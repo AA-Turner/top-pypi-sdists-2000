@@ -8,15 +8,11 @@ from flask import Flask
 
 if TYPE_CHECKING:
     from fastapi import FastAPI
+    from starlette.types import ASGIApp
 
 Schema = dict[str, Any]
 
 StoreT = TypeVar("StoreT")
-
-
-class AppRunner(Protocol):
-    def run_flask_app(self, app: Flask, port: int | None = None, timeout: float = 5.0, wait: bool = True) -> int: ...
-    def run_asgi_app(self, app: FastAPI, port: int | None = None, timeout: float = 5.0, wait: bool = True) -> int: ...
 
 
 @dataclass(slots=True)
@@ -28,6 +24,11 @@ class CapturedRequest:
     body: bytes
     raw_query: str = ""
 
+    def __repr__(self) -> str:
+        target = f"{self.path}?{self.raw_query}" if self.raw_query else self.path
+        body = f" body={self.body[:200]!r}" if self.body else ""
+        return f"<{self.method} {target}{body}>"
+
     def json(self) -> Any:
         return json.loads(self.body)
 
@@ -38,7 +39,7 @@ class OpenAPIServer:
     base_url: str
     port: int
     spec: Schema
-    wsgi_app: Flask | FastAPI
+    wsgi_app: Flask | ASGIApp
     requests: list[CapturedRequest] = field(default_factory=list)
     schema_requests: list[CapturedRequest] = field(default_factory=list)
 
@@ -60,7 +61,7 @@ class GraphQLServer:
 @dataclass(slots=True)
 class OpenAPIApp:
     spec: Schema
-    server: Flask | FastAPI
+    server: Flask | ASGIApp
     kind: Literal["flask", "fastapi"] = "flask"
 
     def make_server(self, port: int) -> OpenAPIServer:

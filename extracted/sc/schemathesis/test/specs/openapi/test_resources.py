@@ -1,16 +1,21 @@
 from __future__ import annotations
 
+import json
+import os
+import subprocess
+import sys
 import threading
 
 import pytest
-import requests
-from hypothesis import HealthCheck, given, settings
+from hypothesis import strategies as st
 from hypothesis.vendor.pretty import pretty
 
 from schemathesis.config import GenerationConfig
 from schemathesis.core import deserialization
 from schemathesis.core.parameters import ParameterLocation
-from schemathesis.core.transport import Response
+from schemathesis.generation.feedback import FeedbackSources
+from schemathesis.generation.hypothesis import examples
+from schemathesis.generation.hypothesis.examples import generate_many
 from schemathesis.generation.meta import TestPhase
 from schemathesis.generation.modes import GenerationMode
 from schemathesis.generation.value import GeneratedValue
@@ -22,8 +27,11 @@ from schemathesis.resources.repository import (
     ResourceRepository,
 )
 from schemathesis.specs.openapi._hypothesis import openapi_cases
-from schemathesis.specs.openapi.extra_data_source import ParameterRequirement
+from schemathesis.specs.openapi.examples import get_strategies_from_examples
+from schemathesis.specs.openapi.extra_data_source import OpenApiExtraDataSource, ParameterRequirement
 from schemathesis.specs.openapi.semantic_pool import SemanticValueIndex
+from schemathesis.specs.openapi.stateful.dependencies.models import InputSlot, ResourceDefinition
+from test.utils import objects_at, run_given
 
 USER_RESOURCE = "User"
 POST_USERS = "POST /users"
@@ -218,8 +226,66 @@ def test_wildcard_pointer_unresolvable_before_wildcard_yields_no_entries():
     assert repository.iter_instances("Item") == ()
 
 
+def test_wildcard_many_pointer_keeps_single_objects_and_drops_primitives():
+    repository = ResourceRepository(
+        [
+            ResourceDescriptor(
+                resource_name="Member",
+                operation="GET /groups",
+                status_code="200",
+                pointer="/groups/*/members",
+                cardinality=Cardinality.MANY,
+            )
+        ]
+    )
+    repository.record_response(
+        operation="GET /groups",
+        status_code=200,
+        payload={"groups": [{"members": [{"id": "a"}]}, {"members": {"id": "b"}}, {"members": "c"}]},
+    )
+    assert [instance.data for instance in repository.iter_instances("Member")] == [{"id": "a"}, {"id": "b"}]
+
+
+def test_seed_input_values_skips_empty_buckets():
+    repository = ResourceRepository([])
+    repository.seed_input_values({"User": {}, "Pet": {"id": "1"}}, source="config")
+    assert repository.iter_instances("User") == ()
+    assert [(i.data, i.source_operation, i.status_code) for i in repository.iter_instances("Pet")] == [
+        ({"id": "1"}, "config", 200)
+    ]
+
+
+def test_record_request_ignores_unusable_slots(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /users/{user_id}",
+        {
+            "parameters": [{"name": "user_id", "in": "path", "required": True, "schema": {"type": "string"}}],
+            "requestBody": {"content": {"application/json": {"schema": {}}}},
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    user = ResourceDefinition.inferred_from_parameter("User", "id")
+    slots = [
+        InputSlot(
+            resource=user, resource_field=None, parameter_name="user_id", parameter_location=ParameterLocation.PATH
+        ),
+        InputSlot(resource=user, resource_field="id", parameter_name=0, parameter_location=ParameterLocation.BODY),
+        InputSlot(
+            resource=user, resource_field="id", parameter_name="owner_id", parameter_location=ParameterLocation.BODY
+        ),
+    ]
+    repository = ResourceRepository([])
+    repository.record_request(
+        operation=operation.label,
+        inputs=slots,
+        case=operation.Case(path_parameters={"user_id": "u1"}, body=["x"]),
+        status_code=200,
+    )
+    assert repository.iter_instances("User") == ()
+
+
 @pytest.mark.parametrize(
-    ("paths", "payload", "operation_label", "resource_name", "id_field", "expected_ids"),
+    ("paths", "components", "payload", "operation_label", "resource_name", "id_field", "expected_ids"),
     [
         pytest.param(
             {
@@ -262,6 +328,7 @@ def test_wildcard_pointer_unresolvable_before_wildcard_yields_no_entries():
                     }
                 },
             },
+            {},
             {"Volumes": [{"Name": "v1", "Driver": "local"}, {"Name": "v2", "Driver": "local"}], "Warnings": []},
             "GET /volumes",
             "Volume",
@@ -316,6 +383,7 @@ def test_wildcard_pointer_unresolvable_before_wildcard_yields_no_entries():
                     }
                 },
             },
+            {},
             {"source_fields": [{"id": "f1", "label": "L1"}, {"id": "f2", "label": "L2"}], "total": 2},
             "GET /sources/{sourceId}/fields",
             "Field",
@@ -369,6 +437,7 @@ def test_wildcard_pointer_unresolvable_before_wildcard_yields_no_entries():
                     }
                 },
             },
+            {},
             {"compliance": [{"id": "C1", "status": "ok"}, {"id": "C2", "status": "ok"}], "count": 2},
             "GET /services/{serviceId}/compliance",
             "Compliance",
@@ -418,6 +487,7 @@ def test_wildcard_pointer_unresolvable_before_wildcard_yields_no_entries():
                     }
                 },
             },
+            {},
             {"records": [{"id": "p1", "name": "n1"}, {"id": "p2", "name": "n2"}], "totalSize": 2, "done": True},
             "GET /products",
             "Product",
@@ -425,169 +495,160 @@ def test_wildcard_pointer_unresolvable_before_wildcard_yields_no_entries():
             {"p1", "p2"},
             id="generic-wrapper-word-salesforce",
         ),
+        pytest.param(
+            {
+                "/teams/statuses": {
+                    "get": {
+                        "operationId": "listTeamStatuses",
+                        "responses": {
+                            "200": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "object",
+                                                "properties": {"qual_average": {"type": "number"}},
+                                            },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    }
+                },
+                "/teams/{teamId}": {
+                    "get": {
+                        "operationId": "getTeam",
+                        "parameters": [
+                            {"name": "teamId", "in": "path", "required": True, "schema": {"type": "string"}}
+                        ],
+                        "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                    }
+                },
+            },
+            {},
+            {"frc1": {"qual_average": 95.0}, "frc2": {"qual_average": 87.0}},
+            "GET /teams/statuses",
+            "Team",
+            "teamId",
+            {"frc1", "frc2"},
+            id="map-by-id-keys-are-identifiers",
+        ),
+        pytest.param(
+            {
+                "/widgets": {
+                    "get": {
+                        "operationId": "listWidgetMap",
+                        "responses": {
+                            "200": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "object",
+                                                "properties": {"label": {"type": "string"}},
+                                            },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    }
+                },
+                "/widgets/{widgetId}": {
+                    "get": {
+                        "operationId": "getWidget",
+                        "parameters": [
+                            {"name": "widgetId", "in": "path", "required": True, "schema": {"type": "string"}}
+                        ],
+                        "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                    }
+                },
+            },
+            {},
+            {"w1": {"label": "L1"}, "w2": {"label": "L2"}},
+            "GET /widgets",
+            "Widget",
+            "widgetId",
+            {"w1", "w2"},
+            id="map-by-id-single-segment-path",
+        ),
+        pytest.param(
+            {
+                "/flights": {
+                    "get": {
+                        "operationId": "listFlights",
+                        "responses": {
+                            "200": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {"$ref": "#/components/schemas/CustomResponseFlightPage"}
+                                    }
+                                }
+                            }
+                        },
+                    }
+                },
+                "/flights/{id}": {
+                    "get": {
+                        "operationId": "getFlight",
+                        "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "string"}}],
+                        "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                    }
+                },
+            },
+            {
+                "schemas": {
+                    "Flight": {
+                        "type": "object",
+                        "properties": {"id": {"type": "string"}, "name": {"type": "string"}},
+                        "required": ["id"],
+                    },
+                    "FlightPage": {
+                        "type": "object",
+                        "properties": {
+                            "content": {"type": "array", "items": {"$ref": "#/components/schemas/Flight"}},
+                            "pageNumber": {"type": "integer"},
+                            "pageSize": {"type": "integer"},
+                        },
+                    },
+                    "CustomResponseFlightPage": {
+                        "type": "object",
+                        "properties": {
+                            "response": {"$ref": "#/components/schemas/FlightPage"},
+                            "status": {"type": "string"},
+                            "time": {"type": "string"},
+                        },
+                    },
+                }
+            },
+            {
+                "response": {
+                    "content": [{"id": "f1", "name": "n1"}, {"id": "f2", "name": "n2"}],
+                    "pageNumber": 0,
+                    "pageSize": 20,
+                },
+                "status": "200 OK",
+                "time": "2026-04-30T00:00:00Z",
+            },
+            "GET /flights",
+            "Flight",
+            "id",
+            {"f1", "f2"},
+            id="spring-nested-envelope",
+        ),
     ],
 )
 def test_pool_captures_individuals_from_get_list_envelope(
-    ctx, paths, payload, operation_label, resource_name, id_field, expected_ids
+    ctx, paths, components, payload, operation_label, resource_name, id_field, expected_ids
 ):
-    schema = ctx.openapi.load_schema(paths)
+    schema = ctx.openapi.load_schema(paths, components=components)
     data_source = schema.create_extra_data_source()
     data_source.repository.record_response(operation=operation_label, status_code=200, payload=payload)
     resources = list(data_source.repository.iter_instances(resource_name))
     assert {instance.data.get(id_field) for instance in resources} == expected_ids
-
-
-def test_pool_captures_individuals_from_map_by_id_response(ctx):
-    # Map-by-id payload: keys ARE the identifiers, values are the resources.
-    schema = ctx.openapi.load_schema(
-        {
-            "/teams/statuses": {
-                "get": {
-                    "operationId": "listTeamStatuses",
-                    "responses": {
-                        "200": {
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "additionalProperties": {
-                                            "type": "object",
-                                            "properties": {"qual_average": {"type": "number"}},
-                                        },
-                                    }
-                                }
-                            }
-                        }
-                    },
-                }
-            },
-            "/teams/{teamId}": {
-                "get": {
-                    "operationId": "getTeam",
-                    "parameters": [{"name": "teamId", "in": "path", "required": True, "schema": {"type": "string"}}],
-                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
-                }
-            },
-        }
-    )
-    data_source = schema.create_extra_data_source()
-    data_source.repository.record_response(
-        operation="GET /teams/statuses",
-        status_code=200,
-        payload={"frc1": {"qual_average": 95.0}, "frc2": {"qual_average": 87.0}},
-    )
-    resources = list(data_source.repository.iter_instances("Team"))
-    assert {instance.data.get("teamId") for instance in resources} == {"frc1", "frc2"}
-
-
-def test_pool_captures_individuals_from_nested_envelope_response(ctx):
-    # Spring-style `{response: {content: [...], pageNumber, pageSize}, status, time}` envelope.
-    schema = ctx.openapi.load_schema(
-        {
-            "/flights": {
-                "get": {
-                    "operationId": "listFlights",
-                    "responses": {
-                        "200": {
-                            "content": {
-                                "application/json": {
-                                    "schema": {"$ref": "#/components/schemas/CustomResponseFlightPage"}
-                                }
-                            }
-                        }
-                    },
-                }
-            },
-            "/flights/{id}": {
-                "get": {
-                    "operationId": "getFlight",
-                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "string"}}],
-                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
-                }
-            },
-        },
-        components={
-            "schemas": {
-                "Flight": {
-                    "type": "object",
-                    "properties": {"id": {"type": "string"}, "name": {"type": "string"}},
-                    "required": ["id"],
-                },
-                "FlightPage": {
-                    "type": "object",
-                    "properties": {
-                        "content": {"type": "array", "items": {"$ref": "#/components/schemas/Flight"}},
-                        "pageNumber": {"type": "integer"},
-                        "pageSize": {"type": "integer"},
-                    },
-                },
-                "CustomResponseFlightPage": {
-                    "type": "object",
-                    "properties": {
-                        "response": {"$ref": "#/components/schemas/FlightPage"},
-                        "status": {"type": "string"},
-                        "time": {"type": "string"},
-                    },
-                },
-            }
-        },
-    )
-    data_source = schema.create_extra_data_source()
-    payload = {
-        "response": {
-            "content": [{"id": "f1", "name": "n1"}, {"id": "f2", "name": "n2"}],
-            "pageNumber": 0,
-            "pageSize": 20,
-        },
-        "status": "200 OK",
-        "time": "2026-04-30T00:00:00Z",
-    }
-    data_source.repository.record_response(operation="GET /flights", status_code=200, payload=payload)
-    resources = list(data_source.repository.iter_instances("Flight"))
-    assert {instance.data.get("id") for instance in resources} == {"f1", "f2"}
-
-
-def test_pool_map_by_id_with_single_segment_path(ctx):
-    # Path has one segment; the helper falls back to `from_path(path)` directly.
-    schema = ctx.openapi.load_schema(
-        {
-            "/widgets": {
-                "get": {
-                    "operationId": "listWidgetMap",
-                    "responses": {
-                        "200": {
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "additionalProperties": {
-                                            "type": "object",
-                                            "properties": {"label": {"type": "string"}},
-                                        },
-                                    }
-                                }
-                            }
-                        }
-                    },
-                }
-            },
-            "/widgets/{widgetId}": {
-                "get": {
-                    "operationId": "getWidget",
-                    "parameters": [{"name": "widgetId", "in": "path", "required": True, "schema": {"type": "string"}}],
-                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
-                }
-            },
-        }
-    )
-    data_source = schema.create_extra_data_source()
-    data_source.repository.record_response(
-        operation="GET /widgets",
-        status_code=200,
-        payload={"w1": {"label": "L1"}, "w2": {"label": "L2"}},
-    )
-    resources = list(data_source.repository.iter_instances("Widget"))
-    assert {instance.data.get("widgetId") for instance in resources} == {"w1", "w2"}
 
 
 def test_pool_map_by_id_unrecoverable_path_emits_no_descriptor(ctx):
@@ -736,6 +797,161 @@ def test_captured_variants_filter_values_invalid_for_destination(ctx):
     assert variants[0].draws[0].parameter_name == "itemId"
 
 
+@pytest.mark.parametrize("phase", [TestPhase.EXAMPLES, TestPhase.FUZZING], ids=["examples", "fuzzing"])
+@pytest.mark.parametrize(
+    "note", [{"type": "string"}, {"$ref": "#/components/schemas/Note"}], ids=["flat", "nested-ref"]
+)
+def test_captured_values_reach_body_behind_ref(ctx, note, phase):
+    item = {"type": "object", "properties": {"id": {"type": "integer"}}}
+    schema = ctx.openapi.load_schema(
+        {
+            "/items": {
+                "post": {"responses": {"201": {"description": "OK", "content": {"application/json": {"schema": item}}}}}
+            },
+            "/items/{itemId}": {
+                "get": {
+                    "parameters": [{"name": "itemId", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK", "content": {"application/json": {"schema": item}}}},
+                }
+            },
+            "/orders": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Order"}}},
+                    },
+                    "responses": {"201": {"description": "OK"}},
+                }
+            },
+        },
+        components={
+            "schemas": {
+                "Note": {"type": "string"},
+                "Order": {
+                    "type": "object",
+                    "required": ["itemId"],
+                    "properties": {"itemId": {"type": "integer"}, "note": note},
+                },
+            }
+        },
+    )
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /items", status_code=201, payload={"id": 987654})
+    operation = schema["/orders"]["POST"]
+    feedback = FeedbackSources(extra_data_source=data_source)
+
+    if phase == TestPhase.EXAMPLES:
+        strategies = get_strategies_from_examples(operation, feedback=feedback, fill_missing=True)
+        assert [examples.generate_one(strategy).body for strategy in strategies] == [{"itemId": 987654}]
+    else:
+        cases = generate_many(operation.as_strategy(feedback=feedback), 30)
+        assert any(isinstance(case.body, dict) and case.body.get("itemId") == 987654 for case in cases)
+
+
+def test_top_level_body_requirement_takes_precedence_over_nested_requirement(ctx):
+    repository = ResourceRepository(
+        [
+            ResourceDescriptor(
+                resource_name="Item",
+                operation="POST /sources",
+                status_code="201",
+                pointer="",
+                cardinality=Cardinality.ONE,
+            )
+        ]
+    )
+    repository.record_response(
+        operation="POST /sources",
+        status_code=201,
+        payload={"groupId": {"ownerId": "top"}, "ownerId": "nested"},
+    )
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "groupId": {
+                                    "type": "object",
+                                    "properties": {"ownerId": {"type": "string"}},
+                                }
+                            },
+                        }
+                    }
+                }
+            },
+            "responses": {"201": {"description": "OK"}},
+        },
+    )
+    data_source = OpenApiExtraDataSource(
+        repository=repository,
+        requirements={
+            (operation.label, ParameterLocation.BODY, "groupId"): ParameterRequirement("Item", "groupId"),
+            (operation.label, ParameterLocation.BODY, "groupId/ownerId"): ParameterRequirement("Item", "ownerId"),
+        },
+    )
+
+    variants = data_source.get_captured_variants(
+        operation=operation,
+        location=ParameterLocation.BODY,
+        schema=operation.body[0].optimized_schema,
+    )
+
+    assert [variant.overlay for variant in variants] == [{"groupId": {"ownerId": "top"}}]
+
+
+def test_unresolved_nested_body_requirement_is_ignored(ctx):
+    repository = ResourceRepository(
+        [
+            ResourceDescriptor(
+                resource_name="Item",
+                operation="POST /sources",
+                status_code="201",
+                pointer="",
+                cardinality=Cardinality.ONE,
+            )
+        ]
+    )
+    repository.record_response(operation="POST /sources", status_code=201, payload={"id": "captured"})
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "nested": {
+                                    "type": "object",
+                                    "properties": {"present": {"type": "string"}},
+                                }
+                            },
+                        }
+                    }
+                }
+            },
+            "responses": {"201": {"description": "OK"}},
+        },
+    )
+    data_source = OpenApiExtraDataSource(
+        repository=repository,
+        requirements={(operation.label, ParameterLocation.BODY, "nested/missing"): ParameterRequirement("Item", "id")},
+    )
+
+    assert (
+        data_source.get_captured_variants(
+            operation=operation,
+            location=ParameterLocation.BODY,
+            schema=operation.body[0].optimized_schema,
+        )
+        is None
+    )
+
+
 def test_data_source_provides_captured_variants(user_schema_builder):
     user_schema = {
         "type": "object",
@@ -830,6 +1046,164 @@ def test_record_successful_delete_evicts_pool_entry_and_filters_subsequent_draws
         for _ in range(10)
     }
     assert drawn == {"alive"}, "tombstoned id must not be drawn even when it is the highest-weighted candidate"
+
+
+_ITEMS_PATHS = {
+    "/items": {
+        "post": {
+            "operationId": "createItem",
+            "responses": {
+                "201": {
+                    "description": "OK",
+                    "content": {
+                        "application/json": {
+                            "schema": {"type": "object", "properties": {"id": {"type": "string"}}, "required": ["id"]}
+                        }
+                    },
+                }
+            },
+        }
+    },
+    "/items/{itemId}": {
+        "delete": {
+            "operationId": "deleteItem",
+            "parameters": [{"name": "itemId", "in": "path", "required": True, "schema": {"type": "string"}}],
+            "responses": {"204": {"description": "Deleted"}},
+        },
+        "get": {
+            "operationId": "getItem",
+            "parameters": [{"name": "itemId", "in": "path", "required": True, "schema": {"type": "string"}}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    },
+}
+
+
+def test_record_successful_delete_with_list_path_value_keeps_pool(ctx):
+    schema = ctx.openapi.load_schema(_ITEMS_PATHS)
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /items", status_code=201, payload={"id": "alive"})
+    operation = schema["/items/{itemId}"]["DELETE"]
+    data_source.record_successful_delete(
+        operation=operation, case=operation.Case(path_parameters={"itemId": ["alive"]})
+    )
+    assert [instance.data for instance in data_source.repository.iter_instances("Item")] == [{"id": "alive"}]
+
+
+def test_record_request_captures_path_value_only_for_bound_operations(ctx):
+    schema = ctx.openapi.load_schema(_ITEMS_PATHS)
+    data_source = schema.create_extra_data_source()
+    create = schema["/items"]["POST"]
+    data_source.record_request(operation=create, case=create.Case(), status_code=201)
+    read = schema["/items/{itemId}"]["GET"]
+    data_source.record_request(
+        operation=read, case=read.Case(path_parameters={"itemId": "from-request"}), status_code=200
+    )
+    assert [instance.data for instance in data_source.repository.iter_instances("Item")] == [{"id": "from-request"}]
+
+
+BOOK = {"type": "object", "properties": {"book_title": {"type": "string"}, "owner": {"type": "string"}}}
+MESSAGE_RESPONSE = {
+    "200": {
+        "description": "OK",
+        "content": {"application/json": {"schema": {"type": "object", "properties": {"message": {"type": "string"}}}}},
+    }
+}
+CLIENT_KEYED_BOOKS = {
+    "/books": {
+        "get": {
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "content": {
+                        "application/json": {
+                            "schema": {"type": "object", "properties": {"Books": {"type": "array", "items": BOOK}}}
+                        }
+                    },
+                }
+            }
+        },
+        "post": {
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"book_title": {"type": "string"}, "secret": {"type": "string"}},
+                        }
+                    }
+                }
+            },
+            "responses": MESSAGE_RESPONSE,
+        },
+    },
+    "/books/{book_title}": {
+        "get": {
+            "parameters": [{"name": "book_title", "in": "path", "required": True, "schema": {"type": "string"}}],
+            "responses": {"200": {"description": "OK", "content": {"application/json": {"schema": BOOK}}}},
+        }
+    },
+}
+
+
+@pytest.mark.parametrize(
+    ("status_code", "expected"),
+    [(200, [({"book_title": "mine"}, "POST /books", "alice")]), (400, [])],
+    ids=["created", "rejected"],
+)
+def test_record_request_captures_client_chosen_key_of_create(ctx, status_code, expected):
+    schema = ctx.openapi.load_schema(CLIENT_KEYED_BOOKS)
+    data_source = schema.create_extra_data_source()
+    create = schema["/books"]["POST"]
+    case = create.Case(body={"book_title": "mine", "secret": "s"})
+    case._auth_identity = "alice"
+    if data_source.should_record_request(operation=create.label):
+        data_source.record_request(operation=create, case=case, status_code=status_code)
+    assert [
+        (instance.data, instance.source_operation, instance.identity)
+        for instance in data_source.repository.iter_instances("Book")
+    ] == expected
+
+
+def test_record_request_captures_required_create_key_once(ctx):
+    schema = ctx.openapi.load_schema(
+        {
+            "/sessions": {
+                "post": {
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": ["sessionId"],
+                                    "properties": {"sessionId": {"type": "string"}},
+                                }
+                            }
+                        }
+                    },
+                    "responses": {"201": {"description": "Created"}},
+                }
+            },
+            "/sessions/{sessionId}": {
+                "get": {
+                    "parameters": [{"name": "sessionId", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+    data_source = schema.create_extra_data_source()
+    create = schema["/sessions"]["POST"]
+    data_source.record_request(operation=create, case=create.Case(body={"sessionId": "s1"}), status_code=201)
+    assert [instance.data for instance in data_source.repository.iter_instances("Session")] == [{"sessionId": "s1"}]
+
+
+def test_create_never_draws_existing_keys(ctx):
+    schema = ctx.openapi.load_schema(CLIENT_KEYED_BOOKS)
+    data_source = schema.create_extra_data_source()
+    create = schema["/books"]["POST"]
+    data_source.record_request(operation=create, case=create.Case(body={"book_title": "mine"}), status_code=200)
+    assert data_source.pick_correlated_values(operation=create).values == {}
 
 
 def test_tombstoned_value_falls_through_when_pool_is_otherwise_empty(ctx):
@@ -1054,7 +1428,7 @@ def test_unresolvable_pointer(user_schema_builder):
     assert resources == []
 
 
-def test_custom_deserializer(ctx):
+def test_custom_deserializer(ctx, response_factory):
     @deserialization.deserializer("text/x-keyvalue")
     def deserialize_keyvalue(ctx, response):
         data = {}
@@ -1103,14 +1477,12 @@ def test_custom_deserializer(ctx):
     operation = schema["/users"]["POST"]
     case = operation.Case()
 
-    req = requests.Request("POST", "http://test.example/users")
-    prepared = req.prepare()
-    response = Response(
+    response = response_factory.core(
         status_code=201,
-        headers={"content-type": ["text/x-keyvalue"]},
         content=b"id=user123\nname=Alice",
-        request=prepared,
-        elapsed=0.1,
+        content_type="text/x-keyvalue",
+        method="POST",
+        url="http://test.example/users",
         verify=True,
     )
 
@@ -1345,19 +1717,91 @@ def test_negative_aware_strategy_with_captured_values(ctx):
     config = GenerationConfig()
 
     strategy = operation.path_parameters.get_strategy(
-        operation, config, GenerationMode.NEGATIVE, extra_data_source=data_source
+        operation, config, GenerationMode.NEGATIVE, feedback=FeedbackSources(extra_data_source=data_source)
     )
 
-    results = []
+    results = generate_many(strategy, 20)
 
-    @given(strategy)
-    @settings(max_examples=20, database=None, suppress_health_check=list(HealthCheck))
-    def collect_samples(value):
-        results.append(value)
+    assert [r for r in results if not isinstance(r, GeneratedValue) or not isinstance(r.value, dict)] == []
 
-    collect_samples()
 
-    assert all(isinstance(r, GeneratedValue) for r in results)
+@pytest.mark.parametrize("mode", [GenerationMode.POSITIVE, GenerationMode.NEGATIVE], ids=["positive", "negative"])
+def test_consumer_strategies_use_values_captured_after_previous_builds(ctx, mode):
+    schema = ctx.openapi.load_schema(
+        {
+            "/items": {
+                "post": {
+                    "operationId": "createItem",
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {
+                                "application/json": {
+                                    "schema": {"type": "object", "properties": {"id": {"type": "string"}}}
+                                }
+                            },
+                            "links": {
+                                "UpdateItem": {
+                                    "operationId": "updateItem",
+                                    "parameters": {"id": "$response.body#/id", "itemId": "$response.body#/id"},
+                                }
+                            },
+                        }
+                    },
+                }
+            },
+            "/items/{id}": {
+                "put": {
+                    "operationId": "updateItem",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {"itemId": {"type": "string"}},
+                                    "required": ["itemId"],
+                                    "additionalProperties": False,
+                                }
+                            }
+                        },
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+    data_source = schema.create_extra_data_source()
+    operation = schema["/items/{id}"]["PUT"]
+    body = operation.body[0]
+    config = GenerationConfig()
+
+    def draw(strategy: st.SearchStrategy) -> list[object]:
+        return [value.value if isinstance(value, GeneratedValue) else value for value in generate_many(strategy, 30)]
+
+    def draw_values() -> tuple[list[object], list[object]]:
+        path = draw(
+            operation.path_parameters.get_strategy(
+                operation, config, mode, feedback=FeedbackSources(extra_data_source=data_source)
+            )
+        )
+        bodies = draw(
+            body.get_strategy(operation, config, mode, feedback=FeedbackSources(extra_data_source=data_source))
+        )
+        return path, bodies
+
+    # Negative path strings without captured values are unsatisfiable, so only the body is drawn before capturing.
+    draw(body.get_strategy(operation, config, mode, feedback=FeedbackSources(extra_data_source=data_source)))
+    data_source.repository.record_response(operation="POST /items", status_code=201, payload={"id": "first-item"})
+    path, bodies = draw_values()
+    assert {"id": "first-item"} in path
+    assert {"itemId": "first-item"} in bodies
+
+    data_source.repository.record_response(operation="POST /items", status_code=201, payload={"id": "second-item"})
+    path, bodies = draw_values()
+    assert {"id": "second-item"} in path
+    assert {"itemId": "second-item"} in bodies
 
 
 def test_pool_overlay_keeps_required_fields_for_body_without_type_object(ctx):
@@ -1422,21 +1866,96 @@ def test_pool_overlay_keeps_required_fields_for_body_without_type_object(ctx):
     body = operation.body[0]
     config = GenerationConfig()
 
-    strategy = body.get_strategy(operation, config, GenerationMode.POSITIVE, extra_data_source=data_source)
+    strategy = body.get_strategy(
+        operation, config, GenerationMode.POSITIVE, feedback=FeedbackSources(extra_data_source=data_source)
+    )
 
-    @given(strategy)
-    @settings(max_examples=200, database=None, deadline=None)
+    @run_given(strategy, max_examples=200)
     def t(value):
         if isinstance(value, dict):
             for required in ("clientId", "clientSecret"):
                 assert required in value, f"required field {required!r} missing from POSITIVE body: {value!r}"
 
-    t()
+
+_SHIPPING = {
+    "type": "object",
+    "properties": {"location_id": {"type": "integer"}, "note": {"type": "string"}},
+    # Generation always includes `note`, so a merge that replaces the whole object drops it.
+    "required": ["note"],
+}
+_SHIPPING_REF = {"$ref": "#/components/schemas/Shipping"}
+_COMPOSED_SHIPPING = {
+    "allOf": [
+        {"$ref": "#/components/schemas/Note"},
+        {"type": "object", "properties": {"location_id": {"type": "integer"}}},
+    ]
+}
+_PICKUP = {
+    "type": "object",
+    "properties": {"code": {"type": "integer"}},
+    "required": ["code"],
+    "additionalProperties": False,
+}
+_SHIPPING_OR_PICKUP = {"oneOf": [_SHIPPING_REF, _PICKUP]}
 
 
-def test_nested_body_pool_overlay_lands_pool_values(ctx):
-    # End-to-end via the body strategy: when a body has a nested object holding a foreign-key
-    # field the pool can satisfy, the pool value must reach the wire under the right path.
+def _with_shipping(shipping):
+    return {
+        "type": "object",
+        "properties": {"name": {"type": "string"}, "shipping": shipping},
+        "required": ["shipping"],
+    }
+
+
+@pytest.mark.parametrize(
+    ("body", "path"),
+    [
+        (_with_shipping(_SHIPPING), ("shipping",)),
+        (_with_shipping(_SHIPPING_REF), ("shipping",)),
+        (_with_shipping({"type": "array", "minItems": 1, "items": _SHIPPING}), ("shipping", "*")),
+        (_with_shipping({"type": "array", "minItems": 1, "items": _SHIPPING_REF}), ("shipping", "*")),
+        (_with_shipping({"$ref": "#/components/schemas/Shipments"}), ("shipping", "*")),
+        (
+            _with_shipping(
+                {
+                    "type": "object",
+                    "required": ["parts"],
+                    "properties": {"parts": {"type": "array", "minItems": 1, "items": _SHIPPING_REF}},
+                }
+            ),
+            ("shipping", "parts", "*"),
+        ),
+        ({"type": "array", "minItems": 1, "items": _SHIPPING}, ("*",)),
+        ({"type": "array", "minItems": 1, "items": _SHIPPING_REF}, ("*",)),
+        ({"$ref": "#/components/schemas/Shipments"}, ("*",)),
+        (_with_shipping(_COMPOSED_SHIPPING), ("shipping",)),
+        (_with_shipping({"$ref": "#/components/schemas/ComposedShipping"}), ("shipping",)),
+        (_with_shipping({"anyOf": [_SHIPPING]}), ("shipping",)),
+        (_with_shipping(_SHIPPING_OR_PICKUP), ("shipping",)),
+        (_with_shipping({"type": "array", "minItems": 1, "items": _COMPOSED_SHIPPING}), ("shipping", "*")),
+        (_with_shipping({"type": "array", "minItems": 1, "items": _SHIPPING_OR_PICKUP}), ("shipping", "*")),
+        ({"type": "object", "properties": {"2024": _SHIPPING}, "required": ["2024"]}, ("2024",)),
+    ],
+    ids=[
+        "inline-object",
+        "ref-object",
+        "array",
+        "array-of-refs",
+        "ref-to-array",
+        "array-in-object",
+        "top-level-array",
+        "top-level-array-of-refs",
+        "top-level-ref-to-array",
+        "all-of",
+        "ref-to-all-of",
+        "any-of",
+        "one-of",
+        "array-of-all-of",
+        "array-of-one-of",
+        "digit-named-property",
+    ],
+)
+def test_nested_body_pool_overlay_lands_pool_values(ctx, body, path):
     schema = ctx.openapi.load_schema(
         {
             "/locations": {
@@ -1462,25 +1981,80 @@ def test_nested_body_pool_overlay_lands_pool_values(ctx):
                     "operationId": "createDepartment",
                     "requestBody": {
                         "required": True,
+                        "content": {"application/json": {"schema": body}},
+                    },
+                    "responses": {"201": {"description": "OK"}},
+                }
+            },
+        },
+        components={
+            "schemas": {
+                "Shipping": _SHIPPING,
+                "Shipments": {"type": "array", "minItems": 1, "items": _SHIPPING_REF},
+                "Note": {"type": "object", "properties": {"note": {"type": "string"}}, "required": ["note"]},
+                "ComposedShipping": _COMPOSED_SHIPPING,
+            }
+        },
+    )
+    data_source = schema.create_extra_data_source()
+
+    pooled_ids = {7340001, 7340002, 7340003}
+    for i in pooled_ids:
+        data_source.repository.record_response(operation="POST /locations", status_code=201, payload={"id": i})
+
+    operation = schema["/departments"]["POST"]
+    body = operation.body[0]
+    strategy = body.get_strategy(
+        operation, GenerationConfig(), GenerationMode.POSITIVE, feedback=FeedbackSources(extra_data_source=data_source)
+    )
+
+    pool_hits = []
+    partial_hits = []
+    invalid = []
+
+    # The violating draw is rare, so fewer examples would let a regression pass.
+    @run_given(strategy, max_examples=100)
+    def collect(value):
+        if isinstance(value, GeneratedValue):
+            value = value.value
+        objects = objects_at(value, path)
+        landed = [isinstance(item, dict) and item.get("location_id") in pooled_ids for item in objects]
+        if landed and all(landed):
+            pool_hits.append(objects)
+        elif any(landed):
+            partial_hits.append(objects)
+        if landed and not body.is_valid(value):
+            invalid.append(value)
+
+    assert pool_hits, "Pool's Location.id values never landed in the body"
+    assert not invalid, f"Overlay made POSITIVE bodies invalid: {invalid[:3]!r}"
+    assert not partial_hits, f"Pool value reached only some array items: {partial_hits[:3]!r}"
+    dropped = [objects for objects in pool_hits if not all("note" in item for item in objects)]
+    assert not dropped, f"Overlay dropped the generated `note` sibling: {dropped[:3]!r}"
+
+
+def test_top_level_array_body_variant_combines_item_fields(ctx):
+    owner = {"type": "object", "properties": {"id": {"type": "string"}}, "required": ["id"]}
+    schema = ctx.openapi.load_schema(
+        {
+            "/groups": {"post": {"responses": {"201": {"content": {"application/json": {"schema": owner}}}}}},
+            "/owners": {"post": {"responses": {"201": {"content": {"application/json": {"schema": owner}}}}}},
+            "/items": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "name": {"type": "string"},
-                                        "shipping": {
-                                            "type": "object",
-                                            "properties": {
-                                                "location_id": {"type": "integer"},
-                                                "note": {"type": "string"},
-                                            },
-                                            # `note` is required so random nested generation always
-                                            # includes it; under deep-merge the overlay must keep
-                                            # it in place when it injects `location_id`.
-                                            "required": ["note"],
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {"type": "string"},
+                                            "groupId": {"type": "string"},
+                                            "ownerId": {"type": "string"},
                                         },
                                     },
-                                    "required": ["shipping"],
                                 }
                             }
                         },
@@ -1491,46 +2065,14 @@ def test_nested_body_pool_overlay_lands_pool_values(ctx):
         }
     )
     data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /groups", status_code=201, payload={"id": "G-1"})
+    data_source.repository.record_response(operation="POST /owners", status_code=201, payload={"id": "O-1"})
 
-    pooled_ids = {1, 2, 3}
-    for i in pooled_ids:
-        data_source.repository.record_response(operation="POST /locations", status_code=201, payload={"id": i})
-
-    operation = schema["/departments"]["POST"]
-    body = operation.body[0]
-    config = GenerationConfig()
-    strategy = body.get_strategy(operation, config, GenerationMode.POSITIVE, extra_data_source=data_source)
-
-    pool_hits_with_note = 0
-    pool_hits = 0
-
-    @given(strategy)
-    @settings(max_examples=100, database=None, deadline=None)
-    def collect(value):
-        nonlocal pool_hits_with_note, pool_hits
-        # Hybrid strategy wraps in `GeneratedValue` when picking from the pool so the engine
-        # can attribute provenance; tests that compose the strategy directly unwrap here.
-        if isinstance(value, GeneratedValue):
-            value = value.value
-        if not isinstance(value, dict):
-            return
-        shipping = value.get("shipping")
-        if not isinstance(shipping, dict):
-            return
-        if shipping.get("location_id") in pooled_ids:
-            pool_hits += 1
-            if "note" in shipping:
-                pool_hits_with_note += 1
-
-    collect()
-
-    assert pool_hits > 0, "Pool's Location.id values never landed under shipping.location_id"
-    # Deep-merge guard: when the overlay injects location_id, the generated `note`
-    # sibling (required by the nested schema) must survive the merge.
-    assert pool_hits_with_note == pool_hits, (
-        f"{pool_hits - pool_hits_with_note} of {pool_hits} pool-overlaid bodies dropped the "
-        "generated `note` sibling — nested overlay replaced the whole `shipping` object."
+    operation = schema["/items"]["POST"]
+    variants = data_source.get_captured_variants(
+        operation=operation, location=ParameterLocation.BODY, schema=operation.body[0].optimized_schema
     )
+    assert [variant.overlay for variant in variants] == [[{"groupId": "G-1", "ownerId": "O-1"}]]
 
 
 def test_positive_form_urlencoded_body_pool_overlay_survives_form_prep(ctx):
@@ -1586,14 +2128,15 @@ def test_positive_form_urlencoded_body_pool_overlay_survives_form_prep(ctx):
         data_source.repository.record_response(operation="POST /users", status_code=201, payload={"id": value})
 
     operation = schema["/sessions"]["POST"]
-    cases_strategy = openapi_cases(operation=operation, phase=TestPhase.FUZZING, extra_data_source=data_source)
+    cases_strategy = openapi_cases(
+        operation=operation, phase=TestPhase.FUZZING, feedback=FeedbackSources(extra_data_source=data_source)
+    )
 
     # Counts only the form-urlencoded slice: that's the path the form-prep map/filter
     # rewrites. With the pre-fix code, captured-variant draws were filtered out here.
     form_pool_hits = 0
 
-    @given(cases_strategy)
-    @settings(max_examples=200, database=None, deadline=None)
+    @run_given(cases_strategy, max_examples=200)
     def collect(case):
         nonlocal form_pool_hits
         if case.media_type != "application/x-www-form-urlencoded":
@@ -1601,7 +2144,6 @@ def test_positive_form_urlencoded_body_pool_overlay_survives_form_prep(ctx):
         if isinstance(case.body, dict) and case.body.get("user_id") in pooled_ids:
             form_pool_hits += 1
 
-    collect()
     assert form_pool_hits > 0, "pool-derived user_id never survived the form-urlencoded prep step"
 
 
@@ -1659,16 +2201,11 @@ def test_negative_aware_strategy_with_captured_values_body(ctx):
     config = GenerationConfig()
     body = operation.body[0]
 
-    strategy = body.get_strategy(operation, config, GenerationMode.NEGATIVE, extra_data_source=data_source)
+    strategy = body.get_strategy(
+        operation, config, GenerationMode.NEGATIVE, feedback=FeedbackSources(extra_data_source=data_source)
+    )
 
-    results = []
-
-    @given(strategy)
-    @settings(max_examples=20, database=None, suppress_health_check=list(HealthCheck))
-    def collect_samples(value):
-        results.append(value)
-
-    collect_samples()
+    results = generate_many(strategy, 20)
 
     assert all(isinstance(r, GeneratedValue) for r in results)
 
@@ -1754,69 +2291,67 @@ def test_primitive_response_ignored_for_root_path(ctx):
     assert operation is None or operation.outputs == []
 
 
-def test_identifier_field_fallback_when_paths_differ(ctx):
-    # Producer at /recipes, consumer at /admin/recipes/{slug} - different base paths
-    schema = ctx.openapi.load_schema(
-        {
-            "/recipes": {
-                "post": {"responses": {"201": {"content": {"application/json": {"schema": {"type": "string"}}}}}}
-            },
-            "/admin/recipes/{slug}": {
-                "get": {
-                    "parameters": [{"name": "slug", "in": "path", "required": True, "schema": {"type": "string"}}],
-                    "responses": {
-                        "200": {
-                            "content": {
-                                "application/json": {
-                                    "schema": {"type": "object", "properties": {"slug": {"type": "string"}}}
+@pytest.mark.parametrize(
+    ("paths", "operation_label", "payload", "resource_name", "expected"),
+    [
+        pytest.param(
+            {
+                "/recipes": {
+                    "post": {"responses": {"201": {"content": {"application/json": {"schema": {"type": "string"}}}}}}
+                },
+                "/admin/recipes/{slug}": {
+                    "get": {
+                        "parameters": [{"name": "slug", "in": "path", "required": True, "schema": {"type": "string"}}],
+                        "responses": {
+                            "200": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {"type": "object", "properties": {"slug": {"type": "string"}}}
+                                    }
                                 }
                             }
-                        }
-                    },
-                }
+                        },
+                    }
+                },
             },
-        }
-    )
-    data_source = schema.create_extra_data_source()
-
-    data_source.repository.record_response(operation="POST /recipes", status_code=201, payload="my-recipe")
-
-    # Should use "slug" from fallback (first consumer's field)
-    resources = list(data_source.repository.iter_instances("Recipe"))
-    assert len(resources) == 1
-    assert resources[0].data == {"slug": "my-recipe"}
-
-
-def test_primitive_integer_identifier(ctx):
-    # POST returning integer ID
-    schema = ctx.openapi.load_schema(
-        {
-            "/users": {
-                "post": {"responses": {"201": {"content": {"application/json": {"schema": {"type": "integer"}}}}}}
-            },
-            "/users/{id}": {
-                "get": {
-                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
-                    "responses": {
-                        "200": {
-                            "content": {
-                                "application/json": {
-                                    "schema": {"type": "object", "properties": {"id": {"type": "integer"}}}
+            "POST /recipes",
+            "my-recipe",
+            "Recipe",
+            {"slug": "my-recipe"},
+            id="field-from-consumer-at-different-base-path",
+        ),
+        pytest.param(
+            {
+                "/users": {
+                    "post": {"responses": {"201": {"content": {"application/json": {"schema": {"type": "integer"}}}}}}
+                },
+                "/users/{id}": {
+                    "get": {
+                        "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                        "responses": {
+                            "200": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {"type": "object", "properties": {"id": {"type": "integer"}}}
+                                    }
                                 }
                             }
-                        }
-                    },
-                }
+                        },
+                    }
+                },
             },
-        }
-    )
-    data_source = schema.create_extra_data_source()
-
-    data_source.repository.record_response(operation="POST /users", status_code=201, payload=12345)
-
-    resources = list(data_source.repository.iter_instances("User"))
-    assert len(resources) == 1
-    assert resources[0].data == {"id": 12345}
+            "POST /users",
+            12345,
+            "User",
+            {"id": 12345},
+            id="integer",
+        ),
+    ],
+)
+def test_primitive_identifier_response(ctx, paths, operation_label, payload, resource_name, expected):
+    data_source = ctx.openapi.load_schema(paths).create_extra_data_source()
+    data_source.repository.record_response(operation=operation_label, status_code=201, payload=payload)
+    assert [instance.data for instance in data_source.repository.iter_instances(resource_name)] == [expected]
 
 
 def test_pick_correlated_values_returns_none_for_empty_pool(user_schema_builder):
@@ -1918,60 +2453,6 @@ def test_pick_correlated_values_single_family_correlated_pair(user_schema_builde
     assert draw.source_status == 201
 
 
-def test_pick_correlated_values_falls_back_when_family_lacks_full_match(user_schema_builder):
-    user_schema = {
-        "type": "object",
-        "properties": {"id": {"type": "string"}, "name": {"type": "string"}},
-        "required": ["id", "name"],
-    }
-    nested = {
-        "/users/{user_id}": {
-            "get": {
-                "operationId": "getUser",
-                "parameters": [{"name": "user_id", "in": "path", "required": True, "schema": {"type": "string"}}],
-                "responses": {"200": {"description": "OK", "content": {"application/json": {"schema": user_schema}}}},
-            }
-        }
-    }
-    schema = user_schema_builder(response_schema=user_schema, extra_endpoints=nested)
-    data_source = schema.create_extra_data_source()
-    data_source.repository.record_response(
-        operation=POST_USERS, status_code=CREATED, payload={"id": "1", "name": "Alice"}
-    )
-    operation = schema["/users/{user_id}"]["GET"]
-    result = data_source.pick_correlated_values(operation=operation)
-    assert (ParameterLocation.PATH, "user_id") in result.values
-
-
-def test_pick_correlated_values_rotates_across_consecutive_calls(user_schema_builder):
-    user_schema = {
-        "type": "object",
-        "properties": {"id": {"type": "string"}, "name": {"type": "string"}},
-        "required": ["id", "name"],
-    }
-    nested = {
-        "/users/{user_id}": {
-            "get": {
-                "operationId": "getUser",
-                "parameters": [{"name": "user_id", "in": "path", "required": True, "schema": {"type": "string"}}],
-                "responses": {"200": {"description": "OK", "content": {"application/json": {"schema": user_schema}}}},
-            }
-        }
-    }
-    schema = user_schema_builder(response_schema=user_schema, extra_endpoints=nested)
-    data_source = schema.create_extra_data_source()
-    for value in ("a", "b", "c", "d"):
-        data_source.repository.record_response(
-            operation=POST_USERS, status_code=CREATED, payload={"id": value, "name": "x"}
-        )
-    operation = schema["/users/{user_id}"]["GET"]
-    picks = [
-        data_source.pick_correlated_values(operation=operation).values[(ParameterLocation.PATH, "user_id")]
-        for _ in range(4)
-    ]
-    assert set(picks) == {"a", "b", "c", "d"}
-
-
 def test_correlated_and_per_slot_share_rotation_state(user_schema_builder):
     # Correlated and per-slot picks must deprioritize the same instance for cross-phase rotation.
     user_schema = {
@@ -2001,7 +2482,8 @@ def test_correlated_and_per_slot_share_rotation_state(user_schema_builder):
     assert next_pick != drawn_id
 
 
-def test_pool_overlay_respects_max_properties(ctx):
+@pytest.mark.parametrize("mode", [GenerationMode.POSITIVE, GenerationMode.NEGATIVE], ids=["positive", "negative"])
+def test_pool_overlay_respects_max_properties(ctx, mode):
     # Injecting a captured value adds a key, and the body it lands in may already be at capacity.
     schema = ctx.openapi.load_schema(
         {
@@ -2059,16 +2541,21 @@ def test_pool_overlay_respects_max_properties(ctx):
 
     operation = schema["/posts"]["POST"]
     config = GenerationConfig()
-    strategy = operation.body[0].get_strategy(operation, config, GenerationMode.POSITIVE, extra_data_source=data_source)
+    strategy = operation.body[0].get_strategy(
+        operation, config, mode, feedback=FeedbackSources(extra_data_source=data_source)
+    )
 
     pool_hits = 0
     oversized = []
 
-    @given(strategy)
-    @settings(max_examples=200, database=None, deadline=None)
+    # The violating draw is rare, so fewer examples would let a regression pass.
+    @run_given(strategy, max_examples=200)
     def collect(value):
         nonlocal pool_hits
         if isinstance(value, GeneratedValue):
+            # A mutated draw is a negative case, where exceeding `maxProperties` is allowed.
+            if value.meta is not None:
+                return
             value = value.value
         if not isinstance(value, dict):
             return
@@ -2077,7 +2564,235 @@ def test_pool_overlay_respects_max_properties(ctx):
         if len(value) > 2:
             oversized.append(value)
 
-    collect()
-
     assert pool_hits > 0, "Pool's Category.categoryId values never landed in the body"
     assert not oversized, f"`maxProperties` exceeded: {oversized[0]!r}"
+
+
+def test_pool_draw_names_the_identity_that_produced_the_resource(user_schema_builder, response_factory):
+    user_schema = {
+        "type": "object",
+        "properties": {"id": {"type": "string"}, "name": {"type": "string"}},
+        "required": ["id", "name"],
+    }
+    nested = {
+        "/users/{user_id}": {
+            "get": {
+                "operationId": "getUser",
+                "parameters": [{"name": "user_id", "in": "path", "required": True, "schema": {"type": "string"}}],
+                "responses": {"200": {"description": "OK", "content": {"application/json": {"schema": user_schema}}}},
+            }
+        }
+    }
+    schema = user_schema_builder(response_schema=user_schema, extra_endpoints=nested)
+    data_source = schema.create_extra_data_source()
+    operation = schema["/users"]["POST"]
+    case = operation.Case()
+    case._auth_identity = "alice"
+    response = response_factory.core(
+        status_code=CREATED,
+        content=b'{"id": "1", "name": "Alice"}',
+        method="POST",
+        url="http://test.example/users",
+        verify=True,
+    )
+    data_source.record_response(operation=operation, response=response, case=case)
+
+    picked = data_source.pick_correlated_values(operation=schema["/users/{user_id}"]["GET"])
+
+    assert [draw.source_identity for draw in picked.draws] == ["alice"]
+
+
+CORRELATED_PICKS_SCRIPT = """
+import json, sys
+import schemathesis
+schema = schemathesis.openapi.from_dict(json.load(sys.stdin))
+data_source = schema.create_extra_data_source()
+post = schema["/accounts/{accountId}/templates/{templateId}"]["POST"]
+get = schema["/accounts/{accountId}/templates/{templateId}"]["GET"]
+for account, template in [("a1", "t1"), ("a1", "t2"), ("a2", "t1")]:
+    case = post.Case(path_parameters={"accountId": account, "templateId": template})
+    data_source.record_request(operation=post, case=case, status_code=201)
+print(json.dumps([list(data_source.pick_correlated_values(operation=get).values.values()) for _ in range(4)]))
+"""
+
+
+def test_correlated_picks_identical_across_hash_seeds(ctx):
+    parameters = [
+        {"name": name, "in": "path", "required": True, "schema": {"type": "string"}}
+        for name in ("accountId", "templateId")
+    ]
+    raw_schema = ctx.openapi.build_schema(
+        {
+            "/accounts/{accountId}/templates/{templateId}": {
+                "post": {"parameters": parameters, "responses": {"201": {"description": "Created"}}},
+                "get": {"parameters": parameters, "responses": {"200": {"description": "OK"}}},
+            }
+        }
+    )
+    outputs = {
+        subprocess.run(
+            [sys.executable, "-c", CORRELATED_PICKS_SCRIPT],
+            input=json.dumps(raw_schema),
+            capture_output=True,
+            text=True,
+            check=True,
+            env={**os.environ, "PYTHONHASHSEED": str(seed)},
+        ).stdout
+        for seed in range(8)
+    }
+    assert [json.loads(output) for output in outputs] == [[["a1", "t1"], ["a2", "t1"], ["a1", "t1"], ["a1", "t2"]]]
+
+
+def test_negative_aware_strategy_keeps_schema_examples_intact(ctx):
+    schema = ctx.openapi.load_schema(
+        {
+            "/projects": {
+                "post": {
+                    "operationId": "createProject",
+                    "responses": {
+                        "201": {
+                            "content": {
+                                "application/json": {
+                                    "schema": {"type": "object", "properties": {"id": {"type": "string"}}}
+                                }
+                            },
+                            "links": {
+                                "CreateTask": {
+                                    "operationId": "createTask",
+                                    "parameters": {"project_id": "$response.body#/id"},
+                                }
+                            },
+                        }
+                    },
+                }
+            },
+            "/tasks": {
+                "post": {
+                    "operationId": "createTask",
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {"project_id": {"type": "string"}},
+                                    "required": ["project_id"],
+                                },
+                                "example": {"project_id": "declared"},
+                            }
+                        },
+                        "required": True,
+                    },
+                    "responses": {"201": {"description": "Created"}},
+                }
+            },
+        }
+    )
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /projects", status_code=201, payload={"id": "captured"})
+    operation = schema["/tasks"]["POST"]
+    config = GenerationConfig()
+    body = operation.body[0]
+
+    generate_many(
+        body.get_strategy(
+            operation, config, GenerationMode.NEGATIVE, feedback=FeedbackSources(extra_data_source=data_source)
+        ),
+        100,
+    )
+
+    positive = generate_many(body.get_strategy(operation, config, GenerationMode.POSITIVE), 100)
+    assert {"project_id": "captured"} not in positive
+
+
+_ID = {"type": "integer", "minimum": 1}
+_CHILD = {"type": "object", "properties": {"id": {"type": "integer"}, "name": {"type": "string"}}}
+_PARENT_PK = {"name": "parent_pk", "in": "path", "required": True, "schema": _ID}
+_NAME = {"type": "object", "properties": {"name": {"type": "string"}}}
+_NESTED_CHILDREN = {
+    "/parents/{id}/": {
+        "get": {
+            "parameters": [{"name": "id", "in": "path", "required": True, "schema": _ID}],
+            "responses": {
+                "200": {
+                    "description": "Parent",
+                    "content": {
+                        "application/json": {"schema": {"type": "object", "properties": {"id": {"type": "integer"}}}}
+                    },
+                }
+            },
+        }
+    },
+    "/parents/{parent_pk}/children/": {
+        "post": {
+            "parameters": [_PARENT_PK],
+            "requestBody": {"required": True, "content": {"application/json": {"schema": _NAME}}},
+            "responses": {"201": {"description": "Created", "content": {"application/json": {"schema": _CHILD}}}},
+        }
+    },
+    "/parents/{parent_pk}/children/{id}/": {
+        "patch": {
+            "parameters": [_PARENT_PK, {"name": "id", "in": "path", "required": True, "schema": _ID}],
+            "requestBody": {"required": True, "content": {"application/json": {"schema": _NAME}}},
+            "responses": {"200": {"description": "Updated", "content": {"application/json": {"schema": _CHILD}}}},
+        }
+    },
+}
+
+
+def _child_created_under(schema, data_source, response_factory, parent_pk):
+    create = schema["/parents/{parent_pk}/children/"]["POST"]
+    response = response_factory.core(
+        status_code=201,
+        content=b'{"id": 4, "name": "x"}',
+        method="POST",
+        url=f"http://test.example/parents/{parent_pk}/children/",
+        verify=True,
+    )
+    data_source.record_response(
+        operation=create, response=response, case=create.Case(path_parameters={"parent_pk": parent_pk})
+    )
+
+
+# The coverage phase sends path parameters as text; the fuzzing phase keeps their declared type.
+@pytest.mark.parametrize("parent_pk", ["2", 2], ids=["as-sent-by-coverage", "typed"])
+def test_captured_child_is_paired_with_its_parent_in_the_declared_type(ctx, response_factory, parent_pk):
+    schema = ctx.openapi.load_schema(_NESTED_CHILDREN)
+    data_source = schema.create_extra_data_source()
+    _child_created_under(schema, data_source, response_factory, parent_pk)
+
+    picked = data_source.pick_correlated_values(operation=schema["/parents/{parent_pk}/children/{id}/"]["PATCH"])
+
+    assert picked.values == {(ParameterLocation.PATH, "parent_pk"): 2, (ParameterLocation.PATH, "id"): 4}
+
+
+def test_path_values_captured_from_a_request_keep_their_declared_type(ctx):
+    schema = ctx.openapi.load_schema(_NESTED_CHILDREN)
+    data_source = schema.create_extra_data_source()
+    update = schema["/parents/{parent_pk}/children/{id}/"]["PATCH"]
+
+    data_source.record_request(
+        operation=update, case=update.Case(path_parameters={"parent_pk": "2", "id": "4"}), status_code=200
+    )
+
+    captured = [(instance.data, instance.context) for instance in data_source.repository.iter_instances("Child")]
+    assert captured == [({"id": 4}, {"parent_pk": 2, "id": 4})]
+
+
+def test_coverage_sends_a_captured_child_under_the_parent_it_was_created_under(ctx, response_factory):
+    schema = ctx.openapi.load_schema(_NESTED_CHILDREN)
+    data_source = schema.create_extra_data_source()
+    _child_created_under(schema, data_source, response_factory, "2")
+    update = schema["/parents/{parent_pk}/children/{id}/"]["PATCH"]
+
+    cases = list(
+        schema.iter_coverage_cases(
+            update,
+            generation_modes=[GenerationMode.POSITIVE],
+            generation_config=schema.config.generation,
+            extra_data_source=data_source,
+        )
+    )
+    # The base cases carry the captured pair; only a boundary mutation of `parent_pk` moves away from it.
+    base = [case.path_parameters for case in cases if case._meta.phase.data.scenario.value.endswith("object")]
+    assert base, "the coverage phase produced no base case"
+    assert all(path == {"parent_pk": "2", "id": "4"} for path in base), base

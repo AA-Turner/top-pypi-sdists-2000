@@ -1,10 +1,11 @@
 import pytest
-from hypothesis import HealthCheck, given, settings
 
 from schemathesis.config._auth import AuthConfig
 from schemathesis.core.jsonschema.resolver import make_root_resolver
 from schemathesis.generation import GenerationMode
+from schemathesis.generation.hypothesis.examples import generate_many
 from schemathesis.specs.openapi.adapter.security import extract_security_definitions_v3
+from test.utils import run_given
 
 
 def test_ref_resolving():
@@ -79,11 +80,9 @@ def test_name_clash(ctx, kwargs, expected):
         security=SCHEMA_WITH_PARAMETER_AND_SECURITY_SCHEME["security"],
     )
 
-    @given(case=schema["/test"]["GET"].as_strategy(**kwargs))
+    @run_given(case=schema["/test"]["GET"].as_strategy(**kwargs), max_examples=100)
     def test(case):
         assert case.headers[PARAMETER_NAME] == expected
-
-    test()
 
 
 @pytest.mark.parametrize("with_security_parameters", [True, False])
@@ -99,15 +98,12 @@ def test_without_security_parameters(ctx, with_security_parameters):
     )
     schema.config.generation.update(with_security_parameters=with_security_parameters)
 
-    @given(case=schema["/test"]["GET"].as_strategy())
-    @settings(max_examples=20, suppress_health_check=list(HealthCheck))
+    @run_given(case=schema["/test"]["GET"].as_strategy(), max_examples=20)
     def test(case):
         if with_security_parameters:
             assert "Authorization" in case.headers
         else:
             assert case.headers == {}
-
-    test()
 
 
 @pytest.mark.parametrize("version", ["2.0", "3.0.2"])
@@ -131,21 +127,18 @@ def test_undefined_security_scheme_is_ignored(ctx, version):
 
 def test_invalid_security_requirement_types_are_ignored(ctx):
     # When security requirements contain non-dict elements
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /test",
         {
-            "/test": {
-                "get": {
-                    "security": [
-                        "invalid_string",
-                        123,
-                        ["invalid", "list"],
-                        None,
-                        # Valid: should be processed
-                        {"ApiKeyAuth": []},
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "security": [
+                "invalid_string",
+                123,
+                ["invalid", "list"],
+                None,
+                # Valid: should be processed
+                {"ApiKeyAuth": []},
+            ],
+            "responses": {"200": {"description": "OK"}},
         },
         components={
             "securitySchemes": {
@@ -153,14 +146,13 @@ def test_invalid_security_requirement_types_are_ignored(ctx):
             }
         },
     )
-    operation = schema["/test"]["GET"]
 
     # Should not crash and should extract parameters from the valid requirement
     params = list(operation.security.iter_parameters())
     # Only the valid ApiKeyAuth requirement should be processed
     assert len(params) == 1
-    assert params[0]["name"] == "X-API-Key"
-    assert params[0]["in"] == "header"
+    assert params[0].name == "X-API-Key"
+    assert params[0].location == "header"
 
 
 SECURITY_DEFINITIONS = {
@@ -216,12 +208,9 @@ def test_generated_credentials_in_fuzzing(ctx, version, security, expected):
     schema = _schema_with_security(ctx, version, security)
     seen = set()
 
-    @given(case=schema["/test"]["GET"].as_strategy())
-    @settings(max_examples=10, suppress_health_check=list(HealthCheck))
+    @run_given(case=schema["/test"]["GET"].as_strategy(), max_examples=10)
     def test(case):
         seen.update(case.headers)
-
-    test()
 
     assert seen == expected
 
@@ -230,12 +219,40 @@ def test_optional_auth_keeps_configured_credentials(ctx):
     schema = _schema_with_security(ctx, "3.0.2", [{"basicAuth": []}, {"apiKeyAuth": []}, {}])
     schema.config.auth = AuthConfig.from_dict({"openapi": {"basicAuth": {"username": "user", "password": "secret"}}})
 
-    @given(case=schema["/test"]["GET"].as_strategy())
-    @settings(max_examples=5, suppress_health_check=list(HealthCheck))
+    @run_given(case=schema["/test"]["GET"].as_strategy(), max_examples=5)
     def test(case):
         assert case.headers == {"Authorization": "Basic dXNlcjpzZWNyZXQ="}
 
-    test()
+
+@pytest.mark.parametrize(
+    "auth",
+    [
+        {"openapi": {"basicAuth": {"username": "user", "password": "secret"}}},
+        {"basic": {"username": "user", "password": "secret"}},
+    ],
+    ids=["openapi", "basic"],
+)
+def test_configured_auth_skipped_when_negated_alongside_body(ctx, auth):
+    operation = ctx.openapi.load_operation(
+        "POST /test",
+        {
+            "security": [{"basicAuth": []}],
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": {"type": "object", "required": ["name"]}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        components={"securitySchemes": {"basicAuth": {"type": "http", "scheme": "basic"}}},
+    )
+    operation.schema.config.auth = AuthConfig.from_dict(auth)
+    negated_with_body = [
+        case
+        for case in generate_many(operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), 50)
+        if {mutation.parameter for mutation in case.meta.phase.data.mutations} == {"Authorization", None}
+    ]
+    assert negated_with_body
+    assert "Basic dXNlcjpzZWNyZXQ=" not in [case.headers.get("Authorization") for case in negated_with_body]
 
 
 SECURITY_REQUIRED_CASES = [
@@ -254,4 +271,6 @@ SECURITY_REQUIRED_CASES = [
 )
 def test_only_schemes_demanded_by_every_alternative_are_required(ctx, version, security, expected):
     operation = _schema_with_security(ctx, version, security)["/test"]["GET"]
-    assert {parameter["name"]: parameter["required"] for parameter in operation.security.iter_parameters()} == expected
+    assert {
+        parameter.name: parameter.definition["required"] for parameter in operation.security.iter_parameters()
+    } == expected

@@ -19,9 +19,9 @@
 
 import errno
 import logging
+import platform
 import re
 import subprocess
-from typing import List, Set
 
 try:
     import psutil
@@ -36,7 +36,7 @@ PS_XE_PID_MATCH = re.compile(r"^.*?(\d+).+$")
 """_sre.SRE_Pattern matching PIDs in result from `$ ps xe -o pid,cmd`."""
 
 
-def processes_with_env_psutil(env_name: str, env_value: str) -> Set[int]:
+def processes_with_env_psutil(env_name: str, env_value: str) -> set[int]:
     """Find PIDs of processes having environment variable matching given one.
 
     Internally it uses `psutil` library.
@@ -54,7 +54,17 @@ def processes_with_env_psutil(env_name: str, env_value: str) -> Set[int]:
             pinfo = proc.as_dict(attrs=["pid", "environ"])
         except (psutil.NoSuchProcess, IOError):
             # can't do much if psutil is not able to get this process details
-            pass
+            continue
+        except (psutil.AccessDenied, PermissionError, SystemError):
+            # macOS can deny reading process envs via sysctl(KERN_PROCARGS2)
+            if platform.system() == "Darwin":
+                LOG.debug(
+                    "Skipping process %d due to macOS environ access restriction",
+                    proc.pid,
+                    exc_info=True,
+                )
+                continue
+            raise
         else:
             penv = pinfo.get("environ")
             if penv and env_value in penv.get(env_name, ""):
@@ -63,7 +73,7 @@ def processes_with_env_psutil(env_name: str, env_value: str) -> Set[int]:
     return pids
 
 
-def processes_with_env_ps(env_name: str, env_value: str) -> Set[int]:
+def processes_with_env_ps(env_name: str, env_value: str) -> set[int]:
     """Find PIDs of processes having environment variable matching given one.
 
     It uses `$ ps xe -o pid,cmd` command so it works only on systems
@@ -76,8 +86,8 @@ def processes_with_env_ps(env_name: str, env_value: str) -> Set[int]:
              environment variable equal certain value
     :rtype: set
     """
-    pids: Set[int] = set()
-    ps_xe: List[bytes] = []
+    pids: set[int] = set()
+    ps_xe: list[bytes] = []
     try:
         cmd = "ps", "xe", "-o", "pid,cmd"
         ps_xe = subprocess.check_output(cmd).splitlines()

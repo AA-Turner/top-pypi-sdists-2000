@@ -2,19 +2,33 @@ from __future__ import annotations
 
 import difflib
 import enum
+import re
 from collections import defaultdict
-from collections.abc import Iterator, Mapping
+from collections.abc import Collection, Iterable, Iterator, Mapping
 from dataclasses import asdict, dataclass
 from functools import lru_cache
 from typing import Any, TypeAlias
 
 from schemathesis.core.jsonschema.resolver import Resolver
+from schemathesis.core.jsonschema.types import JsonSchema
 from schemathesis.core.parameters import ParameterLocation, iter_path_parameters
 from schemathesis.core.text import to_pascal_case
-from schemathesis.core.transforms import encode_pointer, get_template_fields
+from schemathesis.core.transforms import (
+    encode_pointer,
+    get_template_fields,
+    iter_decoded_pointer_segments,
+)
 from schemathesis.resources.descriptors import Cardinality
 from schemathesis.specs.openapi.adapter.references import maybe_resolve_with_resolver
-from schemathesis.specs.openapi.stateful.dependencies.naming import from_path, strip_version_prefix
+from schemathesis.specs.openapi.stateful.dependencies.naming import (
+    KeyKind,
+    from_path,
+    key_kind,
+    normalize_for_matching,
+    parameter_names_source,
+    strip_version_prefix,
+    trailing_path_parameter,
+)
 from schemathesis.specs.openapi.stateful.links import SCHEMATHESIS_LINK_EXTENSION
 
 
@@ -33,8 +47,18 @@ class DependencyGraph:
             del operation["path"]
             for input in operation["inputs"]:
                 input["resource"] = input["resource"]["name"]
+                if not input["echoes_response"]:
+                    del input["echoes_response"]
+                if not input["is_listed_identifier"]:
+                    del input["is_listed_identifier"]
+                if not input["is_parent_key"]:
+                    del input["is_parent_key"]
+                del input["body_path"]
             for output in operation["outputs"]:
                 output["resource"] = output["resource"]["name"]
+                del output["response_fields"]
+                if output.get("identifier_pointer") is None:
+                    output.pop("identifier_pointer", None)
                 if output.get("path_parameter") is None:
                     output.pop("path_parameter", None)
                 if output.get("body_field") is None:
@@ -43,6 +67,7 @@ class DependencyGraph:
         for resource in serialized["resources"].values():
             del resource["name"]
             del resource["source"]
+            del resource["inherited_fields"]
             # Simplify FK fields for readability
             if not resource["fk_fields"]:
                 del resource["fk_fields"]
@@ -59,6 +84,7 @@ class DependencyGraph:
         (needs `User.id` parameter).
         """
         encoded_paths = {id(op): encode_pointer(op.path) for op in self.operations.values()}
+        template_fields = {id(op): get_template_fields(op.path) for op in self.operations.values()}
 
         # Precomputed data for the cross-namespace scope guard (bare {id} collision check).
         # All string work happens once here rather than inside the hot inner loop.
@@ -90,6 +116,12 @@ class DependencyGraph:
                     consumers_by_resource[resource_id][consumer_id] = (consumer, [])
                 consumers_by_resource[resource_id][consumer_id][1].append(input_slot)
 
+        path_identifiers: dict[str, set[str]] = {}
+        for operation in self.operations.values():
+            for input_slot in operation.inputs:
+                if input_slot.parameter_location == ParameterLocation.PATH and input_slot.resource_field is not None:
+                    path_identifiers.setdefault(input_slot.resource.name, set()).add(input_slot.resource_field)
+
         for producer in self.operations.values():
             producer_path = encoded_paths[id(producer)]
             producer_id = id(producer)
@@ -97,6 +129,7 @@ class DependencyGraph:
             for output_slot in producer.outputs:
                 # Only iterate over consumers that match this resource
                 relevant_consumers = consumers_by_resource.get(id(output_slot.resource), {})
+                confirmed = _confirmed_input(producer, output_slot)
 
                 for consumer_id, (consumer, input_slots) in relevant_consumers.items():
                     # Skip self-references
@@ -107,6 +140,16 @@ class DependencyGraph:
                     links: dict[str, LinkDefinition] = {}
 
                     for input_slot in input_slots:
+                        if confirmed is not None and not _takes_confirmed_value(input_slot, confirmed):
+                            continue
+                        # A parent key is read from an item's own field, and only by producers not under that parent.
+                        if input_slot.is_parent_key and (
+                            input_slot.parameter_name in template_fields[producer_id]
+                            or output_slot.path_parameter is not None
+                            or output_slot.body_field is not None
+                            or output_slot.is_primitive_identifier
+                        ):
+                            continue
                         # Scope guard: skip bare {id} links where the producer is from a
                         # different namespace. Triggered only when the resource name matches the
                         # producer's path-derived name — i.e., the collision is path-based, not
@@ -137,29 +180,94 @@ class DependencyGraph:
                             # request body (e.g. POST /sessions with body {sessionId: ...}).
                             value_expr = f"$request.body#/{output_slot.body_field}"
                         elif output_slot.is_primitive_identifier:
-                            # Primitive identifier (e.g., string response from POST,
-                            # or an array of identifier strings from GET /collection).
+                            # A bare id (POST's created slug, GET's list of ids) fills only identifier fields.
+                            identifiers = path_identifiers.get(output_slot.resource.name)
+                            field = input_slot.resource_field
+                            if (
+                                identifiers
+                                and field is not None
+                                and field not in identifiers
+                                and key_kind(field) != KeyKind.IDENTIFIER
+                            ):
+                                continue
+                            # A single created value fills a name only as the key of the created item: `/tags/{tagName}`.
+                            if (
+                                output_slot.cardinality == Cardinality.ONE
+                                and isinstance(input_slot.parameter_name, str)
+                                and key_kind(input_slot.parameter_name) == KeyKind.NAME
+                                and (
+                                    f"/{{{input_slot.parameter_name}}}" not in consumer.path
+                                    or trailing_path_parameter(producer.path) is not None
+                                )
+                            ):
+                                continue
                             pointer = output_slot.pointer
                             if output_slot.cardinality == Cardinality.MANY:
                                 pointer = pointer.rstrip("/") + "/*"
                             value_expr = f"$response.body#{pointer}"
                         elif input_slot.resource_field is not None:
-                            body_pointer = extend_pointer(
-                                output_slot.pointer, input_slot.resource_field, output_slot.cardinality
+                            # A name filter's prefix says whose name it takes (`owner_name`); other names are wrong.
+                            if (
+                                input_slot.parameter_location == ParameterLocation.QUERY
+                                and isinstance(input_slot.parameter_name, str)
+                                and key_kind(input_slot.parameter_name) == KeyKind.NAME
+                                and (
+                                    not parameter_names_source(
+                                        parameter=input_slot.parameter_name,
+                                        field=input_slot.resource_field,
+                                        resource=output_slot.resource.name,
+                                        pointer=output_slot.pointer,
+                                    )
+                                    # `Rule.TemplateName` beside `Rule.Name` names a template, not the rule.
+                                    or (
+                                        any(normalize_for_matching(f) == "name" for f in output_slot.resource.fields)
+                                        and all(
+                                            output.resource is not output_slot.resource for output in consumer.outputs
+                                        )
+                                        and not normalize_for_matching(output_slot.resource.name).startswith(
+                                            normalize_for_matching(input_slot.resource_field).removesuffix("name")
+                                        )
+                                    )
+                                )
+                            ):
+                                continue
+                            # A pointer to an undeclared response field always resolves to nothing.
+                            declared: Collection[str] = (
+                                output_slot.resource.fields
+                                if output_slot.response_fields is None
+                                else output_slot.response_fields
                             )
-                            value_expr = f"$response.body#{body_pointer}"
+                            if (
+                                output_slot.resource.source >= DefinitionSource.SCHEMA_WITH_PROPERTIES
+                                and input_slot.resource_field not in declared
+                            ):
+                                if output_slot.identifier_pointer is None or not _names_identifier(
+                                    input_slot.resource_field, output_slot.resource.name
+                                ):
+                                    continue
+                                value_expr = f"$response.body#{output_slot.identifier_pointer}"
+                            else:
+                                body_pointer = extend_pointer(
+                                    output_slot.pointer, input_slot.resource_field, output_slot.cardinality
+                                )
+                                value_expr = f"$response.body#{body_pointer}"
                         else:
                             # No resource field means use the whole resource
                             value_expr = f"$response.body#{output_slot.pointer}"
+                        if value_expr.startswith("$response.body") and output_slot.status_code in ("204", "205"):
+                            # These statuses forbid a body, whatever the schema declares.
+                            continue
                         link_name = f"{consumer.method.capitalize()}{input_slot.resource.name}"
+                        # A separate link, so other links keep generating these fields.
+                        if input_slot.echoes_response:
+                            link_name += "Echo"
                         parameters = {}
                         request_body: dict[str, Any] | list = {}
                         # Data is extracted from response body
                         if input_slot.parameter_location == ParameterLocation.BODY:
-                            if isinstance(input_slot.parameter_name, int):
-                                request_body = [value_expr]
-                            else:
-                                request_body = _build_nested_body(input_slot.parameter_name, value_expr)
+                            request_body = build_nested_body(
+                                input_slot.body_path or (input_slot.parameter_name,), value_expr
+                            )
                         else:
                             parameters = {
                                 f"{input_slot.parameter_location.value}.{input_slot.parameter_name}": value_expr,
@@ -167,10 +275,7 @@ class DependencyGraph:
                         existing = links.get(link_name)
                         if existing is not None:
                             existing.parameters.update(parameters)
-                            if isinstance(existing.request_body, dict) and isinstance(request_body, dict):
-                                _merge_nested_body(existing.request_body, request_body)
-                            else:
-                                existing.request_body = request_body
+                            existing.request_body = merge_request_body(existing.request_body, request_body)
                             continue
                         links[link_name] = LinkDefinition(
                             operation_ref=f"#/paths/{consumer_path}/{consumer.method}",
@@ -182,15 +287,22 @@ class DependencyGraph:
                     # For /users/{userId}/posts -> /users/{userId}/posts/{postId}, userId is shared
                     # but only postId gets mapped from the response. We need to propagate userId.
                     if links:
-                        producer_params = get_template_fields(producer.path)
-                        consumer_params = get_template_fields(consumer.path)
-                        shared_params = producer_params & consumer_params
+                        producer_fields = template_fields[producer_id]
+                        listed_identifier = any(slot.is_listed_identifier for slot in input_slots)
+                        shared_params = [
+                            name
+                            for name in template_fields[consumer_id]
+                            if name in producer_fields
+                            and not (listed_identifier and _keys_different_items(producer, consumer, name))
+                        ]
 
                         for link_def in links.values():
                             # Find which path parameters are already mapped
                             mapped_params = {name for name, _ in iter_path_parameters(link_def.parameters)}
                             # Add $request.path.X for shared params not already mapped
-                            for param in shared_params - mapped_params:
+                            for param in shared_params:
+                                if param in mapped_params:
+                                    continue
                                 link_def.parameters[f"path.{param}"] = f"$request.path.{param}"
 
                         yield ResponseLinks(
@@ -200,18 +312,28 @@ class DependencyGraph:
                         )
 
         # Generate links from FK fields (e.g., customer_id -> GET /customers/{id})
-        yield from self._iter_fk_links(encoded_paths, consumers_by_resource)
+        yield from self._iter_fk_links(encoded_paths)
 
-    def _iter_fk_links(
-        self,
-        encoded_paths: dict[int, str],
-        consumers_by_resource: dict[int, dict[int, tuple[OperationNode, list[InputSlot]]]],
-    ) -> Iterator[ResponseLinks]:
+    def _iter_fk_links(self, encoded_paths: dict[int, str]) -> Iterator[ResponseLinks]:
         """Generate links from foreign key fields in producer responses.
 
         For example, if GET /orders/{id} returns {"id": "...", "customer_id": "..."},
         this creates a link to GET /customers/{id} using the customer_id field value.
         """
+        # Consumers by the resource field they take; FK values never fill body parameters
+        consumers_by_field: dict[tuple[int, str | None], dict[int, tuple[OperationNode, list[InputSlot]]]] = (
+            defaultdict(dict)
+        )
+        for consumer in self.operations.values():
+            consumer_id = id(consumer)
+            for input_slot in consumer.inputs:
+                if input_slot.parameter_location == ParameterLocation.BODY:
+                    continue
+                consumers = consumers_by_field[(id(input_slot.resource), input_slot.resource_field)]
+                if consumer_id not in consumers:
+                    consumers[consumer_id] = (consumer, [])
+                consumers[consumer_id][1].append(input_slot)
+
         for producer in self.operations.values():
             producer_path = encoded_paths[id(producer)]
             producer_id = id(producer)
@@ -223,18 +345,27 @@ class DependencyGraph:
                 # Skip path-keyed and body-keyed outputs (no response body to extract FK fields from)
                 if output_slot.path_parameter is not None or output_slot.body_field is not None:
                     continue
+                # These statuses forbid a body, whatever the schema declares.
+                if output_slot.status_code in ("204", "205"):
+                    continue
 
                 resource = output_slot.resource
                 fk_links: dict[str, LinkDefinition] = {}
+                # Next suffix to try per link name, as names taken once stay taken
+                next_suffixes: dict[str, int] = {}
+                # The resource merges every schema that described it; this response may declare only some fields.
+                declared = output_slot.response_fields
 
                 for fk_field in resource.fk_fields:
+                    if declared is not None and fk_field.field_name not in declared:
+                        continue
                     # Find the target resource in our resource map
                     target_resource = self.resources.get(fk_field.target_resource)
                     if target_resource is None:
                         continue
 
-                    # Find consumers that need the target resource
-                    relevant_consumers = consumers_by_resource.get(id(target_resource), {})
+                    # Find consumers expecting the field the FK suffix names, e.g. customer_id -> id, user_uuid -> uuid
+                    relevant_consumers = consumers_by_field.get((id(target_resource), fk_field.target_field), {})
 
                     for consumer_id, (consumer, input_slots) in relevant_consumers.items():
                         # Skip self-references
@@ -244,15 +375,6 @@ class DependencyGraph:
                         consumer_path = encoded_paths[consumer_id]
 
                         for input_slot in input_slots:
-                            # Match FK suffix to consumer's expected field
-                            # e.g., customer_id -> id, user_uuid -> uuid
-                            if input_slot.resource_field != fk_field.target_field:
-                                continue
-
-                            # Skip body parameters for FK linking
-                            if input_slot.parameter_location == ParameterLocation.BODY:
-                                continue
-
                             # Build the body pointer to the FK field
                             if fk_field.is_array:
                                 # For array FK, fan out across every element: /data/*/site_ids/*
@@ -270,7 +392,10 @@ class DependencyGraph:
                             }
                             operation_ref = f"#/paths/{consumer_path}/{consumer.method}"
                             link_name = _unique_link_name(
-                                f"{consumer.method.capitalize()}{fk_field.target_resource}", fk_links, operation_ref
+                                f"{consumer.method.capitalize()}{fk_field.target_resource}",
+                                fk_links,
+                                operation_ref,
+                                next_suffixes,
                             )
                             if link_name is None:
                                 continue
@@ -283,11 +408,13 @@ class DependencyGraph:
 
                 # Process nested FK fields (e.g., shipping.warehouse_id, line_items[].product_id)
                 for nested_fk in resource.nested_fk_fields:
+                    if declared is not None and next(iter_decoded_pointer_segments(nested_fk.pointer)) not in declared:
+                        continue
                     target_resource = self.resources.get(nested_fk.target_resource)
                     if target_resource is None:
                         continue
 
-                    relevant_consumers = consumers_by_resource.get(id(target_resource), {})
+                    relevant_consumers = consumers_by_field.get((id(target_resource), nested_fk.target_field), {})
 
                     for consumer_id, (consumer, input_slots) in relevant_consumers.items():
                         if consumer_id == producer_id:
@@ -296,11 +423,6 @@ class DependencyGraph:
                         consumer_path = encoded_paths[consumer_id]
 
                         for input_slot in input_slots:
-                            if input_slot.resource_field != nested_fk.target_field:
-                                continue
-                            if input_slot.parameter_location == ParameterLocation.BODY:
-                                continue
-
                             # Build pointer: output_slot.pointer + nested_fk.pointer
                             if output_slot.cardinality == Cardinality.MANY:
                                 base = output_slot.pointer.rstrip("/") + "/*"
@@ -312,7 +434,10 @@ class DependencyGraph:
 
                             operation_ref = f"#/paths/{consumer_path}/{consumer.method}"
                             link_name = _unique_link_name(
-                                f"{consumer.method.capitalize()}{nested_fk.target_resource}", fk_links, operation_ref
+                                f"{consumer.method.capitalize()}{nested_fk.target_resource}",
+                                fk_links,
+                                operation_ref,
+                                next_suffixes,
                             )
                             if link_name is None:
                                 continue
@@ -531,41 +656,70 @@ def extract_nested_fk_fields(
     return result
 
 
-def _build_nested_body(path: str, value: str) -> dict[str, Any]:
-    """Build a nested dict structure from a path like 'shipping/warehouse_id'.
+def _confirmed_input(producer: OperationNode, output_slot: OutputSlot) -> InputSlot | None:
+    """The request input whose value a path- or body-keyed output confirms."""
+    if output_slot.path_parameter is not None:
+        location, name = ParameterLocation.PATH, output_slot.path_parameter
+    elif output_slot.body_field is not None:
+        location, name = ParameterLocation.BODY, output_slot.body_field
+    else:
+        return None
+    return find_input(producer.inputs, location, name)
+
+
+def _takes_confirmed_value(input_slot: InputSlot, confirmed: InputSlot) -> bool:
+    # The confirmed request value is a single scalar key, and a name never stands in for an identifier.
+    if input_slot.echoes_response:
+        return False
+    field = input_slot.resource_field
+    if field is not None and input_slot.resource.types.get(field) == {"array"}:
+        return False
+    return {_key_kind(input_slot.parameter_name), _key_kind(confirmed.parameter_name)} != {
+        KeyKind.NAME,
+        KeyKind.IDENTIFIER,
+    }
+
+
+def _names_identifier(field: str, resource_name: str) -> bool:
+    # `id` or `<resource>Id`: the field that identifies the resource itself, not one it refers to
+    return normalize_for_matching(field) in ("id", normalize_for_matching(resource_name) + "id")
+
+
+def _key_kind(parameter_name: str | int) -> KeyKind | None:
+    if isinstance(parameter_name, int):
+        return None
+    return key_kind(parameter_name)
+
+
+def build_nested_body(path: BodyPath, value: object) -> dict[str, Any] | list[Any]:
+    """Build a body holding `value` at `path`, integers marking array items.
 
     Examples:
-        _build_nested_body("customer_id", "$val") -> {"customer_id": "$val"}
-        _build_nested_body("shipping/warehouse_id", "$val") -> {"shipping": {"warehouse_id": "$val"}}
-        _build_nested_body("items/0/product_id", "$val") -> {"items": [{"product_id": "$val"}]}
+        build_nested_body(("customer_id",), "$val") -> {"customer_id": "$val"}
+        build_nested_body(("shipping", "warehouse_id"), "$val") -> {"shipping": {"warehouse_id": "$val"}}
+        build_nested_body(("items", 0, "product_id"), "$val") -> {"items": [{"product_id": "$val"}]}
+        build_nested_body((0, "product_id"), "$val") -> [{"product_id": "$val"}]
 
     """
-    if "/" not in path:
-        return {path: value}
+    *parents, leaf = path
+    body: dict[str, Any] | list[Any] = [value] if isinstance(leaf, int) else {leaf: value}
+    for step in reversed(parents):
+        body = [body] if isinstance(step, int) else {step: body}
+    return body
 
-    parts = path.split("/")
-    result: dict[str, Any] = {}
-    current = result
 
-    for i, part in enumerate(parts[:-1]):
-        next_part = parts[i + 1]
-        # Check if next part is an array index
-        if next_part.isdigit():
-            current[part] = [{}]
-            current = current[part][0]
-        elif part.isdigit():
-            # Skip array indices - we're already inside the array
-            continue
-        else:
-            current[part] = {}
-            current = current[part]
-
-    # Set the final value
-    final_key = parts[-1]
-    if not final_key.isdigit():
-        current[final_key] = value
-
-    return result
+def merge_request_body(
+    target: dict[str, Any] | list[Any], source: dict[str, Any] | list[Any]
+) -> dict[str, Any] | list[Any]:
+    """Deep merge `source` into `target` and return the result; `source` wins when the shapes differ."""
+    inner_target, inner_source = target, source
+    if isinstance(target, list) and isinstance(source, list):
+        # Fields of top-level array items merge like those of nested array items.
+        inner_target, inner_source = target[0], source[0]
+    if isinstance(inner_target, dict) and isinstance(inner_source, dict):
+        _merge_nested_body(inner_target, inner_source)
+        return target
+    return source
 
 
 def _merge_nested_body(target: dict[str, Any], source: dict[str, Any]) -> None:
@@ -672,6 +826,40 @@ class OperationNode:
     outputs: list[OutputSlot]
 
 
+def find_input(inputs: Iterable[InputSlot], location: ParameterLocation, name: str) -> InputSlot | None:
+    """The first input bound to the `location` parameter called `name`."""
+    return next((slot for slot in inputs if slot.parameter_location == location and slot.parameter_name == name), None)
+
+
+# A body field location, integers marking array items.
+BodyPath: TypeAlias = tuple[str | int, ...]
+# FK fields behind a bundled reference, by the reference's original URI and the remaining depth.
+NestedFKCache: TypeAlias = dict[tuple[str, int], list[tuple[BodyPath, str, str]]]
+
+
+@dataclass(slots=True)
+class DeferredBindings:
+    """Inputs of one operation that bind only once every operation has been scanned."""
+
+    # Nested-body FK lookups whose target resource was not registered yet.
+    nested_fks: list[tuple[str, str, BodyPath]]
+    # Scalar body fields that may name the collection listing their values (`country` <- `GET /countries`).
+    named_scalars: list[tuple[str, str, JsonSchema]]
+    # Required scalar body fields.
+    body_fields: list[tuple[str, JsonSchema]]
+    # `(resource, parameter)` for path parameters named after a field of their owning resource (`/projects/{code}`).
+    field_named_path_parameters: list[tuple[str, str]]
+    # Body fields a client may send.
+    writable_body_fields: dict[str, JsonSchema]
+
+    def __init__(self) -> None:
+        self.nested_fks = []
+        self.named_scalars = []
+        self.body_fields = []
+        self.field_named_path_parameters = []
+        self.writable_body_fields = {}
+
+
 @dataclass(slots=True)
 class InputSlot:
     """A required input for an operation."""
@@ -688,6 +876,14 @@ class InputSlot:
     # Whether this input was matched via suffix matching (e.g., "file_name" -> "BackupFile")
     # Suffix-matched inputs can be upgraded by merge_related_resources if a producer exists
     is_suffix_matched: bool = False
+    # Whether this input sends back a value a response returned, e.g. a `version` token for an update
+    echoes_response: bool = False
+    # Whether a parent key named after its collection takes the identifier the collection lists (`{warehouse}`)
+    is_listed_identifier: bool = False
+    # Whether this input takes the key of the parent an item lives under, read from the item (`Shipment.warehouseId`)
+    is_parent_key: bool = False
+    # Where a nested body field lands, e.g. `("items", 0, "product_id")`; empty for a top-level parameter
+    body_path: BodyPath = ()
 
 
 @dataclass(slots=True)
@@ -715,6 +911,12 @@ class OutputSlot:
     # True when the response body is a map keyed by identifier; capture every map key
     # as a resource instance (e.g. `{<teamKey>: {...}, ...}` from `GET /teams/statuses`).
     extract_object_keys: bool = False
+    # Fields the response declares at `pointer`; `None` when it declares none.
+    # Resources are shared by name, so this can differ from `resource.fields`.
+    response_fields: frozenset[str] | None = None
+    # Envelope field identifying the resource when the resource itself declares no identifier
+    # (`/bookingid` in `{bookingid: 1, booking: {...}}`).
+    identifier_pointer: str | None = None
 
 
 @dataclass(slots=True)
@@ -762,6 +964,8 @@ class ResourceDefinition:
     fk_fields: list[FKField]
     # FK fields found at nested paths in the schema
     nested_fk_fields: list[NestedFKField]
+    # Fields inherited through `allOf` rather than declared by the schema itself
+    inherited_fields: frozenset[str] = frozenset()
 
     @classmethod
     def without_properties(cls, name: str) -> ResourceDefinition:
@@ -787,16 +991,19 @@ class ResourceDefinition:
         )
 
 
-def _unique_link_name(base: str, links: dict[str, LinkDefinition], operation_ref: str) -> str | None:
+def _unique_link_name(
+    base: str, links: dict[str, LinkDefinition], operation_ref: str, next_suffixes: dict[str, int]
+) -> str | None:
     """Keep the first link's name, and give a different destination sharing it one of its own."""
     existing = links.get(base)
     if existing is None:
         return base
     if existing.operation_ref == operation_ref:
         return None
-    suffix = 2
+    suffix = next_suffixes.get(base, 2)
     while f"{base}{suffix}" in links:
         suffix += 1
+    next_suffixes[base] = suffix + 1
     return f"{base}{suffix}"
 
 
@@ -818,3 +1025,17 @@ class DefinitionSource(enum.IntEnum):
 OperationMap: TypeAlias = dict[str, OperationNode]
 ResourceMap: TypeAlias = dict[str, ResourceDefinition]
 CanonicalizationCache: TypeAlias = dict[str, Mapping[str, Any]]
+
+
+def _keys_different_items(producer: OperationNode, consumer: OperationNode, parameter: str) -> bool:
+    """Whether `{parameter}` sits under different parents, so each operation names a different item with it.
+
+    `/warehouses/{name}` and `/warehouses/{warehouse}/shelves/{name}/bins` share `{name}`, but one is a warehouse
+    and the other a shelf.
+    """
+    placeholder = "/{" + parameter + "}"
+    return _shape(producer.path.split(placeholder, 1)[0]) != _shape(consumer.path.split(placeholder, 1)[0])
+
+
+def _shape(path: str) -> str:
+    return re.sub(r"\{[^}]*\}", "{}", path)

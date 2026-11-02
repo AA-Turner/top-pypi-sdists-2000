@@ -22,6 +22,7 @@ from unittest.mock import patch
 import ansible.module_utils.basic as mock_ansible_module
 from ansible.module_utils import basic
 
+from ansiblelint._mockings import is_lint_mock_module
 from ansiblelint.rules import AnsibleLintRule, RulesCollection
 from ansiblelint.text import has_jinja
 from ansiblelint.utils import load_plugin
@@ -37,7 +38,7 @@ if TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 ignored_re = re.compile(
-    "|".join(  # noqa: FLY002
+    "|".join(  # ruff:ignore[static-join-to-f-string]
         [
             r"^parameters are mutually exclusive:",
             # https://github.com/ansible/ansible-lint/issues/3128 as strings can be jinja
@@ -136,6 +137,11 @@ class ArgsRule(AnsibleLintRule):
         ) and loaded_module.plugin_resolved_path.endswith(".ps1"):
             return []
 
+        # mock_modules stubs use an empty argument_spec and would otherwise
+        # report every real parameter as unsupported (args[module] / basic.py).
+        if is_lint_mock_module(loaded_module.plugin_resolved_path):
+            return []
+
         module_args = {
             key: value
             for key, value in task["action"].items()
@@ -198,9 +204,17 @@ class ArgsRule(AnsibleLintRule):
                 return []
             assert spec.loader is not None
             module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-
+            previous_module = sys.modules.get(spec.name)
+            sys.modules[spec.name] = module
             try:
+                spec.loader.exec_module(module)
+            finally:
+                if previous_module is None:
+                    sys.modules.pop(spec.name, None)
+                else:
+                    sys.modules[spec.name] = previous_module
+
+            try:  # ruff:ignore[too-many-statements-in-try-clause]
                 if not hasattr(module, "main"):
                     # skip validation for module options that are implemented as action plugin
                     # as the option values can be changed in action plugin and are not passed
@@ -224,7 +238,7 @@ class ArgsRule(AnsibleLintRule):
                     # as what happens may be very hard to debug.
                     with contextlib.redirect_stdout(fio):
                         # pylint: disable=protected-access
-                        basic._ANSIBLE_ARGS = None  # noqa: SLF001
+                        basic._ANSIBLE_ARGS = None  # ruff:ignore[private-member-access]
                         try:
                             module.main()
                         except SystemExit:
@@ -315,9 +329,12 @@ class ArgsRule(AnsibleLintRule):
 
 # testing code to be loaded only with pytest or when executed the rule file
 if "pytest" in sys.modules:
-    import pytest  # noqa: TC002
+    from typing import cast
+
+    import pytest  # ruff:ignore[typing-only-third-party-import]
 
     from ansiblelint.runner import Runner  # pylint: disable=ungrouped-imports
+    from ansiblelint.utils import Task
 
     def test_args_module_fail(default_rules_collection: RulesCollection) -> None:
         """Test rule invalid module options."""
@@ -381,13 +398,13 @@ if "pytest" in sys.modules:
                 return getattr(self, key)
 
         rule = ArgsRule()
-        task = MockTask()
+        task = cast("Task", MockTask())
         failed_msg = '{"msg": "value of default must be one of: allow, deny, reject"}'
 
         # pylint: disable=protected-access
-        results = rule._parse_failed_msg(  # noqa: SLF001
+        results = rule._parse_failed_msg(  # ruff:ignore[private-member-access]
             failed_msg,
-            task,  # type: ignore[arg-type]
+            task,
             "ufw",
         )
 

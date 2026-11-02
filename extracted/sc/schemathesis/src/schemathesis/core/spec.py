@@ -1,49 +1,37 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, NoReturn, Protocol
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Generator, Iterator
 
-    import jsonschema_rs
     from hypothesis.strategies import SearchStrategy
     from requests.structures import CaseInsensitiveDict
 
-    from schemathesis.auths import AuthContext, AuthStorage
+    from schemathesis.auths import AuthContext, AuthProvider, AuthStorage
+    from schemathesis.checks import CheckContext
     from schemathesis.config import GenerationConfig, ProjectConfig
     from schemathesis.core import Body, Specification
     from schemathesis.core.error_feedback import ErrorFeedbackStore
+    from schemathesis.core.error_feedback.store import Observation
     from schemathesis.core.errors import InvalidSchema
-    from schemathesis.core.jsonschema.types import JsonSchemaObject
+    from schemathesis.core.failures import ServerError
+    from schemathesis.core.jsonschema.types import JsonSchemaObject, JsonValue
     from schemathesis.core.result import Result
     from schemathesis.core.schema_analysis import SchemaWarning
     from schemathesis.core.statistic import ApiStatistic, StatefulInference
     from schemathesis.core.transport import CallOutcome, HttpMethod, Response
     from schemathesis.engine.link_calibration import LinkCalibrationState
     from schemathesis.engine.observations import Observations
-    from schemathesis.engine.run import Phase
+    from schemathesis.engine.recorder import ScenarioRecorder
     from schemathesis.generation import GenerationMode
     from schemathesis.generation.case import Case
-    from schemathesis.generation.meta import CaseMetadata
-    from schemathesis.generation.stateful.state_machine import APIStateMachine
+    from schemathesis.generation.feedback import FeedbackSources
+    from schemathesis.generation.meta import CaseMetadata, TestPhase
+    from schemathesis.generation.stateful.state_machine import APIStateMachine, StepInput
     from schemathesis.hooks import HookDispatcher
-    from schemathesis.python._constants.pool import ConstantsPool
     from schemathesis.resources import ExtraDataSource, ResourcePool
     from schemathesis.schemas import APIOperation
-
-
-@dataclass
-class CoverageCapabilities:
-    """Coverage-phase data the engine asks of a specification.
-
-    Specs that do not participate in coverage generation can return an empty instance
-    (`format_strategies={}`, `update_pattern=None`, `validator_cls=None`).
-    """
-
-    format_strategies: dict[str, SearchStrategy[Any]]
-    update_pattern: Callable[[str, int | None, int | None], str] | None
-    validator_cls: type[jsonschema_rs.Validator] | None
 
 
 class SchemaMetadata(Protocol):
@@ -58,17 +46,14 @@ class SchemaMetadata(Protocol):
     @property
     def specification(self) -> Specification: ...  # pragma: no cover
 
+    @property
+    def title(self) -> str | None: ...  # pragma: no cover
+
     def validate(self) -> None: ...  # pragma: no cover
 
     def get_base_url(self) -> str: ...  # pragma: no cover
 
     def get_local_hook_dispatcher(self) -> HookDispatcher | None: ...  # pragma: no cover
-
-
-class SchemaWarnings(Protocol):
-    """Static-analysis warnings collected from the schema."""
-
-    def iter_schema_warnings(self) -> list[SchemaWarning]: ...  # pragma: no cover
 
 
 class Scheduler(Protocol):
@@ -79,9 +64,48 @@ class Scheduler(Protocol):
     def release(self) -> None: ...  # pragma: no cover
 
 
-class OperationsProvider(Protocol):
-    """Operation enumeration, lookup, statistics, and unit-phase scheduling."""
+class AuthFlowSteps(Protocol):
+    """Operations a sign-up and login flow calls, and where the login response carries the token."""
 
+    @property
+    def register_operation(self) -> str: ...  # pragma: no cover
+
+    @property
+    def login_operation(self) -> str: ...  # pragma: no cover
+
+    @property
+    def login_media_type(self) -> str: ...  # pragma: no cover
+
+    @property
+    def credentials(self) -> tuple[str, ...]: ...  # pragma: no cover
+
+    @property
+    def token_pointer(self) -> str: ...  # pragma: no cover
+
+
+class AuthFlow(Protocol):
+    """A sign-up and login flow the engine runs to authenticate the requests that follow."""
+
+    @property
+    def spec(self) -> AuthFlowSteps: ...  # pragma: no cover
+
+    def is_supplied(self) -> bool: ...  # pragma: no cover
+
+    # `schemathesis.toml` lines that authenticate through this flow.
+    def config_lines(self) -> list[str]: ...  # pragma: no cover
+
+    def sign_up_body(self, operation: APIOperation) -> tuple[dict[str, JsonValue], str] | None: ...  # pragma: no cover
+
+    def authenticate(self, credentials: dict[str, JsonValue], token: str) -> None: ...  # pragma: no cover
+
+
+class ApiSchema(SchemaMetadata, Protocol):
+    """Full schema contract."""
+
+    # Static-analysis warnings collected from the schema.
+    def iter_schema_warnings(self) -> list[SchemaWarning]: ...  # pragma: no cover
+
+    # Operation enumeration, lookup, statistics, and unit-phase scheduling.
     @property
     def statistic(self) -> ApiStatistic: ...  # pragma: no cover
 
@@ -93,23 +117,24 @@ class OperationsProvider(Protocol):
 
     def get_tags(self, operation: APIOperation) -> list[str] | None: ...  # pragma: no cover
 
-    def get_unit_scheduler(
-        self,
-        operations: list[Result[APIOperation, InvalidSchema]],
-        phase: Phase,
-    ) -> Scheduler: ...  # pragma: no cover
+    def get_operation_layers(self, operations: list[APIOperation]) -> list[list[APIOperation]]: ...  # pragma: no cover
 
-
-class CaseFactory(Protocol):
-    """Test-case construction for an operation."""
-
+    # Test-case construction for an operation.
     def get_case_strategy(
         self,
         operation: APIOperation,
         hooks: HookDispatcher | None = ...,
         auth_storage: AuthStorage | None = ...,
         generation_mode: GenerationMode = ...,
-        **kwargs: Any,
+        feedback: FeedbackSources = ...,
+        *,
+        path_parameters: dict[str, Any] | None = ...,
+        headers: dict[str, Any] | None = ...,
+        cookies: dict[str, Any] | None = ...,
+        query: dict[str, Any] | None = ...,
+        body: Any = ...,
+        media_type: str | None = ...,
+        phase: TestPhase = ...,
     ) -> SearchStrategy[Case]: ...  # pragma: no cover
 
     def make_case(
@@ -129,21 +154,12 @@ class CaseFactory(Protocol):
     ) -> Case: ...  # pragma: no cover
 
     def get_strategies_from_examples(
-        self, operation: APIOperation, **kwargs: Any
+        self, operation: APIOperation, feedback: FeedbackSources = ..., **kwargs: Any
     ) -> list[SearchStrategy[Case]]: ...  # pragma: no cover
-
-    def get_custom_format_strategies(
-        self, generation_config: GenerationConfig, mode: GenerationMode
-    ) -> dict[str, SearchStrategy]: ...  # pragma: no cover
 
     def revalidate_case_metadata(self, case: Case) -> None: ...  # pragma: no cover
 
-
-class CoverageBackend(Protocol):
-    """Coverage-phase generation surface."""
-
-    def get_coverage_capabilities(self) -> CoverageCapabilities: ...  # pragma: no cover
-
+    # Coverage-phase generation.
     def iter_coverage_cases(
         self,
         operation: APIOperation,
@@ -154,19 +170,14 @@ class CoverageBackend(Protocol):
         error_feedback: ErrorFeedbackStore | None = ...,
     ) -> Iterator[Case]: ...  # pragma: no cover
 
-
-class StatefulBackend(Protocol):
-    """Stateful-phase surface: state machine, link candidates, fuzz weights."""
-
+    # Stateful phase: state machine, link candidates, fuzz weights.
     def as_state_machine(self) -> type[APIStateMachine]: ...  # pragma: no cover
 
-    def _build_state_machine(
+    def build_state_machine(
         self,
         *,
-        error_feedback: ErrorFeedbackStore | None,
+        feedback: FeedbackSources,
         link_calibration: LinkCalibrationState | None,
-        extra_data_source: ExtraDataSource | None,
-        constants_value_source: ConstantsPool | None = ...,
     ) -> type[APIStateMachine]: ...  # pragma: no cover
 
     def apply_stateful_inference(self, observations: Observations | None) -> StatefulInference: ...  # pragma: no cover
@@ -183,10 +194,17 @@ class StatefulBackend(Protocol):
 
     def compute_fuzz_operation_weights(self, operations: list[APIOperation]) -> dict[str, int]: ...  # pragma: no cover
 
+    def record_link_outcome(
+        self,
+        *,
+        calibration: LinkCalibrationState,
+        response: Response,
+        observations: tuple[Observation, ...],
+        step_input: StepInput,
+        recorder: ScenarioRecorder,
+    ) -> None: ...  # pragma: no cover
 
-class TransportShape(Protocol):
-    """Wire-level transformations: URL construction, body preparation, response validation."""
-
+    # Wire-level transformations: URL construction, body preparation, response validation.
     def validate_response(
         self,
         operation: APIOperation,
@@ -197,16 +215,32 @@ class TransportShape(Protocol):
 
     def build_request_url(self, case: Case, base_url: str) -> str: ...  # pragma: no cover
 
-    def prepare_request_body(self, body: Body) -> Body: ...  # pragma: no cover
+    def prepare_request_body(self, case: Case) -> Body: ...  # pragma: no cover
 
     def evaluate_server_error(self, case: Case, response: Response) -> None: ...  # pragma: no cover
 
-    def classify_call_outcome(self, response: Response) -> CallOutcome: ...  # pragma: no cover
+    def evaluate_auth(self, ctx: CheckContext, response: Response, case: Case) -> bool | None: ...  # pragma: no cover
+    def server_error(self, case: Case, response: Response) -> ServerError: ...  # pragma: no cover
+
+    def evaluate_negative_data(
+        self, ctx: CheckContext, response: Response, case: Case
+    ) -> bool | None: ...  # pragma: no cover
+
+    def evaluate_positive_data(
+        self, ctx: CheckContext, response: Response, case: Case
+    ) -> bool | None: ...  # pragma: no cover
+
+    def classify_call_outcome(self, case: Case, response: Response) -> CallOutcome: ...  # pragma: no cover
+
+    def status_name_for_code(self, status_code: int) -> str | None: ...  # pragma: no cover
+
+    def hash_case(self, case: Case) -> int: ...  # pragma: no cover
 
     def prepare_multipart(
         self,
         form_data: dict[str, Any],
         operation: APIOperation,
+        media_type: str,
         selected_content_types: dict[str, str] | None = ...,
     ) -> tuple[list | None, dict[str, Any] | None]: ...  # pragma: no cover
 
@@ -214,38 +248,21 @@ class TransportShape(Protocol):
         self, operation: APIOperation, location: str
     ) -> Callable | None: ...  # pragma: no cover
 
-    def get_request_payload_content_types(self, operation: APIOperation) -> list[str]: ...  # pragma: no cover
+    def declared_base_path(self) -> str: ...  # pragma: no cover
 
-
-class ProbeAdapter(Protocol):
-    """Hooks the engine invokes after probes uncover server behavior."""
-
+    # Adaptations the engine invokes after probes uncover server behavior.
     def create_extra_data_source(self) -> ExtraDataSource | None: ...  # pragma: no cover
 
     def adapt_to_null_byte_in_header_failure(self) -> None: ...  # pragma: no cover
 
     def adapt_to_path_decoder_rejection(self) -> None: ...  # pragma: no cover
 
-
-class AuthBackend(Protocol):
-    """Spec-aware authentication for generated cases."""
-
+    # Spec-aware authentication for generated cases.
     def apply_auth(self, case: Case, context: AuthContext) -> bool: ...  # pragma: no cover
+
+    def auth_flow(self) -> AuthFlow | None: ...  # pragma: no cover
 
     @property
     def reauth_retry_statuses(self) -> frozenset[int]: ...  # pragma: no cover
 
-
-class ApiSchema(
-    SchemaMetadata,
-    SchemaWarnings,
-    OperationsProvider,
-    CaseFactory,
-    CoverageBackend,
-    StatefulBackend,
-    TransportShape,
-    ProbeAdapter,
-    AuthBackend,
-    Protocol,
-):
-    """Full schema contract; composed of role protocols so callers can depend on a narrow slice."""
+    def security_auth_providers(self) -> Iterator[AuthProvider]: ...  # pragma: no cover

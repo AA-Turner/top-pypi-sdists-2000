@@ -2,6 +2,62 @@ import pytest
 from flask import jsonify, request
 
 
+@pytest.mark.parametrize(
+    ["reference", "component"],
+    [
+        (
+            "https://example.invalid/text.json",
+            {"$id": "https://example.invalid/text.json", "type": "string"},
+        ),
+        (
+            "https://example.invalid/text.json#/foo",
+            {"$id": "https://example.invalid/text.json", "foo": {"type": "string"}},
+        ),
+    ],
+    ids=["whole-document", "non-component-fragment"],
+)
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_external_ref_in_failure_schema_resolves(ctx, cli, snapshot_cli, reference, component):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/data": {
+                "get": {
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "required": ["a"],
+                                        "properties": {"a": {"$ref": reference}},
+                                    }
+                                }
+                            },
+                        }
+                    }
+                }
+            }
+        },
+        version="3.1.0",
+        components={"schemas": {"Text": component}},
+    )
+
+    @app.route("/data", methods=["GET"])
+    def data():
+        return jsonify({})
+
+    assert (
+        cli.run_openapi_app(
+            app,
+            "--max-examples=1",
+            "--checks=response_schema_conformance",
+            "--phases=examples,fuzzing",
+        )
+        == snapshot_cli
+    )
+
+
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_bundled_ref_schema_path_display(ctx, cli, snapshot_cli):
     # When response validation fails inside a $ref-ed component, the "Schema at" path
@@ -44,13 +100,14 @@ def test_bundled_ref_schema_path_display(ctx, cli, snapshot_cli):
         # Return an integer for host instead of a string — always a type error
         return jsonify({"host": 42}), 200
 
-    result = cli.run_openapi_app(
-        app,
-        "--checks=response_schema_conformance",
-        "--max-examples=1",
+    assert (
+        cli.run_openapi_app(
+            app,
+            "--checks=response_schema_conformance",
+            "--max-examples=1",
+        )
+        == snapshot_cli
     )
-    assert "x-bundled" not in result.stdout
-    assert result == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
@@ -203,14 +260,50 @@ def test_bundled_ref_in_negative_testing_description(ctx, cli, snapshot_cli):
             return jsonify({"error": "non-printable"}), 400
         return jsonify({"id": 1}), 201
 
-    result = cli.run_openapi_app(
-        app,
-        "--checks=negative_data_rejection",
-        "--phases=fuzzing",
-        "--mode=negative",
-        "--max-examples=10",
+    assert (
+        cli.run_openapi_app(
+            app,
+            "--checks=negative_data_rejection",
+            "--phases=fuzzing",
+            "--mode=negative",
+            "--max-examples=10",
+        )
+        == snapshot_cli
     )
 
-    assert "#/x-bundled/" not in result.stdout
 
-    assert result == snapshot_cli
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_whole_external_file_reference_in_schema_location(ctx, cli, app_runner, snapshot_cli):
+    # A `$ref` without a fragment points at the whole referenced file, so the "Schema at"
+    # location must name that file instead of coming out empty.
+    paths = {
+        "/pets": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {"application/json": {"schema": {"type": "array", "items": {"$ref": "pets.json"}}}},
+                    }
+                }
+            }
+        }
+    }
+    app = ctx.openapi.make_permissive_flask_app(ctx.openapi.build_schema(paths, version="3.0.2"))
+    base_url = app_runner.openapi_url(app, path="")
+    schema_path = ctx.openapi.write_schema(paths, version="3.0.2")
+    ctx.makefile({"type": "object", "required": ["name"]}, filename="pets")
+
+    @app.route("/api/pets", methods=["GET"])
+    def pets():
+        # Missing "name" — always violates the externally referenced schema
+        return jsonify([{"x": 1}]), 200
+
+    assert (
+        cli.run(
+            str(schema_path),
+            f"--url={base_url}/api",
+            "--checks=response_schema_conformance",
+            "--max-examples=1",
+        )
+        == snapshot_cli
+    )

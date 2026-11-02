@@ -3,7 +3,6 @@ from __future__ import annotations
 import textwrap
 import time
 from dataclasses import dataclass, field
-from itertools import groupby
 from json.decoder import JSONDecodeError
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -14,35 +13,45 @@ from schemathesis.cli.commands.run.context import PHASE_STATUS_PRIORITY
 from schemathesis.cli.commands.run.handlers.base import BaseOutputHandler
 from schemathesis.cli.events import LoadingFinished, LoadingStarted
 from schemathesis.cli.output import (
-    BLOCK_PADDING,
+    Indent,
     LoadingProgressManager,
-    _style,
+    SpinnerProgressManager,
     display_api_operations,
-    display_baseline_summary,
-    display_errors_summary,
+    display_errors,
     display_failures,
-    display_failures_summary,
-    display_fatal_error,
-    display_filtered_summary,
     display_final_line,
     display_header,
     display_section_name,
-    display_seed,
-    display_test_cases,
+    display_summary_counts,
+    display_summary_footer,
+    display_warning_blocks,
+    duration_phrase,
     format_duration,
+    get_status_icon,
+    issue_parts,
+    list_block,
     make_console,
     make_progress_bar,
     print_lines,
+    reauth_summary_lines,
+    style,
+    unmatched_filter_block,
+    warning_items,
 )
-from schemathesis.config import ProjectConfig, ReportFormat
-from schemathesis.core import SpecificationKind
-from schemathesis.core.output import decode_response_text, prepare_response_payload
+from schemathesis.config import ProjectConfig
+from schemathesis.core import SpecificationFeature
+from schemathesis.core.failures import case_header, reason_phrase
+from schemathesis.core.output import format_response_payload, pluralize
+from schemathesis.core.output.sanitization import sanitized
 from schemathesis.core.result import Ok
 from schemathesis.core.timing import Instant
 from schemathesis.core.version import SCHEMATHESIS_VERSION
-from schemathesis.engine import Status, events
-from schemathesis.engine.run import ELASTIC_PHASES, PhaseName
-from schemathesis.engine.run.probes import ProbeOutcome
+from schemathesis.engine import Status, StopReason, events
+from schemathesis.engine.errors import never_reached_server
+from schemathesis.engine.run import ELASTIC_PHASES, INTERNAL_PHASES, UNIT_PHASES, PhaseName
+from schemathesis.engine.run.auth_bootstrap import AuthBootstrapPayload
+from schemathesis.engine.run.probes import ProbeOutcome, ProbeRun
+from schemathesis.engine.summary import WarningBlock, WarningGroup, WarningItem
 
 if TYPE_CHECKING:
     from rich.console import Console, RenderableType
@@ -51,10 +60,40 @@ if TYPE_CHECKING:
     from rich.text import Text
 
     from schemathesis.cli.commands.run.context import ExecutionContext
+    from schemathesis.core.spec import AuthFlowSteps
     from schemathesis.engine.run.cache import CacheReport
     from schemathesis.generation.stateful.state_machine import ExtractionFailure
 
-DISCORD_LINK = "https://discord.gg/R9ASRAmHnA"
+DICTIONARY_MISMATCH_REASON = "with entries that mostly fail the bound parameter's schema"
+
+
+def _auth_bootstrap_line(payload: AuthBootstrapPayload, spec: AuthFlowSteps) -> Text:
+    from rich.style import Style
+    from rich.text import Text
+
+    if payload.status == Status.SUCCESS:
+        icon, color = "✅  ", "green"
+        text = (
+            f"signed up via {spec.register_operation} and logged in; disable with `auto-signup = false` under `[auth]`"
+        )
+    else:
+        icon, color = "🚫  ", "red"
+        detail = " ".join(f"{payload.status_code or ''} {payload.message or ''}".split())[:100]
+        text = {
+            "sign-up": f"no valid body could be generated for {spec.register_operation}",
+            "register": f"{spec.register_operation} failed: {detail}",
+            "login": f"{spec.login_operation} failed: {detail}",
+            "extract": f"no token at {spec.token_pointer} in the {spec.login_operation} response",
+        }[payload.failure_stage or ""]
+        text += "; continuing without authentication"
+    return Text.assemble(
+        (icon, Style(color=color)), ("Auth: ", Style(color="bright_white", bold=True)), (text, Style(color=color))
+    )
+
+
+def _server_unreachable(probes: list[ProbeRun]) -> bool:
+    """Whether no probe could connect, because the connection was refused or timed out, so none reached a server."""
+    return bool(probes) and all(never_reached_server(probe.error) for probe in probes)
 
 
 def _format_cache_row(report: CacheReport | None) -> Text | None:
@@ -67,8 +106,7 @@ def _format_cache_row(report: CacheReport | None) -> Text | None:
         return Text("unavailable, running without cache")
     parts = []
     if report.replayed:
-        noun = "request" if report.replayed == 1 else "requests"
-        parts.append(f"{report.replayed} {noun} replayed")
+        parts.append(f"{pluralize(report.replayed, 'request')} replayed")
     if report.dropped:
         parts.append(f"{report.dropped} stale removed")
     if not parts:
@@ -76,26 +114,69 @@ def _format_cache_row(report: CacheReport | None) -> Text | None:
     return Text(", ".join(parts))
 
 
-def get_status_icon(stats: dict[Status, int], *, is_interrupted: bool, default: str = "🕛") -> str:
-    if is_interrupted:
-        return "⚡"
-    if stats[Status.ERROR] > 0:
+def format_phase_stats(
+    stats: dict[Status, int], *, width: int = 0, without_checks: bool, server_unavailable: bool
+) -> list[str]:
+    """Outcome counts of a phase, right-aligned to `width` so live updates do not shift the line."""
+    parts = []
+    if stats[Status.SUCCESS]:
+        if without_checks:
+            parts.append(f"⏭  {stats[Status.SUCCESS]:{width}d} without checks")
+        else:
+            parts.append(f"✅ {stats[Status.SUCCESS]:{width}d} passed")
+    if stats[Status.FAILURE]:
+        parts.append(f"❌ {stats[Status.FAILURE]:{width}d} failed")
+    if stats[Status.ERROR]:
+        suffix = "s" if stats[Status.ERROR] > 1 else ""
+        parts.append(f"🚫 {stats[Status.ERROR]:{width}d} error{suffix}")
+    skipped = stats[Status.SKIP] + stats.get(Status.INTERRUPTED, 0)
+    if skipped:
+        parts.append(f"⏭  {skipped:{width}d} skipped")
+    if server_unavailable:
+        parts.append("🚫 server stopped responding")
+    return parts
+
+
+def phase_status_icon(status: Status, stats: dict[Status, int]) -> str | None:
+    """Icon for a finished phase whose scenario counts do not convey its status."""
+    # A phase errors without any operation erroring once the server stops responding.
+    if status == Status.ERROR:
         return "🚫"
-    if stats[Status.FAILURE] > 0:
-        return "❌"
-    if stats[Status.SUCCESS] > 0:
-        return "✅"
-    if stats[Status.SKIP] > 0:
+    if phase_without_checks(status, stats):
         return "⏭ "
-    return default
+    return None
+
+
+def phase_without_checks(status: Status, stats: dict[Status, int]) -> bool:
+    """Scenarios that passed without any check applied to them leave the phase skipped."""
+    return status == Status.SKIP and stats[Status.SUCCESS] > 0
 
 
 def bold(option: str) -> str:
     return click.style(option, bold=True)
 
 
-def _is_graphql(ctx: ExecutionContext) -> bool:
-    return ctx.specification is not None and ctx.specification.kind is SpecificationKind.GRAPHQL
+def _unvalidated_responses(by_media_type: dict[str, dict[str, set[str]]]) -> str:
+    # Name the media type: responses in other media types of the same operations are still validated
+    if len(by_media_type) == 1:
+        return f"{next(iter(by_media_type))} responses"
+    return f"responses in {len(by_media_type)} media types"
+
+
+def _status_name(ctx: ExecutionContext, status_code: int) -> str:
+    name = ctx.status_name(status_code)
+    return f"{status_code} {reason_phrase(status_code)}" if name is None else name
+
+
+def _short_status(ctx: ExecutionContext, status_code: int) -> str:
+    name = ctx.status_name(status_code)
+    return str(status_code) if name is None else name
+
+
+def _status_codes_are_uninformative(ctx: ExecutionContext) -> bool:
+    return ctx.specification is not None and not ctx.specification.supports_feature(
+        SpecificationFeature.STATUS_CODE_ANALYSIS
+    )
 
 
 # Methods that most often create a resource, in the order they are preferred when several
@@ -133,7 +214,7 @@ def _missing_test_data_advice(
         return (
             "This operation declares no parameters, so an empty request was all there was to send",
             "These operations declare no parameters, so an empty request was all there was to send",
-            "💡 Check `--url`, and whether the schema describes everything these operations need",
+            "Check `--url`, and whether the schema describes everything these operations need",
         )
     if label not in linked:
         # The inferred graph knows more than the declared links do.
@@ -143,78 +224,363 @@ def _missing_test_data_advice(
             return (
                 f"No links point to this operation - {producer} appears to supply the data it needs",
                 f"No links point to these operations - {producer} appears to supply the data they need",
-                f"💡 Add a link from {producer}, or supply the identifiers it returns in your config file",
+                f"Add a link from {producer}, or supply the identifiers it returns in your config file",
             )
         if candidates is not None:
             return (
                 "No links point to this operation - nothing in the schema appears to supply the data it needs",
                 "No links point to these operations - nothing in the schema appears to supply the data they need",
-                "💡 Schemathesis found no operation that creates this data - create it outside the test run and supply the identifiers in your config file",
+                "Schemathesis found no operation that creates this data - create it outside the test run and supply the identifiers in your config file",
             )
         return (
             "No links point to this operation",
             "No links point to these operations",
-            "💡 Provide realistic parameter values in your config file so tests can access existing resources",
+            "Provide realistic parameter values in your config file so tests can access existing resources",
         )
     if not stateful_ran:
         cause = "Reachable via links, but stateful testing did not run"
-        return (cause, cause, "💡 Enable the `stateful` phase so declared links can supply real identifiers")
+        return (cause, cause, "Enable the `stateful` phase so declared links can supply real identifiers")
     if label not in exercised:
         return (
             "Reachable via links, but stateful testing never reached it",
             "Reachable via links, but stateful testing never reached them",
-            "💡 Raise `phases.stateful.max-steps` or run longer so stateful testing reaches these operations",
+            "Raise `phases.stateful.max-steps` or run longer so stateful testing reaches these operations",
         )
     cause = "Reached via links, but the linked data was not usable"
     return (
         cause,
         cause,
-        "💡 Check the operations that create this data - their responses do not yield usable identifiers",
+        "Check the operations that create this data - their responses do not yield usable identifiers",
     )
 
 
-TRUNCATION_PLACEHOLDER = "[...]"
+def _detailed_block(
+    title: str, warnings: dict[str, set[str]], suffix: str, tip: str, *, short_suffix: str
+) -> WarningBlock:
+    items = [
+        WarningItem(text=label, details=sorted(messages), operation=label)
+        for label, messages in sorted(warnings.items())
+    ]
+    return WarningBlock(
+        title=title,
+        count=len(warnings),
+        entity="operation",
+        suffix=suffix,
+        short_suffix=short_suffix,
+        groups=[WarningGroup(items=items, tips=[tip])],
+    )
+
+
+def _missing_auth_block(ctx: ExecutionContext) -> WarningBlock:
+    missing_auth = ctx.warnings.missing_auth
+    groups = [
+        WarningGroup(
+            heading=f"{_status_name(ctx, status_code)} ({pluralize(len(labels), 'operation')})",
+            items=warning_items(labels),
+        )
+        for status_code, labels in missing_auth.items()
+    ]
+    groups[-1].tips = [
+        ctx.warnings.auth_flow_suggestion or "Ensure valid authentication credentials are set via `--auth` or `-H`"
+    ]
+    statuses = f"{_short_status(ctx, 401)}/{_short_status(ctx, 403)}"
+    return WarningBlock(
+        title="Authentication failed",
+        count=sum(len(labels) for labels in missing_auth.values()),
+        entity="operation",
+        suffix=f" returned only {statuses} responses",
+        short_suffix=f"returned only {statuses} responses",
+        groups=groups,
+        affects_verdict=True,
+    )
+
+
+def _missing_deserializer_block(ctx: ExecutionContext) -> WarningBlock:
+    warnings = ctx.warnings.missing_deserializer
+    groups = [
+        WarningGroup(
+            heading=f"{media_type} ({pluralize(len(operations), 'operation')})",
+            items=[
+                WarningItem(text=f"{label} ({', '.join(sorted(details))})", operation=label)
+                for label, details in sorted(operations.items())
+            ],
+        )
+        for media_type, operations in sorted(warnings.items())
+    ]
+    groups[-1].tips = ["Register a deserializer with `@schemathesis.deserializer()` to enable validation"]
+    return WarningBlock(
+        title="Schema validation skipped",
+        count=len({label for operations in warnings.values() for label in operations}),
+        entity="operation",
+        suffix=f" cannot validate {_unvalidated_responses(warnings)} due to missing deserializers",
+        short_suffix=f"cannot validate {_unvalidated_responses(warnings)}",
+        groups=groups,
+    )
+
+
+def _missing_test_data_block(ctx: ExecutionContext) -> WarningBlock:
+    """Operations nothing ever served, grouped by what would make them reachable."""
+    missing = ctx.warnings.missing_test_data
+    if _status_codes_are_uninformative(ctx):
+        return list_block(
+            "Missing test data",
+            missing,
+            " never returned data, preventing tests from reaching your API's core logic",
+            ["Supply argument values via a fuzz dictionary so queries can return data"],
+            short_suffix="never returned data",
+            affects_verdict=True,
+        )
+    linked = ctx.warnings.linked_operations or set()
+    stateful_ran = ctx.phases[PhaseName.STATEFUL_TESTING][0] != Status.SKIP
+    labels_by_advice: dict[tuple[str, str, str], set[str]] = {}
+    for label in missing:
+        advice = _missing_test_data_advice(
+            label,
+            linked=linked,
+            stateful_ran=stateful_ran,
+            exercised=ctx.warnings.stateful_exercised,
+            producers=ctx.warnings.resource_producers or {},
+            parameterless=ctx.warnings.parameterless,
+        )
+        labels_by_advice.setdefault(advice, set()).add(label)
+    if len(labels_by_advice) == 1:
+        (_, _, tip), labels = next(iter(labels_by_advice.items()))
+        groups = [WarningGroup(items=warning_items(labels), tips=[tip])]
+    else:
+        groups = [
+            # The list that follows says how many there are when there is more than one.
+            WarningGroup(
+                heading=one if len(labels) == 1 else f"{many} ({len(labels)} operations)",
+                items=warning_items(labels),
+                tips=[tip],
+            )
+            for (one, many, tip), labels in sorted(labels_by_advice.items())
+        ]
+    return WarningBlock(
+        title="Missing test data",
+        count=len(missing),
+        entity="operation",
+        suffix=f" repeatedly returned {_status_name(ctx, 404)}, preventing tests from reaching your API's core logic",
+        short_suffix=f"repeatedly returned {_short_status(ctx, 404)} responses",
+        groups=groups,
+        affects_verdict=True,
+    )
+
+
+def _low_valid_rate_block(ctx: ExecutionContext) -> WarningBlock:
+    """The share of requests each operation accepted, and what turned the rest away."""
+    reported = ctx.warnings.low_valid_rate_reported
+    unreachable_dominates = False
+    conflicts_dominate = False
+    items = []
+    for label in sorted(reported):
+        for phase, rate in sorted(ctx.warnings.valid_rates.get(label, {}).items()):
+            if rate.accepted and rate.rate < ctx.config.warnings.low_valid_rate.threshold:
+                if rate.unreachable > max(rate.rejected, rate.conflicts):
+                    unreachable_dominates = True
+                    cause = f"{rate.unreachable} not found"
+                elif rate.conflicts > rate.rejected:
+                    conflicts_dominate = True
+                    cause = f"{rate.conflicts} conflicts"
+                else:
+                    cause = f"{rate.rejected} rejected"
+                items.append(
+                    WarningItem(
+                        text=f"{label} ({phase}): {rate.rate:.0%} accepted ({rate.accepted}/{rate.total}, {cause})",
+                        operation=label,
+                    )
+                )
+    if _status_codes_are_uninformative(ctx):
+        tip = "Most requests came back with errors; supply argument values via a fuzz dictionary"
+    elif unreachable_dominates:
+        tip = "Most requests addressed resources that do not exist; supply identifiers via examples or a dictionary"
+    elif conflicts_dominate:
+        tip = (
+            "Most requests collided with existing resources, often with values repeated across cases; "
+            "a `before_call` hook can give unique fields fresh values"
+        )
+    else:
+        tip = "Most requests were refused on their data; the schema likely omits constraints the API enforces"
+    return WarningBlock(
+        title="Low valid-input rate",
+        count=len(reported),
+        entity="operation",
+        suffix=" accepted few of the requests sent to it, leaving the logic behind them untested",
+        short_suffix="accepted few of the requests sent to it",
+        groups=[WarningGroup(items=items, tips=[tip])],
+        affects_verdict=True,
+    )
+
+
+def warning_blocks(ctx: ExecutionContext) -> list[WarningBlock]:
+    """Every warning the run raised, in the order the terminal shows them."""
+    warnings = ctx.warnings
+    blocks = []
+    if warnings.missing_auth:
+        blocks.append(_missing_auth_block(ctx))
+    if warnings.rate_limited:
+        blocks.append(
+            list_block(
+                "Rate limited",
+                warnings.rate_limited,
+                " mostly returned 429 Too Many Requests, leaving the logic behind them untested",
+                ["Send requests no faster than the API allows with `--rate-limit`, e.g. `--rate-limit=100/m`"],
+                short_suffix="mostly returned 429 responses",
+                affects_verdict=True,
+            )
+        )
+    if warnings.not_served:
+        blocks.append(
+            list_block(
+                "Not served",
+                warnings.not_served,
+                " returned only statuses saying the server does not serve them, leaving them untested",
+                ["Point `--url` at the server that serves these operations, or exclude them from the run"],
+                short_suffix="returned only not-served statuses",
+                affects_verdict=True,
+            )
+        )
+    if warnings.base_url_mismatch:
+        blocks.append(
+            list_block(
+                "Base URL may be missing a path",
+                warnings.base_url_mismatch,
+                " returned only 404 Not Found",
+                [f"The schema declares a base path; try `--url {warnings.base_url_suggestion}`"],
+                short_suffix="returned only 404 responses",
+                affects_verdict=True,
+            )
+        )
+    if warnings.missing_test_data:
+        blocks.append(_missing_test_data_block(ctx))
+    if warnings.validation_mismatch:
+        blocks.append(
+            list_block(
+                "Schema validation mismatch",
+                warnings.validation_mismatch,
+                " mostly rejected generated data due to validation errors, "
+                "indicating schema constraints don't match API validation",
+                ["Check your schema constraints - API validation may be stricter than documented"],
+                short_suffix="mostly rejected generated data",
+                affects_verdict=True,
+            )
+        )
+    if warnings.missing_deserializer:
+        blocks.append(_missing_deserializer_block(ctx))
+    if warnings.unused_openapi_auth:
+        blocks.append(
+            list_block(
+                "Unused OpenAPI auth",
+                warnings.unused_openapi_auth,
+                " not defined in the schema",
+                [],
+                entity="configured auth scheme",
+                short_suffix="not used in the schema",
+            )
+        )
+    if warnings.dictionary_mismatch:
+        blocks.append(
+            list_block(
+                "Dictionary mismatch",
+                warnings.dictionary_mismatch,
+                f" {DICTIONARY_MISMATCH_REASON}",
+                ["Fix the entries, or bind the dictionary to a parameter whose schema they match"],
+                entity="dictionary binding",
+                short_suffix=DICTIONARY_MISMATCH_REASON,
+            )
+        )
+    if warnings.unmatched_filter:
+        blocks.append(unmatched_filter_block(warnings.unmatched_filter))
+    if warnings.method_not_allowed:
+        blocks.append(
+            list_block(
+                "Method Not Allowed",
+                warnings.method_not_allowed,
+                " consistently returned `405 Method Not Allowed`, skipped from later phases",
+                ["Verify the server actually accepts these methods, or remove them from the schema if unsupported"],
+                short_suffix="skipped after consistent 405 responses",
+                affects_verdict=True,
+            )
+        )
+    if warnings.unsupported_regex:
+        blocks.append(
+            _detailed_block(
+                "Unsupported regex patterns",
+                warnings.unsupported_regex,
+                " with regex patterns Schemathesis cannot use as written",
+                "Supply examples for these operations, or narrow the pattern",
+                short_suffix="had unusable regex patterns",
+            )
+        )
+    if warnings.low_valid_rate_reported:
+        blocks.append(_low_valid_rate_block(ctx))
+    if warnings.unresolvable_reference:
+        blocks.append(
+            _detailed_block(
+                "Unresolvable references",
+                warnings.unresolvable_reference,
+                " skipped parts of the schema",
+                "Resolve these references so the skipped parts get tested",
+                short_suffix="had parts of the schema skipped",
+            )
+        )
+    if warnings.unsupported_field:
+        blocks.append(
+            _detailed_block(
+                "Unsupported fields",
+                warnings.unsupported_field,
+                " sent requests without some fields",
+                "Fill these fields with a `map_body` hook, or `before_call` for coverage cases",
+                short_suffix="had fields left out",
+            )
+        )
+    if warnings.constants_extraction:
+        blocks.append(
+            list_block(
+                "Constant reuse skipped",
+                warnings.constants_extraction,
+                " could not be scanned for constant reuse",
+                ["Check that each `@schemathesis.python.constants` source returns your app or modules"],
+                entity="registered source",
+                short_suffix="could not be scanned",
+            )
+        )
+    return blocks
+
+
+def extraction_failure_reason(failure: ExtractionFailure) -> list[str]:
+    """Why a link could not take the data it needs from a response."""
+    if failure.error:
+        if isinstance(failure.error, (JSONDecodeError, UnicodeDecodeError)):
+            return ["Failed to parse JSON from response"]
+        return [f"{failure.error.__class__.__name__}: {failure.error}"]
+    if failure.parameter_name == "body":
+        lines = [f"Could not resolve request body via {failure.expression}"]
+    else:
+        lines = [f"Could not resolve parameter `{failure.parameter_name}` via `{failure.expression}`"]
+    prefix = "$response.body"
+    if failure.expression.startswith(prefix):
+        lines.append(f"Path `{failure.expression[len(prefix) :]}` not found in response")
+    return lines
+
+
+def extraction_failure_steps(failure: ExtractionFailure) -> list[tuple[int, str]]:
+    """Requests that led to the response, oldest first, as (status code, curl command)."""
+    return [
+        (
+            response.status_code,
+            case.as_reproduction_command(headers=dict(response.request.headers), verify=response.verify),
+        )
+        for case, response in reversed(failure.history)
+    ]
 
 
 @dataclass(slots=True)
-class ProbingProgressManager:
-    console: Console
-    started_at: Instant
-    progress: Progress
-    progress_task_id: TaskID | None
-    is_interrupted: bool
-
+class ProbingProgressManager(SpinnerProgressManager):
     def __init__(self, console: Console) -> None:
-        from rich.progress import Progress, RenderableColumn, SpinnerColumn, TextColumn
         from rich.text import Text
 
-        self.console = console
-        self.started_at = Instant()
-        self.progress = Progress(
-            TextColumn(""),
-            SpinnerColumn("clock"),
-            RenderableColumn(Text("Probing API capabilities", style="bright_white")),
-            transient=True,
-            console=console,
-        )
-        self.progress_task_id = None
-        self.is_interrupted = False
-
-    def start(self) -> None:
-        """Start probing progress display."""
-        self.progress_task_id = self.progress.add_task("Probing", total=None)
-        self.progress.start()
-
-    def stop(self) -> None:
-        """Stop probing progress display."""
-        assert self.progress_task_id is not None
-        self.progress.stop_task(self.progress_task_id)
-        self.progress.stop()
-
-    def interrupt(self) -> None:
-        """Handle interruption during probing."""
-        self.is_interrupted = True
-        self.stop()
+        SpinnerProgressManager.__init__(self, console, Text("Probing API capabilities", style="bright_white"))
 
     def get_completion_message(self) -> Text:
         """Generate completion message including duration."""
@@ -270,6 +636,7 @@ class UnitTestProgressManager:
     stats_task_id: TaskID
 
     is_interrupted: bool
+    server_unavailable: bool
 
     def __init__(
         self,
@@ -330,24 +697,19 @@ class UnitTestProgressManager:
             Status.ERROR: 0,
             Status.INTERRUPTED: 0,
         }
+        self.server_unavailable = False
         self._update_stats_display()
 
         self.live = None
         self.is_interrupted = False
 
-    def _get_stats_message(self, *, live: bool = True) -> str:
-        width = len(str(self.total))
-
-        parts = []
-        if self.stats[Status.SUCCESS]:
-            parts.append(f"✅ {self.stats[Status.SUCCESS]:{width}d} passed")
-        if self.stats[Status.FAILURE]:
-            parts.append(f"❌ {self.stats[Status.FAILURE]:{width}d} failed")
-        if self.stats[Status.ERROR]:
-            suffix = "s" if self.stats[Status.ERROR] > 1 else ""
-            parts.append(f"🚫 {self.stats[Status.ERROR]:{width}d} error{suffix}")
-        if self.stats[Status.SKIP] or self.stats[Status.INTERRUPTED]:
-            parts.append(f"⏭  {self.stats[Status.SKIP] + self.stats[Status.INTERRUPTED]:{width}d} skipped")
+    def _get_stats_message(self, *, live: bool = True, without_checks: bool = False) -> str:
+        parts = format_phase_stats(
+            self.stats,
+            width=len(str(self.total)),
+            without_checks=without_checks,
+            server_unavailable=self.server_unavailable,
+        )
         if self.suffix and live:
             parts.append(self.suffix)
         return "  ".join(parts)
@@ -404,11 +766,17 @@ class UnitTestProgressManager:
         """Fold this pass into the phase's running time."""
         self.elapsed_ms += self.started_at.elapsed_ms
 
-    def restart_pass(self) -> None:
+    def restart_pass(self, total: int | None = None) -> None:
         """A repeat under a budget walks the operations again; the totals keep counting."""
         self.current = 0
         self.current_operations.clear()
         self.started_at = Instant()
+        if total is not None:
+            self.total = total
+            assert self.title_task_id is not None
+            assert self.progress_task_id is not None
+            self.title_progress.update(self.title_task_id, description=self.title, total=total, completed=0)
+            self.progress_bar.update(self.progress_task_id, total=total, completed=0)
 
     def start_operation(self, label: str) -> None:
         """Start tracking new operation."""
@@ -439,6 +807,9 @@ class UnitTestProgressManager:
         self._update_stats_display()
 
     def interrupt(self) -> None:
+        # Workers may each report the same interrupt.
+        if self.is_interrupted:
+            return
         self.is_interrupted = True
         # A repeat walks the operations again, so what is left is what never reported at all.
         self.stats[Status.SKIP] += max(self.total - len(self.outcomes), 0)
@@ -450,20 +821,14 @@ class UnitTestProgressManager:
         if self.live:
             self.live.stop()
 
-    def _get_status_icon(self, default_icon: str = "🕛") -> str:
-        return get_status_icon(self.stats, is_interrupted=self.is_interrupted, default=default_icon)
+    def _get_status_icon(self) -> str:
+        return get_status_icon(self.stats, is_interrupted=self.is_interrupted)
 
-    def get_completion_message(self, icon: str | None = None) -> str:
+    def get_completion_message(self, icon: str | None = None, *, without_checks: bool = False) -> str:
         """Complete the phase and return status message."""
-        duration = format_duration(self.elapsed_ms)
         icon = icon or self._get_status_icon()
-
-        message = self._get_stats_message(live=False) or "No tests were run"
-        if self.is_interrupted:
-            duration_message = f"interrupted after {duration}"
-        else:
-            duration_message = f"in {duration}"
-
+        message = self._get_stats_message(live=False, without_checks=without_checks) or "No tests were run"
+        duration_message = duration_phrase(self.elapsed_ms, interrupted=self.is_interrupted)
         return f"{icon}  {self.title} ({duration_message})\n\n    {message}"
 
 
@@ -495,6 +860,7 @@ class StatefulProgressManager:
     links_covered: set[str]
     stats: dict[Status, int]
     is_interrupted: bool
+    server_unavailable: bool
 
     def __init__(
         self, *, console: Console, title: str, links_selected: int, links_inferred: int, links_total: int
@@ -546,6 +912,7 @@ class StatefulProgressManager:
             Status.SKIP: 0,
         }
         self.is_interrupted = False
+        self.server_unavailable = False
 
     def start(self, *, show_live: bool = True) -> None:
         """Start progress display."""
@@ -555,10 +922,7 @@ class StatefulProgressManager:
 
         # Initialize progress displays
         self.title_task_id = self.title_progress.add_task("Stateful")
-        links = f"0 covered / {self.links_selected} selected / {self.links_total} total"
-        if self.links_inferred:
-            links += f" ({self.links_inferred} inferred)"
-        self.progress_task_id = self.progress_bar.add_task("", scenarios=0, links=links)
+        self.progress_task_id = self.progress_bar.add_task("", scenarios=0, links=self.links_text())
 
         # Create live display
         group = Group(
@@ -592,31 +956,26 @@ class StatefulProgressManager:
     def _update_progress_display(self) -> None:
         """Update the progress display."""
         assert self.progress_task_id is not None
-        links = f"{len(self.links_covered)} covered / {self.links_selected} selected / {self.links_total} total"
-        if self.links_inferred:
-            links += f" ({self.links_inferred} inferred)"
-        self.progress_bar.update(self.progress_task_id, scenarios=self.scenarios, links=links)
+        self.progress_bar.update(self.progress_task_id, scenarios=self.scenarios, links=self.links_text())
 
-    def _get_stats_message(self) -> str:
+    def links_text(self) -> str:
+        text = f"{len(self.links_covered)} covered / {self.links_selected} selected / {self.links_total} total"
+        if self.links_inferred:
+            text += f" ({self.links_inferred} inferred)"
+        return text
+
+    def _get_stats_message(self, *, without_checks: bool = False) -> str:
         """Get formatted stats message."""
-        parts = []
-        if self.stats[Status.SUCCESS]:
-            parts.append(f"✅ {self.stats[Status.SUCCESS]} passed")
-        if self.stats[Status.FAILURE]:
-            parts.append(f"❌ {self.stats[Status.FAILURE]} failed")
-        if self.stats[Status.ERROR]:
-            suffix = "s" if self.stats[Status.ERROR] > 1 else ""
-            parts.append(f"🚫 {self.stats[Status.ERROR]} error{suffix}")
-        if self.stats[Status.SKIP]:
-            parts.append(f"⏭  {self.stats[Status.SKIP]} skipped")
-        return "  ".join(parts)
+        return "  ".join(
+            format_phase_stats(self.stats, without_checks=without_checks, server_unavailable=self.server_unavailable)
+        )
 
     def _update_stats_display(self) -> None:
         """Update the statistics display."""
         self.stats_progress.update(self.stats_task_id, description=self._get_stats_message())
 
-    def _get_status_icon(self, default_icon: str = "🕛") -> str:
-        return get_status_icon(self.stats, is_interrupted=self.is_interrupted, default=default_icon)
+    def _get_status_icon(self) -> str:
+        return get_status_icon(self.stats, is_interrupted=self.is_interrupted)
 
     def interrupt(self) -> None:
         """Handle interruption."""
@@ -632,18 +991,11 @@ class StatefulProgressManager:
         """A repeat under a budget draws new scenarios; the totals keep counting."""
         self.started_at = Instant()
 
-    def get_completion_message(self, icon: str | None = None) -> tuple[str, str]:
+    def get_completion_message(self, icon: str | None = None, *, without_checks: bool = False) -> tuple[str, str]:
         """Complete the phase and return status message."""
-        duration = format_duration(self.elapsed_ms)
         icon = icon or self._get_status_icon()
-
-        message = self._get_stats_message() or "No tests were run"
-        if self.is_interrupted:
-            duration_message = f"interrupted after {duration}"
-        else:
-            duration_message = f"in {duration}"
-
-        return f"{icon}  {self.title} ({duration_message})", message
+        message = self._get_stats_message(without_checks=without_checks) or "No tests were run"
+        return f"{icon}  {self.title} ({duration_phrase(self.elapsed_ms, interrupted=self.is_interrupted)})", message
 
 
 @dataclass
@@ -665,6 +1017,10 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
     repeat_managers: dict[PhaseName, UnitTestProgressManager | StatefulProgressManager] = field(default_factory=dict)
     repeat_statuses: dict[PhaseName, Status] = field(default_factory=dict)
     cycle_context: ExecutionContext | None = None
+    # Under a budget, coverage passes that run back to back report as one block, printed once another phase starts.
+    pending_coverage: UnitTestProgressManager | None = None
+    # Phase the cycle line showed before a coverage pass took it over.
+    cycle_phase_before_coverage: PhaseName | None = None
     # When the run last found a failure it had not seen before.
     last_failure_at: Instant | None = None
     seen_failures: int = 0
@@ -691,13 +1047,17 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
             self._on_fatal_error(ctx, event)
         elif isinstance(event, events.RateLimitRetry):
             self._on_rate_limit_retry(event)
+        elif isinstance(event, events.NonFatalError):
+            self._on_non_fatal_error(event)
         elif isinstance(event, LoadingStarted):
-            self._on_loading_started(event)
+            self._on_loading_started(ctx, event)
         elif isinstance(event, LoadingFinished):
             self._on_loading_finished(ctx, event)
 
     def start(self, ctx: ExecutionContext) -> None:
         display_header(SCHEMATHESIS_VERSION)
+        for _, message in ctx.startup_warnings:
+            click.secho(f"⚠️  {message}\n", fg="yellow")
 
     def shutdown(self, ctx: ExecutionContext) -> None:
         if self.cycle_live is not None:
@@ -712,23 +1072,21 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
         if self.probing_manager is not None:
             self.probing_manager.stop()
 
+    def _on_non_fatal_error(self, event: events.NonFatalError) -> None:
+        from schemathesis.engine.errors import ServerUnavailable
+
+        if isinstance(event.value, ServerUnavailable):
+            manager = self.stateful_tests_manager or self.unit_tests_manager
+            if manager is not None:
+                manager.server_unavailable = True
+
     def _on_loading_finished(self, ctx: ExecutionContext, event: LoadingFinished) -> None:
-        from rich.padding import Padding
         from rich.style import Style
         from rich.table import Table
 
         self.config = event.config
 
-        assert self.loading_manager is not None
-        self.loading_manager.stop()
-
-        message = Padding(
-            self.loading_manager.get_completion_message(),
-            BLOCK_PADDING,
-        )
-        self.console.print(message)
-        self.console.print()
-        self.loading_manager = None
+        self._finish_loading()
 
         table = Table(
             show_header=False,
@@ -739,7 +1097,7 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
         table.add_column("Field", style=Style(color="bright_white", bold=True))
         table.add_column("Value", style="cyan", overflow="fold")
 
-        table.add_row("Base URL:", event.base_url)
+        table.add_row("Base URL:", sanitized(event.base_url, ctx.config.output.sanitization))
         table.add_row("Specification:", event.specification.name)
         statistic = event.statistic.operations
         table.add_row("Operations:", f"{statistic.selected} selected / {statistic.total} total")
@@ -760,7 +1118,7 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
             dict_word = "dictionary" if len(dictionaries) == 1 else "dictionaries"
             table.add_row("Dictionaries:", f"{len(dictionaries)} {dict_word} / {total_values} {entry_word}")
 
-        message = Padding(table, BLOCK_PADDING)
+        message = Indent(table)
         self.console.print(message)
         self.console.print()
 
@@ -771,7 +1129,7 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
         phase = event.phase
         if phase.name == PhaseName.PROBING and phase.is_enabled:
             self._start_probing()
-        elif phase.name in [PhaseName.EXAMPLES, PhaseName.COVERAGE, PhaseName.FUZZING] and phase.is_enabled:
+        elif phase.name in UNIT_PHASES and phase.is_enabled:
             self._start_unit_tests(ctx, event)
         elif phase.name == PhaseName.STATEFUL_TESTING and phase.is_enabled and phase.skip_reason is None:
             self._start_stateful_tests(event)
@@ -804,12 +1162,7 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
     def _cycle_metrics(self, ctx: ExecutionContext) -> str:
         # Per-cycle pass/fail counts swing as operations flip between passes; these only grow.
         parts = [f"{ctx.statistic.total_cases} cases"]
-        unique = len(ctx.statistic.unique_failures_map)
-        if unique:
-            parts.append(f"❌ {unique} unique failure{'' if unique == 1 else 's'}")
-        errors = len(ctx.errors)
-        if errors:
-            parts.append(f"🚫 {errors} error{'' if errors == 1 else 's'}")
+        parts.extend(issue_parts(unique_failures=len(ctx.statistic.unique_failures_map), errors=len(ctx.errors)))
         if self.cycle_links:
             parts.append(self.cycle_links)
         extra = self._progress_suffix(ctx)
@@ -844,6 +1197,12 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
             elif manager is not None:
                 self._print_unit_completion(manager, status)
 
+    def _flush_coverage(self) -> None:
+        manager = self.pending_coverage
+        if manager is not None:
+            self.pending_coverage = None
+            self._print_unit_completion(manager, self.repeat_statuses.pop(PhaseName.COVERAGE))
+
     def _start_probing(self) -> None:
         self.probing_manager = ProbingProgressManager(console=self.console)
         self.probing_manager.start()
@@ -852,6 +1211,10 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
         assert ctx.api_statistic is not None
         assert self.unit_tests_manager is None
         phase = event.phase.name
+        if phase == PhaseName.COVERAGE and event.operations is not None:
+            self._start_coverage_repeat(len(event.operations))
+            return
+        self._flush_coverage()
         retained = self.repeat_managers.get(phase)
         if isinstance(retained, UnitTestProgressManager):
             self.unit_tests_manager = retained
@@ -868,7 +1231,26 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
             self._start_cycle_line()
         self.unit_tests_manager.start(show_live=not in_cycle and self.cycle_live is None)
 
+    def _start_coverage_repeat(self, total: int) -> None:
+        pending = self.pending_coverage
+        if pending is not None:
+            # Nothing ran since the previous coverage pass, so this one continues its block.
+            self.pending_coverage = None
+            self.unit_tests_manager = pending
+            pending.restart_pass(total)
+            if pending.live is not None:
+                pending.live.start()
+            return
+        # Its block was already printed; while the cycle runs, the pass only shows on the cycle line.
+        self.cycle_phase_before_coverage = self.cycle_phase
+        self.cycle_phase = PhaseName.COVERAGE
+        self.unit_tests_manager = UnitTestProgressManager(
+            console=self.console, title=PhaseName.COVERAGE.display, total=total
+        )
+        self.unit_tests_manager.start(show_live=False)
+
     def _start_stateful_tests(self, event: events.PhaseStarted) -> None:
+        self._flush_coverage()
         payload = event.payload
         assert isinstance(payload, events.StatefulPhasePayload)
         retained = self.repeat_managers.get(PhaseName.STATEFUL_TESTING)
@@ -894,7 +1276,6 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
         self.stateful_tests_manager.start(show_live=not in_cycle and self.cycle_live is None)
 
     def _on_phase_finished(self, ctx: ExecutionContext, event: events.PhaseFinished) -> None:
-        from rich.padding import Padding
         from rich.style import Style
         from rich.table import Table
         from rich.text import Text
@@ -909,40 +1290,55 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
             if event.status == Status.SUCCESS:
                 assert isinstance(event.payload, Ok)
                 payload = event.payload.ok()
-                self.console.print(
-                    Padding(
-                        Text.assemble(
+                cache_row = _format_cache_row(payload.cache)
+                # Specifications without HTTP probes have nothing to report unless the cache does.
+                if payload.probes or cache_row is not None:
+                    unreachable = _server_unreachable(payload.probes)
+                    if unreachable:
+                        header = Text.assemble(
+                            ("⚠️  ", Style(color="yellow")),
+                            ("API capabilities: unknown, server unreachable", Style(color="bright_white")),
+                        )
+                    else:
+                        header = Text.assemble(
                             ("✅  ", Style(color="green")),
                             ("API capabilities:", Style(color="bright_white")),
-                        ),
-                        BLOCK_PADDING,
+                        )
+                    self.console.print(Indent(header))
+                    self.console.print()
+
+                    table = Table(
+                        show_header=False,
+                        box=None,
+                        padding=(0, 4),
+                        collapse_padding=True,
                     )
-                )
-                self.console.print()
+                    table.add_column("Capability", style=Style(color="bright_white", bold=True), no_wrap=True)
+                    table.add_column("Status", style="cyan")
+                    # Without a response, a probe measured nothing about the API.
+                    for probe_run in [] if unreachable else payload.probes:
+                        icon, style = {
+                            ProbeOutcome.SUCCESS: ("✓", Style(color="green")),
+                            ProbeOutcome.FAILURE: ("✘", Style(color="red")),
+                            ProbeOutcome.SKIP: ("⊘", Style(color="yellow")),
+                        }[probe_run.outcome]
 
-                table = Table(
-                    show_header=False,
-                    box=None,
-                    padding=(0, 4),
-                    collapse_padding=True,
-                )
-                table.add_column("Capability", style=Style(color="bright_white", bold=True), no_wrap=True)
-                table.add_column("Status", style="cyan")
-                for probe_run in payload.probes:
-                    icon, style = {
-                        ProbeOutcome.SUCCESS: ("✓", Style(color="green")),
-                        ProbeOutcome.FAILURE: ("✘", Style(color="red")),
-                        ProbeOutcome.SKIP: ("⊘", Style(color="yellow")),
-                    }[probe_run.outcome]
+                        table.add_row(f"{probe_run.probe.name}:", Text(icon, style=style))
 
-                    table.add_row(f"{probe_run.probe.name}:", Text(icon, style=style))
+                    if cache_row is not None:
+                        table.add_row("Cache:", cache_row)
 
-                cache_row = _format_cache_row(payload.cache)
-                if cache_row is not None:
-                    table.add_row("Cache:", cache_row)
-
-                self.console.print(Padding(table, BLOCK_PADDING))
-                self.console.print()
+                    if table.row_count:
+                        self.console.print(Indent(table))
+                        self.console.print()
+        elif (
+            isinstance(event.payload, AuthBootstrapPayload)
+            and event.payload.spec is not None
+            # Users who supply credentials gain nothing from hearing that sign-up was skipped.
+            and event.status != Status.SKIP
+        ):
+            self.console.print(Indent(_auth_bootstrap_line(event.payload, event.payload.spec)))
+            self.console.print()
         elif phase.name == PhaseName.STATEFUL_TESTING and phase.is_enabled and self.stateful_tests_manager is not None:
             manager = self.stateful_tests_manager
             self.stateful_tests_manager = None
@@ -952,15 +1348,21 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
             manager.stop()
             manager.end_pass()
             self._print_stateful_completion(manager, event.status)
-        elif (
-            phase.name in [PhaseName.EXAMPLES, PhaseName.COVERAGE, PhaseName.FUZZING]
-            and phase.is_enabled
-            and self.unit_tests_manager is not None
-        ):
+        elif phase.name in UNIT_PHASES and phase.is_enabled and self.unit_tests_manager is not None:
             unit_manager = self.unit_tests_manager
             self.unit_tests_manager = None
             if self._retain(phase.name, event.status):
                 self.cycle_context = ctx
+                return
+            if phase.name == PhaseName.COVERAGE and self.cycle_phase_before_coverage is not None:
+                self.cycle_phase = self.cycle_phase_before_coverage
+                self.cycle_phase_before_coverage = None
+                return
+            if phase.name == PhaseName.COVERAGE and self.config.max_time is not None:
+                unit_manager.stop()
+                unit_manager.end_pass()
+                self._merge_status(phase.name, event.status)
+                self.pending_coverage = unit_manager
                 return
             unit_manager.stop()
             unit_manager.end_pass()
@@ -971,48 +1373,46 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
         if phase not in self.repeat_managers:
             return False
         self.repeat_managers[phase].end_pass()
+        self._merge_status(phase, status)
+        return True
+
+    def _merge_status(self, phase: PhaseName, status: Status) -> None:
         current = self.repeat_statuses.get(phase)
         if current is None or PHASE_STATUS_PRIORITY[status] >= PHASE_STATUS_PRIORITY[current]:
             self.repeat_statuses[phase] = status
-        return True
 
     def _print_unit_completion(self, manager: UnitTestProgressManager, status: Status) -> None:
-        from rich.padding import Padding
         from rich.text import Text
 
-        # A phase errors without any operation erroring once the server stops accepting connections.
-        icon = "🚫" if status == Status.ERROR else None
-        self.console.print(Padding(Text(manager.get_completion_message(icon), style="white"), BLOCK_PADDING))
+        icon = phase_status_icon(status, manager.stats)
+        message = manager.get_completion_message(icon, without_checks=phase_without_checks(status, manager.stats))
+        self.console.print(Indent(Text(message, style="white")))
         self.console.print()
 
     def _print_stateful_completion(self, manager: StatefulProgressManager, status: Status) -> None:
-        from rich.padding import Padding
         from rich.style import Style
         from rich.table import Table
         from rich.text import Text
 
-        title, summary = manager.get_completion_message("🚫" if status == Status.ERROR else None)
-        self.console.print(Padding(Text(title, style="bright_white"), BLOCK_PADDING))
+        title, summary = manager.get_completion_message(
+            phase_status_icon(status, manager.stats), without_checks=phase_without_checks(status, manager.stats)
+        )
+        self.console.print(Indent(Text(title, style="bright_white")))
 
         table = Table(show_header=False, box=None, padding=(0, 4), collapse_padding=True)
         table.add_column("Field", style=Style(color="bright_white", bold=True))
         table.add_column("Value", style="cyan")
         table.add_row("Scenarios:", f"{manager.scenarios}")
-        message = (
-            f"{len(manager.links_covered)} covered / {manager.links_selected} selected / {manager.links_total} total"
-        )
-        if manager.links_inferred:
-            message += f" ({manager.links_inferred} inferred)"
-        table.add_row("API Links:", message)
+        table.add_row("API Links:", manager.links_text())
 
         self.console.print()
-        self.console.print(Padding(table, BLOCK_PADDING))
+        self.console.print(Indent(table))
         self.console.print()
-        self.console.print(Padding(Text(summary, style="bright_white"), (0, 0, 0, 5)))
+        self.console.print(Indent(Text(summary, style="bright_white"), left=5, right=0))
         self.console.print()
 
     def _on_scenario_started(self, event: events.ScenarioStarted) -> None:
-        if event.phase in [PhaseName.EXAMPLES, PhaseName.COVERAGE, PhaseName.FUZZING]:
+        if event.phase in UNIT_PHASES:
             # We should display execution result + percentage in the end. For example:
             assert event.label is not None
             assert self.unit_tests_manager is not None
@@ -1036,7 +1436,7 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
 
     def _on_scenario_finished(self, ctx: ExecutionContext, event: events.ScenarioFinished) -> None:
         self._note_new_failures(ctx)
-        if event.phase in [PhaseName.EXAMPLES, PhaseName.COVERAGE, PhaseName.FUZZING]:
+        if event.phase in UNIT_PHASES:
             assert self.unit_tests_manager is not None
             self.unit_tests_manager.set_suffix(self._progress_suffix(ctx))
             if event.phase == PhaseName.FUZZING:
@@ -1064,7 +1464,6 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
             self.cycle_context = ctx
 
     def _on_rate_limit_retry(self, event: events.RateLimitRetry) -> None:
-        from rich.padding import Padding
         from rich.text import Text
 
         retry_word = "retry" if event.retries_left == 1 else "retries"
@@ -1076,10 +1475,9 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
                 "white",
             ),
         )
-        self.console.print(Padding(message, BLOCK_PADDING))
+        self.console.print(Indent(message))
 
     def _on_interrupted(self, event: events.Interrupted) -> None:
-        from rich.padding import Padding
 
         if self.unit_tests_manager is not None:
             self.unit_tests_manager.interrupt()
@@ -1087,295 +1485,18 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
             self.stateful_tests_manager.interrupt()
         elif self.loading_manager is not None:
             self.loading_manager.interrupt()
-            message = Padding(
-                self.loading_manager.get_completion_message(),
-                BLOCK_PADDING,
-            )
+            message = Indent(self.loading_manager.get_completion_message())
             self.console.print(message)
             self.console.print()
         elif self.probing_manager is not None:
             self.probing_manager.interrupt()
-            message = Padding(
-                self.probing_manager.get_completion_message(),
-                BLOCK_PADDING,
-            )
+            message = Indent(self.probing_manager.get_completion_message())
             self.console.print(message)
             self.console.print()
             self.probing_manager = None
 
-    def _on_fatal_error(self, ctx: ExecutionContext, event: events.FatalError) -> None:
-        self.shutdown(ctx)
-        display_fatal_error(
-            self.console,
-            self.loading_manager,
-            event,
-            wait_for_schema=self.config.wait_for_schema,
-        )
-        self.loading_manager = None
-
-    def _print_warning_header(self, title: str, count: int, entity_name: str, suffix_text: str) -> None:
-        """Print warning block header."""
-        plural = "" if count == 1 else "s"
-        click.echo(_style(f"{title}: {count} {entity_name}{plural}{suffix_text}\n", fg="yellow"))
-
-    def _print_warning_tips(self, tips: list[str]) -> None:
-        """Print warning tips and footer."""
-        click.echo()
-        for tip in tips:
-            click.echo(_style(tip, fg="yellow"))
-        if tips:
-            click.echo()
-
-    def _print_items(self, items: set[str]) -> None:
-        """Print all items."""
-        for item in sorted(items):
-            click.echo(_style(f"  - {item}", fg="yellow"))
-
-    def _display_warning_block(
-        self,
-        title: str,
-        operations: set[str] | dict[int, set[str]],
-        tips: list[str],
-        suffix_text: str = "",
-        entity_name: str = "operation",
-    ) -> None:
-        """Display warnings for operations (simple list or grouped by status code)."""
-        if isinstance(operations, dict):
-            # Status code grouped: dict[int, set[str]]
-            total = sum(len(ops) for ops in operations.values())
-            self._print_warning_header(title, total, entity_name, suffix_text)
-
-            for status_code, ops in operations.items():
-                status_text = "Unauthorized" if status_code == 401 else "Forbidden"
-                count = len(ops)
-                plural = "" if count == 1 else "s"
-                click.echo(_style(f"{status_code} {status_text} ({count} {entity_name}{plural}):", fg="yellow"))
-                self._print_items(ops)
-        else:
-            # Simple set of operations
-            self._print_warning_header(title, len(operations), entity_name, suffix_text)
-            self._print_items(operations)
-
-        self._print_warning_tips(tips)
-
-    def _display_grouped_detail_block(
-        self,
-        title: str,
-        warnings: dict[str, dict[str, set[str]]],
-        entity_name: str,
-        suffix_text: str,
-        tips: list[str],
-    ) -> None:
-        """Display warnings grouped by a shared cause, with per-operation details."""
-        total = len({label for operations in warnings.values() for label in operations})
-        self._print_warning_header(title, total, entity_name, suffix_text)
-
-        for group, operations in sorted(warnings.items()):
-            count = len(operations)
-            plural = "" if count == 1 else "s"
-            click.echo(_style(f"{group} ({count} {entity_name}{plural}):", fg="yellow"))
-            self._print_items({f"{label} ({', '.join(sorted(details))})" for label, details in operations.items()})
-
-        self._print_warning_tips(tips)
-
-    def _display_detailed_warning_block(
-        self,
-        title: str,
-        warnings: dict[str, set[str]],
-        entity_name: str,
-        suffix_text: str,
-        tips: list[str],
-        show_entity_label: bool = True,
-    ) -> None:
-        """Display warnings with detailed messages per entity."""
-        self._print_warning_header(title, len(warnings), entity_name, suffix_text)
-
-        for idx, (entity_label, messages) in enumerate(sorted(warnings.items())):
-            if show_entity_label:
-                click.echo(_style(f"  - {entity_label}", fg="yellow"))
-                for message in sorted(messages):
-                    click.echo(_style(f"    {message}", fg="yellow"))
-            else:
-                for message in sorted(messages):
-                    click.echo(_style(f"  {message}", fg="yellow"))
-
-            # Add spacing between entities (but not after the last one)
-            if idx < len(warnings) - 1:
-                click.echo()
-
-        self._print_warning_tips(tips)
-
-    def _display_missing_test_data_block(self, ctx: ExecutionContext) -> None:
-        """Display operations nothing ever served, grouped by what would actually make them reachable."""
-        if _is_graphql(ctx):
-            self._print_warning_header(
-                "Missing test data",
-                len(ctx.warnings.missing_test_data),
-                "operation",
-                " never returned data, preventing tests from reaching your API's core logic",
-            )
-            self._print_items(ctx.warnings.missing_test_data)
-            self._print_warning_tips(["💡 Supply argument values via a fuzz dictionary so queries can return data"])
-            return
-        linked = ctx.warnings.linked_operations or set()
-        stateful_ran = ctx.phases[PhaseName.STATEFUL_TESTING][0] != Status.SKIP
-        groups: dict[tuple[str, str, str], set[str]] = {}
-        for label in ctx.warnings.missing_test_data:
-            advice = _missing_test_data_advice(
-                label,
-                linked=linked,
-                stateful_ran=stateful_ran,
-                exercised=ctx.warnings.stateful_exercised,
-                producers=ctx.warnings.resource_producers or {},
-                parameterless=ctx.warnings.parameterless,
-            )
-            groups.setdefault(advice, set()).add(label)
-
-        self._print_warning_header(
-            "Missing test data",
-            len(ctx.warnings.missing_test_data),
-            "operation",
-            " repeatedly returned 404 Not Found, preventing tests from reaching your API's core logic",
-        )
-        if len(groups) == 1:
-            (_, _, tip), labels = next(iter(groups.items()))
-            self._print_items(labels)
-            self._print_warning_tips([tip])
-            return
-        for (one, many, tip), labels in sorted(groups.items()):
-            # The list that follows says how many there are when there is more than one.
-            heading = f"{one}:" if len(labels) == 1 else f"{many} ({len(labels)} operations):"
-            click.echo(_style(heading, fg="yellow"))
-            self._print_items(labels)
-            self._print_warning_tips([tip])
-
-    def _display_low_valid_rate_block(self, ctx: ExecutionContext) -> None:
-        """Report the share of requests each operation accepted, and what turned the rest away."""
-        self._print_warning_header(
-            "Low valid-input rate",
-            len(ctx.warnings.low_valid_rate_reported),
-            "operation",
-            " accepted few of the requests sent to it, leaving the logic behind them untested",
-        )
-        unreachable_dominates = False
-        for label in sorted(ctx.warnings.low_valid_rate_reported):
-            for phase, rate in sorted(ctx.warnings.valid_rates.get(label, {}).items()):
-                if rate.accepted and rate.rate < ctx.config.warnings.low_valid_rate.threshold:
-                    if rate.unreachable > rate.rejected:
-                        unreachable_dominates = True
-                        cause = f"{rate.unreachable} not found"
-                    else:
-                        cause = f"{rate.rejected} rejected"
-                    click.echo(
-                        _style(
-                            f"  - {label} ({phase}): {rate.rate:.0%} accepted ({rate.accepted}/{rate.total}, {cause})",
-                            fg="yellow",
-                        )
-                    )
-        if _is_graphql(ctx):
-            tip = "💡 Most requests came back with errors; supply argument values via a fuzz dictionary"
-        elif unreachable_dominates:
-            tip = "💡 Most requests addressed resources that do not exist; supply identifiers via examples or a dictionary"
-        else:
-            tip = "💡 Most requests were refused on their data; the schema likely omits constraints the API enforces"
-        self._print_warning_tips([tip])
-
     def display_warnings(self, ctx: ExecutionContext) -> None:
-        display_section_name("WARNINGS")
-        click.echo()
-        if ctx.warnings.missing_auth:
-            self._display_warning_block(
-                title="Authentication failed",
-                operations=ctx.warnings.missing_auth,
-                suffix_text=" returned authentication errors",
-                tips=["💡 Ensure valid authentication credentials are set via --auth or -H"],
-            )
-
-        if ctx.warnings.base_url_mismatch:
-            self._display_warning_block(
-                title="Base URL may be missing a path",
-                operations=ctx.warnings.base_url_mismatch,
-                suffix_text=" returned only 404 Not Found",
-                tips=[f"💡 The schema declares a base path; try --url {ctx.warnings.base_url_suggestion}"],
-            )
-
-        if ctx.warnings.missing_test_data:
-            self._display_missing_test_data_block(ctx)
-
-        if ctx.warnings.validation_mismatch:
-            self._display_warning_block(
-                title="Schema validation mismatch",
-                operations=ctx.warnings.validation_mismatch,
-                suffix_text=" mostly rejected generated data due to validation errors, indicating schema constraints don't match API validation",
-                tips=["💡 Check your schema constraints - API validation may be stricter than documented"],
-            )
-
-        if ctx.warnings.missing_deserializer:
-            self._display_grouped_detail_block(
-                title="Schema validation skipped",
-                warnings=ctx.warnings.missing_deserializer,
-                entity_name="operation",
-                suffix_text=" cannot validate responses due to missing deserializers",
-                tips=["💡 Register a deserializer with @schemathesis.deserializer() to enable validation"],
-            )
-
-        if ctx.warnings.unused_openapi_auth:
-            self._display_warning_block(
-                title="Unused OpenAPI auth",
-                operations=ctx.warnings.unused_openapi_auth,
-                suffix_text=" not defined in the schema",
-                tips=[],
-                entity_name="configured auth scheme",
-            )
-
-        if ctx.warnings.unmatched_filter:
-            self._display_warning_block(
-                title="Unmatched filters",
-                operations=ctx.warnings.unmatched_filter,
-                suffix_text=" matched no API operations",
-                tips=["💡 Check the filter for a typo, or update it if the operation was renamed"],
-                entity_name="filter",
-            )
-
-        if ctx.warnings.method_not_allowed:
-            self._display_warning_block(
-                title="Method Not Allowed",
-                operations=ctx.warnings.method_not_allowed,
-                suffix_text=" consistently returned `405 Method Not Allowed` — skipped from later phases",
-                tips=[
-                    "💡 Verify the server actually accepts these methods, or remove them from the schema if unsupported"
-                ],
-            )
-
-        if ctx.warnings.unsupported_regex:
-            self._display_detailed_warning_block(
-                title="Unsupported regex patterns",
-                warnings=ctx.warnings.unsupported_regex,
-                entity_name="operation",
-                suffix_text=" contain regex patterns Schemathesis cannot use as written",
-                tips=["💡 Supply examples for these operations, or narrow the pattern"],
-            )
-
-        if ctx.warnings.low_valid_rate_reported:
-            self._display_low_valid_rate_block(ctx)
-
-        if ctx.warnings.unresolvable_reference:
-            self._display_detailed_warning_block(
-                title="Unresolvable references",
-                warnings=ctx.warnings.unresolvable_reference,
-                entity_name="operation",
-                suffix_text=" skipped parts of the schema",
-                tips=["💡 Resolve these references so the skipped parts get tested"],
-            )
-
-        if ctx.warnings.constants_extraction:
-            self._display_warning_block(
-                title="Constant reuse skipped",
-                operations=ctx.warnings.constants_extraction,
-                suffix_text=" could not be scanned for constant reuse",
-                tips=["💡 Check that each @schemathesis.python.constants source returns your app or modules"],
-                entity_name="registered source",
-            )
+        display_warning_blocks(warning_blocks(ctx))
 
     def display_stateful_failures(self, ctx: ExecutionContext) -> None:
         display_section_name("Stateful tests")
@@ -1388,210 +1509,77 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
 
         for idx, (transition_id, failures) in enumerate(grouped.items(), 1):
             for failure in failures:
-                click.echo(f"\n    {idx}. Test Case ID: {failure.case_id}\n")
+                click.echo(f"\n    {case_header(idx, failure.case_id)}\n")
                 click.echo(f"    {transition_id}")
 
                 indent = "        "
-                if failure.error:
-                    if isinstance(failure.error, JSONDecodeError):
-                        click.echo(f"\n{indent}Failed to parse JSON from response")
-                    else:
-                        click.echo(f"\n{indent}{failure.error.__class__.__name__}: {failure.error}")
-                else:
-                    if failure.parameter_name == "body":
-                        description = f"\n{indent}Could not resolve request body via {failure.expression}"
-                    else:
-                        description = f"\n{indent}Could not resolve parameter `{failure.parameter_name}` via `{failure.expression}`"
-                    prefix = "$response.body"
-                    if failure.expression.startswith(prefix):
-                        description += f"\n{indent}Path `{failure.expression[len(prefix) :]}` not found in response"
-                    click.echo(description)
-
+                click.echo("\n" + "\n".join(f"{indent}{line}" for line in extraction_failure_reason(failure)))
                 click.echo()
 
-                for case, response in reversed(failure.history):
-                    curl = case.as_curl_command(headers=dict(response.request.headers), verify=response.verify)
-                    click.echo(f"{indent}[{response.status_code}] {curl}")
+                for status_code, curl in extraction_failure_steps(failure):
+                    click.echo(f"{indent}[{status_code}] {curl}")
 
-                response = failure.response
-
-                if response.content is None or not response.content:
-                    click.echo(f"\n{indent}<EMPTY>")
-                else:
-                    text = decode_response_text(response)
-                    if text is None:
-                        click.echo(f"\n{indent}<BINARY>")
-                    else:
-                        payload = prepare_response_payload(text, config=ctx.config.output)
-                        click.echo(textwrap.indent(f"\n{payload}", prefix=indent))
+                payload = format_response_payload(failure.response, config=ctx.config.output)
+                click.echo(textwrap.indent(f"\n{payload}", prefix=indent))
 
         click.echo()
 
     def display_phases(self, ctx: ExecutionContext) -> None:
-        click.echo(_style("Test Phases:", bold=True))
+        click.echo(style("Test Phases:", bold=True))
 
         for phase in PhaseName:
-            if phase in (PhaseName.PROBING, PhaseName.SCHEMA_ANALYSIS):
+            if phase in INTERNAL_PHASES:
                 # Internal phases are not part of the test phase summary
                 continue
             status, skip_reason = ctx.phases[phase]
 
             if status == Status.SKIP:
-                click.echo(_style(f"  ⏭  {phase.display}", fg="yellow"), nl=False)
+                click.echo(style(f"  ⏭  {phase.display}", fg="yellow"), nl=False)
                 if skip_reason:
-                    click.echo(_style(f" ({skip_reason.display})", fg="yellow"))
+                    click.echo(style(f" ({skip_reason.display})", fg="yellow"))
                 else:
                     click.echo()
             elif status == Status.SUCCESS:
-                click.echo(_style(f"  ✅ {phase.display}", fg="green"))
+                click.echo(style(f"  ✅ {phase.display}", fg="green"))
             elif status == Status.FAILURE:
-                click.echo(_style(f"  ❌ {phase.display}", fg="red"))
+                click.echo(style(f"  ❌ {phase.display}", fg="red"))
             elif status == Status.ERROR:
-                click.echo(_style(f"  🚫 {phase.display}", fg="red"))
+                click.echo(style(f"  🚫 {phase.display}", fg="red"))
             elif status == Status.INTERRUPTED:
-                click.echo(_style(f"  ⚡ {phase.display}", fg="yellow"))
+                click.echo(style(f"  ⚡ {phase.display}", fg="yellow"))
         click.echo()
 
     def display_warnings_summary(self, ctx: ExecutionContext) -> None:
-        click.echo(_style("Warnings:", bold=True))
-        missing_deserializer = {
-            label for operations in ctx.warnings.missing_deserializer.values() for label in operations
-        }
-        entries = (
-            (
-                sum(len(operations) for operations in ctx.warnings.missing_auth.values()),
-                "Missing authentication",
-                "operation",
-                "returned only 401/403 responses",
-            ),
-            (
-                len(ctx.warnings.base_url_mismatch),
-                "Base URL may be missing a path",
-                "operation",
-                "returned only 404 responses",
-            ),
-            (
-                len(ctx.warnings.missing_test_data),
-                "Missing valid test data",
-                "operation",
-                "never returned data" if _is_graphql(ctx) else "repeatedly returned 404 responses",
-            ),
-            (
-                len(ctx.warnings.validation_mismatch),
-                "Schema validation mismatch",
-                "operation",
-                "mostly rejected generated data",
-            ),
-            (len(missing_deserializer), "Schema validation skipped", "operation", "cannot validate responses"),
-            (
-                len(ctx.warnings.unused_openapi_auth),
-                "Unused OpenAPI auth",
-                "configured auth scheme",
-                "not used in the schema",
-            ),
-            (
-                len(ctx.warnings.unsupported_regex),
-                "Unsupported regex",
-                "operation",
-                "had unusable regex patterns",
-            ),
-            (
-                len(ctx.warnings.unmatched_filter),
-                "Unmatched filters",
-                "filter",
-                "matched no API operations",
-            ),
-            (
-                len(ctx.warnings.method_not_allowed),
-                "Method Not Allowed",
-                "operation",
-                "skipped after consistent 405 responses",
-            ),
-            (
-                len(ctx.warnings.constants_extraction),
-                "Constant reuse skipped",
-                "registered source",
-                "could not be scanned",
-            ),
-            (
-                len(ctx.warnings.unresolvable_reference),
-                "Unresolvable references",
-                "operation",
-                "had parts of the schema skipped",
-            ),
-            (
-                len(ctx.warnings.low_valid_rate_reported),
-                "Low valid-input rate",
-                "operation",
-                "accepted few of the requests sent to it",
-            ),
-        )
-        for count, title, entity_name, suffix_text in entries:
-            if not count:
-                continue
-            plural = "" if count == 1 else "s"
-            click.echo(_style(f"  ⚠️ {title}: {bold(str(count))} {entity_name}{plural} {suffix_text}", fg="yellow"))
+        click.echo(style("Warnings:", bold=True))
+        for block in warning_blocks(ctx):
+            plural = "" if block.count == 1 else "s"
+            entry = f"{block.title}: {bold(str(block.count))} {block.entity}{plural} {block.short_suffix}"
+            click.echo(style(f"  ⚠️ {entry}", fg="yellow"))
         click.echo()
 
     def display_final_line(self, ctx: ExecutionContext, event: events.EngineFinished) -> None:
-        unique_failures = sum(
-            len(group.failures) for grouped in ctx.statistic.failures.values() for group in grouped.values()
-        )
         display_final_line(
-            failures=unique_failures,
+            failures=ctx.statistic.total_failures,
             errors=len(ctx.errors),
-            warnings=ctx.warnings.kind_count,
+            warnings=ctx.warnings.kind_count + len({kind for kind, _ in ctx.startup_warnings}),
             running_time=event.running_time,
             total_cases=ctx.statistic.total_cases,
+            nothing_tested_reason=ctx.nothing_tested_reason,
+            exit_code=ctx.exit_code,
+            baseline_not_saved=ctx.baseline_write_error is not None,
+            no_checks_ran=ctx.statistic.no_checks_ran,
+            interrupted=event.stop_reason == StopReason.INTERRUPTED,
         )
 
-    def display_reports(self) -> None:
-        reports = self.config.reports
-        enabled = [
-            (format, report)
-            for format, report in (
-                (ReportFormat.JUNIT, reports.junit),
-                (ReportFormat.VCR, reports.vcr),
-                (ReportFormat.HAR, reports.har),
-                (ReportFormat.NDJSON, reports.ndjson),
-                (ReportFormat.JSON, reports.json),
-                (ReportFormat.ALLURE, reports.allure),
-            )
-            if report.enabled
-        ]
-        if enabled:
-            click.echo(_style("Reports:", bold=True))
-            for format, _ in enabled:
-                click.echo(_style(f"  - {format.value.upper()}: {reports.get_path(format)}"))
-            click.echo()
-
-    def display_seed(self) -> None:
-        display_seed(self.config)
-
     def _on_engine_finished(self, ctx: ExecutionContext, event: events.EngineFinished) -> None:
+        self._flush_coverage()
         self._stop_cycle_line()
         assert self.loading_manager is None
         assert self.probing_manager is None
         assert self.unit_tests_manager is None
         assert self.stateful_tests_manager is None
         if ctx.errors:
-            display_section_name("ERRORS")
-            errors = sorted(
-                ctx.errors, key=lambda r: (r.phase.value if r.phase is not None else "", r.label, r.info.title)
-            )
-            for label, group_errors in groupby(errors, key=lambda r: r.label):
-                display_section_name(label, "_", fg="red")
-                _errors = list(group_errors)
-                for idx, error in enumerate(_errors, 1):
-                    click.echo(error.info.format(bold=lambda x: click.style(x, bold=True)))
-                    if idx < len(_errors):
-                        click.echo()
-            click.echo(
-                _style(
-                    f"\nNeed more help?\n    Join our Discord server: {DISCORD_LINK}",
-                    fg="red",
-                )
-            )
+            display_errors(ctx.errors, base_url_is_set=ctx.base_url_is_set)
         display_failures(ctx.statistic, ctx.config.output, record_crashes=ctx.config.cache.enabled)
         if not ctx.warnings.is_empty:
             self.display_warnings(ctx)
@@ -1607,38 +1595,11 @@ class OutputHandler(BaseOutputHandler["ExecutionContext"]):
 
         self.display_phases(ctx)
 
-        if summary.failures:
-            display_failures_summary(summary.failures)
-
-        if summary.baseline is not None:
-            display_baseline_summary(summary.baseline)
-
-        if summary.filtered:
-            display_filtered_summary(summary.filtered)
-
-        if summary.errors:
-            display_errors_summary(summary.errors)
+        display_summary_counts(summary)
 
         if not ctx.warnings.is_empty:
             self.display_warnings_summary(ctx)
 
-        if event.payload is not None:
-            if event.payload.reauth_count > 0:
-                suffix = "" if event.payload.reauth_count == 1 else "s"
-                ctx.add_summary_line(f"  Re-authenticated {event.payload.reauth_count} time{suffix}")
-            if event.payload.reauth_broke:
-                ctx.add_summary_line(
-                    _style(
-                        "  ⚠️ Authentication stopped working mid-run - credentials likely invalidated",
-                        fg="yellow",
-                    )
-                )
-
-        if ctx.summary_lines:
-            print_lines(ctx.summary_lines)
-            click.echo()
-
-        display_test_cases(summary.test_cases)
-        self.display_reports()
-        self.display_seed()
+        ctx.summary_lines.extend(reauth_summary_lines(event.payload))
+        display_summary_footer(ctx, summary)
         self.display_final_line(ctx, event)

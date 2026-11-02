@@ -4,14 +4,13 @@ import os
 from pathlib import Path
 from typing import Optional
 
-from docling_core.types.doc.page import SegmentedPdfPage, TextCellUnit
-
-from docling_parse.pdf_parser import DoclingPdfParser, PdfDocument
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+from docling_core.types.doc.page import (
+    PdfPageBoundaryType,
+    SegmentedPdfPage,
+    TextCellUnit,
 )
+
+from docling_parse.pdf_parser import DecodeConfig, DoclingPdfParser, PdfDocument
 
 
 def parse_args():
@@ -46,8 +45,8 @@ def parse_args():
         type=str,
         # choices=["both", "original", "sanitized"],
         choices=["all", "char", "word", "line"],
-        required=True,
-        default="both",
+        required=False,
+        default="char",
         help="category [`all`, `char`, `word`, `line`]",
     )
 
@@ -150,27 +149,26 @@ def visualise_py(
     page_boundary: str = "crop_box",  # media_box
     category: str = "char",  # "both", "sanitized", "original"
     page_num: int = -1,
-    password: Optional[str] = None,
+    password: str | None = None,
 ):
     parser = DoclingPdfParser(loglevel=log_level)
 
     pdf_doc: PdfDocument = parser.load(
-        path_or_stream=pdf_path, lazy=True, password=password
+        path_or_stream=pdf_path,
+        lazy=True,
+        password=password,
+        boundary_type=PdfPageBoundaryType(page_boundary),
+        decode_config=DecodeConfig(enforce_same_font=enforce_same_font),
     )
 
     page_nos = [page_num]
     if page_num == -1:
-        page_nos = [(page_ind + 1) for page_ind in range(0, pdf_doc.number_of_pages())]
+        page_nos = [(page_ind + 1) for page_ind in range(pdf_doc.number_of_pages())]
 
     for page_no in page_nos:
         print(f"parsing {pdf_path} on page: {page_no}")
 
-        pdf_page: SegmentedPdfPage = pdf_doc.get_page(
-            page_no=page_no,
-            create_words=True,
-            create_textlines=True,
-            enforce_same_font=enforce_same_font,
-        )
+        pdf_page: SegmentedPdfPage = pdf_doc.get_page(page_no=page_no)
 
         if os.path.exists(str(output_dir)):
             pdf_page.save_as_json(
@@ -178,7 +176,6 @@ def visualise_py(
             )
 
         if category in ["all", "char"]:
-
             img = pdf_page.render_as_image(
                 cell_unit=TextCellUnit.CHAR,
                 draw_cells_bbox=(not display_text),
@@ -254,6 +251,10 @@ def visualise_py(
 
 
 def main():
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    )
 
     (
         log_level,

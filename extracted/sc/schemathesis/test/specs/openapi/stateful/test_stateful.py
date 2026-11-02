@@ -1,16 +1,35 @@
+import sys
+from collections import Counter
+from uuid import uuid4
+
 import pytest
+import requests
+from fastapi import FastAPI, Header, HTTPException
 from hypothesis import HealthCheck, Phase, settings
+from hypothesis.control import current_build_context
 from hypothesis.errors import InvalidDefinition
+from hypothesis.internal.conjecture.data import Status
+from pydantic import BaseModel
 
 import schemathesis
 from schemathesis.config import OperationConfig
 from schemathesis.core.errors import NoLinksFound
 from schemathesis.core.failures import FailureGroup
+from schemathesis.core.transforms import deepclone
+from schemathesis.core.transport import Response
+from schemathesis.generation.hypothesis.examples import generate_many
+from schemathesis.generation.meta import TestPhase
 from schemathesis.generation.modes import GenerationMode
 from schemathesis.generation.stateful.state_machine import DEFAULT_STATE_MACHINE_SETTINGS, StepOutput
-from schemathesis.specs.openapi.stateful import make_response_filter, match_status_code
+from schemathesis.specs.openapi.stateful import (
+    collect_transitions,
+    into_step_input,
+    make_response_filter,
+    match_status_code,
+)
 from test.apps.catalog.openapi import users as openapi_users
-from test.apps.catalog.openapi.modifiers.stateful import NoMergeBody
+from test.apps.catalog.openapi.modifiers.stateful import NoMergeBody, SingleUseBearerTokens
+from test.utils import run_given, saved_example_keys
 
 
 @pytest.mark.parametrize(
@@ -94,6 +113,7 @@ schema.config.update(base_url="{api.base_url}")
 schema.config.generation.update(modes=[GenerationMode.POSITIVE])
 TestStateful = schema.as_state_machine().TestCase
 TestStateful.settings = settings(
+    # The bug needs a specific call sequence, which takes many scenarios to reach.
     max_examples=2000,
     deadline=None,
     suppress_health_check=list(HealthCheck),
@@ -159,6 +179,7 @@ def test_hidden_failure_app(transport, factory):
     with pytest.raises(TypeError, match="can only concatenate str"):
         state_machine.run(
             settings=settings(
+                # The bug needs a specific call sequence, which takes many scenarios to reach.
                 max_examples=2000,
                 deadline=None,
                 suppress_health_check=list(HealthCheck),
@@ -245,6 +266,7 @@ def test_dynamic_body(merge_body, ctx):
 
     state_machine.run(
         settings=settings(
+            # The linked call that carries the dynamic body is one step among many scenarios.
             max_examples=100,
             deadline=None,
             suppress_health_check=list(HealthCheck),
@@ -252,6 +274,337 @@ def test_dynamic_body(merge_body, ctx):
             stateful_step_count=2,
         )
     )
+
+
+def _linked_body_api(link_body, extension) -> FastAPI:
+    link = {"operationId": "updateItem", "parameters": {"id": "$response.body#/id"}, "requestBody": link_body}
+    if extension is not None:
+        link["x-schemathesis"] = extension
+    spec = {
+        "openapi": "3.0.2",
+        "info": {"title": "Items", "version": "1"},
+        "paths": {
+            "/items": {
+                "post": {
+                    "operationId": "createItem",
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {"application/json": {"schema": {"type": "object"}}},
+                            "links": {"UpdateItem": link},
+                        }
+                    },
+                }
+            },
+            "/items/{id}": {
+                "put": {
+                    "operationId": "updateItem",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "requestBody": {"required": True, "content": {"application/json": {"schema": {}}}},
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        },
+    }
+    app = FastAPI(openapi_url=None)
+
+    @app.get("/openapi.json")
+    def openapi():
+        return spec
+
+    @app.post("/items", status_code=201)
+    def create_item():
+        return {"id": "item-1"}
+
+    @app.put("/items/{id}")
+    def update_item(id: str):
+        return {}
+
+    return app
+
+
+@pytest.mark.parametrize(
+    ("link_body", "extension", "expected"),
+    [
+        ("$response.body#/id", {"merge_body": False}, "item-1"),
+        ("$response.body#/id", None, "item-1"),
+        (["$response.body#/id"], None, ["item-1"]),
+    ],
+    ids=["replace-scalar", "merge-scalar", "merge-list"],
+)
+def test_non_object_link_body_is_sent_as_is(link_body, extension, expected):
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app=_linked_body_api(link_body, extension))
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE])
+    bodies = []
+
+    class Workflow(schema.as_state_machine()):
+        def validate_response(self, response, case, additional_checks=None, **kwargs):
+            if case.operation.label == "PUT /items/{id}":
+                bodies.append(case.body)
+
+    Workflow.run(
+        settings=settings(
+            max_examples=10,
+            deadline=None,
+            database=None,
+            suppress_health_check=list(HealthCheck),
+            phases=[Phase.generate],
+        )
+    )
+    assert expected in bodies
+
+
+def test_inferred_body_link_picks_from_every_listed_resource():
+    project = {"type": "object", "properties": {"id": {"type": "string"}}, "required": ["id"]}
+    spec = {
+        "openapi": "3.0.2",
+        "info": {"title": "Projects", "version": "1"},
+        "paths": {
+            "/projects": {
+                "get": {
+                    "operationId": "listProjects",
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {
+                                "application/json": {
+                                    "schema": {"type": "array", "items": {"$ref": "#/components/schemas/Project"}}
+                                }
+                            },
+                        }
+                    },
+                }
+            },
+            "/tasks": {
+                "post": {
+                    "operationId": "createTask",
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {"project_id": {"type": "string"}},
+                                    "required": ["project_id"],
+                                }
+                            }
+                        },
+                    },
+                    "responses": {"201": {"description": "Created"}},
+                }
+            },
+        },
+        "components": {"schemas": {"Project": project}},
+    }
+    app = FastAPI(openapi_url=None)
+
+    @app.get("/openapi.json")
+    def openapi():
+        return spec
+
+    @app.get("/projects")
+    def list_projects():
+        return [{"id": "first"}, {"id": "second"}]
+
+    @app.post("/tasks", status_code=201)
+    def create_task():
+        return {}
+
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app=app)
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE])
+    project_ids = set()
+
+    class Workflow(schema.as_state_machine()):
+        def validate_response(self, response, case, additional_checks=None, **kwargs):
+            if case.operation.label == "POST /tasks":
+                project_ids.add(case.body["project_id"])
+
+    Workflow.run(
+        settings=settings(
+            max_examples=10,
+            deadline=None,
+            database=None,
+            suppress_health_check=list(HealthCheck),
+            phases=[Phase.generate],
+        )
+    )
+    assert {"first", "second"} <= project_ids
+
+
+_ITEM_BODIES = {
+    "/item": {
+        "type": "object",
+        "required": ["data"],
+        "additionalProperties": False,
+        "properties": {"data": {"$ref": "#/components/schemas/Item"}},
+    },
+    "/items": {
+        "type": "object",
+        "required": ["data"],
+        "additionalProperties": False,
+        "properties": {"data": {"type": "array", "minItems": 1, "items": {"$ref": "#/components/schemas/Item"}}},
+    },
+    "/item-list": {"type": "array", "minItems": 1, "items": {"$ref": "#/components/schemas/Item"}},
+}
+_EXPLICIT_ITEM_LINKS = {
+    "/item": {"data": {"groupId": "$response.body#/data/id"}},
+    "/items": {"data": [{"groupId": "$response.body#/data/id"}]},
+    "/item-list": [{"groupId": "$response.body#/data/id"}],
+}
+
+
+def _linked_items(body):
+    data = body["data"] if isinstance(body, dict) else body
+    return data if isinstance(data, list) else [data]
+
+
+@pytest.mark.parametrize("explicit", [False, True], ids=["inferred", "explicit"])
+def test_link_body_keeps_generated_fields_of_nested_objects_and_array_items(explicit):
+    links = {
+        f"Create{path}": {"operationRef": f"#/paths/~1{path[1:]}/post", "requestBody": _EXPLICIT_ITEM_LINKS[path]}
+        for path in _ITEM_BODIES
+    }
+    group_response = {
+        "description": "Created",
+        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/GroupResponse"}}},
+    }
+    if explicit:
+        group_response["links"] = links
+    paths = {"/groups": {"post": {"responses": {"201": group_response}}}}
+    for path, body_schema in _ITEM_BODIES.items():
+        paths[path] = {
+            "post": {
+                "requestBody": {"required": True, "content": {"application/json": {"schema": body_schema}}},
+                "responses": {"201": {"description": "Created"}},
+            }
+        }
+    spec = {
+        "openapi": "3.0.2",
+        "info": {"title": "Groups", "version": "1"},
+        "paths": paths,
+        "components": {
+            "schemas": {
+                "Group": {"type": "object", "required": ["id"], "properties": {"id": {"type": "string"}}},
+                "GroupResponse": {
+                    "type": "object",
+                    "required": ["data"],
+                    "properties": {"data": {"$ref": "#/components/schemas/Group"}},
+                },
+                "Item": {
+                    "type": "object",
+                    "required": ["name", "groupId"],
+                    "additionalProperties": False,
+                    "properties": {"name": {"type": "string", "minLength": 1}, "groupId": {"type": "string"}},
+                },
+            }
+        },
+    }
+    app = FastAPI(openapi_url=None)
+
+    @app.get("/openapi.json")
+    def openapi():
+        return spec
+
+    @app.post("/groups", status_code=201)
+    def create_group():
+        return {"data": {"id": "G-REAL"}}
+
+    @app.post("/item", status_code=201)
+    @app.post("/items", status_code=201)
+    @app.post("/item-list", status_code=201)
+    def create_item():
+        return {}
+
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app=app)
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE])
+    linked = {path: [] for path in _ITEM_BODIES}
+
+    class Workflow(schema.as_state_machine()):
+        def validate_response(self, response, case, additional_checks=None, **kwargs):
+            items = _linked_items(case.body) if case.operation.path in linked else []
+            if any(item.get("groupId") == "G-REAL" for item in items):
+                linked[case.operation.path].append(case.body)
+
+    Workflow.run(
+        settings=settings(
+            max_examples=10,
+            deadline=None,
+            database=None,
+            suppress_health_check=list(HealthCheck),
+            phases=[Phase.generate],
+        )
+    )
+    assert all(linked.values()), {path: len(bodies) for path, bodies in linked.items()}
+    incomplete = [
+        body for bodies in linked.values() for body in bodies if not all("name" in item for item in _linked_items(body))
+    ]
+    assert not incomplete, f"Linked bodies lost `name`: {incomplete[:3]!r}"
+
+
+def test_link_sends_parameter_undeclared_on_target():
+    spec = {
+        "openapi": "3.0.2",
+        "info": {"title": "Items", "version": "1"},
+        "paths": {
+            "/items": {
+                "post": {
+                    "operationId": "createItem",
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "links": {
+                                "GetItem": {
+                                    "operationId": "getItem",
+                                    "parameters": {"id": "$response.body#/id", "query.trace": "$response.body#/id"},
+                                }
+                            },
+                        }
+                    },
+                }
+            },
+            "/items/{id}": {
+                "get": {
+                    "operationId": "getItem",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        },
+    }
+    app = FastAPI(openapi_url=None)
+
+    @app.get("/openapi.json")
+    def openapi():
+        return spec
+
+    @app.post("/items", status_code=201)
+    def create_item():
+        return {"id": "item-1"}
+
+    @app.get("/items/{id}")
+    def get_item(id: str):
+        return {}
+
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app=app)
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE])
+    queries = []
+
+    class Workflow(schema.as_state_machine()):
+        def validate_response(self, response, case, additional_checks=None, **kwargs):
+            if case.operation.label == "GET /items/{id}":
+                queries.append(case.query)
+
+    Workflow.run(
+        settings=settings(
+            max_examples=10,
+            deadline=None,
+            database=None,
+            suppress_health_check=list(HealthCheck),
+            phases=[Phase.generate],
+            stateful_step_count=3,
+        )
+    )
+    assert {"trace": "item-1"} in queries
 
 
 def test_custom_config_in_test_case(ctx):
@@ -262,21 +615,21 @@ def test_custom_config_in_test_case(ctx):
         assert getattr(settings, key) == value
 
 
-def test_passing_transport_kwargs(ctx, mocker):
+def test_state_machine_is_public_api_state_machine(ctx):
+    schema = ctx.openapi.load_schema({"/items": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    assert issubclass(schema.as_state_machine(), schemathesis.stateful.APIStateMachine)
+
+
+# The server ignores the token, so the auth check re-sends requests without it and must keep the other options.
+def test_passing_transport_kwargs(ctx):
     api = ctx.openapi.apps.users_crud()
-    schema = schemathesis.openapi.from_dict(api.spec)
+    raw_schema = deepclone(api.spec)
+    raw_schema["components"]["securitySchemes"] = {"token": {"type": "apiKey", "in": "query", "name": "token"}}
+    raw_schema["security"] = [{"token": []}]
+    schema = schemathesis.openapi.from_dict(raw_schema)
     schema.config.update(base_url=api.base_url)
+    kwargs = {"params": {"token": "valid", "trace": "1"}}
 
-    mocker.patch(
-        "schemathesis.specs.openapi.checks.get_security_parameters",
-        return_value=[{"name": "token", "required": True, "in": "query"}],
-    )
-    mocked = mocker.patch("schemathesis.specs.openapi.checks._contains_auth")
-
-    headers = {"Authorization": "Bearer SECRET!", "Content-Type": "application/json"}
-    kwargs = {"verify": False, "headers": headers}
-
-    # State machine should properly pass transport kwargs to `validate_response`
     class APIWorkflow(schema.as_state_machine()):
         def before_call(self, case) -> None:
             case.body = {"first_name": "foo", "last_name": "bar"}
@@ -290,7 +643,34 @@ def test_passing_transport_kwargs(ctx, mocker):
     except FailureGroup:
         pass
 
-    assert mocked.call_args.args[0]._transport_kwargs == kwargs
+    assert [request.query for request in api.requests if "token" not in request.query] == [{"trace": "1"}]
+
+
+# Each expired token draws one 401, after which the step re-authenticates and later steps use the new token.
+def test_expired_token_is_refreshed(ctx):
+    api = ctx.openapi.apps.stateful_users(SingleUseBearerTokens())
+    schema = schemathesis.openapi.from_url(api.schema_url)
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE])
+
+    @schemathesis.auth()
+    class TokenAuth:
+        def get(self, case, context):
+            return requests.post(f"{api.base_url}/auth/token").json()["token"]
+
+        def set(self, case, data, context):
+            case.headers = case.headers or {}
+            case.headers["Authorization"] = f"Bearer {data}"
+
+    schema.as_state_machine().run(
+        settings=settings(
+            max_examples=5,
+            deadline=None,
+            database=None,
+            suppress_health_check=list(HealthCheck),
+            phases=[Phase.generate],
+        )
+    )
+    assert set(Counter(api.wsgi_app.config["expired_token_uses"]).values()) == {1}
 
 
 @pytest.mark.parametrize(
@@ -509,4 +889,251 @@ def test_transitions_with_colliding_normalized_names_keep_separate_rules(ctx):
         "GET_users___200_GetUser__GET_users_id__2",
         "RANDOM__GET_users",
         "RANDOM__GET_users_",
+    ]
+
+
+def test_negative_step_with_link_supplied_parameters_falls_back_to_positive(ctx):
+    # The link fills the only parameter that could be negated; the step still has to run.
+    operation = ctx.openapi.load_operation(
+        "GET /users/{userId}",
+        {
+            "parameters": [{"name": "userId", "in": "path", "required": True, "schema": {"type": "integer"}}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    strategy = operation.as_strategy(
+        generation_mode=GenerationMode.NEGATIVE, phase=TestPhase.STATEFUL, path_parameters={"userId": 42}
+    )
+    modes = [case.meta.generation.mode for case in generate_many(strategy, 5)]
+    assert set(modes) == {GenerationMode.POSITIVE}
+
+
+def _users_api_with_optional_auth_header() -> FastAPI:
+    app = FastAPI()
+    users: dict[str, dict] = {}
+
+    class NewUser(BaseModel):
+        username: str
+        email: str
+
+    class User(NewUser):
+        id: str
+
+    @app.post("/users", response_model=User, status_code=201)
+    def create_user(body: NewUser, authorization: str | None = Header(None)):
+        user_id = str(uuid4())
+        users[user_id] = {"id": user_id, **body.model_dump()}
+        return users[user_id]
+
+    @app.get("/users/{userId}", response_model=User, responses={404: {"description": "Not found"}})
+    def get_user(userId: str, authorization: str | None = Header(None)):
+        if userId not in users:
+            raise HTTPException(404)
+        return users[userId]
+
+    @app.put("/users/{userId}", response_model=User, responses={404: {"description": "Not found"}})
+    def update_user(userId: str, body: NewUser, authorization: str | None = Header(None)):
+        if userId not in users:
+            raise HTTPException(404)
+        users[userId].update(body.model_dump())
+        return users[userId]
+
+    @app.delete("/users/{userId}", status_code=204, responses={404: {"description": "Not found"}})
+    def delete_user(userId: str, authorization: str | None = Header(None)):
+        if users.pop(userId, None) is None:
+            raise HTTPException(404)
+
+    return app
+
+
+def test_long_scenarios_complete_requested_examples():
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app=_users_api_with_optional_auth_header())
+    schema.config.generation.update(modes=list(GenerationMode))
+    completed = []
+
+    class Workflow(schema.as_state_machine()):
+        def validate_response(self, response, case, additional_checks=None, **kwargs):
+            pass
+
+        def teardown(self):
+            # A rejected scenario reaches teardown while its rejection is still propagating.
+            if sys.exc_info()[1] is None:
+                completed.append(True)
+
+    Workflow.run(
+        settings=settings(
+            max_examples=20,
+            stateful_step_count=20,
+            deadline=None,
+            database=None,
+            suppress_health_check=list(HealthCheck),
+            phases=[Phase.generate],
+        )
+    )
+    assert len(completed) == 20
+
+
+def test_positive_scenarios_are_never_rejected():
+    # Rule sampling may disable every rule that is valid at a step; that must not discard the scenario.
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app=_users_api_with_optional_auth_header())
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE])
+    rejected = []
+
+    class Workflow(schema.as_state_machine()):
+        def validate_response(self, response, case, additional_checks=None, **kwargs):
+            pass
+
+        def teardown(self):
+            # Running out of the data budget ends a scenario too, but it is not a rejection.
+            error = sys.exc_info()[1]
+            if error is not None and current_build_context().data.status is not Status.OVERRUN:
+                rejected.append(error)
+
+    Workflow.run(
+        settings=settings(
+            max_examples=20,
+            stateful_step_count=10,
+            deadline=None,
+            database=None,
+            suppress_health_check=list(HealthCheck),
+            phases=[Phase.generate],
+        )
+    )
+    assert rejected == []
+
+
+def test_long_scenarios_follow_links_beyond_default_step_allowance():
+    # How often one scenario follows links out of an operation scales with the configured scenario length.
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app=_users_api_with_optional_auth_header())
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE])
+    linked_calls = []
+
+    class Workflow(schema.as_state_machine()):
+        def setup(self):
+            linked_calls.append(Counter())
+
+        def step(self, input):
+            if input.transition is not None:
+                source = self.recorder.cases[input.transition.parent_id].value.operation.label
+                linked_calls[-1][(source, input.case.operation.label)] += 1
+            return super().step(input)
+
+        def validate_response(self, response, case, additional_checks=None, **kwargs):
+            pass
+
+    Workflow.run(
+        settings=settings(
+            max_examples=10,
+            stateful_step_count=20,
+            deadline=None,
+            database=None,
+            suppress_health_check=list(HealthCheck),
+            phases=[Phase.generate],
+        )
+    )
+    assert max(max(calls.values(), default=0) for calls in linked_calls) > 2
+
+
+def test_configured_headers_sent_on_every_step():
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app=_users_api_with_optional_auth_header())
+    schema.config.update(headers={"X-Token": "secret"})
+    schema.config.generation.update(modes=list(GenerationMode))
+    headers = []
+
+    class Workflow(schema.as_state_machine()):
+        def validate_response(self, response, case, additional_checks=None, **kwargs):
+            headers.append(case.headers.get("X-Token"))
+
+    Workflow.run(
+        settings=settings(
+            max_examples=5,
+            deadline=None,
+            database=None,
+            suppress_health_check=list(HealthCheck),
+            phases=[Phase.generate],
+        )
+    )
+    assert set(headers) == {"secret"}
+
+
+def test_linked_steps_keep_negative_share_of_scenario_starts(ctx, response_factory):
+    schema = ctx.openapi.load_schema(
+        {
+            "/items": {
+                "post": {
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "links": {
+                                "GetItem": {"operationId": "getItem", "parameters": {"itemId": "$response.body#/id"}}
+                            },
+                        }
+                    }
+                }
+            },
+            "/items/{itemId}": {
+                "get": {
+                    "operationId": "getItem",
+                    "parameters": [
+                        {"name": "itemId", "in": "path", "required": True, "schema": {"type": "integer"}},
+                        {"name": "limit", "in": "query", "required": True, "schema": {"type": "integer"}},
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+    source = schema["/items"]["POST"]
+    [link] = collect_transitions([source, schema["/items/{itemId}"]["GET"]]).operations[source.label].outgoing
+    response = Response.from_requests(response_factory.requests(content=b'{"id": 42}', status_code=201), True)
+    strategy = into_step_input(target=link.target, link=link, modes=list(GenerationMode))(
+        StepOutput(response=response, case=source.Case())
+    )
+    modes = Counter()
+
+    # Enough draws to tell the 10% negative rate, skewed upwards by Hypothesis, from an even split between modes.
+    @run_given(input=strategy, max_examples=200)
+    def test(input):
+        modes[input.case.meta.generation.mode] += 1
+
+    assert 0 < modes[GenerationMode.NEGATIVE] / modes.total() < 0.45, modes
+
+
+def test_test_case_runs_in_process(ctx):
+    api = ctx.openapi.apps.users_crud()
+    schema = schemathesis.openapi.from_url(api.schema_url)
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE])
+    test_case = schema.as_state_machine().TestCase
+
+    class QuickTestCase(test_case):
+        settings = settings(test_case.settings, max_examples=2, stateful_step_count=2, database=None)
+
+    QuickTestCase().runTest()
+    assert {request.method for request in api.requests} >= {"POST"}
+
+
+# Replaying one API's saved scenarios into another API's state machine changes which failures it finds.
+def test_saved_scenarios_are_kept_per_schema(ctx):
+    users_crud = ctx.openapi.apps.users_crud().schema_url
+    keys = saved_example_keys(schemathesis.openapi.from_url(users_crud).as_state_machine())
+    assert keys == saved_example_keys(schemathesis.openapi.from_url(users_crud).as_state_machine())
+    linked_users = ctx.openapi.apps.linked_users().schema_url
+    assert keys.isdisjoint(saved_example_keys(schemathesis.openapi.from_url(linked_users).as_state_machine()))
+
+
+def test_rule_names_stay_unique_when_operation_labels_normalize_alike(ctx):
+    links = {"Next": {"operationId": "next", "parameters": {}}}
+    schema = ctx.openapi.load_schema(
+        {
+            path: {"get": {"responses": {"200": {"description": "OK", "links": links}}}}
+            for path in ("/users", "/users/", "/users-", "/users_")
+        }
+        | {"/next": {"get": {"operationId": "next", "responses": {"200": {"description": "OK"}}}}}
+    )
+    state_machine = schema.as_state_machine()
+    assert sorted(name for name in vars(state_machine) if name.startswith("RANDOM__GET_users")) == [
+        "RANDOM__GET_users",
+        "RANDOM__GET_users_",
+        "RANDOM__GET_users__2",
+        "RANDOM__GET_users__3",
     ]

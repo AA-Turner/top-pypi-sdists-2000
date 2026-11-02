@@ -3,9 +3,9 @@ from __future__ import annotations
 import base64
 import time
 from collections import defaultdict
-from collections.abc import Iterator, Mapping
-from dataclasses import dataclass
-from typing import TYPE_CHECKING, Protocol, cast
+from collections.abc import Iterable, Iterator, Mapping
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 from schemathesis.config._output import MAX_RECORDED_PAYLOAD_SIZE
 from schemathesis.core.failures import Failure
@@ -16,6 +16,7 @@ from schemathesis.generation.case import Case
 if TYPE_CHECKING:
     import requests
 
+    from schemathesis.checks import CheckResult
     from schemathesis.config import OutputConfig
     from schemathesis.generation.stateful.state_machine import Transition
 
@@ -52,6 +53,8 @@ class RecordedScenario(Protocol):
     def find_all_cases(self) -> Iterator[Case]: ...  # pragma: no cover
 
     def find_response(self, *, case_id: str) -> Response | None: ...  # pragma: no cover
+
+    def failing_case_ids(self) -> list[str]: ...  # pragma: no cover
 
     def iter_chain_cases(
         self, *, case_id: str, related_case_ids: tuple[str, ...] = ...
@@ -98,7 +101,13 @@ class ScenarioRecorder:
         )
 
     def record_case(
-        self, *, parent_id: str | None, case: Case, transition: Transition | None, is_transition_applied: bool
+        self,
+        *,
+        case: Case,
+        parent_id: str | None = None,
+        transition: Transition | None = None,
+        is_transition_applied: bool = False,
+        is_probe: bool = False,
     ) -> None:
         """Record a test case and its relationship to a parent, if applicable."""
         self.cases[case.id] = CaseNode(
@@ -106,6 +115,7 @@ class ScenarioRecorder:
             parent_id=parent_id,
             transition=transition,
             is_transition_applied=is_transition_applied,
+            is_probe=is_probe,
         )
 
     def record_response(self, *, case_id: str, response: Response) -> None:
@@ -123,6 +133,23 @@ class ScenarioRecorder:
         """Record a network-level error for a given test case."""
         self.interactions[case_id] = Interaction(request=Request.from_prepared_request(request), response=None)
 
+    def record_network_error(self, *, case_id: str, error: requests.RequestException) -> None:
+        """Record the request of a call that failed with a network-level error, if it carries one."""
+        import requests
+
+        if isinstance(error.request, requests.Request):
+            self.record_request(case_id=case_id, request=error.request.prepare())
+        elif isinstance(error.request, requests.PreparedRequest):
+            self.record_request(case_id=case_id, request=error.request)
+
+    def failing_case_ids(self) -> list[str]:
+        """IDs of the cases that failed at least one check."""
+        return [
+            case_id
+            for case_id, checks in self.checks.items()
+            if any(check.status == Status.FAILURE for check in checks)
+        ]
+
     def has_responses(self) -> bool:
         """Whether the server answered anything at all in this scenario."""
         return any(interaction.response is not None for interaction in self.interactions.values())
@@ -132,15 +159,53 @@ class ScenarioRecorder:
         self.cases.pop(case_id, None)
         self.interactions.pop(case_id, None)
 
-    def record_check_failure(self, *, name: str, case_id: str, code_sample: str, failure: Failure) -> None:
+    def record_check_failure(
+        self,
+        *,
+        name: str,
+        case_id: str,
+        code_sample: str,
+        failure: Failure,
+        steps: list[ReproductionStep] | None = None,
+    ) -> None:
         """Record a failure of a check for a given test case."""
         self.checks.setdefault(case_id, []).append(
             CheckNode(
                 name=name,
                 status=Status.FAILURE,
-                failure_info=CheckFailureInfo(code_sample=code_sample, failure=failure),
+                failure_info=CheckFailureInfo(code_sample=code_sample, failure=failure, steps=steps or []),
             )
         )
+
+    def record_reproducible_failure(
+        self, *, name: str, case_id: str, failure: Failure, cases: Iterable[Case], verify: bool
+    ) -> None:
+        """Record a failure of a check, reproduced by sending `cases` in order."""
+        steps = self.reproduction_steps(cases, failure=failure, verify=verify)
+        self.record_check_failure(
+            name=name,
+            case_id=case_id,
+            code_sample="\n".join(step.curl for step in steps),
+            failure=failure,
+            steps=steps,
+        )
+
+    def record_check_results(self, case: Case, response: Response, results: list[CheckResult]) -> None:
+        """Record the results of checks that ran on `response` to `case`."""
+        for result in results:
+            if result.failure is not None:
+                code_sample = case.as_reproduction_command(
+                    headers=dict(response.request.headers),
+                    verify=response.verify,
+                )
+                self.record_check_failure(
+                    name=result.name,
+                    case_id=case.id,
+                    code_sample=code_sample,
+                    failure=result.failure,
+                )
+            else:
+                self.record_check_success(name=result.name, case_id=case.id)
 
     def record_filtered_failure(self, *, case_id: str) -> None:
         """Record that a `filter_failure` hook dropped a failure for a given test case."""
@@ -149,6 +214,10 @@ class ScenarioRecorder:
     def record_check_success(self, *, name: str, case_id: str) -> None:
         """Record a successful pass of a check for a given test case."""
         self.checks.setdefault(case_id, []).append(CheckNode(name=name, status=Status.SUCCESS, failure_info=None))
+
+    def record_check_error(self, *, name: str, case_id: str) -> None:
+        """Record a check that crashed for a given test case."""
+        self.checks.setdefault(case_id, []).append(CheckNode(name=name, status=Status.ERROR, failure_info=None))
 
     def record_interaction(self, case_id: str, interaction: Interaction) -> None:
         """Record a pre-built `Interaction` (used for serialization round-trips, e.g. xdist worker IPC)."""
@@ -178,6 +247,23 @@ class ScenarioRecorder:
     def find_request_headers(self, *, case_id: str) -> dict[str, str]:
         """Retrieve the headers a given test case actually sent."""
         return _flatten_headers(self.interactions[case_id].request.headers)
+
+    def reproduction_steps(self, cases: Iterable[Case], *, failure: Failure, verify: bool) -> list[ReproductionStep]:
+        """`cases` as the requests that reproduce `failure`, each with the headers it sent."""
+        roles = failure.identity_roles()
+        return [
+            ReproductionStep.from_case(
+                case, headers=self.find_request_headers(case_id=case.id), verify=verify, roles=roles
+            )
+            for case in cases
+        ]
+
+    def iter_failure_cases(self, *, case_id: str, failure: Failure) -> Iterator[Case]:
+        """The failing case and the cases `failure` references, such as the owner's read for an authorization bypass."""
+        wanted = {case_id, *failure.related_case_ids()}
+        for node_id, node in self.cases.items():
+            if node_id in wanted:
+                yield node.value
 
     def find_parent(self, *, case_id: str) -> Case | None:
         """Find the parent case of a given test case, if it exists."""
@@ -272,6 +358,8 @@ class CaseNode:
     # and outside of the implemented transition logic (e.g. spec-specific stateful transitions)
     transition: Transition | None
     is_transition_applied: bool
+    # A request sent on the parent case's behalf, e.g. by a check, not a generated test case.
+    is_probe: bool
 
 
 @dataclass(slots=True)
@@ -282,9 +370,45 @@ class CheckNode:
 
 
 @dataclass(slots=True)
+class ReproductionStep:
+    """One request a failure needs to be reproduced."""
+
+    case_id: str
+    # Label of the operation the request calls.
+    operation: str
+    method: str
+    # Path with parameters filled in.
+    path: str
+    curl: str
+    # Identity and its role in the failure, e.g. `alice (owner)`, when the request's identity matters.
+    sender: str | None = None
+
+    @classmethod
+    def from_case(
+        cls, case: Case, *, headers: dict[str, Any] | None, verify: bool, roles: Mapping[str, str]
+    ) -> ReproductionStep:
+        curl = case.as_reproduction_command(headers=headers, verify=verify)
+        # Requests sent as different identities look alike once credentials are masked.
+        role = roles.get(case.auth_identity) if case.auth_identity is not None else None
+        sender = f"{case.auth_identity} ({role})" if role is not None else None
+        if sender is not None:
+            curl = f"# as {sender}\n{curl}"
+        return cls(
+            case_id=case.id,
+            operation=case.operation.label,
+            method=case.method,
+            path=case.formatted_path,
+            curl=curl,
+            sender=sender,
+        )
+
+
+@dataclass(slots=True)
 class CheckFailureInfo:
     code_sample: str
     failure: Failure
+    # Requests the failure needs, oldest first; empty when only the code sample is known.
+    steps: list[ReproductionStep] = field(default_factory=list)
 
 
 def serialize_payload(payload: bytes) -> str:

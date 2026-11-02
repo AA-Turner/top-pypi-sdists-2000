@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import json
 import re
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, BinaryIO, TextIO
+from typing import TYPE_CHECKING, Any, BinaryIO, NotRequired, TextIO
 
-from typing_extensions import NotRequired, TypedDict
+from typing_extensions import TypedDict
 
 from schemathesis.core import NOT_SET, media_types
 from schemathesis.core.transport import Response
@@ -14,6 +15,7 @@ from schemathesis.core.transport import Response
 if TYPE_CHECKING:
     import yaml
 
+    from schemathesis.core.jsonschema.types import JsonValue
     from schemathesis.generation.case import Case
     from schemathesis.schemas import APIOperation
 
@@ -38,20 +40,12 @@ _DESERIALIZERS: dict[str, ResponseDeserializer] = {}
 
 
 def _iter_matching_deserializers(media_type: str) -> Iterator[tuple[str, ResponseDeserializer]]:
-    main, sub = media_types.parse(media_type)
-    checks = [
-        media_types.is_json,
-        media_types.is_xml,
-        media_types.is_plain_text,
-        media_types.is_yaml,
-    ]
+    parsed = media_types.parse(media_type)
     for registered_media_type, deserializer in _DESERIALIZERS.items():
-        if any(check(media_type) and check(registered_media_type) for check in checks):
+        if media_types.same_family(media_type, registered_media_type) or media_types.matches_either(
+            parsed, media_types.parse(registered_media_type)
+        ):
             yield registered_media_type, deserializer
-        else:
-            target_main, target_sub = media_types.parse(registered_media_type)
-            if main in ("*", target_main) and sub in ("*", target_sub):
-                yield registered_media_type, deserializer
 
 
 def has_deserializer(media_type: str) -> bool:
@@ -77,11 +71,6 @@ def register_deserializer(func: ResponseDeserializer, *media_types: str) -> Resp
     for media_type in media_types:
         _DESERIALIZERS[media_type] = func
     return func
-
-
-def unregister_deserializer(*media_types: str) -> None:
-    for media_type in media_types:
-        _DESERIALIZERS.pop(media_type, None)
 
 
 def deserializer(*media_types: str) -> Callable[[ResponseDeserializer], ResponseDeserializer]:
@@ -184,6 +173,12 @@ def get_yaml_loader() -> type[yaml.SafeLoader]:
         return mapping
 
     cls.construct_mapping = construct_mapping  # type: ignore[method-assign,assignment]
+
+    def construct_binary(self: yaml.SafeLoader, node: yaml.ScalarNode) -> str:
+        return self.construct_scalar(node)
+
+    # JSON has no bytes type, so a `!!binary` value stays the base64 text written in the document.
+    cls.add_constructor("tag:yaml.org,2002:binary", construct_binary)
     return cls
 
 
@@ -191,11 +186,6 @@ def deserialize_yaml(stream: str | bytes | TextIO | BinaryIO) -> Any:
     import yaml
 
     return yaml.load(stream, get_yaml_loader())
-
-
-def deserializers() -> dict[str, ResponseDeserializer]:
-    """Return a snapshot of the registered deserializers."""
-    return dict(_DESERIALIZERS)
 
 
 def deserialize_response(
@@ -316,3 +306,21 @@ def _parse_sse_events(content: bytes, encoding: str = "utf-8") -> list[ServerSen
 def _deserialize_sse(_ctx: DeserializationContext, response: Response) -> list[ServerSentEvent]:
     # SSE streams are always UTF-8 per spec, regardless of transport-level default encoding heuristics.
     return _parse_sse_events(response.content, "utf-8")
+
+
+def parse_json_sequence(content: bytes, media_type: str) -> list[JsonValue]:
+    """Values of a JSON Lines or JSON Text Sequence body, one per line or record."""
+    separator = "\x1e" if media_types.parse(media_type)[1].endswith("json-seq") else "\n"
+    text = content.decode("utf-8-sig")
+    values: list[JsonValue] = []
+    offset = 0
+    for record in text.split(separator):
+        # Only JSON whitespace makes a record blank, a line of other Unicode whitespace is malformed JSON
+        if record.strip(" \t\r\n"):
+            try:
+                values.append(json.loads(record))
+            except json.JSONDecodeError as exc:
+                # Point at the malformed record within the whole body, not within the record alone
+                raise json.JSONDecodeError(exc.msg, text, offset + exc.pos) from None
+        offset += len(record) + len(separator)
+    return values

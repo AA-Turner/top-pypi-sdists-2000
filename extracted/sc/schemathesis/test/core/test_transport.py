@@ -1,5 +1,8 @@
+import json
+
 import pytest
 import requests
+from werkzeug.test import Client
 
 from schemathesis.core.transport import Response, expand_status_code
 
@@ -22,6 +25,20 @@ def test_expand_status_code(value, expected):
 
 
 @pytest.mark.parametrize(
+    ("headers", "expected"),
+    [([("Content-Type", "text/plain; charset=latin-1")], "latin-1"), ([], "utf-8")],
+    ids=["declared-charset", "no-charset"],
+)
+def test_empty_wsgi_response_encoding(headers, expected):
+    def app(environ, start_response):
+        start_response("204 No Content", headers)
+        return []
+
+    response = Response.from_any(Client(app).get("/"))
+    assert (response.status_code, response.content, response.encoding) == (204, b"", expected)
+
+
+@pytest.mark.parametrize(
     ("content", "charset", "expected"),
     [
         (b"hello world", "bogus-xyz", "hello world"),
@@ -38,3 +55,12 @@ def test_text_lossy_never_raises(response_factory, content, charset, expected):
     response = Response.from_requests(raw, verify=False)
     assert response.encoding == charset
     assert response.text_lossy() == expected
+
+
+def test_truncated_copy_drops_values_derived_from_full_body(response_factory):
+    response = response_factory.core(content=b'{"a": 1}')
+    assert (response.json(), response.encoded_body) == ({"a": 1}, "eyJhIjogMX0=")
+    truncated = response.truncated(4)
+    with pytest.raises(json.JSONDecodeError):
+        truncated.json()
+    assert truncated.encoded_body == "eyJhIg=="

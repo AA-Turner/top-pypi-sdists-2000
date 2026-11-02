@@ -1,13 +1,12 @@
 import re
 import string
-import sys
 import warnings
 from itertools import product
 
 import jsonschema_rs
 import pytest
 from flask import jsonify
-from hypothesis import HealthCheck, assume, given, settings
+from hypothesis import HealthCheck, assume, example, given, settings
 from hypothesis import strategies as st
 
 try:
@@ -18,13 +17,15 @@ except ImportError:
 import schemathesis
 from schemathesis.core.errors import InternalError
 from schemathesis.core.jsonschema import FANCY_REGEX_OPTIONS
-from schemathesis.generation.hypothesis import examples
-from schemathesis.specs.openapi.converter import update_pattern_in_schema
-from schemathesis.specs.openapi.patterns import (
+from schemathesis.core.jsonschema.patterns import (
     _PARTIAL_SCRIPT_CLASSES,
     _UNICODE_PROPERTY_RAW_MAP,
+    CharacterRules,
     _serialize,
+    character_rules,
+    compile_ecma_pattern,
     is_valid_jsonschema_rs_regex,
+    is_valid_python_regex,
     matches_every_string,
     normalize_regex,
     pattern_length_bounds,
@@ -34,10 +35,11 @@ from schemathesis.specs.openapi.patterns import (
     pin_pattern_length,
     update_quantifier,
 )
-
-SKIP_BEFORE_PY11 = pytest.mark.skipif(
-    sys.version_info < (3, 11), reason="Possessive repeats and atomic groups are only available in Python 3.11+"
-)
+from schemathesis.engine import from_schema
+from schemathesis.generation import GenerationMode
+from schemathesis.generation.hypothesis import examples
+from schemathesis.specs.openapi.converter import update_pattern_in_schema
+from test.utils import run_given
 
 
 @pytest.mark.parametrize(
@@ -67,9 +69,9 @@ SKIP_BEFORE_PY11 = pytest.mark.skipif(
         (".{1,5}?", None, 3, "^.{1,3}$"),
         (".{0,3}?", 1, None, ".{1,3}"),
         (".{2,}?", 1, 3, "^.{2,3}$"),
-        pytest.param(".{1,5}+", None, 3, "^.{1,3}$", marks=SKIP_BEFORE_PY11),
-        pytest.param(".{0,3}+", 1, None, ".{1,3}", marks=SKIP_BEFORE_PY11),
-        pytest.param(".{2,}+", 1, 3, "^.{2,3}$", marks=SKIP_BEFORE_PY11),
+        (".{1,5}+", None, 3, "^.{1,3}$"),
+        (".{0,3}+", 1, None, ".{1,3}"),
+        (".{2,}+", 1, 3, "^.{2,3}$"),
         # Group without quantifier
         ("[a-z]", None, 5, "^[a-z]{1,5}$"),
         ("[a-z]", 3, None, "[a-z]{3,}"),
@@ -152,7 +154,7 @@ SKIP_BEFORE_PY11 = pytest.mark.skipif(
             r"^[a-zA-Z0-9]+([-a-zA-Z0-9]?[a-zA-Z0-9])*$",
             5,
             64,
-            r"^[a-zA-Z0-9]{5,64}([\-a-zA-Z0-9]{0,1}[a-zA-Z0-9]){0,31}$",
+            r"^[a-zA-Z0-9]{1,64}([\-a-zA-Z0-9]{0,1}[a-zA-Z0-9]){0,63}$",
         ),
         (r"^\+[0-9]{5,}$", 6, 6, r"^\+[0-9]{5}$"),
         (r"^abcd$", 50, 50, r"^abcd$"),
@@ -168,7 +170,7 @@ SKIP_BEFORE_PY11 = pytest.mark.skipif(
         ("^(((?:DB|BR)[-a-zA-Z0-9_]+),?){1,}$", None, 6000, r"^(((?:DB|BR)[\-a-zA-Z0-9_]{1,}),{0,1}){1,2000}$"),
         # Optional `\*?` is preserved (collapsing it to `{0}` would reject "geo:abc*"),
         # while `\w*` still tightens to use the remaining length budget.
-        (r"^geo:\w*\*?$", 5, 200, r"^geo:\w{1,195}\*{0,1}$"),
+        (r"^geo:\w*\*?$", 5, 200, r"^geo:\w{0,196}\*{0,1}$"),
         (r"^[\w\W]$", 1, 3, r"^.{1}$"),
         (r"^[\w\W]+$", 1, 3, r"^.{1,3}$"),
         (r"^[\w\W]*$", 1, 3, r"^.{1,3}$"),
@@ -226,14 +228,14 @@ SKIP_BEFORE_PY11 = pytest.mark.skipif(
         (r"(\d{3})+", 1, 2, r"(\d{3})+"),
         (r"(\d{3})+", 7, 7, r"(\d{3})+"),
         (r"(\d{3})+", 0, 0, r"(\d{3})+"),
-        (r"(a|bb)+", 4, 8, r"^(a|bb){4,8}$"),
+        (r"(a|bb)+", 4, 8, "^(a|bb){2,8}$"),
         # Anchored multi-part with multi-char groups
         (r"^(abc)+(def)+$", 6, 6, r"^(abc){1}(def){1}$"),
         (r"^(abc)+(def)+$", 9, 9, r"^(abc){1}(def){2}$"),
         (r"^(ab)+(cd)+(ef)+$", 6, 6, r"^(ab){1}(cd){1}(ef){1}$"),
         (r"^(ab)+(cd)+(ef)+$", 10, 10, r"^(ab){1}(cd){1}(ef){3}$"),
         (r"^(\d{3})+(\w{2})+$", 10, 10, r"^(\d{3}){2}(\w{2}){2}$"),
-        (r"^(abc)+\d+$", 4, 10, r"^(abc){2,3}\d{1}$"),
+        (r"^(abc)+\d+$", 4, 10, r"^(abc){1,3}\d{1,7}$"),
         (r"^(abc)+(\d)+$", 7, 7, r"^(abc){1}(\d){4}$"),
         (r"^abc(\d{3})+$", 6, 12, r"^abc(\d{3}){1,3}$"),
         # Patterns containing lookahead / lookbehind assertions inside quantified groups
@@ -241,9 +243,8 @@ SKIP_BEFORE_PY11 = pytest.mark.skipif(
         (r"^([a-z]+(?!\s))+$", 1, 5, r"^([a-z]{1,}(?!\s)){1,5}$"),
         (r"^([a-z]+(?<=\s))+$", 1, 5, r"^([a-z]{1,}(?<=\s)){1,5}$"),
         (r"^([a-z]+(?=\s))+$", 1, 5, r"^([a-z]{1,}(?=\s)){1,5}$"),
-        # Branch alternation with finite per-tick max (1 or 2 chars) — outer count
-        # tightens to keep total length within bounds.
-        (r"^[a-z0-9]([a-z0-9]|-[a-z0-9])*$", 1, 100, r"^[a-z0-9]([a-z0-9]|-[a-z0-9]){0,49}$"),
+        # Branch alternation with 1 or 2 chars per repetition: the count leaves room for `"a" * 100`.
+        (r"^[a-z0-9]([a-z0-9]|-[a-z0-9])*$", 1, 100, r"^[a-z0-9]([a-z0-9]|-[a-z0-9]){0,99}$"),
         (r"^(foo|bar)+$", 3, 12, r"^(foo|bar){1,4}$"),
         # Outer bound already finite and unchanged; inner content is variable-length
         # — maxLength cannot be encoded through the outer repetition count alone.
@@ -264,6 +265,9 @@ SKIP_BEFORE_PY11 = pytest.mark.skipif(
         # Required-only siblings whose combined max can't reach the target minLength —
         # both greedy and balanced bail and the original schema is kept.
         (r"^[a-z]{1,3}_[a-z]{1,3}$", 10, 12, r"^[a-z]{1,3}_[a-z]{1,3}$"),
+        # A fixed count never drops below itself to fit the budget - the shorter strings miss the original pattern.
+        (r"^a?b{2}c{2}d?$", 2, 5, r"^a?b{2}c{2}d?$"),
+        (r"^\+[0-9]{5}$", 2, 5, r"^\+[0-9]{5}$"),
         # Nested unbounded inner (`([a-z]+)+`) — the per-tick max is unbounded so
         # the slot is pinned and only the outer count is preserved.
         (r"^([a-z]+)+$", 1, 100, r"^([a-z]{1,}){1,100}$"),
@@ -280,10 +284,11 @@ SKIP_BEFORE_PY11 = pytest.mark.skipif(
         (r"^(.|a+){1,3}\d{1,3}$", 100, 100, r"^(.|a+){1,3}\d{1,3}$"),
         # A possessive part keeps everything it took, so any rewritten count admits strings the
         # original rejects - `0++0` matches nothing at all, while `0{1,3}0` matches "00".
-        pytest.param("0++0", None, 4, "0++0", marks=SKIP_BEFORE_PY11),
-        pytest.param("a{1,3}+a", None, 4, "a{1,3}+a", marks=SKIP_BEFORE_PY11),
-        pytest.param("(?:ab)++ab", None, 4, "(?:ab)++ab", marks=SKIP_BEFORE_PY11),
-        pytest.param("a+b++c", 1, 4, "a+b++c", marks=SKIP_BEFORE_PY11),
+        ("0++0", None, 4, "0++0"),
+        ("a{1,3}+a", None, 4, "a{1,3}+a"),
+        ("(?:ab)++ab", None, 4, "(?:ab)++ab"),
+        ("a+b++c", 1, 4, "a+b++c"),
+        (r"^(a*+)[ab]$", 2, 3, r"^(a*+)[ab]$"),
         # Anchored only at the start, with more than one part: the budget still lands, and encoding
         # a maximum closes the pattern so longer strings stop matching.
         ("^[a-zA-Z][a-zA-Z0-9_]*", 63, 63, "^[a-zA-Z][a-zA-Z0-9_]{62}$"),
@@ -291,10 +296,12 @@ SKIP_BEFORE_PY11 = pytest.mark.skipif(
         ("^[a-z][0-9]+", 3, 6, "^[a-z][0-9]{2,5}$"),
         ("^foo[a-z]+", 4, 8, "^foo[a-z]{1,5}$"),
         ("^[a-z][0-9]+", 5, None, "^[a-z][0-9]{4,}"),
+        # A slot shorter than its maximum leaves the rest of the budget to its siblings.
+        (r"^[a-z]{1,3}[0-9]+$", None, 10, r"^[a-z]{1,3}[0-9]{1,9}$"),
         # A group is a part like any other, and its own repeat is where its share of the budget goes.
-        ("arn:([a-z0-9-]+):forecast:.*:.*:.+", 20, 40, r"^arn:([a-z0-9\-]{2,23}):forecast:.{0,22}:.{0,22}:.{2,23}$"),
-        ("^prefix-([a-z]+)-[0-9]+$", 12, 24, "^prefix-([a-z]{2,15})-[0-9]{2,15}$"),
-        ("^([a-z]+)-([0-9]+)$", 6, 12, "^([a-z]{3,10})-([0-9]{2,10})$"),
+        ("arn:([a-z0-9-]+):forecast:.*:.*:.+", 20, 40, r"^arn:([a-z0-9\-]{1,23}):forecast:.{0,22}:.{0,22}:.{1,23}$"),
+        ("^prefix-([a-z]+)-[0-9]+$", 12, 24, "^prefix-([a-z]{1,15})-[0-9]{1,15}$"),
+        ("^([a-z]+)-([0-9]+)$", 6, 12, "^([a-z]{1,10})-([0-9]{1,10})$"),
         # A group wrapping the whole pattern is transparent to the budget - the quantifier inside it still tightens.
         ("^([a-zA-Z0-9]*)$", 5, 5, "^([a-zA-Z0-9]{5})$"),
         ("^([a-zA-Z0-9]*)$", 1, 10, "^([a-zA-Z0-9]{1,10})$"),
@@ -306,6 +313,38 @@ SKIP_BEFORE_PY11 = pytest.mark.skipif(
         # A group holding anything but one quantifiable item has no single place for the budget to land.
         ("^(a|bb)$", 2, 2, "^(a|bb)$"),
         ("^([a-z][0-9]*)$", 3, 3, "^([a-z][0-9]*)$"),
+        # Lookarounds right after `^` take no characters, so the budget lands on what follows them.
+        ("^(?!aws:)[a-z]*$", 1, 128, "^(?!aws:)[a-z]{1,128}$"),
+        ("^(?!aws:)(?=x)[a-z]*$", 1, None, "^(?!aws:)(?=x)[a-z]{1,}$"),
+        ("^(?!a)[a-z]+-[0-9]*$", 4, 4, "^(?!a)[a-z]{1}-[0-9]{2}$"),
+        ("^(?!aws:)$", 1, None, "^(?!aws:)$"),
+        ("^a*(?:-+?)?", 0, 0, "^a{0}(?:-{1,}?){0}$"),
+        ("^a*()*b*$", 0, 0, "^a{0}(){0}b{0}$"),
+        ("^a(bc)x+$", None, 4096, "^a(bc)x{1,4093}$"),
+        ("^[a-z](0{0,2})+", 1, None, "^[a-z](0{0,2}){1,}"),
+        ("^.?-*", None, 1, "^.?-*"),
+        ("^(a)$", None, 4096, "^(a{1})$"),
+        ("^(a?)+b+$", 7, 12, "^(a?)+b+$"),
+        ("^(?:(?:a|bb){2}){1,3}$", 4, None, "^(?:(?:a|bb){2}){1,3}$"),
+        ("}", None, 1, "^}{1}$"),
+        ("^", None, 4096, "^"),
+        ("}?", 0, 0, "^}{0}$"),
+        ("a+b", 0, 10, "a+b"),
+        ("(ab)*", None, 1, "(ab)*"),
+        ("^a+()+$", 1, None, "^a+()+$"),
+        ("^a{1,3}.?", 4, None, "^a{1,3}.?"),
+        ("^\\uffff+$", None, 4096, "^\\uffff{1,4096}$"),
+        ("^(a?)+b+$", 0, 0, "^(a?)+b+$"),
+        ("\\w+(?<!\\s)", None, 4096, "\\w+(?<!\\s)"),
+        ("^(?-im:a)+$", None, 4096, "^(?-im:a){1,4096}$"),
+        ("^(x{0,2})?x+.$", None, 3, "^(x{0,2}){0,1}x{1,2}.$"),
+        ("^(?:ab|abcd)+$", None, 4096, "^(?:ab(?:|cd)){1,2048}$"),
+        ("^(?:.+){2}0{2}(?:.+a{1,3})+?$", 2, 5, "^(?:.+){2}0{2}(?:.+a{1,3})+?$"),
+        ("^(?=a)", 1, 3, "^(?=a)"),
+        # Every slot keeps every count some string within the bounds needs, e.g. `geo:abcdef` and `a0000`.
+        (r"^geo:\w*\*?$", None, 10, r"^geo:\w{0,6}\*{0,1}$"),
+        (r"^[a-z]{1,3}[0-9]+$", 5, 10, r"^[a-z]{1,3}[0-9]{2,9}$"),
+        (r"^(a?)+b+c+$", 7, 12, r"^(a{0,1}){1,}b{1,11}c{1,11}$"),
     ],
 )
 def test_update_quantifier(pattern, min_length, max_length, expected):
@@ -329,24 +368,42 @@ def test_update_quantifier_exact_length_is_bounded(pattern, length):
     assert pattern_length_bounds(update_quantifier(pattern, length, length)) == (length, length)
 
 
+REWRITE_ENUMERATION_MAX_LENGTH = 7
+
+
 @pytest.mark.parametrize(
-    ("pattern", "min_length", "max_length"),
+    ("pattern", "min_length", "max_length", "alphabet"),
     [
-        (r"^([a-zA-Z0-9]*)$", 5, 5),
-        (r"^([a-zA-Z0-9_.-]+)$", 3, 12),
-        (r"^(?i:[a-z]*)$", 4, 4),
-        (r"^(?i:([a-z-]+))$", 2, 9),
-        (r"^([a-zA-ZÀ-ÖØ-öø-ɏ \t\n\r\f\v0-9_.:/=+\-@]*)$", 256, 256),
+        (r"^([a-zA-Z0-9]*)$", 5, 5, "a0"),
+        (r"^([a-zA-Z0-9_.-]+)$", 3, 12, "a."),
+        (r"^(?i:[a-z]*)$", 4, 4, "aB"),
+        (r"^(?i:([a-z-]+))$", 2, 9, "a-"),
+        (r"^([a-zA-ZÀ-ÖØ-öø-ɏ \t\n\r\f\v0-9_.:/=+\-@]*)$", 256, 256, "a"),
+        # Unanchored: the rewrite keeps only the strings that match end to end.
+        (r"a{2}-+\.{2}", 7, 12, None),
+        (r"^[a-z]{1,3}[0-9]+$", 5, 10, "a0"),
+        (r"^(a?)+b+c+$", 7, 12, "abc"),
+        (r"^(a|bb)+$", 4, 8, "ab"),
+        (r"^[a-z]+[0-9]+$", 4, 8, "a0"),
     ],
 )
 @settings(max_examples=30, suppress_health_check=list(HealthCheck))
 @given(data=st.data())
-def test_group_rewrite_stays_within_the_original_language(pattern, min_length, max_length, data):
-    rewritten = update_quantifier(pattern, min_length, max_length)
-    assert rewritten != pattern
-    value = data.draw(st.from_regex(rewritten, fullmatch=True, alphabet=st.characters(codec=None)))
+def test_group_rewrite_stays_within_the_original_language(pattern, min_length, max_length, alphabet, data):
+    schema = {"type": "string", "pattern": pattern, "minLength": min_length, "maxLength": max_length}
+    rewritten_schema = dict(schema)
+    update_pattern_in_schema(rewritten_schema)
+    original = jsonschema_rs.validator_for(schema, pattern_options=FANCY_REGEX_OPTIONS)
+    folded = jsonschema_rs.validator_for(rewritten_schema, pattern_options=FANCY_REGEX_OPTIONS)
+    value = data.draw(st.from_regex(rewritten_schema["pattern"], fullmatch=True, alphabet=st.characters(codec=None)))
     assert re.search(pattern, value), f"{value!r} does not match {pattern}"
-    assert min_length <= len(value) <= max_length
+    assert not folded.is_valid(value) or original.is_valid(value), f"{value!r} under {rewritten_schema}"
+    if alphabet is None:
+        return
+    for length in range(min_length, min(max_length, REWRITE_ENUMERATION_MAX_LENGTH) + 1):
+        for letters in product(alphabet, repeat=length):
+            text = "".join(letters)
+            assert original.is_valid(text) == folded.is_valid(text), f"{text!r} under {rewritten_schema}"
 
 
 def test_update_quantifier_keeps_repeat_matching_empty():
@@ -370,6 +427,8 @@ def test_update_quantifier_invalid_pattern():
         ("abc*def*", 1, 3, "abc*def*"),
         ("[bc]*[de]*", 1, 3, "[bc]*[de]*"),
         ("[bc]3", 1, 3, "[bc]3"),
+        # Either slot may carry most of the length, so `minLength` stays with the schema.
+        ("[a-z]+[0-9]+", 4, 8, "^[a-z]{1,7}[0-9]{1,7}$"),
     ],
 )
 def test_update_quantifier_unanchored_multi(pattern, min_length, max_length, expected):
@@ -382,7 +441,6 @@ def test_update_quantifier_unanchored_multi(pattern, min_length, max_length, exp
     [
         ("[A-Za-z][A-Za-z0-9_.-]*", 1, 255),
         ("[a-z0-9_][a-z0-9_-]+[a-z0-9_]", 3, 63),
-        ("[a-z]+[0-9]+", 4, 8),
         ("[a-z][0-9]*", 4, 4),
     ],
 )
@@ -395,40 +453,42 @@ def test_update_quantifier_unanchored_multi_enforces_min(pattern, min_length, ma
 
 
 @pytest.mark.parametrize(
-    ("min_length", "max_length", "value"),
+    ("pattern", "min_length", "max_length", "value"),
     [
         # Multi-slot rewrite must accept any distribution that satisfies the original
         # pattern within the length budget; per-slot caps from a balanced split would
         # reject valid lengths the original pattern allowed.
-        (1, 128, "A" + "0" * 100),
-        (1, 128, "A" + "0" * 127),
-        (1, 128, "A" * 128),
+        (r"^[a-zA-Z*]+[a-zA-Z0-9-]*$", 1, 128, "A" + "0" * 100),
+        (r"^[a-zA-Z*]+[a-zA-Z0-9-]*$", 1, 128, "A" + "0" * 127),
+        (r"^[a-zA-Z*]+[a-zA-Z0-9-]*$", 1, 128, "A" * 128),
+        (r"^[a-z]{1,3}[0-9]+$", None, 10, "a" + "0" * 9),
+        (r"^[a-z]{1,3}[0-9]+$", 1, 10, "a" + "0" * 9),
     ],
 )
-def test_update_quantifier_admits_uneven_slot_distributions(min_length, max_length, value):
-    rewritten = update_quantifier(r"^[a-zA-Z*]+[a-zA-Z0-9-]*$", min_length, max_length)
+def test_update_quantifier_admits_uneven_slot_distributions(pattern, min_length, max_length, value):
+    rewritten = update_quantifier(pattern, min_length, max_length)
     assert re.match(rewritten, value), (rewritten, value)
 
 
 @pytest.mark.parametrize(
-    ("schema", "expected"),
+    ("bounds", "expected"),
     [
         (
-            {"type": "string", "pattern": r"^[a-z]+$", "minLength": 1, "maxLength": 10},
+            {"pattern": r"^[a-z]+$", "minLength": 1, "maxLength": 10},
             {"type": "string", "pattern": r"^[a-z]{1,10}$"},
         ),
         # Unbounded `{1,}` survives the rewrite; `maxLength` must stay so length is still enforced.
         (
-            {"type": "string", "pattern": r"^([a-z]+-){2,3}\d+$", "minLength": 1, "maxLength": 32},
+            {"pattern": r"^([a-z]+-){2,3}\d+$", "minLength": 1, "maxLength": 32},
             {"type": "string", "pattern": r"^([a-z]{1,}-){2,3}\d{1,28}$", "maxLength": 32},
         ),
         # Each slot's max is allocated as if it were the only one, so together they outrun the budget.
         (
-            {"type": "string", "pattern": r"^0+0+$", "maxLength": 3},
+            {"pattern": r"^0+0+$", "maxLength": 3},
             {"type": "string", "pattern": r"^0{1,2}0{1,2}$", "maxLength": 3},
         ),
         (
-            {"type": "string", "pattern": r"^[a-zA-Z]+([ '-][a-zA-Z]+){0,2}\.?$", "minLength": 1, "maxLength": 30},
+            {"pattern": r"^[a-zA-Z]+([ '-][a-zA-Z]+){0,2}\.?$", "minLength": 1, "maxLength": 30},
             {
                 "type": "string",
                 "pattern": r"^[a-zA-Z]{1,30}([ '\-][a-zA-Z]{1,}){0,2}\.{0,1}$",
@@ -437,7 +497,8 @@ def test_update_quantifier_admits_uneven_slot_distributions(min_length, max_leng
         ),
     ],
 )
-def test_update_pattern_in_schema_keeps_unenforced_bounds(schema, expected):
+def test_update_pattern_in_schema_keeps_unenforced_bounds(bounds, expected):
+    schema = {"type": "string", **bounds}
     update_pattern_in_schema(schema)
     assert schema == expected
 
@@ -466,6 +527,13 @@ SECRET_REFERENCE = r"(^arn:aws([a-z]|\-)*:secretsmanager:[a-z0-9-.]+:.*)|(\$(\.[
         (r"^[a-z]+$", 0, 0, True),
         # Back-references carry a length the walk cannot follow, so nothing is ruled out.
         (r"^(a+)\1$", 3, 3, False),
+        ("(?>abc)", None, 1, True),
+        ("}", 4096, None, True),
+        ("(foo)\\1", 2, 2, True),
+        ("|", 3, 1, True),
+        ("x{2}", None, 1, True),
+        ("^(ab|c)", 0, 0, True),
+        ("^(b*?)*?", None, 4096, False),
     ],
 )
 def test_pattern_length_is_unreachable(pattern, min_length, max_length, expected):
@@ -482,6 +550,12 @@ PIN_CASES = [
     (r"^[a-z]+$", 40),
     (SPLIT_UUID, 47),
 ]
+
+IOTTWINMAKER_ARN = r".*(^arn:((aws)|(aws-cn)|(aws-us-gov)):s3:::)([a-zA-Z0-9_-]+$).*"
+FSX_ARN = (
+    r"^arn:(?=[^:]+:fsx:[^:]+:\d{12}:)((|(?=[a-z0-9-.]{1,63})(?!\d{1,3}(\.\d{1,3}){3})"
+    r"(?![^:]*-{2})(?![^:]*-\.)(?![^:]*\.-)[a-z0-9].*(?<!-)):){4}(?!/).{0,1024}$"
+)
 
 
 @pytest.mark.parametrize(("pattern", "length"), PIN_CASES)
@@ -530,11 +604,50 @@ def test_pin_pattern_length_random(data):
     assert re.fullmatch(pattern, value), f"{value!r} does not match {pattern}"
 
 
-@SKIP_BEFORE_PY11
+@pytest.mark.parametrize(
+    ("pattern", "min_length", "max_length", "expected"),
+    [
+        ("}?", 0, 0, ""),
+        ("^()+$", None, 4096, "^$"),
+        ("^[Ѐ-ӿ]+$", None, 4096, "^[Ѐ-ӿ]+$"),
+        ("^(?:^)*a+$", None, 4096, "^a{1}$"),
+        ("^(?:ab|abcd)+$", None, 4096, "^(?:ab|abcd)+$"),
+    ],
+)
+def test_pin_pattern_length_rewrite(pattern, min_length, max_length, expected):
+    assert pin_pattern_length(pattern, min_length, max_length) == expected
+
+
+@pytest.mark.parametrize(
+    ("pattern", "expected"),
+    [
+        (
+            r"^(?=.*[a-c])(?!.*[@#])[a-z0-9]{3,8}\Z",
+            CharacterRules(required=("[a-c]",), forbidden=("[@\\#]",), body="[a-z0-9]", min_size=3, max_size=8),
+        ),
+        (r"^(?=.*a)[a-z]+\Z", CharacterRules(required=("a",), forbidden=(), body="[a-z]", min_size=1, max_size=None)),
+        # A lookahead that needs a character before the class is not an anywhere-in-the-value rule.
+        (r"^(?=.+?[a-c])[a-z]{3,8}\Z", None),
+    ],
+    ids=["required-and-forbidden", "literal", "non-empty-prefix"],
+)
+def test_character_rules(pattern, expected):
+    assert character_rules(pattern) == expected
+
+
 def test_pin_pattern_length_leaves_possessive_repeats_alone():
     # A possessive run keeps what it took, so a count the following part could otherwise share
     # would let strings through that the pattern turns down.
     assert pin_pattern_length("^[a-z]++[a-z]$", 5, 5) == "^[a-z]++[a-z]$"
+
+
+@pytest.mark.parametrize(
+    ("pattern", "length"),
+    [(IOTTWINMAKER_ARN, 1024), (FSX_ARN, 8), (FSX_ARN, 512)],
+    ids=["anchors", "lookarounds-minimum", "lookarounds-maximum"],
+)
+def test_pin_pattern_length_declines_when_zero_width_checks_reject_the_pinned_shape(pattern, length):
+    assert pin_pattern_length(pattern, length, length) == pattern
 
 
 @pytest.mark.parametrize(
@@ -599,24 +712,9 @@ def test_pin_pattern_length_leaves_possessive_repeats_alone():
         # Negated POSIX class `[:^X:]` and unknown POSIX names \u2014 bail out.
         (r"[[:^alnum:]_]", None),
         (r"[[:greek:]_]", None),
-        # A nested class stands for one side of an operator.
-        (r"[\p{N}&&[5]]", r"[5]"),
-        # A side spelled with a shorthand class carries no codepoints to work out.
-        (r"[\p{L}&&\w]", None),
-        (r"[\p{L}&&[\w]]", None),
-        # A nested class opening on `]` names it as a member, leaving the operator's side unreadable.
-        (r"[\p{L}&&[]]", None),
-        # A negated POSIX class cannot compose with the members beside it, on either side.
-        (r"[\p{L}&&[:^alnum:]]", None),
-        # Nothing is left for the class to admit.
-        (r"[\p{L}&&\p{N}]", None),
         # Brace hex naming no digits, or a codepoint past the last one.
         (r"[a\x{}b]", None),
         (r"[a\x{110000}]", None),
-        # A class that never closes, with and without an operator inside it.
-        (r"[\p{L}&&[a]", None),
-        (r"[\p{L}&&[:alpha]", None),
-        (r"[\p{L}[a]", None),
         # Neither spelling of a group name is read by every engine, so the name goes.
         (r"^(?<major>\d+)\.(?<minor>\d+)$", r"^(\d+)\.(\d+)$"),
         (r"(?<word>\w+)-(?<rest>.*)", r"(\w+)-(.*)"),
@@ -630,6 +728,18 @@ def test_pin_pattern_length_leaves_possessive_repeats_alone():
         # A name Python cannot carry, and a name reused across alternatives, both readable once dropped.
         (r"(?<1st>a)", r"(a)"),
         (r"(?<x>a)|(?<x>b)", r"(a)|(b)"),
+        # A hyphen beside a class escape cannot form a range, so ECMA reads it literally.
+        (r"^/[\w-/]*[a-zA-Z0-9]$", r"^/[\w\-/]*[a-zA-Z0-9]$"),
+        (r"[a-\d]", r"[a\-\d]"),
+        (r"[\s-\S]", r"[\s\-\S]"),
+        # The atom after such a hyphen closes the would-be range, so the next hyphen is literal too.
+        (r"^[\d-a-z]+$", r"^[\d\-a\-z]+$"),
+        (r"[\w-\x41-z]", r"[\w\-\x41\-z]"),
+        (r"[\d-a-]", r"[\d\-a-]"),
+        (r"[\d-a-b-c]", r"[\d\-a\-b-c]"),
+        (r"[a-\d-b-q]", r"[a\-\d\-b-q]"),
+        (r"\w-/", None),
+        (r"[\w-]", None),
         # No translation needed (already valid Python regex)
         (r"[a-z]+", None),
         (r"^\d+$", None),
@@ -667,13 +777,10 @@ _ENGINE_AGREEMENT = [
     # `||` is not an operator in the engine behind validation - it names a literal `|`.
     (r"^[\p{L}||\p{N}]$", "a1|", "!"),
     (r"^[\p{L}||\p{M}||\p{Z}||\p{S}||\p{N}||\p{P}]$", "a1 .$|", "\x01"),
-    # `&&` keeps what both sides admit, and a class nested inside another adds to it.
-    (r"^[\p{Print}&&[^|:/]]$", "a& ", "|:/"),
-    (r"^[[\p{L}]\p{N}]$", "a1", "[]!"),
-    # `~~` keeps what only one side admits.
-    (r"^[\p{L}~~\p{N}]$", "a1", "~!"),
-    # A class reaching the last codepoint leaves no gap above it.
-    (r"^[\p{L}\x{10FFFF}~~[a]]$", "b\U0010ffff", "a"),
+    (r"^[\p{Print}&&[^|:/]]$", ("a]", "&]", "[]", "^]", "|]", ":]", "/]"), ("a", "1", "]")),
+    (r"^[[\p{L}]\p{N}]$", ("a1]", "[1]", "Z0]"), ("a]", "1]", "a1", "[]")),
+    (r"^[\p{L}~~\p{N}]$", "a1~", "!"),
+    (r"^[\p{L}\x{10FFFF}~~[a]]$", ("a]", "b]", "~]", "[]", "\U0010ffff]"), ("a", "1]", "\U0010ffff")),
     # PCRE brace hex escapes.
     (r"^[a\x{60}]$", "a`", "b"),
     (r"^([$\-._+!*\x{60}(),;/?:@=&\w]|%([0-9a-fA-F?]{2}|[0-9a-fA-F?]?[*]))+$", "a`$_", " \t"),
@@ -690,12 +797,39 @@ def test_translation_agrees_with_the_validator(pattern, matching, rejected):
     assert translated is not None
     compiled = re.compile(translated)
     validator = jsonschema_rs.validator_for({"type": "string", "pattern": pattern}, pattern_options=FANCY_REGEX_OPTIONS)
-    for char in matching:
-        assert compiled.fullmatch(char), char
-        assert validator.is_valid(char), char
-    for char in rejected:
-        assert not compiled.fullmatch(char), char
-        assert not validator.is_valid(char), char
+    for value in matching:
+        assert compiled.fullmatch(value), value
+        assert validator.is_valid(value), value
+    for value in rejected:
+        assert not compiled.fullmatch(value), value
+        assert not validator.is_valid(value), value
+
+
+_END_ANCHOR_AGREEMENT = [
+    (r"^a$", ("a",), ("a\n",)),
+    (r"(?m)^a$", ("a", "a\nb"), ("ab",)),
+    (r"\\$", ("\\",), ("\\\n",)),
+    (r"\$", ("$",), ("a",)),
+    (r"[$]", ("$",), ("a",)),
+    (r"[^$]", ("a",), ("$",)),
+    (r"^[^]$]+$", ("ab",), ("a$", "a]")),
+    (r"^[]$]+$", ("]$",), ("a", "]\n")),
+]
+
+
+@pytest.mark.parametrize(
+    ("pattern", "matching", "rejected"), _END_ANCHOR_AGREEMENT, ids=[item[0] for item in _END_ANCHOR_AGREEMENT]
+)
+def test_end_anchor_agrees_with_the_validator(pattern, matching, rejected):
+    compiled = compile_ecma_pattern(pattern)
+    assert compiled is not None
+    validator = jsonschema_rs.validator_for({"type": "string", "pattern": pattern}, pattern_options=FANCY_REGEX_OPTIONS)
+    for value in matching:
+        assert compiled.search(value), value
+        assert validator.is_valid(value), value
+    for value in rejected:
+        assert not compiled.search(value), value
+        assert not validator.is_valid(value), value
 
 
 _COMPLEMENT_PROBE = "aZ0_ -!.\t\néÀ́ €中\U0001f600"
@@ -733,6 +867,7 @@ def _patterns_with_properties(draw: st.DrawFn) -> str:
 
 
 @given(_patterns_with_properties())
+# The violating draw is rare, so fewer examples would let a regression pass.
 @settings(suppress_health_check=list(HealthCheck), max_examples=200)
 def test_normalize_regex_never_produces_nested_classes(pattern: str) -> None:
     result = normalize_regex(pattern)
@@ -741,6 +876,18 @@ def test_normalize_regex_never_produces_nested_classes(pattern: str) -> None:
     with warnings.catch_warnings():
         warnings.simplefilter("error", FutureWarning)
         re.compile(result)
+
+
+# CPython emits a FutureWarning for some bracket shapes while compiling; pattern validation must stay quiet.
+@pytest.mark.parametrize(
+    "pattern",
+    ["^[[:a]b]+$", "[[:]]", "^a+$"],
+    ids=["nested-set", "empty-nested-set", "plain"],
+)
+def test_is_valid_python_regex_does_not_warn(pattern: str) -> None:
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", FutureWarning)
+        assert is_valid_python_regex(pattern) is True
 
 
 @given(st.data())
@@ -886,9 +1033,11 @@ def is_valid_regex(pattern: str) -> bool:
         r"([a-z])\1+",
         # GROUPREF_EXISTS (conditional group)
         r"(x)(?(1)a|b)",
+        r"(x)?(?(1)a|b)",
+        r"(x)?(?(1)a)",
         # ATOMIC_GROUP
-        pytest.param("(?>abc)", marks=SKIP_BEFORE_PY11),
-        pytest.param("(?>\\d+)", marks=SKIP_BEFORE_PY11),
+        "(?>abc)",
+        "(?>\\d+)",
     ],
 )
 def test_serialize_roundtrip(pattern):
@@ -900,23 +1049,20 @@ def test_serialize_roundtrip(pattern):
     assert _serialize(list(sre_parse.parse(serialized))) == serialized
 
     # Semantically equivalent
-    for s in ["", "a", "abc", "ABC", "123", "a-b", "\t\n", "\x00"]:
+    for s in ["", "a", "abc", "ABC", "123", "a-b", "\t\n", "\x00", "xa", "b"]:
         assert bool(re.search(pattern, s)) == bool(re.search(serialized, s))
 
 
 @pytest.mark.parametrize(
-    "pattern",
+    ("pattern", "expected"),
     [
-        pytest.param("a*+", marks=SKIP_BEFORE_PY11),
-        pytest.param("a++", marks=SKIP_BEFORE_PY11),
-        pytest.param("a{2,5}+", marks=SKIP_BEFORE_PY11),
+        ("a*+", "a{0,}+"),
+        ("a++", "a{1,}+"),
+        ("a{2,5}+", "a{2,5}+"),
     ],
 )
-def test_serialize_possessive(pattern):
-    parsed = sre_parse.parse(pattern)
-    serialized = _serialize(list(parsed))
-    re.compile(serialized)
-    assert _serialize(list(sre_parse.parse(serialized))) == serialized
+def test_serialize_possessive(pattern, expected):
+    assert _serialize(list(sre_parse.parse(pattern))) == expected
 
 
 @pytest.mark.parametrize("char", list(string.printable))
@@ -1018,6 +1164,7 @@ def test_serialize_escaped_literal(pattern, should_match):
 
 
 @given(pattern=st.text(min_size=1, max_size=80).filter(is_valid_regex))
+# Serialization bugs hide in rare random patterns, so the sweep needs breadth.
 @settings(max_examples=500, suppress_health_check=list(HealthCheck), deadline=None)
 def test_serialize_random_pattern(pattern):
     parsed = sre_parse.parse(pattern)
@@ -1171,10 +1318,11 @@ def test_response_schema_is_not_mutated(cli, ctx, snapshot_cli):
     assert cli.run_openapi_app(app, "-call", "--phases=fuzzing", "-n 1") == snapshot_cli
 
 
-@pytest.mark.snapshot(replace_reproduce_with=True)
-def test_unicode_surrogate_pattern_in_query_parameter(cli, ctx, snapshot_cli):
-    # Pattern from amazonaws.com/cleanrooms schema - surrogate code points are invalid in regex
-    invalid_pattern = "([\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t\\r\\n]){0,255}"
+@pytest.mark.snapshot(replace_reproduce_with=True, replace_invalid_component=True)
+def test_unicode_surrogate_patterns_are_dropped_with_warning(cli, ctx, snapshot_cli):
+    # Surrogate code points are invalid in regex engines.
+    query_pattern = "([\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t\\r\\n]){0,255}"
+    body_pattern = "[\\uD800-\\uDBFF]"
 
     app, _ = ctx.openapi.make_flask_app(
         {
@@ -1184,37 +1332,11 @@ def test_unicode_surrogate_pattern_in_query_parameter(cli, ctx, snapshot_cli):
                         {
                             "name": "description",
                             "in": "query",
-                            "schema": {"type": "string", "pattern": invalid_pattern},
+                            "schema": {"type": "string", "pattern": query_pattern},
                         }
                     ],
                     "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
-    )
-
-    @app.route("/test")
-    def test_endpoint():
-        return jsonify({"status": "ok"})
-
-    assert (
-        cli.run_openapi_app(
-            app,
-            "--max-examples=10",
-            "--phases=fuzzing",
-        )
-        == snapshot_cli
-    )
-
-
-@pytest.mark.snapshot(replace_reproduce_with=True, replace_invalid_component=True)
-def test_unicode_surrogate_pattern_in_request_body(cli, ctx, snapshot_cli):
-    # Surrogate code point range - invalid in regex engine
-    invalid_pattern = "[\\uD800-\\uDBFF]"
-
-    app, _ = ctx.openapi.make_flask_app(
-        {
-            "/test": {
+                },
                 "post": {
                     "requestBody": {
                         "required": True,
@@ -1223,19 +1345,19 @@ def test_unicode_surrogate_pattern_in_request_body(cli, ctx, snapshot_cli):
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "message": {"type": "string", "pattern": invalid_pattern},
+                                        "message": {"type": "string", "pattern": body_pattern},
                                     },
                                 }
                             }
                         },
                     },
                     "responses": {"200": {"description": "OK"}},
-                }
+                },
             }
         }
     )
 
-    @app.route("/test", methods=["POST"])
+    @app.route("/test", methods=["GET", "POST"])
     def test_endpoint():
         return jsonify({"status": "ok"})
 
@@ -1355,6 +1477,8 @@ ALNUM = string.ascii_letters + string.digits
         ("[", ALNUM, False),
         ("abc", "abc", False),
         ("abcd", "abc", True),
+        ("[!-0]", ALNUM, False),
+        ("[9-@]", ALNUM, False),
     ],
 )
 def test_pattern_requires_char_outside(pattern, allowed, expected):
@@ -1408,23 +1532,19 @@ def test_is_valid_jsonschema_rs_regex(pattern, expected):
 def test_pattern_the_validator_cannot_compile_is_dropped(ctx):
     # Such a pattern constrains nothing during validation, and keeping it would only stop the rest
     # of the schema from being modeled.
-    schema = ctx.openapi.build_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /items",
         {
-            "/items": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "q",
-                            "in": "query",
-                            "schema": {"type": "string", "pattern": "[A-Z]{,3}", "maxLength": 5},
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+            "parameters": [
+                {
+                    "name": "q",
+                    "in": "query",
+                    "schema": {"type": "string", "pattern": "[A-Z]{,3}", "maxLength": 5},
                 }
-            }
-        }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schemathesis.openapi.from_dict(schema)["/items"]["GET"]
     parameter = next(iter(operation.query))
 
     assert "pattern" not in parameter.optimized_schema
@@ -1434,21 +1554,56 @@ def test_pattern_the_validator_cannot_compile_is_dropped(ctx):
 @pytest.mark.parametrize("pattern", [r"^(?P<major>\d+)$", r"^(?<major>\d+)$"], ids=["python", "ecma"])
 def test_named_group_pattern_is_kept(ctx, pattern):
     # A group name only one engine reads would leave the pattern refused where the schema is validated.
-    schema = ctx.openapi.build_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /items",
         {
-            "/items": {
-                "get": {
-                    "parameters": [
-                        {"name": "q", "in": "query", "required": True, "schema": {"type": "string", "pattern": pattern}}
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "parameters": [
+                {"name": "q", "in": "query", "required": True, "schema": {"type": "string", "pattern": pattern}}
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schemathesis.openapi.from_dict(schema)["/items"]["GET"]
     assert next(iter(operation.query)).optimized_schema["pattern"] == r"^(\d+)$"
     assert examples.generate_one(operation.as_strategy()).query["q"].isdigit()
+
+
+LETTERS = r"^[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F]+$"
+
+
+@pytest.mark.parametrize(
+    ("pattern", "expected"),
+    [
+        (r"^[\p{L}]+$", LETTERS),
+        (r"^[\p{L]+$", None),
+        (r"^[\pL]+$", LETTERS),
+        (r"^[\pQ]\pL$", None),
+        (r"^[[:alpha:]]+$", LETTERS),
+        (r"^[[:digit:]]x[[:alpha]$", r"^[0-9]x[\[:alpha]$"),
+        (r"^(?<name>[a-z])+$", r"^([a-z])+$"),
+        (r"^(?<name[a-z]+$", None),
+    ],
+    ids=[
+        "braced-property",
+        "unclosed-braced-property",
+        "shorthand-property",
+        "unknown-shorthand-property",
+        "posix-class",
+        "unclosed-posix-class",
+        "named-group",
+        "unclosed-named-group",
+    ],
+)
+def test_pcre_class_syntax_is_translated_or_dropped(ctx, pattern, expected):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [
+                {"name": "q", "in": "query", "required": True, "schema": {"type": "string", "pattern": pattern}}
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    assert next(iter(operation.query)).optimized_schema.get("pattern") == expected
 
 
 def test_quantifier_rewrite_the_validator_cannot_compile_is_not_taken():
@@ -1459,6 +1614,35 @@ def test_quantifier_rewrite_the_validator_cannot_compile_is_not_taken():
     update_pattern_in_schema(schema)
 
     assert schema == {"type": "string", "pattern": "^.{1,}$", "maxLength": 2147483647}
+
+
+@pytest.mark.parametrize("length_keyword", ["minLength", "maxLength"], ids=["min", "max"])
+def test_huge_length_is_not_folded_into_pattern(ctx, length_keyword):
+    length = 9223372036854775807
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [
+                {
+                    "name": "q",
+                    "in": "query",
+                    "required": True,
+                    "schema": {"type": "string", "pattern": "^a+$", length_keyword: length},
+                }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+
+    assert next(iter(operation.query)).optimized_schema == {
+        "type": "string",
+        "pattern": "^a+$",
+        length_keyword: length,
+    }
+    if length_keyword == "maxLength":
+        value = examples.generate_one(operation.as_strategy()).query["q"]
+        assert re.fullmatch("^a+$", value)
+        assert len(value) <= length
 
 
 def test_quantifier_rewrite_within_reach_is_taken():
@@ -1490,8 +1674,8 @@ BRUTE_FORCE_PATTERNS = [
     r"^a(?:bb)*$",
     r"^(?:aa|b){1,3}$",
     r"^(a+)\1$",
-    pytest.param(r"^(?>a+)b*$", marks=SKIP_BEFORE_PY11),
-    pytest.param(r"^(?:ab)++$", marks=SKIP_BEFORE_PY11),
+    r"^(?>a+)b*$",
+    r"^(?:ab)++$",
     r"^(?:^)*a+$",
     r"^(?:ab){3}$",
     r"^(?:aab){2,4}$",
@@ -1499,10 +1683,26 @@ BRUTE_FORCE_PATTERNS = [
     r"^((?:ab|abab)+)$",
     r"^(?:(?:ab|abab)+|(?:ba|baba)+)$",
     r"^(?:b|(a)\1)$",
-    pytest.param(r"^(?>a+)*$", marks=SKIP_BEFORE_PY11),
+    r"^(?>a+)*$",
+    r"a*(^ab)(b+$)a*",
+    r"^a(?=b)(|b)a+$",
 ]
 BRUTE_FORCE_ALPHABET = "ab"
 BRUTE_FORCE_MAX_LENGTH = 9
+
+SMALL_REGEX_BODIES = st.recursive(
+    st.sampled_from(("a", "b", "[ab]", ".", "(?=a)", "(?=b)", "(?!a)", "^", "$", r"\b")),
+    lambda children: st.one_of(
+        children.map(lambda child: f"(?:{child})"),
+        st.tuples(children, children).map(lambda parts: "".join(parts)),
+        st.tuples(children, children).map(lambda parts: f"(?:{parts[0]}|{parts[1]})"),
+        st.tuples(children, st.sampled_from(("*", "+", "?", "{1,2}"))).map(lambda parts: f"(?:{parts[0]}){parts[1]}"),
+    ),
+    max_leaves=5,
+)
+SMALL_REGEX_PATTERNS = st.tuples(st.sampled_from(("", "^")), SMALL_REGEX_BODIES, st.sampled_from(("", "$", r"\Z"))).map(
+    lambda parts: "".join(parts)
+)
 
 
 def _strings_of_length(length):
@@ -1539,6 +1739,27 @@ def test_pinned_pattern_admits_only_original_matches_of_the_pinned_length(patter
             assert original.fullmatch(text), (pattern, length, text)
 
 
+@example(pattern=r"^a(?=b)(|b)a+$", length=2)
+@example(pattern=r"(?:(?=a))+", length=0)
+@example(pattern=r"a(?:^)+", length=1)
+@example(pattern=r"(?:(?!b))+.", length=1)
+@settings(max_examples=50, suppress_health_check=list(HealthCheck), deadline=None)
+@given(pattern=SMALL_REGEX_PATTERNS, length=st.integers(min_value=0, max_value=8))
+def test_pinned_generated_pattern_is_a_non_empty_subset(pattern, length):
+    pinned = pin_pattern_length(pattern, length, length)
+    if pinned == pattern:
+        return
+    admitted = {
+        text
+        for size in range(BRUTE_FORCE_MAX_LENGTH + 1)
+        for text in _strings_of_length(size)
+        if re.fullmatch(pinned, text)
+    }
+    assert admitted, (pattern, length, pinned)
+    assert {len(text) for text in admitted} == {length}
+    assert all(re.fullmatch(pattern, text) for text in admitted)
+
+
 @pytest.mark.parametrize("pattern", BRUTE_FORCE_PATTERNS)
 def test_pin_leaves_a_length_alone_when_the_pattern_cannot_reach_it(pattern):
     compiled = re.compile(pattern)
@@ -1561,3 +1782,113 @@ def test_unreadable_pattern_rules_nothing_out(pattern):
     # A pattern Python cannot read says nothing about length, so generation keeps its own path.
     assert pattern_length_is_unreachable(pattern, 1, 5) is False
     assert pin_pattern_length(pattern, 1, 5) == pattern
+
+
+@pytest.mark.hypothesis_nested
+@pytest.mark.parametrize(
+    ("parameter_schema", "expected"),
+    [
+        (
+            {"type": "string", "pattern": "^a+", "minLength": 3},
+            {"type": "string", "pattern": "^a{3,}"},
+        ),
+        (
+            {"type": "string", "pattern": "^(ab|c)", "maxLength": 5},
+            {"type": "string", "pattern": "^(ab|c)", "maxLength": 5},
+        ),
+        (
+            {"type": "string", "pattern": "(ab|c)$", "maxLength": 5},
+            {"type": "string", "pattern": "(ab|c)$", "maxLength": 5},
+        ),
+        (
+            {"type": "string", "pattern": "^(?:a|bb){1,2}$", "minLength": 1, "maxLength": 10},
+            {"type": "string", "pattern": "^(?:a|bb){1,2}$", "minLength": 1, "maxLength": 10},
+        ),
+        (
+            {"type": "string", "pattern": "^(?:(?:a|bb){2}){1,3}$", "minLength": 1, "maxLength": 100},
+            {"type": "string", "pattern": "^(?:(?:a|bb){2}){1,3}$", "minLength": 1, "maxLength": 100},
+        ),
+        (
+            {"type": "string", "pattern": "^(?:(?:ab){2}c){1,3}$", "minLength": 1, "maxLength": 100},
+            {"type": "string", "pattern": "^(?:(?:ab){2}c){1,3}$", "minLength": 1, "maxLength": 100},
+        ),
+        (
+            {"type": "string", "pattern": "^(?:(ab)c){1,3}$", "minLength": 1, "maxLength": 100},
+            {"type": "string", "pattern": "^(?:(ab)c){1,3}$", "minLength": 1, "maxLength": 100},
+        ),
+        (
+            {"type": "string", "pattern": "^x(?:a|bb)+$", "minLength": 5, "maxLength": 5},
+            {"type": "string", "pattern": "^x(?:a|bb)+$", "minLength": 5, "maxLength": 5},
+        ),
+        (
+            {"type": "string", "pattern": "^a{1,2}b{1,2}c{3}$", "minLength": 7, "maxLength": 7},
+            {"type": "string", "pattern": "^a{2}b{2}c{3}$"},
+        ),
+    ],
+    ids=[
+        "leading-anchor-floor",
+        "leading-anchor-group",
+        "trailing-anchor-group",
+        "repeated-alternation",
+        "fixed-count-alternation",
+        "fixed-count-group",
+        "capturing-group-inside-repeat",
+        "exact-length-alternation",
+        "exact-length-searched",
+    ],
+)
+def test_length_bounds_beside_a_pattern(ctx, parameter_schema, expected):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [{"name": "q", "in": "query", "required": True, "schema": parameter_schema}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    assert next(iter(operation.query)).optimized_schema == expected
+    validator = jsonschema_rs.validator_for(parameter_schema)
+
+    @run_given(case=operation.as_strategy(), max_examples=10)
+    def check(case):
+        assert validator.is_valid(case.query["q"]), case.query
+
+
+@pytest.mark.parametrize(
+    ("pattern", "meaning"),
+    [("[^ab]x", "[^ab]x"), ("[[:alpha:]]+", r"[a-zA-Z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u024F]+")],
+    ids=["negated-class", "posix-class"],
+)
+def test_coverage_phase_header_values_match_pattern(ctx, app_runner, pattern, meaning):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "get": {
+                    "parameters": [
+                        {
+                            "name": "X-Key",
+                            "in": "header",
+                            "required": True,
+                            "schema": {"type": "string", "pattern": pattern},
+                        }
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        }
+    )
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    schema.config.phases.update(phases=["coverage"])
+    schema.config.checks.update(included_check_names=["not_a_server_error"])
+    values = []
+    with ctx.restore_hooks():
+
+        @schemathesis.hook
+        def before_call(context, case, **kwargs):
+            if case.meta.generation.mode == GenerationMode.POSITIVE:
+                values.append(case.headers["X-Key"])
+
+        for _ in from_schema(schema).execute():
+            pass
+    validator = jsonschema_rs.validator_for({"type": "string", "pattern": meaning})
+    assert values
+    assert all(validator.is_valid(value) for value in values), values

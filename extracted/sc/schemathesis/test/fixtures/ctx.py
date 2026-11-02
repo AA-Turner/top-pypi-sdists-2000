@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from contextlib import contextmanager
 from dataclasses import dataclass
+from pathlib import Path
 from textwrap import dedent
 from typing import TYPE_CHECKING, Any, Literal, overload
 
@@ -15,32 +16,43 @@ from schemathesis.checks import CHECKS
 from schemathesis.hooks import GLOBAL_HOOK_DISPATCHER
 from test.apps import builders
 from test.apps.catalog.graphql import bookstore as graphql_bookstore
-from test.apps.catalog.openapi import ajv as openapi_ajv
 from test.apps.catalog.openapi import basic as openapi_basic
 from test.apps.catalog.openapi import confluent as openapi_confluent
+from test.apps.catalog.openapi import envelopes as openapi_envelopes
 from test.apps.catalog.openapi import error_feedback as openapi_error_feedback
-from test.apps.catalog.openapi import flask_rest as openapi_flask_rest
-from test.apps.catalog.openapi import go_validator as openapi_go_validator
-from test.apps.catalog.openapi import laravel as openapi_laravel
-from test.apps.catalog.openapi import litestar as openapi_litestar
-from test.apps.catalog.openapi import marshmallow as openapi_marshmallow
 from test.apps.catalog.openapi import nested as openapi_nested
-from test.apps.catalog.openapi import rails as openapi_rails
 from test.apps.catalog.openapi import restler as openapi_restler
+from test.apps.catalog.openapi import sign_up as openapi_sign_up
 from test.apps.catalog.openapi import stateful as openapi_stateful
 from test.apps.catalog.openapi import supervisor as openapi_supervisor
 from test.apps.catalog.openapi import swagger_v2 as openapi_swagger_v2
-from test.apps.catalog.openapi import symfony as openapi_symfony
 from test.apps.catalog.openapi import under_declared_security as openapi_under_declared_security
 from test.apps.catalog.openapi import users as openapi_users
 from test.apps.catalog.openapi import wfc as openapi_wfc
-from test.apps.catalog.openapi import zod as openapi_zod
 from test.apps.runtime import GraphQLApp, GraphQLServer, Modifier, OpenAPIApp, OpenAPIServer
 
+STARTED_SERVERS = pytest.StashKey[list[OpenAPIServer]]()
+
+
+@pytest.hookimpl(wrapper=True)
+def pytest_runtest_makereport(item, call):
+    report = yield
+    servers = item.stash.get(STARTED_SERVERS, None)
+    if report.failed and servers:
+        text = "\n\n".join("\n".join([server.base_url, *map(repr, server.requests)]) for server in servers)
+        report.sections.append(("Captured requests", text))
+    return report
+
+
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from schemathesis.config import SchemathesisConfig
     from schemathesis.openapi.loaders import OpenApiSchema
+    from schemathesis.schemas import APIOperation
     from schemathesis.specs.graphql.schemas import GraphQLSchema
+    from test.apps.catalog.grpc.raw import RawGrpcServer
+    from test.apps.catalog.grpc.users import CrashingGrpcServer, GrpcApp, GrpcServer
 
 
 @overload
@@ -54,7 +66,10 @@ def _start(parent: Context, app: GraphQLApp) -> GraphQLServer: ...
 def _start(parent: Context, app: OpenAPIApp | GraphQLApp) -> OpenAPIServer | GraphQLServer:
     app_runner = parent.request.getfixturevalue("app_runner")
     runner = app_runner.run_flask_app if app.kind == "flask" else app_runner.run_asgi_app
-    return app.make_server(port=runner(app.server))
+    server = app.make_server(port=runner(app.server))
+    if isinstance(server, OpenAPIServer):
+        parent.request.node.stash.setdefault(STARTED_SERVERS, []).append(server)
+    return server
 
 
 @dataclass(slots=True)
@@ -73,8 +88,14 @@ class OpenAPIApps:
     def multiple_failures(self) -> OpenAPIServer:
         return _start(self.parent, openapi_basic.multiple_failures())
 
+    def crash_closes_connection(self) -> OpenAPIServer:
+        return _start(self.parent, openapi_basic.crash_closes_connection())
+
     def custom_format(self) -> OpenAPIServer:
         return _start(self.parent, openapi_basic.custom_format())
+
+    def identical_query_parameters(self) -> OpenAPIServer:
+        return _start(self.parent, openapi_basic.identical_query_parameters())
 
     def flaky(self) -> OpenAPIServer:
         return _start(self.parent, openapi_basic.flaky())
@@ -163,17 +184,11 @@ class OpenAPIApps:
     def success_and_text(self) -> OpenAPIServer:
         return _start(self.parent, openapi_basic.success_and_text())
 
-    def chunked_success(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_basic.chunked_success())
-
     def success_text_and_write_only(self) -> OpenAPIServer:
         return _start(self.parent, openapi_basic.success_text_and_write_only())
 
     def slow(self) -> OpenAPIServer:
         return _start(self.parent, openapi_basic.slow())
-
-    def success_and_slow(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_basic.success_and_slow())
 
     def headers(self) -> OpenAPIServer:
         return _start(self.parent, openapi_basic.headers())
@@ -205,6 +220,9 @@ class OpenAPIApps:
     def basic(self) -> OpenAPIServer:
         return _start(self.parent, openapi_basic.basic())
 
+    def basic_with_query(self) -> OpenAPIServer:
+        return _start(self.parent, openapi_basic.basic_with_query())
+
     def success_and_basic(self) -> OpenAPIServer:
         return _start(self.parent, openapi_basic.success_and_basic())
 
@@ -214,14 +232,17 @@ class OpenAPIApps:
     def kitchen_sink(self) -> OpenAPIServer:
         return _start(self.parent, openapi_basic.kitchen_sink())
 
-    def rails_planted_bug(self, *, envelope: openapi_rails.Envelope) -> OpenAPIServer:
-        return _start(self.parent, openapi_rails.planted_bug(envelope))
+    def rails_planted_bug(self, *, envelope: openapi_envelopes.RailsEnvelope) -> OpenAPIServer:
+        return _start(self.parent, openapi_envelopes.planted_bug(openapi_envelopes.RAILS[envelope]))
 
     def laravel_planted_bug(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_laravel.planted_bug())
+        return _start(self.parent, openapi_envelopes.planted_bug(openapi_envelopes.LARAVEL))
 
     def stateful_users(self, *modifiers: Modifier[openapi_stateful.UserStore]) -> OpenAPIServer:
         return _start(self.parent, openapi_stateful.stateful_users(*modifiers))
+
+    def flaky_branch_blocks(self) -> OpenAPIServer:
+        return _start(self.parent, openapi_stateful.flaky_branch_blocks())
 
     def users_crud(self) -> OpenAPIServer:
         return _start(self.parent, openapi_users.crud())
@@ -235,16 +256,22 @@ class OpenAPIApps:
     def users_crud_with_failure(self) -> OpenAPIServer:
         return _start(self.parent, openapi_users.crud_with_failure())
 
+    def linked_users(self) -> OpenAPIServer:
+        return _start(self.parent, openapi_users.linked_users())
+
     def aspnet_planted_bug(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_error_feedback.aspnet_planted_bug())
+        return _start(self.parent, openapi_envelopes.planted_bug(openapi_envelopes.ASPNET))
 
     def under_declared_security(
         self, *modifiers: Modifier[openapi_under_declared_security.UnderDeclaredSecurityStore]
     ) -> OpenAPIServer:
         return _start(self.parent, openapi_under_declared_security.under_declared_security(*modifiers))
 
+    def sign_up_and_login(self, behavior: openapi_sign_up.SignUpBehavior = "ok") -> OpenAPIServer:
+        return _start(self.parent, openapi_sign_up.sign_up_and_login(behavior))
+
     def zod_planted_bug(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_zod.planted_bug())
+        return _start(self.parent, openapi_envelopes.planted_bug(openapi_envelopes.ZOD))
 
     def unimplemented_method(self) -> OpenAPIServer:
         return _start(self.parent, openapi_supervisor.unimplemented_method())
@@ -275,6 +302,14 @@ class OpenAPIApps:
 
     def wfc_credentials_rejected(self) -> OpenAPIServer:
         return _start(self.parent, openapi_wfc.wfc_credentials_rejected())
+
+    def wfc_accounts_seeded_later(self) -> OpenAPIServer:
+        return _start(self.parent, openapi_wfc.wfc_accounts_seeded_later())
+
+    def wfc_owned_orders(
+        self, policy: str, listing: str | None = None, writes: bool = False, security: str = "declared"
+    ) -> OpenAPIServer:
+        return _start(self.parent, openapi_wfc.wfc_owned_orders(policy, listing, writes, security))
 
     def planted_bug(self) -> OpenAPIServer:
         return _start(self.parent, openapi_error_feedback.planted_bug())
@@ -364,25 +399,25 @@ class OpenAPIApps:
         return _start(self.parent, openapi_error_feedback.token_with_examples())
 
     def ajv_planted_bug(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_ajv.planted_bug())
+        return _start(self.parent, openapi_envelopes.planted_bug(openapi_envelopes.AJV))
 
     def go_validator_planted_bug(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_go_validator.planted_bug())
+        return _start(self.parent, openapi_envelopes.planted_bug(openapi_envelopes.GO_VALIDATOR))
 
     def symfony_planted_bug(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_symfony.planted_bug())
+        return _start(self.parent, openapi_envelopes.planted_bug(openapi_envelopes.SYMFONY))
 
     def marshmallow_planted_bug(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_marshmallow.planted_bug())
+        return _start(self.parent, openapi_envelopes.planted_bug(openapi_envelopes.MARSHMALLOW))
 
     def confluent_planted_bug(self) -> OpenAPIServer:
         return _start(self.parent, openapi_confluent.planted_bug())
 
     def flask_rest_planted_bug(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_flask_rest.planted_bug())
+        return _start(self.parent, openapi_envelopes.planted_bug(openapi_envelopes.FLASK_REST))
 
     def litestar_planted_bug(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_litestar.planted_bug())
+        return _start(self.parent, openapi_envelopes.planted_bug(openapi_envelopes.LITESTAR))
 
     def restler_planted_bug(self) -> OpenAPIServer:
         return _start(self.parent, openapi_restler.planted_bug())
@@ -404,9 +439,6 @@ class OpenAPIApps:
 
     def swagger_v2_examples(self) -> OpenAPIServer:
         return _start(self.parent, openapi_swagger_v2.examples())
-
-    def swagger_v2_response_headers(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_swagger_v2.response_headers())
 
     def swagger_v2_default_response(self) -> OpenAPIServer:
         return _start(self.parent, openapi_swagger_v2.default_response())
@@ -450,23 +482,20 @@ class OpenAPIApps:
     def swagger_v2_and_security(self) -> OpenAPIServer:
         return _start(self.parent, openapi_swagger_v2.and_security())
 
-    def swagger_v2_kitchen_sink(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_swagger_v2.kitchen_sink())
-
     def deep_leaf_bug(self) -> OpenAPIServer:
         return _start(self.parent, openapi_nested.deep_leaf_bug())
 
     def header_constraint_bug(self) -> OpenAPIServer:
         return _start(self.parent, openapi_nested.header_constraint_bug())
 
-    def query_array_items_bug(self) -> OpenAPIServer:
-        return _start(self.parent, openapi_nested.query_array_items_bug())
-
     def one_of_branch_bug(self) -> OpenAPIServer:
         return _start(self.parent, openapi_nested.one_of_branch_bug())
 
     def additional_properties_bug(self) -> OpenAPIServer:
         return _start(self.parent, openapi_nested.additional_properties_bug())
+
+    def languages_with_codes(self) -> OpenAPIServer:
+        return _start(self.parent, openapi_nested.languages_with_codes())
 
 
 @dataclass(slots=True)
@@ -479,10 +508,19 @@ class GraphQLApps:
     def federated_subgraph(self) -> GraphQLServer:
         return _start(self.parent, graphql_bookstore.federated_subgraph())
 
+    def coverage_inputs(self) -> GraphQLServer:
+        return _start(self.parent, graphql_bookstore.coverage_inputs())
+
+    def lenient(self) -> GraphQLServer:
+        return _start(self.parent, graphql_bookstore.lenient())
+
     def from_schema(
         self, schema, *, endpoint: str = "/graphql", framework: Literal["flask", "fastapi"] = "flask"
     ) -> GraphQLServer:
         return _start(self.parent, graphql_bookstore.from_schema(schema, endpoint=endpoint, framework=framework))
+
+    def canned_response(self, payload: object, *, status_code: int = 200) -> GraphQLServer:
+        return _start(self.parent, graphql_bookstore.canned_response(payload, status_code=status_code))
 
     def use_after_create(self) -> GraphQLServer:
         return _start(self.parent, graphql_bookstore.use_after_create())
@@ -529,10 +567,98 @@ class GraphQLContext:
     def load_sdl(self, sdl: str, *, config: SchemathesisConfig | None = None) -> GraphQLSchema:
         return schemathesis.graphql.from_file(sdl, config=config)
 
+    def write_sdl(self, sdl: str, *, filename: str = "schema.graphql") -> Path:
+        path = self.parent.request.getfixturevalue("tmp_path") / filename
+        path.write_text(sdl)
+        return path
+
     def load_introspection(
         self, raw_schema: dict[str, Any], *, config: SchemathesisConfig | None = None
     ) -> GraphQLSchema:
         return schemathesis.graphql.from_dict(raw_schema, config=config)
+
+
+@dataclass(slots=True)
+class GrpcApps:
+    parent: Context
+
+    def users(
+        self,
+        *,
+        tls: bool = False,
+        client_auth: bool = False,
+        reflection: str | None = "v1alpha",
+        undescribed_services: tuple[str, ...] = (),
+        reflection_imports: bool = True,
+        unserved_files: tuple[str, ...] = (),
+        emptied_files: tuple[str, ...] = (),
+        annotated: bool = False,
+        start: bool = True,
+        port: int = 0,
+        on_get_user: Callable[[int, Any], object] | None = None,
+    ) -> GrpcServer:
+        # grpcio has no free-threaded build, so only tests that start a server need it.
+        from test.apps.catalog.grpc import users as grpc_users
+
+        app = grpc_users.users(
+            tls=tls,
+            client_auth=client_auth,
+            reflection_version=reflection,
+            undescribed_services=undescribed_services,
+            reflection_imports=reflection_imports,
+            unserved_files=unserved_files,
+            emptied_files=emptied_files,
+            annotated=annotated,
+            start=start,
+            port=port,
+            on_get_user=on_get_user,
+        )
+        return self._serve(app)
+
+    def crashing_users(self, how: str) -> CrashingGrpcServer:
+        """`users` where a call with id 500 brings the server down: `exit` drops connections, `stop` cancels calls."""
+        from test.apps.catalog.grpc.users import crashing_users
+
+        server = crashing_users(how, self.parent.request.getfixturevalue("tmp_path"))
+        self.parent.request.addfinalizer(server.kill)
+        return server
+
+    def side_effects(self) -> GrpcServer:
+        from test.apps.catalog.grpc.users import side_effects
+
+        return self._serve(side_effects())
+
+    def library(self) -> GrpcServer:
+        from test.apps.catalog.grpc.users import library
+
+        return self._serve(library())
+
+    def envelope(self) -> GrpcServer:
+        from test.apps.catalog.grpc.users import envelope
+
+        return self._serve(envelope())
+
+    def echo_status(self) -> RawGrpcServer:
+        from test.apps.catalog.grpc.raw import echo_status
+
+        server = echo_status(self.parent.request.getfixturevalue("tmp_path"))
+        self.parent.request.addfinalizer(server.stop)
+        return server
+
+    def _serve(self, app: GrpcApp) -> GrpcServer:
+        server = app.make_server(self.parent.request.getfixturevalue("tmp_path"))
+        self.parent.request.addfinalizer(server.close)
+        return server
+
+
+@dataclass(slots=True)
+class GrpcContext:
+    parent: Context
+
+    @property
+    def apps(self) -> GrpcApps:
+        pytest.importorskip("grpc", reason="grpcio has no free-threaded build")
+        return GrpcApps(parent=self.parent)
 
 
 @dataclass
@@ -549,10 +675,29 @@ class OpenApiContext:
         return builders.build_schema(paths, version=version, **kwargs)
 
     def load_schema(
-        self, paths: dict[str, Any] | None, *, version: str = "3.0.2", **kwargs: dict[str, Any]
+        self,
+        paths: dict[str, Any] | None,
+        *,
+        version: str = "3.0.2",
+        config: SchemathesisConfig | None = None,
+        **kwargs: dict[str, Any],
     ) -> OpenApiSchema:
         schema = self.build_schema(paths, version=version, **kwargs)
-        return schemathesis.openapi.from_dict(schema)
+        return schemathesis.openapi.from_dict(schema, config=config)
+
+    def load_operation(
+        self,
+        label: str,
+        definition: dict[str, Any],
+        *,
+        version: str = "3.0.2",
+        config: SchemathesisConfig | None = None,
+        **kwargs: dict[str, Any],
+    ) -> APIOperation:
+        # `label` is "METHOD /path", e.g. "POST /users".
+        method, path = label.split(" ", 1)
+        schema = self.load_schema({path: {method.lower(): definition}}, version=version, config=config, **kwargs)
+        return schema[path][method]
 
     def from_full_schema(self, raw_schema: dict[str, Any]) -> OpenApiSchema:
         version = raw_schema.get("openapi") or raw_schema["swagger"]
@@ -596,6 +741,10 @@ class Context:
     @property
     def graphql(self) -> GraphQLContext:
         return GraphQLContext(parent=self)
+
+    @property
+    def grpc(self) -> GrpcContext:
+        return GrpcContext(parent=self)
 
     @property
     def _testdir(self):

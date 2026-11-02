@@ -16,7 +16,7 @@ from schemathesis.engine.recorder import CheckNode, RecordedScenario, Request
 from schemathesis.generation.meta import CoveragePhaseData
 
 if TYPE_CHECKING:
-    from typing_extensions import Self
+    from typing import Self
 
 TextOutput = IO[str] | StringIO | Path
 
@@ -39,7 +39,7 @@ class VcrWriter:
         else:
             self._stream = self._output
         self._stream.write(
-            f"command: '{command}'\n"
+            f"command: '{_escape_single_quoted(command)}'\n"
             f"recorded_with: 'Schemathesis {SCHEMATHESIS_VERSION}'\n"
             f"seed: {seed}\n"
             f"http_interactions:"
@@ -111,7 +111,7 @@ class VcrWriter:
             def write_response_body(response: Response) -> None:
                 if response.content is not None:
                     encoding = response.encoding or "utf8"
-                    string = response.content.decode(encoding, "replace")
+                    string = response.text_lossy()
                     stream.write(f"    body:\n      encoding: '{encoding}'\n      string: ")
                     write_double_quoted(stream, string)
 
@@ -182,7 +182,9 @@ class VcrWriter:
 
             stream.write(f"\n  recorded_at: '{recorded_at}'")
             write_checks(checks)
-            stream.write(f"\n  request:\n    uri: '{uri}'\n    method: '{interaction.request.method}'\n    headers:\n")
+            stream.write(
+                f"\n  request:\n    uri: '{_escape_single_quoted(uri)}'\n    method: '{interaction.request.method}'\n    headers:\n"
+            )
             write_headers(interaction.request.headers)
             write_request_body(interaction.request)
 
@@ -223,6 +225,11 @@ class VcrWriter:
         exc_tb: TracebackType | None,
     ) -> None:
         self.close()
+
+
+def _escape_single_quoted(text: str) -> str:
+    # YAML single-quoted scalars escape a quote by doubling it
+    return text.replace("'", "''")
 
 
 def write_double_quoted(stream: IO, text: str | None) -> None:

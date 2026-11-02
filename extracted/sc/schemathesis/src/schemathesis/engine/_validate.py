@@ -30,11 +30,12 @@ def validate_response(
         collected.add(failure)
         checked_by.setdefault(failure, name)
         failure_data = recorder.find_failure_data(parent_id=case.id, failure=failure)
-        recorder.record_check_failure(
+        recorder.record_reproducible_failure(
             name=name,
             case_id=failure_data.case.id,
-            code_sample=failure_data.case.as_curl_command(headers=failure_data.headers, verify=failure_data.verify),
             failure=failure,
+            cases=recorder.iter_failure_cases(case_id=failure_data.case.id, failure=failure),
+            verify=failure_data.verify,
         )
 
     def on_success(name: str, _case: Case) -> None:
@@ -44,7 +45,7 @@ def validate_response(
         case=case,
         response=response,
         ctx=ctx,
-        checks=ctx._checks,
+        checks=ctx.internals.checks,
         on_failure=on_failure,
         on_success=on_success,
     )

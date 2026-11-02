@@ -1,26 +1,23 @@
 from __future__ import annotations
 
-import sys
+import os
 from dataclasses import dataclass
+from tomllib import TOMLDecodeError
 from typing import Any
 
 import click
 
+from schemathesis.cli.commands.explain import explain as explain_command
 from schemathesis.cli.commands.fuzz import fuzz as fuzz_command
 from schemathesis.cli.commands.replay import replay as replay_command
 from schemathesis.cli.commands.run import run as run_command
-from schemathesis.cli.constants import EXTENSIONS_DOCUMENTATION_URL
+from schemathesis.cli.constants import EXTENSIONS_DOCUMENTATION_URL, ExitCode
 from schemathesis.cli.core import get_terminal_width
 from schemathesis.cli.ext.groups import CommandWithGroupedOptions, GroupedOption, StyledGroup, should_use_color
 from schemathesis.cli.output import display_header
 from schemathesis.config import ConfigError, SchemathesisConfig
 from schemathesis.core.errors import HookError, format_exception
 from schemathesis.core.version import SCHEMATHESIS_VERSION
-
-if sys.version_info < (3, 11):
-    from tomli import TOMLDecodeError
-else:
-    from tomllib import TOMLDecodeError
 
 CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 ROOT_CONTEXT_SETTINGS: dict[str, Any] = {"help_option_names": []}
@@ -42,15 +39,15 @@ def _show_help(ctx: click.Context, param: click.Parameter, value: bool) -> None:
         ctx.exit()
 
 
-@click.group(context_settings=ROOT_CONTEXT_SETTINGS, cls=StyledGroup)  # type: ignore[untyped-decorator]
-@click.option(  # type: ignore[untyped-decorator]
+@click.group(context_settings=ROOT_CONTEXT_SETTINGS, cls=StyledGroup)
+@click.option(
     "--config-file",
     "config_file",
     help="The path to `schemathesis.toml` file to use for configuration",
     metavar="PATH",
     type=str,
 )
-@click.option(  # type: ignore[untyped-decorator]
+@click.option(
     "--no-color",
     is_flag=True,
     help="Disable colored output",
@@ -58,9 +55,9 @@ def _show_help(ctx: click.Context, param: click.Parameter, value: bool) -> None:
     callback=_set_no_color,
     expose_value=False,
 )
-@click.pass_context  # type: ignore[untyped-decorator]
-@click.version_option()  # type: ignore[untyped-decorator]
-@click.option(  # type: ignore[untyped-decorator]
+@click.pass_context
+@click.version_option()
+@click.option(
     "-h",
     "--help",
     is_flag=True,
@@ -71,6 +68,8 @@ def _show_help(ctx: click.Context, param: click.Parameter, value: bool) -> None:
 )
 def schemathesis(ctx: click.Context, config_file: str | None) -> None:
     """Property-based API testing for OpenAPI and GraphQL."""
+    # grpc's native logs repeat errors the report shows. grpc reads this on import, which hooks loaded below may do.
+    os.environ.setdefault("GRPC_VERBOSITY", "NONE")
     try:
         if config_file is not None:
             config = SchemathesisConfig.from_path(config_file)
@@ -84,7 +83,7 @@ def schemathesis(ctx: click.Context, config_file: str | None) -> None:
             bold=True,
         )
         click.echo("\nThe configuration file does not exist")
-        ctx.exit(1)
+        ctx.exit(ExitCode.ERROR)
     except PermissionError:
         display_header(SCHEMATHESIS_VERSION)
         click.secho(
@@ -93,7 +92,7 @@ def schemathesis(ctx: click.Context, config_file: str | None) -> None:
             bold=True,
         )
         click.echo("\nPermission denied")
-        ctx.exit(1)
+        ctx.exit(ExitCode.ERROR)
     except (TOMLDecodeError, ConfigError) as exc:
         display_header(SCHEMATHESIS_VERSION)
         click.secho(
@@ -106,7 +105,7 @@ def schemathesis(ctx: click.Context, config_file: str | None) -> None:
         else:
             detail = "The loaded configuration is incorrect"
         click.echo(f"\n{detail}\n\n{exc}")
-        ctx.exit(1)
+        ctx.exit(ExitCode.ERROR)
     except HookError as exc:
         click.secho("Unable to load Schemathesis extension hooks", fg="red", bold=True)
         formatted_module_name = click.style(f"'{exc.module_path}'", bold=True)
@@ -122,7 +121,7 @@ def schemathesis(ctx: click.Context, config_file: str | None) -> None:
             message = format_exception(cause, with_traceback=True, skip_frames=1)
             click.secho(f"\n{message}", fg="red")
         click.echo(f"\nFor more information on how to work with hooks, visit {EXTENSIONS_DOCUMENTATION_URL}")
-        ctx.exit(1)
+        ctx.exit(ExitCode.ERROR)
     ctx.obj = config
 
 
@@ -148,3 +147,4 @@ fuzz = schemathesis.command(
 )(fuzz_command)
 
 schemathesis.add_command(replay_command)
+schemathesis.add_command(explain_command)

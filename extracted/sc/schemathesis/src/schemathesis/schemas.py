@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import abstractmethod
 from collections.abc import Callable, Generator, Iterator, Mapping
 from dataclasses import dataclass, field
 from functools import cached_property, lru_cache, wraps
@@ -11,29 +12,30 @@ from typing import (
     Generic,
     NoReturn,
     TypeVar,
+    cast,
 )
 from urllib.parse import quote, unquote, urljoin, urlsplit, urlunsplit
 
 from schemathesis import transport
-from schemathesis.config import GenerationConfig, ProjectConfig
-from schemathesis.core import NOT_SET, Body, NotSet, media_types
+from schemathesis.config import GenerationConfig, ProjectConfig, SanitizationConfig
+from schemathesis.core import NOT_SET, SCHEMATHESIS_TEST_CASE_HEADER, Body, NotSet, media_types
 from schemathesis.core.adapter import OperationParameter, ResponsesContainer
 from schemathesis.core.errors import IncorrectUsage, InvalidSchema
-from schemathesis.core.failures import FailureGroup
+from schemathesis.core.failures import FailureGroup, ServerError
 from schemathesis.core.jsonschema.types import JsonSchemaObject
 from schemathesis.core.parameters import LOCATION_TO_CONTAINER, ParameterLocation, SkippedParameter
 from schemathesis.core.result import Ok, Result
 from schemathesis.core.runtime import RuntimeProbeState
-from schemathesis.core.spec import CoverageCapabilities
 from schemathesis.core.statistic import ApiStatistic, StatefulInference
-from schemathesis.core.transport import CallOutcome, HttpMethod, HttpMethodSchema, Response
+from schemathesis.core.transport import CallOutcome, HttpMethod, HttpMethodSchema, Response, is_uninformative_status
 from schemathesis.generation import GenerationMode
 from schemathesis.generation.case import Case
 from schemathesis.generation.coverage import GenerationSession
+from schemathesis.generation.feedback import NO_FEEDBACK, FeedbackSources
 from schemathesis.generation.hypothesis.given import GivenInput, given_proxy
-from schemathesis.generation.meta import CaseMetadata
+from schemathesis.generation.meta import CaseMetadata, TestPhase
 from schemathesis.hooks import HookDispatcherMark
-from schemathesis.transport.prepare import prepare_path
+from schemathesis.transport.prepare import prepare_path, prepare_request
 
 from .auths import AuthStorage, ReauthState, compute_retry_on_statuses
 from .filters import (
@@ -41,7 +43,6 @@ from .filters import (
     FilterValue,
     MatcherFunc,
     RegexValue,
-    is_deprecated,
 )
 from .hooks import (
     HookDispatcher,
@@ -50,28 +51,33 @@ from .hooks import (
 )
 
 if TYPE_CHECKING:
+    from typing import Self
+
     import httpx
     import httpx2
     import requests
+    from hypothesis import HealthCheck
     from hypothesis.strategies import SearchStrategy
     from requests.structures import CaseInsensitiveDict
-    from typing_extensions import Self
     from werkzeug.test import TestResponse
 
     from schemathesis.auths import AuthContext, AuthProvider
+    from schemathesis.checks import CheckContext, RunChecks
     from schemathesis.core import Specification
     from schemathesis.core.cache import CacheWriter
     from schemathesis.core.error_feedback import ErrorFeedbackStore
+    from schemathesis.core.error_feedback.store import Observation
     from schemathesis.core.schema_analysis import SchemaWarning
-    from schemathesis.core.spec import Scheduler
+    from schemathesis.core.spec import AuthFlow
     from schemathesis.engine.link_calibration import LinkCalibrationState
     from schemathesis.engine.observations import Observations
     from schemathesis.engine.recorder import ScenarioRecorder
-    from schemathesis.engine.run import Phase
-    from schemathesis.generation.hypothesis.reporting import FilterCaseTracker
-    from schemathesis.generation.stateful.state_machine import APIStateMachine
+    from schemathesis.generation.hypothesis.reporting import FilterCaseTracker, SlowParameter, UnsatisfiableParameter
+    from schemathesis.generation.stateful.state_machine import APIStateMachine, StepInput
     from schemathesis.python._constants.pool import ConstantsPool
     from schemathesis.resources import ExtraDataSource, ResourcePool
+
+_NO_SANITIZATION = SanitizationConfig(enabled=False)
 
 
 @lru_cache
@@ -79,6 +85,24 @@ def get_full_path(base_path: str, path: str) -> str:
     # `base_path` is already in wire form; doubling its `%` keeps it whole through the `unquote`
     # that undoes the `quote` guarding `path` from being read as an absolute URL.
     return unquote(urljoin(base_path.replace("%", "%25"), quote(path.lstrip("/"))))
+
+
+def wrap_test_function(func: Callable) -> Callable:
+    """Wrap a test function so it gets its own hook dispatcher, keeping it sync or async like `func`."""
+    if iscoroutinefunction(func):
+
+        @wraps(func)
+        async def test_wrapper(*args: Any, **kwargs: Any) -> Any:
+            return await func(*args, **kwargs)
+
+    else:
+
+        @wraps(func)
+        def test_wrapper(*args: Any, **kwargs: Any) -> Any:
+            return func(*args, **kwargs)
+
+    HookDispatcher.add_dispatcher(test_wrapper)
+    return test_wrapper
 
 
 @dataclass(eq=False)
@@ -95,6 +119,8 @@ class BaseSchema(Mapping):
     _constants_pool_cache: tuple[object, int, ConstantsPool] | None = field(
         init=False, default=None, repr=False, compare=False
     )
+    # Check instances outside the engine; clones build their own, so `after_run` fires once per test function.
+    _run_checks: RunChecks | None = field(init=False, default=None, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         self.hook = to_filterable_hook(self.hooks)  # type: ignore[method-assign]
@@ -103,20 +129,40 @@ class BaseSchema(Mapping):
         self._probe_state = RuntimeProbeState()
 
     @property
+    @abstractmethod
     def specification(self) -> Specification:
         raise NotImplementedError
 
     @property
+    def title(self) -> str | None:
+        return None
+
+    def get_transport(self, app: object) -> transport.BaseTransport:
+        """Transport that sends this schema's cases to `app`, or over the network when `app` is `None`."""
+        return transport.get(app)
+
+    @property
     def transport(self) -> transport.BaseTransport:
-        return transport.get(self.app)
+        return self.get_transport(self.app)
+
+    def as_reproduction_command(
+        self, case: Case, *, headers: Mapping[str, Any] | None, verify: bool, base_url: str | None = None
+    ) -> str:
+        """Command that reproduces `case` outside Schemathesis."""
+        return case.as_curl_command(headers, verify, base_url=base_url)
 
     def is_security_param_negated(self, case: Case) -> bool:
         return False
 
-    def _security_auth_providers(self) -> Iterator[AuthProvider]:
+    def alternative_credentials(self, operation: APIOperation) -> list[tuple[ParameterLocation, str]]:
+        # Generated credentials that only some of the accepted security requirements need.
+        return []
+
+    def security_auth_providers(self) -> Iterator[AuthProvider]:
         # Auth providers bound to declared security schemes. Only OpenAPI has them.
         return iter(())
 
+    @abstractmethod
     def apply_auth(self, case: Case, context: AuthContext) -> bool:
         """Apply spec-specific authentication to a test case.
 
@@ -124,6 +170,10 @@ class BaseSchema(Mapping):
         Subclasses should implement this to provide spec-specific auth mechanisms.
         """
         raise NotImplementedError
+
+    def auth_flow(self) -> AuthFlow | None:
+        """Sign-up and login flow the schema declares, or `None` when there is none."""
+        return None
 
     @cached_property
     def reauth_retry_statuses(self) -> frozenset[int]:
@@ -170,8 +220,7 @@ class BaseSchema(Mapping):
             New schema instance with applied include filters.
 
         """
-        filter_set = self.filter_set.clone()
-        filter_set.include(
+        filter_set = self.filter_set.with_include(
             func,
             name=name,
             name_regex=name_regex,
@@ -222,13 +271,7 @@ class BaseSchema(Mapping):
             New schema instance with applied exclude filters.
 
         """
-        filter_set = self.filter_set.clone()
-        if deprecated:
-            if func is None:
-                func = is_deprecated
-            else:
-                filter_set.exclude(is_deprecated)
-        filter_set.exclude(
+        filter_set = self.filter_set.with_exclude(
             func,
             name=name,
             name_regex=name_regex,
@@ -240,9 +283,11 @@ class BaseSchema(Mapping):
             tag_regex=tag_regex,
             operation_id=operation_id,
             operation_id_regex=operation_id_regex,
+            deprecated=deprecated,
         )
         return self.clone(filter_set=filter_set)
 
+    @abstractmethod
     def __iter__(self) -> Iterator[str]:
         raise NotImplementedError
 
@@ -253,9 +298,11 @@ class BaseSchema(Mapping):
         except KeyError as exc:
             self.on_missing_operation(item, exc)
 
+    @abstractmethod
     def _get_operation_map(self, key: str) -> APIOperationMap:
         raise NotImplementedError
 
+    @abstractmethod
     def on_missing_operation(self, item: str, exc: KeyError) -> NoReturn:
         raise NotImplementedError
 
@@ -274,6 +321,10 @@ class BaseSchema(Mapping):
     def get_full_path(self, path: str) -> str:
         return get_full_path(self.base_path, path)
 
+    def _should_skip(self, operation: APIOperation) -> bool:
+        """Whether the schema's filters leave `operation` out."""
+        return not self.filter_set.applies_to(operation)
+
     @property
     def base_path(self) -> str:
         """Base path for the schema."""
@@ -282,16 +333,17 @@ class BaseSchema(Mapping):
         if self.config.base_url:
             path = urlsplit(self.config.base_url).path
         else:
-            path = self._get_base_path()
+            path = self.declared_base_path()
         if not path.endswith("/"):
             path += "/"
         return path
 
-    def _get_base_path(self) -> str:
+    @abstractmethod
+    def declared_base_path(self) -> str:
         raise NotImplementedError
 
     def _build_base_url(self) -> str:
-        path = self._get_base_path()
+        path = self.declared_base_path()
         parts = urlsplit(self.location or "")[:2] + (path, "", "")
         return urlunsplit(parts)
 
@@ -312,23 +364,28 @@ class BaseSchema(Mapping):
         return None
 
     def validate(self) -> None:
-        raise NotImplementedError
+        return None
 
     @cached_property
     def statistic(self) -> ApiStatistic:
         return self._measure_statistic()
 
+    @abstractmethod
     def _measure_statistic(self) -> ApiStatistic:
         raise NotImplementedError
 
+    @abstractmethod
     def get_all_operations(self) -> Generator[Result[APIOperation, InvalidSchema], None, None]:
         raise NotImplementedError
 
-    def get_strategies_from_examples(self, operation: APIOperation, **kwargs: Any) -> list[SearchStrategy[Case]]:
+    def get_strategies_from_examples(
+        self, operation: APIOperation, feedback: FeedbackSources = NO_FEEDBACK, **kwargs: Any
+    ) -> list[SearchStrategy[Case]]:
         raise NotImplementedError
 
     def get_parameter_serializer(self, operation: APIOperation, location: str) -> Callable | None:
-        raise NotImplementedError
+        # Specs without per-location serialization rules send values as generated.
+        return None
 
     def parametrize(self) -> Callable:
         """Return a decorator that marks a test function for `pytest` parametrization.
@@ -359,19 +416,7 @@ class BaseSchema(Mapping):
 
                 return wrapped_test
 
-            if iscoroutinefunction(func):
-
-                @wraps(func)
-                async def test_wrapper(*args: Any, **kwargs: Any) -> Any:
-                    return await func(*args, **kwargs)
-
-            else:
-
-                @wraps(func)
-                def test_wrapper(*args: Any, **kwargs: Any) -> Any:
-                    return func(*args, **kwargs)
-
-            HookDispatcher.add_dispatcher(test_wrapper)
+            test_wrapper = wrap_test_function(func)
             cloned = self.clone(test_function=test_wrapper)
             SchemaHandleMark.set(test_wrapper, cloned)
             return test_wrapper
@@ -420,11 +465,12 @@ class BaseSchema(Mapping):
         return None
 
     def prepare_multipart(
-        self, form_data: dict[str, Any], operation: APIOperation, selected_content_types: dict[str, str] | None = None
+        self,
+        form_data: dict[str, Any],
+        operation: APIOperation,
+        media_type: str,
+        selected_content_types: dict[str, str] | None = None,
     ) -> tuple[list | None, dict[str, Any] | None]:
-        raise NotImplementedError
-
-    def get_request_payload_content_types(self, operation: APIOperation) -> list[str]:
         raise NotImplementedError
 
     def make_case(
@@ -442,15 +488,43 @@ class BaseSchema(Mapping):
         multipart_content_types: dict[str, str] | None = None,
         meta: CaseMetadata | None = None,
     ) -> Case:
+        from requests.structures import CaseInsensitiveDict
+
+        return Case(
+            operation=operation,
+            method=method or cast("HttpMethod", operation.method.upper()),
+            path=path or operation.path,
+            path_parameters=path_parameters or {},
+            headers=CaseInsensitiveDict() if headers is None else CaseInsensitiveDict(headers),
+            cookies=cookies or {},
+            query=query or {},
+            body=body,
+            media_type=self._case_media_type(operation, body, media_type),
+            multipart_content_types=multipart_content_types,
+            meta=meta,
+        )
+
+    @abstractmethod
+    def _case_media_type(self, operation: APIOperation, body: Body, media_type: str | None) -> str | None:
+        """Media type of a new case when the caller gives `media_type`, possibly `None`."""
         raise NotImplementedError
 
+    @abstractmethod
     def get_case_strategy(
         self,
         operation: APIOperation,
         hooks: HookDispatcher | None = None,
         auth_storage: AuthStorage | None = None,
         generation_mode: GenerationMode = GenerationMode.POSITIVE,
-        **kwargs: Any,
+        feedback: FeedbackSources = NO_FEEDBACK,
+        *,
+        path_parameters: dict[str, Any] | None = None,
+        headers: dict[str, Any] | None = None,
+        cookies: dict[str, Any] | None = None,
+        query: dict[str, Any] | None = None,
+        body: Any = NOT_SET,
+        media_type: str | None = None,
+        phase: TestPhase = TestPhase.FUZZING,
     ) -> SearchStrategy[Case]:
         raise NotImplementedError
 
@@ -458,6 +532,14 @@ class BaseSchema(Mapping):
         """Labels of operations that another operation links to; empty when the spec has no links."""
         return set()
 
+    def resource_producers(self) -> dict[str, set[str]]:
+        """For every operation that consumes a resource, the operations that appear to supply it.
+
+        Absent means the operation consumes nothing, or the spec infers no resources; empty means nothing supplies it.
+        """
+        return {}
+
+    @abstractmethod
     def as_state_machine(self) -> type[APIStateMachine]:
         """Create a state machine class for stateful testing of linked API operations.
 
@@ -467,23 +549,28 @@ class BaseSchema(Mapping):
         """
         raise NotImplementedError
 
-    def _build_state_machine(
+    def build_state_machine(
         self,
         *,
-        error_feedback: ErrorFeedbackStore | None,
+        feedback: FeedbackSources,
         link_calibration: LinkCalibrationState | None,
-        extra_data_source: ExtraDataSource | None,
-        constants_value_source: ConstantsPool | None = None,
     ) -> type[APIStateMachine]:
         """Engine-internal variant of `as_state_machine` that wires per-run state."""
-        raise NotImplementedError
+        # Specs whose transitions use neither runtime feedback nor link calibration build the plain machine.
+        return self.as_state_machine()
 
+    @abstractmethod
     def get_tags(self, operation: APIOperation) -> list[str] | None:
         raise NotImplementedError
 
     def get_operation_id(self, operation: APIOperation) -> str | None:
+        return None
+
+    @abstractmethod
+    def is_deprecated(self, operation: APIOperation) -> bool:
         raise NotImplementedError
 
+    @abstractmethod
     def create_extra_data_source(self) -> ExtraDataSource | None:
         """Create an extra data source for augmenting test generation with real data.
 
@@ -502,9 +589,9 @@ class BaseSchema(Mapping):
     ) -> bool | None:
         raise NotImplementedError
 
-    def get_coverage_capabilities(self) -> CoverageCapabilities:
-        """Return spec-specific data the coverage phase asks of a schema."""
-        return CoverageCapabilities(format_strategies={}, update_pattern=None, validator_cls=None)
+    def parse_rejection(self, operation: APIOperation, case: Case, response: Response) -> tuple[Observation, ...]:
+        """Field-level observations a rejection carries outside its body, e.g. gRPC status details. Default: none."""
+        return ()
 
     def record_runtime_observations(
         self,
@@ -518,6 +605,7 @@ class BaseSchema(Mapping):
     ) -> None:
         """Spec-specific runtime observations from a response (e.g. auth inference). Default: no-op."""
 
+    @abstractmethod
     def iter_coverage_cases(
         self,
         operation: APIOperation,
@@ -526,7 +614,6 @@ class BaseSchema(Mapping):
         generation_config: GenerationConfig,
         extra_data_source: ResourcePool | None = None,
         error_feedback: ErrorFeedbackStore | None = None,
-        unexpected_methods_seen: set[tuple[str, str]] | None = None,
         session: GenerationSession | None = None,
     ) -> Iterator[Case]:
         raise NotImplementedError
@@ -539,15 +626,9 @@ class BaseSchema(Mapping):
         for location in list(meta._dirty):
             meta.clear_dirty(location)
 
-    def get_unit_scheduler(
-        self,
-        operations: list[Result[APIOperation, InvalidSchema]],
-        phase: Phase,
-    ) -> Scheduler:
-        """Return the scheduler that decides operation execution order in the unit phase."""
-        from schemathesis.engine.run.unit._pool import DefaultScheduler
-
-        return DefaultScheduler(operations=operations)
+    def get_operation_layers(self, operations: list[APIOperation]) -> list[list[APIOperation]]:
+        """Partition operations into layers that dispatch in order; no layers keeps the given order."""
+        return []
 
     def apply_stateful_inference(self, observations: Observations | None) -> StatefulInference:
         """Discover spec-specific stateful transitions; return the counts available."""
@@ -569,9 +650,28 @@ class BaseSchema(Mapping):
         """Return resolvable (target, overrides) link candidates from a response; empty for specs without links."""
         return []
 
+    def record_link_outcome(
+        self,
+        *,
+        calibration: LinkCalibrationState,
+        response: Response,
+        observations: tuple[Observation, ...],
+        step_input: StepInput,
+        recorder: ScenarioRecorder,
+    ) -> None:
+        """Score the link a stateful step followed by how the step went; a no-op for specs without links."""
+
     def iter_schema_warnings(self) -> list[SchemaWarning]:
         """Return spec-level static-analysis warnings collected from the schema."""
         return []
+
+    def find_unsatisfiable_parameter(self, operation: APIOperation) -> UnsatisfiableParameter | None:
+        """Return the first parameter of `operation` that admits no value, if the spec can tell."""
+        return None
+
+    def find_slow_parameter(self, operation: APIOperation, reason: HealthCheck) -> SlowParameter | None:
+        """Return the first parameter of `operation` that fails the `reason` health check, if the spec can tell."""
+        return None
 
     def build_request_url(self, case: Case, base_url: str) -> str:
         """Construct the request URL by templating the case path onto `base_url`."""
@@ -582,9 +682,13 @@ class BaseSchema(Mapping):
         # `quote` — decoding it would turn an escaped reserved character such as `%3F` into a live delimiter.
         return unquote(urljoin(base_url.replace("%", "%25"), quote(path)))
 
-    def prepare_request_body(self, body: Body) -> Body:
+    def build_url_template(self, case: Case, base_url: str) -> str:
+        """Construct the request URL like `build_request_url`, keeping path parameters as `{name}` placeholders."""
+        return f"{base_url.rstrip('/')}{case.path}"
+
+    def prepare_request_body(self, case: Case) -> Body:
         """Apply spec-specific transformations to a generated body before sending."""
-        return body
+        return case.body
 
     def evaluate_server_error(self, case: Case, response: Response) -> None:
         """Raise a Failure if the schema's own conventions classify this response as a server error.
@@ -592,7 +696,50 @@ class BaseSchema(Mapping):
         Default no-op; specs whose errors aren't fully captured by HTTP status (e.g. GraphQL 200 + errors body) override.
         """
 
-    def classify_call_outcome(self, response: Response) -> CallOutcome:
+    def evaluate_auth(self, ctx: CheckContext, response: Response, case: Case) -> bool | None:
+        """Raise a Failure if the operation answers without the credentials the request carried.
+
+        Default skips the check; specs that can tell whether credentials are enforced override.
+        """
+        return True
+
+    def server_error(self, case: Case, response: Response) -> ServerError:
+        """The failure an error status reports.
+
+        Specs whose error responses carry a status name or a machine-readable origin (e.g. gRPC library errors) override.
+        """
+        return ServerError(operation=case.operation.label, status_code=response.status_code)
+
+    def evaluate_negative_data(self, ctx: CheckContext, response: Response, case: Case) -> bool | None:
+        """Raise a Failure if the schema's own conventions show that invalid data was accepted.
+
+        Default no-op; specs that can tell accepted data from rejected data override.
+        """
+        return None
+
+    def evaluate_positive_data(self, ctx: CheckContext, response: Response, case: Case) -> bool | None:
+        """Raise a Failure if the schema's own conventions show that valid data was rejected.
+
+        Default no-op; specs that can tell accepted data from rejected data override.
+        """
+        return None
+
+    def status_name_for_code(self, status_code: int) -> str | None:
+        """Name the protocol gives the status an HTTP status code stands for, or `None` when the code alone says it."""
+        return None
+
+    def operation_label_for_display(self, operation_label: str | None) -> str | None:
+        """Return the API operation label when transport method and path are only protocol framing."""
+        return None
+
+    def hash_case(self, case: Case) -> int:
+        """Hash of the request a case sends, ignoring its test case id."""
+        # Unmasked values, as masked ones would make distinct cases collide.
+        request = prepare_request(case, {SCHEMATHESIS_TEST_CASE_HEADER: "0"}, config=_NO_SANITIZATION)
+        headers = tuple(sorted((name.lower(), value) for name, value in request.headers.items()))
+        return hash((request.method, request.url, headers, request.body))
+
+    def classify_call_outcome(self, case: Case, response: Response) -> CallOutcome:
         """Decide what the API did with a request carrying positive test data.
 
         Status codes carry the answer by default; specs that respond 200 regardless of the outcome
@@ -601,9 +748,18 @@ class BaseSchema(Mapping):
         status_code = response.status_code
         if 200 <= status_code < 300:
             return CallOutcome.ACCEPTED
+        # A documented redirect serves the request; an undocumented one is usually a login page.
+        if 300 <= status_code < 400:
+            documented = case.operation.responses.status_codes
+            if str(status_code) in documented or "3XX" in documented:
+                return CallOutcome.ACCEPTED
+        if is_uninformative_status(status_code):
+            return CallOutcome.UNINFORMATIVE
         if status_code == 404:
             return CallOutcome.UNREACHABLE
-        if 400 <= status_code < 500 and status_code not in (401, 403):
+        if status_code == 409:
+            return CallOutcome.CONFLICT
+        if 400 <= status_code < 500:
             return CallOutcome.REJECTED
         return CallOutcome.UNINFORMATIVE
 
@@ -614,16 +770,20 @@ class BaseSchema(Mapping):
         """React to the engine probe finding that the app rejects unsafe characters in URL paths."""
         self._probe_state.path_decoder_strict = True
 
-    def get_custom_format_strategies(
-        self, generation_config: GenerationConfig, mode: GenerationMode
-    ) -> dict[str, SearchStrategy]:
-        """Return spec-specific format strategies (mode-aware)."""
-        return {}
-
     def as_strategy(
         self,
         generation_mode: GenerationMode = GenerationMode.POSITIVE,
-        **kwargs: Any,
+        *,
+        feedback: FeedbackSources | None = None,
+        hooks: HookDispatcher | None = None,
+        auth_storage: AuthStorage | None = None,
+        path_parameters: dict[str, Any] | None = None,
+        headers: dict[str, Any] | None = None,
+        cookies: dict[str, Any] | None = None,
+        query: dict[str, Any] | None = None,
+        body: Any = NOT_SET,
+        media_type: str | None = None,
+        phase: TestPhase = TestPhase.FUZZING,
     ) -> SearchStrategy[Case]:
         """Create a Hypothesis strategy that generates test cases for all schema operations.
 
@@ -631,7 +791,16 @@ class BaseSchema(Mapping):
 
         Args:
             generation_mode: Whether to generate positive or negative test data.
-            **kwargs: Additional keywords for each strategy.
+            feedback: Runtime signals that steer generation; defaults to constants extracted for this schema.
+            hooks: Hooks applied to each generated case.
+            auth_storage: Authentication applied to each generated case.
+            path_parameters: Fixed path parameters; missing ones are generated.
+            headers: Fixed headers; missing ones are generated.
+            cookies: Fixed cookies; missing ones are generated.
+            query: Fixed query parameters; missing ones are generated.
+            body: Fixed request body.
+            media_type: Media type of the request body.
+            phase: Test phase the cases are generated for.
 
         Returns:
             Combined Hypothesis strategy for all valid operations in the schema.
@@ -640,12 +809,25 @@ class BaseSchema(Mapping):
         from hypothesis import strategies as st
 
         _strategies = [
-            operation.ok().as_strategy(generation_mode=generation_mode, **kwargs)
+            operation.ok().as_strategy(
+                generation_mode=generation_mode,
+                feedback=feedback,
+                hooks=hooks,
+                auth_storage=auth_storage,
+                path_parameters=path_parameters,
+                headers=headers,
+                cookies=cookies,
+                query=query,
+                body=body,
+                media_type=media_type,
+                phase=phase,
+            )
             for operation in self.get_all_operations()
             if isinstance(operation, Ok)
         ]
         return st.one_of(_strategies)
 
+    @abstractmethod
     def find_operation_by_label(self, label: str) -> APIOperation | None:
         raise NotImplementedError
 
@@ -669,7 +851,17 @@ class APIOperationMap(Mapping):
     def as_strategy(
         self,
         generation_mode: GenerationMode = GenerationMode.POSITIVE,
-        **kwargs: Any,
+        *,
+        feedback: FeedbackSources | None = None,
+        hooks: HookDispatcher | None = None,
+        auth_storage: AuthStorage | None = None,
+        path_parameters: dict[str, Any] | None = None,
+        headers: dict[str, Any] | None = None,
+        cookies: dict[str, Any] | None = None,
+        query: dict[str, Any] | None = None,
+        body: Any = NOT_SET,
+        media_type: str | None = None,
+        phase: TestPhase = TestPhase.FUZZING,
     ) -> SearchStrategy[Case]:
         """Create a Hypothesis strategy that generates test cases for all schema operations in this subset.
 
@@ -677,7 +869,16 @@ class APIOperationMap(Mapping):
 
         Args:
             generation_mode: Whether to generate positive or negative test data.
-            **kwargs: Additional keywords for each strategy.
+            feedback: Runtime signals that steer generation; defaults to constants extracted for this schema.
+            hooks: Hooks applied to each generated case.
+            auth_storage: Authentication applied to each generated case.
+            path_parameters: Fixed path parameters; missing ones are generated.
+            headers: Fixed headers; missing ones are generated.
+            cookies: Fixed cookies; missing ones are generated.
+            query: Fixed query parameters; missing ones are generated.
+            body: Fixed request body.
+            media_type: Media type of the request body.
+            phase: Test phase the cases are generated for.
 
         Returns:
             Combined Hypothesis strategy for all valid operations in the schema.
@@ -686,7 +887,20 @@ class APIOperationMap(Mapping):
         from hypothesis import strategies as st
 
         _strategies = [
-            operation.as_strategy(generation_mode=generation_mode, **kwargs) for operation in self._data.values()
+            operation.as_strategy(
+                generation_mode=generation_mode,
+                feedback=feedback,
+                hooks=hooks,
+                auth_storage=auth_storage,
+                path_parameters=path_parameters,
+                headers=headers,
+                cookies=cookies,
+                query=query,
+                body=body,
+                media_type=media_type,
+                phase=phase,
+            )
+            for operation in self._data.values()
         ]
         return st.one_of(_strategies)
 
@@ -739,6 +953,20 @@ S = TypeVar("S")
 SchemaT = TypeVar("SchemaT", bound="BaseSchema")
 
 
+class UndeclaredResponses:
+    """Responses of a specification that declares none per operation."""
+
+    def find_by_status_code(self, status_code: int) -> None:
+        return None
+
+    def add(self, status_code: str, definition: dict[str, Any]) -> None:
+        raise NotImplementedError
+
+    @property
+    def status_codes(self) -> tuple[str, ...]:
+        return ()
+
+
 @dataclass(repr=False)
 class OperationDefinition:
     """A wrapper to store not resolved API operation definitions.
@@ -779,6 +1007,8 @@ class APIOperation(Generic[P, R, S, SchemaT]):
     filter_case_tracker: FilterCaseTracker | None = field(default=None, repr=False, compare=False)
     # Optional parameters left out because their schemas could not be parsed.
     skipped_parameters: list[SkippedParameter] = field(default_factory=list, repr=False, compare=False)
+    # Schema errors in parts left out of an otherwise testable operation, reported while the rest is tested.
+    schema_errors: list[InvalidSchema] = field(default_factory=list, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         if not self.label:
@@ -836,6 +1066,18 @@ class APIOperation(Generic[P, R, S, SchemaT]):
             return self.body
         return None
 
+    def get_parameter_set(self, location: ParameterLocation) -> ParameterSet[P]:
+        match location:
+            case ParameterLocation.PATH:
+                return self.path_parameters
+            case ParameterLocation.HEADER:
+                return self.headers
+            case ParameterLocation.COOKIE:
+                return self.cookies
+            case ParameterLocation.QUERY:
+                return self.query
+        raise ValueError(f"`{location.value}` is not a parameter location")
+
     def add_parameter(self, parameter: P) -> None:
         # If the parameter has a typo, then by default, there will be an error from `jsonschema` earlier.
         # But if the user wants to skip schema validation, we choose to ignore a malformed parameter.
@@ -851,17 +1093,35 @@ class APIOperation(Generic[P, R, S, SchemaT]):
             return container.get(name)
         return None
 
-    def get_bodies_for_media_type(self, media_type: str) -> Iterator[P]:
-        main_target, sub_target = media_types.parse(media_type)
+    def get_body_for_media_type(self, media_type: str | None) -> P | None:
+        """The body declared for `media_type`, preferring an exact match over a media range or other parameters."""
+        if media_type is None:
+            return None
         for body in self.body:
-            main, sub = media_types.parse(body.media_type)
-            if main in ("*", main_target) and sub in ("*", sub_target):
+            if body.media_type == media_type:
+                return body
+        return next(self.get_bodies_for_media_type(media_type), None)
+
+    def get_bodies_for_media_type(self, media_type: str) -> Iterator[P]:
+        target = media_types.parse(media_type)
+        for body in self.body:
+            if media_types.matches_parts(media_types.parse(body.media_type), target):
                 yield body
 
     def as_strategy(
         self,
         generation_mode: GenerationMode = GenerationMode.POSITIVE,
-        **kwargs: Any,
+        *,
+        feedback: FeedbackSources | None = None,
+        hooks: HookDispatcher | None = None,
+        auth_storage: AuthStorage | None = None,
+        path_parameters: dict[str, Any] | None = None,
+        headers: dict[str, Any] | None = None,
+        cookies: dict[str, Any] | None = None,
+        query: dict[str, Any] | None = None,
+        body: Any = NOT_SET,
+        media_type: str | None = None,
+        phase: TestPhase = TestPhase.FUZZING,
     ) -> SearchStrategy[Case]:
         """Create a Hypothesis strategy that generates test cases for this API operation.
 
@@ -869,25 +1129,48 @@ class APIOperation(Generic[P, R, S, SchemaT]):
 
         Args:
             generation_mode: Whether to generate positive or negative test data.
-            **kwargs: Extra arguments to the underlying strategy function.
+            feedback: Runtime signals that steer generation; defaults to constants extracted for this schema.
+            hooks: Hooks applied to each generated case.
+            auth_storage: Authentication applied to each generated case.
+            path_parameters: Fixed path parameters; missing ones are generated.
+            headers: Fixed headers; missing ones are generated.
+            cookies: Fixed cookies; missing ones are generated.
+            query: Fixed query parameters; missing ones are generated.
+            body: Fixed request body.
+            media_type: Media type of the request body.
+            phase: Test phase the cases are generated for.
 
         """
         from schemathesis.generation._hooks import apply_case_hooks
         from schemathesis.generation.hypothesis import setup
 
         setup()
-        if "constants_value_source" not in kwargs:
+        if feedback is None:
             from schemathesis.python._constants.orchestrator import make_constants_value_source
 
-            kwargs["constants_value_source"] = make_constants_value_source(self.schema)
+            feedback = FeedbackSources(constants_value_source=make_constants_value_source(self.schema))
         if self.schema.config.headers:
-            headers = kwargs.setdefault("headers", {})
-            headers.update(self.schema.config.headers)
-        strategy = self.schema.get_case_strategy(self, generation_mode=generation_mode, **kwargs)
-        return apply_case_hooks(strategy, self, local=kwargs.get("hooks"))
+            headers = {**(headers or {}), **self.schema.config.headers}
+        strategy = self.schema.get_case_strategy(
+            self,
+            hooks=hooks,
+            auth_storage=auth_storage,
+            generation_mode=generation_mode,
+            feedback=feedback,
+            path_parameters=path_parameters,
+            headers=headers,
+            cookies=cookies,
+            query=query,
+            body=body,
+            media_type=media_type,
+            phase=phase,
+        )
+        return apply_case_hooks(strategy, self, local=hooks)
 
-    def get_strategies_from_examples(self, **kwargs: Any) -> list[SearchStrategy[Case]]:
-        return self.schema.get_strategies_from_examples(self, **kwargs)
+    def get_strategies_from_examples(
+        self, feedback: FeedbackSources = NO_FEEDBACK, **kwargs: Any
+    ) -> list[SearchStrategy[Case]]:
+        return self.schema.get_strategies_from_examples(self, feedback=feedback, **kwargs)
 
     def get_parameter_serializer(self, location: str) -> Callable | None:
         return self.schema.get_parameter_serializer(self, location)
@@ -902,25 +1185,9 @@ class APIOperation(Generic[P, R, S, SchemaT]):
         return serializers
 
     def prepare_multipart(
-        self, form_data: dict[str, Any], selected_content_types: dict[str, str] | None = None
+        self, form_data: dict[str, Any], media_type: str, selected_content_types: dict[str, str] | None = None
     ) -> tuple[list | None, dict[str, Any] | None]:
-        return self.schema.prepare_multipart(form_data, self, selected_content_types=selected_content_types)
-
-    def get_request_payload_content_types(self) -> list[str]:
-        return self.schema.get_request_payload_content_types(self)
-
-    def _get_default_media_type(self) -> str:
-        # If the user wants to send payload, then there should be a media type, otherwise the payload is ignored
-        media_types = self.get_request_payload_content_types()
-        if len(media_types) == 1:
-            # The only available option
-            return media_types[0]
-        media_types_repr = ", ".join(media_types)
-        raise IncorrectUsage(
-            "Can not detect appropriate media type. "
-            "You can either specify one of the defined media types "
-            f"or pass any other media type available for serialization. Defined media types: {media_types_repr}"
-        )
+        return self.schema.prepare_multipart(form_data, self, media_type, selected_content_types=selected_content_types)
 
     def validate_response(
         self,
@@ -986,13 +1253,11 @@ class APIOperation(Generic[P, R, S, SchemaT]):
             multipart_content_types: Selected content types for multipart form properties.
 
         """
-        from requests.structures import CaseInsensitiveDict
-
         return self.schema.make_case(
             operation=self,
             method=method,
             path_parameters=path_parameters or {},
-            headers=CaseInsensitiveDict() if headers is None else CaseInsensitiveDict(headers),
+            headers=headers,
             cookies=cookies or {},
             query=query or {},
             body=body,
@@ -1000,8 +1265,3 @@ class APIOperation(Generic[P, R, S, SchemaT]):
             multipart_content_types=multipart_content_types,
             meta=_meta,
         )
-
-    @property
-    def operation_reference(self) -> str:
-        path = self.path.replace("~", "~0").replace("/", "~1")
-        return f"#/paths/{path}/{self.method}"

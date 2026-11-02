@@ -18,7 +18,7 @@
 """TCP executor definition."""
 
 import socket
-from typing import Any, List, Tuple, Union
+from typing import Any
 
 from mirakuru.base import Executor
 
@@ -32,7 +32,7 @@ class TCPExecutor(Executor):
 
     def __init__(
         self,
-        command: Union[str, List[str], Tuple[str, ...]],
+        command: str | list[str] | tuple[str, ...],
         host: str,
         port: int,
         **kwargs: Any,
@@ -44,7 +44,7 @@ class TCPExecutor(Executor):
         :param int port: port under which process is accessible
         :param bool shell: same as the `subprocess.Popen` shell definition
         :param int timeout: number of seconds to wait for the process to start
-            or stop. If None or False, wait indefinitely.
+            or stop.
         :param float sleep: how often to check for start/stop condition
         :param int sig_stop: signal used to stop process run by the executor.
             default is `signal.SIGTERM`

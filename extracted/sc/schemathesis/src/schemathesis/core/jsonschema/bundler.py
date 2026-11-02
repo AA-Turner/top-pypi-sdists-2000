@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
+from urllib.parse import urlsplit
 
 from schemathesis.core.cache import MISSING, BoundedCache
 from schemathesis.core.jsonschema.resolver import (
@@ -11,7 +12,7 @@ from schemathesis.core.jsonschema.resolver import (
     resolve_reference_with_uri,
 )
 from schemathesis.core.jsonschema.types import JsonSchema, to_json_type_name
-from schemathesis.core.transforms import decode_pointer
+from schemathesis.core.transforms import decode_pointer, encode_pointer
 
 BUNDLE_STORAGE_KEY = "x-bundled"
 REFERENCE_TO_BUNDLE_PREFIX = f"#/{BUNDLE_STORAGE_KEY}"
@@ -55,11 +56,14 @@ class Bundler:
     """Bundler tracks schema ids stored in a bundle."""
 
     counter: int
+    # Whether keywords next to `$ref` apply (Draft 2019-09+) or are ignored (Draft 4).
+    ref_siblings: bool
 
-    __slots__ = ("counter",)
+    __slots__ = ("counter", "ref_siblings")
 
-    def __init__(self) -> None:
+    def __init__(self, *, ref_siblings: bool = True) -> None:
         self.counter = 0
+        self.ref_siblings = ref_siblings
 
     def bundle(self, schema: JsonSchema, resolver: Resolver) -> Bundle:
         """Bundle a JSON Schema by embedding all references."""
@@ -83,13 +87,15 @@ class Bundler:
             name = uri_to_name.get(uri)
             if name is None:
                 self.counter += 1
-                name = f"schema{self.counter}"
+                # Fixed width, so names sort in creation order however many schemas were bundled before.
+                name = f"schema{self.counter:06d}"
                 uri_to_name[uri] = name
             return name
 
         def bundle_recursive(
             current: JsonSchema | list[JsonSchema],
             current_resolver: Resolver,
+            identity_handled: bool = False,
         ) -> JsonSchema | list[JsonSchema]:
             """Recursively process and bundle references in the current schema."""
             # Local lookup is cheaper and it matters for large schemas.
@@ -97,6 +103,15 @@ class Bundler:
             nonlocal has_recursive_references
             _bundle_recursive = bundle_recursive
             if isinstance(current, dict):
+                if ("$id" in current or "id" in current) and not identity_handled:
+                    current_resolver = current_resolver.enter(current)
+                    if current is not schema:
+                        references_before = reference_count
+                        bundled_named = _bundle_recursive(current, current_resolver, True)
+                        # References into the bundle resolve against the closest `$id` above them, not the root holding it.
+                        if reference_count != references_before:
+                            return _without_identity(bundled_named)
+                        return bundled_named
                 reference = current.get("$ref")
                 if isinstance(reference, str) and not reference.startswith(REFERENCE_TO_BUNDLE_PREFIX):
                     # Empty references resolve to the current scope and are not useful for test generation
@@ -183,23 +198,31 @@ class Bundler:
 
         assert isinstance(bundled, dict)
 
-        # The root reference to a single target that never points back at itself reads the same
-        # spelled out in place. A sibling pointing at that target keeps the storage it needs.
-        if not has_recursive_references and "$ref" in bundled and len(defs) == 1 and reference_count == 1:
-            result = {key: value for key, value in bundled.items() if key != "$ref"}
-            for value in defs.values():
-                if isinstance(value, dict):
-                    result.update(value)
-            return Bundle(schema=result, name_to_uri={})
+        # A root reference to a single non-recursive target reads the same spelled out in place, unless
+        # a sibling points at that target or shares a keyword with it (the merge would overwrite one).
+        # Where siblings are ignored, spelling the target out next to them would enforce them instead.
+        if (
+            not has_recursive_references
+            and "$ref" in bundled
+            and len(defs) == 1
+            and reference_count == 1
+            and (self.ref_siblings or len(bundled) == 1)
+        ):
+            (target,) = defs.values()
+            if not isinstance(target, dict) or bundled.keys().isdisjoint(target):
+                result = {key: value for key, value in bundled.items() if key != "$ref"}
+                if isinstance(target, dict):
+                    result.update(target)
+                return Bundle(schema=result, name_to_uri={})
 
         if defs:
             bundled[BUNDLE_STORAGE_KEY] = defs
         return Bundle(schema=bundled, name_to_uri={v: k for k, v in uri_to_name.items()})
 
 
-def bundle(schema: JsonSchema, resolver: Resolver) -> Bundle:
+def bundle(schema: JsonSchema, resolver: Resolver, *, ref_siblings: bool = True) -> Bundle:
     """Gather every reachable reference target into the schema, keeping the references themselves."""
-    return Bundler().bundle(schema, resolver)
+    return Bundler(ref_siblings=ref_siblings).bundle(schema, resolver)
 
 
 def unbundle_path(path: list[str | int], name_to_uri: dict[str, str]) -> list[str | int]:
@@ -214,10 +237,12 @@ def unbundle_path(path: list[str | int], name_to_uri: dict[str, str]) -> list[st
         next_key = path[i + 1] if i + 1 < len(path) else None
         if path[i] == BUNDLE_STORAGE_KEY and isinstance(next_key, str) and next_key in name_to_uri:
             uri = name_to_uri[next_key]
-            if "#" in uri:
-                fragment = uri.split("#", 1)[1]
-                if fragment.startswith("/"):
-                    result.extend(decode_pointer(segment) for segment in fragment[1:].split("/"))
+            fragment = uri.split("#", 1)[1] if "#" in uri else ""
+            if fragment.startswith("/"):
+                result.extend(decode_pointer(segment) for segment in fragment[1:].split("/"))
+            else:
+                # A whole-file reference has no pointer segments; name the referenced file instead.
+                result.append(_document_display_name(uri))
             i += 2
         else:
             result.append(path[i])
@@ -225,7 +250,21 @@ def unbundle_path(path: list[str | int], name_to_uri: dict[str, str]) -> list[st
     return result
 
 
-_UNBUNDLED_COMPONENTS_CACHE: BoundedCache = BoundedCache(maxsize=32)
+def _document_display_name(uri: str) -> str:
+    """Name of the referenced document inside a URI, e.g. `pet.json` in `file:///dir/pet.json`."""
+    path = urlsplit(uri).path.rstrip("/").rsplit("/", 1)[-1]
+    return path or uri
+
+
+_UNBUNDLED_COMPONENTS_CACHE: BoundedCache = BoundedCache(maxsize=256)
+
+
+def _unbundled_schema_name(bundled_name: str, original_uri: str | None) -> str:
+    if original_uri is not None and "#/components/schemas/" in original_uri:
+        return decode_pointer(original_uri.split("#/components/schemas/")[1])
+    if original_uri is not None and "#/definitions/" in original_uri:
+        return decode_pointer(original_uri.split("#/definitions/")[1])
+    return bundled_name
 
 
 def _unbundled_components(bundled: dict[str, Any], name_to_uri: dict[str, str]) -> dict[str, dict[str, Any]]:
@@ -238,13 +277,7 @@ def _unbundled_components(bundled: dict[str, Any], name_to_uri: dict[str, str]) 
         return cached[0]
     schemas: dict[str, Any] = {}
     for bundled_name, bundled_schema in bundled.items():
-        original_uri = name_to_uri.get(bundled_name)
-        if original_uri is not None and "#/components/schemas/" in original_uri:
-            name = decode_pointer(original_uri.split("#/components/schemas/")[1])
-        elif original_uri is not None and "#/definitions/" in original_uri:
-            name = decode_pointer(original_uri.split("#/definitions/")[1])
-        else:
-            name = bundled_name
+        name = _unbundled_schema_name(bundled_name, name_to_uri.get(bundled_name))
         schemas[name] = unbundle(bundled_schema, name_to_uri)
     components = {"schemas": schemas}
     # The trailing elements pin the keyed objects, so their `id`s cannot be recycled into a stale hit.
@@ -260,11 +293,8 @@ def unbundle(schema: JsonSchema | list[JsonSchema], name_to_uri: dict[str, str])
             if key == "$ref" and isinstance(value, str) and value.startswith(REFERENCE_TO_BUNDLE_PREFIX):
                 bundled_name = value.split("/")[-1]
                 if bundled_name in name_to_uri:
-                    original_uri = name_to_uri[bundled_name]
-                    if "#" in original_uri:
-                        result[key] = "#" + original_uri.split("#", 1)[1]
-                    else:
-                        result[key] = value
+                    name = _unbundled_schema_name(bundled_name, name_to_uri[bundled_name])
+                    result[key] = f"#/components/schemas/{encode_pointer(name)}"
                 else:
                     result[key] = value
             elif key == BUNDLE_STORAGE_KEY and isinstance(value, dict):

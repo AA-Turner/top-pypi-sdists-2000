@@ -8,6 +8,7 @@ import os
 import sys
 from collections import defaultdict
 from contextlib import contextmanager
+from functools import lru_cache
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING, Any, cast
@@ -16,7 +17,6 @@ import pathspec
 import wcmatch.pathlib
 from yaml.error import YAMLError
 
-from ansiblelint.app import get_app
 from ansiblelint.config import ANSIBLE_OWNED_KINDS, BASE_KINDS, Options, options
 from ansiblelint.constants import CONFIG_FILENAMES, FileType, States
 
@@ -27,6 +27,28 @@ if TYPE_CHECKING:
 
 
 _logger = logging.getLogger(__package__)
+
+ROLE_SUBDIRS = ("tasks", "meta", "vars", "defaults", "handlers")
+
+
+def _has_role_subdirs(path: Path) -> bool:
+    """Return true if path is a directory with typical role subfolders."""
+    return path.is_dir() and any((path / subdir).is_dir() for subdir in ROLE_SUBDIRS)
+
+
+def find_role_dir(path: Path) -> Path | None:
+    """Return the innermost roles/ descendant that looks like a role root."""
+    current = path if path.is_dir() else path.parent
+    found: Path | None = None
+    while current.name:
+        if (
+            "roles" in current.parts
+            and current.name != "roles"
+            and _has_role_subdirs(current)
+        ):
+            found = current
+        current = current.parent
+    return found
 
 
 def abspath(path: str, base_dir: str) -> str:
@@ -128,27 +150,39 @@ def expand_paths_vars(paths: list[str]) -> list[str]:
     return paths
 
 
-def kind_from_path(path: Path, *, base: bool = False) -> FileType:
-    """Determine the file kind based on its name.
+@lru_cache(maxsize=128)
+def _get_project_root_for_dir(dir_path: str) -> Path:
+    """Cache project-root discovery per directory to avoid repeated FS walks."""
+    project_root, _ = find_project_root([dir_path])
+    return project_root
 
-    When called with base=True, it will return the base file type instead
-    of the explicit one. That is expected to return 'yaml' for any yaml files.
-    """
+
+def _resolve_kind_glob_path(path: Path) -> wcmatch.pathlib.PurePath:
+    """Return a PurePath usable for glob matching against kind patterns."""
     # We attempt to use a relative path to the project root for glob matching.
     # This prevents parent directory names (like 'tasks') from triggering
     # false positives in kind discovery. See #4763.
     try:
-        project_root, _ = find_project_root([str(path)])
+        # Project root is shared by siblings; cache by directory to cut FS walks.
+        lookup_path = path if path.is_dir() else path.parent
+        project_root = _get_project_root_for_dir(str(lookup_path.resolve()))
         # .resolve() ensures we handle symlinks and double-dots correctly
         rel_path = path.resolve().relative_to(project_root.resolve())
-        pathex = wcmatch.pathlib.PurePath(str(rel_path))
+        return wcmatch.pathlib.PurePath(str(rel_path))
     except (ValueError, RuntimeError):
         # Fallback to absolute if the file is outside the project root or can't be found
-        pathex = wcmatch.pathlib.PurePath(str(path.absolute().resolve()))
-    kinds = options.kinds if not base else BASE_KINDS
+        return wcmatch.pathlib.PurePath(str(path.absolute().resolve()))
+
+
+def _match_kind_from_globs(
+    pathex: wcmatch.pathlib.PurePath,
+    kinds: list[dict[str, str]],
+    path: Path,
+) -> FileType | None:
+    """Return the first kind whose glob pattern matches path, if any."""
     for entry in kinds:
         for k, v in entry.items():
-            if pathex.globmatch(
+            if not pathex.globmatch(
                 v,
                 flags=(
                     wcmatch.pathlib.GLOBSTAR
@@ -156,21 +190,26 @@ def kind_from_path(path: Path, *, base: bool = False) -> FileType:
                     | wcmatch.pathlib.DOTGLOB
                 ),
             ):
-                return str(k)  # type: ignore[return-value]
+                continue
+            matched_kind = str(k)
+            # Namespace folders under roles/ can match **/roles/*/ without
+            # being role roots themselves. See #5079.
+            if matched_kind == "role" and path.is_dir() and not _has_role_subdirs(path):
+                continue
+            return matched_kind  # type: ignore[return-value]
+    return None
 
-    if base:
-        # Unknown base file type is default
-        return ""
+
+def _fallback_kind_from_path(path: Path) -> FileType:
+    """Determine a fallback kind for a path not matched by any glob pattern."""
+    if path.is_dir() and _has_role_subdirs(path):
+        return "role"
 
     if path.is_dir():
-        known_role_subfolders = ("tasks", "meta", "vars", "defaults", "handlers")
-        for filename in known_role_subfolders:
-            if (path / filename).is_dir():
-                return "role"
         _logger.debug(
             "Folder `%s` does not look like a role due to missing any of the common subfolders such: %s.",
             path,
-            ", ".join(known_role_subfolders),
+            ", ".join(ROLE_SUBDIRS),
         )
 
     if str(path) == "/dev/stdin":
@@ -182,6 +221,25 @@ def kind_from_path(path: Path, *, base: bool = False) -> FileType:
 
     # Unknown file types report a empty string (evaluated as False)
     return ""
+
+
+def kind_from_path(path: Path, *, base: bool = False) -> FileType:
+    """Determine the file kind based on its name.
+
+    When called with base=True, it will return the base file type instead
+    of the explicit one. That is expected to return 'yaml' for any yaml files.
+    """
+    pathex = _resolve_kind_glob_path(path)
+    kinds = options.kinds if not base else BASE_KINDS
+    matched_kind = _match_kind_from_globs(pathex, kinds, path)
+    if matched_kind is not None:
+        return matched_kind
+
+    if base:
+        # Unknown base file type is default
+        return ""
+
+    return _fallback_kind_from_path(path)
 
 
 # pylint: disable=too-many-instance-attributes
@@ -235,22 +293,13 @@ class Lintable:
 
         # if the lintable is part of a role, we save role folder name
         self.role = ""
-        parts = self.path.parent.parts
-        if "roles" in parts:
-            role = self.path
-            roles_path = get_app(cached=True).runtime.config.default_roles_path
-            while (
-                str(role.parent.absolute()) not in roles_path
-                and role.parent.name != "roles"
-                and role.name
-            ):
-                role = role.parent
-            if role.exists():
-                self.role = role.name
+        role_path = find_role_dir(self.path)
+        if role_path is not None:
+            self.role = role_path.name
 
         if str(self.path) in ["/dev/stdin", "-"]:
             # pylint: disable=consider-using-with
-            self.file = NamedTemporaryFile(  # noqa: SIM115
+            self.file = NamedTemporaryFile(  # ruff:ignore[open-file-with-context-handler]
                 mode="w+",
                 suffix="playbook.yml",
                 encoding="utf-8",
@@ -276,7 +325,7 @@ class Lintable:
         self.base_kind = base_kind or kind_from_path(self.path, base=True)
         self.abspath = self.path.expanduser().absolute()
 
-        if self.kind == "tasks":
+        if self.kind == "tasks" and self.parent is None:
             self.parent = _guess_parent(self)
 
         if self.kind == "yaml":
@@ -358,6 +407,8 @@ class Lintable:
                 # new file
                 self._original_content = ""
         self.updated = self._original_content != value
+        if value != self._content:
+            self.state = States.NOT_LOADED
         self._content = value
 
     @content.deleter
@@ -422,6 +473,23 @@ class Lintable:
             for match in self.matches
         )
 
+    def _load_yaml_state(self) -> None:
+        """Load and process YAML content, guessing kind and appending skip rules."""
+        from ansiblelint.utils import (  # pylint: disable=import-outside-toplevel
+            parse_yaml_linenumbers,
+        )
+
+        self.state = parse_yaml_linenumbers(self)
+        if self.kind == "yaml":
+            self._guess_kind()
+        if "append_skipped_rules" not in globals():
+            # pylint: disable=import-outside-toplevel
+            from ansiblelint.skip_utils import append_skipped_rules
+
+        # pylint: disable=possibly-used-before-assignment
+        if self.state:
+            self.state = append_skipped_rules(self.state, self)
+
     @property
     def data(self) -> Any:
         """Return loaded data representation for current file, if possible."""
@@ -431,27 +499,7 @@ class Lintable:
                 return self.state
             try:
                 if str(self.base_kind) == "text/yaml":
-                    from ansiblelint.utils import (  # pylint: disable=import-outside-toplevel
-                        parse_yaml_linenumbers,
-                    )
-
-                    self.state = parse_yaml_linenumbers(self)
-                    # now that _data is not empty, we can try guessing if playbook or rulebook
-                    # it has to be done before append_skipped_rules() call as it's relying
-                    # on self.kind.
-                    if self.kind == "yaml":
-                        self._guess_kind()
-                    # Lazy import to avoid delays and cyclic-imports
-                    if "append_skipped_rules" not in globals():
-                        # pylint: disable=import-outside-toplevel
-                        from ansiblelint.skip_utils import append_skipped_rules
-
-                    # pylint: disable=possibly-used-before-assignment
-                    if self.state:
-                        self.state = append_skipped_rules(
-                            self.state,
-                            self,
-                        )
+                    self._load_yaml_state()
                 else:
                     _logger.debug(
                         "data set to None for %s due to being '%s' (%s) kind.",
@@ -547,6 +595,15 @@ def find_project_root(
     return directory, "file system root"
 
 
+def path_is_inside(child: Path, parent: Path) -> bool:
+    """Return true when child is parent or a descendant of parent."""
+    try:
+        child.resolve().relative_to(parent.resolve())
+    except ValueError:
+        return False
+    return True
+
+
 def expand_dirs_in_lintables(lintables: set[Lintable]) -> None:
     """Return all recognized lintables within given directory."""
     should_expand = False
@@ -559,22 +616,30 @@ def expand_dirs_in_lintables(lintables: set[Lintable]) -> None:
     if should_expand:
         # this relies on git and we do not want to call unless needed
         all_files = discover_lintables(options)
+        initial_count = len(lintables)
 
         for item in copy.copy(lintables):
             if item.path.is_dir():
                 for filename in all_files:
-                    if filename.startswith((str(item.path), str(item.path.absolute()))):
+                    if path_is_inside(Path(filename), item.path):
                         lintables.add(Lintable(filename))
+
+        expanded_count = len(lintables) - initial_count
+        if expanded_count > 0:
+            _logger.warning(
+                "Directory expansion discovered %d file(s). "
+                "If this is more than expected, use 'exclude_paths' in your "
+                "ansible-lint configuration to narrow the scope. "
+                "See: https://docs.ansible.com/projects/lint/configuring/",
+                expanded_count,
+            )
 
 
 def _guess_parent(lintable: Lintable) -> Lintable | None:
     """Return a parent directory for a lintable."""
-    try:
-        if lintable.path.parents[2].name == "roles":
-            # role_name = lintable.parents[1].name
-            return Lintable(lintable.path.parents[1], kind="role")
-    except IndexError:
-        pass
+    role_path = find_role_dir(lintable.path)
+    if role_path is not None:
+        return Lintable(role_path, kind="role")
     return None
 
 

@@ -14,13 +14,15 @@ from hypothesis import strategies as st
 from hypothesis.strategies._internal.featureflags import FeatureFlags, FeatureStrategy
 
 from schemathesis.core.error_feedback.store import ParameterPath
-from schemathesis.core.jsonschema import BUNDLE_STORAGE_KEY, get_type
+from schemathesis.core.jsonschema import ALL_KEYWORDS, BUNDLE_STORAGE_KEY, get_type
 from schemathesis.core.jsonschema.bundler import REFERENCE_TO_BUNDLE_PREFIX
 from schemathesis.core.jsonschema.types import JsonSchemaObject, JsonValue
-from schemathesis.core.media_types import is_xml
-from schemathesis.core.mutations import Mutation, MutationChannel, OperatorKind, render_mutations
-from schemathesis.core.parameters import ParameterLocation
+from schemathesis.core.media_types import is_form_urlencoded, is_xml
+from schemathesis.core.mutations import Mutation, MutationChannel, MutationMetadata, OperatorKind
+from schemathesis.core.parameters import EXTRA_PROPERTY_LOCATIONS, ParameterLocation
 from schemathesis.core.transforms import deepclone
+from schemathesis.specs.openapi.coverage._schema import ANNOTATION_KEYWORDS
+from schemathesis.specs.openapi.headers import PLAIN_HEADER_FORMATS
 from schemathesis.specs.openapi.negative.types import Draw, Schema
 from schemathesis.specs.openapi.negative.utils import can_negate, is_binary_format
 
@@ -36,41 +38,6 @@ PathSelector: TypeAlias = str | int | None
 MAX_WALK_DEPTH = 32
 # Cap on extra mutation targets per case beyond the always-chosen primary.
 MAX_SECONDARY_TARGETS = 2
-
-
-class MutationMetadata:
-    """Per-case metadata: the structured Mutation records applied this case."""
-
-    __slots__ = ("mutations",)
-
-    mutations: tuple[Mutation, ...]
-
-    def __init__(self, mutations: tuple[Mutation, ...]) -> None:
-        self.mutations = mutations
-
-    @property
-    def description(self) -> str | None:
-        lines = render_mutations(self.mutations)
-        if not lines:
-            return None
-        if len(lines) == 1:
-            return lines[0]
-        return "- " + "\n- ".join(lines)
-
-    @property
-    def parameter(self) -> str | None:
-        return self.mutations[0].parameter if len(self.mutations) == 1 else None
-
-    @property
-    def parameter_location(self) -> ParameterLocation | None:
-        locations = {mutation.parameter_location for mutation in self.mutations}
-        return locations.pop() if len(locations) == 1 else None
-
-    @property
-    def location(self) -> str | None:
-        if len(self.mutations) != 1:
-            return None
-        return self.mutations[0].schema_pointer or None
 
 
 @dataclass(slots=True)
@@ -402,7 +369,18 @@ TYPE_SPECIFIC_KEYS = {
     "number": ("multipleOf", "maximum", "exclusiveMaximum", "minimum", "exclusiveMinimum"),
     "integer": ("multipleOf", "maximum", "exclusiveMaximum", "minimum", "exclusiveMinimum"),
     "string": ("maxLength", "minLength", "pattern", "format", "contentEncoding", "contentMediaType"),
-    "array": ("items", "additionalItems", "maxItems", "minItems", "uniqueItems", "contains"),
+    "array": (
+        "items",
+        "prefixItems",
+        "additionalItems",
+        "maxItems",
+        "minItems",
+        "uniqueItems",
+        "contains",
+        "minContains",
+        "maxContains",
+        "unevaluatedItems",
+    ),
     "object": (
         "maxProperties",
         "minProperties",
@@ -410,10 +388,14 @@ TYPE_SPECIFIC_KEYS = {
         "properties",
         "patternProperties",
         "additionalProperties",
+        "unevaluatedProperties",
         "dependencies",
+        "dependentRequired",
+        "dependentSchemas",
         "propertyNames",
     ),
 }
+ALL_TYPE_SPECIFIC_KEYS = frozenset(keyword for keywords in TYPE_SPECIFIC_KEYS.values() for keyword in keywords)
 
 
 class MutationContext:
@@ -568,15 +550,20 @@ class MutationContext:
                 new_schema["additionalProperties"] = {"type": "string", "format": "_header_value"}
         # Empty arrays / objects may still validate against the original schema,
         # turning a "negative" case into a positive one — force at least one element.
-        if "array" in get_type(new_schema) and new_schema.get("items") and "minItems" not in new_schema.get("not", {}):
+        not_schema = new_schema.get("not")
+        if (
+            "array" in get_type(new_schema)
+            and new_schema.get("items")
+            and (not isinstance(not_schema, dict) or "minItems" not in not_schema)
+        ):
             new_schema.setdefault("minItems", 1)
         # A barred `required` already rules the empty object out, and demanding a property on top of it
         # asks a closed shape for a key it does not admit.
         if (
             "object" in get_type(new_schema)
             and new_schema.get("properties")
-            and "minProperties" not in new_schema.get("not", {})
-            and "required" not in new_schema.get("not", {})
+            and (not isinstance(not_schema, dict) or "minProperties" not in not_schema)
+            and (not isinstance(not_schema, dict) or "required" not in not_schema)
         ):
             new_schema.setdefault("minProperties", 1)
 
@@ -680,7 +667,7 @@ def change_type(
     if "type" not in schema:
         # No `type`: schema accepts every type; nothing to change.
         return MutationResult.FAILURE, None
-    if ctx.media_type == "application/x-www-form-urlencoded":
+    if is_form_urlencoded(ctx.media_type):
         # Form data must stay object-shaped.
         return MutationResult.FAILURE, None
     old_types = get_type(schema)
@@ -707,6 +694,7 @@ def change_type(
         _ensure_path_string_not_numeric(ctx, schema, old_types)
         _ensure_boolean_not_coercible(ctx, schema, old_types)
         prevent_unsatisfiable_schema(schema, new_type)
+        _ensure_number_not_whole(schema, old_types)
     else:
         candidate = draw(st.sampled_from(sorted(candidates)))
         candidates.remove(candidate)
@@ -723,6 +711,7 @@ def change_type(
         _ensure_path_string_not_numeric(ctx, schema, old_types)
         _ensure_boolean_not_coercible(ctx, schema, old_types)
         prevent_unsatisfiable_schema(schema, new_type)
+        _ensure_number_not_whole(schema, old_types)
 
     mutation = Mutation(
         path=(),
@@ -779,6 +768,16 @@ def _ensure_boolean_not_coercible(ctx: MutationContext, schema: Schema, old_type
         schema["not"] = {"pattern": r"^(?:[Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee]|0|1)$"}
 
 
+def _ensure_number_not_whole(schema: Schema, old_types: list[str]) -> None:
+    if schema.get("type") != "number" or "integer" not in old_types:
+        return
+    # Whole floats like `2.0` still validate as integers; a real fraction violates `integer` regardless of
+    # the original bounds, which could otherwise leave no fraction to draw (e.g. `multipleOf: 2`).
+    for keyword in TYPE_SPECIFIC_KEYS["number"]:
+        schema.pop(keyword, None)
+    schema["not"] = {"multipleOf": 1}
+
+
 def _get_type_candidates(ctx: MutationContext, schema: Schema) -> set[str]:
     types = set(get_type(schema))
     if ctx.is_path_location:
@@ -792,10 +791,7 @@ def _get_type_candidates(ctx: MutationContext, schema: Schema) -> set[str]:
     if "boolean" in types and ctx.is_query_location:
         candidates.discard("array")
         candidates.discard("object")
-    # Every integer is a number and vice versa from the validator's perspective —
-    # neither swap produces values the original schema rejects.
-    if "integer" in types and "number" in candidates:
-        candidates.remove("number")
+    # Every integer is a valid number, so `integer` never violates `number`.
     if "number" in types and "integer" in candidates:
         candidates.remove("integer")
     return candidates
@@ -821,9 +817,10 @@ def _get_type_candidates_with_weights(ctx: MutationContext, schema: Schema, draw
 def prevent_unsatisfiable_schema(schema: Schema, new_type: str) -> None:
     """Drop keywords that would conflict with `new_type` in the schema and its `not` branch."""
     drop_not_type_specific_keywords(schema, new_type)
-    if "not" in schema:
-        drop_not_type_specific_keywords(schema["not"], new_type)
-        if not schema["not"]:
+    not_schema = schema.get("not")
+    if isinstance(not_schema, dict):
+        drop_not_type_specific_keywords(not_schema, new_type)
+        if not not_schema:
             del schema["not"]
 
 
@@ -835,26 +832,37 @@ def drop_not_type_specific_keywords(schema: Schema, new_type: str) -> None:
             schema.pop(keyword, None)
 
 
+def _accepts_every_string(schema: JsonValue) -> bool:
+    if schema is True:
+        return True
+    return (
+        isinstance(schema, dict)
+        and {keyword for keyword in schema if keyword in ALL_KEYWORDS} <= {"type"}
+        and "string" in get_type(schema)
+    )
+
+
 def is_negatable_keyword(key: str, value: Any, *, location: ParameterLocation, allow_extra_parameters: bool) -> bool:
     """Whether barring this keyword changes what reaches the server."""
     if key == "required":
         return value != []
-    if key in ("example", "examples", BUNDLE_STORAGE_KEY):
+    if key in ANNOTATION_KEYWORDS or key == BUNDLE_STORAGE_KEY:
+        return False
+    if location.is_in_header and key == "format" and value in PLAIN_HEADER_FORMATS:
+        # Any string satisfies the header schema, so a value outside the injected format is still valid.
         return False
     if location == ParameterLocation.PATH and key == "minLength" and value == 1:
         # Negating `minLength: 1` produces empty paths that the transport drops anyway.
         return False
     if (
-        not allow_extra_parameters
-        and key == "additionalProperties"
-        and location
-        in (
-            ParameterLocation.QUERY,
-            ParameterLocation.HEADER,
-            ParameterLocation.COOKIE,
-            ParameterLocation.BODY,
-        )
+        location != ParameterLocation.BODY
+        and key in ("anyOf", "oneOf")
+        and isinstance(value, list)
+        and any(_accepts_every_string(branch) for branch in value)
     ):
+        # Every value reaches the server as a string, which one of the branches accepts.
+        return False
+    if not allow_extra_parameters and key == "additionalProperties" and location in EXTRA_PROPERTY_LOCATIONS:
         return False
     return not (
         key in ("type", "properties", "items", "minItems") or (key == "additionalProperties" and location.is_in_header)
@@ -872,24 +880,29 @@ def has_negatable_target(
     if not isinstance(schema, dict) or depth > MAX_WALK_DEPTH:
         return False
     # `change_type` only declines where the value serializes to a string anyway.
-    if "type" in schema and "string" not in get_type(schema):
+    types = get_type(schema)
+    if "type" in schema and "string" not in types:
         return True
+    applicable = {keyword for name in types for keyword in TYPE_SPECIFIC_KEYS.get(name, ())}
+
+    # Keywords of other types hold for any value of the declared ones, so barring them is unsatisfiable.
+    def applies(keyword: str) -> bool:
+        return keyword in applicable or keyword not in ALL_TYPE_SPECIFIC_KEYS
+
     if any(
-        is_negatable_keyword(key, value, location=location, allow_extra_parameters=allow_extra_parameters)
+        applies(key)
+        and is_negatable_keyword(key, value, location=location, allow_extra_parameters=allow_extra_parameters)
         for key, value in schema.items()
     ):
         return True
     nested: list[Any] = []
     for keyword in ("properties", "patternProperties"):
         value = schema.get(keyword)
-        if isinstance(value, dict):
+        if isinstance(value, dict) and applies(keyword):
             nested.extend(value.values())
     for keyword in ("items", "additionalProperties"):
-        nested.append(schema.get(keyword))
-    for keyword in ("oneOf", "anyOf", "allOf"):
-        value = schema.get(keyword)
-        if isinstance(value, list):
-            nested.extend(value)
+        if applies(keyword):
+            nested.append(schema.get(keyword))
     return any(
         has_negatable_target(child, location=location, allow_extra_parameters=allow_extra_parameters, depth=depth + 1)
         for child in nested

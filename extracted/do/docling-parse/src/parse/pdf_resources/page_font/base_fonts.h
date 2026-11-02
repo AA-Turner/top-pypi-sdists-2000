@@ -1,0 +1,367 @@
+//-*-C++-*-
+
+#ifndef PDF_PAGE_FONT_BASE_FONTS_H
+#define PDF_PAGE_FONT_BASE_FONTS_H
+
+#include <memory>
+#include <unordered_set>
+#include <unordered_map>
+
+//#include <filesystem>
+
+namespace pdflib
+{
+
+  // Outcome of matching a PDF font name against the built-in base fonts.
+  // `font` is empty when nothing matched, and `name` is then empty too.
+  struct base_font_match
+  {
+    std::shared_ptr<base_font> font = {};
+    std::string                name = {};
+  };
+
+  class base_fonts
+  {
+    typedef base_font base_font_type;
+
+  public:
+
+    base_fonts();
+    ~base_fonts();
+
+    void print();
+
+    bool is_core_14_font(const std::string& font_name);
+
+    // Single pass over the base fonts, returning the longest key contained in
+    // the normalised name. Prefer this over the has_/get_ pair below: each of
+    // those scans every base font with a substring match, so asking both (or
+    // asking repeatedly for the same font) is expensive.
+    base_font_match find_corresponding_font(const std::string& font_name);
+
+    bool        has_corresponding_font(const std::string& font_name);
+    std::string get_corresponding_font(const std::string& font_name);
+
+    bool has(const std::string& font_name);
+
+    // Throws std::out_of_range when the name is not a known base font.
+    std::shared_ptr<base_font_type> get(const std::string& font_name);
+
+    std::shared_ptr<base_font_type> operator[](const std::string& font_name);
+    void verify_all();
+
+    template<typename glyphs_type>
+    void initialise(std::string filename, glyphs_type& glyphs);
+
+  private:
+
+    std::string normalise(const std::string& font_name);
+
+    std::string read_fontname(std::string filename);
+
+    void register_standard_aliases();
+
+  private:
+
+    bool initialized;
+    
+    std::unordered_set<std::string> core_14_fonts;
+
+    std::unordered_map<std::string, std::shared_ptr<base_font_type> > name_to_basefont;
+  };
+
+  base_fonts::base_fonts():
+    initialized(false)
+  {}
+
+  base_fonts::~base_fonts()
+  {}
+
+  void base_fonts::print()
+  {
+    for(auto itr=name_to_basefont.begin(); itr!=name_to_basefont.end(); itr++)
+      {
+        LOG_S(INFO) << itr->first;
+      }
+  }
+
+  std::string base_fonts::normalise(const std::string& font_name)
+  {
+    std::string norm_name="";
+
+    for(int l=0; l<font_name.size(); l++)
+      {
+	char c = font_name[l]; 
+
+	if(c=='/' or c=='\r' or c=='\n' or c=='\\')
+	  {
+	    continue;
+	  }
+	else if('A'<=c and c<='Z')
+	  {
+	    char t = c-'Z'+'z';
+	    norm_name.push_back(t);
+	  }
+	else
+	  {
+	    norm_name.push_back(c);
+	  }
+      }
+
+    return norm_name;
+  }
+
+  bool base_fonts::is_core_14_font(const std::string& font_name)
+  {
+    std::string norm_name = normalise(font_name);
+    return (core_14_fonts.count(norm_name)==1);
+  }
+
+  base_font_match base_fonts::find_corresponding_font(const std::string& font_name)
+  {
+    std::string norm_name = normalise(font_name);
+
+    base_font_match result;
+    for(auto itr=name_to_basefont.begin(); itr!=name_to_basefont.end(); itr++)
+      {
+        if(norm_name.find(itr->first)!=std::string::npos)
+          {
+	    // we have to be careful that "Helvetica" is not returned for Helvetice-Bold!
+	    if(result.name.size()<(itr->first).size())
+	      {
+		result.name = itr->first;
+		result.font = itr->second;
+	      }
+          }
+      }
+
+    return result;
+  }
+
+  bool base_fonts::has_corresponding_font(const std::string& font_name)
+  {
+    return static_cast<bool>(find_corresponding_font(font_name).font);
+  }
+
+  std::string base_fonts::get_corresponding_font(const std::string& font_name)
+  {
+    base_font_match match = find_corresponding_font(font_name);
+
+    if(match.font)
+      {
+	return match.name;
+      }
+
+    LOG_S(ERROR) << "unkown " << font_name << "[norm_name=" << normalise(font_name) << "]";
+    
+    return "Unknown";
+  }
+
+  bool base_fonts::has(const std::string& font_name)
+  {
+    std::string norm_name = normalise(font_name);
+    return (name_to_basefont.count(norm_name)==1);
+  }
+
+  std::shared_ptr<base_font> base_fonts::get(const std::string& font_name)
+  {
+    std::string norm_name = normalise(font_name);
+    return name_to_basefont.at(norm_name);
+  }
+
+  std::shared_ptr<base_font> base_fonts::operator[](const std::string& font_name)
+  {
+    std::string norm_name = normalise(font_name);
+    return name_to_basefont.at(norm_name);
+  }
+
+  void base_fonts::verify_all()
+  {
+    for(auto& item : name_to_basefont)
+      {
+        LOG_S(INFO) << "verifying font: " << item.first;
+        item.second->initialise();
+      }
+  }
+
+  template<typename glyphs_type>
+  void base_fonts::initialise(std::string dirname, glyphs_type& glyphs)
+  {
+    if(initialized)
+      {
+	LOG_S(WARNING) << "skipping base_fonts::initialise, already initialized ...";
+	return;
+      }
+    
+    std::vector<std::string> standard = utils::filesystem::list_files(dirname+"/standard");
+    std::sort(standard.begin(), standard.end());
+
+    LOG_S(INFO) << "standard-fonts: " << standard.size();
+    for(auto path:standard)
+      {
+	LOG_S(INFO) << "\t file-name: " << path;
+
+        std::string fontname = read_fontname(path);
+	//LOG_S(INFO) << "\t font-name: " << fontname;
+
+	name_to_basefont.emplace(fontname, std::make_shared<base_font>(path, glyphs));
+
+	core_14_fonts.insert(fontname);
+      }    
+
+    std::vector<std::string> microsoft = utils::filesystem::list_files(dirname+"/custom/Microsoft");
+    std::sort(microsoft.begin(), microsoft.end());
+
+    LOG_S(INFO) << "microsoft-fonts: " << microsoft.size();
+    for(auto path:microsoft)
+      {
+        std::string fontname = read_fontname(path);
+
+	if(name_to_basefont.count(fontname)==0)
+	  {
+	    LOG_S(INFO) << "\t reading font " << fontname << "at " << path;
+	    
+	    name_to_basefont.emplace(fontname, std::make_shared<base_font>(path, glyphs));
+	  }    
+	else
+	  {
+	    //LOG_S(WARNING) << "\t font-name (=" << fontname << ") already read";
+	  }
+      }
+
+    std::vector<std::string> tex = utils::filesystem::list_files(dirname+"/custom/TeX");
+    std::sort(tex.begin(), tex.end());
+
+    LOG_S(INFO) << "tex-fonts: " << tex.size();
+    for(auto path:tex)
+      {
+        std::string fontname = read_fontname(path);
+	//LOG_S(INFO) << "\t font-name: " << fontname;
+
+	if(name_to_basefont.count(fontname)==0)
+	  {
+	    LOG_S(INFO) << "\t reading font " << fontname << "at " << path;
+
+	    name_to_basefont.emplace(fontname, std::make_shared<base_font>(path, glyphs));
+	  }    
+	else
+	  {
+	    //LOG_S(WARNING) << "\t font-name (=" << fontname << ") already read";
+	  }
+      }
+
+    std::vector<std::string> adv_ps_sym =
+      utils::filesystem::list_files(dirname+"/custom/AdvPSSym");
+    std::sort(adv_ps_sym.begin(), adv_ps_sym.end());
+
+    LOG_S(INFO) << "AdvPSSym-fonts: " << adv_ps_sym.size();
+    for(auto path:adv_ps_sym)
+      {
+	std::string fontname = read_fontname(path);
+
+	if(name_to_basefont.count(fontname)==0)
+	  {
+	    LOG_S(INFO) << "\t reading font " << fontname << "at " << path;
+	    name_to_basefont.emplace(fontname, std::make_shared<base_font>(path, glyphs));
+	  }
+      }
+
+    register_standard_aliases();
+
+    initialized = true;
+  }
+
+  std::string base_fonts::read_fontname(std::string filename)
+  {
+    std::string fontname = "unknown";
+
+    std::ifstream file(filename.c_str());
+    
+    std::string line;
+    while (std::getline(file, line))
+      {
+        if(line.size()==0 or (line.front()=='#'))
+	  {
+	    continue;
+	  }
+	
+        size_t ind = line.find("FontName");
+        if(ind!=std::string::npos)
+          {
+            std::vector<std::string> elems = utils::string::split(line, " ");
+
+            fontname = "/"+utils::string::strip(elems.back());
+	    fontname = normalise(fontname);
+	    //fontname = utils::string::strip(elems.back());
+	    /*
+	    if(fontname.size()>0 and fontname.back()=='\n')
+	      {
+		fontname.pop_back();
+	      }
+	    
+	    if(fontname.size()>0 and fontname.back()=='\r')
+	      {
+		fontname.pop_back();
+	      }
+	    */
+            //LOG_S(INFO) << line << " -> " << fontname;                        
+            break;
+          }
+      }
+
+    if(fontname=="unknown")
+      {
+	std::stringstream ss;
+	ss << "no FontName found in " << filename;
+	
+        LOG_S(ERROR) << ss.str();
+	throw std::logic_error(ss.str());
+      }
+
+    return fontname;
+  }
+
+  void base_fonts::register_standard_aliases()
+  {
+    // A PDF may name a Core-14 font by a common family alias (Arial for
+    // Helvetica, Times New Roman for Times, Courier New for Courier) and ship it
+    // without a /Widths table. The resolver only matches when the canonical
+    // PostScript name is contained in the font name, which these aliases are
+    // not, so bind them to the Core-14 metrics that viewers substitute.
+    static const std::vector<std::pair<std::string, std::string> > aliases =
+      {
+        {"arial",                    "helvetica"},
+        {"arial-bold",               "helvetica-bold"},
+        {"arial-italic",             "helvetica-oblique"},
+        {"arial-bolditalic",         "helvetica-boldoblique"},
+        {"couriernew",               "courier"},
+        {"couriernew-bold",          "courier-bold"},
+        {"couriernew-italic",        "courier-oblique"},
+        {"couriernew-bolditalic",    "courier-boldoblique"},
+        {"times",                    "times-roman"},
+        {"timesnewroman",            "times-roman"},
+        {"timesnewroman-bold",       "times-bold"},
+        {"timesnewroman-italic",     "times-italic"},
+        {"timesnewroman-bolditalic", "times-bolditalic"},
+      };
+
+    for(auto& alias : aliases)
+      {
+        if(name_to_basefont.count(alias.first)==1 or
+           name_to_basefont.count(alias.second)==0)
+          {
+            continue;
+          }
+
+        // the alias shares the font it points at: the metrics are identical and
+        // read-only, so there is no reason to hold a second copy of them
+        std::shared_ptr<base_font_type> bf = name_to_basefont.at(alias.second);
+        name_to_basefont.emplace(alias.first, bf);
+
+        core_14_fonts.insert(alias.first);
+      }
+  }
+
+}
+
+#endif

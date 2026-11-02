@@ -6,22 +6,25 @@ from typing import Any
 from urllib.parse import quote
 
 from schemathesis.core.media_types import is_form_parts, is_xml_parts
-from schemathesis.core.parameters import ParameterLocation
+from schemathesis.core.parameters import HEADER_LOCATIONS, ParameterLocation
+from schemathesis.core.transforms import jsonify_python_specific_types, to_wire_string
 from schemathesis.core.validation import has_invalid_characters, is_latin_1_encodable
 from schemathesis.openapi.generation.filters import is_invalid_path_parameter
 
 
-def jsonify(value: Any) -> Any:
-    # Builds a new value: the input may be a spec-declared example that every other case reuses.
-    if isinstance(value, bool):
-        return "true" if value else "false"
-    if value is None:
-        return "null"
-    if isinstance(value, dict):
-        return {key: jsonify(item) for key, item in value.items()}
-    if isinstance(value, list):
-        return [jsonify(item) for item in value]
-    return value
+def stringify_value(val: Any, container_name: str) -> Any:
+    if isinstance(val, dict):
+        # String values, the usual case, stay as they are without a call each.
+        return {key: sub if type(sub) is str else stringify_value(sub, container_name) for key, sub in val.items()}
+    if val is None or isinstance(val, (int, float, bool)):
+        return to_wire_string(val)
+    if isinstance(val, list):
+        if container_name == "query":
+            # Having a list here ensures there will be multiple query parameters with the same name
+            return [stringify_value(item, container_name) for item in val]
+        # use comma-separated values style for arrays
+        return ",".join(str(stringify_value(sub, container_name)) for sub in val)
+    return val
 
 
 def quote_path_parameter(value: Any) -> str:
@@ -79,8 +82,15 @@ class WireSemantics:
         `declared` marks a value the schema author wrote verbatim, where a `/` is intent to send `%2F`
         rather than an artifact of generation, so the path filter judges its encoded form instead.
         """
-        if self.location in ("header", "cookie") and isinstance(value, str):
-            return not value or (is_latin_1_encodable(value) and not has_invalid_characters("A", value))
+        if self.location in HEADER_LOCATIONS:
+            if isinstance(value, str):
+                return not value or (is_latin_1_encodable(value) and not has_invalid_characters("A", value))
+            # Containers travel as their joined keys and items, so each one must fit the header on its own.
+            if isinstance(value, list):
+                return all(self.representable(item) for item in value)
+            if isinstance(value, dict):
+                return all(self.representable(key) and self.representable(item) for key, item in value.items())
+            return True
         elif self.location == "path":
             if declared and isinstance(value, str):
                 return not is_invalid_path_parameter(quote_path_parameter(value), allow_encoded_slash=True)
@@ -117,7 +127,8 @@ class WireSemantics:
 
     def url_part(self) -> bool:
         """Whether values travel inside the URL, where every rendering collapses to text."""
-        return self.location in (ParameterLocation.PATH, ParameterLocation.QUERY)
+        # A JSON-encoded parameter keeps its types on the wire.
+        return self.location in (ParameterLocation.PATH, ParameterLocation.QUERY) and self.media_type is None
 
     def urlencoded_body(self) -> bool:
         return self.location == ParameterLocation.BODY and self.media_type == ("application", "x-www-form-urlencoded")
@@ -125,9 +136,9 @@ class WireSemantics:
     def rendered(self, value: Any) -> Any:
         """The value as this location transmits it."""
         if self.location == ParameterLocation.PATH:
-            return quote_path_parameter(jsonify(value))
+            return quote_path_parameter(jsonify_python_specific_types(value))
         if self.location == ParameterLocation.QUERY:
-            return jsonify(value)
+            return jsonify_python_specific_types(value)
         return value
 
     def observed(self, value: Any) -> str:
@@ -135,11 +146,24 @@ class WireSemantics:
         # An XML null serializes to an empty element, which reads back as "".
         if self.media_type is not None and is_xml_parts(self.media_type) and value is None:
             return ""
+        if self.location in HEADER_LOCATIONS:
+            return str(stringify_value(value, self.location))
         return str(value)
+
+    def sent_texts(self, value: Any) -> list[str]:
+        """The texts a server reads for a parameter value that travels as text, one per repeated query item."""
+        if self.location == ParameterLocation.BODY or not self.serializes_to_string():
+            return []
+        if self.location in HEADER_LOCATIONS:
+            return [self.observed(value)]
+        if self.location == ParameterLocation.PATH and isinstance(value, list):
+            return [stringify_value(value, self.location)]
+        items = value if self.location == ParameterLocation.QUERY and isinstance(value, list) else [value]
+        return [to_wire_string(item) for item in items if not isinstance(item, (dict, list))]
 
     def serializes_to_string(self) -> bool:
         if self.location in ("query", "path", "header", "cookie"):
-            return True
+            return self.media_type is None
         if self.location == "body" and self.media_type is not None:
             if is_form_parts(self.media_type):
                 return True

@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from collections.abc import Callable, Generator, Mapping
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, assert_never
+from urllib.parse import urlsplit
 
 import jsonschema_rs
 from jsonschema_rs import Validator
-from typing_extensions import assert_never
 
-from schemathesis import hooks, transport
 from schemathesis.auths import reauth_and_replay
 from schemathesis.checks import (
     CheckContext,
@@ -18,7 +17,7 @@ from schemathesis.checks import (
     run_checks,
     run_checks_for,
 )
-from schemathesis.core import NOT_SET, SCHEMATHESIS_TEST_CASE_HEADER, Body, NotSet, curl, media_types
+from schemathesis.core import NOT_SET, Body, NotSet, curl, media_types
 from schemathesis.core.errors import IncorrectUsage
 from schemathesis.core.failures import Failure, FailureGroup, failure_report_title, format_failures
 from schemathesis.core.jsonschema import make_validator
@@ -37,9 +36,10 @@ from schemathesis.hooks import (
     dispatch_after_network_error,
     dispatch_after_validate,
     dispatch_before_call,
+    schema_hook_dispatchers,
 )
-from schemathesis.transport.prepare import prepare_path, prepare_request
-from schemathesis.transport.serialization import Binary
+from schemathesis.transport.prepare import base_url_from_request_url, prepare_path, prepare_request
+from schemathesis.transport.serialization import contains_binary
 
 if TYPE_CHECKING:
     import httpx
@@ -60,17 +60,6 @@ def _default_headers() -> CaseInsensitiveDict:
 
 
 _NOTSET_HASH = 0x7F3A9B2C
-
-
-def _contains_bytes(value: Body) -> bool:
-    """Check if value contains bytes or Binary wrappers anywhere in nested structure."""
-    if isinstance(value, bytes | Binary):
-        return True
-    if isinstance(value, dict):
-        return any(_contains_bytes(v) for v in value.values())
-    if isinstance(value, list):
-        return any(_contains_bytes(item) for item in value)
-    return False
 
 
 OperationT = TypeVar("OperationT", bound="APIOperation")
@@ -110,6 +99,8 @@ class Case(Generic[OperationT]):
     _has_explicit_auth: bool
     # WFC auth entry this case ran under, when several are in play.
     _auth_identity: str | None
+    # Base URL the latest `call` sent this case to; `None` means the operation's own.
+    _base_url: str | None
     _components: dict
     _freeze_metadata: bool
 
@@ -129,6 +120,7 @@ class Case(Generic[OperationT]):
         "_auth",
         "_has_explicit_auth",
         "_auth_identity",
+        "_base_url",
         "_components",
         "_freeze_metadata",
     )
@@ -167,6 +159,7 @@ class Case(Generic[OperationT]):
         object.__setattr__(self, "_auth", _auth)
         object.__setattr__(self, "_has_explicit_auth", _has_explicit_auth)
         object.__setattr__(self, "_auth_identity", None)
+        object.__setattr__(self, "_base_url", None)
         object.__setattr__(self, "_components", store_components(self))
         object.__setattr__(self, "_freeze_metadata", False)
 
@@ -222,7 +215,7 @@ class Case(Generic[OperationT]):
         return f"{output})"
 
     def __hash__(self) -> int:
-        return hash(self.as_curl_command({SCHEMATHESIS_TEST_CASE_HEADER: "0"}))
+        return self.operation.schema.hash_case(self)
 
     def _repr_pretty_(self, *args: Any, **kwargs: Any) -> None: ...
 
@@ -251,7 +244,10 @@ class Case(Generic[OperationT]):
         # Only track components that were actually generated
         for location in self._meta.components:
             value = self.get_container(location)
-            hash_value = self._hash_container(value)
+            if location in self._meta._initial_hashes:
+                hash_value = self._meta._initial_hashes[location]
+            else:
+                hash_value = self._hash_container(value)
             self._meta.update_validated_hash(location, hash_value)
             # Snapshot the wire-form hash so revalidation can tell whether the
             # container is still the unmodified value produced by generation.
@@ -260,6 +256,25 @@ class Case(Generic[OperationT]):
             # ones a hook overwrote and validate those against their live values.
             if isinstance(value, Mapping):
                 self._meta._initial_containers[location] = dict(value)
+
+    def _sync_validated_hashes(self) -> None:
+        """Take the current containers as the modification baseline for the generated components."""
+        if self._meta is None:
+            return
+        for location in self._meta.components:
+            self._meta.update_validated_hash(location, self._hash_container(self.get_container(location)))
+
+    def _record_starting_state(self) -> None:
+        """Take the containers as they are now as the case's starting state, not as edits to the generated values.
+
+        Auth and configured overrides are written after generation; without this, the first `meta` read
+        revalidates them and can relabel a negative case (e.g. "Missing `Authorization`") as positive.
+        """
+        if self._meta is None:
+            return
+        self._sync_validated_hashes()
+        for location in list(self._meta._dirty):
+            self._meta.clear_dirty(location)
 
     def _check_modifications(self) -> None:
         """Detect in-place modifications by comparing container hashes."""
@@ -292,13 +307,12 @@ class Case(Generic[OperationT]):
 
         if location == ParameterLocation.BODY:
             # Validate body against media type schema
-            if isinstance(value, NotSet) or value is None:
+            if isinstance(value, NotSet) or value is None or self.media_type is None or contains_binary(value):
                 return False
-            for alternative in self.operation.body:
-                if _contains_bytes(value):
-                    return False
-                if alternative.media_type == self.media_type:
-                    return make_validator(alternative.validation_schema, validator_cls).is_valid(value)
+            alternative = self.operation.get_body_for_media_type(self.media_type)
+            if alternative is None:
+                return False
+            return make_validator(alternative.validation_schema, validator_cls).is_valid(value)
         # Validate other locations against container schema
         container = getattr(self.operation, location.container_name)
         if isinstance(value, CaseInsensitiveDict):
@@ -316,9 +330,11 @@ class Case(Generic[OperationT]):
             return _NOTSET_HASH
         # Plain JSON-shaped containers (the common case for bodies) go through canonical JSON in
         # Rust; deeply-nested schemas like Kubernetes Pods are ~10x faster than recursive hashing.
-        if type(value) is dict or type(value) is list:
+        # Other mappings, like case-insensitive headers, take the same path through a plain copy.
+        plain = dict(value) if isinstance(value, Mapping) and type(value) is not dict else value
+        if type(plain) is dict or type(plain) is list:
             try:
-                return hash((type(value), jsonschema_rs.canonical.json.to_string(value)))
+                return hash((type(value), jsonschema_rs.canonical.json.to_string(plain)))
             except (TypeError, ValueError):
                 pass
         if isinstance(value, Mapping):
@@ -328,7 +344,7 @@ class Case(Generic[OperationT]):
                     tuple(sorted(((k, self._hash_container(v)) for k, v in value.items()), key=lambda x: str(x[0]))),
                 )
             )
-        if isinstance(value, list | tuple):
+        if isinstance(value, (list, tuple)):
             return hash((type(value), tuple(self._hash_container(item) for item in value)))
         return hash((type(value), value))
 
@@ -342,20 +358,76 @@ class Case(Generic[OperationT]):
                 self._revalidate_metadata()
         return self._meta
 
+    def freeze_metadata(self) -> None:
+        object.__setattr__(self, "_freeze_metadata", True)
+
+    def settle_metadata(self) -> None:
+        """Fix metadata to the values about to be sent; later edits no longer revalidate it.
+
+        Reporters read sent cases from other threads, so a sent case must never revalidate on read.
+        """
+        self._check_modifications()
+        if self._meta and self._meta.is_dirty():
+            self._revalidate_metadata()
+        self.freeze_metadata()
+
+    def derive(
+        self,
+        *,
+        headers: CaseInsensitiveDict | None = None,
+        query: dict[str, Any] | None = None,
+        cookies: dict[str, Any] | None = None,
+        keep_auth: bool = False,
+    ) -> Case[OperationT]:
+        """Copy this case's request data under a fresh id.
+
+        Containers not passed are shallow-copied. Auth stays behind unless `keep_auth` is set, so a request
+        derived to probe the API never inherits the original's credentials by accident.
+        """
+        meta = self.meta
+        derived = Case(
+            operation=self.operation,
+            method=self.method,
+            path=self.path,
+            path_parameters=self.path_parameters.copy(),
+            headers=headers if headers is not None else self.headers.copy(),
+            cookies=cookies if cookies is not None else self.cookies.copy(),
+            query=query if query is not None else self.query.copy(),
+            body=self.body.copy() if isinstance(self.body, (list, dict)) else self.body,
+            media_type=self.media_type,
+            multipart_content_types=self.multipart_content_types,
+            meta=meta.copy() if meta is not None else None,
+        )
+        if keep_auth:
+            derived._auth = self._auth
+            derived._has_explicit_auth = self._has_explicit_auth
+            derived._auth_identity = self._auth_identity
+        return derived
+
+    @property
+    def auth_identity(self) -> str | None:
+        """Name of the auth entry this case was sent with, when several are configured."""
+        return self._auth_identity
+
     @property
     def formatted_path(self) -> str:
         """Path template with variables substituted (e.g., /users/{user_id} -> /users/123)."""
         return prepare_path(self.path, self.path_parameters)
 
-    def as_curl_command(self, headers: Mapping[str, Any] | None = None, verify: bool = True) -> str:
+    def as_curl_command(
+        self, headers: Mapping[str, Any] | None = None, verify: bool = True, *, base_url: str | None = None
+    ) -> str:
         """Generate a curl command that reproduces this test case.
 
         Args:
             headers: Additional headers to include in the command.
             verify: When False, adds `--insecure` flag to curl command.
+            base_url: Base URL the request was sent to. Defaults to the one passed to `call`, then the schema's.
 
         """
-        request_data = prepare_request(self, headers, config=self.operation.schema.config.output.sanitization)
+        request_data = prepare_request(
+            self, headers, config=self.operation.schema.config.output.sanitization, base_url=base_url
+        )
         result = curl.generate(
             method=str(request_data.method),
             url=str(request_data.url),
@@ -369,6 +441,12 @@ class Case(Generic[OperationT]):
             warnings_text = "\n\n".join(f"⚠️  {warning}" for warning in result.warnings)
             return f"{result.command}\n\n{warnings_text}"
         return result.command
+
+    def as_reproduction_command(
+        self, headers: Mapping[str, Any] | None = None, verify: bool = True, *, base_url: str | None = None
+    ) -> str:
+        """Command that reproduces this test case in the schema's own tooling, e.g. curl for HTTP APIs."""
+        return self.operation.schema.as_reproduction_command(self, headers=headers, verify=verify, base_url=base_url)
 
     def as_transport_kwargs(self, base_url: str | None = None, headers: dict[str, str] | None = None) -> dict[str, Any]:
         return self.operation.schema.transport.serialize_case(self, base_url=base_url, headers=headers)
@@ -396,28 +474,16 @@ class Case(Generic[OperationT]):
 
         """
         hook_context = HookContext(operation=self.operation)
-        # Sync the modification baseline to the current container state so revalidation reacts
-        # only to edits a `before_call` hook makes, not to auth/overrides applied earlier in place.
-        if self._meta is not None:
-            for location in self._meta.components:
-                self._meta.update_validated_hash(location, self._hash_container(self.get_container(location)))
+        # Revalidation reacts only to edits a `before_call` hook makes, not to auth/overrides applied earlier in place.
+        self._sync_validated_hashes()
         dispatch_before_call(GLOBAL_HOOK_DISPATCHER, context=hook_context, case=self, kwargs=kwargs)
 
-        # Detect in-place container edits the hook made, then revalidate before freezing so
-        # stale generation-time metadata reflects the values actually sent.
-        self._check_modifications()
-        if self._meta and self._meta.is_dirty():
-            self._revalidate_metadata()
-
-        # Freeze metadata to prevent revalidation after request preparation transforms the body
-        object.__setattr__(self, "_freeze_metadata", True)
+        self.settle_metadata()
+        object.__setattr__(self, "_base_url", base_url)
 
         if self.operation.app is not None:
             kwargs.setdefault("app", self.operation.app)
-        if "app" in kwargs:
-            transport_ = transport.get(kwargs["app"])
-        else:
-            transport_ = self.operation.schema.transport
+        transport_ = self.operation.schema.get_transport(kwargs.get("app", self.operation.schema.app))
         try:
             response = transport_.send(
                 self,
@@ -433,12 +499,10 @@ class Case(Generic[OperationT]):
             raise
         except Exception as exc:
             # Add reproduction code for check failures and app errors (e.g., ASGI/WSGI internal errors)
-            if not hasattr(exc, "__notes__"):
-                exc.__notes__ = []  # type: ignore[attr-defined]
             verify = kwargs.get("verify", True)
             try:
-                curl = self.as_curl_command(headers=headers, verify=verify)
-                exc.__notes__.append(f"\nReproduce with:\n\n    {curl}")  # type: ignore[attr-defined]
+                curl = self.as_reproduction_command(headers=headers, verify=verify)
+                exc.add_note(f"\nReproduce with:\n\n    {curl}")
             except Exception:
                 # Curl generation can fail for the same reason as the original error
                 # (e.g., malformed path template). Skip adding curl command to avoid
@@ -491,6 +555,7 @@ class Case(Generic[OperationT]):
         # For example - non-Schemathesis tests that manually construct `Case` instances
         load_all_checks()
 
+        sent_base_url = _sent_base_url(self, response, transport_kwargs)
         response = Response.from_any(response)
 
         phase = PhaseName.from_str(self.meta.phase.name.value) if self.meta is not None else None
@@ -498,6 +563,13 @@ class Case(Generic[OperationT]):
             operation=self.operation, phase=phase.value if phase is not None else None
         )
         response_checks = run_checks_for(self.operation.schema).for_responses()
+        # Checks that re-send the request must reach the server that answered, even when the schema names none.
+        if (
+            sent_base_url is not None
+            and self.operation.app is None
+            and not (transport_kwargs and "app" in transport_kwargs)
+        ):
+            transport_kwargs = {**(transport_kwargs or {}), "base_url": sent_base_url}
         ctx = CheckContext(
             override=self._override,
             auth=transport_kwargs.get("auth") if transport_kwargs else None,
@@ -510,11 +582,12 @@ class Case(Generic[OperationT]):
         )
         if not checks:
             # Default set: built-ins enabled in config + max_response_time + response checks.
-            checks = list(ctx._checks)
+            checks = list(ctx.internals.checks)
         checks = [
             check for check in list(checks) + list(additional_checks or []) if check not in set(excluded_checks or [])
         ]
-        has_after_validate = hooks.defines("after_validate") or self.operation.schema.hooks.defines("after_validate")
+        after_validate_dispatchers = schema_hook_dispatchers(self.operation.schema)
+        has_after_validate = any(dispatcher.defines("after_validate") for dispatcher in after_validate_dispatchers)
         check_results: list[CheckResult] = []
         _on_success: Callable[[str, Case], None] | None
 
@@ -547,8 +620,7 @@ class Case(Generic[OperationT]):
         if has_after_validate:
             hook_context = HookContext(operation=self.operation)
             dispatch_after_validate(
-                GLOBAL_HOOK_DISPATCHER,
-                self.operation.schema.hooks,
+                *after_validate_dispatchers,
                 context=hook_context,
                 case=self,
                 response=response,
@@ -557,8 +629,9 @@ class Case(Generic[OperationT]):
         if failures:
             _failures = list(failures)
             message = failure_report_title(_failures) + "\n"
-            verify = getattr(response, "verify", True)
-            curl = self.as_curl_command(headers=dict(response.request.headers), verify=verify)
+            curl = self.as_reproduction_command(
+                headers=dict(response.request.headers), verify=response.verify, base_url=sent_base_url
+            )
             message += format_failures(
                 case_id=None,
                 response=response,
@@ -617,6 +690,34 @@ class Case(Generic[OperationT]):
             transport_kwargs=transport_kwargs,
         )
         return response
+
+
+def _sent_base_url(
+    case: Case,
+    response: Response | httpx.Response | httpx2.Response | requests.Response | TestResponse,
+    transport_kwargs: dict[str, Any] | None,
+) -> str | None:
+    """Base URL `response` was requested from, or `None` when only the schema's base URL is known."""
+    if transport_kwargs and transport_kwargs.get("base_url"):
+        return transport_kwargs["base_url"]
+    if case._base_url is not None:
+        return case._base_url
+    if (
+        case.operation.app is not None
+        or (transport_kwargs and "app" in transport_kwargs)
+        or urlsplit(case.operation.base_url or "").netloc
+    ):
+        return None
+    request_url: object
+    if isinstance(response, Response):
+        request_url = response.request.url
+    else:
+        # A followed redirect replaces the request; the chain starts with the one the case was sent as.
+        first = response.history[0] if response.history else response
+        request_url = first.request.url
+    if request_url is None:
+        return None
+    return base_url_from_request_url(case, str(request_url))
 
 
 def adjust_urlencoded_payload(case: Case) -> None:

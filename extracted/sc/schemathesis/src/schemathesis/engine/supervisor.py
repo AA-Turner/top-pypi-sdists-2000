@@ -2,21 +2,23 @@ from __future__ import annotations
 
 import threading
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from typing import TYPE_CHECKING
 
 from schemathesis.core.cache import CacheWriter, Kind, request_from_case
+from schemathesis.core.transport import CallOutcome
 from schemathesis.core.warnings import SchemathesisWarning
 
 if TYPE_CHECKING:
+    from schemathesis.core.transport import Response
     from schemathesis.generation.case import Case
 
-# Fires only on operations that 405 from the first call; any non-405 cancels
-# the streak permanently. High enough to ride out noisy early-response orderings.
+# Fires only on operations that 405, or answer that they are not served, from the first call; any other response
+# cancels the streak permanently. High enough to ride out noisy early-response orderings.
 METHOD_NOT_ALLOWED_THRESHOLD = 10
 
 
-class SchedulingDirective(str, Enum):
+class SchedulingDirective(StrEnum):
     """Per-operation instruction the supervisor issues to the scheduler."""
 
     RUN = "run"
@@ -42,6 +44,7 @@ def _method_not_allowed_verdict(reason: str) -> Verdict:
 @dataclass(slots=True)
 class _Counters:
     method_not_allowed: int = 0
+    not_served: int = 0
     other: int = 0
 
 
@@ -54,7 +57,7 @@ class _OperationRecord:
 class Supervisor:
     """Per-operation runtime supervisor consulted by the scheduler.
 
-    `record_response` is called for every response and may flip an operation's
+    `observe` is called for every response and may flip an operation's
     verdict once a rule fires. `verdict` is the read path the scheduler
     consults before queueing each scenario.
     """
@@ -65,12 +68,32 @@ class Supervisor:
         self._records: dict[str, _OperationRecord] = {}
         self._lock = threading.Lock()
 
+    def observe(self, case: Case, response: Response, *, cache_writer: CacheWriter | None) -> None:
+        """Record a response for the case's operation, judging 405s against its documented responses.
+
+        The schema decides which other responses say the server does not serve the operation at all.
+        """
+        schema = case.operation.schema
+        status_code = response.status_code
+        not_served_status = None
+        if schema.classify_call_outcome(case, response) is CallOutcome.NOT_SERVED:
+            not_served_status = schema.status_name_for_code(status_code) or str(status_code)
+        self.record_response(
+            operation_label=case.operation.label,
+            status_code=status_code,
+            is_documented_status=case.operation.responses.find_by_status_code(status_code) is not None,
+            not_served_status=not_served_status,
+            case=case,
+            cache_writer=cache_writer,
+        )
+
     def record_response(
         self,
         *,
         operation_label: str,
         status_code: int,
         is_documented_status: bool = False,
+        not_served_status: str | None = None,
         case: Case | None = None,
         cache_writer: CacheWriter | None = None,
     ) -> None:
@@ -87,6 +110,8 @@ class Supervisor:
             # don't treat them as evidence of an unimplemented method.
             if status_code == 405 and not is_documented_status:
                 record.counters.method_not_allowed += 1
+            elif not_served_status is not None:
+                record.counters.not_served += 1
             else:
                 record.counters.other += 1
             if record.counters.other == 0 and record.counters.method_not_allowed >= METHOD_NOT_ALLOWED_THRESHOLD:
@@ -94,6 +119,12 @@ class Supervisor:
                     f"Skipped after {record.counters.method_not_allowed} consecutive `405 Method Not Allowed` responses"
                 )
                 flipped_now = True
+            elif record.counters.other == 0 and record.counters.not_served >= METHOD_NOT_ALLOWED_THRESHOLD:
+                record.verdict = Verdict(
+                    directive=SchedulingDirective.SKIP,
+                    reason=f"Skipped after {record.counters.not_served} consecutive `{not_served_status}` responses",
+                    warning=SchemathesisWarning.NOT_SERVED,
+                )
         if flipped_now and cache_writer is not None and case is not None:
             cache_writer.record(Kind.METHOD_NOT_ALLOWED, operation_label, request_from_case(case))
 

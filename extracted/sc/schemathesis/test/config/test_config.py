@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+import schemathesis
 from schemathesis.config import (
     ConfigError,
     OperationConfig,
@@ -9,10 +10,12 @@ from schemathesis.config import (
     ProjectConfig,
     SchemathesisConfig,
     SchemathesisWarning,
+    get_workers_count,
 )
+from schemathesis.config._auth import WFCAuthConfig
 from schemathesis.config._phases import DEFAULT_UNEXPECTED_METHODS
 from schemathesis.config._validator import CONFIG_SCHEMA
-from schemathesis.core.errors import HookError
+from schemathesis.errors import HookError
 from schemathesis.filters import FilterSet
 
 CONFIGS_DIR = Path(__file__).parent / "configs"
@@ -73,6 +76,32 @@ def test_escaped_placeholder_is_resolved_once(monkeypatch):
     monkeypatch.delenv("TEST_STRING_1", raising=False)
     config = SchemathesisConfig.from_str("[auth.wfc]\npath = '$${TEST_STRING_1}.yaml'")
     assert repr(config.projects.default.auth.wfc) == "WFCAuthConfig(path='${TEST_STRING_1}.yaml')"
+
+
+def test_wfc_path_override_preserves_configured_values():
+    config = SchemathesisConfig.from_dict(
+        {
+            "auth": {
+                "wfc": {
+                    "path": "configured.json",
+                    "user": "alice",
+                    "refresh_interval": 60,
+                    "peers": ["alice", "bob"],
+                }
+            }
+        }
+    )
+
+    config.projects.override.update(wfc_auth="override.json")
+
+    assert config.projects.get_default().auth.wfc == WFCAuthConfig(
+        path="override.json", user="alice", refresh_interval=60, peers=["alice", "bob"]
+    )
+
+
+def test_config_repr_omits_parameters_set_to_none():
+    config = SchemathesisConfig.from_dict({"parameters": {"id": None, "b": 1}})
+    assert repr(config.projects.default) == "ProjectConfig(parameters={'b': 1})"
 
 
 def test_warnings_for_without_operations():
@@ -261,3 +290,179 @@ def test_unknown_warning_name_is_reported_with_a_suggestion(source, section, des
         f"  - {description} -> 'mising_auth' is not a valid value. Did you mean 'missing_auth'?\n\n"
         f"Valid values are: {', '.join(repr(name) for name in sorted(WARNING_NAMES))}."
     )
+
+
+@pytest.mark.parametrize(
+    ("method", "suggestion"),
+    [("FETCH", " Did you mean 'PATCH'?"), ("zzzzzzzz", "")],
+    ids=["close-match", "no-match"],
+)
+def test_unexpected_method_error_suggests_only_a_close_match(method, suggestion):
+    with pytest.raises(ConfigError) as exc:
+        SchemathesisConfig.from_str(f'[phases.coverage]\nunexpected-methods = ["{method}"]')
+
+    assert str(exc.value) == (
+        "Error in [phases.coverage] section:\n  Invalid value:\n\n"
+        f"  - Item #0 in the 'unexpected-methods' array -> '{method}' is not a valid value.{suggestion}\n\n"
+        "Valid values are: 'DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT', 'QUERY', 'TRACE'."
+    )
+
+
+def test_generation_mode_all_and_maximize_list():
+    generation = SchemathesisConfig.from_str(
+        '[generation]\nmode = "all"\nmaximize = ["response_time"]\n'
+    ).projects.default.generation
+
+    assert (generation.modes, [metric.__name__ for metric in generation.maximize]) == (
+        list(schemathesis.GenerationMode),
+        ["response_time"],
+    )
+
+
+def test_coverage_generation_rejects_max_examples():
+    with pytest.raises(ConfigError) as exc:
+        SchemathesisConfig.from_str("[phases.coverage.generation]\nmax-examples = 5\n")
+
+    assert str(exc.value) == (
+        "`max-examples` has no effect in the coverage phase: it generates every case the schema defines."
+    )
+
+
+def test_max_examples_loads_for_bounded_generation():
+    assert (
+        SchemathesisConfig.from_str("[generation]\nmax-examples = 5\n").projects.default.generation.max_examples,
+        SchemathesisConfig.from_str(
+            "[phases.fuzzing.generation]\nmax-examples = 5\n"
+        ).projects.default.phases.fuzzing.generation.max_examples,
+    ) == (5, 5)
+
+
+def test_warnings_disabled_in_table_form_hide_and_never_fail():
+    warnings = SchemathesisConfig.from_str("[warnings]\nenabled = false\nfail-on = true\n").projects.default.warnings
+
+    assert (warnings.display, warnings.fail_on) == ([], [])
+
+
+def test_workers_auto_uses_available_cpus():
+    config = SchemathesisConfig.from_str('workers = "auto"')
+    override = config.projects.override
+    override.update(workers="auto")
+
+    assert (config.projects.default.workers, override.workers) == (get_workers_count(), get_workers_count())
+
+
+@pytest.mark.parametrize("workers", [0, -1])
+def test_workers_below_one(workers):
+    with pytest.raises(ConfigError) as exc:
+        SchemathesisConfig.from_str(f"workers = {workers}")
+    assert str(exc.value) == (
+        f"Invalid value for 'workers': {workers}\n\n"
+        "Expected either:\n"
+        "  - A positive integer (e.g., workers = 4)\n"
+        '  - The string "auto" for automatic detection (workers = "auto")'
+    )
+
+
+def test_project_workers_below_one():
+    with pytest.raises(ConfigError) as exc:
+        SchemathesisConfig.from_str('[[project]]\ntitle = "a"\nworkers = 0')
+    assert str(exc.value) == (
+        "Error in [project.0] section:\n  Value out of range:\n\n  - 'workers' -> Must be at least 1, but got 0."
+    )
+
+
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        (
+            '[[project]]\ntitle = "a"\nworkers = "many"\n',
+            "Error in [project.0] section:\n  Type error:\n\n"
+            "  - 'workers' -> Must be an integer or 'auto', but got string: 'many'",
+        ),
+        (
+            'generation.maximize = "foo"\n',
+            "Error in [generation] section:\n  Type error:\n\n"
+            "  - 'maximize' -> Must be 'response_time' or an array, but got string: 'foo'",
+        ),
+    ],
+    ids=["project-workers-const", "maximize-enum"],
+)
+def test_any_of_with_literal_alternative_lists_allowed_values(source, expected):
+    with pytest.raises(ConfigError) as exc:
+        SchemathesisConfig.from_str(source)
+    assert str(exc.value) == expected
+
+
+def test_standalone_project_config_reads_discovered_config_file(tmp_path, monkeypatch):
+    (tmp_path / "schemathesis.toml").write_text("seed = 42\n")
+    monkeypatch.chdir(tmp_path)
+
+    assert ProjectConfig().seed == 42
+
+
+def test_run_limits_set_on_project_apply_to_whole_config():
+    config = SchemathesisConfig()
+    project = config.projects.default
+
+    project.max_failures = 3
+    project.max_time = 60
+    project.seed = 7
+
+    assert (config.max_failures, config.max_time, config.seed) == (3, 60, 7)
+
+
+def test_custom_check_disabled_in_config():
+    checks = SchemathesisConfig.from_str("[checks.custom_check]\nenabled = false\n").projects.default.checks
+
+    assert repr(checks.get_by_name(name="custom_check")) == "SimpleCheckConfig(enabled=False)"
+
+
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        ("[checks]\nenabled = false\n", False),
+        ("[checks]\nenabled = false\n[checks.custom_check]\nthreshold = 1\n", False),
+        ("[checks]\nenabled = false\n[checks.custom_check]\nenabled = true\n", True),
+        ("[checks]\nenabled = false\n[phases.fuzzing.generation]\nmax-examples = 5\n", False),
+    ],
+    ids=["unconfigured", "kwargs-only", "re-enabled", "phase-merged"],
+)
+def test_global_checks_enabled_applies_to_custom_checks(source, expected):
+    project = SchemathesisConfig.from_str(source).projects.default
+
+    assert project.checks_config_for(phase="fuzzing").get_by_name(name="custom_check").enabled is expected
+
+
+@pytest.mark.parametrize(
+    ("override", "project", "expected"),
+    [
+        ({"excluded_check_names": ["not_a_server_error"]}, {"included_check_names": ["not_a_server_error"]}, False),
+        ({"included_check_names": ["not_a_server_error"]}, {"excluded_check_names": ["not_a_server_error"]}, True),
+    ],
+    ids=["override-excludes", "override-includes"],
+)
+def test_override_check_selection_beats_project_selection(override, project, expected):
+    config = SchemathesisConfig()
+    config.projects.override.checks.update(**override)
+    config.projects.default.checks.update(**project)
+
+    assert config.projects.get_default().checks.not_a_server_error.enabled is expected
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        ("Bearer ${API_TOKEN}", "Missing environment variable: `API_TOKEN`"),
+        (
+            "${API_USER}:${API_TOKEN}@${API_USER}",
+            "Missing environment variables: `API_USER`, `API_TOKEN`",
+        ),
+    ],
+    ids=["single", "several"],
+)
+def test_missing_env_var_error_names_the_variable(monkeypatch, value, expected):
+    monkeypatch.delenv("API_TOKEN", raising=False)
+    monkeypatch.delenv("API_USER", raising=False)
+    with pytest.raises(ConfigError) as exc:
+        SchemathesisConfig.from_dict({"headers": {"Authorization": value}})
+    assert str(exc.value) == expected

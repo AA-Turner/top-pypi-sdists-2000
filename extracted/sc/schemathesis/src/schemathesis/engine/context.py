@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any
 
 from schemathesis.auths import ReauthState
 from schemathesis.checks import RunChecks
-from schemathesis.config import ProjectConfig
+from schemathesis.config import CoveragePhaseConfig, ExamplesPhaseConfig, FuzzingPhaseConfig, ProjectConfig
 from schemathesis.core import NOT_SET, NotSet
 from schemathesis.core.error_feedback import ErrorFeedbackStore
 from schemathesis.core.error_feedback.collector import record_observations
@@ -18,15 +18,20 @@ from schemathesis.engine.health import HealthState
 from schemathesis.engine.link_calibration import LinkCalibrationState
 from schemathesis.engine.observations import Observations
 from schemathesis.engine.outage import ServerMonitor
+from schemathesis.engine.run import PhaseName
 from schemathesis.engine.run.cache import Cache
 from schemathesis.engine.supervisor import Supervisor
+from schemathesis.generation import derive_operation_seed
 from schemathesis.generation.case import Case
 from schemathesis.generation.coverage import GenerationSession
+from schemathesis.generation.feedback import AuthHeaderLog, FeedbackSources
 from schemathesis.python._constants.orchestrator import build_constants_pool
 from schemathesis.python._constants.pool import ConstantsPool
 from schemathesis.schemas import APIOperation
 
 if TYPE_CHECKING:
+    from types import TracebackType
+
     import requests
 
     from schemathesis.core.error_feedback.store import Observation
@@ -65,7 +70,7 @@ class EngineContext:
 
     schema: ApiSchema
     control: ExecutionControl
-    outcome_cache: dict[int, BaseException | None]
+    outcome_cache: dict[int, tuple[BaseException, TracebackType | None] | None]
     start_time: float
     observations: Observations | None
     link_calibration: LinkCalibrationState | None
@@ -98,7 +103,8 @@ class EngineContext:
         "_constants_extraction",
         "_constants_extraction_lock",
         "coverage_session",
-        "coverage_unexpected_methods_seen",
+        "auth_enforced_operations",
+        "auth_header_log",
         "reauth",
     )
 
@@ -120,7 +126,7 @@ class EngineContext:
         )
         self.outcome_cache = {}
         self.health = HealthState()
-        self.server = ServerMonitor()
+        self.server = ServerMonitor(health=self.health)
         self.link_calibration = LinkCalibrationState() if schema.config.phases.stateful.link_calibration else None
         self.observations = observations
         self._thread_local = threading.local()
@@ -144,7 +150,9 @@ class EngineContext:
         self.reauth = ReauthState(retry_on_statuses=schema.reauth_retry_statuses)
         # Coverage generation state lives and dies with the run.
         self.coverage_session = GenerationSession()
-        self.coverage_unexpected_methods_seen: set[tuple[str, str]] = set()
+        # Operations whose missing and invalid credentials were already rejected in this run.
+        self.auth_enforced_operations: set[str] = set()
+        self.auth_header_log = AuthHeaderLog()
 
     def _repr_pretty_(self, *args: Any, **kwargs: Any) -> None: ...
 
@@ -213,6 +221,31 @@ class EngineContext:
         """Discover spec-specific stateful transitions; return the counts available."""
         return self.schema.apply_stateful_inference(self.observations)
 
+    def feedback_for(self, *, operation: APIOperation, phase: PhaseName) -> FeedbackSources:
+        """Runtime signals that steer generation for one operation in one phase."""
+        return FeedbackSources(
+            extra_data_source=self._extra_data_source_for(operation=operation, phase=phase),
+            error_feedback=self.error_feedback,
+            constants_value_source=self.constants_value_source(),
+            auth_header_log=self.auth_header_log,
+            auth_headers=self.auth_header_log.get(operation.label),
+        )
+
+    def _extra_data_source_for(self, *, operation: APIOperation, phase: PhaseName) -> ExtraDataSource | None:
+        # Extra data sources augment generation only when enabled for this phase.
+        phase_config = self.config.phases_for(operation=operation).get_by_name(name=phase.value)
+        if isinstance(phase_config, (FuzzingPhaseConfig, ExamplesPhaseConfig, CoveragePhaseConfig)) and (
+            phase_config.extra_data_sources.is_enabled and self.extra_data_source is not None
+        ):
+            return self.extra_data_source
+        return None
+
+    def constants_value_source(self) -> ConstantsPool | None:
+        # The pool is read-only during draws and values are picked via `st.randoms()`, so strategies stay reproducible.
+        if self.constants_extraction.is_empty():
+            return None
+        return self.constants_extraction
+
     def extract_constants(self) -> ConstantsPool:
         """Force one-time constant extraction so later strategy builds hit a ready pool."""
         return self.constants_extraction
@@ -221,17 +254,22 @@ class EngineContext:
         self.control.stop()
 
     def detect_server_outage(self, exc: requests.ConnectionError) -> bool:
-        """Stop the run when a refused connection means the server went away."""
+        """Stop the run when a refused or reset connection means the server went away."""
         if not self.server.is_down(exc):
             return False
         self.control.is_server_unavailable = True
         return True
 
-    def cache_outcome(self, case: Case, outcome: BaseException | None) -> None:
-        self.outcome_cache[hash(case)] = outcome
+    def cache_outcome(self, key: int, outcome: BaseException | None) -> None:
+        # Keep the first traceback so every replay reports it once instead of stacking frames on it.
+        self.outcome_cache[key] = None if outcome is None else (outcome, outcome.__traceback__)
 
-    def get_cached_outcome(self, case: Case) -> BaseException | None | NotSet:
-        return self.outcome_cache.get(hash(case), NOT_SET)
+    def get_cached_outcome(self, key: int) -> BaseException | None | NotSet:
+        cached = self.outcome_cache.get(key, NOT_SET)
+        if isinstance(cached, tuple):
+            outcome, traceback = cached
+            return outcome.with_traceback(traceback)
+        return cached
 
     def get_session(self, *, operation: APIOperation | None = None) -> requests.Session:
         session = getattr(self._thread_local, "session", None)
@@ -246,6 +284,10 @@ class EngineContext:
         """Run seed shifted by the cycle, so a repeat covers ground the last one did not."""
         seed = self.config.seed
         return None if seed is None else seed + self.cycle_index
+
+    def operation_seed(self, operation: APIOperation) -> int | None:
+        """Cycle seed mixed with the operation label, so operations with identical parameters draw different inputs."""
+        return derive_operation_seed(self.cycle_seed, operation.label)
 
     def next_stateful_seed(self) -> int | None:
         """Seed for the next stateful suite; every suite in the run gets its own, cycles included."""
@@ -271,6 +313,10 @@ class EngineContext:
             return
         self._thread_local.slice_deadline = budget.take(deadline - self._reserved_time)
 
+    def release_operation_slice(self) -> None:
+        """Let this worker finish the operation it holds without the deadline of its share."""
+        self._thread_local.slice_deadline = None
+
     @property
     def is_operation_slice_expired(self) -> bool:
         deadline = getattr(self._thread_local, "slice_deadline", None)
@@ -281,16 +327,19 @@ class EngineContext:
         cached = self._transport_kwargs_cache.get(key)
         if cached is None:
             config = self.config
+            settings = config.request_settings_for(operation=operation)
             cached = {
                 "headers": config.headers_for(operation=operation),
                 "max_redirects": config.max_redirects_for(operation=operation),
-                "timeout": config.request_timeout_for(operation=operation),
-                "verify": config.tls_verify_for(operation=operation),
-                "cert": config.request_cert_for(operation=operation),
+                "verify": settings.verify,
+                "cert": settings.cert,
             }
-            proxy = config.proxy_for(operation=operation)
-            if proxy is not None:
-                cached["proxies"] = {"all": proxy}
+            # An explicit `None` would override the transport's default timeout and let a request hang forever.
+            if settings.timeout is not None:
+                cached["timeout"] = settings.timeout
+            proxies = settings.proxies
+            if proxies is not None:
+                cached["proxies"] = proxies
             self._transport_kwargs_cache[key] = cached
         kwargs = cached.copy()
         # Apply the health timeout override only when it strictly tightens the configured timeout.
@@ -331,17 +380,16 @@ def make_session(config: ProjectConfig, *, operation: APIOperation | None = None
 
     session = ManagedCookiesSession()
     session.headers = {}
-    session.verify = config.tls_verify_for(operation=operation)
+    settings = config.request_settings_for(operation=operation)
+    session.verify = settings.verify
     auth = config.auth_for(operation=operation)
     if auth is not None:
         session.auth = auth
     headers = config.headers_for(operation=operation)
     if headers:
         session.headers.update(headers)
-    request_cert = config.request_cert_for(operation=operation)
-    if request_cert is not None:
-        session.cert = request_cert
-    proxy = config.proxy_for(operation=operation)
-    if proxy is not None:
-        session.proxies["all"] = proxy
+    if settings.cert is not None:
+        session.cert = settings.cert
+    if settings.proxy is not None:
+        session.proxies["all"] = settings.proxy
     return session

@@ -7,6 +7,8 @@ from functools import lru_cache
 from schemathesis.specs.openapi.expressions import extractors, lexer, nodes
 from schemathesis.specs.openapi.expressions.errors import RuntimeExpressionError, UnknownToken
 
+REGEX_MARKER = "#regex:"
+
 
 @lru_cache
 def parse(expr: str) -> list[nodes.Node]:
@@ -64,6 +66,8 @@ def _parse_request(tokens: lexer.TokenGenerator, expr: str) -> nodes.BodyRequest
                 return nodes.BodyRequest(token.value)
         except StopIteration:
             return nodes.BodyRequest()
+        if token.is_dot:
+            raise _dotted_body_error(tokens, expr, "$request")
     raise RuntimeExpressionError(f"Invalid expression: {expr}")
 
 
@@ -79,10 +83,27 @@ def _parse_response(tokens: lexer.TokenGenerator, expr: str) -> nodes.HeaderResp
         try:
             token = next(tokens)
             if token.is_pointer:
+                pointer, marker, pattern = token.value.partition(REGEX_MARKER)
+                if marker:
+                    return nodes.BodyResponse(pointer, extractor=compile_extractor(pattern))
                 return nodes.BodyResponse(token.value)
         except StopIteration:
             return nodes.BodyResponse()
+        if token.is_dot:
+            raise _dotted_body_error(tokens, expr, "$response")
     raise RuntimeExpressionError(f"Invalid expression: {expr}")
+
+
+def _dotted_body_error(tokens: lexer.TokenGenerator, expr: str, name: str) -> RuntimeExpressionError:
+    parts = []
+    for token in tokens:
+        if not (token.is_string or token.is_dot):
+            break
+        parts.append(token.value)
+    if not parts:
+        return RuntimeExpressionError(f"Invalid expression: {expr}")
+    pointer = "".join(parts).replace(".", "/")
+    return RuntimeExpressionError(f"Invalid expression `{expr}`. Did you mean `{name}.body#/{pointer}`?")
 
 
 def take_token(tokens: lexer.TokenGenerator, expr: str) -> lexer.Token:
@@ -112,9 +133,12 @@ def take_extractor(tokens: lexer.TokenGenerator, expr: str, current_end: int) ->
     if not rest or rest.startswith("}"):
         return None
     extractor = next(tokens)
-    if not extractor.value.startswith("#regex:"):
+    if not extractor.value.startswith(REGEX_MARKER):
         raise RuntimeExpressionError(f"Invalid extractor: {expr}")
-    pattern = extractor.value[len("#regex:") :]
+    return compile_extractor(extractor.value[len(REGEX_MARKER) :])
+
+
+def compile_extractor(pattern: str) -> extractors.RegexExtractor:
     try:
         compiled = re.compile(pattern)
     except re.error as exc:

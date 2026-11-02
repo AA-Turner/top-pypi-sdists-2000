@@ -5,21 +5,14 @@ from flask import jsonify, request
 
 from schemathesis.core.parameters import ParameterLocation
 from schemathesis.generation import GenerationMode
-from schemathesis.resources import PoolDraw, PoolPick
-from test.coverage.helpers import body_operation, iter_cases, make_request_body
+from schemathesis.resources import PoolDraw
+from schemathesis.specs.openapi.coverage._schema import OVERSIZED_STRING_LENGTH
+from test.apps.fragments.handlers import null_name_lookup
+from test.apps.fragments.schemas import null_name_responses
+from test.coverage.helpers import iter_cases, make_request_body
+from test.utils import objects_at
 
-# Consumer responses declare `name` as required; the planted-bug handlers return it as null for known ids.
-PLANTED_BUG_RESPONSES = {
-    "200": {
-        "description": "OK",
-        "content": {
-            "application/json": {
-                "schema": {"type": "object", "required": ["name"], "properties": {"name": {"type": "string"}}}
-            }
-        },
-    },
-    "404": {"description": "Not found"},
-}
+OVERSIZED = "a" * OVERSIZED_STRING_LENGTH
 
 
 def _path_parameter(name, schema=None):
@@ -68,13 +61,6 @@ def _json_string_field(name):
     return value if isinstance(value, str) else None
 
 
-def _planted_bug_lookup(registry, key):
-    if key not in registry:
-        return "", 404
-    # Planted bug: required `name` is null for entries that exist
-    return jsonify({"name": None}), 200
-
-
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_coverage_consumes_path_keyed_pool(cli, snapshot_cli, ctx):
     paths = {
@@ -87,7 +73,7 @@ def test_coverage_consumes_path_keyed_pool(cli, snapshot_cli, ctx):
             "get": {
                 "operationId": "getWidget",
                 "parameters": [_path_parameter("widgetId", {"type": "string", "format": "uuid"})],
-                "responses": PLANTED_BUG_RESPONSES,
+                "responses": null_name_responses(),
             },
         }
     }
@@ -102,7 +88,7 @@ def test_coverage_consumes_path_keyed_pool(cli, snapshot_cli, ctx):
 
     @app.route("/widgets/<widget_id>", methods=["GET"])
     def get_widget(widget_id):
-        return _planted_bug_lookup(widgets, widget_id)
+        return null_name_lookup(widgets, widget_id)
 
     assert cli.run_openapi_app(app, "--phases=coverage", "-c response_schema_conformance") == snapshot_cli
 
@@ -201,7 +187,7 @@ def test_coverage_consumes_body_field_keyed_pool(cli, snapshot_cli, ctx):
                         },
                     }
                 ),
-                "responses": PLANTED_BUG_RESPONSES,
+                "responses": null_name_responses(),
             }
         },
     }
@@ -219,7 +205,54 @@ def test_coverage_consumes_body_field_keyed_pool(cli, snapshot_cli, ctx):
 
     @app.route("/sessions/<session_id>/events", methods=["POST"])
     def create_event(session_id):
-        return _planted_bug_lookup(sessions, session_id)
+        return null_name_lookup(sessions, session_id)
+
+    assert cli.run_openapi_app(app, "--phases=coverage", "-c response_schema_conformance") == snapshot_cli
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_coverage_consumes_pool_for_ref_body_property(cli, snapshot_cli, ctx):
+    paths = {
+        "/sessions": {
+            "post": {
+                "operationId": "createSession",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Session"}}},
+                    }
+                },
+            }
+        },
+        "/events": {
+            "post": {
+                "operationId": "createEvent",
+                "requestBody": _id_body("sessionId", {"$ref": "#/components/schemas/SessionId"}),
+                "responses": null_name_responses(),
+            }
+        },
+    }
+    app, _ = ctx.openapi.make_flask_app(
+        paths,
+        components={
+            "schemas": {
+                "SessionId": {"type": "string"},
+                "Session": {"type": "object", "properties": {"id": {"type": "string"}}, "required": ["id"]},
+            }
+        },
+    )
+
+    sessions: set[str] = set()
+
+    @app.route("/sessions", methods=["POST"])
+    def create_session():
+        session_id = f"session-{len(sessions)}"
+        sessions.add(session_id)
+        return jsonify({"id": session_id}), 201
+
+    @app.route("/events", methods=["POST"])
+    def create_event():
+        return null_name_lookup(sessions, _json_string_field("sessionId"))
 
     assert cli.run_openapi_app(app, "--phases=coverage", "-c response_schema_conformance") == snapshot_cli
 
@@ -249,7 +282,7 @@ def test_coverage_correlates_nested_resource_pool_picks(cli, snapshot_cli, ctx):
             "get": {
                 "operationId": "getReview",
                 "parameters": [_path_parameter("productId"), _path_parameter("reviewId")],
-                "responses": PLANTED_BUG_RESPONSES,
+                "responses": null_name_responses(),
             }
         },
     }
@@ -278,7 +311,7 @@ def test_coverage_correlates_nested_resource_pool_picks(cli, snapshot_cli, ctx):
 
     @app.route("/products/<product_id>/reviews/<review_id>", methods=["GET"])
     def get_review(product_id, review_id):
-        return _planted_bug_lookup(reviews, (product_id, review_id))
+        return null_name_lookup(reviews, (product_id, review_id))
 
     assert cli.run_openapi_app(app, "--phases=coverage", "-c response_schema_conformance") == snapshot_cli
 
@@ -422,69 +455,308 @@ def test_coverage_pool_overlay_respects_destination_format(cli, snapshot_cli, ct
     assert cli.run_openapi_app(app, "--phases=coverage", "-c positive_data_acceptance") == snapshot_cli
 
 
+def _id_producer(path, resource, id_schema):
+    # `POST <path>` returns an `id`, which the pool offers to `<resource>_id` slots elsewhere.
+    return {
+        path: {
+            "post": {
+                "operationId": f"create{resource}",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {"type": "object", "properties": {"id": id_schema}, "required": ["id"]}
+                            }
+                        },
+                    }
+                },
+            }
+        }
+    }
+
+
+def _body_consumer(body_schema):
+    return {
+        "/foo": {"post": {"requestBody": make_request_body(body_schema), "responses": {"200": {"description": "OK"}}}}
+    }
+
+
 def test_coverage_pool_overlays_reach_top_level_and_nested_body_slots(ctx):
     # A pooled value the property schema rejects must not displace generated ones.
-    operation = body_operation(
-        ctx,
+    schema = ctx.openapi.load_schema(
         {
-            "type": "object",
-            "properties": {
-                "name": {"type": "string"},
-                "count": {"type": "integer"},
-                "shipping": {
+            **_id_producer("/users", "User", {"type": "string"}),
+            **_id_producer("/orders", "Order", {"type": "string"}),
+            **_id_producer("/locations", "Location", {"type": "string"}),
+            **_id_producer("/priorities", "Priority", {"type": "string"}),
+            **_body_consumer(
+                {
                     "type": "object",
-                    "properties": {"location_id": {"type": "string"}, "priority": {"type": "integer"}},
-                },
-            },
-            "required": ["name", "shipping"],
-        },
-    )
-
-    class _FakeDataSource:
-        def pick_correlated_values(self, *, operation):
-            return PoolPick(
-                values={
-                    (ParameterLocation.BODY, "name"): "pooled-name",
-                    (ParameterLocation.BODY, "count"): "not-an-integer",
-                    (ParameterLocation.BODY, "shipping/location_id"): "loc-7",
-                    (ParameterLocation.BODY, "shipping/priority"): "not-an-integer",
+                    "properties": {
+                        "user_id": {"type": "string"},
+                        "order_id": {"type": "integer"},
+                        "shipping": {
+                            "type": "object",
+                            "properties": {"location_id": {"type": "string"}, "priority_id": {"type": "integer"}},
+                        },
+                    },
+                    "required": ["user_id", "shipping"],
                 }
-            )
+            ),
+        }
+    )
+    data_source = schema.create_extra_data_source()
+    for operation, value in (
+        ("POST /users", "pooled-user"),
+        ("POST /orders", "not-an-integer"),
+        ("POST /locations", "loc-7"),
+        ("POST /priorities", "not-an-integer"),
+    ):
+        data_source.repository.record_response(operation=operation, status_code=201, payload={"id": value})
 
-    cases = iter_cases(operation, GenerationMode.POSITIVE, extra_data_source=_FakeDataSource())
+    cases = iter_cases(schema["/foo"]["POST"], GenerationMode.POSITIVE, extra_data_source=data_source)
     bodies = [case.body for case in cases if isinstance(case.body, dict)]
-    assert any(body.get("name") == "pooled-name" for body in bodies), bodies
+    assert any(body.get("user_id") == "pooled-user" for body in bodies), bodies
     assert any(
         isinstance(body.get("shipping"), dict) and body["shipping"].get("location_id") == "loc-7" for body in bodies
     ), bodies
-    assert all(body.get("count") != "not-an-integer" for body in bodies), bodies
+    assert all(body.get("order_id") != "not-an-integer" for body in bodies), bodies
     assert all(
-        not isinstance(body.get("shipping"), dict) or body["shipping"].get("priority") != "not-an-integer"
+        not isinstance(body.get("shipping"), dict) or body["shipping"].get("priority_id") != "not-an-integer"
         for body in bodies
     ), bodies
 
 
 def test_coverage_pool_overlay_dict_value_with_undeclared_keys(ctx):
-    # Pool object value for "address" contains "country", absent from the property schema.
-    operation = body_operation(
-        ctx,
+    # Pool object value for "address_id" contains "country", absent from the property schema.
+    address = {"type": "object", "properties": {"city": {"type": "string"}}}
+    schema = ctx.openapi.load_schema(
         {
-            "type": "object",
-            "properties": {"address": {"type": "object", "properties": {"city": {"type": "string"}}}},
-        },
+            **_id_producer("/addresses", "Address", address),
+            **_body_consumer({"type": "object", "properties": {"address_id": address}}),
+        }
+    )
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(
+        operation="POST /addresses", status_code=201, payload={"id": {"city": "London", "country": "UK"}}
     )
 
-    class _FakeDataSource:
-        def pick_correlated_values(self, *, operation):
-            return PoolPick(values={(ParameterLocation.BODY, "address"): {"city": "London", "country": "UK"}})
-
-    cases = iter_cases(operation, GenerationMode.POSITIVE, extra_data_source=_FakeDataSource())
+    cases = iter_cases(schema["/foo"]["POST"], GenerationMode.POSITIVE, extra_data_source=data_source)
     assert [case.body for case in cases] == [
-        {"address": {"city": "London", "country": "UK"}},
+        {"address_id": {"city": "London", "country": "UK"}},
         {},
-        {"address": {"city": "London"}},
-        {"address": {}},
+        {"address_id": {"city": "London"}},
+        {"address_id": {}},
+        {"address_id": {"city": OVERSIZED, "country": "UK"}},
     ]
+
+
+_SHIPPING = {
+    "type": "object",
+    "properties": {"location_id": {"type": "integer"}, "note": {"type": "string"}},
+    "required": ["note"],
+}
+_SHIPPING_REF = {"$ref": "#/components/schemas/Shipping"}
+
+
+@pytest.mark.parametrize(
+    ("shipping", "path", "body"),
+    [
+        (_SHIPPING_REF, ("shipping",), {"$ref": "#/components/schemas/Department"}),
+        (_SHIPPING_REF, ("shipping",), None),
+        ({"type": "array", "minItems": 1, "items": _SHIPPING}, ("shipping", "*"), None),
+        ({"type": "array", "minItems": 1, "items": _SHIPPING_REF}, ("shipping", "*"), None),
+        ({"$ref": "#/components/schemas/Shipments"}, ("shipping", "*"), None),
+        (
+            {
+                "type": "object",
+                "required": ["parts"],
+                "properties": {"parts": {"type": "array", "minItems": 1, "items": _SHIPPING_REF}},
+            },
+            ("shipping", "parts", "*"),
+            None,
+        ),
+    ],
+    ids=["ref-body", "ref-object", "array", "array-of-refs", "ref-to-array", "array-in-object"],
+)
+def test_coverage_pool_overlay_reaches_nested_body_fields(ctx, shipping, path, body):
+    department = {
+        "type": "object",
+        "properties": {"name": {"type": "string"}, "shipping": shipping},
+        "required": ["shipping"],
+    }
+    schema = ctx.openapi.load_schema(
+        {**_id_producer("/locations", "Location", {"type": "integer"}), **_body_consumer(body or department)},
+        components={
+            "schemas": {
+                "Department": department,
+                "Shipping": _SHIPPING,
+                "Shipments": {"type": "array", "minItems": 1, "items": _SHIPPING_REF},
+            }
+        },
+    )
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /locations", status_code=201, payload={"id": 7340001})
+
+    cases = iter_cases(schema["/foo"]["POST"], GenerationMode.POSITIVE, extra_data_source=data_source)
+    hits = []
+    for case in cases:
+        objects = objects_at(case.body, path)
+        landed = [item.get("location_id") == 7340001 for item in objects]
+        assert all(landed) or not any(landed), f"Pool value reached only some array items: {objects!r}"
+        if objects and all(landed):
+            hits.append(case)
+            assert all("note" in item for item in objects), f"Overlay dropped the generated `note`: {objects!r}"
+            assert [draw.resource_name for draw in case.meta.pool_draws] == ["Location"]
+    assert hits, [case.body for case in cases]
+
+
+@pytest.mark.parametrize("name", ["²", "2024"], ids=["non-ascii-digit", "ascii-digits"])
+def test_coverage_pool_overlay_reaches_field_under_digit_named_property(ctx, name):
+    schema = ctx.openapi.load_schema(
+        {
+            **_id_producer("/locations", "Location", {"type": "integer"}),
+            **_body_consumer(
+                {
+                    "type": "object",
+                    "required": [name],
+                    "properties": {
+                        name: {
+                            "type": "object",
+                            "required": ["location_id"],
+                            "properties": {"location_id": {"type": "integer"}},
+                        }
+                    },
+                }
+            ),
+        }
+    )
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /locations", status_code=201, payload={"id": 7340001})
+
+    cases = iter_cases(schema["/foo"]["POST"], GenerationMode.POSITIVE, extra_data_source=data_source)
+    assert [case.body for case in cases] == [{name: {"location_id": 7340001}}, {name: {"location_id": 2**63}}]
+
+
+def test_coverage_pool_overlay_prefers_captured_object_over_its_captured_fields(ctx):
+    address = {"type": "object", "properties": {"location_id": {"type": "integer"}}}
+    schema = ctx.openapi.load_schema(
+        {
+            **_id_producer("/locations", "Location", {"type": "integer"}),
+            **_id_producer("/addresses", "Address", address),
+            **_body_consumer({"type": "object", "properties": {"address_id": address, "billing": address}}),
+        }
+    )
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /locations", status_code=201, payload={"id": 7340001})
+    data_source.repository.record_response(
+        operation="POST /addresses", status_code=201, payload={"id": {"location_id": 5550001}}
+    )
+
+    cases = iter_cases(schema["/foo"]["POST"], GenerationMode.POSITIVE, extra_data_source=data_source)
+    billing = {"location_id": 7340001}
+    assert [case.body for case in cases] == [
+        {"address_id": {"location_id": 5550001}, "billing": billing},
+        {"address_id": {"location_id": 5550001}},
+        {"billing": billing},
+        {},
+        {"address_id": {}, "billing": billing},
+        {"address_id": {"location_id": 2**63}, "billing": billing},
+        {"address_id": {"location_id": 5550001}, "billing": {}},
+        {"address_id": {"location_id": 5550001}, "billing": {"location_id": 2**63}},
+    ]
+
+
+@pytest.mark.parametrize(
+    ("version", "body", "expected"),
+    [
+        (
+            "3.1.0",
+            {
+                "type": "object",
+                "properties": {"shipping": {"$ref": "#/components/schemas/Shipping", "type": "object"}},
+            },
+            [{"shipping": {"location_id": 0}}, {}, {"shipping": {}}, {"shipping": {"location_id": 2**63}}],
+        ),
+        (
+            "3.0.2",
+            {
+                "type": "object",
+                "properties": {
+                    "shipping": {"type": "object", "properties": {"location_id": {"type": "integer", "example": 42}}}
+                },
+            },
+            [{"shipping": {"location_id": 42}}, {}, {"shipping": {}}, {"shipping": {"location_id": 2**63}}],
+        ),
+        (
+            "3.0.2",
+            {
+                "type": "object",
+                "properties": {
+                    "shipping": {
+                        "allOf": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "parts": {
+                                        "type": "array",
+                                        "minItems": 1,
+                                        "items": {"type": "object", "properties": {"location_id": {"type": "integer"}}},
+                                    }
+                                },
+                            }
+                        ]
+                    }
+                },
+            },
+            [
+                {"shipping": {"parts": [{"location_id": 0}]}},
+                {},
+                {"shipping": {}},
+                {"shipping": {"parts": [{}, {}]}},
+                {"shipping": {"parts": [{}]}},
+                {"shipping": {"parts": [{"location_id": 2**63}]}},
+            ],
+        ),
+    ],
+    ids=["ref-with-clashing-sibling", "nested-declared-example", "field-inside-all-of"],
+)
+def test_coverage_pool_overlay_leaves_fields_it_cannot_fill(ctx, version, body, expected):
+    schema = ctx.openapi.load_schema(
+        {**_id_producer("/locations", "Location", {"type": "integer"}), **_body_consumer(body)},
+        version=version,
+        components={"schemas": {"Shipping": {"type": "object", "properties": {"location_id": {"type": "integer"}}}}},
+    )
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /locations", status_code=201, payload={"id": 7340001})
+
+    cases = iter_cases(schema["/foo"]["POST"], GenerationMode.POSITIVE, extra_data_source=data_source)
+    assert [case.body for case in cases] == expected
+
+
+def test_coverage_pool_overlay_reaches_top_level_field_of_ref_body(ctx):
+    schema = ctx.openapi.load_schema(
+        {
+            **_id_producer("/locations", "Location", {"type": "integer"}),
+            **_body_consumer({"$ref": "#/components/schemas/Department"}),
+        },
+        components={
+            "schemas": {
+                "Department": {
+                    "type": "object",
+                    "properties": {"location_id": {"type": "integer"}, "note": {"$ref": "#/components/schemas/Note"}},
+                    "required": ["location_id"],
+                },
+                "Note": {"type": "string"},
+            }
+        },
+    )
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /locations", status_code=201, payload={"id": 7340001})
+
+    cases = iter_cases(schema["/foo"]["POST"], GenerationMode.POSITIVE, extra_data_source=data_source)
+    assert [case.body["location_id"] for case in cases] == [7340001, 7340001, 2**63, 7340001]
 
 
 def test_coverage_pool_draws_multi_slot_correlated(ctx):
@@ -529,6 +801,7 @@ def test_coverage_pool_draws_multi_slot_correlated(ctx):
         status_code=201,
         payload={"id": "post-7", "userId": "user-1"},
         context={"userId": "user-1"},
+        referenced=frozenset({"user-1"}),
     )
 
     consumer = schema["/users/{userId}/posts/{postId}"]["GET"]
@@ -543,6 +816,7 @@ def test_coverage_pool_draws_multi_slot_correlated(ctx):
             resource_field="id",
             source_operation=expected_source,
             source_status=201,
+            source_input=True,
         ),
         "postId": PoolDraw(
             location=ParameterLocation.PATH.value,
@@ -635,3 +909,323 @@ def test_coverage_pool_draws_survive_numeric_id_serialization(ctx):
             source_status=201,
         ),
     )
+
+
+def _album_schema(ctx, parameter_schema):
+    return ctx.openapi.load_schema(
+        {
+            "/albums": {
+                "post": {
+                    "operationId": "createAlbum",
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {"id": {"type": "string"}},
+                                        "required": ["id"],
+                                    }
+                                }
+                            },
+                        }
+                    },
+                }
+            },
+            "/albums/{albumId}": {
+                "get": {
+                    "operationId": "getAlbum",
+                    "parameters": [_path_parameter("albumId", parameter_schema)],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+
+
+# A declared value is often a placeholder the API does not know; the captured id is what reaches real logic.
+@pytest.mark.parametrize(
+    "declared",
+    [{"example": "album-1"}, {"default": "album-1"}, {"examples": ["album-1", "alb-42"]}],
+    ids=["example", "default", "examples"],
+)
+def test_coverage_prefers_captured_value_over_declared_value(ctx, declared):
+    schema = _album_schema(ctx, {"type": "string", **declared})
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /albums", status_code=201, payload={"id": "alb-42"})
+
+    cases = iter_cases(schema["/albums/{albumId}"]["GET"], GenerationMode.POSITIVE, extra_data_source=data_source)
+
+    assert [case.path_parameters["albumId"] for case in cases] == ["alb-42", "album-1"]
+
+
+@pytest.mark.parametrize(
+    ("captured", "expected"),
+    [("b", ["b", "a", "c"]), ("not-listed", ["a", "b", "c"])],
+    ids=["allowed", "outside-enum"],
+)
+def test_coverage_uses_captured_value_only_when_schema_allows_it(ctx, captured, expected):
+    schema = _album_schema(ctx, {"type": "string", "enum": ["a", "b", "c"]})
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /albums", status_code=201, payload={"id": captured})
+
+    cases = iter_cases(schema["/albums/{albumId}"]["GET"], GenerationMode.POSITIVE, extra_data_source=data_source)
+
+    assert [case.path_parameters["albumId"] for case in cases] == expected
+
+
+def _album_with_response_example(ctx):
+    return ctx.openapi.load_schema(
+        {
+            "/albums": {
+                "post": {
+                    "operationId": "createAlbum",
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {"id": {"type": "string"}},
+                                        "required": ["id"],
+                                    },
+                                    "example": {"id": "album-from-example"},
+                                }
+                            },
+                        }
+                    },
+                }
+            },
+            "/albums/{albumId}": {
+                "get": {
+                    "operationId": "getAlbum",
+                    "parameters": [_path_parameter("albumId")],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+
+
+# Values from the spec's response examples only stand in until the API returns real ones.
+def test_pool_prefers_live_values_over_response_examples(ctx):
+    schema = _album_with_response_example(ctx)
+    data_source = schema.create_extra_data_source()
+    consumer = schema["/albums/{albumId}"]["GET"]
+    assert data_source.pick_correlated_values(operation=consumer).values == {
+        (ParameterLocation.PATH, "albumId"): "album-from-example"
+    }
+
+    data_source.repository.record_response(operation="POST /albums", status_code=201, payload={"id": "alb-42"})
+
+    picks = [
+        data_source.pick_correlated_values(operation=consumer).values[(ParameterLocation.PATH, "albumId")]
+        for _ in range(20)
+    ]
+    assert picks.count("alb-42") > picks.count("album-from-example")
+
+
+# A plausible id the API never issued still finds bugs, so spec examples keep coming up now and then.
+def test_pool_keeps_drawing_response_examples_after_live_values(ctx):
+    schema = _album_with_response_example(ctx)
+    data_source = schema.create_extra_data_source()
+    consumer = schema["/albums/{albumId}"]["GET"]
+    data_source.repository.record_response(operation="POST /albums", status_code=201, payload={"id": "alb-42"})
+
+    picks = {
+        data_source.pick_correlated_values(operation=consumer).values[(ParameterLocation.PATH, "albumId")]
+        for _ in range(20)
+    }
+    assert picks == {"alb-42", "album-from-example"}
+
+
+def _array_response(item_schema):
+    return {
+        "200": {
+            "description": "OK",
+            "content": {"application/json": {"schema": {"type": "array", "items": item_schema}}},
+        },
+        "404": {"description": "Not found"},
+    }
+
+
+@pytest.mark.parametrize("phase", ["coverage", "fuzzing"])
+@pytest.mark.parametrize("producer_parameter", ["id", "project_id"])
+def test_pool_pairs_child_with_its_parent_across_parameter_names(cli, ctx, phase, producer_parameter):
+    # Commits are listed under `{id}` but fetched under `{project_id}`; both name the same project.
+    project = {"type": "object", "required": ["id"], "properties": {"id": {"type": "string"}}}
+    commit = {"type": "object", "required": ["sha"], "properties": {"sha": {"type": "string"}}}
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/projects": {"get": {"operationId": "listProjects", "responses": _array_response(project)}},
+            f"/projects/{{{producer_parameter}}}/commits": {
+                "get": {
+                    "operationId": "listCommits",
+                    "parameters": [_path_parameter(producer_parameter)],
+                    "responses": _array_response(commit),
+                }
+            },
+            "/projects/{project_id}/commits/{sha}": {
+                "get": {
+                    "operationId": "getCommit",
+                    "parameters": [_path_parameter("project_id"), _path_parameter("sha")],
+                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                }
+            },
+        }
+    )
+    commits = {str(project_id): [f"sha{project_id}x{index}" for index in range(3)] for project_id in range(1, 6)}
+    owners = {sha: project_id for project_id, shas in commits.items() for sha in shas}
+    pairs: list[tuple[str, str]] = []
+
+    @app.route("/projects", methods=["GET"])
+    def list_projects():
+        return jsonify([{"id": project_id} for project_id in commits])
+
+    @app.route("/projects/<project_id>/commits", methods=["GET"])
+    def list_commits(project_id):
+        if project_id not in commits:
+            return "", 404
+        return jsonify([{"sha": sha} for sha in commits[project_id]])
+
+    @app.route("/projects/<project_id>/commits/<sha>", methods=["GET"])
+    def get_commit(project_id, sha):
+        if project_id in commits and sha in owners:
+            pairs.append((project_id, sha))
+        return ("", 200) if owners.get(sha) == project_id else ("", 404)
+
+    cli.run_openapi_app(app, f"--phases={phase}", "--max-examples=10", "--seed=42", "-c not_a_server_error")
+    assert [pair for pair in pairs if owners[pair[1]] != pair[0]] == []
+    if phase == "fuzzing":
+        assert len(set(pairs)) > 1, pairs
+    else:
+        assert pairs
+
+
+def test_coverage_pool_overlay_reaches_every_item_of_whole_drawn_arrays(ctx):
+    item = {
+        "type": "object",
+        "properties": {"location_id": {"type": "integer", "minimum": 1}, "name": {"type": "string", "minLength": 1}},
+        "required": ["location_id", "name"],
+        "additionalProperties": False,
+    }
+    schema = ctx.openapi.load_schema(
+        {
+            **_id_producer("/locations", "Location", {"type": "integer"}),
+            **_body_consumer(
+                {
+                    "type": "object",
+                    "properties": {"data": {"type": "array", "minItems": 1, "items": item}},
+                    "required": ["data"],
+                    "additionalProperties": False,
+                }
+            ),
+        }
+    )
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /locations", status_code=201, payload={"id": 7340001})
+
+    cases = iter_cases(schema["/foo"]["POST"], GenerationMode.POSITIVE, extra_data_source=data_source)
+    assert [
+        (case.meta.phase.data.description, [entry["location_id"] for entry in case.body["data"]]) for case in cases
+    ] == [
+        ("Valid object", [7340001]),
+        ("Object with valid 'data' value: Near-boundary items array", [7340001, 7340001]),
+        (
+            "Object with valid 'data' value: Single-item array: Object with valid 'location_id' value: Minimum value",
+            [1],
+        ),
+        (
+            "Object with valid 'data' value: Single-item array: Object with valid 'location_id' value: "
+            "Near-boundary number",
+            [2],
+        ),
+        (
+            "Object with valid 'data' value: Single-item array: Object with valid 'location_id' value: "
+            "Number beyond common integer widths",
+            [2**63],
+        ),
+        (
+            "Object with valid 'data' value: Single-item array: Object with valid 'name' value: "
+            "Near-boundary length string",
+            [7340001],
+        ),
+        (
+            "Object with valid 'data' value: Single-item array: Object with valid 'name' value: "
+            "String longer than common implicit limits",
+            [7340001],
+        ),
+    ]
+
+
+def test_coverage_pool_falls_back_when_pinning_breaks_unique_items(ctx):
+    item = {
+        "type": "object",
+        "properties": {"location_id": {"type": "integer"}},
+        "required": ["location_id"],
+        "additionalProperties": False,
+    }
+    body = {
+        "type": "object",
+        "properties": {"data": {"type": "array", "minItems": 2, "items": item, "uniqueItems": True}},
+        "required": ["data"],
+        "additionalProperties": False,
+    }
+    schema = ctx.openapi.load_schema(
+        {**_id_producer("/locations", "Location", {"type": "integer"}), **_body_consumer(body)}
+    )
+    data_source = schema.create_extra_data_source()
+    data_source.repository.record_response(operation="POST /locations", status_code=201, payload={"id": 7340001})
+
+    cases = iter_cases(schema["/foo"]["POST"], GenerationMode.POSITIVE, extra_data_source=data_source)
+
+    assert [(case.meta.phase.data.description, case.body) for case in cases] == [
+        ("Valid object", {"data": [{"location_id": 0}, {"location_id": 1}]}),
+        (
+            "Object with valid 'data' value: Near-boundary items array",
+            {"data": [{"location_id": 0}, {"location_id": 1}, {"location_id": -1}]},
+        ),
+    ]
+
+
+def test_coverage_pool_skips_oversized_values_echoed_in_responses(cli, ctx):
+    # Servers reject a URL carrying the echoed oversized value before the handler sees it.
+    product = {"type": "object", "required": ["productId"], "properties": {"productId": {"type": "string"}}}
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/products": {
+                "post": {
+                    "operationId": "createProduct",
+                    "requestBody": _id_body("productId", {"type": "string"}),
+                    "responses": {
+                        "201": {"description": "Created", "content": {"application/json": {"schema": product}}}
+                    },
+                }
+            },
+            "/products/{productId}": {
+                "get": {
+                    "operationId": "getProduct",
+                    "parameters": [_path_parameter("productId")],
+                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                }
+            },
+        }
+    )
+    fetched: list[str] = []
+
+    @app.route("/products", methods=["POST"])
+    def create_product():
+        product_id = _json_string_field("productId")
+        if product_id is None:
+            return "", 400
+        return jsonify({"productId": product_id}), 201
+
+    @app.route("/products/<product_id>", methods=["GET"])
+    def get_product(product_id):
+        fetched.append(product_id)
+        return "", 404
+
+    cli.run_openapi_app(app, "--phases=coverage", "-c not_a_server_error")
+    assert fetched

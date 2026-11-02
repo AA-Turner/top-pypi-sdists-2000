@@ -12,7 +12,9 @@ from typing import TYPE_CHECKING
 
 from schemathesis.config import GenerationConfig
 from schemathesis.core import MAX_STRING_LENGTH
-from schemathesis.core.validation import has_leading_whitespace
+from schemathesis.core.file_samples import FILE_SAMPLES
+from schemathesis.core.parameters import ParameterLocation
+from schemathesis.core.validation import has_surrounding_whitespace
 from schemathesis.generation.jsonschema.context import Alphabet, FormatLengths
 from schemathesis.transport.serialization import Binary
 
@@ -113,9 +115,9 @@ def header_values(
         alphabet=st.characters(
             min_codepoint=0, max_codepoint=MAX_HEADER_CODEPOINT, codec=codec, exclude_characters=exclude_characters
         )
-        # `requests` refuses a value opening with whitespace. Rejecting it keeps the drawn length,
-        # where trimming it afterwards silently returned a shorter value than the one asked for.
-    ).filter(lambda value: not has_leading_whitespace(value))
+        # `requests` refuses a value opening with whitespace, and servers strip it from the end. Rejecting it keeps
+        # the drawn length, where trimming it afterwards silently returned a shorter value than the one asked for.
+    ).filter(lambda value: not has_surrounding_whitespace(value))
 
 
 HEADER_FORMAT = "_header_value"
@@ -392,6 +394,8 @@ FORMAT_LENGTHS: dict[str, tuple[int, int]] = {
     "email": (6, 36),
     "idn-email": (6, 36),
     "uuid": (36, 36),
+    # Counted in bytes, not characters.
+    "binary": (0, MAX_STRING_LENGTH),
 }
 
 
@@ -508,6 +512,18 @@ def uri_values_within(min_length: int, max_length: float) -> st.SearchStrategy[s
     return st.one_of(branches) if branches else None
 
 
+def binary_values_within(min_length: int, max_length: float) -> st.SearchStrategy[str]:
+    """Binary payloads whose byte count lands inside the window."""
+    from hypothesis import strategies as st
+
+    max_size = None if max_length == float("inf") else int(max_length)
+    samples = [sample for sample in FILE_SAMPLES.values() if min_length <= len(sample) <= max_length]
+    arbitrary = st.binary(min_size=min_length, max_size=max_size)
+    if samples:
+        return st.one_of(st.sampled_from(samples), arbitrary).map(Binary)
+    return arbitrary.map(Binary)
+
+
 # Generators that can be pointed at a narrower window instead of drawn from and filtered.
 FORMAT_NARROWERS: dict[str, Callable[[int, float], st.SearchStrategy[str] | None]] = {
     "date-time": date_time_values_within,
@@ -517,16 +533,23 @@ FORMAT_NARROWERS: dict[str, Callable[[int, float], st.SearchStrategy[str] | None
     "uri-reference": uri_values_within,
     "iri": uri_values_within,
     "iri-reference": uri_values_within,
+    "binary": binary_values_within,
 }
 
 
 def format_lengths_for(formats: dict[str, st.SearchStrategy]) -> dict[str, FormatLengths]:
     """What is known about the lengths in `formats`, skipping every name with a caller-supplied generator."""
     defaults = get_default_format_strategies()
+    return _format_lengths(frozenset(name for name in FORMAT_LENGTHS if formats.get(name) is defaults.get(name)))
+
+
+@lru_cache
+def _format_lengths(names: frozenset[str]) -> dict[str, FormatLengths]:
+    # Shared between callers, which only read it.
     return {
         name: FormatLengths(shortest, longest, FORMAT_NARROWERS.get(name))
         for name, (shortest, longest) in FORMAT_LENGTHS.items()
-        if formats.get(name) is defaults.get(name)
+        if name in names
     }
 
 
@@ -558,7 +581,8 @@ def get_default_format_strategies() -> dict[str, st.SearchStrategy]:
         "uri-template": domains.map("https://{}/{{id}}".format),
         "email": email_strategy,
         "idn-email": email_strategy,
-        "binary": st.binary().map(Binary),
+        # Real files come first, so a single draw yields one that upload handlers can parse.
+        "binary": st.one_of(st.sampled_from(list(FILE_SAMPLES.values())), st.binary()).map(Binary),
         "byte": st.binary().map(lambda x: b64encode(x).decode()),
         "duration": duration_values(),
         # `st.uuids` supplies the entropy; drawing the integer directly biases hard toward zero and
@@ -590,7 +614,7 @@ def header_alphabet(generation_config: GenerationConfig) -> Alphabet:
         codec=codec,
         max_codepoint=MAX_HEADER_CODEPOINT,
         exclude_characters="".join(sorted(set(excluded + INVALID_HEADER_CHARS))),
-        allow_leading_whitespace=False,
+        allow_surrounding_whitespace=False,
         min_name_length=1,
         name_characters="!#$%&'*+-.^_`|~" + string.digits + string.ascii_letters,
     )
@@ -611,3 +635,12 @@ def cookie_alphabet(generation_config: GenerationConfig) -> Alphabet:
         min_name_length=1,
         name_characters="!#$%&'*+-.^_`|~" + string.digits + string.ascii_letters,
     )
+
+
+def alphabet_for(location: ParameterLocation | None, generation_config: GenerationConfig) -> Alphabet:
+    """Characters a value sent in `location` may carry, under the caller's generation settings."""
+    if location == ParameterLocation.COOKIE:
+        return cookie_alphabet(generation_config)
+    if location == ParameterLocation.HEADER:
+        return header_alphabet(generation_config)
+    return Alphabet(allow_x00=generation_config.allow_x00, codec=generation_config.codec)

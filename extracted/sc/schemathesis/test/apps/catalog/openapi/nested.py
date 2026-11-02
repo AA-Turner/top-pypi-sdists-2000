@@ -22,13 +22,6 @@ def header_constraint_bug() -> OpenAPIApp:
     return OpenAPIApp(spec=spec, server=app, kind="flask")
 
 
-def query_array_items_bug() -> OpenAPIApp:
-    spec = build_schema(schemas.query_array_items_bug())
-    app = make_flask_app_from_schema(spec)
-    handlers.register_query_array_items_bug(app)
-    return OpenAPIApp(spec=spec, server=app, kind="flask")
-
-
 def one_of_branch_bug() -> OpenAPIApp:
     spec = build_schema(schemas.one_of_branch_bug())
     app = make_flask_app_from_schema(spec)
@@ -40,4 +33,11 @@ def additional_properties_bug() -> OpenAPIApp:
     spec = build_schema(schemas.additional_properties_bug())
     app = make_flask_app_from_schema(spec)
     handlers.register_additional_properties_bug(app)
+    return OpenAPIApp(spec=spec, server=app, kind="flask")
+
+
+def languages_with_codes() -> OpenAPIApp:
+    spec = build_schema(schemas.languages_with_codes())
+    app = make_flask_app_from_schema(spec)
+    handlers.register_languages_with_codes(app)
     return OpenAPIApp(spec=spec, server=app, kind="flask")

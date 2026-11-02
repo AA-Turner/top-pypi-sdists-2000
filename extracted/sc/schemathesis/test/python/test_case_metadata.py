@@ -1,12 +1,16 @@
 import pytest
-from hypothesis import HealthCheck, Phase, given, settings
+from flask import jsonify, request
+from hypothesis import Phase, find
 from hypothesis import strategies as st
 from requests.structures import CaseInsensitiveDict
 
+import schemathesis
 from schemathesis.core.mutations import OperatorKind
 from schemathesis.core.parameters import ParameterLocation
+from schemathesis.engine.recorder import ScenarioRecorder
 from schemathesis.generation import GenerationMode
 from schemathesis.generation.meta import (
+    CONTENT_TYPE_PROBES,
     CaseMetadata,
     ComponentInfo,
     ExamplesPhaseData,
@@ -14,8 +18,12 @@ from schemathesis.generation.meta import (
     GenerationInfo,
     PhaseInfo,
     TestPhase,
+    coverage_scenario,
 )
+from schemathesis.resources import PoolDraw
+from schemathesis.specs.openapi.checks import ignored_auth
 from schemathesis.specs.openapi.negative.mutations import Mutation, MutationChannel
+from test.utils import run_given
 
 
 def make_negative_meta(location, parameter=None, description="Test mutation"):
@@ -96,6 +104,43 @@ def test_direct_assignment_marks_dirty_and_revalidates(simple_operation):
     assert case.meta.generation.mode == GenerationMode.POSITIVE
 
 
+def test_probe_metadata_stays_as_sent(ctx, app_runner):
+    # Reporters read recorded cases on other threads; a sent case revalidating there races the worker.
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "get": {
+                    "security": [{"basicAuth": []}],
+                    "parameters": [{"name": "limit", "in": "query", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+        components={"securitySchemes": {"basicAuth": {"type": "http", "scheme": "basic"}}},
+    )
+
+    @app.route("/items")
+    def items():
+        if request.authorization is None or request.authorization.password != "pass":
+            return jsonify({}), 401
+        return jsonify([])
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    case = schema["/items"]["GET"].Case(query={"limit": 1}, _meta=make_positive_meta(ParameterLocation.QUERY))
+    transport_kwargs = {"auth": ("user", "pass")}
+    response = case.call(**transport_kwargs)
+    recorder = ScenarioRecorder(label="GET /items")
+    recorder.record_case(case=case)
+
+    case.validate_response(response, checks=[ignored_auth], transport_kwargs=transport_kwargs, recorder=recorder)
+
+    probes = [node.value for node in recorder.cases.values() if node.parent_id == case.id]
+    assert len(probes) == 2
+    for probe in probes:
+        probe.query["limit"] = "many"
+        assert probe.meta.generation.mode == GenerationMode.POSITIVE
+
+
 def test_inplace_modification_detected_and_revalidated(simple_operation):
     meta = make_negative_meta(ParameterLocation.BODY, "id", "Missing required property")
 
@@ -135,37 +180,42 @@ def test_no_metadata_no_crash(simple_operation):
     assert case.meta is None
 
 
+@pytest.mark.hypothesis_nested
+def test_body_under_undeclared_media_type_becomes_negative(simple_operation):
+    @run_given(case=simple_operation.as_strategy(generation_mode=GenerationMode.POSITIVE), max_examples=1)
+    def test(case):
+        case.media_type = "text/plain"
+        case.body = {"id": "valid"}
+        assert case.meta.generation.mode == GenerationMode.NEGATIVE
+
+
 def test_nested_dict_modification_detected(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /items",
         {
-            "/items": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": ["config"],
+                            "properties": {
+                                "config": {
                                     "type": "object",
-                                    "required": ["config"],
                                     "properties": {
-                                        "config": {
-                                            "type": "object",
-                                            "properties": {
-                                                "enabled": {"type": "boolean"},
-                                            },
-                                        },
+                                        "enabled": {"type": "boolean"},
                                     },
-                                    "additionalProperties": False,
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+                                },
+                            },
+                            "additionalProperties": False,
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schema["/items"]["POST"]
 
     meta = make_positive_meta(ParameterLocation.BODY)
 
@@ -260,43 +310,39 @@ def test_hook_self_assigns_stringified_query_keeps_positive(ctx):
 
 def test_hook_adds_required_field_metadata_updates(ctx):
     # See GH-3073
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /locations",
         {
-            "/locations": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "required": ["name", "address_id"],
-                                    "properties": {
-                                        "name": {
-                                            "type": "string",
-                                            "pattern": "^[A-Za-z]{4,254}$",
-                                            "minLength": 4,
-                                        },
-                                        "address_id": {
-                                            "type": "string",
-                                            "format": "uuid",
-                                        },
-                                        "purpose": {"type": "string", "default": ""},
-                                        "costs": {"type": "number", "default": 0},
-                                        "revenue": {"type": "number", "default": 0},
-                                        "debt": {"type": "number", "default": 0},
-                                    },
-                                    "additionalProperties": False,
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"201": {"description": "Created"}},
-                }
-            }
-        }
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": ["name", "address_id"],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z]{4,254}$",
+                                    "minLength": 4,
+                                },
+                                "address_id": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                },
+                                "purpose": {"type": "string", "default": ""},
+                                "costs": {"type": "number", "default": 0},
+                                "revenue": {"type": "number", "default": 0},
+                                "debt": {"type": "number", "default": 0},
+                            },
+                            "additionalProperties": False,
+                        }
+                    }
+                },
+            },
+            "responses": {"201": {"description": "Created"}},
+        },
     )
-    operation = schema["/locations"]["POST"]
 
     meta = make_negative_meta(ParameterLocation.BODY, "address_id", "Required property removed")
 
@@ -348,8 +394,7 @@ def test_before_call_hook_with_negative_cases(ctx):
 
     strategy = operation.as_strategy(generation_mode=GenerationMode.NEGATIVE)
 
-    @given(case=strategy)
-    @settings(max_examples=3, phases=[Phase.generate], deadline=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=strategy, max_examples=3, phases=[Phase.generate])
     def test_case(case):
         if case.meta and isinstance(case.body, dict):
             # Initially negative (missing required id)
@@ -363,8 +408,6 @@ def test_before_call_hook_with_negative_cases(ctx):
             # Verify transition happened
             if initial_mode == GenerationMode.NEGATIVE:
                 assert case.meta.components[ParameterLocation.BODY].mode == GenerationMode.POSITIVE
-
-    test_case()
 
 
 @pytest.mark.hypothesis_nested
@@ -397,33 +440,26 @@ def test_map_case_hook_with_metadata(ctx):
 
     strategy = operation.as_strategy(generation_mode=GenerationMode.NEGATIVE)
 
-    @given(case=strategy)
-    @settings(max_examples=3, phases=[Phase.generate], deadline=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=strategy, max_examples=3, phases=[Phase.generate])
     def test_case(case):
         # Verify path parameter is valid after hook fix
         assert case.meta.components[ParameterLocation.PATH].mode == GenerationMode.POSITIVE
 
-    test_case()
-
 
 def test_query_parameter_modification_revalidates(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /users",
         {
-            "/users": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "include_deleted",
-                            "in": "query",
-                            "schema": {"type": "boolean"},
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+            "parameters": [
+                {
+                    "name": "include_deleted",
+                    "in": "query",
+                    "schema": {"type": "boolean"},
                 }
-            }
-        }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schema["/users"]["GET"]
 
     meta = make_negative_meta(ParameterLocation.QUERY, "include_deleted", "Invalid type")
 
@@ -438,25 +474,57 @@ def test_query_parameter_modification_revalidates(ctx):
     assert case.meta.components[ParameterLocation.QUERY].mode == GenerationMode.POSITIVE
 
 
-def test_header_case_insensitive_dict_hash(ctx):
-    schema = ctx.openapi.load_schema(
+def test_pipe_delimited_query_parameters_revalidate_after_edit(ctx):
+    parameters = [
         {
-            "/users": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "X-API-Version",
-                            "in": "header",
-                            "required": True,
-                            "schema": {"type": "string"},
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "name": name,
+            "in": "query",
+            "required": True,
+            "style": "pipeDelimited",
+            "explode": False,
+            "schema": {"type": "array", "items": {"type": "string"}, "minItems": 2},
         }
+        for name in ("tags", "labels")
+    ]
+    operation = ctx.openapi.load_operation(
+        "GET /items", {"parameters": parameters, "responses": {"200": {"description": "OK"}}}
     )
-    operation = schema["/users"]["GET"]
+    case = find(operation.as_strategy(generation_mode=GenerationMode.POSITIVE), lambda case: True)
+
+    assert case.meta.components[ParameterLocation.QUERY].mode == GenerationMode.POSITIVE
+    case.query["unknown"] = "x"
+    assert case.meta.components[ParameterLocation.QUERY].mode == GenerationMode.NEGATIVE
+
+
+@pytest.mark.parametrize("query", [None, {"id": "abc"}], ids=["none", "wrong-type"])
+def test_replacing_query_container_revalidates_as_negative(ctx, query):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [{"name": "id", "in": "query", "required": True, "schema": {"type": "integer"}}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = find(operation.as_strategy(generation_mode=GenerationMode.POSITIVE), lambda case: True)
+    case.query = query
+    assert case.meta.components[ParameterLocation.QUERY].mode == GenerationMode.NEGATIVE
+
+
+def test_header_case_insensitive_dict_hash(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /users",
+        {
+            "parameters": [
+                {
+                    "name": "X-API-Version",
+                    "in": "header",
+                    "required": True,
+                    "schema": {"type": "string"},
+                }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
 
     meta = make_positive_meta(ParameterLocation.HEADER)
 
@@ -472,25 +540,124 @@ def test_header_case_insensitive_dict_hash(ctx):
     _ = case.meta.generation.mode
 
 
-def test_path_parameter_modification_revalidates(ctx):
+@pytest.fixture
+def header_operation(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [
+                {"name": "authorization", "in": "header", "schema": {"type": "string"}},
+                {
+                    "name": "x-count",
+                    "in": "header",
+                    "required": True,
+                    "schema": {"type": "string", "pattern": "^[0-9]+$"},
+                },
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    return operation
+
+
+@pytest.mark.parametrize("name", ["Authorization", "X-Other"], ids=["declared-in-other-case", "undeclared"])
+def test_header_added_by_hook_keeps_case_positive(header_operation, name):
+    case = find(header_operation.as_strategy(generation_mode=GenerationMode.POSITIVE), lambda case: True)
+    case.headers = case.headers or {}
+    case.headers[name] = "Bearer token"
+    assert case.meta.generation.mode == GenerationMode.POSITIVE
+    assert case.meta.components[ParameterLocation.HEADER].mode == GenerationMode.POSITIVE
+
+
+@pytest.mark.parametrize(
+    "headers",
+    [{"X-Count": "abc"}, {"Authorization": "Bearer token"}],
+    ids=["invalid-value", "missing-required"],
+)
+def test_header_replaced_by_hook_with_invalid_value_is_negative(header_operation, headers):
+    case = find(header_operation.as_strategy(generation_mode=GenerationMode.POSITIVE), lambda case: True)
+    case.headers = headers
+    assert case.meta.generation.mode == GenerationMode.NEGATIVE
+
+
+def test_derived_case_revalidation_leaves_original_metadata_intact(header_operation):
+    case = find(header_operation.as_strategy(generation_mode=GenerationMode.POSITIVE), lambda case: True)
+    meta = case.meta
+    derived = case.derive(headers=CaseInsensitiveDict({"X-Count": "abc"}))
+    assert derived.meta.generation.mode == GenerationMode.NEGATIVE
+    assert meta.generation.mode == GenerationMode.POSITIVE
+    assert not meta.is_dirty()
+
+
+@pytest.fixture
+def json_body_operation(ctx):
     schema = ctx.openapi.load_schema(
         {
-            "/users/{user_id}": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "user_id",
-                            "in": "path",
-                            "required": True,
-                            "schema": {"type": "string", "pattern": "^[0-9]+$"},
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+            "/items": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": ["name"],
+                                    "properties": {"name": {"type": "string"}},
+                                }
+                            }
+                        },
+                    },
+                    "responses": {"201": {"description": "Created"}},
                 }
             }
         }
     )
-    operation = schema["/users/{user_id}"]["GET"]
+    return schema["/items"]["POST"]
+
+
+def test_content_type_probe_stays_negative_when_a_hook_adds_a_header(json_body_operation):
+    schema = json_body_operation.schema
+    cases = schema.iter_coverage_cases(
+        json_body_operation, generation_modes=[GenerationMode.NEGATIVE], generation_config=schema.config.generation
+    )
+    probes = [case for case in cases if coverage_scenario(case) in CONTENT_TYPE_PROBES]
+    assert {coverage_scenario(case) for case in probes} == CONTENT_TYPE_PROBES
+    for case in probes:
+        case.headers["X-Test-Mode"] = "true"
+        assert case.meta.generation.mode == GenerationMode.NEGATIVE
+        assert case.meta.components[ParameterLocation.HEADER].mode == GenerationMode.NEGATIVE
+
+
+def test_case_hash_is_case_insensitive_for_headers(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /users",
+        {
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+
+    lower_case = operation.Case(headers={"x-token": "a"})
+    upper_case = operation.Case(headers={"X-Token": "a"})
+
+    assert lower_case == upper_case
+    assert len({lower_case, upper_case}) == 1
+
+
+def test_path_parameter_modification_revalidates(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /users/{user_id}",
+        {
+            "parameters": [
+                {
+                    "name": "user_id",
+                    "in": "path",
+                    "required": True,
+                    "schema": {"type": "string", "pattern": "^[0-9]+$"},
+                }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
 
     meta = make_negative_meta(ParameterLocation.PATH, "user_id", "Invalid pattern")
 
@@ -505,40 +672,36 @@ def test_path_parameter_modification_revalidates(ctx):
 
 
 def test_multiple_components_modified_all_revalidate(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /users/{user_id}",
         {
-            "/users/{user_id}": {
-                "post": {
-                    "parameters": [
-                        {
-                            "name": "user_id",
-                            "in": "path",
-                            "required": True,
-                            "schema": {"type": "string", "pattern": "^[0-9]+$"},
-                        }
-                    ],
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "required": ["email"],
-                                    "properties": {
-                                        "email": {"type": "string", "format": "email"},
-                                        "name": {"type": "string", "minLength": 2},
-                                    },
-                                    "additionalProperties": False,
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
+            "parameters": [
+                {
+                    "name": "user_id",
+                    "in": "path",
+                    "required": True,
+                    "schema": {"type": "string", "pattern": "^[0-9]+$"},
                 }
-            }
-        }
+            ],
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": ["email"],
+                            "properties": {
+                                "email": {"type": "string", "format": "email"},
+                                "name": {"type": "string", "minLength": 2},
+                            },
+                            "additionalProperties": False,
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schema["/users/{user_id}"]["POST"]
 
     meta = CaseMetadata(
         generation=GenerationInfo(time=0.0, mode=GenerationMode.NEGATIVE),
@@ -616,8 +779,7 @@ type Query {
 
     strategy = operation.as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=5, phases=[Phase.generate], deadline=None)
+    @run_given(case=strategy, max_examples=5, phases=[Phase.generate])
     def test_case(case):
         assert case.meta is not None
         assert case.meta.generation.mode == GenerationMode.POSITIVE
@@ -627,35 +789,29 @@ type Query {
         # GraphQL schemas don't validate, so mode should remain POSITIVE
         assert case.meta.generation.mode == GenerationMode.POSITIVE
 
-    test_case()
-
 
 def test_case_without_metadata_no_crash(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /items",
         {
-            "/items": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "required": ["id"],
-                                    "properties": {
-                                        "id": {"type": "string"},
-                                        "name": {"type": "string"},
-                                    },
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": ["id"],
+                            "properties": {
+                                "id": {"type": "string"},
+                                "name": {"type": "string"},
+                            },
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schema["/items"]["POST"]
 
     # Create case without metadata (as users would do)
     case = operation.Case(
@@ -678,34 +834,29 @@ def test_revalidation_with_openapi_30_boolean_exclusive_minimum(ctx):
     # OpenAPI 3.0 allows `exclusiveMinimum: true` (boolean form alongside `minimum`).
     # Revalidation must accept such schemas using the OpenAPI-3.0 validator class
     # rather than a newer JSON Schema draft that requires a numeric form.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /items",
         {
-            "/items": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "Pitch": {
-                                            "type": "number",
-                                            "minimum": 0,
-                                            "exclusiveMinimum": True,
-                                        }
-                                    },
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Pitch": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "exclusiveMinimum": True,
                                 }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+                            },
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-
-    operation = schema["/items"]["POST"]
 
     meta = make_positive_meta(ParameterLocation.BODY)
 
@@ -752,3 +903,17 @@ def test_case_metadata_round_trip_preserves_fuzzing_mutations():
     restored = CaseMetadata.from_dict(meta.to_dict())
 
     assert restored.phase.data.mutations == (mutation,)
+
+
+def test_case_metadata_round_trip_preserves_pool_draw_provenance():
+    draw = PoolDraw(
+        "path", "order_id", "Order", "id", "POST /orders/{order_id}/notes", 201, "alice", True, {"page": "2"}
+    )
+    meta = CaseMetadata(
+        generation=GenerationInfo(time=0.0, mode=GenerationMode.POSITIVE),
+        components={},
+        phase=PhaseInfo(name=TestPhase.FUZZING, data=FuzzingPhaseData("", None, None, None)),
+        pool_draws=(draw,),
+    )
+
+    assert CaseMetadata.from_dict(meta.to_dict()).pool_draws == (draw,)

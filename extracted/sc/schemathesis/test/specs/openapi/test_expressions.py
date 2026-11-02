@@ -1,4 +1,5 @@
 import json
+import re
 from io import BytesIO
 
 import pytest
@@ -10,10 +11,7 @@ from urllib3 import HTTPResponse
 from schemathesis.core.transforms import UNRESOLVABLE, resolve_pointer
 from schemathesis.core.transport import Response
 from schemathesis.generation.stateful.state_machine import StepOutput
-from schemathesis.schemas import APIOperation, OperationDefinition
 from schemathesis.specs.openapi import expressions
-from schemathesis.specs.openapi.adapter import v3_0
-from schemathesis.specs.openapi.adapter.parameters import OpenApiBody
 from schemathesis.specs.openapi.expressions.errors import RuntimeExpressionError
 from schemathesis.specs.openapi.expressions.lexer import Token
 
@@ -29,34 +27,17 @@ DOCUMENT = {
     " ": 7,
     "m~n": 8,
     "bool-value": True,
+    "null-value": None,
 }
 
 
 @pytest.fixture
-def operation(openapi_30):
-    media_type = "application/json"
-    content = {"schema": {}}
-    definition = {"requestBody": {"content": {media_type: content}}}
-    instance = APIOperation(
-        "/users/{user_id}",
-        "PUT",
-        OperationDefinition(definition),
-        openapi_30,
-        responses=openapi_30._parse_responses({}, ""),
-        security=openapi_30._parse_security({}),
-        label="PUT /users/{user_id}",
-        base_url="http://127.0.0.1:8080/api",
+def operation(ctx):
+    instance = ctx.openapi.load_operation(
+        "PUT /users/{user_id}",
+        {"requestBody": {"content": {"application/json": {"schema": {}}}}, "responses": {"200": {"description": "OK"}}},
     )
-    instance.add_parameter(
-        OpenApiBody.from_definition(
-            definition=content,
-            media_type=media_type,
-            is_required=False,
-            resource_name=None,
-            name_to_uri={},
-            adapter=v3_0,
-        )
-    )
+    instance.base_url = "http://127.0.0.1:8080/api"
     return instance
 
 
@@ -123,6 +104,11 @@ def output(case, response):
         ("eq.{$request.query.username#regex:f(.+)}", "eq.oo"),
         ("eq.{$request.query.username#regex:t(.+)}", UNRESOLVABLE),
         ("eq.{$request.query.unknown}", UNRESOLVABLE),
+        ("$response.body#/foo/0#regex:b(.+)", "ar"),
+        ("ID_{$response.body#/foo/1#regex:b(.+)}", "ID_az"),
+        ("$response.body#/foo/0#regex:q(.+)", UNRESOLVABLE),
+        ("$response.body#/g|h#regex:(.+)", UNRESOLVABLE),
+        ("$response.body#/unknown#regex:(.+)", UNRESOLVABLE),
     ],
 )
 def test_evaluate(output, expr, expected):
@@ -140,6 +126,7 @@ def test_evaluate(output, expr, expected):
         ({"$response.body#/foo/unknown": "value"}, UNRESOLVABLE),
         ({"$response.body#/a~1b": "value"}, {"1": "value"}),
         ({"$response.body#/bool-value": "value"}, {"true": "value"}),
+        ({"$response.body#/null-value": "value"}, {"null": "value"}),
         (["$response.body#/foo/unknown"], UNRESOLVABLE),
         (
             {"key": "$response.body#/foo/0", "items": ["$response.body#/foo/1", "literal", 42]},
@@ -169,6 +156,8 @@ def test_dynamic_body(output, expr, expected):
         "$response.header.unknown#wrong",
         "$response.header.unknown#regex:[",
         "$response.header.unknown#regex:(.+)(.+)",
+        "$response.body#/foo#regex:[",
+        "$response.body#/foo#regex:(.+)(.+)",
         "$response}",
         "$request",
         "$response",
@@ -182,6 +171,26 @@ def test_dynamic_body(output, expr, expected):
 def test_invalid_expression(output, expr):
     with pytest.raises(RuntimeExpressionError):
         expressions.evaluate(expr, output)
+
+
+@pytest.mark.parametrize(
+    ("expr", "suggestion"),
+    [
+        ("$response.body.0.id", "$response.body#/0/id"),
+        ("$request.body.user.name", "$request.body#/user/name"),
+        ("{$response.body.id}", "$response.body#/id"),
+    ],
+)
+def test_dotted_body_path_suggests_pointer(output, expr, suggestion):
+    with pytest.raises(RuntimeExpressionError, match=re.escape(f"Did you mean `{suggestion}`?")):
+        expressions.evaluate(expr, output)
+
+
+@pytest.mark.parametrize("expr", ["$request.body$method", "$response.body$statusCode", "$request.body."])
+def test_invalid_body_suffix_has_plain_error(output, expr):
+    with pytest.raises(RuntimeExpressionError) as exc:
+        expressions.evaluate(expr, output)
+    assert str(exc.value) == f"Invalid expression: {expr}"
 
 
 @given(expr=(st.text() | (st.lists(st.sampled_from([".", "}", "{", "$"]) | st.text()).map("".join))))

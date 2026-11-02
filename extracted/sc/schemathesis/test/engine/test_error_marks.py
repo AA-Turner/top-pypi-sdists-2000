@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 import schemathesis
 from schemathesis.core.errors import (
     AuthenticationError,
@@ -11,13 +13,11 @@ from schemathesis.core.errors import (
 from schemathesis.core.jsonschema import make_validator_for
 from schemathesis.core.jsonschema.resolver import make_root_resolver
 from schemathesis.engine import Status, events
+from schemathesis.engine.errors import EngineErrorInfo
 from schemathesis.engine.run import PhaseName
 from schemathesis.specs.openapi.examples import ExampleWalk, extract_from_schema
+from test.engine.helpers import examples_only
 from test.utils import EventStream
-
-
-def _examples_only(schema) -> EventStream:
-    return EventStream(schema, phases=[PhaseName.EXAMPLES]).execute()
 
 
 def _schema_with_query_and_body_example(ctx, *, query_schema=None, extra_operation=None):
@@ -56,7 +56,7 @@ def test_create_test_auth_provider_failure_surfaces_as_non_fatal_error(ctx):
         def set(self, case, data, context):
             pass
 
-    schema_dict = ctx.openapi.build_schema(
+    loaded = ctx.openapi.load_schema(
         {
             "/items": {
                 "post": {
@@ -76,9 +76,8 @@ def test_create_test_auth_provider_failure_surfaces_as_non_fatal_error(ctx):
         },
         components={"securitySchemes": {"bearer": {"type": "http", "scheme": "bearer"}}},
     )
-    loaded = schemathesis.openapi.from_dict(schema_dict)
     try:
-        stream = _examples_only(loaded)
+        stream = examples_only(loaded)
     finally:
         schemathesis.auths.unregister()
 
@@ -88,9 +87,38 @@ def test_create_test_auth_provider_failure_surfaces_as_non_fatal_error(ctx):
     ]
 
 
+# Replays hit the token-fetch breaker and fail differently, so Hypothesis reports the failure grouped.
+def test_stateful_auth_provider_failure_surfaces_as_authentication_error(ctx):
+    api = ctx.openapi.apps.users_crud()
+
+    @schemathesis.auth()
+    class _BrokenAuth:
+        def get(self, case, context):
+            raise AuthenticationError("provider", "get", "creds expired")
+
+        def set(self, case, data, context):
+            pass
+
+    try:
+        stream = EventStream(
+            schemathesis.openapi.from_url(api.schema_url),
+            phases=[PhaseName.STATEFUL_TESTING],
+            max_examples=10,
+            seed=1,
+        ).execute()
+    finally:
+        schemathesis.auths.unregister()
+
+    errors = stream.find_all(events.NonFatalError, phase=PhaseName.STATEFUL_TESTING)
+    assert [str(event.value).splitlines()[0].partition(";")[0] for event in errors] == [
+        "creds expired",
+        "Token fetch failed 3 times in a row",
+    ]
+
+
 def test_invalid_headers_example_mark(ctx):
     # Header example containing a newline character is rejected at the wire level.
-    schema = ctx.openapi.build_schema(
+    loaded = ctx.openapi.load_schema(
         {
             "/items": {
                 "get": {
@@ -108,12 +136,45 @@ def test_invalid_headers_example_mark(ctx):
             }
         }
     )
-    loaded = schemathesis.openapi.from_dict(schema)
-    stream = _examples_only(loaded)
+    stream = examples_only(loaded)
     errors = stream.find_all(events.NonFatalError, phase=PhaseName.EXAMPLES)
     assert any(isinstance(event.value, InvalidHeadersExample) for event in errors), [
         type(e.value).__name__ for e in errors
     ]
+
+
+def test_unresolvable_reference_is_titled_as_schema_error():
+    error = UnresolvableReference("#/components/schemas/Missing")
+    assert EngineErrorInfo(error).format() == (
+        "Schema Error\n\nReference `#/components/schemas/Missing` cannot be resolved"
+    )
+
+
+@pytest.mark.parametrize(
+    ("cycle", "expected"),
+    [
+        (
+            ["#/components/schemas/Node"],
+            "Schema `#/components/schemas/Node` has a required reference to itself",
+        ),
+        (
+            [
+                "#/components/schemas/Node",
+                "other.json#/components/schemas/Leaf",
+                "other.json",
+                "#/components/schemas/Node",
+            ],
+            "Schema `#/components/schemas/Node` has required references forming a cycle:\n\n"
+            "  #/components/schemas/Node ->\n"
+            "  #/components/schemas/Leaf ->\n"
+            "  other.json ->\n"
+            "  #/components/schemas/Node",
+        ),
+    ],
+    ids=["self-reference", "multi-step-cycle"],
+)
+def test_infinite_recursive_reference_message(cycle, expected):
+    assert str(InfiniteRecursiveReference("#/components/schemas/Node", cycle)) == expected
 
 
 def test_invalid_regex_example_generation_error(ctx):
@@ -129,33 +190,10 @@ def test_invalid_regex_example_generation_error(ctx):
         make_validator_for(invalid_schema)
         return strategy
 
-    stream = _examples_only(loaded)
+    stream = examples_only(loaded)
 
     errors = stream.find_all(events.NonFatalError, phase=PhaseName.EXAMPLES)
     assert any(isinstance(event.value, InvalidRegexPattern) for event in errors), [
-        type(e.value).__name__ for e in errors
-    ]
-    finished = stream.find_all(events.ScenarioFinished, phase=PhaseName.EXAMPLES)
-    assert any(event.status == Status.ERROR for event in finished), [event.status for event in finished]
-
-
-def test_infinite_recursive_reference_example_generation_error(ctx):
-    schema = _schema_with_query_and_body_example(ctx)
-    loaded = schemathesis.openapi.from_dict(schema)
-
-    @loaded.hook
-    def before_generate_query(context, strategy):
-        def fail(value):
-            raise InfiniteRecursiveReference(
-                "#/components/schemas/Node", ["#/components/schemas/Node", "#/components/schemas/Node"]
-            )
-
-        return strategy.map(fail)
-
-    stream = _examples_only(loaded)
-
-    errors = stream.find_all(events.NonFatalError, phase=PhaseName.EXAMPLES)
-    assert any(isinstance(event.value, InfiniteRecursiveReference) for event in errors), [
         type(e.value).__name__ for e in errors
     ]
     finished = stream.find_all(events.ScenarioFinished, phase=PhaseName.EXAMPLES)
@@ -193,12 +231,17 @@ def test_unresolvable_reference_example_generation_error(ctx):
 
         return strategy.map(extract)
 
-    stream = _examples_only(loaded)
+    stream = examples_only(loaded)
 
     errors = stream.find_all(events.NonFatalError, phase=PhaseName.EXAMPLES)
     assert any(isinstance(event.value, UnresolvableReference) for event in errors), [
         type(e.value).__name__ for e in errors
     ]
+    assert [
+        (event.info.message, event.info.has_useful_traceback)
+        for event in errors
+        if isinstance(event.value, UnresolvableReference)
+    ] == [("Reference `#/components/schemas/Missing` cannot be resolved", False)]
     finished = stream.find_all(events.ScenarioFinished, phase=PhaseName.EXAMPLES)
     assert any(event.status == Status.ERROR for event in finished), [event.status for event in finished]
 
@@ -206,7 +249,7 @@ def test_unresolvable_reference_example_generation_error(ctx):
 def test_missing_path_parameters_mark(ctx):
     api = ctx.openapi.apps.missing_path_parameter()
     schema = schemathesis.openapi.from_url(api.schema_url)
-    stream = _examples_only(schema)
+    stream = examples_only(schema)
     errors = stream.find_all(events.NonFatalError, phase=PhaseName.EXAMPLES)
     assert any("Path parameter 'id' is not defined" in str(event.value) for event in errors), [
         str(e.value) for e in errors

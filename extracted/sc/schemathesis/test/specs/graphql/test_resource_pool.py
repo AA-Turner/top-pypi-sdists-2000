@@ -5,16 +5,19 @@ import random
 
 import graphql
 import pytest
-from hypothesis import HealthCheck, given, settings
 
+from schemathesis.core.transport import Response
 from schemathesis.generation import GenerationMode
+from schemathesis.generation.feedback import FeedbackSources
+from schemathesis.generation.hypothesis.examples import generate_many
 from schemathesis.specs.graphql.extra_data_source import GraphQLResourcePool
 from schemathesis.specs.graphql.handles import Handle, SchemaIndex
 from schemathesis.specs.graphql.substitution import iter_operation_pool_values, substitute_pool_values
+from test.utils import run_given
 
 
 @pytest.fixture
-def gql_schema():
+def gql_schema(ctx):
     sdl = """
     scalar BookID
     type Author { id: ID! name: String! }
@@ -27,7 +30,7 @@ def gql_schema():
         addBook(title: String!, authorId: ID!): Book!
     }
     """
-    return graphql.build_schema(sdl)
+    return ctx.graphql.load_sdl(sdl)
 
 
 @pytest.fixture
@@ -37,7 +40,7 @@ def rng():
 
 @pytest.fixture
 def pool(gql_schema):
-    return GraphQLResourcePool(client_schema=gql_schema)
+    return _make_pool(gql_schema)
 
 
 def _parse(query: str) -> graphql.OperationDefinitionNode:
@@ -47,9 +50,18 @@ def _parse(query: str) -> graphql.OperationDefinitionNode:
     return operation
 
 
-def _schema_and_pool(sdl, **kwargs):
-    schema = graphql.build_schema(sdl)
-    return schema, GraphQLResourcePool(client_schema=schema, **kwargs)
+def _make_pool(schema, **kwargs):
+    return GraphQLResourcePool(
+        client_schema=schema.client_schema,
+        index=schema.analysis.schema_index,
+        handles=schema.analysis.handles,
+        **kwargs,
+    )
+
+
+def _schema_and_pool(ctx, sdl):
+    schema = ctx.graphql.load_sdl(sdl)
+    return schema.client_schema, _make_pool(schema)
 
 
 def _capture_book(pool, book_id="captured-id"):
@@ -65,11 +77,60 @@ def test_capture_id_field(pool, rng):
     assert pool.draw(handle=Handle("Book", "id"), random=rng) == "abc-1"
 
 
-def test_capture_skips_when_errors_present(pool, rng):
-    operation = _parse('mutation { addBook(title: "x", authorId: "1") { id } }')
-    body = json.dumps({"data": {"addBook": {"id": "abc-2"}}, "errors": [{"message": "boom"}]}).encode("utf-8")
-    pool.capture_response(response_body=body, operation_node=operation)
+_RECORD_SDL = """
+type Book { id: ID! title: String! }
+type Query { getBooks: [Book!]! }
+type Mutation { addBook(title: String!): Book! }
+"""
+_CREATED_BOOK = json.dumps({"data": {"addBook": {"id": "b-1", "__typename": "Book"}}}).encode("utf-8")
+
+
+@pytest.mark.parametrize(
+    ("query", "content"),
+    [
+        ('mutation { addBook(title: "x") { id } }', b""),
+        ('mutation { addBook(title: "x") { id } }', b"not json"),
+        ('mutation { addBook(title: "x") { id } }', b"{}"),
+        ('mutation { addBook(title: "x") { id } }', b'{"data": null}'),
+        ('mutation { addBook(title: "x") { id } }', b'{"data": "scalar"}'),
+        (
+            'mutation { addBook(title: "x") { id } }',
+            json.dumps({"data": {"addBook": {"id": "b-1"}}, "errors": [{"message": "boom"}]}).encode("utf-8"),
+        ),
+        ("mutation { addBook(title: ", _CREATED_BOOK),
+        ("fragment F on Book { id }", _CREATED_BOOK),
+    ],
+    ids=[
+        "empty-body",
+        "non-json-body",
+        "empty-object",
+        "data-null",
+        "data-not-dict",
+        "errors-present",
+        "unparsable-query",
+        "no-operation",
+    ],
+)
+def test_record_response_ignores_unusable_payloads(ctx, response_factory, rng, query, content):
+    schema = ctx.graphql.load_sdl(_RECORD_SDL)
+    operation = schema["Mutation"]["addBook"]
+    pool = _make_pool(schema)
+    response = Response.from_requests(response_factory.requests(content=content), True)
+    pool.record_response(operation=operation, response=response, case=operation.Case(body=query))
     assert pool.draw(handle=Handle("Book", "id"), random=rng) is None
+
+
+def test_record_response_skips_typename_selection(ctx, response_factory, rng):
+    schema = ctx.graphql.load_sdl(_RECORD_SDL)
+    operation = schema["Mutation"]["addBook"]
+    pool = _make_pool(schema)
+    response = Response.from_requests(response_factory.requests(content=_CREATED_BOOK), True)
+    pool.record_response(
+        operation=operation,
+        response=response,
+        case=operation.Case(body='mutation { addBook(title: "x") { __typename id } }'),
+    )
+    assert pool.draw(handle=Handle("Book", "id"), random=rng) == "b-1"
 
 
 def test_capture_walks_lists(pool, rng):
@@ -87,7 +148,7 @@ def test_capture_uses_real_field_name_for_aliased_selections(pool, rng):
 
 
 def test_per_key_cap_evicts_oldest(gql_schema, rng):
-    pool = GraphQLResourcePool(client_schema=gql_schema, max_per_key=3)
+    pool = _make_pool(gql_schema, max_per_key=3)
     operation = _parse("query { authors { id } }")
     for chunk in [["1", "2"], ["3", "4"], ["5"]]:
         pool.capture(operation_node=operation, response_data={"authors": [{"id": v} for v in chunk]})
@@ -123,12 +184,12 @@ type Mutation { addBook(title: String!): Book! }
     ],
     ids=["bespoke-scalar-substitutes", "empty-pool-skips", "bare-id-via-return-type"],
 )
-def test_substitution_type_match(sdl, captured, should_substitute, rng):
-    schema, pool = _schema_and_pool(sdl)
+def test_substitution_type_match(ctx, sdl, captured, should_substitute, rng):
+    schema, pool = _schema_and_pool(ctx, sdl)
     if captured:
         _capture_book(pool)
     operation = _parse('query { book(id: "placeholder") { id } }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
+    operation = substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
     printed = graphql.print_ast(operation)
     if should_substitute:
         assert "captured-id" in printed
@@ -138,95 +199,248 @@ def test_substitution_type_match(sdl, captured, should_substitute, rng):
         assert "captured-id" not in printed
 
 
-@pytest.mark.parametrize("arg_name", ["bookId", "bookID", "book_id"])
-def test_substitution_via_argument_name_token(arg_name, rng):
-    sdl = f"""
+@pytest.mark.parametrize(
+    ("sdl", "query"),
+    [
+        *(
+            pytest.param(
+                f"""
     type Book {{ id: ID! }}
     type Query {{ lookup({arg_name}: ID!): String }}
     type Mutation {{ addBook(title: String!): Book! }}
-    """
-    schema, pool = _schema_and_pool(sdl)
+    """,
+                f'query {{ lookup({arg_name}: "placeholder") }}',
+                id=f"argument-name-token-{arg_name}",
+            )
+            for arg_name in ("bookId", "bookID", "book_id")
+        ),
+        *(
+            pytest.param(
+                f"""
+    scalar BookID
+    input BookRef {{ {input_field}: {field_type} }}
+    type Book {{ id: BookID! }}
+    type Query {{ lookup(ref: BookRef!): String }}
+    type Mutation {{ addBook(title: String!): Book! }}
+    """,
+                f'query {{ lookup(ref: {{{input_field}: "placeholder"}}) }}',
+                id=f"input-object-{case_id}",
+            )
+            for input_field, field_type, case_id in (
+                ("id", "BookID", "bespoke-scalar"),
+                ("bookId", "ID!", "camelCase-name-token"),
+                ("book_id", "ID!", "snake_case-name-token"),
+            )
+        ),
+        pytest.param(
+            """
+    scalar BookID
+    input BookRef { id: BookID! }
+    input UpdateInput { ref: BookRef!, title: String! }
+    type Book { id: BookID! }
+    type Query { _: Int }
+    type Mutation {
+        addBook(title: String!): Book!
+        updateBook(input: UpdateInput!): Book
+    }
+    """,
+            'mutation { updateBook(input: {ref: {id: "placeholder"}, title: "t"}) { id } }',
+            id="nested-input-object",
+        ),
+        # A fragment spread next to `id` inside the selection set does not break the walk.
+        pytest.param(
+            """
+    scalar BookID
+    type Book { id: BookID! title: String! }
+    type Query { book(id: BookID!): Book }
+    type Mutation { addBook(title: String!): Book! }
+    """,
+            'query { book(id: "placeholder") { id ...BookFields } } fragment BookFields on Book { title }',
+            id="fragment-spread-inside-selection",
+        ),
+        pytest.param(
+            """
+    scalar BookID
+    type Author { books(bookId: BookID!): [String!]! }
+    type Book { id: BookID! }
+    type Query { author: Author book(id: BookID!): Book }
+    type Mutation { addBook(title: String!): Book! }
+    """,
+            'query { author { books(bookId: "placeholder") } }',
+            id="nested-object-selection",
+        ),
+        pytest.param(
+            """
+    type Book { id: ID! }
+    type Query { book(id: ID!): Book }
+    type Mutation { addBook(title: String!): Book! deleteBook(id: ID!): Boolean }
+    """,
+            'mutation { deleteBook(id: "placeholder") }',
+            id="cleanup-returning-scalar",
+        ),
+        pytest.param(
+            """
+    type Book { id: ID! }
+    type DeleteBookPayload { deletedBookId: ID }
+    type Query { book(id: ID!): Book }
+    type Mutation { addBook(title: String!): Book! bookDelete(id: ID!): DeleteBookPayload }
+    """,
+            'mutation { bookDelete(id: "placeholder") { deletedBookId } }',
+            id="cleanup-returning-payload-without-record",
+        ),
+    ],
+)
+def test_substitution_replaces(ctx, sdl, query, rng):
+    schema, pool = _schema_and_pool(ctx, sdl)
     _capture_book(pool)
-    operation = _parse(f'query {{ lookup({arg_name}: "placeholder") }}')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
+    operation = substitute_pool_values(operation_node=_parse(query), client_schema=schema, pool=pool, random=rng)
     assert "captured-id" in graphql.print_ast(operation)
 
 
-def test_substitution_skips_bare_id_when_field_returns_scalar(rng):
-    sdl = """
+@pytest.mark.parametrize(
+    ("sdl", "query", "captured", "kept"),
+    [
+        pytest.param(
+            """
     type Book { id: ID! }
     type Query { lookup(id: ID!): String }
     type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool)
-    operation = _parse('query { lookup(id: "placeholder") }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    assert "placeholder" in graphql.print_ast(operation)
-
-
-def test_substitution_skips_generic_id_arg_with_non_id_name(rng):
-    sdl = """
+    """,
+            'query { lookup(id: "placeholder") }',
+            "captured-id",
+            "placeholder",
+            id="bare-id-when-field-returns-scalar",
+        ),
+        pytest.param(
+            """
     type Book { id: ID! }
     type Query { lookup(filter: ID!): String }
     type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool)
-    operation = _parse('query { lookup(filter: "placeholder") }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    assert "placeholder" in graphql.print_ast(operation)
-
-
-def test_substitution_isolates_by_argument_name_token(rng):
-    sdl = """
+    """,
+            'query { lookup(filter: "placeholder") }',
+            "captured-id",
+            "placeholder",
+            id="generic-id-arg-with-non-id-name",
+        ),
+        pytest.param(
+            """
     type Book { id: ID! }
     type Author { id: ID! }
     type Query { lookup(authorId: ID!): String }
     type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool, "book-id")
-    operation = _parse('query { lookup(authorId: "placeholder") }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    assert "placeholder" in graphql.print_ast(operation)
-
-
-def test_substitution_isolates_by_parent_type(rng):
-    sdl = """
+    """,
+            'query { lookup(authorId: "placeholder") }',
+            "book-id",
+            "placeholder",
+            id="isolated-by-argument-name-token",
+        ),
+        pytest.param(
+            """
     scalar BookID
     scalar AuthorID
     type Book { id: BookID! }
     type Author { id: AuthorID! }
     type Query { author(id: AuthorID!): Author }
     type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool, "book-id-only")
-    operation = _parse('query { author(id: "placeholder") { id } }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    printed = graphql.print_ast(operation)
-    assert "book-id-only" not in printed
-    assert "placeholder" in printed
-
-
-@pytest.mark.parametrize(
-    "body",
-    [b"not-json", b"{}", b'{"data": null}', b'{"data": "scalar"}'],
-    ids=["malformed-json", "empty-object", "data-null", "data-not-dict"],
+    """,
+            'query { author(id: "placeholder") { id } }',
+            "book-id-only",
+            "placeholder",
+            id="isolated-by-parent-type",
+        ),
+        pytest.param(
+            """
+    scalar BookID
+    type Book { id: BookID! }
+    type Query { bookByTitle(title: String!): Book }
+    type Mutation { addBook(title: String!): Book! }
+    """,
+            'query { bookByTitle(title: "placeholder") { id } }',
+            "captured-id",
+            "placeholder",
+            id="non-id-scalar-argument",
+        ),
+        pytest.param(
+            """
+    scalar BookID
+    input BookFilter { title: String }
+    type Book { id: BookID! }
+    type Query { books(filter: BookFilter!): [Book!]! }
+    type Mutation { addBook(title: String!): Book! }
+    """,
+            'query { books(filter: {title: "placeholder"}) { id } }',
+            "captured-id",
+            "placeholder",
+            id="non-id-input-field",
+        ),
+        pytest.param(
+            """
+    enum Status { ACTIVE INACTIVE }
+    type Book { id: ID! }
+    type Query { books(status: Status!): [Book!]! }
+    type Mutation { addBook(title: String!): Book! }
+    """,
+            "query { books(status: ACTIVE) { id } }",
+            "captured-id",
+            "ACTIVE",
+            id="enum-typed-argument",
+        ),
+        pytest.param(
+            """
+    scalar BookID
+    scalar AuthorID
+    input AuthorRef { id: AuthorID! }
+    type Book { id: BookID! }
+    type Author { id: AuthorID! }
+    type Query { authorPosts(ref: AuthorRef!): [String!]! }
+    type Mutation { addBook(title: String!): Book! }
+    """,
+            'query { authorPosts(ref: {id: "placeholder"}) }',
+            "book-id",
+            "placeholder",
+            id="input-object-field-isolated-by-type",
+        ),
+        pytest.param(
+            """
+    scalar BookID
+    type Book { id: BookID! }
+    type Query { books(titles: [String!]!): [Book!]! }
+    type Mutation { addBook(title: String!): Book! }
+    """,
+            'query { books(titles: ["a", "b"]) { id } }',
+            "captured-id",
+            '["a", "b"]',
+            id="list-of-non-id-scalars",
+        ),
+        pytest.param(
+            """
+    scalar BookID
+    type Book { id: BookID! }
+    type Query { books(ids: [BookID!]!): [Book!]! }
+    type Mutation { addBook(title: String!): Book! }
+    """,
+            "query { books(ids: []) { id } }",
+            "captured-id",
+            "ids: []",
+            id="empty-list-argument",
+        ),
+    ],
 )
-def test_capture_response_skips_unusable_payloads(pool, rng, body):
-    operation = _parse('mutation { addBook(title: "x", authorId: "1") { id } }')
-    pool.capture_response(response_body=body, operation_node=operation)
-    assert pool.draw(handle=Handle("Book", "id"), random=rng) is None
+def test_substitution_leaves_untouched(ctx, sdl, query, captured, kept, rng):
+    schema, pool = _schema_and_pool(ctx, sdl)
+    _capture_book(pool, captured)
+    operation = substitute_pool_values(operation_node=_parse(query), client_schema=schema, pool=pool, random=rng)
+    printed = graphql.print_ast(operation)
+    assert kept in printed
+    assert captured not in printed
 
 
-def test_capture_skips_subscription_operations(rng):
+def test_capture_skips_subscription_operations(ctx, rng):
     sdl = """
     type Query { _: Int }
     type Subscription { event: String! }
     """
-    schema, pool = _schema_and_pool(sdl)
+    schema, pool = _schema_and_pool(ctx, sdl)
     operation = _parse("subscription { event }")
     pool.capture(operation_node=operation, response_data={"event": "hello"})
     assert pool.draw(handle=Handle("Subscription", "id"), random=rng) is None
@@ -244,14 +458,14 @@ def test_capture_skips_fragment_spreads_in_selection_set(pool, rng):
     assert pool.draw(handle=Handle("Author", "id"), random=rng) == "captured"
 
 
-def test_capture_skips_enum_typed_fields(rng):
+def test_capture_skips_enum_typed_fields(ctx, rng):
     sdl = """
     enum Status { ACTIVE INACTIVE }
     type Author { id: ID! status: Status! }
     type Query { authors: [Author!]! }
     type Mutation { _: Boolean }
     """
-    schema, pool = _schema_and_pool(sdl)
+    schema, pool = _schema_and_pool(ctx, sdl)
     operation = _parse("query { authors { id status } }")
     pool.capture(
         operation_node=operation,
@@ -261,136 +475,52 @@ def test_capture_skips_enum_typed_fields(rng):
     assert pool.draw(handle=Handle("Author", "id"), random=rng) == "a-1"
 
 
-def test_substitution_skips_subscription_operations(rng):
+def test_substitution_skips_subscription_operations(ctx, rng):
     sdl = """
     type Query { _: Int }
     type Subscription { event: String! }
     """
-    schema, pool = _schema_and_pool(sdl)
+    schema, pool = _schema_and_pool(ctx, sdl)
     operation = _parse("subscription { event }")
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
+    operation = substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
     # No-op: substitution silently skips operation types other than query/mutation.
     assert "event" in graphql.print_ast(operation)
 
 
-def test_substitution_skips_non_id_scalar_arguments(rng):
-    sdl = """
-    scalar BookID
-    type Book { id: BookID! }
-    type Query { bookByTitle(title: String!): Book }
-    type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
+_UNKNOWN_NODES_SDL = """
+scalar BookID
+input BookFilter { id: BookID }
+type Book { id: BookID! title: String! }
+type Query { book(id: BookID!): Book  books(filter: BookFilter): [Book!]! }
+type Mutation { addBook(title: String!): Book! }
+"""
+
+
+def test_substitution_leaves_nodes_unknown_to_the_schema_untouched(ctx, rng):
+    schema, pool = _schema_and_pool(ctx, _UNKNOWN_NODES_SDL)
     _capture_book(pool)
-    operation = _parse('query { bookByTitle(title: "placeholder") { id } }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    # `title: String!` is not an ID-shaped argument; substitution leaves it.
-    assert "placeholder" in graphql.print_ast(operation)
+    operation = _parse(
+        'query { __typename book(id: "placeholder", extra: "keep") '
+        'books(filter: {id: "placeholder", unknown: "keep"}) { id } }'
+    )
+    operation = substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
+    assert graphql.print_ast(operation) == graphql.print_ast(
+        _parse(
+            'query { __typename book(id: "captured-id", extra: "keep") '
+            'books(filter: {id: "captured-id", unknown: "keep"}) { id } }'
+        )
+    )
 
 
-def test_substitution_leaves_non_id_input_fields_untouched(rng):
-    sdl = """
-    scalar BookID
-    input BookFilter { title: String }
-    type Book { id: BookID! }
-    type Query { books(filter: BookFilter!): [Book!]! }
-    type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool)
-    operation = _parse('query { books(filter: {title: "placeholder"}) { id } }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    assert "placeholder" in graphql.print_ast(operation)
-
-
-@pytest.mark.parametrize(
-    ("input_field", "field_type"),
-    [
-        ("id", "BookID"),
-        ("bookId", "ID!"),
-        ("book_id", "ID!"),
-    ],
-    ids=["bespoke-scalar", "camelCase-name-token", "snake_case-name-token"],
-)
-def test_substitution_descends_into_input_object(input_field, field_type, rng):
-    sdl = f"""
-    scalar BookID
-    input BookRef {{ {input_field}: {field_type} }}
-    type Book {{ id: BookID! }}
-    type Query {{ lookup(ref: BookRef!): String }}
-    type Mutation {{ addBook(title: String!): Book! }}
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool)
-    operation = _parse(f'query {{ lookup(ref: {{{input_field}: "placeholder"}}) }}')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    assert "captured-id" in graphql.print_ast(operation)
-
-
-def test_substitution_skips_enum_typed_arguments(rng):
-    sdl = """
-    enum Status { ACTIVE INACTIVE }
-    type Book { id: ID! }
-    type Query { books(status: Status!): [Book!]! }
-    type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool)
-    operation = _parse("query { books(status: ACTIVE) { id } }")
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    assert "ACTIVE" in graphql.print_ast(operation)
-
-
-def test_substitution_descends_into_nested_input_object(rng):
-    sdl = """
-    scalar BookID
-    input BookRef { id: BookID! }
-    input UpdateInput { ref: BookRef!, title: String! }
-    type Book { id: BookID! }
-    type Query { _: Int }
-    type Mutation {
-        addBook(title: String!): Book!
-        updateBook(input: UpdateInput!): Book
-    }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool)
-    operation = _parse('mutation { updateBook(input: {ref: {id: "placeholder"}, title: "t"}) { id } }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    assert "captured-id" in graphql.print_ast(operation)
-
-
-def test_substitution_isolates_input_object_field_by_type(rng):
-    sdl = """
-    scalar BookID
-    scalar AuthorID
-    input AuthorRef { id: AuthorID! }
-    type Book { id: BookID! }
-    type Author { id: AuthorID! }
-    type Query { authorPosts(ref: AuthorRef!): [String!]! }
-    type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool, "book-id")
-    operation = _parse('query { authorPosts(ref: {id: "placeholder"}) }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    assert "placeholder" in graphql.print_ast(operation)
-
-
-def test_substitution_skips_fragment_spreads_inside_selection(rng):
-    sdl = """
-    scalar BookID
-    type Book { id: BookID! title: String! }
-    type Query { book(id: BookID!): Book }
-    type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool)
-    # Fragment spread next to `id` inside book's selection set; the walker skips it.
-    operation = _parse('query { book(id: "placeholder") { id ...BookFields } } fragment BookFields on Book { title }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    # The outer arg is substituted; the fragment spread doesn't break the walk.
-    assert "captured-id" in graphql.print_ast(operation)
+def test_iter_operation_pool_values_skips_nodes_unknown_to_the_schema():
+    schema = graphql.build_schema(_UNKNOWN_NODES_SDL)
+    operation = _parse(
+        'query { __typename book(id: "abc", extra: "keep") books(filter: {id: "def", unknown: "x"}) { id } }'
+    )
+    assert list(iter_operation_pool_values(operation, schema, SchemaIndex(schema))) == [
+        (Handle("Book", "id"), "abc"),
+        (Handle("Book", "id"), "def"),
+    ]
 
 
 @pytest.mark.parametrize(
@@ -403,54 +533,25 @@ def test_substitution_skips_fragment_spreads_inside_selection(rng):
     ],
     ids=["bespoke-list", "camelCase-Ids", "camelCase-IDs", "snake_case-_ids"],
 )
-def test_substitution_into_list_argument(arg_name, scalar_type, rng):
+def test_substitution_into_list_argument(ctx, arg_name, scalar_type, rng):
     sdl = f"""
     scalar BookID
     type Book {{ id: BookID! }}
     type Query {{ books({arg_name}: [{scalar_type}!]!): [Book!]! }}
     type Mutation {{ addBook(title: String!): Book! }}
     """
-    schema, pool = _schema_and_pool(sdl)
+    schema, pool = _schema_and_pool(ctx, sdl)
     for value in ("id-1", "id-2"):
         _capture_book(pool, value)
     operation = _parse(f'query {{ books({arg_name}: ["a", "b"]) {{ id }} }}')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
+    operation = substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
     printed = graphql.print_ast(operation)
     # Both list elements get replaced by captured ids; original placeholders are gone.
     assert '"a"' not in printed and '"b"' not in printed
     assert any(captured in printed for captured in ("id-1", "id-2"))
 
 
-def test_substitution_skips_list_of_non_id_scalars(rng):
-    sdl = """
-    scalar BookID
-    type Book { id: BookID! }
-    type Query { books(titles: [String!]!): [Book!]! }
-    type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool)
-    operation = _parse('query { books(titles: ["a", "b"]) { id } }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    printed = graphql.print_ast(operation)
-    assert '"a"' in printed and '"b"' in printed
-
-
-def test_substitution_into_empty_list_argument_is_noop(rng):
-    sdl = """
-    scalar BookID
-    type Book { id: BookID! }
-    type Query { books(ids: [BookID!]!): [Book!]! }
-    type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool)
-    operation = _parse("query { books(ids: []) { id } }")
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    assert "captured-id" not in graphql.print_ast(operation)
-
-
-def test_substitution_into_list_of_input_objects(rng):
+def test_substitution_into_list_of_input_objects(ctx, rng):
     sdl = """
     scalar BookID
     input BookRef { id: BookID! }
@@ -458,28 +559,13 @@ def test_substitution_into_list_of_input_objects(rng):
     type Query { lookup(refs: [BookRef!]!): [Book!]! }
     type Mutation { addBook(title: String!): Book! }
     """
-    schema, pool = _schema_and_pool(sdl)
+    schema, pool = _schema_and_pool(ctx, sdl)
     _capture_book(pool)
     operation = _parse('query { lookup(refs: [{id: "a"}, {id: "b"}]) { id } }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
+    operation = substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
     printed = graphql.print_ast(operation)
     assert '"a"' not in printed and '"b"' not in printed
     assert "captured-id" in printed
-
-
-def test_substitution_walks_into_nested_object_selections(rng):
-    sdl = """
-    scalar BookID
-    type Author { books(bookId: BookID!): [String!]! }
-    type Book { id: BookID! }
-    type Query { author: Author book(id: BookID!): Book }
-    type Mutation { addBook(title: String!): Book! }
-    """
-    schema, pool = _schema_and_pool(sdl)
-    _capture_book(pool)
-    operation = _parse('query { author { books(bookId: "placeholder") } }')
-    substitute_pool_values(operation_node=operation, client_schema=schema, pool=pool, random=rng)
-    assert "captured-id" in graphql.print_ast(operation)
 
 
 def test_tombstone_evicts_value_from_pool(pool, rng):
@@ -590,7 +676,7 @@ type Subscription { event(id: ID!): String! }
 def test_iter_operation_pool_values(sdl, query, expected):
     schema = graphql.build_schema(sdl)
     operation = _parse(query)
-    assert list(iter_operation_pool_values(operation, schema)) == expected
+    assert list(iter_operation_pool_values(operation, schema, SchemaIndex(schema))) == expected
 
 
 def test_capture_and_draw_non_id_handle(rng):
@@ -599,7 +685,7 @@ def test_capture_and_draw_non_id_handle(rng):
         " type Query { projects: [Project!]! }"
         " type Mutation { moveIssue(projectPath: String!, title: String!): Boolean }"
     )
-    pool = GraphQLResourcePool(client_schema=schema, handles={Handle("Project", "fullPath")})
+    pool = GraphQLResourcePool(client_schema=schema, index=SchemaIndex(schema), handles={Handle("Project", "fullPath")})
     pool.capture(
         operation_node=_parse("query { projects { id fullPath } }"),
         response_data={"projects": [{"id": "1", "fullPath": "acme/web"}]},
@@ -615,13 +701,13 @@ def test_pool_substitutes_non_id_argument(rng):
         " type Query { projects: [Project!]! }"
         " type Mutation { moveIssue(projectPath: String!, title: String!): Boolean }"
     )
-    pool = GraphQLResourcePool(client_schema=schema, handles={Handle("Project", "fullPath")})
+    pool = GraphQLResourcePool(client_schema=schema, index=SchemaIndex(schema), handles={Handle("Project", "fullPath")})
     pool.capture(
         operation_node=_parse("query { projects { id fullPath } }"),
         response_data={"projects": [{"id": "1", "fullPath": "acme/web"}]},
     )
     op = _parse('mutation { moveIssue(projectPath: "RANDOM", title: "x") }')
-    substitute_pool_values(
+    op = substitute_pool_values(
         operation_node=op, client_schema=schema, pool=pool, random=rng, schema_index=SchemaIndex(schema)
     )
     assert 'projectPath: "acme/web"' in graphql.print_ast(op)
@@ -633,7 +719,7 @@ _POOL_MODE_SDL = (
 
 
 def _pool_with_captured_book(schema):
-    pool = GraphQLResourcePool(client_schema=schema.client_schema)
+    pool = _make_pool(schema)
     pool.capture(
         operation_node=_parse("query { book { id author { id } } }"),
         response_data={"book": {"id": "captured-book", "author": {"id": "captured-author"}}},
@@ -645,30 +731,54 @@ def _pool_with_captured_book(schema):
 def test_negative_case_keeps_violation_when_pool_has_values(ctx):
     schema = ctx.graphql.load_sdl(_POOL_MODE_SDL)
     strategy = schema["Query"]["book"].as_strategy(
-        generation_mode=GenerationMode.NEGATIVE, extra_data_source=_pool_with_captured_book(schema)
+        generation_mode=GenerationMode.NEGATIVE,
+        feedback=FeedbackSources(extra_data_source=_pool_with_captured_book(schema)),
     )
 
-    @given(strategy)
-    @settings(max_examples=10, suppress_health_check=list(HealthCheck), deadline=None)
+    @run_given(strategy, max_examples=10)
     def test(case):
         assert graphql.validate(schema.client_schema, graphql.parse(case.body)), (
             f"Negative case is schema-valid: {case.body}"
         )
 
-    test()
-
 
 @pytest.mark.hypothesis_nested
 def test_positive_case_uses_pool_values(ctx):
     schema = ctx.graphql.load_sdl(_POOL_MODE_SDL)
-    strategy = schema["Query"]["book"].as_strategy(extra_data_source=_pool_with_captured_book(schema))
-    bodies = []
-
-    @given(strategy)
-    @settings(max_examples=10, suppress_health_check=list(HealthCheck), deadline=None)
-    def test(case):
-        bodies.append(case.body)
-
-    test()
+    strategy = schema["Query"]["book"].as_strategy(
+        feedback=FeedbackSources(extra_data_source=_pool_with_captured_book(schema))
+    )
+    bodies = [case.body for case in generate_many(strategy, 10)]
 
     assert any('id: "captured-book"' in body and 'authorId: "captured-author"' in body for body in bodies)
+
+
+_NOTE_DELETE_SDL = """
+type Note {{ id: ID! title: String }}
+type DeleteNote {{ id: ID! ok: Boolean }}
+type Query {{ note(id: ID!): Note }}
+type Mutation {{ createNote(title: String): Note deleteNote(id: ID!): {} }}
+"""
+
+
+@pytest.mark.parametrize(
+    ("result_type", "selection"),
+    [("DeleteNote", " { ok }"), ("Boolean", "")],
+    ids=["envelope", "boolean"],
+)
+def test_successful_delete_evicts_id_before_its_response_is_recorded(
+    ctx, response_factory, rng, result_type, selection
+):
+    schema = ctx.graphql.load_sdl(_NOTE_DELETE_SDL.format(result_type))
+    pool = _make_pool(schema)
+    create = schema["Mutation"]["createNote"]
+    pool.record_response(
+        operation=create,
+        response=response_factory.core(content=b'{"data": {"createNote": {"id": "note-1"}}}'),
+        case=create.Case(body='mutation { createNote(title: "x") { id } }'),
+    )
+    delete = schema["Mutation"]["deleteNote"]
+    pool.record_successful_delete(
+        operation=delete, case=delete.Case(body=f'mutation {{ deleteNote(id: "note-1"){selection} }}')
+    )
+    assert pool.draw(handle=Handle("Note", "id"), random=rng) is None

@@ -1,286 +1,573 @@
 from __future__ import annotations
 
-import bitarray
-from bitstring.exceptions import CreationError
-from typing import Union, Iterable, Optional, overload, Iterator, Any
+import functools
 
-if bitarray.__version__.startswith("2."):
-    raise ImportError(f"bitstring version 4.3 requires bitarray version 3 or higher. Found version {bitarray.__version__}.")
+from tibs import Tibs, Mutibs, ByteOrder, DtypeKind, DtypeSingle, DtypeTuple
 
-def indices(s: slice, length: int) -> tuple[int, int | None, int]:
-    """A better implementation of slice.indices such that a
-    slice made from [start:stop:step] will actually equal the original slice."""
-    if s.step is None or s.step > 0:
-        return s.indices(length)
-    assert s.step < 0
-    start, stop, step = s.indices(length)
-    if stop < 0:
-        stop = None
-    return start, stop, step
-
-def offset_slice_indices_lsb0(key: slice, length: int) -> slice:
-    start, stop, step = indices(key, length)
-    if step is not None and step < 0:
-        if stop is None:
-            new_start = start + 1
-            new_stop = None
-        else:
-            first_element = start
-            last_element = start + ((stop + 1 - start) // step) * step
-            new_start = length - last_element
-            new_stop = length - first_element - 1
-    else:
-        first_element = start
-        # The last element will usually be stop - 1, but needs to be adjusted if step != 1.
-        last_element = start + ((stop - 1 - start) // step) * step
-        new_start = length - last_element - 1
-        new_stop = length - first_element
-    return slice(new_start, new_stop, key.step)
+from typing import Any, Self
+from collections.abc import Iterable, Iterator
 
 
-class BitStore:
-    """A light wrapper around bitarray that does the LSB0 stuff"""
+# The bitstring dtypes that have an exactly equivalent tibs dtype, letting values be
+# packed and unpacked in bulk instead of one at a time. Every entry here has been
+# checked to round-trip identically to bitstring's own per-element code at each of its
+# valid lengths. Names that are absent - se, ue, sie, uie, bits, pad - have no tibs
+# equivalent and keep using the per-element path. More kinds can simply be added here
+# as tibs grows them.
+#
+# The narrow float kinds all have an intrinsic length and reject an explicit byte
+# order, so they're listed as Unspecified; tibs_dtype_for turns the resulting
+# ValueError into None for any length they don't allow.
+_TIBS_EQUIVALENT_DTYPES: dict[str, tuple[DtypeKind, ByteOrder]] = {
+    'u': (DtypeKind.Uint, ByteOrder.Unspecified),
+    'uint': (DtypeKind.Uint, ByteOrder.Unspecified),
+    'ube': (DtypeKind.Uint, ByteOrder.Big),
+    'uintbe': (DtypeKind.Uint, ByteOrder.Big),
+    'ule': (DtypeKind.Uint, ByteOrder.Little),
+    'uintle': (DtypeKind.Uint, ByteOrder.Little),
+    'i': (DtypeKind.Int, ByteOrder.Unspecified),
+    'int': (DtypeKind.Int, ByteOrder.Unspecified),
+    'ibe': (DtypeKind.Int, ByteOrder.Big),
+    'intbe': (DtypeKind.Int, ByteOrder.Big),
+    'ile': (DtypeKind.Int, ByteOrder.Little),
+    'intle': (DtypeKind.Int, ByteOrder.Little),
+    'f': (DtypeKind.Float, ByteOrder.Big),
+    'fbe': (DtypeKind.Float, ByteOrder.Big),
+    'float': (DtypeKind.Float, ByteOrder.Big),
+    'floatbe': (DtypeKind.Float, ByteOrder.Big),
+    'fle': (DtypeKind.Float, ByteOrder.Little),
+    'floatle': (DtypeKind.Float, ByteOrder.Little),
+    'bool': (DtypeKind.Bool, ByteOrder.Unspecified),
+    'bin': (DtypeKind.Bin, ByteOrder.Unspecified),
+    'hex': (DtypeKind.Hex, ByteOrder.Unspecified),
+    'oct': (DtypeKind.Oct, ByteOrder.Unspecified),
+    'bytes': (DtypeKind.Bytes, ByteOrder.Unspecified),
+    'bfloat': (DtypeKind.BFloat, ByteOrder.Big),
+    'bfloatbe': (DtypeKind.BFloat, ByteOrder.Big),
+    'bfloatle': (DtypeKind.BFloat, ByteOrder.Little),
+    'p3binary': (DtypeKind.Binary8P3, ByteOrder.Unspecified),
+    'p4binary': (DtypeKind.Binary8P4, ByteOrder.Unspecified),
+    'e4m3mxfp_saturate': (DtypeKind.OcpE4M3Saturate, ByteOrder.Unspecified),
+    'e4m3mxfp_overflow': (DtypeKind.OcpE4M3Overflow, ByteOrder.Unspecified),
+    'e5m2mxfp_saturate': (DtypeKind.OcpE5M2Saturate, ByteOrder.Unspecified),
+    'e5m2mxfp_overflow': (DtypeKind.OcpE5M2Overflow, ByteOrder.Unspecified),
+    'e3m2mxfp': (DtypeKind.OcpE3M2, ByteOrder.Unspecified),
+    'e2m3mxfp': (DtypeKind.OcpE2M3, ByteOrder.Unspecified),
+    'e2m1mxfp': (DtypeKind.OcpE2M1, ByteOrder.Unspecified),
+    'e8m0mxfp': (DtypeKind.OcpE8M0, ByteOrder.Unspecified),
+    'mxint': (DtypeKind.OcpInt8, ByteOrder.Unspecified),
+}
 
-    __slots__ = ('_bitarray', 'modified_length', 'immutable')
 
-    def __init__(self, initializer: Union[int, bitarray.bitarray, str, None] = None,
-                 immutable: bool = False) -> None:
-        self._bitarray = bitarray.bitarray(initializer)
-        self.immutable = immutable
-        self.modified_length = None
+@functools.lru_cache(256)
+def tibs_dtype_for(name: str, bitlength: int | None) -> DtypeSingle | None:
+    """Return the tibs dtype equivalent to a bitstring dtype, or None if there isn't one.
+
+    bitlength is in bits, which is what tibs dtypes use for every kind - including
+    'bytes', where bitstring's own length is a byte count.
+    """
+    if bitlength is None:
+        return None
+    try:
+        kind, byte_order = _TIBS_EQUIVALENT_DTYPES[name]
+    except KeyError:
+        return None
+    try:
+        return DtypeSingle.from_params(kind, bitlength, byte_order)
+    except ValueError:
+        # A length this kind doesn't allow. The per-element path will handle it.
+        return None
+
+
+@functools.lru_cache(256)
+def tibs_dtype_tuple_for(specs: tuple[tuple[str, int | None], ...]) -> DtypeTuple | None:
+    """Return a tibs dtype covering a whole list of bitstring dtypes, or None.
+
+    None if any of them has no tibs equivalent, which leaves the caller reading or
+    packing one dtype at a time. specs are (bitstring dtype name, bitlength) pairs.
+    """
+    dtypes = []
+    for name, bitlength in specs:
+        dtype = tibs_dtype_for(name, bitlength)
+        if dtype is None:
+            return None
+        dtypes.append(dtype)
+    try:
+        return DtypeTuple.from_params(dtypes)
+    except ValueError:
+        return None
+
+
+def _normalise_byte_import_args(offset: int | None, length: int | None) -> tuple[int | None, int | None]:
+    if length is None and isinstance(offset, int) and offset == 0:
+        offset = None
+    return offset, length
+
+
+def _validated_buffer(buffer, offset: int | None, length: int | None) -> memoryview:
+    """Validate offset and length in bits against a buffer, returning it as a memoryview."""
+    mv = memoryview(buffer)
+    if offset is None:
+        offset = 0
+    if offset < 0:
+        raise ValueError("Can't create bitstring with a negative offset.")
+    if offset > mv.nbytes * 8:
+        raise ValueError(
+            f"Can't create bitstring with an offset of {offset} from {mv.nbytes * 8} bits of data.")
+    if length is not None:
+        if length < 0:
+            raise ValueError("Can't create bitstring with a negative length.")
+        if offset + length > mv.nbytes * 8:
+            raise ValueError(
+                f"Can't create bitstring with a length of {length} from {mv.nbytes * 8 - offset} bits of data.")
+    return mv
+
+
+class _BitStoreBase:
+    """Shared pass-through behaviour for ConstBitStore and MutableBitStore.
+
+    The classmethod constructors (join, from_zeros, from_bytes, etc.) are NOT here:
+    each needs to call Tibs.from_x or Mutibs.from_x, and doing that via an extra
+    lookup method would add a call on a hot path just to avoid a few lines of
+    duplication. They're defined directly on each subclass instead.
+    """
+
+    __slots__ = ('tibs',)
+
+    def __init__(self, initializer: Tibs | Mutibs) -> None:
+        self.tibs = initializer
+
+    def __getstate__(self) -> bytes:
+        # The tibs types can't be pickled directly, so use their own encoded form.
+        return self.tibs.encode()
 
     @classmethod
-    def frombytes(cls, b: Union[bytes, bytearray, memoryview], /) -> BitStore:
-        x = super().__new__(cls)
-        x._bitarray = bitarray.bitarray()
-        x._bitarray.frombytes(b)
-        x.immutable = False
-        x.modified_length = None
-        return x
+    def from_buffer(cls, buffer, /, offset: int | None, length: int | None) -> Self:
+        mv = _validated_buffer(buffer, offset, length)
+        offset = offset or 0
+        # Only the bytes covering the wanted bits are passed on, so that for a memory
+        # mapped file just that part gets read, rather than the whole of the file.
+        byte_end = mv.nbytes if length is None else (offset + length + 7) // 8
+        mv = mv.cast('B')[offset // 8: byte_end]
+        return cls.from_bytes(mv, offset=offset % 8, length=length)
 
-    @classmethod
-    def frombuffer(cls, buffer, /, length: Optional[int] = None) -> BitStore:
-        x = super().__new__(cls)
-        x._bitarray = bitarray.bitarray(buffer=buffer)
-        x.immutable = True
-        x.modified_length = length
-        # Here 'modified' means it shouldn't be changed further, so setting, deleting etc. are disallowed.
-        if x.modified_length is not None:
-            if x.modified_length < 0:
-                raise CreationError("Can't create bitstring with a negative length.")
-            if x.modified_length > len(x._bitarray):
-                raise CreationError(
-                    f"Can't create bitstring with a length of {x.modified_length} from {len(x._bitarray)} bits of data.")
-        return x
+    def to_bytes(self) -> bytes:
+        return self.tibs.to_padded_bytes()
 
-    def setall(self, value: int, /) -> None:
-        self._bitarray.setall(value)
+    def to_bools(self) -> list[bool]:
+        return self.tibs.to_bools()
 
-    def tobytes(self) -> bytes:
-        if self.modified_length is not None:
-            return self._bitarray[:self.modified_length].tobytes()
-        return self._bitarray.tobytes()
+    def read_bytes(self, start: int, length: int) -> bytes:
+        return self.tibs.to_bytes(start, start + length)
 
-    def slice_to_uint(self, start: Optional[int] = None, end: Optional[int] = None) -> int:
-        return bitarray.util.ba2int(self.getslice(start, end)._bitarray, signed=False)
+    def byte_swapped(self, start: int | None = None, end: int | None = None) -> Self:
+        return type(self)(self.tibs.byte_swapped(start=start, end=end))
 
-    def slice_to_int(self, start: Optional[int] = None, end: Optional[int] = None) -> int:
-        return bitarray.util.ba2int(self.getslice(start, end)._bitarray, signed=True)
+    def to_u(self) -> int:
+        return self.tibs.to_u()
 
-    def slice_to_hex(self, start: Optional[int] = None, end: Optional[int] = None) -> str:
-        return bitarray.util.ba2hex(self.getslice(start, end)._bitarray)
+    def read_u(self, start: int, length: int) -> int:
+        return self.tibs.to_u(start, start + length)
 
-    def slice_to_bin(self, start: Optional[int] = None, end: Optional[int] = None) -> str:
-        return self.getslice(start, end)._bitarray.to01()
+    def to_i(self) -> int:
+        return self.tibs.to_i()
 
-    def slice_to_oct(self, start: Optional[int] = None, end: Optional[int] = None) -> str:
-        return bitarray.util.ba2base(8, self.getslice(start, end)._bitarray)
+    def read_i(self, start: int, length: int) -> int:
+        return self.tibs.to_i(start, start + length)
 
-    def __iadd__(self, other: BitStore, /) -> BitStore:
-        self._bitarray += other._bitarray
-        return self
+    def to_hex(self) -> str:
+        return self.tibs.to_hex()
 
-    def __add__(self, other: BitStore, /) -> BitStore:
-        bs = self._copy()
-        bs += other
-        return bs
+    def read_hex(self, start: int, length: int) -> str:
+        return self.tibs.to_hex(start, start + length)
+
+    def to_bin(self) -> str:
+        return self.tibs.to_bin()
+
+    def read_bin(self, start: int, length: int) -> str:
+        return self.tibs.to_bin(start, start + length)
+
+    def to_oct(self) -> str:
+        return self.tibs.to_oct()
+
+    def read_oct(self, start: int, length: int) -> str:
+        return self.tibs.to_oct(start, start + length)
+
+    def __add__(self, other: _BitStoreBase, /) -> Self:
+        return type(self)(self.tibs + other.tibs)
 
     def __eq__(self, other: Any, /) -> bool:
-        return self._bitarray == other._bitarray
+        if not isinstance(other, _BitStoreBase):
+            return NotImplemented
+        return self.tibs == other.tibs
 
-    def __and__(self, other: BitStore, /) -> BitStore:
-        return BitStore(self._bitarray & other._bitarray)
+    def __and__(self, other: _BitStoreBase, /) -> Self:
+        return type(self)(self.tibs & other.tibs)
 
-    def __or__(self, other: BitStore, /) -> BitStore:
-        return BitStore(self._bitarray | other._bitarray)
+    def __or__(self, other: _BitStoreBase, /) -> Self:
+        return type(self)(self.tibs | other.tibs)
 
-    def __xor__(self, other: BitStore, /) -> BitStore:
-        return BitStore(self._bitarray ^ other._bitarray)
+    def __xor__(self, other: _BitStoreBase, /) -> Self:
+        return type(self)(self.tibs ^ other.tibs)
 
-    def __iand__(self, other: BitStore, /) -> BitStore:
-        self._bitarray &= other._bitarray
+    def __invert__(self) -> Self:
+        return type(self)(~self.tibs)
+
+    def __lshift__(self, n: int, /) -> Self:
+        return type(self)(self.tibs << n)
+
+    def __rshift__(self, n: int, /) -> Self:
+        return type(self)(self.tibs >> n)
+
+    def find(self, bs: _BitStoreBase, start: int, end: int, bytealigned: bool = False,
+             mask: _BitStoreBase | None = None) -> int | None:
+        return self.tibs.find(bs.tibs, start, end, byte_aligned=bytealigned,
+                              mask=None if mask is None else mask.tibs)
+
+    def rfind(self, bs: _BitStoreBase, start: int, end: int, bytealigned: bool = False,
+              mask: _BitStoreBase | None = None) -> int | None:
+        return self.tibs.rfind(bs.tibs, start, end, byte_aligned=bytealigned,
+                               mask=None if mask is None else mask.tibs)
+
+    def __imul__(self, n: int, /) -> Self:
+        self.tibs *= n
         return self
 
-    def __ior__(self, other: BitStore, /) -> BitStore:
-        self._bitarray |= other._bitarray
-        return self
+    def getindex(self, index: int, /) -> bool:
+        return self.tibs[index]
 
-    def __ixor__(self, other: BitStore, /) -> BitStore:
-        self._bitarray ^= other._bitarray
-        return self
+    def getslice_withstep(self, key: slice, /) -> Self:
+        return type(self)(self.tibs[key])
 
-    def find(self, bs: BitStore, start: int, end: int, bytealigned: bool = False) -> int:
-        if not bytealigned:
-            return self._bitarray.find(bs._bitarray, start, end)
-        try:
-            return next(self.findall_msb0(bs, start, end, bytealigned))
-        except StopIteration:
-            return -1
+    def getslice(self, start: int | None, stop: int | None, /) -> Self:
+        return type(self)(self.tibs[start:stop])
 
-    def rfind(self, bs: BitStore, start: int, end: int, bytealigned: bool = False):
-        if not bytealigned:
-            return self._bitarray.find(bs._bitarray, start, end, right=True)
-        try:
-            return next(self.rfindall_msb0(bs, start, end, bytealigned))
-        except StopIteration:
-            return -1
+    def any(self) -> bool:
+        return self.tibs.any()
 
-    def findall_msb0(self, bs: BitStore, start: int, end: int, bytealigned: bool = False) -> Iterator[int]:
-        if bytealigned is True and len(bs) % 8 == 0:
-            # Special case, looking for whole bytes on whole byte boundaries
-            bytes_ = bs.tobytes()
-            # Round up start byte to next byte, and round end byte down.
-            # We're only looking for whole bytes, so can ignore bits at either end.
-            start_byte = (start + 7) // 8
-            end_byte = end // 8
-            b = self._bitarray[start_byte * 8: end_byte * 8].tobytes()
-            byte_pos = 0
-            bytes_to_search = end_byte - start_byte
-            while byte_pos < bytes_to_search:
-                byte_pos = b.find(bytes_, byte_pos)
-                if byte_pos == -1:
-                    break
-                yield (byte_pos + start_byte) * 8
-                byte_pos = byte_pos + 1
-            return
-        # General case
-        i = self._bitarray.search(bs._bitarray, start, end)
-        if not bytealigned:
-            for p in i:
-                yield p
-        else:
-            for p in i:
-                if (p % 8) == 0:
-                    yield p
+    def all(self) -> bool:
+        return self.tibs.all()
 
-    def rfindall_msb0(self, bs: BitStore, start: int, end: int, bytealigned: bool = False) -> Iterator[int]:
-        i = self._bitarray.search(bs._bitarray, start, end, right=True)
-        if not bytealigned:
-            for p in i:
-                yield p
-        else:
-            for p in i:
-                if (p % 8) == 0:
-                    yield p
+    def count(self, value: Any) -> int:
+        return self.tibs.count(value)
 
-    def count(self, value, /) -> int:
-        return self._bitarray.count(value)
+    def to_values(self, dtype: DtypeSingle, end: int) -> list[Any]:
+        """Unpack the bits up to end as a list of dtype values.
 
-    def clear(self) -> None:
-        self._bitarray.clear()
+        end must be a multiple of the dtype's length - tibs won't unpack a partial
+        final item the way bitstring's Array tolerates trailing bits.
+        """
+        return dtype.unpack_values(self.tibs, 0, end)
 
-    def reverse(self) -> None:
-        self._bitarray.reverse()
+    def to_values_iter(self, dtype: DtypeSingle, end: int) -> Iterator[Any]:
+        """As to_values, but yields the values rather than building a list."""
+        return dtype.unpack_values_iter(self.tibs, 0, end)
+
+    def to_value(self, dtype: DtypeSingle, start: int, end: int) -> Any:
+        """Unpack a single dtype value from the given bit range."""
+        return dtype.unpack(self.tibs, start, end)
+
+    def to_value_tuple(self, dtype: DtypeTuple, start: int, end: int) -> tuple[Any, ...]:
+        """Unpack a whole list of dtypes from the given bit range in one call."""
+        return dtype.unpack(self.tibs, start, end)
+
+    def __len__(self) -> int:
+        return len(self.tibs)
+
+
+class ConstBitStore(_BitStoreBase):
+    """A light wrapper around tibs.Tibs"""
+
+    __slots__ = ()
+
+    def __setstate__(self, state: bytes) -> None:
+        self.tibs = Tibs.decode(state)
+
+    @classmethod
+    def join(cls, bitstores: Iterable[ConstBitStore], /) -> ConstBitStore:
+        x = super().__new__(cls)
+        x.tibs = Tibs.from_joined(b.tibs for b in bitstores)
+        return x
+
+    @classmethod
+    def from_zeros(cls, i: int) -> ConstBitStore:
+        x = super().__new__(cls)
+        x.tibs = Tibs.from_zeros(i)
+        return x
+
+    @classmethod
+    def from_ones(cls, i: int) -> ConstBitStore:
+        x = super().__new__(cls)
+        x.tibs = Tibs.from_ones(i)
+        return x
+
+    @classmethod
+    def from_bytes(cls, b: bytes | bytearray | memoryview, /, offset: int | None = None,
+                   length: int | None = None) -> ConstBitStore:
+        x = super().__new__(cls)
+        offset, length = _normalise_byte_import_args(offset, length)
+        x.tibs = Tibs.from_bytes(b, bit_offset=offset, bit_length=length)
+        return x
+
+    @classmethod
+    def from_bools(cls, iterable: Iterable[Any], /) -> ConstBitStore:
+        x = super().__new__(cls)
+        x.tibs = Tibs.from_bools(iterable)
+        return x
+
+    @classmethod
+    def from_bin(cls, s: str) -> ConstBitStore:
+        x = super().__new__(cls)
+        x.tibs = Tibs.from_bin(s)
+        return x
+
+    @classmethod
+    def from_values(cls, dtype: DtypeSingle, values: Iterable[Any], /) -> ConstBitStore:
+        x = super().__new__(cls)
+        x.tibs = Tibs.from_values(dtype, values)
+        return x
+
+    @classmethod
+    def from_value(cls, dtype: DtypeSingle | DtypeTuple, value: Any, /) -> ConstBitStore:
+        """Pack a single value - or, for a DtypeTuple, a whole sequence of them."""
+        x = super().__new__(cls)
+        x.tibs = dtype.pack(value)
+        return x
+
+    def findall(self, bs: ConstBitStore | MutableBitStore, start: int, end: int, bytealigned: bool = False) -> Iterator[int]:
+        return self.tibs.find_all_iter(bs.tibs, start=start, end=end, byte_aligned=bytealigned)
+
+    def findall_list(self, bs: ConstBitStore | MutableBitStore, start: int, end: int, bytealigned: bool = False) -> list[int]:
+        return self.tibs.find_all(bs.tibs, start=start, end=end, byte_aligned=bytealigned)
 
     def __iter__(self) -> Iterable[bool]:
+        return self.tibs.__iter__()
+
+    def _mutable_copy(self) -> MutableBitStore:
+        """Always creates a copy, even if instance is immutable."""
+        return MutableBitStore(self.tibs.to_mutibs())
+
+    def copy(self) -> ConstBitStore:
+        return self
+
+    def _fresh_copy(self) -> ConstBitStore:
+        """Return a new instance, sharing the immutable data."""
+        return ConstBitStore(self.tibs)
+
+    def to_const(self) -> ConstBitStore:
+        return self
+
+    @classmethod
+    def from_tibs(cls, t: Tibs | Mutibs, /) -> ConstBitStore:
+        if isinstance(t, Mutibs):
+            return cls(t.to_tibs())
+        if not isinstance(t, Tibs):
+            raise TypeError(f"Expected tibs.Tibs or tibs.Mutibs, got {type(t).__name__}.")
+        return cls(t)
+
+    def to_tibs(self) -> Tibs:
+        return self.tibs
+
+    def chunks(self, bits: int, count: int | None = None) -> Iterator[ConstBitStore]:
+        for chunk in self.tibs.chunks_iter(bits, count):
+            yield ConstBitStore(chunk)
+
+    def split_on(self, delimiter: ConstBitStore | MutableBitStore, start: int, end: int,
+                 count: int | None = None, bytealigned: bool = False) -> list[ConstBitStore]:
+        """The pieces of [start, end) split before each delimiter occurrence.
+
+        The first piece is the (possibly empty) bits before the first occurrence; every
+        other piece starts with the delimiter. At most count pieces if count is given.
+        """
+        delimiter_len = len(delimiter.tibs)
+        positions = []
+        next_allowed = start
+        for p in self.tibs.find_all(delimiter.tibs, start=start, end=end, byte_aligned=bytealigned):
+            if p >= next_allowed:  # find_all includes overlapping occurrences; split skips them
+                positions.append(p - start)
+                next_allowed = p + delimiter_len
+        pieces = self.tibs[start:end].split_at(positions)
+        if count is not None:
+            pieces = pieces[:count]
+        return [ConstBitStore(piece) for piece in pieces]
+
+
+class MutableBitStore(_BitStoreBase):
+    """A light wrapper around tibs.Mutibs"""
+
+    __slots__ = ()
+
+    def __setstate__(self, state: bytes) -> None:
+        self.tibs = Mutibs.decode(state)
+
+    @classmethod
+    def join(cls, bitstores: Iterable[MutableBitStore], /) -> MutableBitStore:
+        x = super().__new__(cls)
+        x.tibs = Mutibs.from_joined(b.tibs for b in bitstores)
+        return x
+
+    @classmethod
+    def from_zeros(cls, i: int) -> MutableBitStore:
+        x = super().__new__(cls)
+        x.tibs = Mutibs.from_zeros(i)
+        return x
+
+    @classmethod
+    def from_ones(cls, i: int) -> MutableBitStore:
+        x = super().__new__(cls)
+        x.tibs = Mutibs.from_ones(i)
+        return x
+
+    @classmethod
+    def from_bytes(cls, b: bytes | bytearray | memoryview, /, offset: int | None = None,
+                   length: int | None = None) -> MutableBitStore:
+        x = super().__new__(cls)
+        offset, length = _normalise_byte_import_args(offset, length)
+        x.tibs = Mutibs.from_bytes(b, bit_offset=offset, bit_length=length)
+        return x
+
+    @classmethod
+    def from_bools(cls, iterable: Iterable[Any], /) -> MutableBitStore:
+        x = super().__new__(cls)
+        x.tibs = Mutibs.from_bools(iterable)
+        return x
+
+    @classmethod
+    def from_values(cls, dtype: DtypeSingle, values: Iterable[Any], /) -> MutableBitStore:
+        x = super().__new__(cls)
+        x.tibs = Mutibs.from_values(dtype, values)
+        return x
+
+    def __ilshift__(self, n: int, /) -> MutableBitStore:
+        self.tibs <<= n
+        return self
+
+    def __irshift__(self, n: int, /) -> MutableBitStore:
+        self.tibs >>= n
+        return self
+
+    def __iadd__(self, other: MutableBitStore | ConstBitStore, /) -> MutableBitStore:
+        self.tibs += other.tibs
+        return self
+
+    def __iand__(self, other: MutableBitStore | ConstBitStore, /) -> MutableBitStore:
+        self.tibs &= other.tibs
+        return self
+
+    def __ior__(self, other: MutableBitStore | ConstBitStore, /) -> MutableBitStore:
+        self.tibs |= other.tibs
+        return self
+
+    def __ixor__(self, other: MutableBitStore | ConstBitStore, /) -> MutableBitStore:
+        self.tibs ^= other.tibs
+        return self
+
+    def findall(self, bs: ConstBitStore | MutableBitStore, start: int, end: int, bytealigned: bool = False) -> Iterator[int]:
+        # Mutibs has no find_all_iter, so search an immutable snapshot. This copies the
+        # data, but also makes the iteration safe if the bitstring is mutated during it.
+        return self.tibs.to_tibs().find_all_iter(bs.tibs, start=start, end=end, byte_aligned=bytealigned)
+
+    def findall_list(self, bs: ConstBitStore | MutableBitStore, start: int, end: int, bytealigned: bool = False) -> list[int]:
+        # Unlike find_all_iter, find_all is available directly on Mutibs - the result
+        # is complete before any mutation can happen, so no snapshot is needed.
+        return self.tibs.find_all(bs.tibs, start=start, end=end, byte_aligned=bytealigned)
+
+    def clear(self) -> None:
+        self.tibs.clear()
+
+    def reverse(self) -> None:
+        self.tibs.reverse()
+
+    def byte_swap(self, start: int | None, end: int | None, byte_length: int | None = None) -> None:
+        """Reverse the bytes in [start, end), or in each byte_length group of bytes if given.
+
+        With byte_length the range has to be a whole number of groups.
+        """
+        self.tibs.byte_swap(byte_length, start=start, end=end)
+
+    def reverse_chunks(self, chunk_size: int) -> None:
+        """Reverse the order of the chunk_size-bit chunks, leaving each chunk as it is.
+
+        The length must be a multiple of chunk_size.
+        """
+        self.tibs = Mutibs.from_joined(reversed(self.tibs.chunks(chunk_size)))
+
+    def join_chunks(self, chunk_size: int, indices: range) -> MutableBitStore:
+        """A new store of the chunk_size-bit chunks at the given chunk indices, in order."""
+        # Slicing out just the chunks needed, rather than splitting the whole store into
+        # chunks and picking some, is never slower and is far quicker for a sparse stride.
+        t = self.tibs
+        return MutableBitStore(Mutibs.from_joined(t[i * chunk_size: (i + 1) * chunk_size] for i in indices))
+
+    def __iter__(self) -> Iterable[bool]:
+        # Mutibs deliberately doesn't support iteration, so index bit-by-bit.
+        # This is lazy and so reflects any mutations made while iterating.
         for i in range(len(self)):
             yield self.getindex(i)
 
-    def _copy(self) -> BitStore:
+    def extend_left(self, other: MutableBitStore | ConstBitStore, /) -> None:
+        self.tibs.extend_left(other.tibs)
+
+    def _mutable_copy(self) -> MutableBitStore:
         """Always creates a copy, even if instance is immutable."""
-        return BitStore(self._bitarray)
+        return MutableBitStore(self.tibs.__copy__())
 
-    def copy(self) -> BitStore:
-        return self if self.immutable else self._copy()
+    def copy(self) -> MutableBitStore:
+        return self._mutable_copy()
 
-    def __getitem__(self, item: Union[int, slice], /) -> Union[int, BitStore]:
-        # Use getindex or getslice instead
-        raise NotImplementedError
+    def _fresh_copy(self) -> MutableBitStore:
+        """Return a new instance with a copy of the data."""
+        return self._mutable_copy()
 
-    def getindex_msb0(self, index: int, /) -> bool:
-        return bool(self._bitarray.__getitem__(index))
+    def to_const(self) -> ConstBitStore:
+        """Return an immutable snapshot of the data."""
+        return ConstBitStore(self.tibs.to_tibs())
 
-    def getslice_withstep_msb0(self, key: slice, /) -> BitStore:
-        if self.modified_length is not None:
-            key = slice(*key.indices(self.modified_length))
-        return BitStore(self._bitarray.__getitem__(key))
+    @classmethod
+    def from_tibs(cls, t: Tibs | Mutibs, /) -> MutableBitStore:
+        if isinstance(t, Tibs):
+            return cls(t.to_mutibs())
+        if not isinstance(t, Mutibs):
+            raise TypeError(f"Expected tibs.Tibs or tibs.Mutibs, got {type(t).__name__}.")
+        return cls(t.__copy__())
 
-    def getslice_withstep_lsb0(self, key: slice, /) -> BitStore:
-        key = offset_slice_indices_lsb0(key, len(self))
-        return BitStore(self._bitarray.__getitem__(key))
+    def to_tibs(self) -> Tibs:
+        return self.tibs.to_tibs()
 
-    def getslice_msb0(self, start: Optional[int], stop: Optional[int], /) -> BitStore:
-        if self.modified_length is not None:
-            key = slice(*slice(start, stop, None).indices(self.modified_length))
-            start = key.start
-            stop = key.stop
-        return BitStore(self._bitarray[start:stop])
-
-    def getslice_lsb0(self, start: Optional[int], stop: Optional[int], /) -> BitStore:
-        s = offset_slice_indices_lsb0(slice(start, stop, None), len(self))
-        return BitStore(self._bitarray[s.start:s.stop])
-
-    def getindex_lsb0(self, index: int, /) -> bool:
-        return bool(self._bitarray.__getitem__(-index - 1))
-
-    @overload
-    def setitem_lsb0(self, key: int, value: int, /) -> None:
-        ...
-
-    @overload
-    def setitem_lsb0(self, key: slice, value: BitStore, /) -> None:
-        ...
-
-    def setitem_lsb0(self, key: Union[int, slice], value: Union[int, BitStore], /) -> None:
-        if isinstance(key, slice):
-            new_slice = offset_slice_indices_lsb0(key, len(self))
-            self._bitarray.__setitem__(new_slice, value._bitarray)
-        else:
-            self._bitarray.__setitem__(-key - 1, value)
-
-    def delitem_lsb0(self, key: Union[int, slice], /) -> None:
-        if isinstance(key, slice):
-            new_slice = offset_slice_indices_lsb0(key, len(self))
-            self._bitarray.__delitem__(new_slice)
-        else:
-            self._bitarray.__delitem__(-key - 1)
-
-    def invert_msb0(self, index: Optional[int] = None, /) -> None:
+    def invert(self, index: int | None = None, /) -> None:
         if index is not None:
-            self._bitarray.invert(index)
+            self.tibs.invert(index)
         else:
-            self._bitarray.invert()
+            self.tibs.invert()
 
-    def invert_lsb0(self, index: Optional[int] = None, /) -> None:
-        if index is not None:
-            self._bitarray.invert(-index - 1)
+    def set(self, value: Any, pos: Any, /) -> None:
+        if value:
+            self.tibs.set(pos)
         else:
-            self._bitarray.invert()
+            self.tibs.unset(pos)
 
-    def any_set(self) -> bool:
-        return self._bitarray.any()
+    def replace(self, old: MutableBitStore | ConstBitStore, new: MutableBitStore | ConstBitStore,
+                start: int | None = None, end: int | None = None,
+                count: int | None = None, bytealigned: bool = False) -> int:
+        return self.tibs.replace(old.tibs, new.tibs, start=start, end=end, count=count,
+                                 byte_aligned=bytealigned)
 
-    def all_set(self) -> bool:
-        return self._bitarray.all()
+    def rotate_left(self, n: int, start: int | None = None, end: int | None = None) -> None:
+        self.tibs.rotate_left(n, start=start, end=end)
 
-    def __len__(self) -> int:
-        return self.modified_length if self.modified_length is not None else len(self._bitarray)
+    def rotate_right(self, n: int, start: int | None = None, end: int | None = None) -> None:
+        self.tibs.rotate_right(n, start=start, end=end)
 
-    def setitem_msb0(self, key, value, /):
-        if isinstance(value, BitStore):
-            self._bitarray.__setitem__(key, value._bitarray)
+    def __setitem__(self, key, value, /):
+        if isinstance(value, (MutableBitStore, ConstBitStore)):
+            self.tibs.__setitem__(key, value.tibs)
         else:
-            self._bitarray.__setitem__(key, value)
+            if isinstance(key, slice):
+                key = range(*key.indices(len(self)))
+            if value:
+                self.tibs.set(key)
+            else:
+                self.tibs.unset(key)
 
-    def delitem_msb0(self, key, /):
-        self._bitarray.__delitem__(key)
+    def __delitem__(self, key, /):
+        self.tibs.__delitem__(key)

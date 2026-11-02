@@ -1,74 +1,72 @@
-[tool.poetry]
+[build-system]
+build-backend = "uv_build"
+requires = ["uv-build~=0.12.0"]
+
+[project]
 name = "pycep-parser"
-version = "0.5.1"
+version = "0.7.1"
 description = "A Python based Bicep parser"
-authors = ["Anton Grübel <anton.gruebel@gmail.com>"]
-license = "Apache-2.0"
-
 readme = "README.md"
-
-packages = [
-    { include = "pycep" }
+keywords = [
+    "bicep",
+    "lark",
+    "parser",
 ]
-
-homepage = "https://github.com/gruebel/pycep"
-repository = "https://github.com/gruebel/pycep"
-
-keywords = ["bicep", "parser", "lark"]
-
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
 classifiers = [
-    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Typing :: Typed"
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+dependencies = [
+    "lark>=1.3.0,<2.0.0",
+    "regex>=2024.11.6,<2027.0.0",
+    "typing-extensions>=4.12.0,<5.0.0",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.8"
-lark = ">=1.1.2"
-regex = ">=2022.1.18"
-typing-extensions = ">=3.10.0"
-importlib-resources = {version = ">=2.0.0", python = "<3.9"}
+[[project.authors]]
+name = "Anton Grübel"
+email = "anton.gruebel@gmail.com"
 
-[tool.poetry.dev-dependencies]
-assertpy = "^1.1"
-mypy = {extras = ["faster-cache"], version = "^1.13.0"}
-pre-commit = "<=3.5.0" # 3.6+ needs Python 3.9
-pytest = "^8.3.2"
+[project.urls]
+Changelog = "https://github.com/gruebel/pycep/blob/master/CHANGELOG.md"
+Homepage = "https://github.com/gruebel/pycep"
+Releases = "https://github.com/gruebel/pycep/releases"
+Repository = "https://github.com/gruebel/pycep"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.mypy]
-files = "pycep"
-strict = true
-implicit_reexport = true
-
-[[tool.mypy.overrides]]
-module = [
-    "assertpy"
+[dependency-groups]
+dev = [
+    "assertpy>=1.1,<2.0",
+    "prek>=0.4.12,<0.5.0",
+    "pytest>=9.1.0,<10.0.0",
 ]
-ignore_missing_imports = true
+
+[tool.uv]
+required-version = ">=0.12.0"
+
+[tool.uv.build-backend]
+module-name = "pycep"
+module-root = ""
+source-include = ["tests/**"]
 
 [tool.ruff]
+target-version = "py310"
+line-length = 120
 exclude = [
     ".git",
     "__pycache__",
 ]
-line-length = 120
-target-version = "py38"
 
 [tool.ruff.lint]
-preview = true
 select = [
-    "ANN",
     "A",
+    "ANN",
     "ARG",
     "B",
     "BLE001",
@@ -87,13 +85,14 @@ select = [
     "LOG",
     "N",
     "PERF",
-    "PIE",
     "PGH",
+    "PIE",
     "PLC",
-    "PLW",
     "PLE",
+    "PLW",
     "PT",
     "PTH",
+    "PYI",
     "RET",
     "RSE",
     "RUF",
@@ -101,14 +100,34 @@ select = [
     "SIM",
     "T10",
     "T20",
+    "TC",
     "UP",
     "W",
     "YTT",
 ]
 ignore = [
-    "E501", # the formatter will handle any too long line
+    "E501",
     "RET505",
     "SIM108",
 ]
-
 fixable = ["I001"]
+preview = true
+
+[tool.pyproject-fmt]
+keep_full_version = true
+max_supported_python = "3.14"
+
+[tool.ty.src]
+include = [
+    "pycep",
+    "tests",
+]
+
+[tool.ty.environment]
+python-version = "3.10"
+
+[tool.ty.rules]
+unused-ignore-comment = "error"
+
+[tool.pytest]
+strict = true

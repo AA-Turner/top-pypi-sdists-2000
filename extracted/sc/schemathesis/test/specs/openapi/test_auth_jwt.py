@@ -8,7 +8,7 @@ from flask import jsonify, request
 
 from schemathesis.resources.descriptors import Cardinality, ResourceDescriptor
 from schemathesis.resources.repository import ResourceRepository
-from schemathesis.specs.openapi.auth_jwt import seed_pool_from_headers
+from schemathesis.specs.openapi.auth_jwt import seed_pool_from_basic_auth, seed_pool_from_headers
 from schemathesis.specs.openapi.extra_data_source import ParameterRequirement
 
 
@@ -27,9 +27,14 @@ def _new_repository(resource_names: list[str]) -> ResourceRepository:
     return ResourceRepository(descriptors=descriptors)
 
 
+@pytest.mark.parametrize(
+    "auth",
+    [f"--header=Authorization: Bearer {_make_jwt({'sub': 'alice'})}", "--auth=alice:wonderland"],
+    ids=["jwt-sub", "basic-auth-username"],
+)
 @pytest.mark.snapshot(replace_reproduce_with=True)
-def test_jwt_sub_seeds_pool_for_username_path_param(cli, snapshot_cli, ctx):
-    # Without seeding, schemathesis can't generate the bearer's username, so the bug stays hidden.
+def test_auth_username_seeds_pool_for_username_path_param(cli, snapshot_cli, ctx, auth):
+    # Without seeding, schemathesis can't generate the authenticated username, so the bug stays hidden.
     user_schema = {
         "type": "object",
         "properties": {"username": {"type": "string"}, "name": {"type": "string"}},
@@ -80,85 +85,13 @@ def test_jwt_sub_seeds_pool_for_username_path_param(cli, snapshot_cli, ctx):
     def get_user(username):
         if username != "alice":
             return "", 404
-        # Bug: required `name` is null for the bearer's user.
-        return jsonify({"username": "alice", "name": None}), 200
-
-    token = _make_jwt({"sub": "alice"})
-
-    assert (
-        cli.run_openapi_app(
-            app,
-            f"--header=Authorization: Bearer {token}",
-            "--phases=fuzzing",
-            "--max-examples=50",
-            "-c response_schema_conformance",
-            "--mode=positive",
-        )
-        == snapshot_cli
-    )
-
-
-@pytest.mark.snapshot(replace_reproduce_with=True)
-def test_basic_auth_username_seeds_pool_for_username_path_param(cli, snapshot_cli, ctx):
-    # Basic-auth username is the same identifier the API trusts; without seeding the runner
-    # never generates "alice", so the bug at GET /users/alice stays hidden.
-    user_schema = {
-        "type": "object",
-        "properties": {"username": {"type": "string"}, "name": {"type": "string"}},
-        "required": ["username", "name"],
-    }
-    paths = {
-        "/users": {
-            "post": {
-                "operationId": "createUser",
-                "requestBody": {
-                    "required": True,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {"username": {"type": "string"}, "name": {"type": "string"}},
-                                "required": ["username", "name"],
-                            }
-                        }
-                    },
-                },
-                "responses": {
-                    "201": {"description": "Created", "content": {"application/json": {"schema": user_schema}}}
-                },
-            }
-        },
-        "/users/{username}": {
-            "get": {
-                "operationId": "getUser",
-                "parameters": [
-                    {"name": "username", "in": "path", "required": True, "schema": {"type": "string"}},
-                ],
-                "responses": {
-                    "200": {"description": "OK", "content": {"application/json": {"schema": user_schema}}},
-                    "404": {"description": "Not found"},
-                },
-            }
-        },
-    }
-    app, _ = ctx.openapi.make_flask_app(paths)
-
-    @app.route("/users", methods=["POST"])
-    def create_user():
-        body = request.get_json() or {}
-        return jsonify({"username": body.get("username", ""), "name": body.get("name", "")}), 201
-
-    @app.route("/users/<username>", methods=["GET"])
-    def get_user(username):
-        if username != "alice":
-            return "", 404
-        # Bug: required `name` is null for the basic-auth user.
+        # Bug: required `name` is null for the authenticated user.
         return jsonify({"username": "alice", "name": None}), 200
 
     assert (
         cli.run_openapi_app(
             app,
-            "--auth=alice:wonderland",
+            auth,
             "--phases=fuzzing",
             "--max-examples=50",
             "-c response_schema_conformance",
@@ -180,6 +113,24 @@ def test_seed_only_lands_in_buckets_with_matching_queried_field():
     seed_pool_from_headers(repo, headers, requirements)
 
     assert [i.data for i in repo.iter_instances("User")] == [{"username": "alice"}]
+    assert [i.data for i in repo.iter_instances("Order")] == []
+
+
+@pytest.mark.parametrize(
+    ("basic_auth", "expected_user"),
+    [(("alice", "wonderland"), [{"username": "alice"}]), (("", "wonderland"), [])],
+    ids=["username", "empty-username"],
+)
+def test_basic_auth_seed_only_lands_in_identifier_buckets(basic_auth, expected_user):
+    repo = _new_repository(["User", "Order"])
+    requirements = [
+        ParameterRequirement(resource_name="User", resource_field="username"),
+        ParameterRequirement(resource_name="Order", resource_field="order_id"),
+    ]
+
+    seed_pool_from_basic_auth(repo, basic_auth, requirements)
+
+    assert [i.data for i in repo.iter_instances("User")] == expected_user
     assert [i.data for i in repo.iter_instances("Order")] == []
 
 

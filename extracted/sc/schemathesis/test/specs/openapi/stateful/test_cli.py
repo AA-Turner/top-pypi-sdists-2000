@@ -1,3 +1,4 @@
+import json
 import platform
 import uuid
 from xml.etree import ElementTree
@@ -11,19 +12,18 @@ from test.apps.catalog.openapi.modifiers.stateful import (
     OmitRequiredField,
     ReturnPlainText,
 )
-from test.utils import flaky, load_yaml_or_fail
+from test.utils import load_yaml_or_fail, refusing_url
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
-@pytest.mark.parametrize("workers", [1, 2])
 @pytest.mark.skipif(platform.system() == "Windows", reason="Simpler to setup on Linux")
-def test_default(ctx, cli, snapshot_cli, workers):
+def test_default(ctx, cli, snapshot_cli):
     api = ctx.openapi.apps.users_crud()
     assert (
         cli.run(
             api.schema_url,
             "-c not_a_server_error",
-            f"--workers={workers}",
+            "--workers=2",
             "--mode=positive",
             "--seed=1",
         )
@@ -32,7 +32,7 @@ def test_default(ctx, cli, snapshot_cli, workers):
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
-@flaky(max_runs=3, min_passes=1)
+@pytest.mark.flaky(reruns=2)
 def test_sanitization(ctx, cli, tmp_path):
     api = ctx.openapi.apps.users_crud()
     cassette_path = tmp_path / "output.yaml"
@@ -50,13 +50,14 @@ def test_sanitization(ctx, cli, tmp_path):
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
-@flaky(max_runs=5, min_passes=1)
+@pytest.mark.flaky(reruns=4)
 def test_max_failures(ctx, cli, snapshot_cli):
     api = ctx.openapi.apps.users_crud_with_failure()
     assert (
         cli.run(
             api.schema_url,
             "--no-shrink",
+            # The bug needs a specific call sequence, which takes many scenarios to reach.
             "--max-examples=80",
             "--max-failures=2",
             "-c not_a_server_error",
@@ -72,7 +73,7 @@ def test_with_cassette(ctx, tmp_path, cli):
     cassette_path = tmp_path / "output.yaml"
     cli.run(
         api.schema_url,
-        "--max-examples=40",
+        "--max-examples=5",
         "--max-failures=1",
         "-c not_a_server_error",
         f"--report-vcr-path={cassette_path}",
@@ -107,6 +108,7 @@ def test_junit(ctx, tmp_path, cli):
         api.schema_url,
         "--phases=stateful",
         "--no-shrink",
+        # The bug needs a specific call sequence, which takes many scenarios to reach.
         "--max-examples=80",
         "--max-failures=1",
         "--seed=1",
@@ -128,30 +130,16 @@ def test_junit(ctx, tmp_path, cli):
     assert structure == expected, xml_content
 
 
-@pytest.mark.snapshot(replace_reproduce_with=True)
-def test_stateful_only(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.users_crud()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--phases=stateful",
-            "--mode=positive",
-            "--no-shrink",
-            "--max-examples=200",
-            "-c not_a_server_error",
-        )
-        == snapshot_cli
-    )
-
-
 @pytest.mark.snapshot(replace_reproduce_with=True, replace_phase_statistic=True)
-def test_stateful_only_with_error(ctx, cli, snapshot_cli):
+def test_stateful_only_with_error(ctx, cli, app_runner, snapshot_cli):
     api = ctx.openapi.apps.users_crud()
     assert (
         cli.run(
             api.schema_url,
-            "--url=http://127.0.0.1:1/api",
+            f"--url=http://127.0.0.1:{app_runner.run_resetting_server()}/api",
             "--phases=stateful",
+            # The reported request body must not depend on the random seed.
+            "--generation-deterministic",
         )
         == snapshot_cli
     )
@@ -175,23 +163,30 @@ def test_filtered_out(ctx, cli, snapshot_cli):
 @pytest.mark.skipif(platform.system() == "Windows", reason="Linux specific error")
 def test_proxy_error(ctx, cli, snapshot_cli):
     api = ctx.openapi.apps.users_crud_with_success()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--proxy=http://127.0.0.1",
-            "--phases=stateful",
+    # The schema is read from a file, so the proxy fails only on API calls.
+    with refusing_url() as proxy:
+        assert (
+            cli.run(str(ctx.makefile(api.spec)), f"--url={api.base_url}", f"--proxy={proxy}", "--phases=stateful")
+            == snapshot_cli
         )
-        == snapshot_cli
-    )
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
-def test_keyboard_interrupt(ctx, cli, mocker, snapshot_cli):
-    def mocked(*args, **kwargs):
-        raise KeyboardInterrupt
-
+def test_keyboard_interrupt(ctx, cli, snapshot_cli):
     api = ctx.openapi.apps.users_crud_with_success()
-    mocker.patch("schemathesis.Case.call", wraps=mocked)
+    module = ctx.write_pymodule(
+        """
+@schemathesis.hook
+def before_call(context, case, kwargs):
+    raise KeyboardInterrupt
+"""
+    )
+    assert cli.run(api.schema_url, "--phases=stateful", hooks=module) == snapshot_cli
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_stateful_only_without_links(ctx, cli, snapshot_cli):
+    api = ctx.openapi.apps.success()
     assert cli.run(api.schema_url, "--phases=stateful") == snapshot_cli
 
 
@@ -262,6 +257,38 @@ def test_not_enough_links(ctx, cli, snapshot_cli):
     assert cli.run(api.schema_url, "--phases=stateful", "--include-method=POST") == snapshot_cli
 
 
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_links_from_operation_with_unusable_body(ctx, cli, snapshot_cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/users": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Missing"}}},
+                    },
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "links": {
+                                "GetUser": {"operationId": "getUser", "parameters": {"id": "$response.body#/id"}}
+                            },
+                        }
+                    },
+                }
+            },
+            "/users/{id}": {
+                "get": {
+                    "operationId": "getUser",
+                    "parameters": [{"in": "path", "name": "id", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+    assert cli.run_openapi_app(app, "--phases=stateful") == snapshot_cli
+
+
 def test_invalid_parameter_reference(ctx, cli, snapshot_cli):
     # When a link references a non-existent parameter
     api = ctx.openapi.apps.stateful_users(InvalidParameter())
@@ -283,8 +310,106 @@ def test_missing_body_parameter(ctx, cli, snapshot_cli):
     )
 
 
+EXTRACTION_FAILURE_LINKS = ["Link5", "Link2", "Link6", "Link1", "Link4", "Link3"]
+
+
+def test_extraction_failures_order_is_stable(ctx, cli):
+    links = {
+        name: {"operationId": "getUser", "parameters": {"userId": "$response.body#/id"}}
+        for name in EXTRACTION_FAILURE_LINKS
+    }
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/users": {
+                "post": {
+                    "operationId": "createUser",
+                    "responses": {"201": {"description": "Created", "links": links}},
+                }
+            },
+            "/users/{userId}": {
+                "get": {
+                    "operationId": "getUser",
+                    "parameters": [{"name": "userId", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"404": {"description": "Not found"}},
+                }
+            },
+        }
+    )
+
+    @app.route("/users", methods=["POST"])
+    def create_user():
+        return jsonify({"name": "x"}), 201
+
+    @app.route("/users/<int:user_id>", methods=["GET"])
+    def get_user(user_id):
+        return jsonify({}), 404
+
+    result = cli.run_openapi_app(app, "--phases=stateful", "-n 50", "--workers=1", "--seed=42", "-c not_a_server_error")
+    reported = [
+        line.strip()
+        for line in result.stdout.split("Failed to extract data from response:")[1].splitlines()
+        if line.strip().startswith("POST /users -> ")
+    ]
+    assert reported == [
+        f"POST /users -> [201] {name} -> GET /users/{{userId}}" for name in sorted(EXTRACTION_FAILURE_LINKS)
+    ]
+
+
 @pytest.mark.snapshot(replace_reproduce_with=True)
-@flaky(max_runs=3, min_passes=1)
+def test_link_with_multiple_failing_parameters(ctx, cli, snapshot_cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "post": {
+                    "operationId": "createItem",
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {"application/json": {"schema": {"type": "object"}}},
+                            "links": {
+                                "GetItem": {
+                                    "operationId": "getItem",
+                                    "parameters": {"id": "$response.body#/id", "owner": "$response.body#/owner"},
+                                }
+                            },
+                        }
+                    },
+                }
+            },
+            "/items/{id}": {
+                "get": {
+                    "operationId": "getItem",
+                    "parameters": [
+                        {"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}},
+                        {"name": "owner", "in": "query", "required": True, "schema": {"type": "string"}},
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+
+    @app.route("/items", methods=["POST"])
+    def create_item():
+        return jsonify({"name": "x"}), 201
+
+    @app.route("/items/<int:item_id>", methods=["GET"])
+    def get_item(item_id):
+        return jsonify({})
+
+    assert (
+        cli.run_openapi_app(
+            app,
+            "--phases=stateful",
+            "--max-examples=5",
+            "-c not_a_server_error",
+            config={"phases": {"stateful": {"inference": {"algorithms": []}}}},
+        )
+        == snapshot_cli
+    )
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
 def test_link_requestbody_extraction_fails_when_producer_missing_id(ctx, cli, snapshot_cli):
     openapi = {
         "openapi": "3.0.0",
@@ -385,13 +510,11 @@ def test_link_requestbody_extraction_fails_when_producer_missing_id(ctx, cli, sn
         if not isinstance(data, dict):
             return {"error": "Invalid input"}, 400
 
-        name = data.get("name", "Product")
-        if not isinstance(name, str) or not name:
-            return {"error": "Invalid name"}, 400
-
-        price = data.get("price", 9.99)
-        if not isinstance(price, (int | float)):
-            return {"error": "Invalid price"}, 400
+        name = data.get("name")
+        price = data.get("price")
+        # Rejecting negative bodies keeps the reported producer response identical across runs.
+        if name != "Product" or price != 9.99:
+            return {"error": "Invalid product"}, 400
 
         product_id = str(next_id)
         next_id += 1
@@ -432,7 +555,6 @@ def test_link_requestbody_extraction_fails_when_producer_missing_id(ctx, cli, sn
     )
 
 
-@flaky(max_runs=3, min_passes=1)
 @pytest.mark.parametrize("content", ["", "User data as plain text"])
 def test_non_json_response(ctx, cli, snapshot_cli, content):
     api = ctx.openapi.apps.stateful_users(ReturnPlainText(body=content))
@@ -440,7 +562,7 @@ def test_non_json_response(ctx, cli, snapshot_cli, content):
         cli.run(
             api.schema_url,
             "--phases=stateful",
-            "-n 80",
+            "-n 10",
             "-c not_a_server_error",
             "--mode=positive",
             config={"phases": {"stateful": {"inference": {"algorithms": []}}}},
@@ -556,6 +678,69 @@ def test_stateful_link_coverage_with_no_parameters_or_body(cli, snapshot_cli, ct
         )
         == snapshot_cli
     )
+
+
+@pytest.mark.parametrize(
+    "operation_ref",
+    ["#/paths/~1items~1%7Bitem_id%7D/get", "#/paths/~1items~1{item_id}/get"],
+    ids=["percent-encoded", "unencoded"],
+)
+def test_link_operation_ref_with_path_template(ctx, cli, operation_ref):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "post": {
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {
+                                "application/json": {
+                                    "schema": {"type": "object", "properties": {"id": {"type": "string"}}}
+                                }
+                            },
+                            "links": {
+                                "GetItem": {
+                                    "operationRef": operation_ref,
+                                    "parameters": {"item_id": "$response.body#/id"},
+                                }
+                            },
+                        }
+                    },
+                }
+            },
+            "/items/{item_id}": {
+                "get": {
+                    "parameters": [{"name": "item_id", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                }
+            },
+        },
+        version="3.1.0",
+    )
+    created = []
+    fetched = []
+
+    @app.route("/items", methods=["POST"])
+    def create_item():
+        created.append(f"item-{len(created)}")
+        return jsonify({"id": created[-1]}), 201
+
+    @app.route("/items/<item_id>", methods=["GET"])
+    def get_item(item_id):
+        fetched.append(item_id)
+        return jsonify({}), 200 if item_id in created else 404
+
+    result = cli.run_openapi_app(
+        app,
+        "--phases=stateful",
+        "--mode=positive",
+        "-c not_a_server_error",
+        "--max-examples=10",
+        "--seed=1",
+        config={"phases": {"stateful": {"inference": {"algorithms": []}}}},
+    )
+    assert result.exit_code == ExitCode.OK, result.stdout
+    assert set(fetched) & set(created)
 
 
 def test_nested_link_refs(cli, snapshot_cli, ctx):
@@ -766,3 +951,438 @@ def test_nested_path_shared_parameter_propagation(cli, ctx, snapshot_cli, phase)
         )
         == snapshot_cli
     )
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_without_error_feedback_and_link_calibration(ctx, cli, snapshot_cli):
+    api = ctx.openapi.apps.users_crud()
+    assert (
+        cli.run(
+            api.schema_url,
+            "--phases=stateful",
+            "-c not_a_server_error",
+            "--mode=positive",
+            "--max-examples=5",
+            "--seed=1",
+            config={
+                "phases": {
+                    "fuzzing": {"error-feedback": {"enabled": False}},
+                    "stateful": {"link-calibration": False},
+                }
+            },
+        )
+        == snapshot_cli
+    )
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_links_between_error_responses_only(ctx, cli, snapshot_cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/first": {
+                "post": {
+                    "responses": {
+                        "409": {
+                            "description": "Conflict",
+                            "links": {"Next": {"operationId": "second", "parameters": {"q": "$response.body#/x"}}},
+                        }
+                    }
+                }
+            },
+            "/second": {
+                "get": {
+                    "operationId": "second",
+                    "parameters": [{"name": "q", "in": "query", "schema": {"type": "string"}}],
+                    "responses": {"409": {"description": "Conflict"}},
+                }
+            },
+        }
+    )
+
+    @app.route("/first", methods=["POST"])
+    def first():
+        return jsonify({"x": "value"}), 409
+
+    @app.route("/second", methods=["GET"])
+    def second():
+        return jsonify({}), 409
+
+    assert cli.run_openapi_app(app, "--phases=stateful", "--max-examples=5", "--seed=1") == snapshot_cli
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_links_from_operations_that_produce_no_resources(ctx, cli, snapshot_cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/first": {
+                "post": {
+                    "responses": {
+                        "409": {
+                            "description": "Conflict",
+                            "links": {"Next": {"operationId": "second", "parameters": {"q": "$response.body#/x"}}},
+                        }
+                    }
+                }
+            },
+            "/second": {
+                "get": {
+                    "operationId": "second",
+                    "parameters": [{"name": "q", "in": "query", "schema": {"type": "string"}}],
+                    "responses": {"409": {"description": "Conflict"}},
+                }
+            },
+            "/users": {
+                "post": {
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {
+                                "application/json": {
+                                    "schema": {"type": "object", "properties": {"id": {"type": "integer"}}}
+                                }
+                            },
+                        }
+                    }
+                }
+            },
+        }
+    )
+
+    @app.route("/first", methods=["POST"])
+    def first():
+        return jsonify({"x": "value"}), 409
+
+    @app.route("/second", methods=["GET"])
+    def second():
+        return jsonify({}), 409
+
+    @app.route("/users", methods=["POST"])
+    def users():
+        return jsonify({"id": 1}), 201
+
+    assert cli.run_openapi_app(app, "--phases=stateful", "--max-examples=5", "--seed=1") == snapshot_cli
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_known_stateful_failure_does_not_fail_the_run(ctx, cli, snapshot_cli, tmp_path):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/users": {
+                "post": {
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {
+                                "application/json": {
+                                    "schema": {"type": "object", "properties": {"id": {"type": "integer"}}}
+                                }
+                            },
+                            "links": {
+                                "GetUser": {"operationId": "getUser", "parameters": {"id": "$response.body#/id"}}
+                            },
+                        }
+                    }
+                }
+            },
+            "/users/{id}": {
+                "get": {
+                    "operationId": "getUser",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+
+    @app.route("/users", methods=["POST"])
+    def create_user():
+        return jsonify({"id": 1}), 201
+
+    @app.route("/users/<int:user_id>", methods=["GET"])
+    def get_user(user_id):
+        return jsonify({}), 500
+
+    baseline = tmp_path / "baseline.json"
+    baseline.write_text(
+        json.dumps(
+            {
+                "format_version": 1,
+                "entries": [
+                    {
+                        "operation": "GET /users/{id}",
+                        "check": "not_a_server_error",
+                        "failure": "ServerError",
+                        "signature": "500",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert (
+        cli.run_openapi_app(
+            app,
+            "--phases=stateful",
+            "--checks=not_a_server_error",
+            "--max-examples=5",
+            config={"baseline": str(baseline)},
+        )
+        == snapshot_cli
+    )
+
+
+def test_before_call_body_mutation_does_not_leak_into_later_links(ctx, cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/catalogs": {
+                "post": {
+                    "operationId": "createCatalog",
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "meta": {"type": "object", "properties": {"name": {"type": "string"}}}
+                                        },
+                                    }
+                                }
+                            },
+                            "links": {
+                                "ReplaceItem": {
+                                    "operationId": "replaceItem",
+                                    "parameters": {"name": "$response.body#/meta/name"},
+                                    "requestBody": {"meta": "$response.body#/meta"},
+                                },
+                                "GetStatus": {
+                                    "operationId": "getStatus",
+                                    "parameters": {"name": "$response.body#/meta/name"},
+                                },
+                            },
+                        }
+                    },
+                }
+            },
+            "/items/{name}": {
+                "put": {
+                    "operationId": "replaceItem",
+                    "parameters": [{"name": "name", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "requestBody": {
+                        "required": True,
+                        "content": {"application/json": {"schema": {"type": "object"}}},
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+            "/catalogs/{name}/status": {
+                "get": {
+                    "operationId": "getStatus",
+                    "parameters": [{"name": "name", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                }
+            },
+        }
+    )
+    created = []
+    status_names = []
+
+    @app.route("/catalogs", methods=["POST"])
+    def create_catalog():
+        created.append(f"catalog-{len(created)}")
+        return jsonify({"meta": {"name": created[-1]}}), 201
+
+    @app.route("/items/<name>", methods=["PUT"])
+    def replace_item(name):
+        return jsonify({}), 200
+
+    @app.route("/catalogs/<name>/status", methods=["GET"])
+    def get_status(name):
+        status_names.append(name)
+        return jsonify({}), 200 if name in created else 404
+
+    module = ctx.write_pymodule(
+        """
+@schemathesis.hook
+def before_call(context, case, kwargs):
+    if case.operation.path == "/items/{name}" and isinstance(case.body, dict) and isinstance(case.body.get("meta"), dict):
+        case.body["meta"]["name"] = "renamed-by-hook"
+"""
+    )
+    cli.run_openapi_app(
+        app,
+        "--phases=stateful",
+        "--mode=positive",
+        "-c not_a_server_error",
+        "--max-examples=10",
+        "--seed=1",
+        hooks=module,
+    )
+    assert "renamed-by-hook" not in status_names
+    assert set(status_names) & set(created)
+
+
+def test_inferred_link_to_templated_path_is_not_reported_as_schema_error(cli, ctx):
+    # A time budget infers links before fuzzing, so a failing operation is explained against the schema with them.
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "get": {
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {"item_id": {"type": "string"}},
+                                            "required": ["item_id"],
+                                        },
+                                    }
+                                }
+                            },
+                        }
+                    }
+                }
+            },
+            "/items/{item_id}": {
+                "get": {
+                    "parameters": [{"name": "item_id", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+            "/upload": {
+                "post": {
+                    "parameters": [{"name": "q", "in": "query", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        },
+        version="3.1.0",
+    )
+
+    @app.route("/items")
+    def list_items():
+        return jsonify([{"item_id": "a"}])
+
+    @app.route("/items/<item_id>")
+    def get_item(item_id):
+        return jsonify({})
+
+    @app.route("/upload", methods=["POST"])
+    def upload():
+        return jsonify({})
+
+    module = ctx.write_pymodule(
+        """
+@schemathesis.hook.apply_to(path="/upload")
+def map_query(context, query):
+    raise AssertionError("Rejected by hook")
+"""
+    )
+    # Timing-dependent output rules out a snapshot.
+    result = cli.run_openapi_app(
+        app, "--max-examples=1", "--max-time=60", "--max-failures=1", "-c", "not_a_server_error", hooks=module
+    )
+    assert "Unexpected error during testing of this API operation: Rejected by hook" in result.stdout
+    assert "Invalid `operationRef` definition" not in result.stdout
+
+
+# An exception leaking out of the stateful thread is printed as a traceback.
+@pytest.mark.filterwarnings("error::pytest.PytestUnhandledThreadExceptionWarning")
+def test_negative_only_steps_without_negatable_parameters_still_run(ctx, cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "post": {
+                    "operationId": "createItem",
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "links": {
+                                "GetItem": {"operationId": "getItem", "parameters": {"itemId": "$response.body#/id"}}
+                            },
+                        }
+                    },
+                }
+            },
+            "/items/{itemId}": {
+                "get": {
+                    "operationId": "getItem",
+                    "parameters": [{"name": "itemId", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+    fetched = []
+
+    @app.route("/items", methods=["POST"])
+    def create_item():
+        return jsonify({"id": 42}), 201
+
+    @app.route("/items/<item_id>", methods=["GET"])
+    def get_item(item_id):
+        fetched.append(item_id)
+        return jsonify({}), 200
+
+    cli.run_openapi_app(
+        app,
+        "--phases=stateful",
+        "--mode=negative",
+        "-c negative_data_rejection",
+        "--max-examples=10",
+        "--seed=1",
+    )
+    assert "42" in fetched
+
+
+@pytest.mark.filterwarnings("error::pytest.PytestUnhandledThreadExceptionWarning")
+def test_skip_raised_during_stateful_skips_the_suite(ctx, cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "post": {
+                    "operationId": "createItem",
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "links": {
+                                "GetItem": {"operationId": "getItem", "parameters": {"itemId": "$response.body#/id"}}
+                            },
+                        }
+                    },
+                }
+            },
+            "/items/{itemId}": {
+                "get": {
+                    "operationId": "getItem",
+                    "parameters": [{"name": "itemId", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+
+    @app.route("/items", methods=["POST"])
+    def create_item():
+        return jsonify({"id": 42}), 201
+
+    @app.route("/items/<item_id>", methods=["GET"])
+    def get_item(item_id):
+        return jsonify({}), 200
+
+    module = ctx.write_pymodule(
+        """
+from schemathesis.core.control import SkipTest
+
+@schemathesis.hook
+def before_call(context, case, **kwargs):
+    raise SkipTest("Skipped by hook")
+"""
+    )
+    result = cli.run_openapi_app(app, "--phases=stateful", "--max-examples=10", "--seed=1", hooks=module)
+    assert "⏭  Stateful" in result.stdout

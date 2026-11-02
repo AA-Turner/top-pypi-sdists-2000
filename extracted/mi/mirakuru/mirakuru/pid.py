@@ -18,7 +18,7 @@
 """Pid executor definition."""
 
 import os.path
-from typing import Any, List, Tuple, Union
+from typing import Any
 
 from mirakuru.base import Executor
 
@@ -33,7 +33,7 @@ class PidExecutor(Executor):
 
     def __init__(
         self,
-        command: Union[str, List[str], Tuple[str, ...]],
+        command: str | list[str] | tuple[str, ...],
         filename: str,
         **kwargs: Any,
     ) -> None:
@@ -45,7 +45,7 @@ class PidExecutor(Executor):
         :param str filename: the file which is to exist
         :param bool shell: same as the `subprocess.Popen` shell definition
         :param int timeout: number of seconds to wait for the process to start
-            or stop. If None or False, wait indefinitely.
+            or stop.
         :param float sleep: how often to check for start/stop condition
         :param int sig_stop: signal used to stop process run by the executor.
             default is `signal.SIGTERM`

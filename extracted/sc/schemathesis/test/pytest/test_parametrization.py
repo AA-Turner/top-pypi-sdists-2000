@@ -1,17 +1,13 @@
 import pytest
-from hypothesis import HealthCheck, Phase, assume, given, settings
+from hypothesis import Phase, assume
 
 import schemathesis
+from schemathesis.core.transforms import to_wire_string
 from schemathesis.generation.modes import GenerationMode
 from schemathesis.schemas import PayloadAlternatives
+from test.utils import run_given
 
 from ..utils import assert_requests_call, integer
-
-
-@pytest.fixture
-def reload_profile():
-    yield
-    settings.load_profile("default")
 
 
 def test_parametrization(testdir):
@@ -35,10 +31,11 @@ def test_(request, case):
     result.stdout.re_match_lines([r"test_parametrization.py::test_\[GET /users\] PASSED", r"Hypothesis calls: 2"])
 
 
-def test_pytest_parametrize(testdir):
-    # When `pytest.mark.parametrize` is applied
-    testdir.make_test(
-        """
+@pytest.mark.parametrize(
+    ("source", "node_prefix"),
+    [
+        (
+            """
 @pytest.mark.parametrize("param", ("A", "B"))
 @schema.parametrize()
 def test_(request, param, case):
@@ -46,39 +43,58 @@ def test_(request, param, case):
     assert case.operation.path == "/users"
     assert case.method in ("GET", "POST")
 """,
-        paths={
-            "/users": {
-                "get": {"responses": {"200": {"description": "OK"}}},
-                "post": {"responses": {"200": {"description": "OK"}}},
-            }
-        },
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # And there are multiple method/path combinations
-    result = testdir.runpytest("-v", "-s")
-    # Then the total number of tests should be method/path combos x parameters in `parametrize`
-    # I.e. regular pytest parametrization logic should be applied
-    result.assert_outcomes(passed=4)
-    result.stdout.re_match_lines(
-        [
-            r"test_pytest_parametrize.py::test_\[GET /users\]\[A\] PASSED",
-            r"test_pytest_parametrize.py::test_\[GET /users\]\[B\] PASSED",
-            r"Hypothesis calls: 8",
-        ]
-    )
+            "",
+        ),
+        (
+            """
+from hypothesis import settings, HealthCheck
 
 
-def test_method(testdir):
-    # When tests are written as methods
-    testdir.make_test(
-        """
+def pytest_generate_tests(metafunc):
+    metafunc.parametrize("inner", ("A", "B"))
+
+@pytest.fixture()
+def param(inner):
+    return inner * 2
+
+@schema.parametrize()
+@settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
+def test_(request, param, case):
+    request.config.HYPOTHESIS_CASES += 1
+    assert case.operation.path == "/users"
+    assert case.method in ("GET", "POST")
+""",
+            "",
+        ),
+        (
+            """
+from hypothesis import settings, HealthCheck
+
+
 class TestAPI:
+
+    def pytest_generate_tests(self, metafunc):
+        metafunc.parametrize("inner", ("A", "B"))
+
+    @pytest.fixture()
+    def param(self, inner):
+        return inner * 2
+
     @schema.parametrize()
-    def test_(self, request, case):
+    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
+    def test_(self, request, param, case):
         request.config.HYPOTHESIS_CASES += 1
         assert case.operation.path == "/users"
         assert case.method in ("GET", "POST")
 """,
+            "TestAPI::",
+        ),
+    ],
+    ids=["mark", "module-generate-tests", "class-generate-tests"],
+)
+def test_pytest_parametrize(testdir, source, node_prefix):
+    testdir.make_test(
+        source,
         paths={
             "/users": {
                 "get": {"responses": {"200": {"description": "OK"}}},
@@ -87,15 +103,16 @@ class TestAPI:
         },
         generation_modes=[GenerationMode.POSITIVE],
     )
-    # Then they should work as regular tests
     result = testdir.runpytest("-v", "-s")
-    result.assert_outcomes(passed=2)
+    # Regular pytest parametrization applies on top: method/path combos x parameters
+    result.assert_outcomes(passed=4)
     result.stdout.re_match_lines(
         [
-            r"test_method.py::TestAPI::test_\[GET /users\] PASSED",
-            r"test_method.py::TestAPI::test_\[POST /users\] PASSED",
-            r"Hypothesis calls: 4",
+            rf".*::{node_prefix}test_\[{method} /users\]\[{param}\] PASSED"
+            for method in ("GET", "POST")
+            for param in ("A", "B")
         ]
+        + [r"Hypothesis calls: 8"]
     )
 
 
@@ -117,7 +134,7 @@ def test_(request, case):
     result = testdir.runpytest("-v", "-s")
     result.assert_outcomes(passed=2)
     # Then total number of Hypothesis calls should be `max_examples` per pytest test
-    result.stdout.re_match_lines([r"Hypothesis calls: 12$"])
+    result.stdout.re_match_lines([r"Hypothesis calls: 14$"])
 
 
 def test_direct_schema(testdir):
@@ -153,7 +170,7 @@ def test_(request, case):
     # Then it should be correctly used in the generated case
     result = testdir.runpytest("-v", "-s")
     result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 3$"])
+    result.stdout.re_match_lines([r"Hypothesis calls: 4$"])
 
 
 def test_specified_example_body(testdir):
@@ -166,7 +183,7 @@ from hypothesis import Phase
 @settings(max_examples=1, phases=[Phase.explicit])
 def test(request, case):
     request.config.HYPOTHESIS_CASES += 1
-    assert case.body in ({"name": "John"}, {"name": ""})
+    assert case.body in ({"name": "John"}, {"name": ""}, {"name": "a" * 65537})
 """,
         paths={
             "/users": {
@@ -197,8 +214,8 @@ def test(request, case):
     result = testdir.runpytest("-v", "-s")
     # Then this example should be used in tests
     result.assert_outcomes(passed=1)
-    # 3 calls = 1 explicit example + 2 coverage cases (example value + per-property variant).
-    result.stdout.re_match_lines([r"Hypothesis calls: 3$"])
+    # 4 calls = 1 explicit example + 3 coverage cases (example value + per-property variants).
+    result.stdout.re_match_lines([r"Hypothesis calls: 4$"])
 
 
 @pytest.mark.parametrize(
@@ -305,52 +322,6 @@ def test(request, case):
     result.stdout.re_match_lines([r"Hypothesis calls: 4$"])
 
 
-def test_specified_example_body_media_type_override(testdir):
-    # When the given requestBody parameter contains an example specified in Media Type Object (not in Schema Object)
-    testdir.make_test(
-        """
-from hypothesis import Phase
-
-@schema.parametrize()
-@settings(max_examples=1, phases=[Phase.explicit])
-def test(request, case):
-    request.config.HYPOTHESIS_CASES += 1
-    assert case.body in ({"name": "John1"}, {"name": "John2"})
-""",
-        schema={
-            "openapi": "3.0.2",
-            "info": {"title": "Test", "description": "Test", "version": "0.1.0"},
-            "paths": {
-                "/body": {
-                    "post": {
-                        "requestBody": {
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"name": {"type": "string"}},
-                                        "required": ["name"],
-                                        "example": {"name": "John1"},
-                                    },
-                                    "example": {"name": "John2"},
-                                }
-                            }
-                        },
-                        "responses": {"200": {"description": "OK"}},
-                    }
-                }
-            },
-        },
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-
-    result = testdir.runpytest("-v", "-s")
-    # Then this example should be used in tests, not the example from the schema
-    result.assert_outcomes(passed=1)
-    # 4 calls = 2 examples (from schema & Media Type Object) + 2 coverage cases (one per example)
-    result.stdout.re_match_lines([r"Hypothesis calls: 4$"])
-
-
 def test_multiple_examples_different_locations(testdir):
     # When there are examples for different locations (e.g. body and query)
     testdir.make_test(
@@ -361,8 +332,8 @@ from hypothesis import Phase
 @settings(max_examples=1, phases=[Phase.explicit])
 def test(request, case):
     request.config.HYPOTHESIS_CASES += 1
+    assert case.body in ({"name": "John1"}, {"name": "John2"}, {"name": "a" * 65537})
     if not hasattr(case.meta.phase.data, "description"):
-        assert case.body in ({"name": "John1"}, {"name": "John2"})
         assert case.query == {"age": 35}
 """,
         schema={
@@ -396,8 +367,8 @@ def test(request, case):
     result = testdir.runpytest("-v", "-s")
     # Then these examples should be used in tests as a part of a single request, i.e. combined
     result.assert_outcomes(passed=1)
-    # 4 calls = 2 examples (from body schema & Media Type Object) + 2 coverage cases
-    result.stdout.re_match_lines([r"Hypothesis calls: 4$"])
+    # 6 calls = 2 examples (from body schema & Media Type Object) + 4 coverage cases
+    result.stdout.re_match_lines([r"Hypothesis calls: 6$"])
 
 
 def test_multiple_examples_same_location(testdir):
@@ -442,7 +413,7 @@ def test(request, case):
     result = testdir.runpytest("-v", "-s")
     # Then these examples should be used combined in tests
     result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 5$"])
+    result.stdout.re_match_lines([r"Hypothesis calls: 7$"])
 
 
 def test_deselecting(testdir):
@@ -465,7 +436,7 @@ def test_b(request, case):
     # Then only relevant tests should be selected for running
     result.assert_outcomes(passed=2)
     # "/users" path is excluded in the first test function
-    result.stdout.re_match_lines([".* 1 deselected / 2 selected", r".*\[POST /pets\]", r"Hypothesis calls: 18"])
+    result.stdout.re_match_lines([".* 1 deselected / 2 selected", r".*\[POST /pets\]", r"Hypothesis calls: 20"])
 
 
 @pytest.mark.parametrize(
@@ -490,7 +461,7 @@ def test_(request, case):
     result = testdir.runpytest("-s")
     # Then it should be correctly processed
     result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 9"])
+    result.stdout.re_match_lines([r"Hypothesis calls: 10"])
 
 
 def test_invalid_schema(testdir):
@@ -538,7 +509,7 @@ def test_(request, case):
     result = testdir.runpytest()
     # Then test should be executed
     result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 21$"])
+    result.stdout.re_match_lines([r"Hypothesis calls: 24$"])
 
 
 def test_exception_during_test(testdir):
@@ -592,6 +563,41 @@ def test_(request, case):
     result.stdout.re_match_lines([r".*test_invalid_operation.py::test_\[GET /invalid\] FAILED"])
 
 
+def test_malformed_media_type_beside_valid_one(testdir):
+    testdir.make_test(
+        """
+@schema.parametrize()
+@settings(max_examples=1)
+def test_(case):
+    pass
+""",
+        schema_name="simple_openapi.yaml",
+        paths={
+            "/payload": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application.json": {"schema": {"type": "object"}},
+                            "application/json": {"schema": {"type": "object"}},
+                        },
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+    )
+    result = testdir.runpytest("-v", "-rf")
+    result.assert_outcomes(passed=2, failed=1)
+    result.stdout.re_match_lines(
+        [
+            r".*::test_\[POST /payload\] PASSED",
+            r".*::test_\[POST /payload\]\[schema-error\] FAILED",
+            r".*Malformed media type: `application.json`",
+        ]
+    )
+
+
 def test_no_base_path(testdir):
     # When the given schema has no "basePath"
     testdir.make_test(
@@ -611,54 +617,45 @@ def test_(request, case):
 
 def test_empty_content(ctx):
     # When the "content" value is empty in "requestBody"
-    schema = ctx.openapi.load_schema(
-        {"/body": {"post": {"requestBody": {"content": {}}, "responses": {"200": {"description": "OK"}}}}}
+    operation = ctx.openapi.load_operation(
+        "POST /body", {"requestBody": {"content": {}}, "responses": {"200": {"description": "OK"}}}
     )
     # Then the body processing should be no-op
-    operation = schema["/body"]["POST"]
     assert operation.body == PayloadAlternatives([])
 
 
 @pytest.mark.hypothesis_nested
 def test_loose_multipart_definition(ctx):
     # When the schema of "multipart/form-data" content does not define "object" type
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /body",
         {
-            "/body": {
-                "post": {
-                    "requestBody": {
-                        "content": {"multipart/form-data": {"schema": {"properties": {"foo": {"type": "string"}}}}},
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "content": {"multipart/form-data": {"schema": {"properties": {"foo": {"type": "string"}}}}},
+                "required": True,
+            },
+            "responses": {"200": {"description": "OK"}},
         },
     )
     # Then non-object data should be excluded during generation
 
-    @given(case=schema["/body"]["POST"].as_strategy())
-    @settings(max_examples=5, deadline=None, suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much])
+    @run_given(case=operation.as_strategy(), max_examples=5)
     def test(case):
         assert isinstance(case.body, dict)
 
     # And the resulting values should be valid
-    test()
 
 
 @pytest.mark.hypothesis_nested
 def test_multipart_behind_a_reference(ctx):
     # When the schema of "multipart/form-data" is behind a reference
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /body",
         {
-            "/body": {
-                "post": {
-                    "requestBody": {
-                        "$ref": "#/components/requestBodies/MultipartBody",
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "$ref": "#/components/requestBodies/MultipartBody",
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         components={
             "requestBodies": {
@@ -671,17 +668,9 @@ def test_multipart_behind_a_reference(ctx):
     )
     # Then it should be correctly resolved
 
-    @given(case=schema["/body"]["POST"].as_strategy())
-    @settings(
-        max_examples=5,
-        deadline=None,
-        suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much],
-        phases=[Phase.generate],
-    )
+    @run_given(case=operation.as_strategy(), max_examples=5, phases=[Phase.generate])
     def test(case):
         assert_requests_call(case)
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -691,49 +680,41 @@ def test_optional_form_parameters(ctx):
     schema = schemathesis.openapi.from_url(api.schema_url)
     strategy = schema["/api/multipart"]["POST"].as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=3, deadline=None, suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much])
+    @run_given(case=strategy, max_examples=3)
     def test(case):
         assume("maybe" in case.body)
         response = case.call()
         assert response.status_code == 200
         # Then they still should be possible to generate
-        assert response.json()["maybe"] == str(case.body["maybe"])
-
-    test()
+        assert response.json()["maybe"] == to_wire_string(case.body["maybe"])
 
 
 def test_ref_field(ctx):
     # When the schema contains "$ref" field, that is not a reference (which is supported by the JSON Schema spec)
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /body",
         {
-            "/body": {
-                "post": {
-                    "requestBody": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {"$ref": {"type": "string"}},
-                                    "required": ["$ref"],
-                                    "type": "object",
-                                }
-                            }
-                        },
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {"$ref": {"type": "string"}},
+                            "required": ["$ref"],
+                            "type": "object",
+                        }
+                    }
+                },
+                "required": True,
+            },
+            "responses": {"200": {"description": "OK"}},
         },
     )
 
-    @given(case=schema["/body"]["POST"].as_strategy())
-    @settings(max_examples=5)
+    @run_given(case=operation.as_strategy(), max_examples=5)
     def test(case):
         assert isinstance(case.body["$ref"], str)
 
     # Then "$ref" field should be generated
-    test()
 
 
 def test_exceptions_on_collect(testdir):
@@ -849,3 +830,210 @@ def verify_settings_after_collection(request):
     )
     result = testdir.runpytest("-v", "-s")
     result.assert_outcomes(passed=1)
+
+
+LARGE_MINIMUM_BODY_PATHS = {
+    "/items": {
+        "post": {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "minItems": 40,
+                            "items": {
+                                "type": "array",
+                                "minItems": 20,
+                                "items": {"type": "string", "pattern": "^[a-f]{20}$"},
+                            },
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        }
+    }
+}
+
+
+@pytest.mark.usefixtures("reload_profile")
+@pytest.mark.parametrize(
+    "setup",
+    [
+        """
+schema.config.phases.coverage.enabled = False
+
+@schema.parametrize()
+@settings(max_examples=1, suppress_health_check=list(HealthCheck))
+def test_(case):
+    pass
+""",
+        """
+schema = schemathesis.openapi.from_dict(
+    raw_schema,
+    config=SchemathesisConfig.from_dict(
+        {"suppress-health-check": ["all"], "generation": {"max-examples": 1}, "phases": {"coverage": {"enabled": False}}}
+    ),
+)
+
+@schema.parametrize()
+def test_(case):
+    pass
+""",
+    ],
+    ids=["settings-decorator", "schemathesis-config"],
+)
+def test_suppress_health_check_under_ci_profile(ctx, testdir, setup):
+    testdir.make_test(
+        # The same profile Hypothesis loads on import when the `CI` environment variable is set.
+        'settings.load_profile("ci")\n' + setup,
+        schema=ctx.openapi.build_schema(LARGE_MINIMUM_BODY_PATHS),
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(passed=1)
+
+
+@pytest.mark.usefixtures("reload_profile")
+def test_configured_database_under_ci_profile(testdir):
+    testdir.make_test(
+        """
+settings.load_profile("ci")
+schema = schemathesis.openapi.from_dict(
+    raw_schema, config=SchemathesisConfig.from_dict({"generation": {"database": ":memory:", "max-examples": 1}})
+)
+
+@schema.parametrize()
+def test_(case):
+    pass
+
+@pytest.fixture(scope="session", autouse=True)
+def verify_settings_after_collection(request):
+    yield
+    (item,) = request.session.items
+    assert type(item.obj._hypothesis_internal_use_settings.database).__name__ == "InMemoryExampleDatabase"
+""",
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(passed=1)
+
+
+@pytest.mark.usefixtures("reload_profile")
+@pytest.mark.parametrize(
+    ("config", "setting", "expected"),
+    [
+        ({}, "derandomize", True),
+        ({"generation": {"deterministic": False}}, "derandomize", False),
+        ({"suppress-health-check": []}, "suppress_health_check", ()),
+    ],
+    ids=["no-config", "deterministic", "suppress-health-check"],
+)
+def test_applied_settings_under_ci_profile(testdir, config, setting, expected):
+    testdir.make_test(
+        f"""
+settings.load_profile("ci")
+schema = schemathesis.openapi.from_dict(raw_schema, config=SchemathesisConfig.from_dict({config!r}))
+
+@schema.parametrize()
+def test_(case):
+    pass
+
+@pytest.fixture(scope="session", autouse=True)
+def verify_settings_after_collection(request):
+    yield
+    (item,) = request.session.items
+    assert item.obj._hypothesis_internal_use_settings.{setting} == {expected!r}
+""",
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(passed=1)
+
+
+def _queries_per_path(testdir, api, *, is_lazy):
+    load = f"schemathesis.openapi.from_url('{api.schema_url}', config=SchemathesisConfig(seed=42))"
+    if is_lazy:
+        setup = f"""
+@pytest.fixture
+def api_schema():
+    return {load}
+
+schema = schemathesis.pytest.from_fixture("api_schema")
+"""
+    else:
+        setup = f"schema = {load}"
+    testdir.make_test(
+        f"""
+{setup}
+
+@schema.parametrize()
+@settings(max_examples=10, phases=[Phase.generate])
+def test_(case):
+    case.call()
+"""
+    )
+    seen = len(api.requests)
+    testdir.runpytest().assert_outcomes(passed=1 if is_lazy else 2)
+    queries = {}
+    for request in api.requests[seen:]:
+        if request.path.startswith("/api/"):
+            queries.setdefault(request.path, []).append(request.query)
+    return queries
+
+
+@pytest.mark.parametrize("is_lazy", [False, True], ids=["parametrize", "from_fixture"])
+def test_seeds_operations_with_identical_parameters_differently(ctx, testdir, is_lazy):
+    api = ctx.openapi.apps.identical_query_parameters()
+    queries = _queries_per_path(testdir, api, is_lazy=is_lazy)
+    assert queries["/api/twin_a"] != queries["/api/twin_b"]
+
+
+@pytest.mark.parametrize("is_lazy", [False, True], ids=["parametrize", "from_fixture"])
+def test_seed_reproduces_per_operation_inputs(ctx, testdir, is_lazy):
+    api = ctx.openapi.apps.identical_query_parameters()
+    first = _queries_per_path(testdir, api, is_lazy=is_lazy)
+    assert first == _queries_per_path(testdir, api, is_lazy=is_lazy)
+    assert first.keys() == {"/api/twin_a", "/api/twin_b"}
+
+
+@pytest.mark.parametrize("is_lazy", [False, True], ids=["parametrize", "from_fixture"])
+def test_operation_headers_with_header_parameter_override(ctx, testdir, is_lazy):
+    api = ctx.openapi.apps.header_constraint_bug()
+    testdir.makefile(
+        ".toml",
+        schemathesis="""
+[parameters]
+X-Token = "ABCDEFGH"
+
+[[operations]]
+include-name = "GET /api/header_constraint_bug"
+headers = { X-Custom = "value" }
+""",
+    )
+    load = f"schemathesis.openapi.from_url('{api.schema_url}')"
+    if is_lazy:
+        setup = f"""
+@pytest.fixture
+def api_schema():
+    return {load}
+
+schema = schemathesis.pytest.from_fixture("api_schema")
+"""
+    else:
+        setup = f"schema = {load}"
+    testdir.make_test(
+        f"""
+{setup}
+
+@schema.parametrize()
+@settings(max_examples=5, phases=[Phase.generate])
+def test_(case):
+    case.call()
+"""
+    )
+    seen = len(api.requests)
+    testdir.runpytest().assert_outcomes(passed=1)
+    assert {
+        (request.headers.get("X-Token"), request.headers.get("X-Custom"))
+        for request in api.requests[seen:]
+        if request.path.startswith("/api/")
+    } == {("ABCDEFGH", "value")}

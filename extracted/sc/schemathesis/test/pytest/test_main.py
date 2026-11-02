@@ -1,54 +1,12 @@
 import platform
+import ssl
+import time
 
 import pytest
+from flask import jsonify, request
 
 from schemathesis.generation.modes import GenerationMode
 from test.utils import has_hypothesis_failure_header
-
-
-def test_pytest_parametrize_fixture(testdir):
-    # When `pytest_generate_tests` is used on a module level for fixture parametrization
-    testdir.make_test(
-        """
-from hypothesis import settings, HealthCheck
-
-
-def pytest_generate_tests(metafunc):
-    metafunc.parametrize("inner", ("A", "B"))
-
-@pytest.fixture()
-def param(inner):
-    return inner * 2
-
-@schema.parametrize()
-@settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
-def test_(request, param, case):
-    request.config.HYPOTHESIS_CASES += 1
-    assert case.operation.path == "/users"
-    assert case.method in ("GET", "POST")
-""",
-        paths={
-            "/users": {
-                "get": {"responses": {"200": {"description": "OK"}}},
-                "post": {"responses": {"200": {"description": "OK"}}},
-            }
-        },
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # And there are multiple method/path combinations
-    result = testdir.runpytest("-v", "-s")
-    # Then the total number of tests should be method/path combos x parameters in `pytest_generate_tests`
-    # I.e. regular pytest parametrization logic should be applied
-    result.assert_outcomes(passed=4)
-    result.stdout.re_match_lines(
-        [
-            r"test_pytest_parametrize_fixture.py::test_\[GET /users\]\[A\] PASSED",
-            r"test_pytest_parametrize_fixture.py::test_\[GET /users\]\[B\] PASSED",
-            r"test_pytest_parametrize_fixture.py::test_\[POST /users\]\[A\] PASSED",
-            r"test_pytest_parametrize_fixture.py::test_\[POST /users\]\[B\] PASSED",
-            r"Hypothesis calls: 8",
-        ]
-    )
 
 
 def test_missing_base_url_error_message(testdir):
@@ -71,53 +29,6 @@ def test_b(case):
     assert "https://api.example.com/v1" in result.stdout.str()
     # But it should NOT include reproduction code since this is a configuration error, not an API failure
     assert "Reproduce with:" not in result.stdout.str()
-
-
-def test_pytest_parametrize_class_fixture(testdir):
-    # When `pytest_generate_tests` is used on a class level for fixture parametrization
-    testdir.make_test(
-        """
-from hypothesis import settings, HealthCheck
-
-
-class TestAPI:
-
-    def pytest_generate_tests(self, metafunc):
-        metafunc.parametrize("inner", ("A", "B"))
-
-    @pytest.fixture()
-    def param(self, inner):
-        return inner * 2
-
-    @schema.parametrize()
-    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
-    def test_(self, request, param, case):
-        request.config.HYPOTHESIS_CASES += 1
-        assert case.operation.path == "/users"
-        assert case.method in ("GET", "POST")
-""",
-        paths={
-            "/users": {
-                "get": {"responses": {"200": {"description": "OK"}}},
-                "post": {"responses": {"200": {"description": "OK"}}},
-            }
-        },
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # And there are multiple method/path combinations
-    result = testdir.runpytest("-v", "-s")
-    # Then the total number of tests should be method/path combos x parameters in `pytest_generate_tests`
-    # I.e. regular pytest parametrization logic should be applied
-    result.assert_outcomes(passed=4)
-    result.stdout.re_match_lines(
-        [
-            r"test_pytest_parametrize_class_fixture.py::TestAPI::test_\[GET /users\]\[A\] PASSED",
-            r"test_pytest_parametrize_class_fixture.py::TestAPI::test_\[GET /users\]\[B\] PASSED",
-            r"test_pytest_parametrize_class_fixture.py::TestAPI::test_\[POST /users\]\[A\] PASSED",
-            r"test_pytest_parametrize_class_fixture.py::TestAPI::test_\[POST /users\]\[B\] PASSED",
-            r"Hypothesis calls: 8",
-        ]
-    )
 
 
 def test_pytest_collection_regression(testdir):
@@ -284,6 +195,35 @@ def test(case, data):
     assert "Solution: Create separate test functions" in stdout
 
 
+def test_given_with_dangling_example_reference(testdir):
+    testdir.make_test(
+        """
+@schema.parametrize()
+@schema.given(data=st.data())
+def test(case, data):
+    pass
+        """,
+        paths={
+            "/users": {
+                "get": {
+                    "parameters": [
+                        {
+                            "name": "q",
+                            "in": "query",
+                            "schema": {"type": "string"},
+                            "examples": {"a": {"$ref": "#/components/examples/Nope"}},
+                        }
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+    )
+    result = testdir.runpytest("-v")
+    result.assert_outcomes(errors=1)
+    assert "RefResolutionError: Pointer '/components/examples/Nope' does not exist" in result.stdout.str()
+
+
 def test_given_with_explicit_hypothesis_example(testdir):
     # When user explicitly adds @hypothesis.example() decorator with @schema.given()
     testdir.make_test(
@@ -425,26 +365,6 @@ def test(case):
     result.assert_outcomes(failed=1)
 
 
-def test_failure_reproduction_message(testdir, ctx):
-    # When a test fails
-    api = ctx.openapi.apps.failure()
-    testdir.make_test(
-        f"""
-schema.config.update(base_url="{api.base_url}/api")
-
-@schema.include(path_regex="failure").parametrize()
-def test(case):
-    case.call_and_validate()
-    """,
-        paths={"/failure": {"get": {"responses": {"200": {"description": "OK"}}}}},
-    )
-    # Then there should be a helpful message in the output
-    result = testdir.runpytest()
-    result.assert_outcomes(failed=1)
-    assert "Reproduce with" in result.stdout.str()
-    assert "Undocumented HTTP status code" in result.stdout.str()
-
-
 @pytest.mark.skipif(platform.system() == "Windows", reason="Fails on Windows due to recursion")
 def test_fail_on_operations_with_infinite_recursive_references(testdir, schema_with_recursive_references):
     # When the test schema contains infinite recursive references
@@ -570,7 +490,16 @@ def test_(case):
     result.stdout.re_match_lines([r".*Impossible to generate negative test cases.*"])
 
 
-def test_skip_impossible_to_negate(testdir):
+@pytest.mark.parametrize(
+    "content",
+    [
+        {"application/json": {"schema": {}}},
+        # Any bytes are a valid binary body
+        {"application/octet-stream": {"schema": {"type": "string", "format": "binary"}}},
+    ],
+    ids=["any-json", "binary"],
+)
+def test_skip_impossible_to_negate(testdir, content):
     # See GH-1463
     # When endpoint's body schema can't be negated
     testdir.make_test(
@@ -588,14 +517,7 @@ def test_(case):
         paths={
             "/pets": {
                 "post": {
-                    "requestBody": {
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                            }
-                        },
-                        "required": True,
-                    },
+                    "requestBody": {"content": content, "required": True},
                     "responses": {"200": {"description": "OK"}},
                 }
             }
@@ -717,7 +639,7 @@ def test_(request, case):
     # And the ones that can be negated should be negated
     result = testdir.runpytest("-v", "-s")
     result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 1"])
+    result.stdout.re_match_lines([r"Hypothesis calls: 20$"])
 
 
 def test_trimmed_output(testdir, ctx):
@@ -731,6 +653,7 @@ def test_a(case):
     case.call_and_validate()
 
 @given(st.integers())
+@settings(deadline=None, suppress_health_check=[HealthCheck.too_slow])
 def test_b(v):
     1 / v""",
     )
@@ -743,6 +666,29 @@ def test_b(v):
     assert not has_hypothesis_failure_header(stdout, "test_a(")
     # And regular Hypothesis tests have it
     assert has_hypothesis_failure_header(stdout, "test_b(")
+
+
+def test_verbose_hypothesis_output_is_hidden_for_schemathesis_tests(testdir):
+    testdir.make_test(
+        """
+from hypothesis import Verbosity
+
+@schema.parametrize()
+@settings(max_examples=1, verbosity=Verbosity.verbose)
+def test_a(case):
+    pass
+
+@given(st.integers())
+@settings(max_examples=1, verbosity=Verbosity.verbose)
+def test_b(v):
+    pass
+"""
+    )
+    result = testdir.runpytest("-s")
+    result.assert_outcomes(passed=2)
+    stdout = result.stdout.str()
+    assert "Test case: test_a(" not in stdout
+    assert "Test case: test_b(" in stdout
 
 
 def test_stateful_missing_links_hide_hypothesis_block(testdir):
@@ -823,6 +769,63 @@ def test(case):
     else:
         expected = rf"curl -X GET -H 'Authorization: {auth}' {base_url}/failure"
     assert expected in result.stdout.str()
+    assert "Reproduce with" in result.stdout.str()
+    assert "Undocumented status code" in result.stdout.str()
+
+
+def test_content_type_probe_control_request_keeps_call_auth(testdir, ctx, app_runner):
+    # A server that fails every authenticated request fails the probe for reasons other than its Content-Type.
+    app, _ = ctx.openapi.make_flask_app({"/items": {"get": {"responses": {"200": {"description": "OK"}}}}})
+
+    @app.route("/items")
+    def items():
+        if "Authorization" not in request.headers:
+            return "", 401
+        return "", 500
+
+    testdir.make_test(
+        f"""
+from schemathesis.checks import not_a_server_error
+from schemathesis.generation.meta import CONTENT_TYPE_PROBES, coverage_scenario
+
+schema.config.update(base_url="{app_runner.openapi_url(app, path="")}")
+
+@schema.parametrize()
+def test(case):
+    if coverage_scenario(case) in CONTENT_TYPE_PROBES:
+        case.call_and_validate(auth=("test", "test"), checks=[not_a_server_error])
+""",
+        paths={"/items": {"get": {"responses": {"200": {"description": "OK"}}}}},
+    )
+    testdir.runpytest().assert_outcomes(passed=2)
+
+
+def test_content_type_probe_control_request_keeps_requests_auth(testdir, ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app({"/items": {"get": {"responses": {"200": {"description": "OK"}}}}})
+
+    @app.route("/items")
+    def items():
+        if "Authorization" not in request.headers:
+            return "", 401
+        return "", 500
+
+    testdir.make_test(
+        f"""
+from requests.auth import HTTPBasicAuth
+from schemathesis.checks import not_a_server_error
+from schemathesis.generation.meta import CONTENT_TYPE_PROBES, coverage_scenario
+
+schema.config.update(base_url="{app_runner.openapi_url(app, path="")}")
+schema.auth.set_from_requests(HTTPBasicAuth("test", "test"))
+
+@schema.parametrize()
+def test(case):
+    if coverage_scenario(case) in CONTENT_TYPE_PROBES:
+        case.call_and_validate(checks=[not_a_server_error])
+""",
+        paths={"/items": {"get": {"responses": {"200": {"description": "OK"}}}}},
+    )
+    testdir.runpytest().assert_outcomes(passed=2)
 
 
 @pytest.mark.parametrize("enabled", [True, False])
@@ -1143,7 +1146,7 @@ def test(case):
                     ],
                     "requestBody": {
                         "content": {
-                            "image/jpeg": {
+                            "video/mp4": {
                                 "schema": {"format": "base64", "type": "string"},
                             }
                         }
@@ -1157,7 +1160,7 @@ def test(case):
     result = testdir.runpytest()
     # The body is unreachable, but the query parameter is still exercised without one.
     result.assert_outcomes(passed=1, warnings=1)
-    assert "Skipped test cases with unsupported payload media types: image/jpeg" in result.stdout.str()
+    assert "Skipped test cases with unsupported payload media types: video/mp4" in result.stdout.str()
 
 
 def test_override(ctx, testdir):
@@ -1269,41 +1272,53 @@ def test_api(case):
     result.assert_outcomes(**expected)
 
 
-def test_transport_kwargs_from_config(ctx, testdir):
-    api = ctx.openapi.apps.success()
+def test_transport_kwargs_from_config(ctx, testdir, app_runner, tmp_path):
+    app, _ = ctx.openapi.make_flask_app({"/api/success": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    received = []
+
+    # Records what arrived, then outlasts the configured timeout.
+    @app.route("/api/success")
+    def success():
+        received.append(
+            (
+                {name: request.headers.get(name) for name in ("X-Foo", "X-Spam")},
+                ssl.PEM_cert_to_DER_cert(request.environ["SSL_CLIENT_CERT"]),
+            )
+        )
+        time.sleep(1)
+        return jsonify({})
+
+    server = app_runner.run_client_cert_flask_app(app, tmp_path)
     testdir.make_test(
         f"""
+import requests
+
 config = schemathesis.Config.from_dict({{
     "tls-verify": False,
     "headers": {{ "X-Foo": "Bar", "X-Spam": "Unknown" }},
-    "request-timeout": 3,
-    "request-cert": "foo",
+    "request-timeout": 0.3,
+    "request-cert": {str(server.cert_path)!r},
     "phases": {{
         "coverage": {{
             "enabled": False,
         }}
     }}
 }})
-schema = schemathesis.openapi.from_url('{api.schema_url}', config=config)
+schema = schemathesis.openapi.from_url("https://127.0.0.1:{server.port}/openapi.json", config=config)
 
 def noop(*args, **kwargs):
     pass
 
 @schema.include(name="GET /api/success").parametrize()
-@settings(suppress_health_check=list(HealthCheck))
-def test(case, mocker):
-    spy = mocker.patch("requests.Session.request")
-    case.call_and_validate(checks=[noop], headers={{"X-Spam": "Explicit" }})
-    kwargs = spy.call_args[1]
-    assert kwargs["verify"] is False
-    assert kwargs["timeout"] == 3
-    assert kwargs["cert"] == "foo"
-    assert kwargs["headers"]["X-Foo"] == "Bar"
-    assert kwargs["headers"]["X-Spam"] == "Explicit"
+@settings(max_examples=1, suppress_health_check=list(HealthCheck))
+def test(case):
+    with pytest.raises(requests.exceptions.ReadTimeout):
+        case.call_and_validate(checks=[noop], headers={{"X-Spam": "Explicit" }})
 """
     )
     result = testdir.runpytest()
     result.assert_outcomes(passed=1)
+    assert received == [({"X-Foo": "Bar", "X-Spam": "Explicit"}, server.cert_der)]
 
 
 def test_config_using_headers(testdir):
@@ -1332,7 +1347,7 @@ schema.config.update(headers=HEADERS)
 
 @schema.parametrize()
 def test(case):
-    assert case.headers == HEADERS
+    assert {name: case.headers[name] for name in HEADERS} == HEADERS
 """
     )
     result = testdir.runpytest()
@@ -1364,7 +1379,7 @@ schema.config.update(basic_auth=("test", "test"))
 
 @schema.parametrize()
 def test(case):
-    assert case.headers == {"Authorization": "Basic dGVzdDp0ZXN0"}
+    assert case.headers["Authorization"] == "Basic dGVzdDp0ZXN0"
 """
     )
     result = testdir.runpytest()
@@ -1783,6 +1798,42 @@ def test(case):
     assert sorted(unexpected_pairs) == sorted([(m, "/items") for m in unexpected]), unexpected_pairs
 
 
+@pytest.mark.parametrize(
+    ("marker", "expected_generated"),
+    [("@pytest.mark.skip", False), ("", True)],
+    ids=["skipped", "running"],
+)
+def test_coverage_cases_generated_only_when_the_test_runs(testdir, tmp_path, marker, expected_generated):
+    log_path = tmp_path / "coverage_cases.log"
+    testdir.make_test(
+        f"""
+schema.config.phases.examples.enabled = False
+schema.config.phases.fuzzing.enabled = False
+
+@schema.hook
+def map_case(ctx, case):
+    with open({str(log_path)!r}, "a") as f:
+        f.write("generated\\n")
+    return case
+
+{marker}
+@schema.parametrize()
+def test(case):
+    pass
+""",
+        paths={
+            "/items": {
+                "get": {
+                    "parameters": [{"name": "key", "in": "query", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+    )
+    testdir.runpytest()
+    assert log_path.exists() is expected_generated
+
+
 def test_filter_failure_drops_a_failure(ctx, testdir):
     api = ctx.openapi.apps.failure()
     testdir.make_test(
@@ -1800,3 +1851,201 @@ def test(case):
 """
     )
     testdir.runpytest().assert_outcomes(passed=1)
+
+
+def test_manual_target_steers_generation(testdir):
+    # Only target-guided search hits one exact value in a wide range, and it needs about 100 examples to get there.
+    testdir.make_test(
+        """
+import hypothesis
+
+schema.config.phases.coverage.enabled = False
+
+@schema.include(path_regex="items").parametrize()
+@settings(max_examples=100, derandomize=True)
+def test_api(case):
+    value = case.query["value"]
+    hypothesis.target(-abs(value - 1_000), label="distance")
+    assert value != 1_000
+""",
+        paths={
+            "/items": {
+                "get": {
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "in": "query",
+                            "required": True,
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 1_000_000,
+                        }
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+        generation_modes=[GenerationMode.POSITIVE],
+    )
+    testdir.runpytest().assert_outcomes(failed=1)
+
+
+def test_pytest_parametrize_without_schemas(testdir):
+    testdir.make_test(
+        """
+@schemathesis.pytest.parametrize()
+def test_api(case):
+    pass
+""",
+    )
+    result = testdir.runpytest("-v")
+    result.assert_outcomes(errors=1)
+    result.stdout.re_match_lines([r".*test_api does not match any API operations and therefore has no effect"])
+
+
+def test_examples_only_with_custom_media_type_and_non_binary_example(testdir):
+    testdir.make_test(
+        """
+schemathesis.openapi.media_type("text/csv", st.just(b"a,b"))
+schema.config.phases.fuzzing.enabled = False
+schema.config.phases.coverage.enabled = False
+
+@schema.include(path="/csv").parametrize()
+def test_api(case):
+    pass
+""",
+        paths={
+            "/csv": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {"text/csv": {"schema": {"type": "array"}, "example": [{"a": 1}]}},
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+        schema_name="simple_openapi.yaml",
+    )
+    result = testdir.runpytest("-p", "no:xdist")
+    result.assert_outcomes(failed=1)
+    result.stdout.re_match_lines([r".*unsupported payload media types: text/csv"])
+
+
+def test_examples_only_with_invalid_header_example(testdir):
+    testdir.make_test(
+        """
+schema.config.phases.fuzzing.enabled = False
+schema.config.phases.coverage.enabled = False
+
+@schema.include(path="/items").parametrize()
+def test_api(case):
+    pass
+""",
+        paths={
+            "/items": {
+                "get": {
+                    "parameters": [
+                        {
+                            "name": "X-Token",
+                            "in": "header",
+                            "required": True,
+                            "schema": {"type": "string"},
+                            "example": "a\nb",
+                        }
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+        schema_name="simple_openapi.yaml",
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(failed=1)
+    result.stdout.re_match_lines([r".*some header examples are invalid:", r".*- 'X-Token'='a\\nb'"])
+
+
+def test_examples_only_with_invalid_regex_pattern(testdir):
+    testdir.make_test(
+        """
+import jsonschema_rs
+
+schema.config.phases.fuzzing.enabled = False
+schema.config.phases.coverage.enabled = False
+
+@schema.hook
+def before_generate_query(context, strategy):
+    jsonschema_rs.validator_for({"type": "string", "pattern": "[invalid"})
+    return strategy
+
+@schema.include(path="/items").parametrize()
+def test_api(case):
+    pass
+""",
+        paths={
+            "/items": {
+                "get": {
+                    "parameters": [
+                        {"name": "key", "in": "query", "required": True, "schema": {"type": "string"}, "example": "a"}
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+        schema_name="simple_openapi.yaml",
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(failed=1)
+    result.stdout.re_match_lines(
+        [
+            r".*InvalidRegexPattern: Failed to generate test cases for this API operation because of unsupported regular expression `\[invalid`"
+        ]
+    )
+
+
+def test_undeclared_path_parameter(testdir):
+    testdir.make_test(
+        """
+@schema.include(path="/items/{item_id}").parametrize()
+def test_api(case):
+    pass
+""",
+        paths={"/items/{item_id}": {"get": {"responses": {"200": {"description": "OK"}}}}},
+        schema_name="simple_openapi.yaml",
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(failed=1)
+    result.stdout.re_match_lines([r".*InvalidSchema: Path parameter 'item_id' is not defined"])
+
+
+@pytest.mark.parametrize(
+    ("ini", "expected"),
+    [
+        (
+            "",
+            ["test_schema_marked_function_respects_name_filter.py::test_api[GET /users]"],
+        ),
+        (
+            "[pytest]\npython_functions = verify_*\n",
+            ["test_reuse.py::verify_api[GET /users]"],
+        ),
+    ],
+    ids=["default", "custom-python-functions"],
+)
+def test_schema_marked_function_respects_name_filter(testdir, ini, expected):
+    module = testdir.make_test(
+        """
+@schema.parametrize()
+def test_api(case):
+    pass
+"""
+    )
+    testdir.makepyfile(
+        test_reuse=f"""
+from {module.purebasename} import test_api as _private_helper, test_api as renamed_helper, test_api as verify_api
+"""
+    )
+    if ini:
+        testdir.makeini(ini)
+    result = testdir.runpytest("--collect-only", "-q")
+    assert result.outlines[: result.outlines.index("")] == expected

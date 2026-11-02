@@ -1,3 +1,4 @@
+import json
 import platform
 
 import jsonschema_rs
@@ -14,8 +15,7 @@ from schemathesis.core.result import Err, Ok
 from schemathesis.core.transport import Response as HTTPResponse
 from schemathesis.openapi.checks import JsonSchemaError
 from schemathesis.specs.openapi import adapter
-from schemathesis.specs.openapi._operation_lookup import OperationLookup
-from schemathesis.specs.openapi.adapter import validators
+from test.utils import run_given
 
 
 @pytest.mark.parametrize("base_path", ["/v1", "/v1/"])
@@ -163,10 +163,10 @@ def test_schema_parsing_error(ctx, simple_schema):
     assert oks[0].method == "post"
 
 
-def test_not_recoverable_schema_error(ctx, simple_schema):
+def test_missing_paths_schema_error(ctx, simple_schema):
     # When there is an error in the API schema that leads to inability to generate any tests
     del simple_schema["paths"]
-    # Then it is an explicit exception during processing API operations
+    # Then it is a single schema error that belongs to no path or method
     schema = ctx.openapi.load_schema(
         simple_schema.get("paths"),
         version=simple_schema["swagger"],
@@ -175,8 +175,10 @@ def test_not_recoverable_schema_error(ctx, simple_schema):
         basePath=simple_schema["basePath"],
         schemes=simple_schema["schemes"],
     )
-    with pytest.raises(InvalidSchema):
-        list(schema.get_all_operations())
+    (result,) = schema.get_all_operations()
+    error = result.err()
+    assert (error.path, error.method) == (None, None)
+    assert '"paths" is a required property' in str(error)
 
 
 def test_invalid_parameter_schema_type(ctx):
@@ -195,6 +197,11 @@ def test_invalid_parameter_schema_type(ctx):
     # Then getting this parameter's schema should raise InvalidSchema
     with pytest.raises(InvalidSchema, match="Can not generate data for query parameter"):
         _ = operation.query[0].optimized_schema
+
+
+@pytest.mark.parametrize("info", [None, "oops", {"title": ["API"]}], ids=["null", "string", "non-string-title"])
+def test_malformed_info_has_no_title(info):
+    assert schemathesis.openapi.from_dict({"openapi": "3.0.0", "info": info, "paths": {}}).title is None
 
 
 def test_no_paths_on_openapi_3_1(ctx):
@@ -256,36 +263,147 @@ def test_openapi_3_2_smoke(ctx):
 
 
 def test_openapi_3_2_querystring_parameter_is_collected(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /search",
         {
-            "/search": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "ignored",
-                            "in": "querystring",
-                            "required": True,
-                            "content": {
-                                "application/x-www-form-urlencoded": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"q": {"type": "string"}},
-                                        "required": ["q"],
-                                    }
-                                }
-                            },
+            "parameters": [
+                {
+                    "name": "ignored",
+                    "in": "querystring",
+                    "required": True,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {"q": {"type": "string"}},
+                                "required": ["q"],
+                            }
                         }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+                    },
                 }
-            }
+            ],
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.2.0",
     )
-    operation = schema["/search"]["GET"]
     assert len(operation.query.items) == 1
     assert operation.query.items[0].definition["in"] == "querystring"
     assert operation.query.items[0].location == ParameterLocation.QUERY
+
+
+ITEM = {"type": "object", "properties": {"id": {"type": "integer"}}, "required": ["id"], "additionalProperties": False}
+MEDIA_TYPE_COMPONENTS = {"mediaTypes": {"Item": {"schema": ITEM}}}
+REFERENCED_CONTENT = {"application/json": {"$ref": "#/components/mediaTypes/Item"}}
+
+
+def test_openapi_3_2_media_type_reference_in_request_body(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {"required": True, "content": REFERENCED_CONTENT},
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.2.0",
+        components=MEDIA_TYPE_COMPONENTS,
+    )
+
+    @run_given(operation.as_strategy(), max_examples=10)
+    def test(case):
+        assert set(case.body) == {"id"}
+        assert isinstance(case.body["id"], int)
+
+
+def test_openapi_3_2_media_type_reference_in_parameter(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [{"name": "q", "in": "query", "required": True, "content": REFERENCED_CONTENT}],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.2.0",
+        components=MEDIA_TYPE_COMPONENTS,
+    )
+
+    @run_given(operation.as_strategy(), max_examples=10)
+    def test(case):
+        value = json.loads(case.query["q"])
+        assert set(value) == {"id"}
+        assert isinstance(value["id"], int)
+
+
+@pytest.mark.parametrize("required", [True, False], ids=["required", "optional"])
+def test_openapi_3_2_unresolvable_media_type_reference_in_request_body(ctx, required):
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {
+                "required": required,
+                "content": {"application/json": {"$ref": "#/components/mediaTypes/Missing"}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.2.0",
+        components=MEDIA_TYPE_COMPONENTS,
+    )
+    assert [(skipped.location, skipped.reference, skipped.required) for skipped in operation.skipped_parameters] == [
+        ("body", "#/components/mediaTypes/Missing", required)
+    ]
+
+
+def test_openapi_3_2_unresolvable_media_type_reference_in_response(ctx, response_factory):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "content": {"application/json": {"$ref": "#/components/mediaTypes/Missing"}},
+                },
+                "404": {"description": "Not Found", "content": REFERENCED_CONTENT},
+            }
+        },
+        version="3.2.0",
+        components=MEDIA_TYPE_COMPONENTS,
+    )
+    headers = {"content-type": ["application/json"]}
+    operation.validate_response(response_factory.core(content=b'{"id": "bad"}', headers=headers))
+    with pytest.raises(JsonSchemaError):
+        operation.validate_response(response_factory.core(content=b'{"id": "bad"}', headers=headers, status_code=404))
+
+
+# Open API 3.0 documents sometimes point a media type at a schema; a boolean one constrains nothing.
+def test_media_type_reference_to_boolean_schema(ctx, response_factory):
+    content = {"application/json": {"$ref": "#/components/schemas/Any"}}
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {"required": True, "content": content},
+            "responses": {"200": {"description": "OK", "content": content}},
+        },
+        components={"schemas": {"Any": True}},
+    )
+    assert [body.media_type for body in operation.body] == ["application/json"]
+    operation.validate_response(
+        response_factory.core(content=b'{"id": "bad"}', headers={"content-type": ["application/json"]})
+    )
+
+
+@pytest.mark.parametrize(
+    "content",
+    [REFERENCED_CONTENT, {**REFERENCED_CONTENT, "text/plain": "malformed"}],
+    ids=["reference", "reference-next-to-malformed-entry"],
+)
+def test_openapi_3_2_media_type_reference_in_response(ctx, response_factory, content):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {"responses": {"200": {"description": "OK", "content": content}}},
+        version="3.2.0",
+        components=MEDIA_TYPE_COMPONENTS,
+    )
+    with pytest.raises(JsonSchemaError):
+        operation.validate_response(
+            response_factory.core(content=b'{"id": "bad"}', headers={"content-type": ["application/json"]})
+        )
 
 
 @pytest.mark.parametrize(
@@ -335,9 +453,9 @@ def test_openapi_3_2_querystring_parameter_constraints(ctx, parameters):
     ],
     ids=["openapi-3.0", "openapi-3.1", "openapi-3.2"],
 )
-def test_validate_v3_rejects_invalid_schema(version, invalid_schema, expected_error):
+def test_validate_rejects_invalid_schema(version, invalid_schema, expected_error):
     with pytest.raises(jsonschema_rs.ValidationError, match=expected_error):
-        validators.validate_v3(invalid_schema)
+        schemathesis.openapi.from_dict(invalid_schema).validate()
 
 
 @pytest.mark.parametrize(
@@ -345,14 +463,14 @@ def test_validate_v3_rejects_invalid_schema(version, invalid_schema, expected_er
     ["3.0.0", "3.1.0", "3.2.0"],
     ids=["openapi-3.0", "openapi-3.1", "openapi-3.2"],
 )
-def test_validate_v3_accepts_valid_schema(version):
+def test_validate_accepts_valid_schema(version):
     raw_schema = {
         "openapi": version,
         "info": {"title": "Test", "version": "0.1.0"},
         "paths": {},
     }
     # Should not raise
-    validators.validate_v3(raw_schema)
+    schemathesis.openapi.from_dict(raw_schema).validate()
 
 
 def test_schema_error_on_path(ctx, simple_schema):
@@ -371,7 +489,7 @@ def test_schema_error_on_path(ctx, simple_schema):
     assert len(operations) == 2
     errors = [op for op in operations if isinstance(op, Err)]
     assert len(errors) == 1
-    assert errors[0].err().path is None
+    assert errors[0].err().path == "null"
     assert errors[0].err().method is None
     # And all valid operations should be parsed as `Ok`
     oks = [op for op in operations if isinstance(op, Ok)]
@@ -539,22 +657,9 @@ def test_get_operation(ctx, operation_id, reference, path, method):
         assert operation.method.upper() == method
 
 
-def test_operation_lookup_cache_built_once(ctx, monkeypatch):
-    schema = ctx.openapi.load_schema(SCHEMA["paths"])
-    calls = 0
-    original = OperationLookup._build_tables
-
-    def tracking(self: OperationLookup) -> None:
-        nonlocal calls
-        calls += 1
-        return original(self)
-
-    monkeypatch.setattr(OperationLookup, "_build_tables", tracking)
-
-    schema.find_operation_by_id("getFoo")
-    schema.find_operation_by_reference("#/paths/~1foo/get")
-
-    assert calls == 1
+def test_find_operation_by_path_without_operation_id(ctx):
+    schema = ctx.openapi.load_schema({"/users/{user_id}": {"get": RESPONSES}})
+    assert schema.find_operation_by_path("GET", "/users/42").label == "GET /users/{user_id}"
 
 
 def test_find_operation_by_id_in_referenced_path(ctx):
@@ -571,6 +676,15 @@ def test_find_operation_by_id_in_referenced_path(ctx):
     operation = schema.find_operation_by_id("getFoo")
     assert operation.path == "/foo"
     assert operation.method.upper() == "GET"
+
+
+def test_find_operation_by_reference_outside_paths(ctx):
+    schema = ctx.openapi.load_schema(
+        {"/foo": {"$ref": "#/components/x-paths/Path"}},
+        components={"x-paths": {"Path": {"get": {"operationId": "getFoo", **RESPONSES}}}},
+    )
+    with pytest.raises(OperationNotFound, match="Operation '#/components/x-paths/Path/get' not found"):
+        schema.find_operation_by_reference("#/components/x-paths/Path/get")
 
 
 def test_find_operation_by_id_in_referenced_path_shared_parameters(ctx):

@@ -1,32 +1,41 @@
 from __future__ import annotations
 
 import json
-import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from schemathesis.cli.commands.run.handlers.base import EventHandler
+from schemathesis.cli.constants import ExitCode
+from schemathesis.core.errors import HookExecutionError, LoaderError
 from schemathesis.core.timing import format_timestamp
 from schemathesis.core.version import SCHEMATHESIS_VERSION
 from schemathesis.engine import StopReason
-from schemathesis.engine.events import EngineFinished, EngineStarted
-from schemathesis.engine.run import PhaseName
+from schemathesis.engine.events import EngineFinished, EngineStarted, FatalError
+from schemathesis.engine.run import INTERNAL_PHASES
+from schemathesis.engine.summary import running_time
 
 if TYPE_CHECKING:
     from schemathesis.cli.context import BaseExecutionContext
-    from schemathesis.cli.summary import SummaryData
     from schemathesis.engine import events
-
-# Internal phases are not part of the reported test phases, matching the terminal.
-INTERNAL_PHASES = (PhaseName.PROBING, PhaseName.SCHEMA_ANALYSIS)
+    from schemathesis.engine.summary import SummaryData
 
 
-def _running_time(started_at: float | None, finished: events.EngineFinished | None) -> float | None:
+def _stop_reason(finished: events.EngineFinished | None, exit_code: int) -> str:
     if finished is not None:
-        return finished.running_time
-    if started_at is None:
-        return None
-    return time.time() - started_at
+        return finished.stop_reason.value
+    if exit_code == ExitCode.INTERRUPTED:
+        return StopReason.INTERRUPTED.value
+    # The engine never decides this one: it did not get to stop on its own.
+    return "error"
+
+
+def _fatal_error_title(event: events.FatalError) -> str:
+    # Matches the title the terminal prints for the same error.
+    if isinstance(event.exception, LoaderError):
+        return "Schema Loading Error"
+    if isinstance(event.exception, HookExecutionError):
+        return "Hook Error"
+    return "Test Execution Error"
 
 
 def build_document(
@@ -36,6 +45,7 @@ def build_document(
     seed: int | None,
     started_at: float | None,
     finished: events.EngineFinished | None,
+    fatal_error: events.FatalError | None,
     exit_code: int,
 ) -> dict[str, Any]:
     """`started_at` is `None` when the engine never started, `finished` when it never stopped."""
@@ -46,8 +56,8 @@ def build_document(
         "command": command,
         "seed": seed,
         "started_at": format_timestamp(started_at) if started_at is not None else None,
-        "running_time": _running_time(started_at, finished),
-        "stop_reason": (finished.stop_reason if finished is not None else StopReason.INTERRUPTED).value,
+        "running_time": running_time(started_at, finished),
+        "stop_reason": _stop_reason(finished, exit_code),
         "complete": finished is not None,
         "exit_code": exit_code,
         "operations": {
@@ -71,10 +81,12 @@ def build_document(
             "with_failures": summary.test_cases.with_failures,
             "unique_failures": summary.test_cases.unique_failures,
             "without_checks": summary.test_cases.without_checks,
+            "errored": summary.test_cases.errored,
         },
         "failures": [
             {
                 "type": group.type,
+                "code": group.code,
                 "title": group.title,
                 "severity": group.severity.value,
                 "count": group.count,
@@ -82,7 +94,8 @@ def build_document(
             }
             for group in summary.failures
         ],
-        "errors": [{"title": group.title, "count": group.count} for group in summary.errors],
+        "errors": [{"title": group.title, "count": group.count} for group in summary.errors]
+        + ([{"title": _fatal_error_title(fatal_error), "count": 1}] if fatal_error is not None else []),
         "baseline": {
             "known": summary.baseline.known,
             "new": summary.baseline.new,
@@ -102,6 +115,7 @@ def build_document(
                 phase: {
                     "accepted": rate.accepted,
                     "unreachable": rate.unreachable,
+                    "conflicts": rate.conflicts,
                     "rejected": rate.rejected,
                 }
                 for phase, rate in phases.items()
@@ -118,12 +132,13 @@ def build_document(
 class JsonReportHandler(EventHandler["BaseExecutionContext"]):
     """Writes the run's verdict as one JSON document."""
 
-    __slots__ = ("output", "started_at", "finished")
+    __slots__ = ("output", "started_at", "finished", "fatal_error")
 
     def __init__(self, output: Path) -> None:
         self.output = output
         self.started_at: float | None = None
         self.finished: events.EngineFinished | None = None
+        self.fatal_error: events.FatalError | None = None
 
     def handle_event(self, ctx: BaseExecutionContext, event: events.EngineEvent) -> None:
         if isinstance(event, EngineStarted):
@@ -131,17 +146,19 @@ class JsonReportHandler(EventHandler["BaseExecutionContext"]):
             self.started_at = event.timestamp
         elif isinstance(event, EngineFinished):
             self.finished = event
+        elif isinstance(event, FatalError):
+            self.fatal_error = event
 
     def shutdown(self, ctx: BaseExecutionContext) -> None:
         from schemathesis.reporting._command import get_command_representation
 
-        sanitization = ctx.config.output.sanitization
         document = build_document(
             summary=ctx.summary(),
-            command=get_command_representation(sanitization if sanitization.enabled else None),
+            command=get_command_representation(ctx.config.output.sanitization),
             seed=ctx.config.seed,
             started_at=self.started_at,
             finished=self.finished,
+            fatal_error=self.fatal_error,
             exit_code=ctx.exit_code,
         )
         self.output.parent.mkdir(parents=True, exist_ok=True)

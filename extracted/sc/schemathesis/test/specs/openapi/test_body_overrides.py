@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import jsonschema_rs
 import pytest
-from hypothesis import HealthCheck, given, settings
 
 from schemathesis.config import SchemathesisConfig
+from schemathesis.generation import GenerationMode
+from schemathesis.generation.hypothesis.examples import generate_many
+from test.utils import run_given
 
 
 def _load_schema(ctx, config: dict, paths: dict, *, version: str = "3.0.2"):
@@ -46,12 +49,7 @@ def test_top_level_literal_substitutes_every_case(ctx):
     operation = schema["/items"]["POST"]
     seen: set[str] = set()
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=10, derandomize=True, database=None, suppress_health_check=list(HealthCheck))
-    def collect(case):
-        seen.add(case.body.get("ccNumber"))
-
-    collect()
+    seen.update(case.body.get("ccNumber") for case in generate_many(operation.as_strategy(), 10))
     assert seen == {"1234-5678-9012-3456"}
 
 
@@ -77,13 +75,34 @@ def test_nested_literal_substitutes_every_case(ctx):
     operation = schema["/items"]["POST"]
     seen: set[str] = set()
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=10, derandomize=True, database=None, suppress_health_check=list(HealthCheck))
-    def collect(case):
-        seen.add(case.body["user"].get("email"))
-
-    collect()
+    seen.update(case.body["user"].get("email") for case in generate_many(operation.as_strategy(), 10))
     assert seen == {"pinned@example.com"}
+
+
+@pytest.mark.hypothesis_nested
+def test_nested_literal_replaces_null_parent(ctx):
+    schema = _load_schema(
+        ctx,
+        {"parameters": {"body.user.email": "pinned@example.com"}},
+        _path_with_body(
+            {
+                "type": "object",
+                "properties": {
+                    "user": {
+                        "type": "object",
+                        "nullable": True,
+                        "properties": {"email": {"type": "string"}},
+                        "additionalProperties": False,
+                    }
+                },
+                "required": ["user"],
+                "additionalProperties": False,
+            }
+        ),
+    )
+    operation = schema["/items"]["POST"]
+    bodies = [case.body for case in generate_many(operation.as_strategy(), 10)]
+    assert bodies == [{"user": {"email": "pinned@example.com"}}] * 10
 
 
 @pytest.mark.hypothesis_nested
@@ -106,8 +125,7 @@ def test_force_inserts_missing_optional_leaf(ctx):
     cases_seen = 0
     cases_with_force = 0
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=15, derandomize=True, database=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(), max_examples=15, derandomize=True)
     def collect(case):
         nonlocal cases_seen, cases_with_force
         if not isinstance(case.body, dict):
@@ -116,7 +134,6 @@ def test_force_inserts_missing_optional_leaf(ctx):
         if case.body.get("optional_token") == "FORCED":
             cases_with_force += 1
 
-    collect()
     assert cases_seen > 0
     assert cases_with_force == cases_seen, "optional leaf should be force-inserted in every case"
 
@@ -140,8 +157,7 @@ def test_wildcard_substitutes_every_array_element(ctx):
     total = 0
     matched = 0
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=10, derandomize=True, database=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(), max_examples=10, derandomize=True)
     def collect(case):
         nonlocal total, matched
         for item in case.body["tags"]:
@@ -149,7 +165,6 @@ def test_wildcard_substitutes_every_array_element(ctx):
             if item == "TAG":
                 matched += 1
 
-    collect()
     assert total > 0 and matched == total
 
 
@@ -172,12 +187,7 @@ def test_op_scope_literal_beats_global_dict_binding(ctx):
     operation = schema["/items"]["POST"]
     seen: set[str] = set()
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=10, derandomize=True, database=None, suppress_health_check=list(HealthCheck))
-    def collect(case):
-        seen.add(case.body.get("token"))
-
-    collect()
+    seen.update(case.body.get("token") for case in generate_many(operation.as_strategy(), 10))
     assert seen == {"OP_LITERAL"}, "op-scoped literal must veto global dict binding"
 
 
@@ -200,12 +210,7 @@ def test_op_scope_dict_binding_beats_global_literal(ctx):
     operation = schema["/items"]["POST"]
     seen: set[str] = set()
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=10, derandomize=True, database=None, suppress_health_check=list(HealthCheck))
-    def collect(case):
-        seen.add(case.body.get("token"))
-
-    collect()
+    seen.update(case.body.get("token") for case in generate_many(operation.as_strategy(), 10))
     assert seen == {"DICT_VALUE"}, "op-scoped dict binding must veto global literal"
 
 
@@ -219,21 +224,17 @@ def test_literal_skipped_when_path_does_not_resolve(ctx):
     operation = schema["/items"]["POST"]
     leaks = 0
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=10, derandomize=True, database=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(), max_examples=10, derandomize=True)
     def collect(case):
         nonlocal leaks
         if "notInSchema" in (case.body or {}):
             leaks += 1
 
-    collect()
     assert leaks == 0
 
 
 @pytest.mark.hypothesis_nested
 def test_override_drops_stale_mutation_on_same_path(ctx):
-    from schemathesis.generation import GenerationMode
-
     schema = _load_schema(
         ctx,
         {
@@ -253,8 +254,7 @@ def test_override_drops_stale_mutation_on_same_path(ctx):
     operation = schema["/items"]["POST"]
     saw_sibling_mutation = False
 
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(max_examples=40, derandomize=True, database=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=40, derandomize=True)
     def collect(case):
         nonlocal saw_sibling_mutation
         if case._meta is None:
@@ -266,8 +266,18 @@ def test_override_drops_stale_mutation_on_same_path(ctx):
             if mutation.path and mutation.path[:1] == ("sibling",):
                 saw_sibling_mutation = True
 
-    collect()
     assert saw_sibling_mutation, "no sibling mutation seen in any case; absence-of-token-mutation could be vacuous"
+
+
+@pytest.mark.hypothesis_nested
+def test_override_that_restores_a_valid_body_drops_its_mutations(ctx):
+    body_schema = {"type": "object", "properties": {"token": {"type": "string", "minLength": 5}}, "required": ["token"]}
+    schema = _load_schema(ctx, {"parameters": {"body.token": "valid-token-value"}}, _path_with_body(body_schema))
+    validator = jsonschema_rs.Draft4Validator(body_schema)
+    cases = generate_many(schema["/items"]["POST"].as_strategy(generation_mode=GenerationMode.NEGATIVE), 10)
+    valid = [case for case in cases if isinstance(case.body, dict) and validator.is_valid(case.body)]
+    assert valid
+    assert [case.body for case in valid if case._meta.generation.mode.is_negative] == []
 
 
 @pytest.mark.hypothesis_nested
@@ -290,8 +300,7 @@ def test_wildcard_override_does_not_corrupt_missing_optional_array(ctx):
     corrupt = 0
     cases_seen = 0
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=20, derandomize=True, database=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(), max_examples=20, derandomize=True)
     def collect(case):
         nonlocal corrupt, cases_seen
         if not isinstance(case.body, dict):
@@ -301,6 +310,5 @@ def test_wildcard_override_does_not_corrupt_missing_optional_array(ctx):
         if tags is not None and not isinstance(tags, list):
             corrupt += 1
 
-    collect()
     assert cases_seen > 0
     assert corrupt == 0, "wildcard override must not synthesize a non-array value for missing optional array"

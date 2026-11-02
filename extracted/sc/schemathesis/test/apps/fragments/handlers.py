@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import json
 import uuid
+from collections.abc import Container
 from time import sleep
 from typing import Any
 
@@ -16,6 +17,13 @@ from test.apps.fragments.schemas import PAYLOAD_SCHEMA, deep_leaf_bug_components
 _BASIC_AUTH_TOKEN = "Basic dGVzdDp0ZXN0"
 
 _PAYLOAD_VALIDATOR = jsonschema_rs.Draft4Validator({"anyOf": [{"type": "null"}, PAYLOAD_SCHEMA]})
+
+
+def null_name_lookup(registry: Container[object], key: object) -> Any:
+    if key not in registry:
+        return "", 404
+    # Planted bug: required `name` is null for entries that exist
+    return jsonify({"name": None}), 200
 
 
 def register_success(app: Flask) -> None:
@@ -91,6 +99,16 @@ def register_csv_payload(app: Flask) -> None:
         text = request.get_data(as_text=True)
         rows = list(csv.DictReader(text.splitlines())) if text else []
         return jsonify(rows)
+
+
+def register_identical_query_parameters(app: Flask) -> None:
+    @app.route("/api/twin_a", methods=["GET"])
+    def twin_a_endpoint() -> Any:
+        return jsonify({"twin": "a"})
+
+    @app.route("/api/twin_b", methods=["GET"])
+    def twin_b_endpoint() -> Any:
+        return jsonify({"twin": "b"})
 
 
 def register_flaky(app: Flask) -> None:
@@ -201,16 +219,6 @@ def register_write_only(app: Flask) -> None:
         if isinstance(data, dict) and len(data) == 1 and isinstance(data.get("write"), int):
             return jsonify(_SUCCESS_RESPONSE)
         raise InternalServerError
-
-
-def register_chunked_success(app: Flask) -> None:
-    @app.route("/api/success", methods=["GET"])
-    def chunked_success_endpoint() -> Any:
-        def generate():
-            yield b'{"success":'
-            yield b" true}"
-
-        return Response(generate(), content_type="application/json")
 
 
 def register_text(app: Flask) -> None:
@@ -362,19 +370,6 @@ def register_header_constraint_bug(app: Flask) -> None:
         return jsonify({"ok": True}), 200
 
 
-def register_query_array_items_bug(app: Flask) -> None:
-    @app.route("/api/query_array_items_bug", methods=["GET"])
-    def query_array_items_bug_endpoint() -> Any:
-        ids = request.args.getlist("ids")
-        if not ids:
-            return jsonify({"error": "ids required"}), 400
-        try:
-            [int(x) for x in ids]
-        except ValueError:
-            return jsonify({"error": "ids must be integers"}), 400
-        return jsonify({"ok": True}), 200
-
-
 def register_one_of_branch_bug(app: Flask) -> None:
     @app.route("/api/one_of_branch_bug", methods=["POST"])
     def one_of_branch_bug_endpoint() -> Any:
@@ -394,3 +389,52 @@ def register_additional_properties_bug(app: Flask) -> None:
             if not isinstance(value, str):
                 return jsonify({"error": "values must be strings"}), 400
         return jsonify({"ok": True}), 200
+
+
+def register_languages_with_codes(app: Flask) -> None:
+    @app.route("/languages/", methods=["GET"])
+    def list_languages() -> Any:
+        return jsonify({"results": [{"code": "en"}]}), 200
+
+    @app.route("/languages/<code>", methods=["DELETE"])
+    def delete_language(code: str) -> Any:
+        return "", 204
+
+
+def register_basic_with_query(app: Flask) -> None:
+    @app.route("/api/basic_query", methods=["GET"])
+    def basic_query_endpoint() -> Any:
+        if request.headers.get("Authorization") == _BASIC_AUTH_TOKEN:
+            return jsonify({"ok": True})
+        return {"detail": "Unauthorized"}, 401
+
+
+def register_flaky_branch_blocks(app: Flask) -> None:
+    created = 0
+
+    # Every second create conflicts, so Hypothesis cannot replay a stateful suite and ends it as flaky.
+    @app.route("/branches", methods=["POST"])
+    def create_branch() -> Any:
+        nonlocal created
+        created += 1
+        if created % 2 == 0:
+            return jsonify({}), 409
+        return jsonify({"id": created}), 201
+
+    @app.route("/blocks", methods=["POST"])
+    def create_block() -> Any:
+        return jsonify({}), 422
+
+
+def register_linked_users_create(app: Flask) -> None:
+    @app.route("/users", methods=["POST"])
+    def create_user() -> Any:
+        return jsonify({"id": 1}), 201
+
+
+def register_linked_users(app: Flask) -> None:
+    register_linked_users_create(app)
+
+    @app.route("/users/<int:user_id>")
+    def get_user(user_id: int) -> Any:
+        return jsonify({"id": user_id})

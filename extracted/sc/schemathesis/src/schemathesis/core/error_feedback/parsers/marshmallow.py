@@ -8,8 +8,9 @@ from schemathesis.core.error_feedback.parsers import PARSERS
 from schemathesis.core.error_feedback.parsers.extractors import (
     ClassificationResult,
     RegexHandler,
-    location_for_method,
+    location_for_parameter,
     numeric_bound,
+    parse_number,
     size_bound,
     size_bound_exact,
 )
@@ -25,6 +26,7 @@ from schemathesis.core.error_feedback.store import (
     TypeMismatchPayload,
 )
 from schemathesis.core.parameters import ParameterLocation
+from schemathesis.core.transforms import as_index_or_key
 
 if TYPE_CHECKING:
     from schemathesis.generation.case import Case
@@ -115,7 +117,7 @@ def _classify(message: str) -> tuple[ClassificationResult, ...]:
             (
                 ObservationKind.NUMERIC_BOUND,
                 NumericBoundPayload(
-                    bound=float(range_pair.group("min")),
+                    bound=parse_number(range_pair.group("min")),
                     direction=BoundDirection.MIN,
                     exclusive=range_pair.group("min_inc") is None,
                 ),
@@ -123,7 +125,7 @@ def _classify(message: str) -> tuple[ClassificationResult, ...]:
             (
                 ObservationKind.NUMERIC_BOUND,
                 NumericBoundPayload(
-                    bound=float(range_pair.group("max")),
+                    bound=parse_number(range_pair.group("max")),
                     direction=BoundDirection.MAX,
                     exclusive=range_pair.group("max_inc") is None,
                 ),
@@ -156,8 +158,7 @@ def _walk(
             if new_location is not None and isinstance(child, dict):
                 yield from _walk(child, path=path, location=new_location, at_root=False)
                 continue
-            child_key: str | int = int(key) if key.isascii() and key.isdigit() else key
-            yield from _walk(child, path=(*path, child_key), location=location, at_root=False)
+            yield from _walk(child, path=(*path, as_index_or_key(key)), location=location, at_root=False)
     elif isinstance(value, list):
         if value and all(isinstance(item, str) for item in value):
             for message in value:
@@ -184,9 +185,10 @@ class MarshmallowParser:
 
     def parse(self, *, operation: APIOperation, body: object, case: Case) -> tuple[Observation, ...]:
         assert isinstance(body, dict)
-        default_location = location_for_method(operation.method)
         observations: list[Observation] = []
-        for path, location, message in _walk(body, path=(), location=default_location, at_root=True):
+        for path, location, message in _walk(body, path=(), location=ParameterLocation.UNKNOWN, at_root=True):
+            if location is ParameterLocation.UNKNOWN:
+                location = location_for_parameter(operation, path, case)
             for kind, payload in _classify(message):
                 observations.append(
                     Observation(

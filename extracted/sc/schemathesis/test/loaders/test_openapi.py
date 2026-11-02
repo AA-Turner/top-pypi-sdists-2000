@@ -64,15 +64,37 @@ def test_openapi_wsgi_loader(ctx, run_test):
     run_test(strategy)
 
 
+def test_openapi_wsgi_loader_plain_application(ctx):
+    spec = json.dumps(ctx.openapi.build_schema({"/users": {"get": {"responses": {"200": {"description": "OK"}}}}}))
+
+    def app(environ, start_response):
+        start_response("200 OK", [("Content-Type", "application/json")])
+        return [spec.encode() if environ["PATH_INFO"] == "/openapi.json" else b'{"success": true}']
+
+    schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
+    assert schema["/users"]["GET"].Case().call().json() == {"success": True}
+
+
 @pytest.mark.parametrize(
     ("version", "expected"),
     [
         ("4.0.0", "The provided schema uses Open API 4.0.0, which is currently not supported."),
+        ("3.1", 'The `openapi` field must be a string, got 3.1. Quote the full version, e.g. `openapi: "3.1.0"`.'),
+        ("3", 'The `openapi` field must be a string, got 3. Quote the full version, e.g. `openapi: "3.1.0"`.'),
     ],
+    ids=["unsupported", "unquoted-float", "unquoted-int"],
 )
 def test_unsupported_openapi_version(version, expected):
     with pytest.raises(LoaderError, match=expected):
-        schemathesis.openapi.from_dict({"openapi": version})
+        schemathesis.openapi.from_file(f"openapi: {version}")
+
+
+def test_unquoted_swagger_version():
+    # Swagger has a single version, so a YAML number is unambiguous and stays accepted.
+    schema = schemathesis.openapi.from_file("swagger: 2.0\ninfo: {title: t, version: '1'}")
+    assert schema.specification.version == "2.0"
+    (result,) = schema.get_all_operations()
+    assert '"paths" is a required property' in str(result.err())
 
 
 def test_number_deserializing(ctx, testdir):
@@ -102,6 +124,54 @@ def test_number_deserializing(ctx, testdir):
     # and the value should be a number
     value = parsed.raw_schema["paths"]["/teapot"]["get"]["parameters"][0]["schema"]["multipleOf"]
     assert isinstance(value, float)
+
+
+def test_from_dict_yaml_aliases_with_non_string_keys():
+    raw_schema = yaml.safe_load("""
+openapi: 3.0.2
+info: {title: t, version: "1"}
+paths:
+  /a:
+    get:
+      parameters: &parameters
+        - {name: q, in: query, schema: {type: string}}
+      responses: &responses
+        200: {description: OK}
+  /b:
+    get:
+      parameters: *parameters
+      responses: *responses
+""")
+
+    schema = schemathesis.openapi.from_dict(raw_schema)
+
+    assert [schema[p]["GET"].definition.raw for p in ("/a", "/b")] == [
+        {
+            "parameters": [{"name": "q", "in": "query", "schema": {"type": "string"}}],
+            "responses": {"200": {"description": "OK"}},
+        }
+    ] * 2
+
+
+def test_yaml_binary_values_load_as_their_text(tmp_path):
+    # JSON Schema has no bytes type, so `!!binary` stays the base64 text written in the document.
+    path = tmp_path / "openapi.yaml"
+    path.write_text("""
+openapi: 3.0.2
+info: {title: t, version: "1"}
+paths:
+  /items:
+    get:
+      parameters:
+        - {name: q, in: query, schema: {type: string, default: !!binary enp6, enum: [!!binary eA==, plain]}}
+      responses: {"200": {description: OK}}
+""")
+    schema = schemathesis.openapi.from_path(path)
+    assert schema.raw_schema["paths"]["/items"]["get"]["parameters"][0]["schema"] == {
+        "type": "string",
+        "default": "enp6",
+        "enum": ["eA==", "plain"],
+    }
 
 
 def test_split_file_schema_with_uri_reserved_path_chars(tmp_path):
@@ -152,7 +222,7 @@ if platform.python_implementation() == "PyPy":
 else:
     JSON_ERROR = ["Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"]
 YAML_ERROR = [
-    "unacceptable character #x0080: control characters are not allowed",
+    f"unacceptable character #x0080: {'control' if yaml.__with_libyaml__ else 'special'} characters are not allowed",
     '  in "<unicode string>", position 2',
 ]
 
@@ -191,6 +261,17 @@ def test_unknown_content_type_retry_yaml(app_runner):
     port = app_runner.run_flask_app(app)
 
     schemathesis.openapi.from_url(f"http://127.0.0.1:{port}/schema")
+
+
+def test_malformed_content_type_falls_back_to_parsing(ctx, app_runner):
+    raw_schema = ctx.openapi.build_schema({"/x": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    app = Flask("test_app")
+
+    @app.route("/openapi.json")
+    def schema():
+        return Response(json.dumps(raw_schema), content_type="json")
+
+    assert schemathesis.openapi.from_url(app_runner.openapi_url(app)).raw_schema == raw_schema
 
 
 @pytest.mark.parametrize(

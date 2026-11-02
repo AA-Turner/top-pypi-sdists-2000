@@ -8,7 +8,6 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import partial
-from types import SimpleNamespace
 from typing import TYPE_CHECKING, Any, Protocol
 
 from schemathesis.core.errors import IncorrectUsage
@@ -16,12 +15,19 @@ from schemathesis.core.statistic import FilterCriterion, UnmatchedFilter
 from schemathesis.core.transforms import resolve_pointer
 
 if TYPE_CHECKING:
-    from typing_extensions import Self
+    from typing import Self
 
     from schemathesis.schemas import APIOperation
 
 
 class HasAPIOperation(Protocol):
+    operation: APIOperation
+
+
+@dataclass(slots=True)
+class OperationContext:
+    """The operation a filter is matched against."""
+
     operation: APIOperation
 
 
@@ -172,18 +178,18 @@ class FilterSet:
         )
 
     def applies_to(self, operation: APIOperation) -> bool:
-        return self.match(SimpleNamespace(operation=operation))
+        return self.match(OperationContext(operation=operation))
 
     def is_explicitly_included(self, operation: APIOperation) -> bool:
         """Whether a filter the user wrote selects this operation."""
-        ctx = SimpleNamespace(operation=operation)
+        ctx = OperationContext(operation=operation)
         if self._declared is None:
             return any(filter_.match(ctx) for filter_ in self._includes)
         return any(entry.filter.match(ctx) for entry in self._declared if entry.include)
 
     def is_explicitly_excluded(self, operation: APIOperation) -> bool:
         """Whether a filter the user wrote rejects this operation."""
-        ctx = SimpleNamespace(operation=operation)
+        ctx = OperationContext(operation=operation)
         if self._deselected is not None and self._deselected(ctx):
             return True
         if self._declared is None:
@@ -277,6 +283,76 @@ class FilterSet:
             operation_id=operation_id,
             operation_id_regex=operation_id_regex,
         )
+
+    def with_include(
+        self,
+        func: MatcherFunc | None = None,
+        *,
+        name: FilterValue | None = None,
+        name_regex: RegexValue | None = None,
+        method: FilterValue | None = None,
+        method_regex: RegexValue | None = None,
+        path: FilterValue | None = None,
+        path_regex: RegexValue | None = None,
+        tag: FilterValue | None = None,
+        tag_regex: RegexValue | None = None,
+        operation_id: FilterValue | None = None,
+        operation_id_regex: RegexValue | None = None,
+    ) -> Self:
+        """A copy of this filter set with a new INCLUDE filter."""
+        filter_set = self.clone()
+        filter_set.include(
+            func,
+            name=name,
+            name_regex=name_regex,
+            method=method,
+            method_regex=method_regex,
+            path=path,
+            path_regex=path_regex,
+            tag=tag,
+            tag_regex=tag_regex,
+            operation_id=operation_id,
+            operation_id_regex=operation_id_regex,
+        )
+        return filter_set
+
+    def with_exclude(
+        self,
+        func: MatcherFunc | None = None,
+        *,
+        name: FilterValue | None = None,
+        name_regex: RegexValue | None = None,
+        method: FilterValue | None = None,
+        method_regex: RegexValue | None = None,
+        path: FilterValue | None = None,
+        path_regex: RegexValue | None = None,
+        tag: FilterValue | None = None,
+        tag_regex: RegexValue | None = None,
+        operation_id: FilterValue | None = None,
+        operation_id_regex: RegexValue | None = None,
+        deprecated: bool = False,
+    ) -> Self:
+        """A copy of this filter set with a new EXCLUDE filter, optionally excluding deprecated operations too."""
+        filter_set = self.clone()
+        if deprecated:
+            if func is None:
+                func = is_deprecated
+            else:
+                filter_set.exclude(is_deprecated)
+        filter_set.exclude(
+            func,
+            name=name,
+            name_regex=name_regex,
+            method=method,
+            method_regex=method_regex,
+            path=path,
+            path_regex=path_regex,
+            tag=tag,
+            tag_regex=tag_regex,
+            operation_id=operation_id,
+            operation_id_regex=operation_id_regex,
+        )
+        return filter_set
 
     def _add_filter(
         self,
@@ -385,7 +461,7 @@ def attach_filter_chain(
 
 
 def is_deprecated(ctx: HasAPIOperation) -> bool:
-    return ctx.operation.definition.raw.get("deprecated") is True
+    return ctx.operation.schema.is_deprecated(ctx.operation)
 
 
 def parse_expression(expression: str) -> tuple[str, str, Any]:
@@ -496,7 +572,7 @@ class FilterUsage:
         self._candidates.setdefault("path", set()).add(operation.path)
         self._candidates.setdefault("method", set()).add(operation.method.upper())
         self._candidates.setdefault("tag", set()).update(operation.tags or ())
-        operation_id = operation.definition.raw.get("operationId")
+        operation_id = operation.schema.get_operation_id(operation)
         if operation_id is not None:
             self._candidates.setdefault("operation_id", set()).add(operation_id)
 

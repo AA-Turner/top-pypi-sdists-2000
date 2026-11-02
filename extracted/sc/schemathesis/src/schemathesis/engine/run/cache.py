@@ -29,6 +29,7 @@ from schemathesis.core.error_feedback.collector import parse_observations
 from schemathesis.core.errors import IncorrectUsage
 from schemathesis.core.parameters import ParameterLocation
 from schemathesis.core.timing import format_timestamp
+from schemathesis.core.transport import AUTH_REJECTION_STATUSES
 from schemathesis.core.version import SCHEMATHESIS_VERSION
 from schemathesis.engine.recorder import ScenarioRecorder
 from schemathesis.wfc.escalation import identity_assignments, restore_identity_assignments
@@ -93,7 +94,7 @@ def _run(ctx: EngineContext) -> CacheReport | None:
     if not cache_config.enabled:
         return None
 
-    directory = effective_directory(cache_config.directory, _active_project_title(ctx))
+    directory = effective_directory(cache_config.directory, ctx.config.named_project_title(ctx.schema.title))
     manifest_path = directory / MANIFEST_FILENAME
     try:
         manifest_present = manifest_path.is_file()
@@ -156,7 +157,7 @@ def _flush(ctx: EngineContext, writer: CacheWriter) -> None:
     if not writer.has_pending and not identities:
         return
 
-    directory = effective_directory(ctx.config.cache.directory, _active_project_title(ctx))
+    directory = effective_directory(ctx.config.cache.directory, ctx.config.named_project_title(ctx.schema.title))
 
     loaded = load(directory)
     if loaded is None:
@@ -282,11 +283,11 @@ def _verify_auth_required(ctx: EngineContext, entry: Entry, operation: APIOperat
     unauth_response = _send_without_auth(ctx, case, operation)
     if unauth_response is None:
         return _Outcome.SKIPPED
-    if unauth_response.status_code not in (401, 403):
+    if unauth_response.status_code not in AUTH_REJECTION_STATUSES:
         return _Outcome.CONTRADICTED
 
     recorder = ScenarioRecorder(label="cache-auth-replay", config=ctx.config.output)
-    recorder.record_case(parent_id=None, case=case, transition=None, is_transition_applied=False)
+    recorder.record_case(case=case)
     recorder.record_response(case_id=case.id, response=unauth_response)
 
     operation.schema.record_runtime_observations(
@@ -350,8 +351,10 @@ def _replay(ctx: EngineContext, entry: Entry, operation: APIOperation) -> tuple[
 
 def _send_without_auth(ctx: EngineContext, case: Case, operation: APIOperation) -> Response | None:
     """Send `case` via a fresh auth-less session so the inference path can fire on 401/403."""
+    from schemathesis.transport.requests import SameHostRedirectsSession
+
     kwargs = ctx.get_transport_kwargs(operation=operation).copy()
-    unauth_session = requests.Session()
+    unauth_session = SameHostRedirectsSession()
     if "verify" in kwargs:
         unauth_session.verify = kwargs["verify"]
     if kwargs.get("cert") is not None:
@@ -361,14 +364,3 @@ def _send_without_auth(ctx: EngineContext, case: Case, operation: APIOperation) 
         return case.call(**kwargs)
     except requests.RequestException:
         return None
-
-
-def _active_project_title(ctx: EngineContext) -> str | None:
-    """Return the active project's title if it matches a named [[project]] block."""
-    title = ctx.schema.raw_schema.get("info", {}).get("title")
-    if not isinstance(title, str):
-        return None
-    parent = ctx.config._get_parent()
-    if title in parent.projects.named:
-        return title
-    return None

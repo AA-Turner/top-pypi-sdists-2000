@@ -1,0 +1,1585 @@
+//-*-C++-*-
+
+#ifndef PDF_TEXT_STATE_H
+#define PDF_TEXT_STATE_H
+
+#include <render/freetype_font_cache.h>
+
+namespace pdflib
+{
+
+  template<>
+  class pdf_state<TEXT>
+  {
+  public:
+
+    pdf_state(const decode_config& config,
+              const pdf_state<GRPH>& grph_state_,
+              const pdf_state<SHAPE>& shape_state_,
+              std::array<double, 9>& trafo_matrix_,
+              page_item<PAGE_CELLS>& page_cells_,
+	      std::shared_ptr<pdf_resource<PAGE_FONTS>> page_fonts_,
+              pdf_render_instructions&  instructions_);
+
+    ~pdf_state();
+
+    pdf_state(const pdf_state<TEXT>& other);
+
+    pdf_state<TEXT>& operator=(const pdf_state<TEXT>& other);
+
+    void BT();
+    void ET();
+
+    void Tc(std::vector<qpdf_stream_instruction>& instructions);
+
+    void Td(std::vector<qpdf_stream_instruction>& instructions);
+    void TD(std::vector<qpdf_stream_instruction>& instructions);
+
+    void Td(double tx, double ty);
+
+    void Tf(std::vector<qpdf_stream_instruction>& instructions);
+
+    void Tj(std::vector<qpdf_stream_instruction>& instructions, int stack_cnt);
+    void TJ(std::vector<qpdf_stream_instruction>& instructions, int stack_cnt);
+
+    void TL(std::vector<qpdf_stream_instruction>& instructions);
+    void TL(double tl);
+
+    void Tm(std::vector<qpdf_stream_instruction>& instructions);
+
+    void Tr(std::vector<qpdf_stream_instruction>& instructions);
+
+    void Ts(std::vector<qpdf_stream_instruction>& instructions);
+    void TStar(std::vector<qpdf_stream_instruction>& instructions);
+
+    void Tw(std::vector<qpdf_stream_instruction>& instructions);
+
+    void Tz(std::vector<qpdf_stream_instruction>& instructions);
+
+  private:
+
+    bool verify(std::vector<qpdf_stream_instruction>& instructions,
+                std::size_t num_instr, std::string name);
+
+    void move_cursor(double tx, double ty);
+
+    std::vector<page_item<PAGE_CELL> > generate_cells(qpdf_stream_instruction instruction,
+                                                      int              stack_size);
+
+    std::vector<std::pair<uint32_t, std::string> > analyse_string(qpdf_stream_instruction instruction);
+
+    void add_cell(pdf_resource<PAGE_FONT>& font,
+                  std::string text,  double width,
+                  int glyph_code,
+                  bool text_is_suppressed_glyph,
+                  bool is_pdf_word_space,
+                  int stack_size,
+                  std::vector<page_item<PAGE_CELL> >& cells);
+
+    /*
+      std::array<double, 4> compute_bbox(double font_descent,
+      double font_ascent,
+      double width);
+    */
+
+    std::array<double, 8> compute_rect(double font_descent,
+                                       double font_ascent,
+                                       double width);
+
+    std::array<double, 8> compute_type3_rect(
+      const std::array<double, 6>& font_matrix,
+      const std::array<double, 6>& glyph_matrix);
+
+    // Glyph space -> user space for the glyph at the current text position.
+    std::array<double, 6> compute_type3_matrix(
+      const std::array<double, 6>& font_matrix);
+
+    std::array<double, 4> compute_bbox(std::array<double, 8>& rect);
+
+  public:
+
+    // A Type3 glyph whose CharProc paints with operators that the glyph
+    // parser of pdf_resource<PAGE_FONT> does not rasterise, such as an image
+    // `Do`. The stream decoder runs the CharProc after the show-string.
+    struct type3_procedure
+    {
+      QPDFObjectHandle charproc;
+      QPDFObjectHandle resources;
+      std::array<double, 6> matrix;
+    };
+
+    // Filled by add_cell() and emptied by the stream decoder after each
+    // show-string, so operator= does not copy it.
+    std::vector<type3_procedure> pending_type3_procedures;
+
+    static int block_count;
+    static int instr_count;
+
+    const decode_config& config;
+    const pdf_state<GRPH>& grph_state;
+    const pdf_state<SHAPE>& shape_state;
+
+    std::array<double, 9>& trafo_matrix;
+
+    page_item<PAGE_CELLS>& page_cells;
+
+    std::shared_ptr<pdf_resource<PAGE_FONTS>> page_fonts;
+
+    pdf_render_instructions& instructions;
+
+    // Page-scoped: malformed fonts are rare, while repeated mathematical
+    // symbols should resolve their embedded outline only once.
+    std::shared_ptr<freetype_font_cache> glyph_metrics_cache;
+
+    std::array<double, 9> text_matrix;
+    std::array<double, 9> line_matrix;
+
+    int rendering_mode = -1;
+    int object_index   = 0;
+
+    double char_spacing = 0;
+    double word_spacing = 0;
+
+    double h_scaling = 1;
+    double leading   = 0;
+    double rise      = 0;
+
+    std::string font_name = "NULL";
+    double      font_size = 1000;
+
+    // Writing mode of the current font (9.7.4.3). `vertical_displacement` is
+    // per glyph, so it is refreshed for each one; the other two follow the
+    // font and are set at Tf.
+    bool   vertical_mode          = false;
+    double vertical_origin_y      = 0.0;
+    double vertical_displacement  = 0.0;
+  };
+
+  int pdf_state<TEXT>::block_count = 0;
+  int pdf_state<TEXT>::instr_count = 0;
+
+  pdf_state<TEXT>::pdf_state(const decode_config& config_,
+                             const pdf_state<GRPH>& grph_state_,
+                             const pdf_state<SHAPE>& shape_state_,
+                             std::array<double, 9>& trafo_matrix_,
+                             page_item<PAGE_CELLS>& page_cells_,
+			     std::shared_ptr<pdf_resource<PAGE_FONTS>> page_fonts_,
+                             pdf_render_instructions& instructions_):
+    config(config_),
+    grph_state(grph_state_),
+    shape_state(shape_state_),
+
+    trafo_matrix(trafo_matrix_),
+
+    page_cells(page_cells_),
+    page_fonts(page_fonts_),
+
+    instructions(instructions_),
+    glyph_metrics_cache(nullptr)
+  {
+    text_matrix = {1.0, 0.0, 0.0,
+                   0.0, 1.0, 0.0,
+                   0.0, 0.0, 1.0};
+
+    line_matrix = {1.0, 0.0, 0.0,
+                   0.0, 1.0, 0.0,
+                   0.0, 0.0, 1.0};
+  }
+
+  pdf_state<TEXT>::pdf_state(const pdf_state<TEXT>& other):
+    config(other.config),
+    grph_state(other.grph_state),
+    shape_state(other.shape_state),
+
+    trafo_matrix(other.trafo_matrix),
+
+    page_cells(other.page_cells),
+    page_fonts(other.page_fonts),
+
+    instructions(other.instructions),
+    glyph_metrics_cache(other.glyph_metrics_cache)
+  {
+    *this = other;
+
+    LOG_S(WARNING) << "pdf_state<TEXT>(const pdf_state<TEXT>& other): font_name " << font_name;
+  }
+  
+  pdf_state<TEXT>::~pdf_state()
+  {}
+
+  pdf_state<TEXT>& pdf_state<TEXT>::operator=(const pdf_state<TEXT>& other)
+  {
+    this->text_matrix = other.text_matrix;
+    this->line_matrix = other.line_matrix;
+
+    this->rendering_mode = other.rendering_mode;
+    this->object_index = other.object_index;
+
+    this->char_spacing = other.char_spacing;
+    this->word_spacing = other.word_spacing;
+
+    this->h_scaling = other.h_scaling;
+    this->leading = other.leading;
+    this->rise = other.rise;
+
+    this->font_name = other.font_name;
+    this->font_size = other.font_size;
+
+    this->vertical_mode = other.vertical_mode;
+    this->vertical_origin_y = other.vertical_origin_y;
+    this->vertical_displacement = other.vertical_displacement;
+    this->glyph_metrics_cache = other.glyph_metrics_cache;
+
+    return *this;
+  }
+
+  bool pdf_state<TEXT>::verify(std::vector<qpdf_stream_instruction>& instructions,
+                               std::size_t num_instr, std::string name)
+  {
+    if(instructions.size()==num_instr)
+      {
+        return true;
+      }
+
+    if(instructions.size()>num_instr)
+      {
+        LOG_S(ERROR) << "#-instructions " << instructions.size()
+                     << " exceeds expected value " << num_instr << " for "
+                     << name;
+        LOG_S(ERROR) << " => we can continue but might have incorrect results!";
+
+        return true;
+      }
+
+    // Too few operands: one damaged operator is not a reason to drop the
+    // rest of the page (a bit-flipped Flate stream leaves tokens such as
+    // `Tj41.749` behind, and the `Tw` that follows arrives with nothing).
+    // Skip the operator, as other readers do, and carry on.
+    LOG_S(ERROR) << "#-instructions " << instructions.size()
+                 << " does not match expected value " << num_instr
+                 << " for PDF operation: " << name
+                 << " => skipping the operator";
+
+    return false;
+  }
+
+  void pdf_state<TEXT>::BT()
+  {
+    //for(int l=0; l<9; l++)
+    //LOG_S(INFO) << "\ttrafo_matrix[" << l << "]\t" << trafo_matrix[l];
+
+    block_count += 1;
+
+    text_matrix = {{1.0, 0.0, 0.0,
+                      0.0, 1.0, 0.0,
+                      0.0, 0.0, 1.0}};
+
+    line_matrix = {{1.0, 0.0, 0.0,
+                      0.0, 1.0, 0.0,
+                      0.0, 0.0, 1.0}};
+  }
+
+  void pdf_state<TEXT>::ET()
+  {
+  }
+
+  void pdf_state<TEXT>::Tc(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    //assert(instructions.size()==1);
+    if(not verify(instructions, 1, __FUNCTION__) ) { return; }
+
+    char_spacing = instructions[0].to_double();
+  }
+
+  void pdf_state<TEXT>::Td(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    //assert(instructions.size()==2);
+    if(not verify(instructions, 2, __FUNCTION__) ) { return; }
+
+    double tx = instructions[0].to_double();
+    double ty = instructions[1].to_double();
+
+    Td(tx, ty);
+  }
+
+  void pdf_state<TEXT>::Td(double tx, double ty)
+  {
+    text_matrix[6] = tx * line_matrix[0] + ty * line_matrix[3] + line_matrix[6];
+    text_matrix[7] = tx * line_matrix[1] + ty * line_matrix[4] + line_matrix[7];
+
+    line_matrix = text_matrix;
+  }
+
+  void pdf_state<TEXT>::TD(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    //assert(instructions.size()==2);
+    if(not verify(instructions, 2, __FUNCTION__) ) { return; }
+
+    double tx = instructions[0].to_double();
+    double ty = instructions[1].to_double();
+
+    this->TL(-ty);
+    this->Td(tx, ty);
+  }
+
+  void pdf_state<TEXT>::Tf(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    //assert(instructions.size()==2);
+    if(not verify(instructions, 2, __FUNCTION__) ) { return; }
+
+    if(not instructions[0].is_string() or not instructions[1].is_number())
+      {
+        LOG_S(ERROR) << "Tf operands are not a name and a number: "
+                     << instructions[0].val << " " << instructions[1].val
+                     << " => keeping the current font";
+        return;
+      }
+
+    std::string prev_fontname = font_name;
+    
+    font_name = instructions[0].to_utf8_string();
+    font_size = instructions[1].to_double();
+
+    if(page_fonts->count(font_name) == 0)
+      {
+        LOG_S(ERROR) << "unknown page-font: '" << font_name << "'";
+
+        auto font_keys = page_fonts->keys();
+        LOG_S(WARNING) << "known fonts: " << font_keys.size();
+        for(auto key:font_keys)
+          {
+            LOG_S(WARNING) << " -> font-key: '" << key << "'";
+          }
+      
+	if(page_fonts->count(prev_fontname))
+	  {
+	    LOG_S(WARNING) << "falling back on previous fontname: " << prev_fontname;
+	    font_name = prev_fontname;
+	  }
+      }
+
+    vertical_mode = false;
+    vertical_origin_y = 0.0;
+    vertical_displacement = 0.0;
+
+    if(page_fonts->count(font_name))
+      {
+        pdf_resource<PAGE_FONT>& font = (*page_fonts)[font_name];
+
+        vertical_mode = font.is_vertical();
+        if(vertical_mode)
+          {
+            vertical_origin_y = font.get_vertical_origin_y();
+            vertical_displacement = font.get_vertical_displacement(0) * font_size;
+
+            LOG_S(INFO) << "Tf " << font_name << ": vertical writing mode";
+          }
+      }
+  }
+
+  void pdf_state<TEXT>::Tj(std::vector<qpdf_stream_instruction>& instructions, int stack_size)
+  {
+    //assert(instructions.size()==1);
+    if(not verify(instructions, 1, __FUNCTION__) ) { return; }
+
+    // A damaged stream can leave a number where the string belongs
+    // (`3.34 Tj`): skip it, as TJ does for its array items.
+    if(not instructions[0].obj.isString())
+      {
+        LOG_S(ERROR) << "Tj operand is not a string: " << instructions[0].val
+                     << " [" << instructions[0].key << "] => skipping the operator";
+        return;
+      }
+
+    instr_count += 1;
+
+    std::vector<page_item<PAGE_CELL> > cells = generate_cells(instructions[0],
+                                                              stack_size);
+
+    for(auto& cell:cells)
+      {
+        //LOG_S(INFO) << "new-cell: " << cell.text;
+        page_cells.push_back(cell);
+      }
+  }
+
+  void pdf_state<TEXT>::TJ(std::vector<qpdf_stream_instruction>& instructions, int stack_size)
+  {
+    //assert(instructions.size()==1);
+    if(not verify(instructions, 1, __FUNCTION__) ) { return; }
+
+    instr_count += 1;
+
+    for(auto item : instructions[0].obj.getArrayAsVector())
+      {
+        if(item.isString())
+          {
+            qpdf_stream_instruction inst(item);
+
+            std::vector<page_item<PAGE_CELL> > cells = generate_cells(item,
+                                                                      stack_size);
+
+            for(auto& cell:cells)
+              {
+                page_cells.push_back(cell);
+              }
+          }
+        else if(item.isNumber())
+          {
+            double value = utils::numeric::locale_safe_numeric_value(item);
+
+            const double adjust = - value / 1000.0 * font_size;
+
+            const double tx = vertical_mode ? 0.0 : adjust * h_scaling;
+            const double ty = vertical_mode ? adjust : 0.0;
+
+            move_cursor(tx, ty);
+          }
+        else
+          {
+            LOG_S(ERROR) << "item is not a string nor a value: "
+                         << item.unparse() << " [" << item.getTypeName() << "]"
+                         << " -> skipping for now ...";
+          }
+      }
+  }
+
+  void pdf_state<TEXT>::move_cursor(double tx, double ty)
+  {
+    text_matrix[6] += tx * text_matrix[0] + ty * text_matrix[3];
+    text_matrix[7] += tx * text_matrix[1] + ty * text_matrix[4];
+  }
+
+  std::vector<page_item<PAGE_CELL> > pdf_state<TEXT>::generate_cells(qpdf_stream_instruction instruction,
+                                                                     int              stack_size)
+  {
+    //LOG_S(INFO) << __FUNCTION__;
+
+    std::vector<page_item<PAGE_CELL> > cells={};
+    
+    if(page_fonts->count(font_name)==0)
+      {
+	LOG_S(ERROR) << "do not know font with name: " << font_name << " -> known keys: ";
+	for(auto& key : page_fonts->keys())
+	  {
+	    LOG_S(ERROR) << key;
+	  }
+	LOG_S(ERROR) << "skipping potential cells ...";
+	return cells;
+      }
+    
+    auto& font = (*page_fonts)[font_name];
+
+    std::vector<std::pair<uint32_t, std::string> > items = analyse_string(instruction);
+
+    //for(auto item:items)
+    //{
+    //LOG_S(INFO) << item.first << "\t" << item.second;
+    //}
+
+    double width = 0.0;
+
+    //double font_descent = font.get_descent();
+    //double font_ascent  = font.get_ascent();
+
+    std::string text="";
+
+    std::vector<double> widths={};
+    std::vector<std::string> chars={};
+
+    /*
+      double space_width=0;
+      {
+      double w0 = font.get_space_width();
+      space_width = (w0 / 1000.0 * font_size * h_scaling);// + (char_spacing+word_spacing)*h_scaling;
+      }
+    */
+
+    for(auto item:items)
+      {
+	//LOG_S(INFO) << item.first << "\t" << item.second;
+	
+        double      width_ = font.get_width(item.first);
+        //std::string chars_ = font.get_string(item.first);
+
+	// item.second holds the raw bytes of the code as they appear in the
+	// content stream. Those bytes select a glyph, they are not text: for a
+	// composite font they are the CID, for a simple font an index into an
+	// encoding. When no authoritative source of ISO 32000-1, 9.10.2 can
+	// resolve the code, there is no Unicode to emit, so fall back to the
+	// same glyph marker the font resolver uses rather than leaking the
+	// code bytes into the cell text (they are not even valid UTF-8 for,
+	// e.g., CID 0xDCC2 of an Identity-H font).
+	std::string chars_;
+	try
+	  {
+	    chars_ = font.get_string(item.first);
+	  }
+	catch(const std::exception& e)
+	  {
+	    chars_ = "GLYPH<c="+std::to_string(item.first)+",font="+font.get_name()+">";
+
+	    LOG_S(WARNING) << "could not decode character (value=" << item.first
+			   << "): " << e.what() << "; emitting '" << chars_ << "'";
+	  }
+
+	const bool text_is_suppressed_glyph =
+	  (not config.keep_glyphs) and chars_.rfind("GLYPH<", 0) == 0;
+	if(text_is_suppressed_glyph)
+	  {
+	    // The glyph is visibly painted but the PDF supplies no authoritative
+	    // Unicode mapping. U+FFFD communicates that decoding loss without
+	    // exposing the internal GLYPH<...> diagnostic or pretending the glyph
+	    // is whitespace. Blank glyph programs are identified in add_cell().
+	    chars_ = "\xEF\xBF\xBD";
+	  }
+	
+	//LOG_S(INFO) << item.first << " --> "
+	//<< item.second << "\twidth_: "
+	//<< width_ << "\tchars_: '" << chars_ << "'";
+
+        double char_width = (width_ / 1000.0 * font_size * h_scaling);
+
+        /*
+          LOG_S(INFO) << "char_width: "
+          << char_width << ", width_: " << width_
+          << ", font_size: " << font_size
+          << ", h_scaling: " << h_scaling;
+        */
+
+        // Word spacing applies to the single-byte character *code* 32, not to
+        // a code that happens to decode to a space (ISO 32000-1, 9.3.3). The
+        // difference is not academic: a symbolic font whose codes this decoder
+        // cannot resolve yields " " for every glyph, and charging each of them
+        // Tw stretched a Cyrillic line by a whole character width, pushing it
+        // over the absolutely-positioned text beside it.
+        const bool is_word_space = (item.first==32 and item.second.size()==1);
+
+        double delta_width=0;
+        if(is_word_space)
+          {
+            delta_width += (char_spacing+word_spacing)*h_scaling;
+          }
+        else
+          {
+            delta_width += char_spacing*h_scaling;
+          }
+
+        //LOG_S(INFO) << "delta_width: " << delta_width;
+
+        if(true) // adding char by char ...
+          {
+            text  += chars_;
+            width += char_width;
+
+            if(vertical_mode)
+              {
+                vertical_displacement =
+                  font.get_vertical_displacement(item.first) * font_size;
+              }
+
+            add_cell(font, text, width, static_cast<int>(item.first),
+                     text_is_suppressed_glyph, is_word_space,
+                     stack_size, cells);
+
+            if(vertical_mode)
+              {
+                move_cursor(0, -delta_width / h_scaling);
+              }
+            else
+              {
+                move_cursor(delta_width, 0);
+              }
+
+            chars  = {};
+            widths = {};
+
+            text  = "";
+            width = 0;
+          }
+      }
+
+    //LOG_S(INFO) << "text-line: " << text;
+    if(text.size()>0)
+      {
+        add_cell(font, text, width, -1, false, false, stack_size, cells);
+      }
+
+    return cells;
+  }
+
+  void pdf_state<TEXT>::add_cell(pdf_resource<PAGE_FONT>& font,
+                                 std::string text, double width,
+                                 int glyph_code,
+                                 bool text_is_suppressed_glyph,
+                                 bool is_pdf_word_space,
+                                 int stack_size,
+                                 std::vector<page_item<PAGE_CELL> >& cells)
+  {
+    const bool need_base_text_cells =
+      config.keep_char_cells or config.create_word_cells or config.create_line_cells;
+
+    if(not need_base_text_cells)
+      {
+	return;
+      }
+    
+    LOG_S(INFO) << __FUNCTION__ << " with text='" << text << "', width=" << width << " from base-font: " << font.get_base_font() << ", font-key: " << font.get_key();
+
+    bool left_to_right = (not utils::string::is_right_to_left(text));
+
+    double font_descent = font.get_descent();
+    double font_ascent  = font.get_ascent();
+    double font_capheight  = font.get_capheight();
+
+    // LOG_S(INFO) << "font_descent: " << font_descent << ", "
+    // 		<< "font_ascent: " << font_ascent << ", "
+    // 		<< "font_capheight: " << font_capheight << ", "
+    // 		<< "capheight/ascent: " << font_capheight/font_ascent << ", "
+    // 		<< "left_to_right: " << left_to_right << ", text: " << text;
+
+    double space_width=0;
+    {
+      double w0 = font.get_space_width();
+      double w1 = (w0 / 1000.0 * font_size * h_scaling);// + (char_spacing+word_spacing)*h_scaling;
+
+      /*
+        LOG_S(INFO) << __FUNCTION__ << " -> w0: " << w0 << ", w1: " << w1 << ", "
+        << "font_size: " << font_size << ", h_scaling: " << h_scaling;
+      */
+
+      std::array<double, 8> rect = compute_rect(font_descent, font_ascent, w1);
+      space_width = std::sqrt((rect[2]-rect[0])*(rect[2]-rect[0])+
+                              (rect[3]-rect[1])*(rect[3]-rect[1]));
+    }
+
+    {
+      page_item<PAGE_CELL> cell;
+
+      cell.active = true;
+      cell.left_to_right = left_to_right;
+
+      cell.widget = false;
+
+      double ratio = 1.0;
+      if(0.05<=font_capheight/font_ascent and font_capheight/font_ascent<=1.0)
+        {
+          ratio = font_capheight/font_ascent;
+        }
+
+      // Type 3 fonts may advertise a deliberately loose /FontBBox (for
+      // example [-10 -10 10 10] with an identity /FontMatrix) even though
+      // their CharProcs draw in a roughly one-unit em. Extract the cached
+      // CharProc bounds here; valid painted glyphs are mapped directly below,
+      // while an unpainted procedure retains only its text advance.
+      std::shared_ptr<pdf_resource<PAGE_FONT>::type3_glyph> type3_glyph = nullptr;
+      if(font.is_type3() and glyph_code >= 0)
+        {
+          type3_glyph = font.get_type3_glyph(static_cast<uint32_t>(glyph_code));
+          if(type3_glyph and type3_glyph->blank)
+            {
+              // An unpainted glyph has an advance but no ink bounds. Keeping
+              // the width and collapsing the vertical extent represents that
+              // distinction without falling back to a loose font-wide box.
+              // Its glyph name is not visible text; expose it as semantic
+              // whitespace so contraction treats it as a boundary marker.
+              text = " ";
+              text_is_suppressed_glyph = false;
+              font_descent = 0.0;
+              font_ascent = 0.0;
+              ratio = 1.0;
+            }
+        }
+
+      bool has_embedded_glyph_bbox = false;
+      bool embedded_glyph_resolved = false;
+      bool embedded_glyph_has_ink = false;
+      std::array<double, 4> embedded_glyph_bbox = {0.0, 0.0, 0.0, 0.0};
+      // Some producers map the space glyph to a control character (for
+      // example U+0008) in /ToUnicode. Whether such a word-space code is a
+      // space is decided by its glyph below, not by the mapped text.
+      const bool control_word_space =
+        is_pdf_word_space and utils::string::is_control(text);
+      if(not font.is_type3() and
+         (font.needs_embedded_glyph_bbox() or text_is_suppressed_glyph or
+          control_word_space) and
+         glyph_code >= 0)
+        {
+          if(glyph_metrics_cache == nullptr)
+            {
+              glyph_metrics_cache = std::make_shared<freetype_font_cache>();
+            }
+          auto font_blob = font.get_embedded_font_blob();
+          const std::string glyph_name =
+            font.get_glyph_name(static_cast<uint32_t>(glyph_code));
+          embedded_glyph_resolved =
+            glyph_metrics_cache->get_glyph_bbox(font_blob,
+                                                text,
+                                                glyph_code,
+                                                glyph_name,
+                                                embedded_glyph_bbox,
+                                                &embedded_glyph_has_ink);
+          has_embedded_glyph_bbox =
+            embedded_glyph_resolved and embedded_glyph_has_ink;
+
+          if(text_is_suppressed_glyph and embedded_glyph_resolved and
+             not embedded_glyph_has_ink)
+            {
+              // Ghostscript's TT_BIAS encoding also hides the identity of
+              // space glyphs. Their empty outline is authoritative: retain
+              // the advance, but make it a semantic contraction boundary.
+              text = " ";
+              text_is_suppressed_glyph = false;
+              is_pdf_word_space = true;
+              font_descent = 0.0;
+              font_ascent = 0.0;
+              ratio = 1.0;
+            }
+          else if(control_word_space and
+                  ((embedded_glyph_resolved and not embedded_glyph_has_ink) or
+                   (font_blob == nullptr and glyph_name == "space")))
+            {
+              // The glyph paints nothing, so the control character is not
+              // text: expose the space it draws.
+              text = " ";
+            }
+          else if(has_embedded_glyph_bbox and
+                  font.needs_embedded_glyph_bbox())
+            {
+              // Preserve the PDF advance width horizontally. Tight horizontal
+              // ink bounds would change text flow; only the malformed vertical
+              // metrics need replacement.
+              font_descent = embedded_glyph_bbox[1];
+              font_ascent = embedded_glyph_bbox[3];
+              ratio = 1.0;
+            }
+        }
+
+      /* // commented out for now ...
+      if(glyph_code >= 0 and font.has_char_bbox(static_cast<uint32_t>(glyph_code)))
+        {
+          glyph_bbox = font.get_char_bbox(static_cast<uint32_t>(glyph_code));
+          has_glyph_bbox = true;
+          font_descent = glyph_bbox[1];
+          font_ascent  = glyph_bbox[3];
+          ratio = 1.0;
+          LOG_S(INFO) << "using glyph-specific bbox for glyph-code=" << glyph_code
+                      << ", text='" << text << "'"
+                      << " bbox=[" << glyph_bbox[0] << ", "
+                      << glyph_bbox[1] << ", "
+                      << glyph_bbox[2] << ", "
+                      << glyph_bbox[3] << "]";
+        }
+      else if(font.has_char_bbox(text))
+        {
+          glyph_bbox = font.get_char_bbox(text);
+          has_glyph_bbox = true;
+          font_descent = glyph_bbox[1];
+          font_ascent  = glyph_bbox[3];
+          ratio = 1.0;
+          LOG_S(INFO) << "using glyph-specific bbox for text='" << text << "'"
+                      << " bbox=[" << glyph_bbox[0] << ", "
+                      << glyph_bbox[1] << ", "
+                      << glyph_bbox[2] << ", "
+                      << glyph_bbox[3] << "]";
+        }
+      */
+      
+      // LOG_S(INFO) << "ratio: " << ratio;
+
+      std::array<double, 8> rect;
+      if(type3_glyph and type3_glyph->valid)
+        {
+          // A Type 3 glyph is painted by its CharProc rather than by the
+          // declared advance rectangle. Map the complete CharProc bounds so
+          // both dimensions match the rendered ink. The advance width remains
+          // responsible only for moving the text cursor below.
+          rect = compute_type3_rect(font.get_font_matrix(), type3_glyph->cm);
+        }
+      else
+        {
+          rect = compute_rect(font_descent*ratio, font_ascent*ratio, width);
+        }
+      {
+        cell.r_x0 = rect[0];
+        cell.r_y0 = rect[1];
+        cell.r_x1 = rect[2];
+        cell.r_y1 = rect[3];
+        cell.r_x2 = rect[4];
+        cell.r_y2 = rect[5];
+        cell.r_x3 = rect[6];
+        cell.r_y3 = rect[7];
+      }
+      // auto font_bbox = font.get_font_bbox();
+      // LOG_S(INFO)
+      // 	<< "font-bbox: ["
+      // 	<< font_bbox[0] << ", "
+      // 	<< font_bbox[1] << ", "
+      // 	<< font_bbox[2] << ", "
+      // 	<< font_bbox[3] << "]";
+      
+      // LOG_S(INFO)
+      // 	<< "r_0: (" << cell.r_x0 << ", " << cell.r_y0 << "); "
+      // 	<< "r_1: (" << cell.r_x1 << ", " << cell.r_y1 << "); "
+      // 	<< "r_2: (" << cell.r_x2 << ", " << cell.r_y2 << "); "
+      // 	<< "r_3: (" << cell.r_x3 << ", " << cell.r_y3 << "); ";
+
+      // std::array<double, 8> base = compute_rect(0, font_ascent*ratio, width);
+
+      // The renderer draws from the glyph's horizontal origin. In vertical
+      // writing the PDF current point is the vertical origin, so apply the
+      // same position vector used for the glyph rectangle.
+      const double g_base_x = vertical_mode ? -0.5 * width : 0.0;
+      const double g_base_y =
+        rise + (vertical_mode ? -vertical_origin_y * font_size : 0.0);
+
+      std::array<double, 9>& T_text = text_matrix;
+      const double t_base_x = T_text[0] * g_base_x + T_text[3] * g_base_y + T_text[6];
+      const double t_base_y = T_text[1] * g_base_x + T_text[4] * g_base_y + T_text[7];
+
+      std::array<double, 9>& T_ctm = trafo_matrix;
+      const double d_base_x = T_ctm[0] * t_base_x + T_ctm[3] * t_base_y + T_ctm[6];
+      const double d_base_y = T_ctm[1] * t_base_x + T_ctm[4] * t_base_y + T_ctm[7];
+
+      // Preserve the PDF cursor geometry independently of the painted glyph
+      // bounds. Tight ink boxes are the right geometry for rendered output,
+      // but cursor origins and advances are the stable signal for deciding
+      // whether consecutive characters form a word or a line. In particular,
+      // this is unaffected by Type 3 side bearings and oversized mathematical
+      // operators.
+      auto map_text_point = [&](double gx, double gy,
+                                double& dx, double& dy)
+      {
+        const double tx = T_text[0] * gx + T_text[3] * gy + T_text[6];
+        const double ty = T_text[1] * gx + T_text[4] * gy + T_text[7];
+        dx = T_ctm[0] * tx + T_ctm[3] * ty + T_ctm[6];
+        dy = T_ctm[1] * tx + T_ctm[4] * ty + T_ctm[7];
+      };
+
+      const double placement_end_x = vertical_mode ? 0.0 : width;
+      const double placement_end_y = vertical_mode
+        ? rise + vertical_displacement
+        : rise;
+      map_text_point(0.0, rise,
+                     cell.text_origin_x, cell.text_origin_y);
+      map_text_point(placement_end_x, placement_end_y,
+                     cell.text_advance_x, cell.text_advance_y);
+
+      double axis_x = cell.text_advance_x - cell.text_origin_x;
+      double axis_y = cell.text_advance_y - cell.text_origin_y;
+      double axis_norm = std::hypot(axis_x, axis_y);
+      if(axis_norm <= 1.e-9)
+        {
+          // Zero-advance marks still need the physical writing direction.
+          // Use the transformed text-space basis, oriented like the font's
+          // normal cursor progression.
+          const double direction =
+            vertical_mode and vertical_displacement < 0.0 ? -1.0 : 1.0;
+          const double basis_x = vertical_mode ? 0.0 : direction;
+          const double basis_y = vertical_mode ? direction : 0.0;
+          axis_x = T_ctm[0] * (T_text[0] * basis_x + T_text[3] * basis_y) +
+                   T_ctm[3] * (T_text[1] * basis_x + T_text[4] * basis_y);
+          axis_y = T_ctm[1] * (T_text[0] * basis_x + T_text[3] * basis_y) +
+                   T_ctm[4] * (T_text[1] * basis_x + T_text[4] * basis_y);
+          axis_norm = std::hypot(axis_x, axis_y);
+        }
+      if(axis_norm > 1.e-9)
+        {
+          cell.writing_axis_x = axis_x / axis_norm;
+          cell.writing_axis_y = axis_y / axis_norm;
+          cell.has_text_placement = true;
+        }
+
+      double nominal_top_x = 0.0;
+      double nominal_top_y = 0.0;
+      map_text_point(0.0, rise + font_size,
+                     nominal_top_x, nominal_top_y);
+      cell.nominal_text_height = std::hypot(
+        nominal_top_x - cell.text_origin_x,
+        nominal_top_y - cell.text_origin_y);
+
+      // LOG_S(INFO) << "base_x0_old: " << base[0] << ", base_y0_old: " << base[1];
+      // LOG_S(INFO) << "base_x0_new: " << d_base_x << ", base_y0_new: " << d_base_y;
+      
+      std::array<double, 4> bbox = compute_bbox(rect);
+      {
+        cell.x0 = bbox[0];
+        cell.y0 = bbox[1];
+        cell.x1 = bbox[2];
+        cell.y1 = bbox[3];
+      }
+
+      {
+	cell.text = text;
+	cell.text_is_suppressed_glyph = text_is_suppressed_glyph;
+	cell.is_pdf_word_space = is_pdf_word_space;
+	cell.rendering_mode = rendering_mode;
+	
+	cell.space_width = space_width;
+	
+	cell.enc_name = font.get_encoding_name();
+	
+	cell.font_enc = to_string(font.get_encoding());
+	cell.font_key = font.get_key();
+	
+	cell.font_name = font.get_name();
+	cell.font_size = font_size/1000.0;
+	
+	cell.italic = false;
+	cell.bold   = false;
+	
+	cell.ocr        = false;
+	cell.confidence = -1.0;
+	
+	cell.stack_size  = stack_size;
+	cell.block_count = block_count;
+	cell.instr_count = instr_count;
+	
+	cell.has_graphics_state = true;
+	cell.line_width         = grph_state.get_line_width();
+	cell.rgb_stroking_ops   = grph_state.get_rgb_stroking_ops();
+	cell.rgb_filling_ops    = grph_state.get_rgb_filling_ops();
+      }
+      
+      if(need_base_text_cells)
+        {
+          cells.push_back(cell);
+        }
+
+      {
+	// some characters have specific bounding-box spec's
+	bool has_glyph_bbox = false;
+	std::array<double, 4> glyph_bbox = {0.0, 0.0, 0.0, 0.0};
+	
+	std::array<double, 8> glyph_rect = rect;
+	{
+	  if(has_embedded_glyph_bbox)
+	    {
+	      glyph_bbox = embedded_glyph_bbox;
+	      has_glyph_bbox = true;
+	    }
+	  else if(glyph_code >= 0 and font.has_char_bbox(static_cast<uint32_t>(glyph_code)))
+	    {
+	      glyph_bbox = font.get_char_bbox(static_cast<uint32_t>(glyph_code));
+	      has_glyph_bbox = true;
+	      font_descent = glyph_bbox[1];
+	      font_ascent  = glyph_bbox[3];
+	      ratio = 1.0;
+	      // LOG_S(INFO) << "using glyph-specific bbox for glyph-code=" << glyph_code
+	      // 		  << ", text='" << text << "'"
+	      // 		  << " bbox=[" << glyph_bbox[0] << ", "
+	      // 		  << glyph_bbox[1] << ", "
+	      // 		  << glyph_bbox[2] << ", "
+	      // 		  << glyph_bbox[3] << "]";
+	      
+	      glyph_rect = compute_rect(font_descent*ratio, font_ascent*ratio, width);
+	    }
+	}
+	
+        text_instruction tinstr(cell.text,
+                                cell.font_enc,
+                                cell.font_key,
+                                cell.font_name,
+                                cell.enc_name,
+                                font.get_base_font(),
+                                cell.font_size,
+                                glyph_rect.at(0), glyph_rect.at(1),
+                                glyph_rect.at(2), glyph_rect.at(3),
+				glyph_rect.at(4), glyph_rect.at(5),
+				glyph_rect.at(6), glyph_rect.at(7),
+                                font_ascent*ratio, font_descent*ratio,
+				d_base_x, d_base_y,
+                                has_glyph_bbox,
+                                glyph_bbox[0], glyph_bbox[1],
+                                glyph_bbox[2], glyph_bbox[3]);
+
+        tinstr.set_char_code(glyph_code);
+        if(glyph_code >= 0)
+          {
+            tinstr.set_glyph_name(font.get_glyph_name(static_cast<uint32_t>(glyph_code)));
+          }
+
+        // 9.4.4: the horizontal scaling Th scales the glyph itself, not only
+        // its displacement, and the text matrix and CTM can scale x and y by
+        // different amounts. The cell quad carries both, but the renderer
+        // draws at a single size taken from the cell's height edge, so the
+        // horizontal factor has to travel with the instruction.
+        {
+          const double m0 = text_matrix[0]*trafo_matrix[0] + text_matrix[1]*trafo_matrix[3];
+          const double m1 = text_matrix[0]*trafo_matrix[1] + text_matrix[1]*trafo_matrix[4];
+          const double m3 = text_matrix[3]*trafo_matrix[0] + text_matrix[4]*trafo_matrix[3];
+          const double m4 = text_matrix[3]*trafo_matrix[1] + text_matrix[4]*trafo_matrix[4];
+
+          const double sx = std::hypot(m0, m1);
+          const double sy = std::hypot(m3, m4);
+
+          const double anisotropy = (sy > 1e-9) ? (sx / sy) : 1.0;
+
+          tinstr.set_horizontal_scale(h_scaling * anisotropy);
+        }
+
+        tinstr.set_fill_color(grph_state.get_rgb_filling_ops(),
+                              grph_state.get_fill_alpha());
+        tinstr.set_clip_state(shape_state.get_clip_state());
+        tinstr.set_rendering_mode(rendering_mode);
+        tinstr.set_blend_mode(grph_state.get_blend_mode());
+        tinstr.set_is_type3(font.is_type3());
+
+        // A Type3 glyph is a content-stream procedure, not a font glyph, so
+        // the renderer cannot draw it from any font face. Emit the glyph's
+        // mask as an image-mask bitmap over its device quad; the pipeline then
+        // places, clips and paints it like any other image.
+        if(font.is_type3() and glyph_code >= 0)
+          {
+            auto g3 = type3_glyph;
+            if(g3 and g3->valid and g3->mask)
+              {
+                const std::array<double, 6>& fm = font.get_font_matrix();
+                const std::array<double, 6>& gm = g3->cm;
+
+                // unit square -> (cm) -> glyph space -> (/FontMatrix) -> text
+                // space (plus rise) -> text matrix -> CTM -> device
+                auto map_pt = [&](double ux, double uy, double& dx, double& dy)
+                {
+                  const double gx = gm[0]*ux + gm[2]*uy + gm[4];
+                  const double gy = gm[1]*ux + gm[3]*uy + gm[5];
+                  // /FontMatrix output is in text-space em units; the font
+                  // size scales it exactly as compute_rect scales metrics.
+                  const double ex = (fm[0]*gx + fm[2]*gy + fm[4]) * font_size;
+                  const double ey = (fm[1]*gx + fm[3]*gy + fm[5]) * font_size + rise;
+                  const double tx = text_matrix[0]*ex + text_matrix[3]*ey + text_matrix[6];
+                  const double ty = text_matrix[1]*ex + text_matrix[4]*ey + text_matrix[7];
+                  dx = trafo_matrix[0]*tx + trafo_matrix[3]*ty + trafo_matrix[6];
+                  dy = trafo_matrix[1]*tx + trafo_matrix[4]*ty + trafo_matrix[7];
+                };
+
+                // Corner order matches the image path (bitmap.h): unit
+                // square (0,0), (0,1), (1,1), (1,0).
+                double x0, y0, x1, y1, x2, y2, x3, y3;
+                map_pt(0, 0, x0, y0);
+                map_pt(0, 1, x1, y1);
+                map_pt(1, 1, x2, y2);
+                map_pt(1, 0, x3, y3);
+
+                std::array<int, 3> shape = {g3->h, g3->w, 1};
+                bitmap_instruction b3(
+                  "type3:" + cell.font_key + ":" + std::to_string(glyph_code),
+                  g3->mask,
+                  nullptr,
+                  CMYK_CONVENTION_UNKNOWN,
+                  shape,
+                  PIXEL_FORMAT_GRAY,
+                  true,
+                  grph_state.get_rgb_filling_ops(),
+                  grph_state.get_fill_alpha(),
+                  x0, y0, x1, y1, x2, y2, x3, y3,
+                  BITMAP_SOURCE_TYPE3_GLYPH,
+                  shape_state.get_clip_state());
+
+                instructions.add_bitmap_instruction(std::move(b3));
+              }
+            else if(not g3)
+              {
+                QPDFObjectHandle charproc =
+                  font.get_type3_charproc(static_cast<uint32_t>(glyph_code));
+                if(charproc.isStream())
+                  {
+                    pending_type3_procedures.push_back(
+                      {charproc, font.get_type3_resources(),
+                       compute_type3_matrix(font.get_font_matrix())});
+                  }
+              }
+          }
+
+        if(config.extract_font_programs)
+          {
+            auto font_blob = font.get_embedded_font_blob();
+            if(font_blob != nullptr and font_blob->has_bytes())
+              {
+                tinstr.set_embedded_font(font_blob);
+              }
+          }
+
+        instructions.add_text_instruction(std::move(tinstr));
+      }
+    }
+
+    if(rendering_mode==3)
+      {
+        LOG_S(WARNING) << "Found cell with text-rendering mode 3 (=invisible) "
+                       << "with text=" << text;
+      }
+
+    // 9.4.4: the displacement runs along the writing direction, so a vertical
+    // font advances by w1 (normally negative, i.e. downwards) and not by the
+    // glyph width. The horizontal scaling Th does not apply to it.
+    if(vertical_mode)
+      {
+        move_cursor(0, vertical_displacement);
+      }
+    else
+      {
+        move_cursor(width, 0);
+      }
+  }
+
+  std::vector<std::pair<uint32_t, std::string> > pdf_state<TEXT>::analyse_string(qpdf_stream_instruction instruction)
+  {
+    // LOG_S(INFO) << __FUNCTION__ << " fontname: " << font_name << ", key: " << instruction.key << " => val: " << instruction.val;
+
+    auto& font = (*page_fonts)[font_name];
+
+    font_encoding_name encoding = font.get_encoding();
+    // LOG_S(INFO) << "encoding: " << encoding;
+    
+    std::string values = instruction.to_char_string();
+    // LOG_S(INFO) << "values: " << values.size() << "\t" << values;
+
+    std::vector<std::pair<uint32_t, std::string> > result;
+
+    if(encoding == IDENTITY_H or
+       encoding == IDENTITY_V  ) // 2-byte string
+      { 
+        // LOG_S(INFO) << "detected encoding: " << to_string(encoding);
+
+        if((values.size()%2)!=0)
+          {
+            LOG_S(WARNING) << "detected non-even values: potential for incorrect paths!";
+          }
+
+        for(int l=0; l<values.size(); l+=2)
+          {
+            if(l+1>=values.size())
+              {
+                LOG_S(ERROR) <<  "skipping last part of the path";
+                continue;
+              }
+
+            //LOG_S(INFO) << "1. value-stream: " << int(static_cast<unsigned char>(values[l+0])) << "\t"
+            //<< static_cast<int>(values[l+0]);
+
+            uint32_t    c_0 = static_cast<unsigned char>(values[l+0]);
+            std::string v_0 = "";
+            v_0 += values[l+0];
+
+            //LOG_S(INFO) << "2. value-stream: " << int(static_cast<unsigned char>(values[l+1])) << "\t"
+            //<< static_cast<int>(values[l+1]);
+
+            uint32_t    c_1 = static_cast<unsigned char>(values[l+1]);
+            std::string v_1 = "";
+            v_1 += values[l+1];
+
+            uint32_t    c = (c_0 << 8) + c_1;
+            std::string v = v_0+v_1;
+
+            //LOG_S(INFO) << "final value-stream: " << c;
+
+            std::pair<uint32_t, std::string> item(c,v);
+            result.push_back(item);
+          }
+      }
+    else if(not font.get_cmap_codespaces().empty())
+      {
+        // The codespace ranges of the CMap decide how many bytes the next
+        // code takes (ISO 32000-1, 9.7.6.2). Guessing instead -- "two bytes
+        // when the pair happens to be a mapped code, one otherwise" -- puts
+        // the reader one byte out of step for the whole rest of the string
+        // the first time a code is missing from the cmap, which is how a
+        // /UniJIS-UCS2 string turned into Latin noise.
+        const std::vector<cmap_codespace_range>& codespaces =
+          font.get_cmap_codespaces();
+
+        int shortest_code = 4;
+        for(const auto& range : codespaces)
+          {
+            shortest_code = std::min(shortest_code, range.n_bytes);
+          }
+
+        std::size_t l=0;
+
+        while(l<values.size())
+          {
+            const unsigned char* bytes =
+              reinterpret_cast<const unsigned char*>(values.data()+l);
+
+            const std::size_t remaining = values.size()-l;
+
+            int n_bytes = 0;
+            for(int n=1; n<=4 and static_cast<std::size_t>(n)<=remaining; n++)
+              {
+                for(const auto& range : codespaces)
+                  {
+                    if(range.n_bytes==n and range.contains(bytes))
+                      {
+                        n_bytes = n;
+                        break;
+                      }
+                  }
+
+                if(n_bytes>0) { break; }
+              }
+
+            if(n_bytes==0)
+              {
+                // A byte string that matches no range is undefined; the spec
+                // has the reader consume the shortest declared code length so
+                // the codes that follow stay aligned.
+                n_bytes = std::min(static_cast<std::size_t>(shortest_code), remaining);
+              }
+
+            uint32_t c = 0;
+            for(int k=0; k<n_bytes; k++)
+              {
+                c = (c<<8) | bytes[k];
+              }
+
+            std::pair<uint32_t, std::string> item(c, values.substr(l, n_bytes));
+            result.push_back(item);
+
+            l += n_bytes;
+          }
+      }
+    else if(encoding == CMAP_RESOURCES)
+      {
+        // No codespace could be read from the cmap-resource: fall back on
+        // recognising two-byte codes by their presence in the cmap.
+        int l=0;
+
+        while(l<values.size())
+          {
+            if(l+2<=values.size())
+              {
+                uint32_t c0 = static_cast<unsigned char>(values[l+0]);
+                uint32_t c1 = static_cast<unsigned char>(values[l+1]);
+
+                uint32_t c = 256*c0+c1;
+
+                //LOG_S(INFO) << "c: " << c << "\tc0: " << c0 << "\tc1: " << c1;
+                if(font.numb_is_in_cmap(c))
+                  {
+                    std::string v = values.substr(l, 2);
+
+                    std::pair<uint32_t, std::string> item(c,v);
+                    result.push_back(item);
+
+                    l += 2;
+                  }
+                else
+                  {
+                    std::string v = values.substr(l, 1);
+
+                    std::pair<uint32_t, std::string> item(c0,v);
+                    result.push_back(item);
+
+                    l += 1;
+                  }
+              }
+            else if(l+1<=values.size())
+              {
+                uint32_t    c = static_cast<unsigned char>(values[l+0]);
+                std::string v = values.substr(l, 1);
+
+                std::pair<uint32_t, std::string> item(c,v);
+                result.push_back(item);
+
+                l += 1;
+              }
+            else
+              {
+                LOG_S(ERROR) << "we should never arrive here: "
+                             << l << "\t" << values.size();
+                break;
+              }
+          }
+      }
+    else
+      {
+        // LOG_S(INFO) << "detected encoding: " << to_string(encoding);
+
+        for(int l=0; l<values.size(); l+=1)
+          {
+            uint32_t    c = static_cast<unsigned char>(values[l]);
+            std::string v = "";
+            v += values[l];
+
+            std::pair<uint32_t, std::string> item(c,v);
+            // LOG_S(INFO) << item.first << ": " << item.second;
+
+            result.push_back(item);
+          }
+      }
+
+    //LOG_S(INFO) << "size of result: " << result.size();
+    
+    return result;
+  }
+
+  // We follow the coordinate transformations as indicated in 8.3.4 [p 120], i.e.
+  //
+  //                       |a b 0|
+  //   [x' y' 1] = [x y 1]*|c d 0|
+  //                       |e f 1|
+  //
+  // with a = M[0], b = M[1], c = M[3], d = M[4], e = M[6], f = M[8]
+  //
+  //  x' = a*x + c*y + e = M[0]*x + M[3]*y + M[6]
+  //  y' = b*x + b*y + f = M[1]*x + M[4]*y + M[7]
+  std::array<double, 8> pdf_state<TEXT>::compute_rect(double font_descent,
+                                                      double font_ascent,
+                                                      double width)
+  {
+    // the bounding-box in the text-glyph reference frame
+    std::array<double, 8> g_rect;
+
+    {
+      // In vertical writing the current point is the glyph's *vertical*
+      // origin, and the glyph itself hangs from it displaced by the position
+      // vector v (9.7.4.3): half a glyph width to the left, and v_y below.
+      const double dx = vertical_mode ? -0.5 * width : 0.0;
+      const double dy = vertical_mode ? -vertical_origin_y * font_size : 0.0;
+
+      /*x_0*/ g_rect[0] = dx;
+      /*y_0*/ g_rect[1] = dy + rise + font_descent / 1000.0 * font_size;
+
+      /*x_1*/ g_rect[2] = dx + width;
+      /*y_1*/ g_rect[3] = dy + rise + font_descent / 1000.0 * font_size;
+
+      /*x_2*/ g_rect[4] = dx + width;
+      /*y_2*/ g_rect[5] = dy + rise + font_ascent / 1000.0 * font_size;
+
+      /*x_3*/ g_rect[6] = dx;
+      /*y_3*/ g_rect[7] = dy + rise + font_ascent / 1000.0 * font_size;
+
+      //LOG_S(INFO) << "text-bbox: [" << tbox[0] << ", " << tbox[1] << ", " << tbox[2] << ", " << tbox[3] << "]";
+    }
+
+    // apply the text-matrix
+    std::array<double, 8> t_rect;
+    {
+      std::array<double, 9>& T = text_matrix;
+
+      /*
+        LOG_S(INFO) << "text-matrix: ";
+        for(int k=0; k<3; k++)
+        {
+        std::stringstream ss;
+        for(int l=0; l<3; l++)
+        ss << "\t" << T[k*3+l];
+
+        LOG_S(INFO) << ss.str();
+        }
+      */
+
+      for(int d=0; d<4; d++)
+        {
+          /*x*/ t_rect[0+2*d] = T[0]*g_rect[0+2*d] + T[3]*g_rect[1+2*d] + T[6];
+          /*y*/ t_rect[1+2*d] = T[1]*g_rect[0+2*d] + T[4]*g_rect[1+2*d] + T[7];
+        }
+
+      //LOG_S(INFO) << "u-bbox: [" << ubox[0] << ", " << ubox[1] << ", " << ubox[2] << ", " << ubox[3] << "]";
+    }
+
+    // apply the current transformation matrix (CTM)
+    std::array<double, 8> d_rect;
+    {
+      std::array<double, 9>& T = trafo_matrix;
+
+      /*
+        LOG_S(INFO) << "ctm-matrix: ";
+        for(int k=0; k<3; k++)
+        {
+        std::stringstream ss;
+        for(int l=0; l<3; l++)
+        ss << "\t" << T[k*3+l];
+
+        LOG_S(INFO) << ss.str();
+        }
+      */
+
+      for(int d=0; d<4; d++)
+        {
+          /*x*/ d_rect[0+2*d] = T[0]*t_rect[0+2*d] + T[3]*t_rect[1+2*d] + T[6];
+          /*y*/ d_rect[1+2*d] = T[1]*t_rect[0+2*d] + T[4]*t_rect[1+2*d] + T[7];
+        }
+
+      //LOG_S(INFO) << "d-bbox: [" << dbox[0] << ", " << dbox[1] << ", " << dbox[2] << ", " << dbox[3] << "]";
+    }
+
+    return d_rect;
+  }
+
+  std::array<double, 8> pdf_state<TEXT>::compute_type3_rect(
+      const std::array<double, 6>& font_matrix,
+      const std::array<double, 6>& glyph_matrix)
+  {
+    // PAGE_CELL corners follow the writing-direction convention used by the
+    // contractor: bottom-left, bottom-right, top-right, top-left. The Type 3
+    // renderer maps the same unit square through these four transformations,
+    // so the extracted character box and painted glyph stay identical even
+    // under rotation, shear, rise, or a non-default FontMatrix.
+    constexpr std::array<std::array<double, 2>, 4> corners = {{
+      {{0.0, 0.0}}, {{1.0, 0.0}}, {{1.0, 1.0}}, {{0.0, 1.0}}
+    }};
+
+    std::array<double, 8> rect;
+    for(std::size_t i = 0; i < corners.size(); ++i)
+      {
+        const double gx = glyph_matrix[0]*corners[i][0] +
+                          glyph_matrix[2]*corners[i][1] + glyph_matrix[4];
+        const double gy = glyph_matrix[1]*corners[i][0] +
+                          glyph_matrix[3]*corners[i][1] + glyph_matrix[5];
+        const double ex = (font_matrix[0]*gx + font_matrix[2]*gy +
+                           font_matrix[4]) * font_size;
+        const double ey = (font_matrix[1]*gx + font_matrix[3]*gy +
+                           font_matrix[5]) * font_size + rise;
+        const double tx = text_matrix[0]*ex + text_matrix[3]*ey + text_matrix[6];
+        const double ty = text_matrix[1]*ex + text_matrix[4]*ey + text_matrix[7];
+        rect[2*i] = trafo_matrix[0]*tx + trafo_matrix[3]*ty + trafo_matrix[6];
+        rect[2*i + 1] =
+          trafo_matrix[1]*tx + trafo_matrix[4]*ty + trafo_matrix[7];
+      }
+    return rect;
+  }
+
+  std::array<double, 6> pdf_state<TEXT>::compute_type3_matrix(
+      const std::array<double, 6>& font_matrix)
+  {
+    // The same mapping as compute_type3_rect() without the CTM, which the
+    // stream decoder applies: /FontMatrix, font size and rise, text matrix.
+    const double a = font_matrix[0]*font_size;
+    const double b = font_matrix[1]*font_size;
+    const double c = font_matrix[2]*font_size;
+    const double d = font_matrix[3]*font_size;
+    const double e = font_matrix[4]*font_size;
+    const double f = font_matrix[5]*font_size + rise;
+
+    return {
+      a*text_matrix[0] + b*text_matrix[3],
+      a*text_matrix[1] + b*text_matrix[4],
+      c*text_matrix[0] + d*text_matrix[3],
+      c*text_matrix[1] + d*text_matrix[4],
+      e*text_matrix[0] + f*text_matrix[3] + text_matrix[6],
+      e*text_matrix[1] + f*text_matrix[4] + text_matrix[7]
+    };
+  }
+
+  std::array<double, 4> pdf_state<TEXT>::compute_bbox(std::array<double, 8>& rect)
+  {
+    std::array<double, 4> bbox;
+    {
+      bbox[0] = rect[0];
+      bbox[1] = rect[1];
+
+      bbox[2] = rect[0];
+      bbox[3] = rect[1];
+    }
+
+    for(int d=0; d<4; d++)
+      {
+        bbox[0] = std::min(bbox[0], rect[0+2*d]);
+        bbox[1] = std::min(bbox[1], rect[1+2*d]);
+
+        bbox[2] = std::max(bbox[2], rect[0+2*d]);
+        bbox[3] = std::max(bbox[3], rect[1+2*d]);
+      }
+
+    return bbox;
+  }
+
+  void pdf_state<TEXT>::TL(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    if(not verify(instructions, 1, __FUNCTION__) ) { return; }
+
+    double tl = instructions[0].to_double();
+
+    TL(tl);
+  }
+
+  void pdf_state<TEXT>::TL(double tl)
+  {
+    leading = tl;
+  }
+
+  void pdf_state<TEXT>::Tm(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    if(not verify(instructions, 6, __FUNCTION__) ) { return; }
+
+    double a = instructions[0].to_double();
+    double b = instructions[1].to_double();
+
+    double c = instructions[2].to_double();
+    double d = instructions[3].to_double();
+
+    double e = instructions[4].to_double();
+    double f = instructions[5].to_double();
+
+    text_matrix[0] = a;
+    text_matrix[1] = b;
+    text_matrix[3] = c;
+    text_matrix[4] = d;
+    text_matrix[6] = e;
+    text_matrix[7] = f;
+
+    line_matrix[0] = a;
+    line_matrix[1] = b;
+    line_matrix[3] = c;
+    line_matrix[4] = d;
+    line_matrix[6] = e;
+    line_matrix[7] = f;
+  }
+
+  /*
+    Table 106 – Text rendering modes [p 246]
+
+    0 Fill text.
+    1 Stroke text.
+    2 Fill, then stroke text.
+    3 Neither fill nor stroke text (invisible).
+    4 Fill text and add to path for clipping (see 9.3.6, "Text Rendering Mode,").
+    5 Stroke text and add to path for clipping.
+  */
+  void pdf_state<TEXT>::Tr(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    if(not verify(instructions, 1, __FUNCTION__) ) { return; }
+
+    int mode = instructions[0].to_int();
+
+    rendering_mode = mode;
+  }
+
+  void pdf_state<TEXT>::Ts(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    if(not verify(instructions, 1, __FUNCTION__) ) { return; }
+
+    rise = instructions[0].to_double();
+  }
+
+  void pdf_state<TEXT>::TStar(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    if(not verify(instructions, 0, __FUNCTION__) ) { return; }
+
+    this->Td(0, -leading);
+  }
+
+  void pdf_state<TEXT>::Tw(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    if(not verify(instructions, 1, __FUNCTION__) ) { return; }
+
+    double tw = instructions[0].to_double();
+
+    word_spacing = tw;
+  }
+
+  // section 9.3.4 [p 258]
+  void pdf_state<TEXT>::Tz(std::vector<qpdf_stream_instruction>& instructions)
+  {
+    if(not verify(instructions, 1, __FUNCTION__) ) { return; }
+
+    double th = instructions[0].to_double();
+
+    h_scaling = th / 100.0;
+  }
+
+}
+
+#endif

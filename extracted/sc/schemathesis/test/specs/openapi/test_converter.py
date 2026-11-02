@@ -1,7 +1,12 @@
+import json
+
+import jsonschema_rs
 import pytest
 
+import schemathesis
 from schemathesis.core.jsonschema import make_validator, make_validator_for
 from schemathesis.core.transforms import transform
+from schemathesis.generation.hypothesis.examples import generate_many
 from schemathesis.specs.openapi import converter
 from schemathesis.specs.openapi.converter import is_read_only, is_write_only, rewrite_properties, to_json_schema
 
@@ -45,6 +50,58 @@ from schemathesis.specs.openapi.converter import is_read_only, is_write_only, re
 def test_prefix_items_to_items_array(schema, expected):
     result = transform(schema, converter.to_json_schema, nullable_keyword="x-nullable")
     assert result == expected
+
+
+CONTAINS_ONE = {"contains": {"const": 1}}
+CONTAINS_TWO = {"contains": {"const": 2}}
+
+
+@pytest.mark.parametrize(
+    ("version", "schema", "expected"),
+    [
+        pytest.param(
+            "3.0.2",
+            {"type": "array", "items": {"type": "integer"}, "allOf": [CONTAINS_ONE, CONTAINS_TWO, {"maxItems": 4}]},
+            {
+                "type": "array",
+                "items": [{"enum": [1]}, {"enum": [2]}],
+                "additionalItems": {"type": "integer"},
+                "allOf": [{"maxItems": 4}],
+                "minItems": 2,
+            },
+            id="items-and-other-allof-entries-kept",
+        ),
+        pytest.param(
+            "3.0.2",
+            {"type": "array", "allOf": [CONTAINS_ONE, CONTAINS_TWO], "minItems": 3},
+            {"type": "array", "items": [{"enum": [1]}, {"enum": [2]}], "minItems": 3},
+            id="larger-min-items-kept",
+        ),
+        pytest.param(
+            "3.0.2",
+            {"type": "array", "allOf": [CONTAINS_ONE, {"maxItems": 4}]},
+            {"type": "array", "allOf": [CONTAINS_ONE, {"maxItems": 4}]},
+            id="single-contains-untouched",
+        ),
+        pytest.param(
+            "3.0.2",
+            {"type": "array", "items": [{"type": "integer"}], "allOf": [CONTAINS_ONE, CONTAINS_TWO]},
+            {"type": "array", "items": [{"type": "integer"}], "allOf": [CONTAINS_ONE, CONTAINS_TWO]},
+            id="positional-items-untouched",
+        ),
+    ],
+)
+def test_allof_of_contains_consts_placed_positionally(ctx, version, schema, expected):
+    # Draft 4 ignores `contains`, so each required value needs its own position to land in generated arrays.
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {"required": True, "content": {"application/json": {"schema": schema}}},
+            "responses": {"200": {"description": "OK"}},
+        },
+        version=version,
+    )
+    assert operation.body[0].optimized_schema == expected
 
 
 @pytest.mark.parametrize(
@@ -359,12 +416,58 @@ def test_upgrade_legacy_exclusive_bounds():
     }
 
 
+@pytest.mark.parametrize(
+    ("schema", "expected"),
+    [
+        (
+            {"type": "array", "items": [{"type": "string"}, {"type": "integer"}]},
+            {"type": "array", "prefixItems": [{"type": "string"}, {"type": "integer"}]},
+        ),
+        (
+            {"type": "array", "items": [{"type": "string"}], "additionalItems": {"type": "boolean"}},
+            {"type": "array", "prefixItems": [{"type": "string"}], "items": {"type": "boolean"}},
+        ),
+        (
+            {"type": "array", "items": {"type": "string"}, "additionalItems": False},
+            {"type": "array", "items": {"type": "string"}, "additionalItems": False},
+        ),
+    ],
+    ids=["tuple", "tuple-with-additional-items", "single-items-schema"],
+)
+def test_upgrade_legacy_tuple_items(schema, expected):
+    assert (
+        transform(
+            schema,
+            converter.to_json_schema,
+            nullable_keyword="nullable",
+            upgrade_legacy_exclusive_bounds=True,
+            convert_prefix_items=False,
+        )
+        == expected
+    )
+
+
 def test_does_not_upgrade_legacy_exclusive_bounds_by_default():
     schema = {"type": "number", "minimum": 0, "exclusiveMinimum": True}
 
     result = transform(schema, converter.to_json_schema, nullable_keyword="nullable")
 
     assert result == schema
+
+
+def test_legacy_exclusive_flag_without_bound_dropped_on_openapi_3_1(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": {"type": "number", "exclusiveMinimum": True}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+    )
+    assert operation.body[0].optimized_schema == {"type": "number"}
 
 
 @pytest.mark.parametrize(
@@ -393,7 +496,7 @@ def test_does_not_upgrade_legacy_exclusive_bounds_by_default():
     ],
 )
 def test_rewrite_read_only(schema, expected):
-    rewrite_properties(schema, is_read_only)
+    rewrite_properties(schema, lambda subschema: is_read_only(subschema, None))
     assert schema == expected
 
 
@@ -572,6 +675,14 @@ def test_pattern_the_validator_enforces_is_kept(pattern):
     assert result["pattern"] == pattern
 
 
+def test_posix_class_keeps_its_posix_meaning_for_the_validator():
+    # ECMA reads `[[:alnum:]]` as literal characters, but authors mean the POSIX class their server enforces.
+    schema = {"type": "string", "pattern": "^[[:alnum:]]+$"}
+    result = transform(schema, converter.to_json_schema, nullable_keyword="x-nullable")
+    validator = jsonschema_rs.validator_for(result)
+    assert [validator.is_valid(value) for value in ("abc1", ":]")] == [True, False]
+
+
 def test_nested_object_required_array_not_duplicated():
     # GH-3460: Nested `required` arrays should not cause duplicates in parent's `required`
     schema = {
@@ -642,6 +753,47 @@ def test_nested_object_required_array_not_duplicated():
                 },
             },
             id="explicit-mapping",
+        ),
+        pytest.param(
+            {
+                "oneOf": [
+                    {"$ref": "#/components/schemas/Comparison"},
+                    {"$ref": "#/components/schemas/In"},
+                ],
+                "discriminator": {
+                    "propertyName": "operator",
+                    "mapping": {
+                        "eq": "#/components/schemas/Comparison",
+                        "gte": "#/components/schemas/Comparison",
+                        "in": "#/components/schemas/In",
+                    },
+                },
+            },
+            {
+                "oneOf": [
+                    {
+                        "allOf": [
+                            {"$ref": "#/components/schemas/Comparison"},
+                            {"properties": {"operator": {"enum": ["eq", "gte"]}}},
+                        ]
+                    },
+                    {
+                        "allOf": [
+                            {"$ref": "#/components/schemas/In"},
+                            {"properties": {"operator": {"enum": ["in"]}}},
+                        ]
+                    },
+                ],
+                "discriminator": {
+                    "propertyName": "operator",
+                    "mapping": {
+                        "eq": "#/components/schemas/Comparison",
+                        "gte": "#/components/schemas/Comparison",
+                        "in": "#/components/schemas/In",
+                    },
+                },
+            },
+            id="many-to-one-mapping",
         ),
         pytest.param(
             {
@@ -879,6 +1031,74 @@ def test_discriminator_pin_skipped_for_polymorphic_branch_target(ctx):
     assert not validator.is_valid({"type": "Item"})
 
 
+def test_discriminator_pin_uses_file_name_for_whole_file_ref(tmp_path):
+    (tmp_path / "cat.json").write_text(
+        json.dumps(
+            {
+                "type": "object",
+                "properties": {"kind": {"type": "string"}, "meow": {"type": "integer"}},
+                "required": ["kind"],
+            }
+        )
+    )
+    (tmp_path / "openapi.json").write_text(
+        json.dumps(
+            {
+                "openapi": "3.0.2",
+                "info": {"title": "Test", "version": "1"},
+                "paths": {
+                    "/pets": {
+                        "post": {
+                            "requestBody": {
+                                "required": True,
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "oneOf": [{"$ref": "cat.json"}],
+                                            "discriminator": {"propertyName": "kind"},
+                                        }
+                                    }
+                                },
+                            },
+                            "responses": {"200": {"description": "OK"}},
+                        }
+                    }
+                },
+            }
+        )
+    )
+    schema = schemathesis.openapi.from_path(tmp_path / "openapi.json")
+    kinds = {case.body["kind"] for case in generate_many(schema["/pets"]["POST"].as_strategy(), 10)}
+    assert kinds == {"cat"}
+
+
+def test_discriminator_pin_applies_to_boolean_branch_target(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{"$ref": "#/components/schemas/Any"}],
+                            "discriminator": {"propertyName": "kind"},
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+        components={"schemas": {"Any": True}},
+    )
+    assert operation.body[0].optimized_schema == {
+        "oneOf": [{"allOf": [{"$ref": "#/x-bundled/schema000001"}, {"properties": {"kind": {"enum": ["Any"]}}}]}],
+        "discriminator": {"propertyName": "kind"},
+        "x-bundled": {"schema000001": True},
+    }
+
+
 def test_discriminator_pin_validates_with_openapi_3_0_draft4(ctx):
     # OpenAPI 3.0 uses Draft 4, which silently ignores `const`. Pin keyword must use `enum` so the
     # discriminator branches are actually disambiguated at validation time.
@@ -1040,17 +1260,14 @@ def test_malformed_properties_left_alone(schema):
     ],
 )
 def test_malformed_properties_do_not_raise_for_operation(ctx, body_schema):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {"application/json": {"schema": body_schema}},
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": body_schema}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    assert schema["/test"]["POST"].get_strategies_from_examples() == []
+    assert operation.get_strategies_from_examples() == []

@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-from pathlib import Path
-from typing import IO, Any
+from typing import Any
 
 import click
 
 from schemathesis.checks import load_all_checks
-from schemathesis.cli.commands.fuzz import executor
+from schemathesis.cli.commands._options import apply_project_options, apply_report_options, build_filter_set
 from schemathesis.cli.commands.run.filters import with_filters
 from schemathesis.cli.constants import COLOR_OPTIONS_INVALID_USAGE_MESSAGE
 from schemathesis.cli.core import ensure_color, resolve_color
@@ -48,11 +46,14 @@ from schemathesis.cli.options import (
     REPORT_ALLURE_PATH,
     REPORT_DIR,
     REPORT_HAR_PATH,
+    REPORT_HTML_PATH,
     REPORT_JSON_PATH,
     REPORT_JUNIT_PATH,
     REPORT_NDJSON_PATH,
     REPORT_PRESERVE_BYTES,
+    REPORT_PYTEST_PATH,
     REPORT_VCR_PATH,
+    REPORT_WFC_PATH,
     REQUEST_CERT,
     REQUEST_CERT_KEY,
     REQUEST_RETRIES,
@@ -63,15 +64,12 @@ from schemathesis.cli.options import (
     WARNINGS,
     WORKERS,
 )
-from schemathesis.cli.validation import validate_auth_overlap
+from schemathesis.cli.validation import validate_auth_overlap, validate_wfc_user
 from schemathesis.config import (
-    DEFAULT_REPORT_DIRECTORY,
     FuzzConfig,
     HealthCheck,
-    ReportFormat,
     SchemathesisConfig,
     SchemathesisWarning,
-    WarningsConfig,
 )
 from schemathesis.generation import GenerationMode
 from schemathesis.generation.metrics import MetricFunction
@@ -79,7 +77,7 @@ from schemathesis.generation.metrics import MetricFunction
 load_all_checks()
 
 
-@click.argument(*LOCATION.args, **LOCATION.kwargs)  # type: ignore[untyped-decorator]
+@click.argument(*LOCATION.args, **LOCATION.kwargs)
 @group("Options")
 @grouped_option(*BASE_URL.args, **BASE_URL.kwargs)
 @grouped_option(*WORKERS.args, **WORKERS.kwargs)
@@ -135,7 +133,10 @@ load_all_checks()
 @grouped_option(*REPORT_HAR_PATH.args, **REPORT_HAR_PATH.kwargs)
 @grouped_option(*REPORT_NDJSON_PATH.args, **REPORT_NDJSON_PATH.kwargs)
 @grouped_option(*REPORT_JSON_PATH.args, **REPORT_JSON_PATH.kwargs)
+@grouped_option(*REPORT_WFC_PATH.args, **REPORT_WFC_PATH.kwargs)
+@grouped_option(*REPORT_PYTEST_PATH.args, **REPORT_PYTEST_PATH.kwargs)
 @grouped_option(*REPORT_ALLURE_PATH.args, **REPORT_ALLURE_PATH.kwargs)
+@grouped_option(*REPORT_HTML_PATH.args, **REPORT_HTML_PATH.kwargs)
 @grouped_option(*REPORT_PRESERVE_BYTES.args, **REPORT_PRESERVE_BYTES.kwargs)
 @grouped_option(*OUTPUT_SANITIZE.args, **OUTPUT_SANITIZE.kwargs)
 @grouped_option(*OUTPUT_TRUNCATE.args, **OUTPUT_TRUNCATE.kwargs)
@@ -153,7 +154,7 @@ load_all_checks()
 @group("Global options")
 @grouped_option(*NO_COLOR.args, **NO_COLOR.kwargs)
 @grouped_option(*FORCE_COLOR.args, **FORCE_COLOR.kwargs)
-@click.pass_context  # type: ignore[untyped-decorator]
+@click.pass_context
 def fuzz(
     ctx: click.Context,
     *,
@@ -168,29 +169,6 @@ def fuzz(
     max_time: int | None = None,
     max_failures: int | None = None,
     continue_on_failure: bool | None = None,
-    include_path: tuple[str, ...],
-    include_path_regex: str | None,
-    include_method: tuple[str, ...],
-    include_method_regex: str | None,
-    include_name: tuple[str, ...],
-    include_name_regex: str | None,
-    include_tag: tuple[str, ...],
-    include_tag_regex: str | None,
-    include_operation_id: tuple[str, ...],
-    include_operation_id_regex: str | None,
-    exclude_path: tuple[str, ...],
-    exclude_path_regex: str | None,
-    exclude_method: tuple[str, ...],
-    exclude_method_regex: str | None,
-    exclude_name: tuple[str, ...],
-    exclude_name_regex: str | None,
-    exclude_tag: tuple[str, ...],
-    exclude_tag_regex: str | None,
-    exclude_operation_id: tuple[str, ...],
-    exclude_operation_id_regex: str | None,
-    include_by: Callable | None = None,
-    exclude_by: Callable | None = None,
-    exclude_deprecated: bool | None = None,
     workers: int | None = None,
     base_url: str | None,
     wait_for_schema: float | None = None,
@@ -204,15 +182,6 @@ def fuzz(
     request_cert: str | None = None,
     request_cert_key: str | None = None,
     request_proxy: str | None = None,
-    report_formats: list[ReportFormat] | None,
-    report_directory: Path | str = DEFAULT_REPORT_DIRECTORY,
-    report_junit_path: IO[str] | None = None,
-    report_vcr_path: IO[str] | None = None,
-    report_har_path: IO[str] | None = None,
-    report_ndjson_path: IO[str] | None = None,
-    report_json_path: IO[str] | None = None,
-    report_allure_path: str | None = None,
-    report_preserve_bytes: bool | None = None,
     output_sanitize: bool | None = None,
     output_truncate: bool | None = None,
     generation_modes: list[GenerationMode],
@@ -232,13 +201,16 @@ def fuzz(
     """Continuously fuzz your API with multi-step operation sequences.
 
     Generates chains of API calls across operations and validates each
-    response. Runs until --max-time is reached or interrupted.
+    response. Stops at the first failure, when --max-time is reached, or when
+    interrupted. With --continue-on-failure it keeps fuzzing until
+    --max-failures failures.
 
     \b
     LOCATION can be:
         - Local file: ./openapi.json, ./schema.yaml, ./schema.graphql
         - OpenAPI URL: https://api.example.com/openapi.json
         - GraphQL URL: https://api.example.com/graphql/
+        - gRPC target: grpc://localhost:50051
     """  # noqa: D301
     if no_color and force_color:
         raise click.UsageError(COLOR_OPTIONS_INVALID_USAGE_MESSAGE)
@@ -249,6 +221,7 @@ def fuzz(
     ensure_color(ctx, color)
 
     validate_auth_overlap(auth, headers)
+    validate_wfc_user(config, auth_wfc, auth_wfc_user)
 
     config.update(
         color=color,
@@ -259,62 +232,9 @@ def fuzz(
     )
     config.output.sanitization.update(enabled=output_sanitize)
     config.output.truncation.update(enabled=output_truncate)
-    config.reports.update(
-        formats=report_formats,
-        junit_path=report_junit_path.name if report_junit_path else None,
-        vcr_path=report_vcr_path.name if report_vcr_path else None,
-        har_path=report_har_path.name if report_har_path else None,
-        ndjson_path=report_ndjson_path.name if report_ndjson_path else None,
-        json_path=report_json_path.name if report_json_path else None,
-        allure_path=report_allure_path,
-        directory=Path(report_directory),
-        preserve_bytes=report_preserve_bytes,
-    )
-    config.projects.override.update(
-        base_url=base_url,
-        headers=headers or None,
-        basic_auth=auth,
-        wfc_auth=auth_wfc,
-        wfc_user=auth_wfc_user,
-        workers=workers,
-        continue_on_failure=continue_on_failure,
-        rate_limit=rate_limit,
-        max_redirects=max_redirects,
-        request_timeout=request_timeout,
-        request_retries=request_retries,
-        tls_verify=request_tls_verify,
-        request_cert=request_cert,
-        request_cert_key=request_cert_key,
-        proxy=request_proxy,
-        warnings=WarningsConfig.from_value([w.value for w in warnings] if isinstance(warnings, list) else warnings)
-        if warnings is not None
-        else None,
-    )
-    filter_set = {
-        "include_path": include_path,
-        "include_method": include_method,
-        "include_name": include_name,
-        "include_tag": include_tag,
-        "include_operation_id": include_operation_id,
-        "include_path_regex": include_path_regex,
-        "include_method_regex": include_method_regex,
-        "include_name_regex": include_name_regex,
-        "include_tag_regex": include_tag_regex,
-        "include_operation_id_regex": include_operation_id_regex,
-        "exclude_path": exclude_path,
-        "exclude_method": exclude_method,
-        "exclude_name": exclude_name,
-        "exclude_tag": exclude_tag,
-        "exclude_operation_id": exclude_operation_id,
-        "exclude_path_regex": exclude_path_regex,
-        "exclude_method_regex": exclude_method_regex,
-        "exclude_name_regex": exclude_name_regex,
-        "exclude_tag_regex": exclude_tag_regex,
-        "exclude_operation_id_regex": exclude_operation_id_regex,
-        "include_by": include_by,
-        "exclude_by": exclude_by,
-        "exclude_deprecated": exclude_deprecated,
-    }
+    apply_report_options(config.reports, ctx.params)
+    apply_project_options(config.projects.override, ctx.params)
+    filter_set = build_filter_set(ctx.params)
     config.projects.override.checks.update(
         included_check_names=included_check_names,
         excluded_check_names=excluded_check_names,
@@ -336,6 +256,8 @@ def fuzz(
     # `[fuzz] max-time` narrows the budget for this command; the root key applies to both commands.
     configured = project.fuzz.max_time if project.fuzz.max_time is not None else project.max_time
     fuzz_config = FuzzConfig(max_time=max_time if max_time is not None else configured)
+
+    from schemathesis.cli.commands.fuzz import executor
 
     executor.execute(
         location=location,

@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+import time
+
+from fastapi import FastAPI
 from flask import jsonify, request
+from starlette.types import Receive, Scope, Send
 
 from test.apps.builders import build_schema, make_flask_app_from_schema
 from test.apps.fragments import handlers, schemas
@@ -100,6 +104,13 @@ def csv_payload() -> OpenAPIApp:
     spec = build_schema(schemas.csv_payload())
     app = make_flask_app_from_schema(spec)
     handlers.register_csv_payload(app)
+    return OpenAPIApp(spec=spec, server=app, kind="flask")
+
+
+def identical_query_parameters() -> OpenAPIApp:
+    spec = build_schema(schemas.identical_query_parameters())
+    app = make_flask_app_from_schema(spec)
+    handlers.register_identical_query_parameters(app)
     return OpenAPIApp(spec=spec, server=app, kind="flask")
 
 
@@ -299,14 +310,6 @@ def invalid() -> OpenAPIApp:
     return OpenAPIApp(spec=spec, server=app, kind="flask")
 
 
-def chunked_success() -> OpenAPIApp:
-    """`/api/success` returning JSON via a generator so Werkzeug emits Transfer-Encoding: chunked."""
-    spec = build_schema(schemas.success())
-    app = make_flask_app_from_schema(spec)
-    handlers.register_chunked_success(app)
-    return OpenAPIApp(spec=spec, server=app, kind="flask")
-
-
 def success_text_and_write_only() -> OpenAPIApp:
     """Composite for filter-combination tests.
 
@@ -334,14 +337,6 @@ def success_and_text() -> OpenAPIApp:
 def slow() -> OpenAPIApp:
     spec = build_schema(schemas.slow())
     app = make_flask_app_from_schema(spec)
-    handlers.register_slow(app)
-    return OpenAPIApp(spec=spec, server=app, kind="flask")
-
-
-def success_and_slow() -> OpenAPIApp:
-    spec = build_schema({**schemas.success(), **schemas.slow()})
-    app = make_flask_app_from_schema(spec)
-    handlers.register_success(app)
     handlers.register_slow(app)
     return OpenAPIApp(spec=spec, server=app, kind="flask")
 
@@ -381,6 +376,13 @@ def basic() -> OpenAPIApp:
     spec = build_schema(schemas.basic(), components=_BASIC_AUTH_SCHEME)
     app = make_flask_app_from_schema(spec)
     handlers.register_basic(app)
+    return OpenAPIApp(spec=spec, server=app, kind="flask")
+
+
+def basic_with_query() -> OpenAPIApp:
+    spec = build_schema(schemas.basic_with_query(), components=_BASIC_AUTH_SCHEME)
+    app = make_flask_app_from_schema(spec)
+    handlers.register_basic_with_query(app)
     return OpenAPIApp(spec=spec, server=app, kind="flask")
 
 
@@ -556,3 +558,21 @@ def vocabulary_path_with_planted_bug() -> OpenAPIApp:
         return jsonify({"detail": "unknown"}), 404
 
     return OpenAPIApp(spec=spec, server=app, kind="flask")
+
+
+def crash_closes_connection() -> OpenAPIApp:
+    app = FastAPI()
+
+    @app.post("/api/crash")
+    def crash(value: dict) -> dict:
+        raise KeyError("boom")
+
+    async def server(scope: Scope, receive: Receive, send: Send) -> None:
+        # Stall like uvicorn logging the traceback, so the connection closes after the 500 with the next request unread.
+        try:
+            await app(scope, receive, send)
+        except KeyError:
+            time.sleep(0.05)
+            raise
+
+    return OpenAPIApp(spec=app.openapi(), server=server, kind="fastapi")

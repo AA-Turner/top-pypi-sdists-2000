@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from collections.abc import Iterator, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
 from schemathesis.config import ProjectConfig
 from schemathesis.config._dictionaries import ParameterDictionaryBinding, lookup_parameter
-from schemathesis.core.parameters import ParameterLocation
+from schemathesis.core.parameters import PARAMETER_LOCATIONS, ParameterLocation
 from schemathesis.core.transforms import diff
 
 if TYPE_CHECKING:
@@ -18,11 +18,22 @@ if TYPE_CHECKING:
 class Override:
     """Overrides for various parts of a test case."""
 
-    query: dict[str, str]
-    headers: dict[str, str]
-    cookies: dict[str, str]
-    path_parameters: dict[str, str]
-    body: dict[str, str]
+    query: dict[str, str] = field(default_factory=dict)
+    headers: dict[str, str] = field(default_factory=dict)
+    cookies: dict[str, str] = field(default_factory=dict)
+    path_parameters: dict[str, str] = field(default_factory=dict)
+    body: dict[str, str] = field(default_factory=dict)
+
+    @classmethod
+    def from_send_kwargs(cls, kwargs: Mapping[str, Any]) -> Override:
+        """The query, headers and cookies a request was sent with, as passed to the transport."""
+        return cls(
+            query=kwargs.get("params") or {},
+            headers=kwargs.get("headers") or {},
+            cookies=kwargs.get("cookies") or {},
+            path_parameters={},
+            body={},
+        )
 
     def items(self) -> Iterator[tuple[ParameterLocation, dict[str, str]]]:
         for key, value in (
@@ -34,11 +45,18 @@ class Override:
             if value:
                 yield key, value
 
+    def as_strategy_kwargs(self) -> dict[str, Any]:
+        """Overridden parameters keyed by the `Case` container they fill; `body` is not overridable this way."""
+        return {location.container_name: entry for location, entry in self.items()}
+
     def apply_to(self, case: Case) -> None:
         """Merge the overridden parameters into the case's containers; `body` is not overridable this way."""
         for location, entry in self.items():
             name = location.container_name
-            container = getattr(case, name) or {}
+            container = getattr(case, name)
+            # Keep an empty container instead of replacing it, so headers stay case-insensitive.
+            if container is None:
+                container = {}
             container.update(entry)
             setattr(case, name, container)
 
@@ -52,10 +70,17 @@ class Override:
         )
 
 
+def with_config_headers(config: ProjectConfig, *, operation: APIOperation) -> Override:
+    """Fixed parameter values from the project config; configured headers win over header overrides."""
+    override = for_operation(config, operation=operation)
+    override.headers = {**override.headers, **config.headers_for(operation=operation)}
+    return override
+
+
 def for_operation(config: ProjectConfig, *, operation: APIOperation) -> Override:
     operation_config = config.operations.get_for_operation(operation)
 
-    output = Override(query={}, headers={}, cookies={}, path_parameters={}, body={})
+    output = Override()
     groups = [
         (output.query, operation.query),
         (output.headers, operation.headers),
@@ -121,11 +146,5 @@ def store_components(case: Case) -> dict[ParameterLocation, StoredValue]:
             value=store_original_state(case.get_container(kind)),
             is_generated=bool(case._meta and kind in case._meta.components),
         )
-        for kind in [
-            ParameterLocation.QUERY,
-            ParameterLocation.HEADER,
-            ParameterLocation.COOKIE,
-            ParameterLocation.PATH,
-            ParameterLocation.BODY,
-        ]
+        for kind in PARAMETER_LOCATIONS
     }

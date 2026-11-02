@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
@@ -12,7 +12,7 @@ from schemathesis.config._env import resolve
 DEFAULT_REPORT_DIRECTORY = Path("./schemathesis-report")
 
 
-class ReportFormat(str, Enum):
+class ReportFormat(StrEnum):
     """Available report formats."""
 
     JUNIT = "junit"
@@ -20,7 +20,24 @@ class ReportFormat(str, Enum):
     HAR = "har"
     NDJSON = "ndjson"
     JSON = "json"
+    WFC = "wfc"
+    PYTEST = "pytest"
     ALLURE = "allure"
+    HTML = "html"
+
+    @property
+    def display_name(self) -> str:
+        return {
+            self.JUNIT: "JUnit",
+            self.VCR: "VCR",
+            self.HAR: "HAR",
+            self.NDJSON: "NDJSON",
+            self.JSON: "JSON",
+            self.WFC: "WFC",
+            self.PYTEST: "pytest",
+            self.ALLURE: "Allure",
+            self.HTML: "HTML",
+        }[self]
 
     @property
     def extension(self) -> str:
@@ -31,9 +48,16 @@ class ReportFormat(str, Enum):
             self.HAR: "json",
             self.NDJSON: "ndjson",
             self.JSON: "json",
+            self.WFC: "json",
+            self.PYTEST: "py",
             # directory output — no file extension
             self.ALLURE: "",
+            self.HTML: "",
         }[self]
+
+    @property
+    def is_directory(self) -> bool:
+        return not self.extension
 
 
 @dataclass(repr=False, slots=True)
@@ -63,7 +87,10 @@ class ReportsConfig(DiffBase):
     har: ReportConfig
     ndjson: ReportConfig
     json: ReportConfig
+    wfc: ReportConfig
+    pytest: ReportConfig
     allure: ReportConfig
+    html: ReportConfig
     _timestamp: str
 
     def __init__(
@@ -76,7 +103,10 @@ class ReportsConfig(DiffBase):
         har: ReportConfig | None = None,
         ndjson: ReportConfig | None = None,
         json: ReportConfig | None = None,
+        wfc: ReportConfig | None = None,
+        pytest: ReportConfig | None = None,
         allure: ReportConfig | None = None,
+        html: ReportConfig | None = None,
     ) -> None:
         self.directory = Path(resolve(directory) or DEFAULT_REPORT_DIRECTORY)
         self.preserve_bytes = preserve_bytes
@@ -85,7 +115,10 @@ class ReportsConfig(DiffBase):
         self.har = har or ReportConfig()
         self.ndjson = ndjson or ReportConfig()
         self.json = json or ReportConfig()
+        self.wfc = wfc or ReportConfig()
+        self.pytest = pytest or ReportConfig()
         self.allure = allure or ReportConfig()
+        self.html = html or ReportConfig()
         self._timestamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%SZ")
 
     @classmethod
@@ -98,7 +131,10 @@ class ReportsConfig(DiffBase):
             har=ReportConfig.from_dict(data.get("har", {})),
             ndjson=ReportConfig.from_dict(data.get("ndjson", {})),
             json=ReportConfig.from_dict(data.get("json", {})),
+            wfc=ReportConfig.from_dict(data.get("wfc", {})),
+            pytest=ReportConfig.from_dict(data.get("pytest", {})),
             allure=ReportConfig.from_dict(data.get("allure", {})),
+            html=ReportConfig.from_dict(data.get("html", {})),
         )._mark_source_keys(data)
 
     def update(
@@ -110,42 +146,50 @@ class ReportsConfig(DiffBase):
         har_path: str | None = None,
         ndjson_path: str | None = None,
         json_path: str | None = None,
+        wfc_path: str | None = None,
+        pytest_path: str | None = None,
         allure_path: str | None = None,
+        html_path: str | None = None,
         directory: Path = DEFAULT_REPORT_DIRECTORY,
         preserve_bytes: bool | None = None,
     ) -> None:
         formats = formats or []
-        if junit_path is not None or ReportFormat.JUNIT in formats:
-            self.junit.enabled = True
-            self.junit.path = Path(junit_path) if junit_path is not None else junit_path
-        if vcr_path is not None or ReportFormat.VCR in formats:
-            self.vcr.enabled = True
-            self.vcr.path = Path(vcr_path) if vcr_path is not None else vcr_path
-        if har_path is not None or ReportFormat.HAR in formats:
-            self.har.enabled = True
-            self.har.path = Path(har_path) if har_path is not None else har_path
-        if ndjson_path is not None or ReportFormat.NDJSON in formats:
-            self.ndjson.enabled = True
-            self.ndjson.path = Path(ndjson_path) if ndjson_path is not None else ndjson_path
-        if json_path is not None or ReportFormat.JSON in formats:
-            self.json.enabled = True
-            self.json.path = Path(json_path) if json_path is not None else json_path
-        if allure_path is not None or ReportFormat.ALLURE in formats:
-            self.allure.enabled = True
-            self.allure.path = Path(allure_path) if allure_path is not None else allure_path
+        paths = {
+            ReportFormat.JUNIT: junit_path,
+            ReportFormat.VCR: vcr_path,
+            ReportFormat.HAR: har_path,
+            ReportFormat.NDJSON: ndjson_path,
+            ReportFormat.JSON: json_path,
+            ReportFormat.WFC: wfc_path,
+            ReportFormat.PYTEST: pytest_path,
+            ReportFormat.ALLURE: allure_path,
+            ReportFormat.HTML: html_path,
+        }
+        for report_format, path in paths.items():
+            if path is not None or report_format in formats:
+                report = self.get(report_format)
+                report.enabled = True
+                report.path = Path(path) if path is not None else None
         if directory != DEFAULT_REPORT_DIRECTORY:
             self.directory = directory
         if preserve_bytes:
             self.preserve_bytes = preserve_bytes
 
+    def get(self, format: ReportFormat) -> ReportConfig:
+        """The configuration of one report format."""
+        return getattr(self, format.value)
+
     def get_path(self, format: ReportFormat) -> Path:
         """Get the final path for a specific format."""
-        report: ReportConfig = getattr(self, format.value)
+        report = self.get(format)
         if report.path is not None:
             return report.path
 
-        if format == ReportFormat.ALLURE:
+        if format.is_directory:
             return self.directory / f"{format.value}-{self._timestamp}"
+        if format == ReportFormat.PYTEST:
+            # pytest collects only `test_*.py` files, and a module name can't contain a hyphen.
+            return self.directory / f"test_schemathesis_{self._timestamp}.py"
 
         return self.directory / f"{format.value}-{self._timestamp}.{format.extension}"
 
@@ -156,10 +200,10 @@ class ReportsConfig(DiffBase):
         run produce identical paths regardless of when they start.
         If `suffix` is given it is inserted before the extension (e.g. ``cassette-abc12345.yaml``).
         """
-        report: ReportConfig = getattr(self, format.value)
+        report = self.get(format)
         if report.path is not None:
             return report.path
-        if format == ReportFormat.ALLURE:
+        if format.is_directory:
             name = f"{format.value}-{suffix}" if suffix else format.value
             return self.directory / name
         path = self.directory / f"{format.value}.{format.extension}"

@@ -22,16 +22,16 @@ from schemathesis.config._dictionaries import (
 from schemathesis.core.jsonschema import BUNDLE_STORAGE_KEY, make_validator, schema_with_bundle
 from schemathesis.core.jsonschema.types import JsonSchema, JsonValue, get_type
 from schemathesis.core.parameters import ParameterLocation
+from schemathesis.core.transforms import split_body_path
 from schemathesis.generation import GenerationMode
-from schemathesis.generation.value import GeneratedValue
+from schemathesis.generation.value import GeneratedValue, prune_overwritten_constants
 from schemathesis.resources import PoolDraw, SemanticDraw
-from schemathesis.specs.openapi.adapter.parameters import _prune_overwritten_constants
 
 if TYPE_CHECKING:
     from schemathesis.config import GenerationConfig, ProjectConfig
+    from schemathesis.core.mutations import MutationMetadata
     from schemathesis.python._constants.pool import ConstantDraw
-    from schemathesis.specs.openapi.negative.mutations import MutationMetadata
-    from schemathesis.specs.openapi.schemas import OpenApiOperation
+    from schemathesis.schemas import APIOperation
 
 
 def _eligible_for_mode(matches_schema: bool, mode: GenerationMode) -> bool:
@@ -91,7 +91,7 @@ class _ResolvedBinding:
 
 def resolve_parameter_bindings(
     *,
-    operation: OpenApiOperation,
+    operation: APIOperation,
     location: ParameterLocation,
     properties: dict[str, JsonSchema],
     generation_config: GenerationConfig,
@@ -184,7 +184,7 @@ def build_dictionary_overlay_strategy(
     if not eligible_per_parameter:
         return inner
 
-    @st.composite  # type: ignore[untyped-decorator]
+    @st.composite
     def overlay(draw: st.DrawFn) -> GeneratedValue | dict[str, JsonValue]:
         produced = draw(inner)
         existing_meta: MutationMetadata | None = None
@@ -204,11 +204,6 @@ def build_dictionary_overlay_strategy(
 
         random = draw(st.randoms())
 
-        # Share the slot 50/50 when the semantic-pool overlay already filled the same parameter.
-        semantically_substituted: set[str] = {
-            semantic.path[0] for semantic in existing_semantic if len(semantic.path) == 1
-        }
-
         new_value = dict(value)
         new_draws: list[DictionaryDraw] = []
         for parameter_name, eligible in eligible_per_parameter.items():
@@ -217,10 +212,8 @@ def build_dictionary_overlay_strategy(
             # Type-wide fills only if the strategy already included the param; parameter-specific forces it.
             if not present and not binding.is_parameter_specific:
                 continue
-            if parameter_name in semantically_substituted:
-                if random.random() >= 0.5:
-                    continue
-            elif random.random() >= binding.probability:
+            # A binding is explicit intent, so it overrides a value the resource pool put in the same slot.
+            if random.random() >= binding.probability:
                 continue
             entry_index, entry_value, matches_schema = draw(st.sampled_from(eligible))
             new_value[parameter_name] = entry_value
@@ -262,7 +255,7 @@ def build_dictionary_overlay_strategy(
             pool_draws=existing_pool,
             semantic_draws=existing_semantic,
             dictionary_draws=combined_draws,
-            constants_draws=_prune_overwritten_constants(existing_constants, new_value),
+            constants_draws=prune_overwritten_constants(existing_constants, new_value),
         )
 
     return overlay()
@@ -279,7 +272,7 @@ class _ResolvedBodyBinding:
 
 def resolve_body_bindings(
     *,
-    operation: OpenApiOperation,
+    operation: APIOperation,
     body_schema: JsonSchema,
     generation_config: GenerationConfig,
 ) -> list[_ResolvedBodyBinding]:
@@ -304,7 +297,7 @@ def resolve_body_bindings(
                 continue
             seen.add(key)
             pointer = parse_body_path(key)
-            leaf_schema = _resolve_body_leaf_schema(body_schema, pointer)
+            leaf_schema = resolve_body_leaf_schema(body_schema, pointer)
             if leaf_schema is None:
                 continue
             dictionary = dictionaries[binding.dictionary]
@@ -321,12 +314,12 @@ def resolve_body_bindings(
     return resolved
 
 
-def _resolve_body_leaf_schema(schema: JsonSchema, pointer: str) -> JsonSchema | None:
+def resolve_body_leaf_schema(schema: JsonSchema, pointer: str) -> JsonSchema | None:
     # `pointer` always comes from `parse_body_path`, so it is `/`-prefixed and non-empty.
     bundled = schema.get(BUNDLE_STORAGE_KEY) if isinstance(schema, dict) else None
     if not isinstance(bundled, dict):
         bundled = {}
-    leaf = _walk_leaf_schema(schema, pointer[1:].split("/"), bundled, ())
+    leaf = _walk_leaf_schema(schema, split_body_path(pointer), bundled, ())
     if leaf is None:
         return None
     # The leaf may reference other bundled definitions, so keep them reachable for validation.
@@ -350,16 +343,17 @@ def _walk_leaf_schema(
     if not isinstance(current, dict):
         return None
     segment, *rest = segments
+    # Consuming a segment shortens the path, so re-entering a recursive reference below can't loop.
     if segment == "*":
         items = current.get("items")
         if isinstance(items, (dict, bool)):
-            found = _walk_leaf_schema(items, rest, bundled, visited)
+            found = _walk_leaf_schema(items, rest, bundled, ())
             if found is not None:
                 return found
     else:
         properties = current.get("properties")
         if isinstance(properties, dict) and segment in properties:
-            found = _walk_leaf_schema(properties[segment], rest, bundled, visited)
+            found = _walk_leaf_schema(properties[segment], rest, bundled, ())
             if found is not None:
                 return found
     # The field may live inside a subschema, so descend combinator branches with the same path.
@@ -391,7 +385,7 @@ def build_body_dictionary_overlay_strategy(
     if not eligible_per_binding:
         return inner
 
-    @st.composite  # type: ignore[untyped-decorator]
+    @st.composite
     def overlay(draw: st.DrawFn) -> GeneratedValue | JsonValue:
         produced = draw(inner)
         existing_meta: MutationMetadata | None = None
@@ -412,9 +406,9 @@ def build_body_dictionary_overlay_strategy(
         random = draw(st.randoms())
         new_draws: list[DictionaryDraw] = []
         for binding, eligible in eligible_per_binding:
-            value = _walk_substitute(
+            value = walk_substitute(
                 value,
-                binding.pointer[1:].split("/"),
+                split_body_path(binding.pointer),
                 _make_replacement(
                     draw=draw,
                     random=random,
@@ -430,11 +424,11 @@ def build_body_dictionary_overlay_strategy(
 
         meta_to_return = existing_meta
         if existing_meta is not None and new_draws:
-            overwritten_segments = [draw_.body_path[1:].split("/") for draw_ in new_draws if draw_.body_path]
+            overwritten_segments = [split_body_path(draw_.body_path) for draw_ in new_draws if draw_.body_path]
             kept = tuple(
                 mutation
                 for mutation in existing_meta.mutations
-                if not any(_path_matches_pattern(mutation.path, pattern) for pattern in overwritten_segments)
+                if not any(path_matches_pattern(mutation.path, pattern) for pattern in overwritten_segments)
             )
             if not kept:
                 meta_to_return = None
@@ -448,13 +442,13 @@ def build_body_dictionary_overlay_strategy(
             pool_draws=existing_pool,
             semantic_draws=existing_semantic,
             dictionary_draws=combined_draws,
-            constants_draws=_prune_overwritten_constants(existing_constants, value),
+            constants_draws=prune_overwritten_constants(existing_constants, value),
         )
 
     return overlay()
 
 
-def _path_matches_pattern(path: tuple[str | int, ...], segments: list[str]) -> bool:
+def path_matches_pattern(path: tuple[str | int, ...], segments: list[str]) -> bool:
     # Match the overwritten leaf or any descendant: dropping `/user` covers `(user, email)`.
     if len(path) < len(segments):
         return False
@@ -499,7 +493,7 @@ def _make_replacement(
     return replace
 
 
-def _walk_substitute(
+def walk_substitute(
     target: JsonValue,
     segments: list[str],
     replace: Callable[[JsonValue], JsonValue],
@@ -512,7 +506,7 @@ def _walk_substitute(
     if head == "*":
         if not isinstance(target, list):
             return target
-        return [_walk_substitute(item, rest, replace, create_missing=create_missing) for item in target]
+        return [walk_substitute(item, rest, replace, create_missing=create_missing) for item in target]
     if isinstance(target, dict):
         if head not in target:
             # Force-insert only when the remaining path is fully scalar — a `*` in `rest` would
@@ -520,11 +514,11 @@ def _walk_substitute(
             if not create_missing or "*" in rest:
                 return target
             new_dict = dict(target)
-            new_dict[head] = _walk_substitute({}, rest, replace, create_missing=True)
+            new_dict[head] = walk_substitute({}, rest, replace, create_missing=True)
             return new_dict
         new_dict = dict(target)
-        new_dict[head] = _walk_substitute(target[head], rest, replace, create_missing=create_missing)
+        new_dict[head] = walk_substitute(target[head], rest, replace, create_missing=create_missing)
         return new_dict
     if create_missing and "*" not in segments and isinstance(target, (str, int, float, bool, type(None))):
-        return _walk_substitute({}, segments, replace, create_missing=True)
+        return walk_substitute({}, segments, replace, create_missing=True)
     return target

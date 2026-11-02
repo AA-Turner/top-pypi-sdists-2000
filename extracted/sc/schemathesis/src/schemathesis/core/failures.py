@@ -5,14 +5,18 @@ import itertools
 import textwrap
 import traceback
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 from json import JSONDecodeError
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
-from schemathesis.core.compat import BaseExceptionGroup
-from schemathesis.core.output import decode_response_text, escape_surrogates, prepare_response_payload
+from schemathesis.core.output import (
+    BINARY_PAYLOAD,
+    EMPTY_PAYLOAD,
+    escape_nonprintable,
+    escape_surrogates,
+    format_response_payload,
+)
 from schemathesis.core.transport import Response
 
 if TYPE_CHECKING:
@@ -36,7 +40,7 @@ def reason_phrase(status_code: int) -> str:
     return _RFC9110_PHRASES.get(status_code) or http.client.responses.get(status_code, "Unknown")
 
 
-class Severity(str, Enum):
+class Severity(StrEnum):
     # For server errors, security issues like ignored auth
     CRITICAL = "critical"
     # For schema violations
@@ -53,26 +57,41 @@ class Severity(str, Enum):
 _SEVERITY_ORDER = {Severity.CRITICAL: 0, Severity.HIGH: 1, Severity.MEDIUM: 2, Severity.LOW: 3}
 
 
-@dataclass
 class Failure(AssertionError):
     """API check failure."""
 
+    # Stable identity in reports; a code is never renumbered or reused.
+    # The hundreds digit says what went wrong, never the protocol: 1 response, 2 request handling, 3 stateful,
+    # 4 auth, 9 custom. A protocol-specific failure gets the next free code in its group.
+    code: ClassVar[str] = "ST901"
+    # Checks that report this failure.
+    checks: ClassVar[tuple[str, ...]] = ()
+    kind_title: ClassVar[str] = "Custom check failed"
+
     __slots__ = ("operation", "title", "message", "case_id", "severity")
+    # Whether rerunning as the identity that sent the request reproduces the failure.
+    reproducible_by_identity: ClassVar[bool] = True
 
     def __init__(
         self,
         *,
         operation: str | None,
-        title: str,
+        title: str | None = None,
         message: str,
         case_id: str | None = None,
         severity: Severity = Severity.MEDIUM,
     ) -> None:
         self.operation = operation
-        self.title = title
+        self.title = title if title is not None else self.kind_title
         self.message = message
         self.case_id = case_id
         self.severity = severity
+
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__name__}(operation={self.operation!r}, title={self.title!r}, "
+            f"message={self.message!r}, case_id={self.case_id!r}, severity={self.severity!r})"
+        )
 
     def __str__(self) -> str:
         if not self.message:
@@ -83,6 +102,7 @@ class Failure(AssertionError):
         """Wire representation shared by the NDJSON report and cross-worker transport."""
         return {
             "type": self.__class__.__name__,
+            "code": self.code,
             "operation": self.operation,
             "title": self.title,
             "message": self.message,
@@ -120,6 +140,10 @@ class Failure(AssertionError):
         """
         return ()
 
+    def identity_roles(self) -> dict[str, str]:
+        """Roles of the identities this failure involves, by identity name, to label their requests."""
+        return {}
+
 
 def _portable_filename(filename: str) -> str:
     # Origins are part of a stored failure's identity, so an absolute checkout root would tie it to one machine.
@@ -152,7 +176,11 @@ def get_origin(exception: BaseException, seen: tuple[BaseException, ...] = ()) -
 
 
 class CustomFailure(Failure):
-    __slots__ = ("operation", "title", "message", "exception", "case_id", "severity", "origin")
+    code = "ST901"
+    checks = ()
+    kind_title = "Custom check failed"
+
+    __slots__ = ("exception", "origin")
 
     def __init__(
         self,
@@ -164,12 +192,8 @@ class CustomFailure(Failure):
         case_id: str | None = None,
         severity: Severity = Severity.MEDIUM,
     ) -> None:
-        self.operation = operation
-        self.title = title
-        self.message = message
+        super().__init__(operation=operation, title=title, message=message, case_id=case_id, severity=severity)
         self.exception = exception
-        self.case_id = case_id
-        self.severity = severity
         self.origin = get_origin(exception)
 
     @property
@@ -181,7 +205,11 @@ class CustomFailure(Failure):
 class ResponseTimeExceeded(Failure):
     """Response took longer than expected."""
 
-    __slots__ = ("operation", "elapsed", "deadline", "title", "message", "case_id", "severity")
+    code = "ST112"
+    checks = ("max_response_time",)
+    kind_title = "Response time limit exceeded"
+
+    __slots__ = ("elapsed", "deadline")
 
     def __init__(
         self,
@@ -190,16 +218,12 @@ class ResponseTimeExceeded(Failure):
         elapsed: float,
         deadline: float,
         message: str,
-        title: str = "Response time limit exceeded",
+        title: str | None = None,
         case_id: str | None = None,
     ) -> None:
-        self.operation = operation
+        super().__init__(operation=operation, title=title, message=message, case_id=case_id, severity=Severity.LOW)
         self.elapsed = elapsed
         self.deadline = deadline
-        self.title = title
-        self.message = message
-        self.case_id = case_id
-        self.severity = Severity.LOW
 
     @property
     def _unique_key(self) -> str:
@@ -214,44 +238,93 @@ def is_reproducible_failure(failure: Failure) -> bool:
 class ServerError(Failure):
     """Server responded with an error."""
 
-    __slots__ = ("operation", "status_code", "title", "message", "case_id", "severity")
+    code = "ST101"
+    checks = ("not_a_server_error",)
+    kind_title = "Server error"
+
+    __slots__ = ("status_code", "status_name")
 
     def __init__(
         self,
         *,
         operation: str,
         status_code: int,
-        title: str = "Server error",
+        title: str | None = None,
         message: str = "",
         case_id: str | None = None,
+        status_name: str | None = None,
     ) -> None:
-        self.operation = operation
+        super().__init__(operation=operation, title=title, message=message, case_id=case_id, severity=Severity.CRITICAL)
         self.status_code = status_code
-        self.title = title
-        self.message = message
-        self.case_id = case_id
-        self.severity = Severity.CRITICAL
+        self.status_name = status_name
 
     @property
     def _unique_key(self) -> str:
+        # Several protocol statuses share one HTTP status code; their names tell them apart.
+        if self.status_name is not None:
+            return f"{self.status_code}:{self.status_name}"
         return str(self.status_code)
+
+
+class AuthScenario(StrEnum):
+    NO_AUTH = "no_auth"
+    INVALID_AUTH = "invalid_auth"
+    GENERATED_AUTH = "generated_auth"
+
+
+class IgnoredAuth(Failure):
+    """The API operation does not check the specified authentication."""
+
+    code = "ST401"
+    checks = ("ignored_auth",)
+    kind_title = "Authentication not enforced"
+
+    __slots__ = ("scenario",)
+
+    def __init__(
+        self,
+        *,
+        operation: str,
+        message: str,
+        scenario: AuthScenario,
+        title: str = "API accepts requests without authentication",
+        case_id: str | None = None,
+    ) -> None:
+        super().__init__(operation=operation, title=title, message=message, case_id=case_id, severity=Severity.CRITICAL)
+        # Which credentials the request carried when the API still let it through.
+        self.scenario = scenario
+
+    @property
+    def _unique_key(self) -> str:
+        return ""
+
+
+class ContentTypeServerError(ServerError):
+    """Server failed on a request whose `Content-Type` is malformed or not accepted by the operation."""
+
+    code = "ST102"
+    checks = ("not_a_server_error",)
+    kind_title = "Server error on undeclared request Content-Type"
+
+    __slots__ = ()
+
+    def __init__(self, *, operation: str, status_code: int, message: str, case_id: str | None = None) -> None:
+        super().__init__(
+            operation=operation,
+            status_code=status_code,
+            message=message,
+            case_id=case_id,
+        )
 
 
 class MalformedJson(Failure):
     """Failed to deserialize JSON."""
 
-    __slots__ = (
-        "operation",
-        "validation_message",
-        "document",
-        "position",
-        "lineno",
-        "colno",
-        "message",
-        "title",
-        "case_id",
-        "severity",
-    )
+    code = "ST109"
+    checks = ("response_schema_conformance",)
+    kind_title = "JSON deserialization error"
+
+    __slots__ = ("validation_message", "document", "position", "lineno", "colno")
 
     def __init__(
         self,
@@ -263,19 +336,15 @@ class MalformedJson(Failure):
         lineno: int,
         colno: int,
         message: str,
-        title: str = "JSON deserialization error",
+        title: str | None = None,
         case_id: str | None = None,
     ) -> None:
-        self.operation = operation
+        super().__init__(operation=operation, title=title, message=message, case_id=case_id, severity=Severity.MEDIUM)
         self.validation_message = validation_message
         self.document = document
         self.position = position
         self.lineno = lineno
         self.colno = colno
-        self.message = message
-        self.title = title
-        self.case_id = case_id
-        self.severity = Severity.MEDIUM
 
     @property
     def _unique_key(self) -> str:
@@ -298,7 +367,11 @@ class MalformedJson(Failure):
 class AcceptedNegativeData(Failure):
     """Response with negative data was accepted."""
 
-    __slots__ = ("operation", "message", "status_code", "expected_statuses", "title", "case_id", "severity")
+    code = "ST201"
+    checks = ("negative_data_rejection",)
+    kind_title = "Schema-violating request accepted"
+
+    __slots__ = ("status_code", "expected_statuses")
 
     def __init__(
         self,
@@ -307,26 +380,22 @@ class AcceptedNegativeData(Failure):
         message: str,
         status_code: int,
         expected_statuses: list[str],
-        title: str = "API accepted schema-violating request",
+        title: str | None = None,
         case_id: str | None = None,
     ) -> None:
-        self.operation = operation
-        self.message = message
+        super().__init__(operation=operation, title=title, message=message, case_id=case_id, severity=Severity.MEDIUM)
         self.status_code = status_code
         self.expected_statuses = expected_statuses
-        self.title = title
-        self.case_id = case_id
-        self.severity = Severity.MEDIUM
 
     @property
     def _unique_key(self) -> str:
         return str(self.status_code)
 
 
-class FailureGroup(BaseExceptionGroup):
+class FailureGroup(BaseExceptionGroup[Failure]):
     """Multiple distinct check failures."""
 
-    exceptions: Sequence[Failure]
+    exceptions: tuple[Failure, ...]
 
     def __init__(self, exceptions: Sequence[Failure], message: str = "", /) -> None:
         super().__init__(message, exceptions)
@@ -337,7 +406,20 @@ class FailureGroup(BaseExceptionGroup):
         return super().__new__(cls, message, list(failures))
 
 
-class MessageBlock(str, Enum):
+class _ReportedFailureGroup(FailureGroup, AssertionError):
+    """FailureGroup as reported to pytest so reporters classify it as a failed test."""
+
+
+_ReportedFailureGroup.__name__ = _ReportedFailureGroup.__qualname__ = "FailureGroup"
+
+
+def as_reported_failure(exc: FailureGroup) -> FailureGroup:
+    reported = _ReportedFailureGroup(list(exc.exceptions), exc.message)
+    reported.__notes__ = list(getattr(exc, "__notes__", []))
+    return reported.with_traceback(exc.__traceback__)
+
+
+class MessageBlock(StrEnum):
     CASE_ID = "case_id"
     FAILURE = "failure"
     STATUS = "status"
@@ -352,6 +434,24 @@ def failure_report_title(failures: Sequence[Failure]) -> str:
     if len(failures) > 1:
         message += "s"
     return message
+
+
+def group_failures(failures: Sequence[Failure]) -> list[tuple[str, list[Failure]]]:
+    """Collapse runs of same-title same-class failures (e.g. several `JsonSchemaError`s on one response)."""
+    return [
+        (title, list(group))
+        for (_, title), group in itertools.groupby(failures, key=lambda failure: (type(failure), failure.title))
+    ]
+
+
+def reproducible_by_identity(failures: Sequence[Failure]) -> bool:
+    """Whether replaying as the identity that sent the request reproduces every failure."""
+    return all(failure.reproducible_by_identity for failure in failures)
+
+
+def case_header(index: int, case_id: str) -> str:
+    """The heading of a numbered failure block."""
+    return f"{index}. Test Case ID: {case_id}"
 
 
 def format_failures(
@@ -372,12 +472,9 @@ def format_failures(
     else:
         output = ""
 
-    # Failures — collapse the title for runs of same-title same-class failures
-    # (e.g. multiple `JsonSchemaError`s on one response) into one header.
-    for (_, title), group_iter in itertools.groupby(failures, key=lambda f: (type(f), f.title)):
-        group = list(group_iter)
+    for title, group in group_failures(failures):
         suffix = f" ({len(group)} violations)" if len(group) > 1 else ""
-        output += formatter(MessageBlock.FAILURE, f"\n- {title}{suffix}")
+        output += formatter(MessageBlock.FAILURE, f"\n- {group[0].code} {title}{suffix}")
         for failure in group:
             if failure.message:
                 output += "\n\n"
@@ -386,25 +483,24 @@ def format_failures(
 
     # Response status
     if isinstance(response, Response):
-        reason = reason_phrase(response.status_code)
-        output += formatter(MessageBlock.STATUS, f"\n[{response.status_code}] {reason}:\n")
-        # Response payload
-        if response.content is None or not response.content:
-            output += "\n    <EMPTY>"
+        # A transport-provided status line already carries its own message, so it ends without a colon.
+        if response.status_line is not None:
+            status_line = escape_nonprintable(response.status_line)
         else:
-            text = decode_response_text(response)
-            if text is None:
-                output += "\n    <BINARY>"
-            else:
-                payload = prepare_response_payload(text, config=config)
-                output += textwrap.indent(f"\n`{payload}`", prefix="    ")
-    if auth_identity is not None:
-        output += formatter(
+            status_line = f"[{response.status_code}] {reason_phrase(response.status_code)}:"
+        output += formatter(MessageBlock.STATUS, f"\n{status_line}\n")
+        payload = format_response_payload(response, config=config)
+        if payload in (EMPTY_PAYLOAD, BINARY_PAYLOAD):
+            output += f"\n    {payload}"
+        else:
+            output += textwrap.indent(f"\n`{payload}`", prefix="    ")
+    if auth_identity is not None and reproducible_by_identity(failures):
+        output += "\n" + formatter(
             MessageBlock.STATUS, f"\nIdentity: {auth_identity} (reproduce with --auth-wfc-user {auth_identity})"
         )
     # `response`/`curl` are None for failures not tied to a case (e.g. after_run): nothing to show.
     if curl is not None:
-        _curl = "\n".join(f"    {line}" for line in curl.splitlines())
+        _curl = "\n".join(f"    {line}" if line else line for line in curl.splitlines())
         output += "\n" + formatter(MessageBlock.CURL, f"\nReproduce with:\n\n{_curl}")
 
     return escape_surrogates(output.rstrip("\n"))

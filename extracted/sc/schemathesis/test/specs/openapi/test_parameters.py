@@ -1,3 +1,4 @@
+import base64
 import datetime
 import re
 
@@ -9,163 +10,134 @@ from hypothesis.errors import FailedHealthCheck, NoSuchExample, Unsatisfiable
 
 import schemathesis
 from schemathesis.core import NOT_SET
-from schemathesis.core.errors import InvalidSchema
+from schemathesis.core.errors import InvalidSchema, RejectedSchemaDefinition
+from schemathesis.core.transforms import deepclone
+from schemathesis.generation.hypothesis.examples import generate_many
 from schemathesis.generation.modes import GenerationMode
 from schemathesis.openapi.generation.filters import is_valid_header
 from schemathesis.specs.openapi._hypothesis import get_default_format_strategies
 from schemathesis.specs.openapi.adapter.security import ORIGINAL_SECURITY_TYPE_KEY
-from test.utils import as_param
+from test.utils import assert_requests_call, run_given
 
 
-@pytest.mark.parametrize("schema_name", ["simple_swagger.yaml", "simple_openapi.yaml"])
+def _parameter(version, name, location, type_):
+    if version == "2.0":
+        return {"name": name, "in": location, "required": True, "type": type_}
+    return {"name": name, "in": location, "required": True, "schema": {"type": type_}}
+
+
+@pytest.mark.parametrize("version", ["2.0", "3.0.2"])
 @pytest.mark.parametrize("type_", ["string", "integer", "array", "boolean", "number"])
-def test_headers(testdir, schema_name, type_):
-    # When parameter is specified for "header"
-    if schema_name == "simple_swagger.yaml":
-        kwargs = {"type": type_}
-    else:
-        kwargs = {"schema": {"type": type_}}
-    testdir.make_test(
-        """
-@schema.parametrize()
-@settings(suppress_health_check=[HealthCheck.filter_too_much], deadline=None, max_examples=3)
-def test_(case):
-    assert_str(case.headers["X-Header"])
-    assert_requests_call(case)
-        """,
-        schema_name=schema_name,
-        **as_param({"name": "X-Header", "in": "header", "required": True, **kwargs}),
-        generation_modes=[GenerationMode.POSITIVE],
+def test_headers(ctx, version, type_):
+    operation = ctx.openapi.load_operation(
+        "GET /users",
+        {"parameters": [_parameter(version, "X-Header", "header", type_)], "responses": {"200": {"description": "OK"}}},
+        version=version,
     )
-    # Then the generated test case should contain it in its `headers` attribute
-    testdir.run_and_assert(passed=1)
+
+    @run_given(case=operation.as_strategy(), max_examples=3)
+    def test(case):
+        assert isinstance(case.headers["X-Header"], str)
+        assert_requests_call(case)
 
 
 @pytest.mark.parametrize("type_", ["string", "integer", "array", "object", "boolean", "number"])
-def test_cookies(testdir, type_):
-    # When parameter is specified for "cookie"
-    parameter = {"name": "token", "in": "cookie", "required": True, "schema": {"type": type_}}
-    # The default form-style `explode=true` collapses array/object cookies to no
-    # value (a single cookie name cannot carry repeated values), so for those
-    # types we use `explode=false` to get a serialized scalar cookie value.
+def test_cookies(ctx, type_):
+    parameter = _parameter("3.0.2", "token", "cookie", type_)
+    # Exploded array/object cookies serialize to no value: one cookie name cannot carry repeated values.
     if type_ in ("array", "object"):
         parameter["explode"] = False
-    testdir.make_test(
-        """
-@schema.parametrize()
-@settings(suppress_health_check=[HealthCheck.filter_too_much, HealthCheck.data_too_large], deadline=None, max_examples=20)
-def test_(case):
-    assert_str(case.cookies["token"])
-    assert_requests_call(case)
-        """,
-        schema_name="simple_openapi.yaml",
-        **as_param(parameter),
-        generation_modes=[GenerationMode.POSITIVE],
+    operation = ctx.openapi.load_operation(
+        "GET /users", {"parameters": [parameter], "responses": {"200": {"description": "OK"}}}
     )
-    # Then the generated test case should contain it in its `cookies` attribute
-    testdir.run_and_assert(passed=1)
+
+    @run_given(case=operation.as_strategy(), max_examples=20)
+    def test(case):
+        assert isinstance(case.cookies["token"], str)
+        assert_requests_call(case)
 
 
-def test_body(testdir):
-    # When parameter is specified for "body"
-    testdir.make_test(
-        """
-@schema.include(method="POST").parametrize()
-@settings(max_examples=3, deadline=None)
-def test_(case):
-    assert_int(case.body)
-    assert_requests_call(case)
-        """,
-        paths={
-            "/users": {
-                "post": {
-                    "parameters": [{"name": "id", "in": "body", "required": True, "schema": {"type": "integer"}}],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+def test_cookie_names_are_case_sensitive(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /x",
+        {
+            "parameters": [
+                {"name": "sid", "in": "cookie", "required": True, "schema": {"enum": ["lower"]}},
+                {"name": "SID", "in": "cookie", "required": True, "schema": {"enum": ["upper"]}},
+            ],
+            "responses": {"200": {"description": "OK"}},
         },
-        generation_modes=[GenerationMode.POSITIVE],
     )
-    # Then the generated test case should contain it in its `body` attribute
-    testdir.run_and_assert(passed=1)
+
+    @run_given(case=operation.as_strategy(), max_examples=1)
+    def test(case):
+        assert case.cookies == {"sid": "lower", "SID": "upper"}
 
 
-def test_path(testdir):
-    # When parameter is specified for "path"
-    testdir.make_test(
-        """
-@schema.include(path_regex="/users/{user_id}").parametrize()
-@settings(max_examples=3, deadline=None)
-def test_(case):
-    if not hasattr(case.meta.phase.data, "description"):
-        assert_int(case.path_parameters["user_id"])
-    assert_requests_call(case)
-        """,
-        paths={
-            "/users/{user_id}": {
-                "get": {
-                    "parameters": [{"name": "user_id", "required": True, "in": "path", "type": "integer"}],
-                    "responses": {"200": {"description": "OK"}},
+@pytest.mark.parametrize(
+    ("label", "definition", "version", "is_expected"),
+    [
+        (
+            "POST /users",
+            {"parameters": [{"name": "id", "in": "body", "required": True, "schema": {"type": "integer"}}]},
+            "2.0",
+            lambda case: isinstance(case.body, int),
+        ),
+        (
+            "GET /users/{user_id}",
+            {"parameters": [{"name": "user_id", "required": True, "in": "path", "type": "integer"}]},
+            "2.0",
+            lambda case: isinstance(case.path_parameters["user_id"], int),
+        ),
+        (
+            "GET /users/{user_id}/{event_id}",
+            {
+                "parameters": [
+                    {"name": "user_id", "required": True, "in": "path", "type": "integer"},
+                    {"name": "event_id", "required": True, "in": "path", "type": "integer"},
+                ]
+            },
+            "2.0",
+            lambda case: (
+                isinstance(case.path_parameters["user_id"], int) and isinstance(case.path_parameters["event_id"], int)
+            ),
+        ),
+        (
+            "POST /users",
+            {"parameters": [{"name": "status", "in": "formData", "required": True, "type": "string"}]},
+            "2.0",
+            lambda case: isinstance(case.body["status"], str),
+        ),
+        (
+            "POST /users",
+            {
+                "requestBody": {
+                    "required": True,
+                    "content": {
+                        "application/problem+json": {
+                            "schema": {"type": "object", "properties": {"key": {"type": "string"}}, "required": ["key"]}
+                        }
+                    },
                 }
-            }
-        },
-        generation_modes=[GenerationMode.POSITIVE],
+            },
+            "3.0.2",
+            lambda case: (
+                case.as_transport_kwargs()["headers"]["Content-Type"] == "application/problem+json"
+                and "key" in case.as_transport_kwargs()["json"]
+            ),
+        ),
+    ],
+    ids=["body", "path", "multiple-path-variables", "form-data", "json-media-type"],
+)
+def test_parameter_location_is_generated(ctx, label, definition, version, is_expected):
+    operation = ctx.openapi.load_operation(
+        label, {**definition, "responses": {"200": {"description": "OK"}}}, version=version
     )
-    # Then the generated test case should contain it its `path_parameters` attribute
-    testdir.run_and_assert(passed=1)
 
-
-def test_multiple_path_variables(testdir):
-    # When there are multiple parameters for "path"
-    testdir.make_test(
-        """
-@schema.include(path_regex="/users/{user_id}/{event_id}").parametrize()
-@settings(max_examples=3, deadline=None)
-def test_(case):
-    if not hasattr(case.meta.phase.data, "description"):
-        assert_int(case.path_parameters["user_id"])
-        assert_int(case.path_parameters["event_id"])
-    assert_requests_call(case)
-        """,
-        paths={
-            "/users/{user_id}/{event_id}": {
-                "get": {
-                    "parameters": [
-                        {"name": "user_id", "required": True, "in": "path", "type": "integer"},
-                        {"name": "event_id", "required": True, "in": "path", "type": "integer"},
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then the generated test case should contain them its `path_parameters` attribute
-    testdir.run_and_assert(passed=1)
-
-
-def test_form_data(testdir):
-    # When parameter is specified for "formData"
-    testdir.make_test(
-        """
-@schema.include(method="POST").parametrize()
-@settings(max_examples=1, deadline=None)
-def test_(case):
-    assert_str(case.body["status"])
-    assert_requests_call(case)
-        """,
-        paths={
-            "/users": {
-                "post": {
-                    "parameters": [{"name": "status", "in": "formData", "required": True, "type": "string"}],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then the generated test case should contain it in its `body` attribute
-    testdir.run_and_assert(passed=1)
+    @run_given(case=operation.as_strategy(), max_examples=3)
+    def test(case):
+        assert is_expected(case), case
+        assert_requests_call(case)
 
 
 @pytest.fixture(params=["swagger", "openapi"])
@@ -199,23 +171,13 @@ def schema(schema_spec, location, base_schema):
     return base_schema
 
 
-def test_security_definitions_api_key(testdir, schema, location):
-    # When schema contains "apiKeySecurity" security definition
-    # And it is in query or header
-    location = "headers" if location == "header" else location
-    testdir.make_test(
-        f"""
-@schema.parametrize()
-@settings(max_examples=1, deadline=None)
-def test_(case):
-    assert_str(case.{location}["api_key"])
-    assert_requests_call(case)
-        """,
-        schema=schema,
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then the generated test case should contain API key in a proper place
-    testdir.run_and_assert(passed=1)
+def test_security_definitions_api_key(ctx, schema, location):
+    container = "headers" if location == "header" else location
+
+    @run_given(case=ctx.openapi.from_full_schema(schema).as_strategy(), max_examples=1)
+    def test(case):
+        assert isinstance(getattr(case, container)["api_key"], str)
+        assert_requests_call(case)
 
 
 @pytest.fixture
@@ -226,22 +188,11 @@ def cookie_schema(simple_openapi):
     return simple_openapi
 
 
-def test_security_definitions_api_key_cookie(testdir, cookie_schema):
-    # When schema contains "apiKeySecurity" security definition
-    # And it is in cookie
-    testdir.make_test(
-        """
-@schema.parametrize()
-@settings(max_examples=1, deadline=None)
-def test_(case):
-    assert_str(case.cookies["api_key"])
-    assert_requests_call(case)
-        """,
-        schema=cookie_schema,
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then the generated test case should contain API key in a proper place
-    testdir.run_and_assert(passed=1)
+def test_security_definitions_api_key_cookie(ctx, cookie_schema):
+    @run_given(case=ctx.openapi.from_full_schema(cookie_schema).as_strategy(), max_examples=1)
+    def test(case):
+        assert isinstance(case.cookies["api_key"], str)
+        assert_requests_call(case)
 
 
 def _assert_parameter(schema, schema_spec, location, expected=None):
@@ -277,7 +228,7 @@ def _assert_parameter(schema, schema_spec, location, expected=None):
                 }
             ]
         )
-    parameters = [param for param in operation.security.iter_parameters() if param["in"] == location]
+    parameters = [param.definition for param in operation.security.iter_parameters() if param.location == location]
     # Then it should be presented as a "string" parameter
     assert parameters == expected
 
@@ -303,21 +254,14 @@ def overridden_security_schema(schema, schema_spec):
     return schema
 
 
-def test_security_definitions_override(testdir, overridden_security_schema, location):
-    # When "security" is an empty list in the API operation definition
-    testdir.make_test(
-        """
-@schema.parametrize()
-@settings(max_examples=1, deadline=None)
-def test_(case):
-    assert "api_key" not in (case.headers or [])
-    assert "api_key" not in (case.query or [])
-    assert_requests_call(case)
-        """,
-        schema=overridden_security_schema,
-    )
-    # Then the generated test case should not contain API key
-    testdir.run_and_assert(passed=1)
+def test_security_definitions_override(ctx, overridden_security_schema, location):
+    strategy = ctx.openapi.from_full_schema(overridden_security_schema).as_strategy()
+
+    @run_given(case=strategy, max_examples=1)
+    def test(case):
+        assert "api_key" not in (case.headers or [])
+        assert "api_key" not in (case.query or [])
+        assert_requests_call(case)
 
 
 @pytest.fixture
@@ -331,48 +275,24 @@ def basic_auth_schema(base_schema, schema_spec):
     return base_schema
 
 
-def test_security_definitions_basic_auth(testdir, basic_auth_schema):
-    # When schema is using HTTP Basic Auth
-    testdir.make_test(
-        """
-import base64
-
-@schema.parametrize()
-@settings(max_examples=10, deadline=None)
-def test_(case):
-    assert "Authorization" in case.headers
-    auth = case.headers["Authorization"]
-    assert auth.startswith("Basic ")
-    assert isinstance(base64.b64decode(auth[6:]), bytes)
-    assert_requests_call(case)
-        """,
-        schema=basic_auth_schema,
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then the generated data should contain a valid "Authorization" header
-    testdir.run_and_assert(passed=1)
+def test_security_definitions_basic_auth(ctx, basic_auth_schema):
+    @run_given(case=ctx.openapi.from_full_schema(basic_auth_schema).as_strategy(), max_examples=10)
+    def test(case):
+        auth = case.headers["Authorization"]
+        assert auth.startswith("Basic ")
+        base64.b64decode(auth[6:])
+        assert_requests_call(case)
 
 
-def test_security_definitions_bearer_auth(testdir, simple_openapi):
-    # When schema is using HTTP Bearer Auth scheme
+def test_security_definitions_bearer_auth(ctx, simple_openapi):
     components = simple_openapi.setdefault("components", {})
     components["securitySchemes"] = {"bearer_auth": {"type": "http", "scheme": "bearer"}}
     simple_openapi["security"] = [{"bearer_auth": []}]
-    testdir.make_test(
-        """
-@schema.parametrize()
-@settings(max_examples=1, deadline=None)
-def test_(case):
-    assert "Authorization" in case.headers
-    auth = case.headers["Authorization"]
-    assert auth.startswith("Bearer ")
-    assert_requests_call(case)
-        """,
-        schema=simple_openapi,
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then the generated test case should contain a valid "Authorization" header
-    testdir.run_and_assert("-s", passed=1)
+
+    @run_given(case=ctx.openapi.from_full_schema(simple_openapi).as_strategy(), max_examples=1)
+    def test(case):
+        assert case.headers["Authorization"].startswith("Bearer ")
+        assert_requests_call(case)
 
 
 def test_bearer_auth_valid_header():
@@ -384,20 +304,31 @@ def test_bearer_auth_valid_header():
         find(strategy, lambda x: not is_valid_header({"x": x}))
 
 
-def test_unknown_data(testdir):
-    # When parameter is specified for unknown "in"
-    # And schema validation is disabled
-    testdir.make_test(
-        """
-@schema.parametrize()
-@settings(max_examples=1)
-def test_(case):
-    pass
-        """,
-        **as_param({"name": "status", "in": "unknown", "required": True, "type": "string"}),
+def test_positive_bearer_tokens_are_ascii(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /x",
+        {"responses": {"200": {"description": "OK"}}},
+        components={"securitySchemes": {"bearer_auth": {"type": "http", "scheme": "bearer"}}},
+        security=[{"bearer_auth": []}],
     )
-    # Then the generated test ignores this parameter
-    testdir.run_and_assert(passed=1)
+    strategy = operation.as_strategy(generation_mode=GenerationMode.POSITIVE)
+    with pytest.raises(NoSuchExample):
+        find(strategy, lambda case: not case.headers["Authorization"].isascii())
+
+
+def test_unknown_data(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /users",
+        {
+            "parameters": [{"name": "status", "in": "unknown", "required": True, "type": "string"}],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="2.0",
+    )
+
+    @run_given(case=operation.as_strategy(), max_examples=1)
+    def test(case):
+        assert not case.query and not case.headers and not case.cookies, case
 
 
 @pytest.mark.hypothesis_nested
@@ -440,61 +371,13 @@ def test_date_deserializing(ctx):
     test()
 
 
-def test_json_media_type(testdir):
-    # When API operation expects a JSON-compatible media type
-    testdir.make_test(
-        """
-@settings(max_examples=10, deadline=None)
-@schema.parametrize()
-def test_(case):
-    kwargs = case.as_transport_kwargs()
-    assert kwargs["headers"]["Content-Type"] == "application/problem+json"
-    assert "key" in kwargs["json"]
-    assert_requests_call(case)
-        """,
-        schema={
-            "openapi": "3.0.2",
-            "info": {"title": "Test", "description": "Test", "version": "0.1.0"},
-            "paths": {
-                "/users": {
-                    "post": {
-                        "requestBody": {
-                            "required": True,
-                            "content": {
-                                "application/problem+json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"key": {"type": "string"}},
-                                        "required": ["key"],
-                                    }
-                                }
-                            },
-                        },
-                        "responses": {
-                            "200": {
-                                "description": "OK",
-                            }
-                        },
-                    }
-                }
-            },
-        },
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then the payload should be serialized as json
-    testdir.run_and_assert(passed=1)
-
-
 def test_nullable_body_behind_a_reference(ctx):
     # When a body parameter is nullable and is behind a reference
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /payload",
         {
-            "/payload": {
-                "post": {
-                    "parameters": [{"$ref": "#/parameters/Foo"}],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "parameters": [{"$ref": "#/parameters/Foo"}],
+            "responses": {"200": {"description": "OK"}},
         },
         parameters={
             "Foo": {
@@ -507,7 +390,6 @@ def test_nullable_body_behind_a_reference(ctx):
         },
     )
     # Then it should be properly collected
-    operation = schema["/payload"]["POST"]
     # And its definition is not transformed to JSON Schema
     assert operation.body[0].definition == {
         "in": "body",
@@ -537,8 +419,7 @@ def test_null_body(ctx):
     )
     schema.config.update(base_url=api.base_url)
 
-    @given(case=schema["/api/payload"]["POST"].as_strategy())
-    @settings(max_examples=5, deadline=None)
+    @run_given(case=schema["/api/payload"]["POST"].as_strategy(), max_examples=5)
     def test(case):
         assume(case.body is None)
         # Then it should be possible to send `null`
@@ -546,23 +427,18 @@ def test_null_body(ctx):
         # And the application should return what was sent (`/api/payload` behaves this way)
         assert response.content.strip() == b"null"
 
-    test()
-
 
 def test_read_only(ctx):
     # When API operation has `readOnly` properties
     api = ctx.openapi.apps.read_only()
     schema = schemathesis.openapi.from_url(api.schema_url)
 
-    @given(case=schema["/api/read_only"]["GET"].as_strategy())
-    @settings(max_examples=1, deadline=None)
+    @run_given(case=schema["/api/read_only"]["GET"].as_strategy(), max_examples=1)
     def test(case):
         # Then `writeOnly` should not affect the response schema
         response = case.call_and_validate()
         assert "write" not in response.json()
         assert "read" in response.json()
-
-    test()
 
 
 def test_write_only(ctx):
@@ -570,8 +446,7 @@ def test_write_only(ctx):
     api = ctx.openapi.apps.write_only()
     schema = schemathesis.openapi.from_url(api.schema_url)
 
-    @given(case=schema["/api/write_only"]["POST"].as_strategy())
-    @settings(max_examples=1)
+    @run_given(case=schema["/api/write_only"]["POST"].as_strategy(), max_examples=1)
     def test(case):
         # Then `writeOnly` should be used only in requests
         assert "write" in case.body
@@ -581,17 +456,359 @@ def test_write_only(ctx):
         assert "write" not in response.json()
         assert "read" in response.json()
 
-    test()
+
+READ_ONLY_ID = {"type": "integer", "readOnly": True}
+NAME = {"type": "string"}
+
+
+def _json_body(schema):
+    return {"requestBody": {"required": True, "content": {"application/json": {"schema": schema}}}}
+
+
+def _keys(value):
+    if isinstance(value, dict):
+        yield from value
+        for item in value.values():
+            yield from _keys(item)
+    elif isinstance(value, list):
+        for item in value:
+            yield from _keys(item)
+
+
+@pytest.mark.parametrize(
+    ("version", "definition", "components"),
+    [
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {
+                    "type": "object",
+                    "properties": {"id": {"$ref": "#/components/schemas/Id"}, "name": NAME},
+                    "required": ["name"],
+                }
+            ),
+            {"schemas": {"Id": READ_ONLY_ID}},
+            id="ref-to-read-only",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {
+                    "type": "object",
+                    "properties": {"id": {"allOf": [{"$ref": "#/components/schemas/Id"}]}, "name": NAME},
+                    "required": ["name"],
+                }
+            ),
+            {"schemas": {"Id": READ_ONLY_ID}},
+            id="all-of-ref",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {"allOf": [{"$ref": "#/components/schemas/Id"}], "readOnly": False},
+                        "name": NAME,
+                    },
+                    "required": ["name"],
+                }
+            ),
+            {"schemas": {"Id": READ_ONLY_ID}},
+            id="all-of-ref-with-writable-sibling",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {"type": "object", "properties": {"id": {"allOf": [READ_ONLY_ID]}, "name": NAME}, "required": ["name"]}
+            ),
+            {},
+            id="inline-all-of",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body({"properties": {"id": READ_ONLY_ID, "name": NAME}, "required": ["name"]}),
+            {},
+            id="untyped-parent",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body({"$ref": "#/components/schemas/Resource"}),
+            {"schemas": {"Resource": {"properties": {"id": READ_ONLY_ID, "name": NAME}, "required": ["name"]}}},
+            id="untyped-parent-behind-ref",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {
+                    "allOf": [
+                        {"$ref": "#/components/schemas/Resource"},
+                        {"properties": {"name": NAME}, "required": ["name"]},
+                    ]
+                }
+            ),
+            {"schemas": {"Resource": {"properties": {"id": READ_ONLY_ID}}}},
+            id="all-of-untyped-base",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {
+                    "allOf": [{"$ref": "#/components/schemas/Resource"}],
+                    "properties": {"name": NAME},
+                    "required": ["id", "name"],
+                }
+            ),
+            {"schemas": {"Resource": {"properties": {"id": READ_ONLY_ID}}}},
+            id="required-in-parent-of-ref-base",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {
+                    "type": "object",
+                    "properties": {"id": {"$ref": "#/components/schemas/Id"}, "name": NAME},
+                    "required": ["id", "name"],
+                }
+            ),
+            {"schemas": {"Id": READ_ONLY_ID}},
+            id="required-ref",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {
+                    "type": "object",
+                    "properties": {"id": {"$ref": "#/components/schemas/Id"}, "name": NAME},
+                    "required": ["name"],
+                }
+            ),
+            {"schemas": {"Id": {**READ_ONLY_ID, "nullable": True}}},
+            id="nullable-ref-target",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {
+                    "type": "object",
+                    "properties": {
+                        "name": NAME,
+                        "owner": {"$ref": "#/components/schemas/Id"},
+                        "child": {"$ref": "#/components/schemas/Child"},
+                    },
+                    "required": ["name", "child"],
+                }
+            ),
+            {
+                "schemas": {
+                    "Id": {**READ_ONLY_ID, "nullable": True},
+                    "Child": {
+                        "properties": {"id": {"$ref": "#/components/schemas/Id"}, "name": NAME},
+                        "required": ["name"],
+                    },
+                }
+            },
+            id="nullable-ref-target-shared",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {
+                    "type": "object",
+                    "properties": {
+                        "name": NAME,
+                        "child": {
+                            "properties": {"id": {"$ref": "#/components/schemas/Id"}, "name": NAME},
+                            "required": ["name"],
+                        },
+                    },
+                    "required": ["name", "child"],
+                }
+            ),
+            {"schemas": {"Id": READ_ONLY_ID}},
+            id="nested-object",
+        ),
+        pytest.param(
+            "3.0.2",
+            _json_body(
+                {
+                    "type": "object",
+                    "properties": {
+                        "name": NAME,
+                        "items": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "properties": {"id": {"$ref": "#/components/schemas/Id"}, "name": NAME},
+                                "required": ["name"],
+                            },
+                        },
+                    },
+                    "required": ["name", "items"],
+                }
+            ),
+            {"schemas": {"Id": READ_ONLY_ID}},
+            id="array-items",
+        ),
+        pytest.param(
+            "2.0",
+            {
+                "parameters": [
+                    {"in": "body", "name": "body", "required": True, "schema": {"$ref": "#/definitions/Resource"}}
+                ]
+            },
+            None,
+            id="swagger-2.0",
+        ),
+        pytest.param(
+            "3.1.0",
+            _json_body(
+                {
+                    "type": "object",
+                    "properties": {"id": {"$ref": "#/components/schemas/Id"}, "name": NAME},
+                    "required": ["name"],
+                }
+            ),
+            {"schemas": {"Id": READ_ONLY_ID}},
+            id="openapi-3.1-ref",
+        ),
+        pytest.param(
+            "3.1.0",
+            _json_body(
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {"anyOf": [{"$ref": "#/components/schemas/Id"}, {"type": "null"}]},
+                        "name": NAME,
+                    },
+                    "required": ["name"],
+                }
+            ),
+            {"schemas": {"Id": READ_ONLY_ID}},
+            id="openapi-3.1-nullable-ref",
+        ),
+    ],
+)
+def test_read_only_properties_are_not_generated_in_request_bodies(ctx, version, definition, components):
+    kwargs = {"definitions": {"Resource": {"properties": {"id": READ_ONLY_ID, "name": NAME}, "required": ["name"]}}}
+    if components is not None:
+        kwargs = {"components": components}
+    operation = ctx.openapi.load_operation(
+        "POST /items", {**definition, "responses": {"200": {"description": "OK"}}}, version=version, **kwargs
+    )
+    bodies = [case.body for case in generate_many(operation.as_strategy(generation_mode=GenerationMode.POSITIVE), 30)]
+    assert any(isinstance(body, dict) and "name" in body for body in bodies)
+    for body in bodies:
+        assert "id" not in set(_keys(body)), f"Read-only field sent: {body!r}"
+
+
+@pytest.mark.parametrize("required", [True, "id"], ids=["boolean", "string"])
+@pytest.mark.parametrize("behind_ref", [False, True], ids=["inline", "ref"])
+def test_read_only_property_under_malformed_required_is_reported_as_schema_error(ctx, required, behind_ref):
+    resource = {"properties": {"id": READ_ONLY_ID, "name": NAME}, "required": required}
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "parameters": [
+                {
+                    "in": "body",
+                    "name": "body",
+                    "required": True,
+                    "schema": {"$ref": "#/definitions/Resource"} if behind_ref else resource,
+                }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="2.0",
+        definitions={"Resource": resource},
+    )
+    with pytest.raises(RejectedSchemaDefinition, match="Invalid `required` definition"):
+        generate_many(operation.as_strategy(), 1)
+
+
+@pytest.mark.parametrize(
+    "read_only",
+    ["true", 1],
+    ids=["string", "integer"],
+)
+def test_truthy_read_only_flag_is_honored(ctx, read_only):
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        _json_body(
+            {
+                "type": "object",
+                "properties": {"id": {"type": "integer", "readOnly": read_only}, "name": NAME},
+                "required": ["name"],
+            }
+        )
+        | {"responses": {"200": {"description": "OK"}}},
+    )
+    for case in generate_many(operation.as_strategy(generation_mode=GenerationMode.POSITIVE), 30):
+        assert "id" not in case.body, f"Read-only field sent: {case.body!r}"
+
+
+@pytest.mark.timeout(30)
+def test_read_only_property_in_self_referencing_all_of(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        _json_body(
+            {
+                "allOf": [{"$ref": "#/components/schemas/Node"}],
+                "properties": {"name": NAME, "child": {"allOf": [{"$ref": "#/components/schemas/Node"}]}},
+                "required": ["id", "name"],
+            }
+        )
+        | {"responses": {"200": {"description": "OK"}}},
+        components={
+            "schemas": {"Node": {"allOf": [{"$ref": "#/components/schemas/Node"}], "properties": {"id": READ_ONLY_ID}}}
+        },
+    )
+    # Checked outside generation, which would swallow the timeout.
+    assert not operation.body[0].is_valid({"name": "x", "child": {"id": 1}})
+    bodies = [case.body for case in generate_many(operation.as_strategy(generation_mode=GenerationMode.POSITIVE), 30)]
+    assert any(isinstance(body, dict) and "name" in body for body in bodies)
+    for body in bodies:
+        assert "id" not in set(_keys(body)), f"Read-only field sent: {body!r}"
+
+
+def test_read_only_property_is_sent_where_another_media_type_keeps_it_writable(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"id": READ_ONLY_ID, "name": NAME},
+                            "required": ["name"],
+                        }
+                    },
+                    "application/x-www-form-urlencoded": {
+                        "schema": {"type": "object", "properties": {"id": {"type": "integer"}}, "required": ["id"]}
+                    },
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    bodies = {
+        case.media_type: case.body
+        for case in generate_many(operation.as_strategy(generation_mode=GenerationMode.POSITIVE), 30)
+    }
+    assert "id" not in bodies["application/json"]
+    assert "id" in bodies["application/x-www-form-urlencoded"]
 
 
 @pytest.mark.parametrize("location", ["path", "query", "header", "cookie"])
 def test_missing_content_and_schema(ctx, location):
     # When an Open API 3 parameter is missing `schema` & `content`
-    schema = ctx.openapi.load_schema(
-        {"/foo": {"get": {"parameters": [{"in": location, "name": "X-Foo", "required": True}]}}}
+    operation = ctx.openapi.load_operation(
+        "GET /foo", {"parameters": [{"in": location, "name": "X-Foo", "required": True}]}
     )
 
-    @given(schema["/foo"]["GET"].as_strategy())
+    @given(operation.as_strategy())
     @settings(max_examples=1)
     def test(case):
         pass
@@ -605,17 +822,141 @@ def test_missing_content_and_schema(ctx, location):
         test()
 
 
+@pytest.mark.parametrize(
+    ("version", "location"),
+    [("3.0.2", "query"), ("3.2.0", "querystring")],
+    ids=["openapi-3.0-query", "openapi-3.2-querystring"],
+)
+def test_empty_parameter_content(ctx, version, location):
+    operation = ctx.openapi.load_operation(
+        "GET /x",
+        {
+            "parameters": [{"name": "q", "in": location, "required": True, "content": {}}],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version=version,
+    )
+
+    @given(case=operation.as_strategy())
+    @settings(max_examples=1)
+    def test(case):
+        pass
+
+    with pytest.raises(
+        InvalidSchema,
+        match=f"Can not generate data for {location} parameter `q`! Its `content` must contain exactly one entry",
+    ):
+        test()
+
+
+@pytest.mark.parametrize(
+    ("parameter", "message"),
+    [
+        (
+            {"content": {"application/json": "oops"}},
+            "Media type `application/json` for query parameter `a` must be an object",
+        ),
+        (
+            {"schema": 5},
+            "Can not generate data for query parameter `a`! Its schema should be an object or boolean, got 5",
+        ),
+    ],
+    ids=["media-type", "schema"],
+)
+def test_non_object_parameter_schema(ctx, parameter, message):
+    operation = ctx.openapi.load_operation(
+        "GET /x",
+        {
+            "parameters": [{"name": "a", "in": "query", "required": True, **parameter}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+
+    @given(case=operation.as_strategy())
+    @settings(max_examples=1)
+    def test(case):
+        pass
+
+    with pytest.raises(InvalidSchema, match=re.escape(message)):
+        test()
+
+
+def test_content_parameter_without_schema_takes_any_value(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /x",
+        {
+            "parameters": [{"name": "a", "in": "query", "required": True, "content": {"application/json": {}}}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    assert [parameter.raw_schema for parameter in operation.query] == [{}]
+
+    @run_given(case=operation.as_strategy(), max_examples=1)
+    def test(case):
+        assert "a" in case.query
+
+
+@pytest.mark.parametrize(
+    ("schema", "expected"),
+    [
+        ({"type": "string"}, {"type": "string", "minLength": 1}),
+        ({"type": "string", "minLength": 0}, {"type": "string", "minLength": 0}),
+        ({"type": "string", "minLength": 3}, {"type": "string", "minLength": 3}),
+    ],
+    ids=["default", "declared-zero", "declared"],
+)
+def test_path_string_minimum_length_defaults_to_one(ctx, schema, expected):
+    operation = ctx.openapi.load_operation(
+        "GET /items/{id}",
+        {
+            "parameters": [{"name": "id", "in": "path", "required": True, "schema": schema}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    assert operation.path_parameters.schema["properties"] == {"id": expected}
+
+
+@pytest.mark.parametrize(
+    ("operation_required", "path_item_required", "expected"),
+    [(True, False, True), (False, True, True), (False, False, False)],
+    ids=["operation-required", "path-item-required", "both-optional"],
+)
+def test_header_declared_twice_in_different_case_is_one_header(ctx, operation_required, path_item_required, expected):
+    header = {"in": "header", "schema": {"type": "string"}}
+    schema = ctx.openapi.load_schema(
+        {
+            "/items": {
+                "parameters": [{"name": "X-Token", "required": path_item_required, **header}],
+                "get": {
+                    "parameters": [
+                        {"name": "X-Trace", **header},
+                        {"name": "x-token", "required": operation_required, **header},
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                },
+            }
+        }
+    )
+    operation = schema["/items"]["GET"]
+    assert [(parameter.name, parameter.is_required) for parameter in operation.headers] == [
+        ("X-Trace", False),
+        ("x-token", expected),
+    ]
+
+    @run_given(case=operation.as_strategy(), max_examples=1)
+    def test(case):
+        assert set(case.headers) <= {"X-Trace", "x-token"}
+        assert "x-token" in case.headers or not expected
+
+
 def test_ascii_codec_for_headers(ctx):
     api = ctx.openapi.apps.headers()
     schema = schemathesis.openapi.from_url(api.schema_url)
     schema.config.generation.codec = "ascii"
 
-    @given(case=schema["/api/headers"]["GET"].as_strategy())
-    @settings(max_examples=50)
+    @run_given(case=schema["/api/headers"]["GET"].as_strategy(), max_examples=50)
     def test(case):
         assert case.headers["X-Token"].isascii()
-
-    test()
 
 
 def test_exclude_chars_and_no_x00_for_headers(ctx):
@@ -624,13 +965,10 @@ def test_exclude_chars_and_no_x00_for_headers(ctx):
     schema.config.generation.exclude_header_characters = "abc"
     schema.config.generation.allow_x00 = False
 
-    @given(case=schema["/api/headers"]["GET"].as_strategy())
-    @settings(max_examples=50)
+    @run_given(case=schema["/api/headers"]["GET"].as_strategy(), max_examples=50)
     def test(case):
         assert "\x00" not in case.headers["X-Token"]
         assert all(ch not in case.headers["X-Token"] for ch in schema.config.generation.exclude_header_characters)
-
-    test()
 
 
 def test_parameter_with_boolean_true_schema(ctx, cli, snapshot_cli):
@@ -664,21 +1002,15 @@ def test_parameter_with_boolean_true_schema(ctx, cli, snapshot_cli):
     assert operation.headers[0].optimized_schema == {"type": "string"}
     assert operation.query[0].optimized_schema is True
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=5)
+    @run_given(case=operation.as_strategy(), max_examples=5)
     def test_positive(case):
         assert "h" in case.headers
         assert isinstance(case.headers["h"], str)
         assert "q" in case.query
 
-    test_positive()
-
-    @given(case=operation.as_strategy(GenerationMode.NEGATIVE))
-    @settings(max_examples=1, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(GenerationMode.NEGATIVE), max_examples=1)
     def test_negative(case):
         pass
-
-    test_negative()
 
     schema_path = ctx.openapi.write_schema(paths, version="3.1.0")
     api = ctx.openapi.apps.success()
@@ -689,27 +1021,38 @@ def test_parameter_with_boolean_true_schema(ctx, cli, snapshot_cli):
     )
 
 
+def test_path_parameter_with_boolean_true_schema(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /items/{id}",
+        {
+            "parameters": [{"name": "id", "in": "path", "required": True, "schema": True}],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+    )
+
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.POSITIVE), max_examples=5)
+    def test(case):
+        assert "id" in case.path_parameters
+
+
 def test_parameter_with_boolean_false_schema(ctx):
     # When a parameter has a boolean false schema (accepts nothing - unusual but valid)
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /test",
         {
-            "/test": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "impossible",
-                            "in": "query",
-                            "schema": False,  # Boolean false - accepts nothing
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+            "parameters": [
+                {
+                    "name": "impossible",
+                    "in": "query",
+                    "schema": False,  # Boolean false - accepts nothing
                 }
-            }
+            ],
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.1.0",
     )
     # Then it should load without crashing
-    operation = schema["/test"]["GET"]
     parameter = operation.query[0]
     # The optimized schema should be preserved or handled
     assert parameter.optimized_schema is False
@@ -738,12 +1081,9 @@ def test_request_body_with_boolean_true_schema(ctx, cli, snapshot_cli):
     # Then the optimized schema should handle boolean true correctly
     assert operation.body[0].optimized_schema is True
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=5)
+    @run_given(case=operation.as_strategy(), max_examples=5)
     def test_positive(case):
         assert case.body is not NOT_SET
-
-    test_positive()
 
     @given(case=operation.as_strategy(GenerationMode.NEGATIVE))
     @settings(max_examples=1, suppress_health_check=list(HealthCheck))
@@ -772,22 +1112,19 @@ def test_optimized_schema_untouched_under_draft_2020_12(ctx):
         "items": {"type": "string"},
         "allOf": [{"contains": {"const": "A"}}, {"contains": {"const": "B"}}],
     }
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /payload",
         {
-            "/payload": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {"application/json": {"schema": array_schema}},
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": array_schema}},
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.1.0",
     )
 
-    assert schema["/payload"]["POST"].body[0].optimized_schema == array_schema
+    assert operation.body[0].optimized_schema == array_schema
 
 
 def test_parameter_type_detection(ctx, cli, snapshot_cli):
@@ -856,47 +1193,114 @@ paths:
 def test_non_string_parameter_name(ctx):
     # Specs converted from YAML 1.1 carry `name: on` as the JSON boolean `true`; the name reaches
     # the wire as text either way.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /foo",
         {
-            "/foo": {
-                "get": {
-                    "parameters": [{"in": "query", "name": True, "required": True, "schema": {"type": "string"}}],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "parameters": [{"in": "query", "name": True, "required": True, "schema": {"type": "string"}}],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
 
-    @given(case=schema["/foo"]["GET"].as_strategy())
-    @settings(max_examples=1, deadline=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(), max_examples=1)
     def test(case):
         assert set(case.query) == {"true"}
 
-    test()
+
+@pytest.mark.parametrize("location", ["query", "body"])
+@pytest.mark.parametrize("mode", list(GenerationMode), ids=[mode.value for mode in GenerationMode])
+def test_non_string_property_name(ctx, location, mode):
+    # Specs loaded with a YAML 1.1 parser carry a property named `on` as the boolean key `True`.
+    object_schema = {
+        "type": "object",
+        "properties": {True: {"type": "string", "enum": ["ALPHA"]}, 200: {"type": "string", "enum": ["BETA"]}},
+        "required": ["true", "200"],
+        "additionalProperties": False,
+    }
+    if location == "query":
+        operation = {"parameters": [{"in": "query", "name": "key", "required": True, "schema": object_schema}]}
+    else:
+        operation = {
+            "requestBody": {"required": True, "content": {"application/json": {"schema": object_schema}}},
+        }
+    schema = ctx.openapi.load_schema({"/foo": {"post": {**operation, "responses": {"200": {"description": "OK"}}}}})
+
+    @run_given(case=schema["/foo"]["POST"].as_strategy(generation_mode=mode), max_examples=1)
+    def test(case):
+        if mode == GenerationMode.POSITIVE:
+            assert (case.query if location == "query" else case.body) == {"true": "ALPHA", "200": "BETA"}
+
+
+def test_yaml_file_with_non_string_property_name():
+    schema = schemathesis.openapi.from_file(
+        """
+openapi: 3.0.2
+info: {title: Test, version: "1.0"}
+paths:
+  /foo:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                on: {type: string, enum: [ALPHA]}
+                200: {type: string, enum: [BETA]}
+              required: ["on", "200"]
+              additionalProperties: false
+      responses:
+        "200": {description: OK}
+"""
+    )
+
+    @run_given(case=schema["/foo"]["POST"].as_strategy(generation_mode=GenerationMode.POSITIVE), max_examples=1)
+    def test(case):
+        assert case.body == {"on": "ALPHA", "200": "BETA"}
 
 
 def test_non_string_path_parameter_name_recovered_from_template(ctx):
     # The template is the only place the original name survives, and its schema must still drive the value.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /foo/{on}",
         {
-            "/foo/{on}": {
-                "get": {
-                    "parameters": [
-                        {"in": "path", "name": True, "required": True, "schema": {"type": "string", "enum": ["ALPHA"]}}
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "parameters": [
+                {"in": "path", "name": True, "required": True, "schema": {"type": "string", "enum": ["ALPHA"]}}
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
 
-    @given(case=schema["/foo/{on}"]["GET"].as_strategy())
-    @settings(max_examples=1, deadline=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(), max_examples=1)
     def test(case):
         assert case.path_parameters == {"on": "ALPHA"}
         assert case.formatted_path == "/foo/ALPHA"
 
-    test()
+
+@pytest.mark.parametrize("version", ["2.0", "3.0.2", "3.1.0"])
+def test_undeclared_path_parameter_is_a_required_non_empty_string(ctx, version):
+    operation = ctx.openapi.load_operation(
+        "GET /users/{user_id}", {"responses": {"200": {"description": "OK"}}}, version=version
+    )
+    assert [(parameter.name, parameter.is_required) for parameter in operation.path_parameters] == [("user_id", True)]
+
+    @run_given(case=operation.as_strategy(), max_examples=5)
+    def test(case):
+        assert isinstance(case.path_parameters["user_id"], str)
+        assert case.path_parameters["user_id"] != ""
+
+
+def test_non_string_path_parameter_name_kept_when_placeholders_are_ambiguous(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /foo/{on}/{off}",
+        {
+            "parameters": [
+                {"in": "path", "name": True, "required": True, "schema": {"type": "string", "enum": ["ALPHA"]}}
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    assert sorted(parameter.name for parameter in operation.path_parameters) == ["off", "on", "true"]
 
 
 @pytest.mark.parametrize(
@@ -929,12 +1333,9 @@ def test_operation_parameter_overrides_path_item_parameter(ctx, version, path_it
     operation = schema["/foo"]["GET"]
     assert [parameter.definition for parameter in operation.query] == [operation_parameter]
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=5, deadline=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(), max_examples=5)
     def test(case):
         assert case.query == {"Action": "CancelJob"}
-
-    test()
 
 
 # Overriding replaces the whole declaration, so a path item's required parameter turns optional.
@@ -1019,42 +1420,301 @@ def test_body_validate_rejects_violating_value(schema_with_referenced_body, valu
     assert not body.is_valid(value)
 
 
-def test_query_parameter_validate(ctx):
-    schema = ctx.openapi.load_schema(
+@pytest.mark.parametrize(
+    ("version", "schema", "valid", "invalid"),
+    [
+        ("3.0.2", {"type": "integer", "minimum": 1}, 5, 0),
+        ("3.1.0", {"type": "array", "prefixItems": [{"type": "string"}, {"type": "integer"}]}, ["a", 1], [1, "a"]),
+        ("3.1.0", {"type": "integer", "minimum": 1, "exclusiveMinimum": True}, 2, 1),
+    ],
+    ids=["minimum", "prefix-items", "legacy-exclusive-minimum"],
+)
+def test_query_parameter_validate(ctx, version, schema, valid, invalid):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
         {
-            "/items": {
-                "get": {
-                    "parameters": [{"name": "limit", "in": "query", "schema": {"type": "integer", "minimum": 1}}],
-                    "responses": {"200": {"description": "OK"}},
+            "parameters": [{"name": "limit", "in": "query", "schema": schema}],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version=version,
+    )
+    limit = operation.query[0]
+    assert limit.validate(valid) is None
+    with pytest.raises(jsonschema_rs.ValidationError):
+        limit.validate(invalid)
+
+
+@pytest.mark.parametrize(
+    "parameter_schema",
+    [{"type": "boolean"}, {"type": "string", "enum": ["asc"]}, {"type": "string", "minLength": 1}],
+    ids=["boolean", "enum", "min-length"],
+)
+@pytest.mark.parametrize("allow_empty_value", [True, False, None], ids=["allowed", "forbidden", "default"])
+def test_query_parameter_allow_empty_value(ctx, parameter_schema, allow_empty_value):
+    parameter = {"name": "filter", "in": "query", "required": True, "schema": parameter_schema}
+    if allow_empty_value is not None:
+        parameter["allowEmptyValue"] = allow_empty_value
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [parameter],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    query = operation.query[0]
+
+    assert query.is_valid("") is (allow_empty_value is True)
+
+
+def test_query_parameter_allow_empty_value_with_recursive_reference(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [
+                {
+                    "name": "filter",
+                    "in": "query",
+                    "required": True,
+                    "allowEmptyValue": True,
+                    "schema": {"$ref": "#/components/schemas/Node"},
+                }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+        components={
+            "schemas": {
+                "Node": {
+                    "type": "object",
+                    "properties": {"child": {"$ref": "#/components/schemas/Node"}},
+                    "additionalProperties": False,
                 }
             }
-        }
+        },
     )
-    limit = schema["/items"]["GET"].query[0]
-    assert limit.validate(5) is None
-    with pytest.raises(jsonschema_rs.ValidationError):
-        limit.validate(0)
+    query = operation.query[0]
+
+    assert [query.is_valid(value) for value in ("", {}, {"child": {"child": {}}}, "x")] == [True, True, True, False]
+
+
+@pytest.mark.parametrize("location", ["query", "formData"])
+@pytest.mark.parametrize("allow_empty_value", [True, False, None], ids=["allowed", "forbidden", "default"])
+def test_swagger_parameter_allow_empty_value(ctx, location, allow_empty_value):
+    parameter = {"name": "filter", "in": location, "required": True, "type": "boolean"}
+    if allow_empty_value is not None:
+        parameter["allowEmptyValue"] = allow_empty_value
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [parameter],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="2.0",
+        consumes=["application/x-www-form-urlencoded"],
+    )
+
+    if location == "query":
+        is_valid = operation.query[0].is_valid("")
+    else:
+        is_valid = operation.body[0].is_valid({"filter": ""})
+    assert is_valid is (allow_empty_value is True)
 
 
 # An empty array serializes to nothing, so generation raises `minItems`; the contract still admits it.
 def test_validate_ignores_serialization_bounds(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /items",
         {
-            "/items": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "tags",
-                            "in": "query",
-                            "required": True,
-                            "schema": {"type": "array", "items": {"type": "string"}},
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+            "parameters": [
+                {
+                    "name": "tags",
+                    "in": "query",
+                    "required": True,
+                    "schema": {"type": "array", "items": {"type": "string"}},
                 }
-            }
-        }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    tags = schema["/items"]["GET"].query[0]
+    tags = operation.query[0]
     assert tags.wire_bounds == {"minItems": 1}
     assert tags.is_valid([])
+
+
+# An empty array or string drops a parameter from the query string unless the document admits nothing else.
+@pytest.mark.parametrize(
+    ("parameter", "empty"),
+    [
+        ({"required": True, "schema": {"type": "array"}}, False),
+        ({"required": True, "schema": {"type": "array", "minItems": 0}}, False),
+        ({"required": True, "schema": {"type": "array", "maxItems": 0}}, True),
+        ({"allowEmptyValue": False, "schema": {"type": "string"}}, False),
+        ({"allowEmptyValue": False, "schema": {"type": "string", "maxLength": 0}}, True),
+        ({"schema": {"type": "array"}}, True),
+    ],
+    ids=["required-array", "declared-min", "only-empty", "no-empty-string", "only-empty-string", "optional"],
+)
+def test_empty_query_values_are_generated_only_where_the_wire_keeps_them(ctx, parameter, empty):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {"parameters": [{"name": "q", "in": "query", **parameter}], "responses": {"200": {"description": "OK"}}},
+    )
+    strategy = operation.as_strategy(generation_mode=GenerationMode.POSITIVE)
+    if empty:
+        find(strategy, lambda case: case.query.get("q") in ([], ""), settings=settings(max_examples=50, database=None))
+    else:
+        assert [case.query for case in generate_many(strategy, 20) if case.query.get("q") in ([], "")] == []
+
+
+def test_malformed_array_bound_is_a_schema_error(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [
+                {"name": "q", "in": "query", "required": True, "schema": {"type": "array", "minItems": "1"}}
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    with pytest.raises(RejectedSchemaDefinition):
+        generate_many(operation.as_strategy(), 1)
+
+
+ITEM_SCHEMA = {"type": "object", "properties": {"id": {"type": "integer"}}, "required": ["id"]}
+
+
+def item_body(media_type="application/json"):
+    return {
+        "requestBody": {
+            "required": True,
+            "content": {media_type: {"schema": {"$ref": "#/components/schemas/Item"}}},
+        },
+        "responses": {"200": {"description": "OK"}},
+    }
+
+
+def load_item_schema(ctx, second_media_type="application/json"):
+    return ctx.openapi.load_schema(
+        {"/a": {"post": item_body()}, "/b": {"post": item_body(second_media_type)}},
+        components={"schemas": {"Item": ITEM_SCHEMA}},
+    )
+
+
+def test_operations_with_the_same_request_body_share_its_converted_schemas(ctx):
+    schema = load_item_schema(ctx)
+    first, second = (schema[path]["POST"].body[0] for path in ("/a", "/b"))
+
+    assert (first.optimized_schema is second.optimized_schema, first.validation_schema is second.validation_schema) == (
+        True,
+        True,
+    )
+
+
+def test_request_body_changed_by_a_hook_keeps_its_own_converted_schema(ctx):
+    schema = load_item_schema(ctx)
+
+    @schema.hook
+    def before_init_operation(context, operation):
+        if operation.path == "/a":
+            operation.body[0].definition["schema"] = {"type": "object", "properties": {"id": {"type": "string"}}}
+
+    first, second = (schema[path]["POST"].body[0] for path in ("/a", "/b"))
+
+    assert (first.optimized_schema["properties"]["id"], second.optimized_schema["properties"]["id"]) == (
+        {"type": "string"},
+        {"type": "integer"},
+    )
+
+
+def test_form_and_json_request_bodies_do_not_share_converted_schemas(ctx):
+    schema = load_item_schema(ctx, second_media_type="application/x-www-form-urlencoded")
+    first, second = (schema[path]["POST"].body[0] for path in ("/a", "/b"))
+
+    assert first.optimized_schema is not second.optimized_schema
+
+
+def test_generating_request_bodies_leaves_the_shared_schemas_unchanged(ctx):
+    schema = load_item_schema(ctx)
+    first, second = (schema[path]["POST"] for path in ("/a", "/b"))
+    body = first.body[0]
+    shared = (body.optimized_schema, body.validation_schema)
+    before = deepclone(shared)
+
+    for operation in (first, second):
+        for mode in (GenerationMode.POSITIVE, GenerationMode.NEGATIVE):
+            generate_many(operation.as_strategy(generation_mode=mode), 5)
+
+    assert shared == before
+
+
+# Only recursive references keep named components in a bundle.
+TREE_SCHEMA = {
+    "type": "object",
+    "properties": {"children": {"type": "array", "items": {"$ref": "#/components/schemas/Item"}}},
+}
+
+
+def test_request_bodies_share_converted_schemas_across_other_bundled_parameters(ctx):
+    filter_parameter = {"name": "filter", "in": "query", "schema": {"$ref": "#/components/schemas/Filter"}}
+    schema = ctx.openapi.load_schema(
+        {
+            "/a": {"post": item_body()},
+            "/b": {"get": {"parameters": [filter_parameter], "responses": {"200": {"description": "OK"}}}},
+            "/c": {"post": item_body()},
+        },
+        components={
+            "schemas": {
+                "Item": TREE_SCHEMA,
+                "Filter": {"type": "object", "properties": {"next": {"$ref": "#/components/schemas/Filter"}}},
+            }
+        },
+    )
+    operations = [result.ok() for result in schema.get_all_operations()]
+    first, second = (operation.body[0] for operation in operations if operation.method == "post")
+
+    assert first.optimized_schema is second.optimized_schema
+
+
+def test_converted_schema_changed_by_a_hook_stays_with_its_operation(ctx):
+    schema = load_item_schema(ctx)
+
+    @schema.hook
+    def before_init_operation(context, operation):
+        if operation.path == "/a":
+            operation.body[0].optimized_schema["properties"]["id"]["type"] = "string"
+
+    first, second = (schema[path]["POST"].body[0] for path in ("/a", "/b"))
+
+    assert (first.optimized_schema["properties"]["id"], second.optimized_schema["properties"]["id"]) == (
+        {"type": "string"},
+        {"type": "integer"},
+    )
+
+
+def test_swagger_body_parameters_share_converted_schemas_across_other_bundled_parameters(ctx):
+    def body_operation():
+        return {
+            "consumes": ["application/json"],
+            "parameters": [{"name": "body", "in": "body", "required": True, "schema": {"$ref": "#/definitions/Item"}}],
+            "responses": {"200": {"description": "OK"}},
+        }
+
+    filter_parameter = {"name": "filter", "in": "body", "schema": {"$ref": "#/definitions/Filter"}}
+    schema = ctx.openapi.load_schema(
+        {
+            "/a": {"post": body_operation()},
+            "/b": {"put": {"parameters": [filter_parameter], "responses": {"200": {"description": "OK"}}}},
+            "/c": {"post": body_operation()},
+        },
+        version="2.0",
+        definitions={
+            "Item": {
+                "type": "object",
+                "properties": {"children": {"type": "array", "items": {"$ref": "#/definitions/Item"}}},
+            },
+            "Filter": {"type": "object", "properties": {"next": {"$ref": "#/definitions/Filter"}}},
+        },
+    )
+    operations = [result.ok() for result in schema.get_all_operations()]
+    first, second = (operation.body[0] for operation in operations if operation.method == "post")
+
+    assert first.optimized_schema is second.optimized_schema

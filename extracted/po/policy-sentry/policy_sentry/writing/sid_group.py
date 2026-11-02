@@ -12,6 +12,7 @@ from policy_sentry.analysis.expand import determine_actions_to_expand
 from policy_sentry.querying.actions import (
     get_action_data,
     get_actions_at_access_level_that_support_wildcard_arns_only,
+    get_actions_matching_arn_type,
     get_actions_that_support_wildcard_arns_only,
     get_actions_with_arn_type_and_access_level,
     get_dependent_actions,
@@ -83,8 +84,8 @@ class SidGroup:
         """Get a single group by the SID identifier"""
         if self.sids[sid]:
             return self.sids[sid]
-        else:
-            raise Exception(f"No SID with the value of {sid}")
+
+        raise Exception(f"No SID with the value of {sid}")
 
     def list_sids(self) -> list[str]:
         """
@@ -200,15 +201,19 @@ class SidGroup:
         )
         self.add_wildcard_only_actions(provided_wildcard_actions)
 
-    def get_rendered_policy(self, minimize: int | None = None) -> dict[str, Any]:
+    def get_rendered_policy(self, minimize: int | None = None, effect: str = "Allow") -> dict[str, Any]:
         """
         Get the JSON rendered policy
 
         Arguments:
             minimize: Reduce the character count of policies without creating overlap with other action names
+            effect: The IAM policy effect, either "Allow" or "Deny". Defaults to "Allow".
         Returns:
             Dictionary: The IAM Policy JSON
         """
+        if effect not in ("Allow", "Deny"):
+            raise ValueError(f"Invalid effect: {effect!r}. Must be 'Allow' or 'Deny'.")
+
         statements: list[dict[str, Any]] = []
         # Only set the actions to lowercase if minimize is provided
         all_actions = get_all_actions(lowercase=True)
@@ -254,7 +259,7 @@ class SidGroup:
                 statements.append(
                     {
                         "Sid": sid,
-                        "Effect": "Allow",
+                        "Effect": effect,
                         "Action": actions,
                         "Resource": group["arn"],
                     }
@@ -272,8 +277,7 @@ class SidGroup:
                         actions = minimize_statement_actions(stmt["Action"], all_actions, minchars=minimize)
                         actions.sort()
                         stmt["Action"] = actions
-        policy = {"Version": POLICY_LANGUAGE_VERSION, "Statement": statements}
-        return policy
+        return {"Version": POLICY_LANGUAGE_VERSION, "Statement": statements}
 
     # pylint: disable=unused-argument
     def add_by_arn_and_access_level(
@@ -314,8 +318,18 @@ class SidGroup:
                         dependent_actions = [
                             action for action in get_dependent_actions(actions) if action not in actions
                         ]
+                        # Check if dependent actions support the same resource type.
+                        # If so, add them to the same SID with the specific ARN
+                        # instead of defaulting to wildcard "*".
+                        actions_matching_resource_type = get_actions_matching_arn_type(
+                            service_prefix, resource_type_name
+                        )
                         for dep_action in dependent_actions:
-                            self.add_action_without_resource_constraint(dep_action)
+                            if dep_action in actions_matching_resource_type:
+                                if dep_action not in actions:
+                                    actions.append(dep_action)
+                            else:
+                                self.add_action_without_resource_constraint(dep_action)
 
                         if sid_namespace in self.sids:
                             # If the ARN already exists there, skip it.
@@ -436,8 +450,7 @@ class SidGroup:
         )
         self.remove_actions_duplicated_in_wildcard_arn()
         logger.debug("Getting the rendered policy")
-        rendered_policy = self.get_rendered_policy()
-        return rendered_policy
+        return self.get_rendered_policy()
 
     def process_template(self, cfg: dict[str, Any], minimize: int | None = None) -> dict[str, Any]:
         """
@@ -450,6 +463,10 @@ class SidGroup:
         Returns:
             Dictionary: The rendered IAM JSON Policy
         """
+        effect = cfg.get("effect", "Allow")
+        if effect not in ("Allow", "Deny"):
+            raise ValueError(f"Invalid effect: {effect}. Must be 'Allow' or 'Deny'.")
+
         cfg_mode = cfg.get("mode")
         if cfg_mode == "crud":
             logger.debug("CRUD mode selected")
@@ -539,8 +556,7 @@ class SidGroup:
                 if cfg_actions is not None and cfg_actions[0] != "":
                     self.add_by_list_of_actions(cfg_actions)
 
-        rendered_policy = self.get_rendered_policy(minimize)
-        return rendered_policy
+        return self.get_rendered_policy(minimize, effect=effect)
 
     def add_wildcard_only_actions(self, provided_wildcard_actions: list[str]) -> None:
         """

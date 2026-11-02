@@ -1,19 +1,27 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
+from fastapi import FastAPI, Request
 from flask import jsonify, request
+from hypothesis import given, settings
+from requests.auth import HTTPBasicAuth
 
 import schemathesis
 from schemathesis.auths import AuthContext, AuthStorage, CachingAuthProvider
-from schemathesis.core.errors import IncorrectUsage
+from schemathesis.core.errors import AuthenticationError, IncorrectUsage
 from schemathesis.engine import Status, from_schema
 from schemathesis.engine.events import ScenarioFinished
 from schemathesis.engine.run import PhaseName
 from schemathesis.generation.case import Case
+from schemathesis.generation.hypothesis.examples import generate_many
+from schemathesis.specs.openapi.auths import DynamicTokenAuthProvider, HttpBearerAuthProvider
 from schemathesis.specs.openapi.checks import negative_data_rejection
 from test.utils import EventStream
 
 TOKEN = "EXAMPLE-TOKEN"
+CERT_PATH = Path(__file__).parent.parent / "cli" / "cert.pem"
 
 
 @pytest.fixture
@@ -111,6 +119,35 @@ def test_set_noop(auth_storage, case_factory):
     with pytest.raises(IncorrectUsage, match="No auth provider is defined."):
         auth_storage.set(case, AuthContext(operation=case.operation, app=None))
     # This normally should not happen, as it is checked before.
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        ({"refresh_interval": None}, "Boom"),
+        ({}, "Boom"),
+        ({"cache_by_key": lambda case, context: 1 / 0}, "division by zero"),
+    ],
+    ids=["uncached", "cached", "broken-cache-key"],
+)
+def test_filtered_provider_error_names_user_class(ctx, kwargs, message):
+    schema = ctx.openapi.load_schema({"/a": {"get": {"responses": {"200": {"description": "OK"}}}}})
+
+    @schema.auth(**kwargs).apply_to(method="GET")
+    class Broken:
+        def get(self, case, context):
+            raise ValueError("Boom")
+
+        def set(self, case, data, context):
+            pass
+
+    @given(schema["/a"]["GET"].as_strategy())
+    @settings(max_examples=1)
+    def test(case):
+        pass
+
+    with pytest.raises(AuthenticationError, match=rf"^Error in 'Broken.get\(\)': {message}\n"):
+        test()
 
 
 MULTI_SCOPE_SCHEMA = {
@@ -233,7 +270,41 @@ def test_auth_cache_with_scopes(ctx):
     assert counts["create"] == 1
 
 
-def test_negative_data_rejection_no_false_positive_with_cookie_security_scheme(ctx, app_runner):
+def test_dynamic_auth_malformed_payload_content_type(auth_operation):
+    provider = DynamicTokenAuthProvider(
+        path="/api/body-auth",
+        method="post",
+        payload={"key": "value"},
+        payload_content_type="json",
+        extract_from="body",
+        extract_selector="/access_token",
+        _applier=HttpBearerAuthProvider(bearer=""),
+    )
+    with pytest.raises(
+        AuthenticationError, match="Malformed payload_content_type 'json': Malformed media type: `json`"
+    ):
+        provider.get(auth_operation.Case(), AuthContext(operation=auth_operation, app=None))
+
+
+def test_dynamic_auth_token_fetch_with_request_cert(auth_operation):
+    auth_operation.schema.config.request_cert = str(CERT_PATH)
+    provider = DynamicTokenAuthProvider(
+        path="/api/body-auth",
+        method="post",
+        payload=None,
+        extract_from="body",
+        extract_selector="/access_token",
+        _applier=HttpBearerAuthProvider(bearer=""),
+    )
+    assert provider.get(auth_operation.Case(), AuthContext(operation=auth_operation, app=None)) == "test-token"
+
+
+@pytest.mark.parametrize(
+    "registrar",
+    [lambda schema: schema.auth, lambda schema: schemathesis.auth],
+    ids=["schema-auth", "global-auth"],
+)
+def test_negative_data_rejection_no_false_positive_with_cookie_security_scheme(ctx, app_runner, registrar):
     app, _ = ctx.openapi.make_flask_app(
         {
             "/api/secure": {
@@ -257,7 +328,7 @@ def test_negative_data_rejection_no_false_positive_with_cookie_security_scheme(c
 
     schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
 
-    @schema.auth(refresh_interval=None)
+    @registrar(schema)(refresh_interval=None)
     class CookieAuth:
         def get(self, case, context):
             return "token123"
@@ -275,43 +346,29 @@ def test_negative_data_rejection_no_false_positive_with_cookie_security_scheme(c
     assert stream.find(ScenarioFinished, status=Status.FAILURE) is None
 
 
-def test_negative_data_rejection_no_false_positive_with_global_cookie_auth(ctx, app_runner):
-    app, _ = ctx.openapi.make_flask_app(
-        {
-            "/api/secure": {
-                "get": {
-                    "responses": {
-                        "200": {"description": "OK"},
-                        "401": {"description": "Unauthorized"},
-                    },
-                    "security": [{"session_cookie": []}],
-                }
-            }
-        },
-        components={"securitySchemes": {"session_cookie": {"type": "apiKey", "in": "cookie", "name": "session"}}},
-    )
+def _wsgi_echo_authorization(ctx):
+    app, _ = ctx.openapi.make_flask_app({"/echo": {"get": {"responses": {"200": {"description": "OK"}}}}})
 
-    @app.route("/api/secure")
-    def secure():
-        if not request.cookies.get("session"):
-            return jsonify({"error": "unauthorized"}), 401
-        return jsonify({}), 200
+    @app.route("/echo")
+    def echo():
+        return jsonify({"authorization": request.headers.get("Authorization")})
 
-    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    return schemathesis.openapi.from_wsgi("/openapi.json", app)
 
-    @schemathesis.auth(refresh_interval=None)
-    class CookieAuth:
-        def get(self, case, context):
-            return "token123"
 
-        def set(self, case, data, context):
-            case.headers = case.headers or {}
-            case.headers["Cookie"] = f"session={data}"
+def _asgi_echo_authorization(ctx):
+    app = FastAPI()
 
-    stream = EventStream(
-        schema,
-        phases=[PhaseName.COVERAGE],
-        checks=[negative_data_rejection],
-    ).execute()
+    @app.get("/echo")
+    async def echo(request: Request):
+        return {"authorization": request.headers.get("Authorization")}
 
-    assert stream.find(ScenarioFinished, status=Status.FAILURE) is None
+    return schemathesis.openapi.from_asgi("/openapi.json", app)
+
+
+@pytest.mark.parametrize("load_schema", [_wsgi_echo_authorization, _asgi_echo_authorization], ids=["wsgi", "asgi"])
+def test_set_from_requests_reaches_in_process_app(ctx, load_schema):
+    schema = load_schema(ctx)
+    schema.auth.set_from_requests(HTTPBasicAuth("user", "pass"))
+    (case,) = generate_many(schema["/echo"]["GET"].as_strategy(), 1)
+    assert case.call().json() == {"authorization": "Basic dXNlcjpwYXNz"}

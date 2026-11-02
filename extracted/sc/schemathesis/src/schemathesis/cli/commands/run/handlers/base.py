@@ -2,20 +2,26 @@ from __future__ import annotations
 
 import threading
 from collections.abc import Callable
+from contextlib import AbstractContextManager
 from io import StringIO
 from pathlib import Path
+from queue import Queue
 from typing import IO, TYPE_CHECKING, Any, Generic, TypeVar
 
 from schemathesis.cli.events import LoadingStarted
-from schemathesis.cli.output import LoadingProgressManager, display_fatal_error
+from schemathesis.cli.output import Indent, LoadingProgressManager, display_fatal_error, display_reports
+from schemathesis.core.output.sanitization import sanitized
+from schemathesis.engine import events
+from schemathesis.engine.recorder import RecordedScenario
 
 if TYPE_CHECKING:
     from rich.console import Console
 
     from schemathesis.cli.context import BaseExecutionContext
-    from schemathesis.engine import events
+    from schemathesis.config import OutputConfig
 
 T = TypeVar("T", bound="BaseExecutionContext")
+ItemT = TypeVar("ItemT")
 
 
 class EventHandler(Generic[T]):
@@ -35,14 +41,26 @@ class BaseOutputHandler(EventHandler[T]):
     console: Console
     loading_manager: LoadingProgressManager | None
 
-    def _on_loading_started(self, event: LoadingStarted) -> None:
-        self.loading_manager = LoadingProgressManager(console=self.console, location=event.location)
+    def _on_loading_started(self, ctx: T, event: LoadingStarted) -> None:
+        location = sanitized(event.location, ctx.config.output.sanitization)
+        assert location is not None
+        self.loading_manager = LoadingProgressManager(console=self.console, location=location)
         self.loading_manager.start()
 
-    def _on_fatal_error(self, ctx: T, event: events.FatalError) -> None:
-        self.shutdown(ctx)
-        display_fatal_error(self.console, self.loading_manager, event)
+    def _finish_loading(self) -> None:
+        assert self.loading_manager is not None
+        self.loading_manager.stop()
+        self.console.print(Indent(self.loading_manager.get_completion_message()))
+        self.console.print()
         self.loading_manager = None
+
+    def _on_fatal_error(self, ctx: T, event: events.FatalError) -> None:
+        try:
+            self.shutdown(ctx)
+            display_fatal_error(self.console, self.loading_manager, event, wait_for_schema=ctx.config.wait_for_schema)
+        finally:
+            # Reports are written even when the run stops before testing
+            display_reports(ctx)
 
 
 TextOutput = IO[str] | StringIO | Path
@@ -70,3 +88,53 @@ class WriterWorker(threading.Thread):
         super().join(timeout)
         if self.error is not None:
             raise self.error
+
+
+class BackgroundWriterHandler(EventHandler, Generic[ItemT]):
+    """Hands report items to a writer thread; `None` on the queue tells the thread to finish."""
+
+    __slots__ = ("queue", "worker")
+
+    def __init__(self) -> None:
+        self.queue: Queue[ItemT | None] = Queue()
+        self.worker: WriterWorker | None = None
+
+    def _start_writer(self, name: str, target: Callable[..., None], **kwargs: object) -> None:
+        self.worker = WriterWorker(name=name, target=target, kwargs={**kwargs, "queue": self.queue})
+        self.worker.start()
+
+    def shutdown(self, ctx: BaseExecutionContext) -> None:
+        self.queue.put(None)
+        if self.worker is not None:
+            self.worker.join()
+
+
+class RecordedScenarioHandler(BackgroundWriterHandler[RecordedScenario]):
+    """Hands every finished scenario's recorded interactions to a writer thread."""
+
+    __slots__ = ("output", "config", "preserve_bytes")
+
+    def __init__(self, output: TextOutput, config: OutputConfig, preserve_bytes: bool = False) -> None:
+        super().__init__()
+        self.output = output
+        self.config = config
+        self.preserve_bytes = preserve_bytes
+
+    def handle_event(self, ctx: BaseExecutionContext, event: events.EngineEvent) -> None:
+        if isinstance(event, (events.ScenarioFinished, events.FuzzScenarioFinished)):
+            self.queue.put(event.recorder)
+
+
+def write_until_finished(
+    writer: AbstractContextManager[object],
+    open: Callable[[], None],
+    write: Callable[[ItemT], None],
+    queue: Queue[ItemT | None],
+) -> None:
+    with writer:
+        open()
+        while True:
+            item = queue.get()
+            if item is None:
+                break
+            write(item)

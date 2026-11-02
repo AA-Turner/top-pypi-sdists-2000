@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import pytest
+from flask import jsonify
 
 import schemathesis
 from schemathesis.core.errors import InvalidSchema
@@ -53,34 +54,18 @@ def test_collection_format_serialization(ctx):
                 seen[name] = True
     missing = [name for name, hit in seen.items() if not hit]
     assert not missing, f"Did not observe delimited array for collectionFormat={missing}"
+    # `collectionFormat: multi` repeats the key (?multi=a&multi=b) instead of delimiting.
+    assert any(call.raw_query.count("multi=") >= 2 for call in captured)
 
 
-SECURITY_CASES = [
-    pytest.param(
-        "/private/api-key",
-        {"headers": {"X-API-Key": "secret"}},
-        ("X-Api-Key", "secret"),
-        id="api-key",
-    ),
-    pytest.param(
-        "/private/basic",
-        {"auth": ("user", "pass")},
-        ("Authorization", "Basic dXNlcjpwYXNz"),
-        id="basic-auth",
-    ),
-]
-
-
-@pytest.mark.parametrize(("path", "stream_kwargs", "expected_header"), SECURITY_CASES)
-def test_security_credentials_propagate(ctx, path, stream_kwargs, expected_header):
+def test_security_credentials_propagate(ctx):
     api = ctx.openapi.apps.swagger_v2_security()
-    schema = schemathesis.openapi.from_url(api.schema_url).include(path=path)
-    EventStream(schema, max_examples=3, **stream_kwargs).execute()
+    schema = schemathesis.openapi.from_url(api.schema_url).include(path_regex="^/private/(api-key|basic)$")
+    EventStream(schema, max_examples=3, headers={"X-API-Key": "secret"}, auth=("user", "pass")).execute()
 
-    captured = api.calls_to(f"/api{path}")
-    header_name, expected_value = expected_header
-    # Engine also drives auth-omitted negatives; require at least one positive carry.
-    assert any(call.headers.get(header_name) == expected_value for call in captured)
+    # Engine also drives auth-omitted negatives; require at least one positive carry per scheme.
+    assert any(call.headers.get("X-Api-Key") == "secret" for call in api.calls_to("/api/private/api-key"))
+    assert any(call.headers.get("Authorization") == "Basic dXNlcjpwYXNz" for call in api.calls_to("/api/private/basic"))
 
 
 def test_oauth2_definition_loads(ctx):
@@ -109,20 +94,45 @@ def test_examples_phase_uses_x_example(ctx):
     assert {"name": "from-x-example"} in bodies
 
 
-def test_response_header_validation_only_complains_about_headers(ctx):
-    # The conformance check must, when it fails, fail with a header-specific message —
-    # not surface generic body-schema errors against a header schema.
-    api = ctx.openapi.apps.swagger_v2_response_headers()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-    stream = EventStream(schema, checks=[response_headers_conformance], max_examples=3).execute()
+def test_response_header_validation_only_complains_about_headers(ctx, app_runner):
+    # A header that breaks its schema must fail with a header message, not body-schema errors against it.
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/headers": {
+                "get": {
+                    "produces": ["application/json"],
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "schema": {"type": "object"},
+                            "headers": {"X-Total-Count": {"type": "integer"}},
+                        }
+                    },
+                }
+            }
+        },
+        version="2.0",
+    )
 
-    assert api.calls_to("/api/headers")
-    for finished in stream.find_all(events.ScenarioFinished):
-        for checks in finished.recorder.checks.values():
-            for check in checks:
-                if check.status == Status.FAILURE:
-                    failure = check.failure_info.failure if check.failure_info else None
-                    assert failure is not None and "header" in str(failure).lower()
+    @app.route("/api/headers")
+    def headers():
+        response = jsonify({})
+        response.headers["X-Total-Count"] = "not-a-number"
+        return response
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    stream = EventStream(schema, checks=[response_headers_conformance], max_examples=1).execute()
+    failures = [
+        str(check.failure_info.failure)
+        for finished in stream.find_all(events.ScenarioFinished)
+        for checks in finished.recorder.checks.values()
+        for check in checks
+        if check.status == Status.FAILURE
+    ]
+    assert failures == [
+        'Response header does not conform to the schema\n\n"not-a-number" is not of type "integer"\n\n'
+        'Schema:\n\n    {\n        "type": "integer"\n    }\n\nValue:\n\n    "not-a-number"'
+    ]
 
 
 def test_default_response_used_when_status_undocumented(ctx):
@@ -209,17 +219,6 @@ def test_native_examples_phase_loads(ctx):
     assert api.calls_to("/api/items")
 
 
-def test_collection_format_multi_uses_repeated_query_keys(ctx):
-    # `collectionFormat: multi` is not in `_serialize_swagger2` — the engine relies on
-    # the HTTP client repeating the key (?multi=a&multi=b), not delimiting.
-    api = ctx.openapi.apps.swagger_v2_collection_format()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-    EventStream(schema, max_examples=20, modes=[schemathesis.GenerationMode.POSITIVE]).execute()
-
-    captured = api.calls_to("/api/search")
-    assert any(r.raw_query.count("multi=") >= 2 for r in captured)
-
-
 def test_optional_security_does_not_require_credentials(ctx):
     api = ctx.openapi.apps.swagger_v2_security()
     schema = schemathesis.openapi.from_url(api.schema_url).include(path="/private/optional")
@@ -240,20 +239,16 @@ def test_parameter_ref_resolves(ctx):
     assert all("page" in call.query for call in listings)
 
 
-PATH_LEVEL_METHODS = [pytest.param("GET", id="get"), pytest.param("POST", id="post")]
-
-
-@pytest.mark.parametrize("method", PATH_LEVEL_METHODS)
-def test_path_level_parameters_apply_to_each_operation(ctx, method):
-    # Path-item-level `parameters` are inherited by every operation under the path;
-    # the engine must apply them to GET and POST alike.
+def test_path_level_parameters_apply_to_each_operation(ctx):
+    # Path-item-level `parameters` are inherited by every operation under the path.
     api = ctx.openapi.apps.swagger_v2_path_level_parameters()
-    schema = schemathesis.openapi.from_url(api.schema_url).include(method=method)
+    schema = schemathesis.openapi.from_url(api.schema_url)
     EventStream(schema, max_examples=3, modes=[schemathesis.GenerationMode.POSITIVE]).execute()
 
-    captured = api.calls_under("/api/path-shared/", method=method)
-    assert captured
-    assert all("trace" in call.query for call in captured)
+    for method in ("GET", "POST"):
+        captured = api.calls_under("/api/path-shared/", method=method)
+        assert captured, method
+        assert all("trace" in call.query for call in captured), method
 
 
 def test_form_urlencoded_body_uses_urlencoding(ctx):

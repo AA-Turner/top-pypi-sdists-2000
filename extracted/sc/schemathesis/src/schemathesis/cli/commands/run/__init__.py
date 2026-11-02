@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-from pathlib import Path
-from typing import IO, Any
+from collections.abc import Iterator
+from typing import Any
 
 import click
+from click.core import ParameterSource
 
 from schemathesis.checks import load_all_checks
-from schemathesis.cli.commands.run import executor
+from schemathesis.cli.commands._options import apply_project_options, apply_report_options, build_filter_set
 from schemathesis.cli.commands.run.filters import with_filters
 from schemathesis.cli.constants import COLOR_OPTIONS_INVALID_USAGE_MESSAGE
 from schemathesis.cli.core import ensure_color, resolve_color
@@ -55,11 +55,14 @@ from schemathesis.cli.options import (
     REPORT_ALLURE_PATH,
     REPORT_DIR,
     REPORT_HAR_PATH,
+    REPORT_HTML_PATH,
     REPORT_JSON_PATH,
     REPORT_JUNIT_PATH,
     REPORT_NDJSON_PATH,
     REPORT_PRESERVE_BYTES,
+    REPORT_PYTEST_PATH,
     REPORT_VCR_PATH,
+    REPORT_WFC_PATH,
     REQUEST_CERT,
     REQUEST_CERT_KEY,
     REQUEST_RETRIES,
@@ -70,14 +73,12 @@ from schemathesis.cli.options import (
     WARNINGS,
     WORKERS,
 )
-from schemathesis.cli.validation import CONFLICTING_URL_MESSAGE, validate_auth_overlap
+from schemathesis.cli.validation import CONFLICTING_URL_MESSAGE, validate_auth_overlap, validate_wfc_user
 from schemathesis.config import (
-    DEFAULT_REPORT_DIRECTORY,
     HealthCheck,
-    ReportFormat,
+    ProjectConfig,
     SchemathesisConfig,
     SchemathesisWarning,
-    WarningsConfig,
 )
 from schemathesis.generation import GenerationMode
 from schemathesis.generation.metrics import MetricFunction
@@ -85,9 +86,12 @@ from schemathesis.generation.metrics import MetricFunction
 load_all_checks()
 
 DEFAULT_PHASES = ["examples", "coverage", "fuzzing", "stateful"]
+# Timeouts this long are almost always milliseconds, the unit Schemathesis 3 took.
+LIKELY_MILLISECONDS = 1000
+OBJECT_LEVEL_AUTHORIZATION_GUIDE = "https://schemathesis.readthedocs.io/en/stable/guides/object-level-authorization/"
 
 
-@click.argument(*LOCATION.args, **LOCATION.kwargs)  # type: ignore[untyped-decorator]
+@click.argument(*LOCATION.args, **LOCATION.kwargs)
 @group("Options")
 @grouped_option(*BASE_URL.args, **BASE_URL.kwargs)
 @grouped_option(*ORIGIN.args, **ORIGIN.kwargs)
@@ -147,7 +151,10 @@ DEFAULT_PHASES = ["examples", "coverage", "fuzzing", "stateful"]
 @grouped_option(*REPORT_HAR_PATH.args, **REPORT_HAR_PATH.kwargs)
 @grouped_option(*REPORT_NDJSON_PATH.args, **REPORT_NDJSON_PATH.kwargs)
 @grouped_option(*REPORT_JSON_PATH.args, **REPORT_JSON_PATH.kwargs)
+@grouped_option(*REPORT_WFC_PATH.args, **REPORT_WFC_PATH.kwargs)
+@grouped_option(*REPORT_PYTEST_PATH.args, **REPORT_PYTEST_PATH.kwargs)
 @grouped_option(*REPORT_ALLURE_PATH.args, **REPORT_ALLURE_PATH.kwargs)
+@grouped_option(*REPORT_HTML_PATH.args, **REPORT_HTML_PATH.kwargs)
 @grouped_option(*REPORT_PRESERVE_BYTES.args, **REPORT_PRESERVE_BYTES.kwargs)
 @grouped_option(*OUTPUT_SANITIZE.args, **OUTPUT_SANITIZE.kwargs)
 @grouped_option(*OUTPUT_TRUNCATE.args, **OUTPUT_TRUNCATE.kwargs)
@@ -173,7 +180,7 @@ DEFAULT_PHASES = ["examples", "coverage", "fuzzing", "stateful"]
 @group("Global options")
 @grouped_option(*NO_COLOR.args, **NO_COLOR.kwargs)
 @grouped_option(*FORCE_COLOR.args, **FORCE_COLOR.kwargs)
-@click.pass_context  # type: ignore[untyped-decorator]
+@click.pass_context
 def run(
     ctx: click.Context,
     *,
@@ -192,29 +199,6 @@ def run(
     baseline: str | None = None,
     baseline_update: bool = False,
     baseline_prune: bool = False,
-    include_path: tuple[str, ...],
-    include_path_regex: str | None,
-    include_method: tuple[str, ...],
-    include_method_regex: str | None,
-    include_name: tuple[str, ...],
-    include_name_regex: str | None,
-    include_tag: tuple[str, ...],
-    include_tag_regex: str | None,
-    include_operation_id: tuple[str, ...],
-    include_operation_id_regex: str | None,
-    exclude_path: tuple[str, ...],
-    exclude_path_regex: str | None,
-    exclude_method: tuple[str, ...],
-    exclude_method_regex: str | None,
-    exclude_name: tuple[str, ...],
-    exclude_name_regex: str | None,
-    exclude_tag: tuple[str, ...],
-    exclude_tag_regex: str | None,
-    exclude_operation_id: tuple[str, ...],
-    exclude_operation_id_regex: str | None,
-    include_by: Callable | None = None,
-    exclude_by: Callable | None = None,
-    exclude_deprecated: bool | None = None,
     workers: int | None = None,
     base_url: str | None,
     origin: str | None,
@@ -229,15 +213,6 @@ def run(
     request_cert: str | None = None,
     request_cert_key: str | None = None,
     request_proxy: str | None = None,
-    report_formats: list[ReportFormat] | None,
-    report_directory: Path | str = DEFAULT_REPORT_DIRECTORY,
-    report_junit_path: IO[str] | None = None,
-    report_vcr_path: IO[str] | None = None,
-    report_har_path: IO[str] | None = None,
-    report_ndjson_path: IO[str] | None = None,
-    report_json_path: IO[str] | None = None,
-    report_allure_path: str | None = None,
-    report_preserve_bytes: bool | None = None,
     output_sanitize: bool | None = None,
     output_truncate: bool | None = None,
     generation_modes: list[GenerationMode],
@@ -266,6 +241,7 @@ def run(
         - Local file: ./openapi.json, ./schema.yaml, ./schema.graphql
         - OpenAPI URL: https://api.example.com/openapi.json
         - GraphQL URL: https://api.example.com/graphql/
+        - gRPC target: grpc://localhost:50051
     """  # noqa: D301
     if no_color and force_color:
         raise click.UsageError(COLOR_OPTIONS_INVALID_USAGE_MESSAGE)
@@ -277,6 +253,7 @@ def run(
     ensure_color(ctx, color)
 
     validate_auth_overlap(auth, headers)
+    validate_wfc_user(config, auth_wfc, auth_wfc_user)
 
     if base_url is not None and origin is not None:
         raise click.UsageError(CONFLICTING_URL_MESSAGE)
@@ -292,40 +269,9 @@ def run(
     )
     config.output.sanitization.update(enabled=output_sanitize)
     config.output.truncation.update(enabled=output_truncate)
-    config.reports.update(
-        formats=report_formats,
-        junit_path=report_junit_path.name if report_junit_path else None,
-        vcr_path=report_vcr_path.name if report_vcr_path else None,
-        har_path=report_har_path.name if report_har_path else None,
-        ndjson_path=report_ndjson_path.name if report_ndjson_path else None,
-        json_path=report_json_path.name if report_json_path else None,
-        allure_path=report_allure_path,
-        directory=Path(report_directory),
-        preserve_bytes=report_preserve_bytes,
-    )
+    apply_report_options(config.reports, ctx.params)
     # Other CLI options work as an override for all defined projects
-    config.projects.override.update(
-        base_url=base_url,
-        baseline=baseline,
-        origin=origin,
-        headers=headers or None,
-        basic_auth=auth,
-        wfc_auth=auth_wfc,
-        wfc_user=auth_wfc_user,
-        workers=workers,
-        continue_on_failure=continue_on_failure,
-        rate_limit=rate_limit,
-        max_redirects=max_redirects,
-        request_timeout=request_timeout,
-        request_retries=request_retries,
-        tls_verify=request_tls_verify,
-        request_cert=request_cert,
-        request_cert_key=request_cert_key,
-        proxy=request_proxy,
-        warnings=WarningsConfig.from_value([w.value for w in warnings] if isinstance(warnings, list) else warnings)
-        if warnings is not None
-        else None,
-    )
+    apply_project_options(config.projects.override, ctx.params, baseline=baseline, origin=origin)
     if (baseline_update or baseline_prune) and config.projects.get_default().baseline is None:
         flag = "--baseline-update" if baseline_update else "--baseline-prune"
         raise click.UsageError(
@@ -333,31 +279,7 @@ def run(
         )
 
     # These are filters for what API operations should be tested
-    filter_set = {
-        "include_path": include_path,
-        "include_method": include_method,
-        "include_name": include_name,
-        "include_tag": include_tag,
-        "include_operation_id": include_operation_id,
-        "include_path_regex": include_path_regex,
-        "include_method_regex": include_method_regex,
-        "include_name_regex": include_name_regex,
-        "include_tag_regex": include_tag_regex,
-        "include_operation_id_regex": include_operation_id_regex,
-        "exclude_path": exclude_path,
-        "exclude_method": exclude_method,
-        "exclude_name": exclude_name,
-        "exclude_tag": exclude_tag,
-        "exclude_operation_id": exclude_operation_id,
-        "exclude_path_regex": exclude_path_regex,
-        "exclude_method_regex": exclude_method_regex,
-        "exclude_name_regex": exclude_name_regex,
-        "exclude_tag_regex": exclude_tag_regex,
-        "exclude_operation_id_regex": exclude_operation_id_regex,
-        "include_by": include_by,
-        "exclude_by": exclude_by,
-        "exclude_deprecated": exclude_deprecated,
-    }
+    filter_set = build_filter_set(ctx.params)
     config.projects.override.phases.update(phases=phases)
     config.projects.override.checks.update(
         included_check_names=included_check_names,
@@ -378,6 +300,8 @@ def run(
         codec=generation_codec,
     )
 
+    from schemathesis.cli.commands.run import executor
+
     executor.execute(
         location=location,
         filter_set=filter_set,
@@ -385,4 +309,55 @@ def run(
         config=config.projects.get_default(),
         args=ctx.args,
         params=ctx.params,
+        startup_warnings=_startup_warnings(ctx, config, included_check_names),
     )
+
+
+def _startup_warnings(
+    ctx: click.Context, config: SchemathesisConfig, included_check_names: list[str] | None
+) -> list[tuple[SchemathesisWarning | None, str]]:
+    timeouts = _iter_timeouts_in_milliseconds(ctx, config.projects.get_default())
+    return [
+        *((SchemathesisWarning.TIMEOUT_UNITS, message) for message in timeouts),
+        *((None, message) for message in _iter_unrunnable_checks(config, included_check_names)),
+    ]
+
+
+def _iter_timeouts_in_milliseconds(ctx: click.Context, config: ProjectConfig) -> Iterator[str]:
+    if not config.warnings.should_display(SchemathesisWarning.TIMEOUT_UNITS):
+        return
+    for value, parameter, option, key in (
+        (config.request_timeout, "request_timeout", "--request-timeout", "request-timeout"),
+        (config.checks.max_response_time.limit, "max_response_time", "--max-response-time", "max_response_time"),
+    ):
+        if value is None or value < LIKELY_MILLISECONDS:
+            continue
+        if ctx.get_parameter_source(parameter) is ParameterSource.DEFAULT:
+            given, suggested = f"{key} = {_format_number(value)}", f"{key} = {_format_number(value / 1000)}"
+        else:
+            given, suggested = f"{option}={_format_number(value)}", f"{option}={_format_number(value / 1000)}"
+        yield f"`{given}` is {_describe_duration(value)}; Schemathesis takes seconds. Did you mean `{suggested}`?"
+
+
+def _iter_unrunnable_checks(config: SchemathesisConfig, included_check_names: list[str] | None) -> Iterator[str]:
+    # Only a check selected by name: one enabled by default or by `all` is not something the user asked for.
+    if "object_level_authorization" not in (included_check_names or []):
+        return
+    projects = (config.projects.default, *config.projects.named.values())
+    if any(project.auth.wfc is not None and project.auth.wfc.peers for project in projects):
+        return
+    yield (
+        "`object_level_authorization` will not run: list at least 2 users as `peers` under `[auth.wfc]`. "
+        f"See {OBJECT_LEVEL_AUTHORIZATION_GUIDE}"
+    )
+
+
+def _format_number(value: float) -> str:
+    return f"{value:f}".rstrip("0").rstrip(".")
+
+
+def _describe_duration(seconds: float) -> str:
+    if seconds < 3600:
+        return f"{round(seconds / 60)} minutes"
+    hours = round(seconds / 3600)
+    return f"{hours} hour" if hours == 1 else f"{hours} hours"

@@ -5,7 +5,7 @@ import sys
 from collections.abc import Callable
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from urllib.parse import quote, urldefrag, urljoin, urlsplit, urlunsplit
 from urllib.request import urlopen
 
@@ -13,12 +13,25 @@ import jsonschema_rs
 
 from schemathesis.core.deserialization import deserialize_yaml
 from schemathesis.core.errors import RefResolutionError, RemoteDocumentError, unresolvable_reference
-from schemathesis.core.jsonschema.types import JsonSchema, JsonValue
+from schemathesis.core.jsonschema.types import JsonSchema, JsonSchemaObject, JsonValue
 from schemathesis.core.transforms import UNRESOLVABLE, resolve_pointer
 from schemathesis.core.transport import DEFAULT_RESPONSE_TIMEOUT
 
 IN_MEMORY_BASE_URI = "urn:schemathesis:root"
 _FRAGMENT_MISS = object()
+
+
+def _find_anchor(root_schema: object, anchor: str) -> object:
+    stack = [root_schema]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, dict):
+            if node.get("$anchor") == anchor:
+                return node
+            stack.extend(node.values())
+        elif isinstance(node, list):
+            stack.extend(node)
+    return UNRESOLVABLE
 
 
 class Resolver:
@@ -30,27 +43,42 @@ class Resolver:
     walk results.
     """
 
-    __slots__ = ("base_uri", "inner", "schema", "fragment_cache", "_ids")
+    __slots__ = ("base_uri", "inner", "schema", "fragment_cache", "_ids", "document")
 
     def __init__(
-        self, inner: jsonschema_rs.Resolver, schema: JsonSchema, ids: dict[str, JsonSchema] | None = None
+        self,
+        inner: jsonschema_rs.Resolver,
+        schema: JsonSchema,
+        *,
+        base_uri: str | None = None,
+        document: Resolver | None = None,
     ) -> None:
         self.inner = inner
         self.schema = schema
         # Frozen on the wrapper so hot-path callers don't pay a property+attribute hop.
-        self.base_uri: str = inner.base_uri
+        self.base_uri: str = inner.base_uri if base_uri is None else base_uri
         self.fragment_cache: dict[str, Any] = {}
-        self._ids = ids
+        self._ids: dict[str, JsonSchema] | None = None
+        # The document around `schema` when `schema` names itself; it resolves what `schema` does not hold.
+        self.document = document
+
+    def enter(self, schema: JsonSchemaObject) -> Resolver:
+        """The resolver for references inside `schema`, whose fragments point into it once it names itself."""
+        for keyword in ("$id", "id"):
+            value = schema.get(keyword)
+            if isinstance(value, str) and _names_schema(keyword, value):
+                if schema is self.schema:
+                    return self
+                base_uri = urldefrag(resolve_reference_uri(self.base_uri, value))[0]
+                return Resolver(self.inner, schema, base_uri=base_uri, document=self.document or self)
+        return self
 
     @property
     def ids(self) -> dict[str, JsonSchema]:
         """Names the document gives itself and its subschemas, so a reference to one stays in-document."""
         if self._ids is None:
-            self._ids = collect_ids(self.schema)
+            self._ids = collect_ids(self.schema, self.base_uri)
         return self._ids
-
-    def lookup(self, reference: str) -> Any:
-        return self.inner.lookup(reference)
 
     def resolve_local_fragment(self, fragment: str) -> Any:
         """Walk the bound schema to `fragment`. Returns `UNRESOLVABLE` if the walk fails."""
@@ -63,11 +91,14 @@ class Resolver:
         # rely on the lenient interpretation.
         if not fragment or fragment == "/":
             value: Any = self.schema
+        elif not fragment.startswith("/"):
+            value = _find_anchor(self.schema, fragment)
+            if value is UNRESOLVABLE:
+                # Tolerate refs like `#components/parameters/X` (no leading `/`) that schemas
+                # in the wild produce.
+                value = resolve_pointer(self.schema, f"/{fragment}")
         else:
-            # Tolerate refs like `#components/parameters/X` (no leading `/`) that schemas
-            # in the wild produce.
-            pointer = fragment if fragment.startswith("/") else f"/{fragment}"
-            value = resolve_pointer(self.schema, pointer)
+            value = resolve_pointer(self.schema, fragment)
         cache[fragment] = value
         return value
 
@@ -134,9 +165,25 @@ def _looks_like_html(content_type: str | None, body: bytes) -> bool:
     return any(head.startswith(marker) for marker in _HTML_MARKERS)
 
 
-@lru_cache
+# An unreachable document fails the same way for every reference into it, so fetching it again only waits again.
+_REMOTE_FAILURES: dict[str, Exception] = {}
+
+
 def load_remote_uri(uri: str) -> Any:
     """Load the resource and parse it as YAML / JSON."""
+    failure = _REMOTE_FAILURES.get(uri)
+    if failure is not None:
+        # Drop the previous traceback so repeated failures do not keep growing it
+        raise failure.with_traceback(None)
+    try:
+        return _load_remote_uri(uri)
+    except Exception as exc:
+        _REMOTE_FAILURES[uri] = exc
+        raise
+
+
+@lru_cache
+def _load_remote_uri(uri: str) -> Any:
     import requests
 
     response = requests.get(uri, timeout=DEFAULT_RESPONSE_TIMEOUT)
@@ -154,7 +201,7 @@ def load_remote_uri(uri: str) -> Any:
 
     document = deserialize_yaml(response.content)
 
-    if not isinstance(document, dict | list):
+    if not isinstance(document, (dict, list)):
         raise RemoteDocumentError(
             f"Remote document is parsed as {type(document).__name__}, but an object/array is expected {_suffix()}"
         )
@@ -189,9 +236,26 @@ def build_registry(
         return jsonschema_rs.Registry([(base_uri, {})], draft=draft, retriever=retrieve)
 
 
-def collect_ids(root_schema: Any) -> dict[str, JsonSchema]:
-    """Map every absolute name the document gives itself to the node carrying it."""
+def _names_schema(keyword: str, value: str) -> bool:
+    """Whether a string under `$id` / `id` is the name of the schema holding it."""
+    # A relative `id` is far more often an ordinary field of example data than a schema name, so only an absolute
+    # one names a schema.
+    return keyword == "$id" or "://" in value or value.startswith("urn:")
+
+
+# The same names repeat: a document is scanned for them once per reference into it.
+@lru_cache(maxsize=4096)
+def _name_key(uri: str) -> str:
+    """Name without dot segments, so `./a`, `x/../a` and `../a` all match `a` in a document without a location."""
+    # References keep their dot segments, so a file outside the document still loads from where they point.
+    return urljoin(".", uri)
+
+
+def collect_ids(root_schema: Any, base_uri: str) -> dict[str, JsonSchema]:
+    """Map every name the document gives itself, resolved against the enclosing base URI, to the node carrying it."""
     ids: dict[str, JsonSchema] = {}
+    base = base_uri
+    # Below the subschemas of a named node sits the base URI to restore once they are all visited.
     stack: list[Any] = [root_schema]
     while stack:
         node = stack.pop()
@@ -199,11 +263,15 @@ def collect_ids(root_schema: Any) -> dict[str, JsonSchema]:
             for keyword in ("$id", "id"):
                 value = node.get(keyword)
                 # A non-string sits under a property named `$id`/`id`, not under the keyword.
-                if isinstance(value, str) and ("://" in value or value.startswith("urn:")):
-                    ids.setdefault(urldefrag(value)[0], node)
+                if isinstance(value, str) and _names_schema(keyword, value):
+                    stack.append(base)
+                    base = urldefrag(resolve_reference_uri(base, value))[0]
+                    ids.setdefault(_name_key(base), node)
             stack.extend(value for value in node.values() if isinstance(value, (dict, list)))
         elif isinstance(node, list):
             stack.extend(value for value in node if isinstance(value, (dict, list)))
+        else:
+            base = node
     return ids
 
 
@@ -244,13 +312,9 @@ def _resolve_reference_uri_with_document(base_uri: str, reference: str) -> tuple
             scheme = "https"
         return f"{scheme}:{reference}", document_uri
 
-    if "://" in document_uri:
-        return urljoin(document_uri, reference), document_uri
-
-    # `_normalize_location` rewrites filesystem paths to `file://` URIs, so all base URIs
-    # reaching here either match the `://` branch above or are `urn:`-prefixed. URNs have
-    # no path component to resolve a relative reference against, so return it as-is.
-    return reference, document_uri
+    # A relative `$id` in a document without a location leaves a relative path as the base, and it anchors relative
+    # references like any other path. A URN has no path to anchor them, so `urljoin` returns them as written.
+    return urljoin(document_uri, reference), document_uri
 
 
 def resolve_reference_uri(base_uri: str, reference: str) -> str:
@@ -261,12 +325,40 @@ def resolve_reference(resolver: Resolver, reference: str) -> tuple[Resolver, Any
     return resolve_reference_with_uri(resolver, reference)[1:]
 
 
-def resolve_reference_with_uri(resolver: Resolver, reference: str) -> tuple[str, Resolver, Any]:
+def _resolve_document_fragment(target_resolver: Resolver, fragment: str, target_uri: str) -> tuple[str, Resolver, Any]:
+    """Resolve a fragment inside an external document, reporting the full target URI on failure."""
+    try:
+        return resolve_reference_with_uri(target_resolver, f"#{fragment}")
+    except RefResolutionError as exc:
+        # A bare `#/fragment` note reads like a broken reference in the main schema; attribute
+        # it to the document that actually missed the key.
+        exc.__notes__ = [target_uri]
+        raise
+
+
+def resolve_reference_with_uri(resolver: Resolver, reference: object) -> tuple[str, Resolver, Any]:
     """Resolve a `$ref` and return `(target_uri, target_resolver, target_value)`.
 
     The bundler needs the absolute target URI for cycle and visited-set bookkeeping
     in addition to the resolved value, so both are returned together.
     """
+    if not isinstance(reference, str):
+        error = RefResolutionError(f"`$ref` must be a string, got {reference!r}")
+        error.add_note(str(reference))
+        raise error
+    document = resolver.document
+    if document is not None:
+        if reference.startswith("#"):
+            value = resolver.resolve_local_fragment(reference[1:])
+            if value is not UNRESOLVABLE:
+                return f"{resolver.base_uri}{reference}", resolver, value
+        else:
+            target_uri = resolve_reference_uri(resolver.base_uri, reference)
+            # Names the document gives its schemas resolve against the `$id`, as JSON Schema specifies.
+            if _name_key(target_uri.partition("#")[0]) in document.ids:
+                reference = target_uri
+        # Documents in the wild point at their components and files relative to the document, not to the `$id`.
+        return resolve_reference_with_uri(document, reference)
     try:
         resolved_uri, current_document_uri = _resolve_reference_uri_with_document(resolver.base_uri, reference)
         document_uri, _, fragment = resolved_uri.partition("#")
@@ -274,16 +366,16 @@ def resolve_reference_with_uri(resolver: Resolver, reference: str) -> tuple[str,
         if document_uri and document_uri != current_document_uri:
             # A document that names itself carries its own target; fetching it would go looking for
             # a copy that may not exist, or may have drifted from the one in hand.
-            named = resolver.ids.get(document_uri)
+            named = resolver.ids.get(_name_key(document_uri))
             if named is not None:
-                named_resolver = Resolver(resolver.inner, named, resolver.ids)
+                named_resolver = Resolver(resolver.inner, named, base_uri=document_uri, document=resolver)
                 if fragment:
-                    return resolve_reference_with_uri(named_resolver, f"#{fragment}")
+                    return _resolve_document_fragment(named_resolver, fragment, resolved_uri)
                 return resolved_uri, named_resolver, named
             document = retrieve(document_uri)
             external_resolver = make_root_resolver(document, location=document_uri)
             if fragment:
-                return resolve_reference_with_uri(external_resolver, f"#{fragment}")
+                return _resolve_document_fragment(external_resolver, fragment, resolved_uri)
             return resolved_uri, external_resolver, document
 
         # Local fragment: walk the bound schema directly. `Registry.lookup()` deep-clones
@@ -292,17 +384,17 @@ def resolve_reference_with_uri(resolver: Resolver, reference: str) -> tuple[str,
         if value is not UNRESOLVABLE:
             return resolved_uri, resolver, value
 
-        resolved = resolver.lookup(reference)
+        resolved = resolver.inner.lookup(reference)
     except (jsonschema_rs.ReferencingError, OSError, RemoteDocumentError) as exc:
         error = RefResolutionError(str(exc))
-        if sys.version_info >= (3, 11):
-            error.add_note(reference)
-        else:
-            # `add_note` is 3.11+, and this error is ours, so mypy has no `__notes__` to see.
-            error.__notes__ = [reference]  # type: ignore[attr-defined]
+        error.add_note(reference)
         raise error from exc
     # Bind `resolved.contents` so subsequent local-fragment walks land in the right document.
-    return resolved_uri, Resolver(resolved.resolver, resolved.contents), resolved.contents
+    # A reference may point at any JSON value, not only a schema.
+    return resolved_uri, Resolver(resolved.resolver, cast(JsonSchema, resolved.contents)), resolved.contents
+
+
+NOT_IN_CYCLE = sys.maxsize
 
 
 def find_unresolvable_reference(schema: JsonSchema, resolver: Resolver, memo: dict[str, str | None]) -> str | None:
@@ -311,9 +403,18 @@ def find_unresolvable_reference(schema: JsonSchema, resolver: Resolver, memo: di
     `memo` carries the verdict for every reference target already walked, so a component shared by
     many schemas in the same document is inspected once instead of once per referring schema.
     """
+    # Targets of one strongly connected group of references share one verdict, known only once the walk leaves
+    # the group's first target. Until then they wait here, keyed by their position on the stack.
+    pending: dict[str, int] = {}
+    stack: list[str] = []
+    # The earliest pending target the current target's walk ran into.
+    earliest = NOT_IN_CYCLE
 
-    def walk(node: JsonValue, current_resolver: Resolver, in_progress: set[str]) -> str | None:
+    def walk(node: JsonValue, current_resolver: Resolver) -> str | None:
+        nonlocal earliest
         if isinstance(node, dict):
+            if "$id" in node or "id" in node:
+                current_resolver = current_resolver.enter(node)
             reference = node.get("$ref")
             # An empty reference points at the current scope, which always resolves.
             if isinstance(reference, str) and reference.strip():
@@ -324,24 +425,39 @@ def find_unresolvable_reference(schema: JsonSchema, resolver: Resolver, memo: di
                 if uri in memo:
                     if memo[uri] is not None:
                         return memo[uri]
-                elif uri not in in_progress:
-                    in_progress.add(uri)
-                    found = walk(target, target_resolver, in_progress)
-                    in_progress.discard(uri)
-                    memo[uri] = found
+                elif uri in pending:
+                    earliest = min(earliest, pending[uri])
+                else:
+                    order = len(stack)
+                    pending[uri] = order
+                    stack.append(uri)
+                    outer_earliest = earliest
+                    earliest = NOT_IN_CYCLE
+                    found = walk(target, target_resolver)
                     if found is not None:
+                        memo[uri] = found
                         return found
+                    if earliest >= order:
+                        while True:
+                            member = stack.pop()
+                            del pending[member]
+                            memo[member] = None
+                            if member == uri:
+                                break
+                        earliest = outer_earliest
+                    else:
+                        earliest = min(outer_earliest, earliest)
             for value in node.values():
                 if isinstance(value, (dict, list)):
-                    found = walk(value, current_resolver, in_progress)
+                    found = walk(value, current_resolver)
                     if found is not None:
                         return found
         elif isinstance(node, list):
             for item in node:
                 if isinstance(item, (dict, list)):
-                    found = walk(item, current_resolver, in_progress)
+                    found = walk(item, current_resolver)
                     if found is not None:
                         return found
         return None
 
-    return walk(schema, resolver, set())
+    return walk(schema, resolver)

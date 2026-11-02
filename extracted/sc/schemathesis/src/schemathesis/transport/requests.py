@@ -5,31 +5,70 @@ import inspect
 import json
 import os
 import time
-from collections.abc import Mapping, MutableMapping
+from collections.abc import Iterator, Mapping, MutableMapping
+from http.client import RemoteDisconnected
 from io import BytesIO
-from typing import TYPE_CHECKING, Any, cast
-from urllib.parse import urlencode, urlparse
+from typing import TYPE_CHECKING, Any
+from urllib.parse import urlencode, urljoin, urlparse
 
 import requests
+from requests.adapters import HTTPAdapter
 from typing_extensions import override
+from urllib3.exceptions import DecodeError, ProtocolError, ReadTimeoutError
+from urllib3.filepost import encode_multipart_formdata
 
 from schemathesis.core import Body, NotSet, media_types
-from schemathesis.core.errors import IncorrectUsage, SerializationNotPossible
-from schemathesis.core.jsonschema import maybe_resolve_bundled, schema_with_bundle
+from schemathesis.core.errors import IncorrectUsage, SerializationNotPossible, is_read_timeout, read_timeout_error
+from schemathesis.core.file_samples import MEDIA_TYPE_FILE_SAMPLES
+from schemathesis.core.jsonschema import get_type
 from schemathesis.core.parameters import RAW_QUERY_STRING_KEY, RawQueryString, split_delimited_query
 from schemathesis.core.rate_limit import ratelimit
-from schemathesis.core.transforms import merge_at, to_wire_string
-from schemathesis.core.transport import DEFAULT_RESPONSE_TIMEOUT, Response
+from schemathesis.core.transforms import merge_at, to_wire_text
+from schemathesis.core.transport import (
+    STREAM_CUT_SHORT_ATTRIBUTE,
+    Response,
+    read_event_stream,
+)
 from schemathesis.generation.overrides import Override
 from schemathesis.transport import BaseTransport, SerializationContext
-from schemathesis.transport.prepare import get_exclude_headers, prepare_body, prepare_headers, prepare_url
-from schemathesis.transport.serialization import Binary, serialize_binary, serialize_json, serialize_xml, serialize_yaml
+from schemathesis.transport.prepare import (
+    get_exclude_headers,
+    prepare_body,
+    prepare_cookies,
+    prepare_headers,
+    prepare_url,
+    replaces_body,
+    serialize_cookies,
+)
+from schemathesis.transport.serialization import (
+    Binary,
+    serialize_binary,
+    serialize_json,
+    serialize_xml,
+    serialize_xml_with_schema,
+    serialize_yaml,
+)
 
 if TYPE_CHECKING:
     from schemathesis.generation.case import Case
 
 
-class ManagedCookiesSession(requests.Session):
+class SameHostRedirectsSession(requests.Session):
+    """`requests.Session` that follows redirects only within the host of the redirected request."""
+
+    @override
+    def get_redirect_target(self, resp: requests.Response) -> str | None:
+        target = super().get_redirect_target(resp)
+        if target is None:
+            return None
+        # Same rule `requests` uses to decide whether credentials may follow a redirect.
+        # The `requests` stubs leave this method unannotated.
+        if self.should_strip_auth(resp.url, urljoin(resp.url, target)):  # type: ignore[no-untyped-call]
+            return None
+        return target
+
+
+class ManagedCookiesSession(SameHostRedirectsSession):
     """`requests.Session` whose response cookies are dropped between generated requests."""
 
 
@@ -40,7 +79,7 @@ def _normalize_query_component(params: Any) -> str:
         return params.lstrip("?")
     if isinstance(params, Mapping):
         return urlencode(params, doseq=True)
-    if isinstance(params, tuple | list):
+    if isinstance(params, (tuple, list)):
         return urlencode(params, doseq=True)
     return str(params)
 
@@ -53,6 +92,34 @@ def _merge_query_components(left: Any, right: Any) -> str:
     if not right_chunk:
         return left_chunk
     return f"{left_chunk}&{right_chunk}"
+
+
+def prepare_query(case: Case) -> dict[str, Any] | str | None:
+    """Build the query for the wire: raw and delimited parts become a pre-encoded string."""
+    params: dict[str, Any] | str | None = case.query
+    raw_query = None
+    if isinstance(params, Mapping):
+        params = dict(params)
+        marker_value = params.get(RAW_QUERY_STRING_KEY)
+        if isinstance(marker_value, RawQueryString):
+            raw_query = str(params.pop(RAW_QUERY_STRING_KEY))
+        delimited_raw, params = split_delimited_query(params)
+        if delimited_raw:
+            raw_query = delimited_raw if raw_query is None else _merge_query_components(raw_query, delimited_raw)
+    if raw_query is not None:
+        return _merge_query_components(raw_query, params)
+    if isinstance(params, dict):
+        # Empty objects are sent as empty strings, so the parameters are still present in the query string
+        params = {key: "" if value == {} else value for key, value in params.items()}
+    return params
+
+
+def merge_params_override(data: dict[str, Any], key: str, params_override: Any) -> None:
+    """Merge explicitly passed query parameters into the serialized query stored under `key`."""
+    if isinstance(data.get(key), str) or isinstance(params_override, str):
+        data[key] = _merge_query_components(data.get(key), params_override)
+    else:
+        merge_at(data, key, params_override)
 
 
 class RequestsTransport(BaseTransport["requests.Session"]):
@@ -70,11 +137,14 @@ class RequestsTransport(BaseTransport["requests.Session"]):
         serializer = None
         if not isinstance(case.body, NotSet) and media_type is not None:
             media_type, serializer = self._resolve_serializer(media_type)
+            # The multipart encoder picks the boundary; a header naming the bare media type leaves the body unparsable.
+            if media_types.is_multipart(media_type) and final_headers.get("Content-Type") == case.media_type:
+                del final_headers["Content-Type"]
 
-        # Set content type header if needed
+        # Set content type header if needed. Multipart headers come from the encoder, which picks the boundary.
         if (
             media_type
-            and media_type != "multipart/form-data"
+            and not media_types.is_multipart(media_type)
             and not isinstance(case.body, NotSet)
             and "content-type" not in final_headers
         ):
@@ -82,8 +152,9 @@ class RequestsTransport(BaseTransport["requests.Session"]):
 
         url = prepare_url(case, base_url)
 
-        # Handle serialization
-        if serializer is not None:
+        # Handle serialization. A body the caller passes replaces the generated one, so that one is not serialized:
+        # transports pick one of `data` and `json` when given both, which can drop the caller's body.
+        if serializer is not None and not replaces_body(kwargs):
             context = SerializationContext(case=case)
             extra = serializer(context, prepare_body(case))
         else:
@@ -98,42 +169,22 @@ class RequestsTransport(BaseTransport["requests.Session"]):
             for key, value in additional_headers.items():
                 final_headers.setdefault(key, value)
 
-        params: dict[str, Any] | str | None = case.query
-        raw_query = None
-        if isinstance(params, Mapping):
-            params = dict(params)
-            marker_value = params.get(RAW_QUERY_STRING_KEY)
-            if isinstance(marker_value, RawQueryString):
-                raw_query = str(params.pop(RAW_QUERY_STRING_KEY))
-            delimited_raw, params = split_delimited_query(params)
-            if delimited_raw:
-                raw_query = delimited_raw if raw_query is None else _merge_query_components(raw_query, delimited_raw)
-        if raw_query is not None:
-            params = _merge_query_components(raw_query, params)
-
-        # Replace empty dictionaries with empty strings, so the parameters actually present in the query string
-        if isinstance(params, Mapping) and any(value == {} for value in (params or {}).values()):
-            params = dict(params)
-            for key, value in params.items():
-                if value == {}:
-                    params[key] = ""
+        params = prepare_query(case)
 
         data = {
             "method": case.method,
             "url": url,
-            "cookies": case.cookies,
+            "cookies": serialize_cookies(case),
             "headers": final_headers,
             "params": params,
             **extra,
         }
 
         if params_override is not None:
-            if isinstance(data.get("params"), str) or isinstance(params_override, str):
-                data["params"] = _merge_query_components(data.get("params"), params_override)
-            else:
-                merge_at(data, "params", params_override)
+            merge_params_override(data, "params", params_override)
         if cookies is not None:
             merge_at(data, "cookies", cookies)
+        data["cookies"] = prepare_cookies(data["cookies"])
 
         excluded_headers = get_exclude_headers(case)
         for name in excluded_headers:
@@ -143,35 +194,32 @@ class RequestsTransport(BaseTransport["requests.Session"]):
 
     def _build_request_data(self, case: Case, kwargs: dict[str, Any]) -> dict[str, Any]:
         """Merge the serialized case with transport settings from config and explicit keyword arguments."""
-        config = case.operation.schema.config
+        settings = case.operation.schema.config.request_settings_for(operation=case.operation)
         data = self.serialize_case(case, **kwargs)
 
-        verify = config.tls_verify_for(operation=case.operation)
-        if verify is not None:
-            data.setdefault("verify", verify)
-        timeout = config.request_timeout_for(operation=case.operation)
-        if timeout is not None:
-            data.setdefault("timeout", timeout)
-        cert = config.request_cert_for(operation=case.operation)
-        if cert is not None:
-            data.setdefault("cert", cert)
+        if settings.verify is not None:
+            data.setdefault("verify", settings.verify)
+        data.setdefault("timeout", settings.network_timeout)
+        if settings.cert is not None:
+            data.setdefault("cert", settings.cert)
 
         for key, value in kwargs.items():
             if key == "base_url":
                 continue
             if key not in ("headers", "cookies", "params") or key not in data:
                 data[key] = value
-        data.setdefault("timeout", DEFAULT_RESPONSE_TIMEOUT)
-        proxies = config.proxy_for(operation=case.operation)
+        proxies = settings.proxies
         if proxies is not None:
-            data.setdefault("proxies", {"all": proxies})
+            data.setdefault("proxies", proxies)
         return data
 
     @override
     def send(self, case: Case, *, session: requests.Session | None = None, **kwargs: Any) -> Response:
         config = case.operation.schema.config
 
-        max_redirects = kwargs.pop("max_redirects", None) or config.max_redirects_for(operation=case.operation)
+        max_redirects = kwargs.pop("max_redirects", None)
+        if max_redirects is None:
+            max_redirects = config.max_redirects_for(operation=case.operation)
 
         if session is not None and session.headers:
             # These headers are explicitly provided via config or CLI args.
@@ -182,13 +230,18 @@ class RequestsTransport(BaseTransport["requests.Session"]):
             kwargs["headers"] = headers
 
         data = self._build_request_data(case, kwargs)
+        # Unless redirects are configured, a documented redirect is the response under test, not its target.
+        if max_redirects == 0 or (
+            max_redirects is None and any(code.startswith("3") for code in case.operation.responses.status_codes)
+        ):
+            data.setdefault("allow_redirects", False)
 
         current_session_headers: MutableMapping[str, Any] = {}
         current_session_auth = None
 
         if session is None:
             validate_vanilla_requests_kwargs(data, case.operation.schema.declared_base_url)
-            session = requests.Session()
+            session = SameHostRedirectsSession()
             close_session = True
         else:
             current_session_headers = session.headers
@@ -198,7 +251,8 @@ class RequestsTransport(BaseTransport["requests.Session"]):
                     current_session_auth = session.auth
                     session.auth = None
             close_session = False
-        if max_redirects is not None:
+        # `requests` raises on any redirect when `max_redirects` is 0, even with redirect following disabled.
+        if max_redirects:
             session.max_redirects = max_redirects
         session.headers = {}
 
@@ -207,18 +261,13 @@ class RequestsTransport(BaseTransport["requests.Session"]):
         try:
             rate_limit = config.rate_limit_for(operation=case.operation)
             retries = config.request_retries_for(operation=case.operation) or 0
+            max_stream_events = config.max_stream_events_for(operation=case.operation)
             with ratelimit(rate_limit, config.base_url):
-                response = _request_with_retries(session, data, retries)
+                response = _request_with_retries(session, data, retries, max_stream_events)
             return Response.from_requests(
                 response,
                 verify=verify,
-                _override=Override(
-                    query=kwargs.get("params") or {},
-                    headers=kwargs.get("headers") or {},
-                    cookies=kwargs.get("cookies") or {},
-                    path_parameters={},
-                    body={},
-                ),
+                _override=Override.from_send_kwargs(kwargs),
             )
         finally:
             session.headers = current_session_headers
@@ -230,12 +279,14 @@ class RequestsTransport(BaseTransport["requests.Session"]):
                 session.cookies.clear()
 
 
-def _request_with_retries(session: requests.Session, data: dict[str, Any], retries: int) -> requests.Response:
+def _request_with_retries(
+    session: requests.Session, data: dict[str, Any], retries: int, max_stream_events: int
+) -> requests.Response:
     # Retry transient network failures with exponential backoff capped at 10s.
     attempt = 0
     while True:
         try:
-            return session.request(**data)
+            return _request_resending_on_dropped_connection(session, data, max_stream_events)
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             if attempt >= retries:
                 raise
@@ -243,7 +294,95 @@ def _request_with_retries(session: requests.Session, data: dict[str, Any], retri
             attempt += 1
 
 
-def validate_vanilla_requests_kwargs(data: dict[str, Any], declared_base_url: str | None = None) -> None:
+def _request_resending_on_dropped_connection(
+    session: requests.Session, data: dict[str, Any], max_stream_events: int
+) -> requests.Response:
+    # A server may close a keep-alive connection after a response without `Connection: close`, leaving a request
+    # already sent on it unread. Like browsers and curl, send such a request once more on a fresh connection.
+    opened = _count_opened_connections(session)
+    try:
+        return _request(session, data, max_stream_events)
+    except requests.exceptions.ConnectionError as exc:
+        if not _is_dropped_before_response(exc) or _count_opened_connections(session) != opened:
+            raise
+        dropped = exc
+    try:
+        return _request(session, data, max_stream_events)
+    except requests.exceptions.RequestException:
+        # The fresh connection failing too means the server itself is broken; report what the original request saw.
+        pass
+    raise dropped
+
+
+EVENT_STREAM_CHUNK_SIZE = 64 * 1024
+
+
+def _request(session: requests.Session, data: dict[str, Any], max_stream_events: int) -> requests.Response:
+    response = session.request(**{**data, "stream": True})
+    if media_types.is_sse(response.headers.get("Content-Type")):
+        # An event stream may never end; stop reading once the request timeout passes in total.
+        response._content, cut_short = read_event_stream(
+            _iter_event_stream(response), data.get("timeout"), max_stream_events
+        )
+        # The ASGI client may have cut the stream short already
+        if cut_short:
+            setattr(response, STREAM_CUT_SHORT_ATTRIBUTE, True)
+        response.close()
+    else:
+        # Read the body here, so network errors while reading it are retried like before.
+        _read_body(response, data["timeout"])
+    return response
+
+
+def _read_body(response: requests.Response, timeout: float | int) -> None:
+    try:
+        response.content  # noqa: B018
+    except requests.exceptions.ConnectionError as exc:
+        # A body that stops arriving within the timeout is reported like a response that never started.
+        if is_read_timeout(exc):
+            raise read_timeout_error(response.url, timeout, response.request) from exc
+        raise
+
+
+def _iter_event_stream(response: requests.Response) -> Iterator[bytes]:
+    # Yield bytes as they arrive; `iter_content` waits to fill a chunk or, without a chunk size, for the stream end.
+    try:
+        while chunk := response.raw.read1(EVENT_STREAM_CHUNK_SIZE, decode_content=True):
+            yield chunk
+    except ReadTimeoutError as exc:
+        raise TimeoutError from exc
+    except ProtocolError as exc:
+        raise requests.exceptions.ChunkedEncodingError(exc) from exc
+    except DecodeError as exc:
+        raise requests.exceptions.ContentDecodingError(exc) from exc
+
+
+def _count_opened_connections(session: requests.Session) -> int:
+    total = 0
+    for adapter in session.adapters.values():
+        if not isinstance(adapter, HTTPAdapter):
+            continue
+        for manager in (adapter.poolmanager, *adapter.proxy_manager.values()):
+            # The pool container refuses direct iteration; its key snapshot is thread-safe.
+            for key in manager.pools.keys():  # noqa: SIM118
+                pool = manager.pools.get(key)
+                if pool is not None:
+                    total += pool.num_connections
+    return total
+
+
+def _is_dropped_before_response(exc: requests.exceptions.ConnectionError) -> bool:
+    reason = exc.args[0] if exc.args else None
+    return (
+        isinstance(reason, ProtocolError)
+        and len(reason.args) == 2
+        and isinstance(
+            reason.args[1], (RemoteDisconnected, ConnectionResetError, BrokenPipeError, ConnectionAbortedError)
+        )
+    )
+
+
+def validate_vanilla_requests_kwargs(data: dict[str, Any], declared_base_url: str | None) -> None:
     """Check arguments for `requests.Session.request`.
 
     Some arguments can be valid for cases like ASGI integration, but at the same time they won't work for the regular
@@ -290,7 +429,7 @@ def yaml_serializer(ctx: SerializationContext, value: Body) -> dict[str, Any]:
 def _should_coerce_to_bytes(item: object) -> bool:
     """Whether the item should be converted to bytes."""
     # These types are OK in forms, others should be coerced to bytes
-    return isinstance(item, Binary) or not isinstance(item, (bytes | str | int))
+    return isinstance(item, Binary) or not isinstance(item, ((bytes, str, int)))
 
 
 def _prepare_form_data(data: dict[str, Any]) -> dict[str, Any]:
@@ -303,10 +442,19 @@ def _prepare_form_data(data: dict[str, Any]) -> dict[str, Any]:
     """
     for name, value in data.items():
         if isinstance(value, list):
-            data[name] = [serialize_binary(item) if _should_coerce_to_bytes(item) else item for item in value]
-        elif _should_coerce_to_bytes(value):
-            data[name] = serialize_binary(value)
+            data[name] = [_prepare_form_value(item) for item in value]
+        else:
+            data[name] = _prepare_form_value(value)
     return data
+
+
+def _prepare_form_value(item: Body) -> object:
+    # Plain fields are text, so non-string values use their JSON spelling rather than Python's, e.g. `true`.
+    if isinstance(item, (bool, dict, list)) or item is None:
+        return to_wire_text(item)
+    if _should_coerce_to_bytes(item):
+        return serialize_binary(item)
+    return item
 
 
 def choose_boundary() -> str:
@@ -328,11 +476,21 @@ def _encode_multipart(value: Any, boundary: str) -> bytes:
     return body.getvalue()
 
 
-def _is_structured_schema(schema: dict[str, Any]) -> bool:
-    # Arrays of binary parts (e.g. `items.format: binary`) are file uploads, not JSON payloads.
+def encode_non_object_multipart(value: Any) -> tuple[bytes, str]:
+    """Encode a body from an uncommon schema, e.g. `{"type": "string"}`, and return it with its Content-Type."""
+    boundary = choose_boundary()
+    return _encode_multipart(value, boundary), f"multipart/form-data; boundary={boundary}"
+
+
+def _part_schema(schema: dict[str, Any]) -> dict[str, Any]:
+    # An array part takes the default of its items: JSON for nested structures, plain text for primitives and files.
     items = schema.get("items")
-    if isinstance(items, dict) and items.get("format") in {"binary", "base64"}:
-        return False
+    if isinstance(items, dict) and items:
+        return items
+    return schema
+
+
+def _declares_structure(schema: dict[str, Any]) -> bool:
     declared = schema.get("type")
     if isinstance(declared, str):
         return declared in {"object", "array"}
@@ -346,28 +504,18 @@ def _collect_encoded_fields(ctx: SerializationContext) -> dict[str, str]:
     operation = ctx.case.operation
     selected = ctx.case.multipart_content_types or {}
     result: dict[str, str] = {}
-    for body in operation.body:
-        main, sub = media_types.parse(body.media_type)
-        if main not in ("*", "multipart") or sub not in ("*", "form-data", "mixed"):
-            continue
-        for name in body.definition.get("encoding", {}):
-            content_type = selected.get(name) or body.get_property_content_type(name)
-            if isinstance(content_type, str):
-                result[name] = content_type
-        # Default nested-object / array form-parts to JSON so the wire payload is parsable.
-        schema_node = body.definition.get("schema")
-        if isinstance(schema_node, dict):
-            properties = schema_node.get("properties")
-            if isinstance(properties, dict):
-                for name, prop in properties.items():
-                    if name in result or not isinstance(prop, dict):
-                        continue
-                    # Resolve a property-level `$ref` against the body schema's bundle so
-                    # a referent like `{type: string}` is left alone and `{type: object}` triggers JSON.
-                    spliced = cast("dict[str, Any]", schema_with_bundle(prop, schema_node))
-                    if _is_structured_schema(maybe_resolve_bundled(spliced)):
-                        result[name] = "application/json"
-        break
+    body = operation.get_body_for_media_type(ctx.case.media_type or "multipart/form-data")
+    if body is None:
+        return result
+    for name in body.definition.get("encoding", {}):
+        # Without a recorded choice, a part is sent with the first listed media type.
+        content_type = selected.get(name) or next(iter(body.get_property_content_types(name)), None)
+        if content_type is not None:
+            result[name] = content_type
+    # Default nested-object / array form-parts to JSON so the wire payload is parsable.
+    for name, prop in body.form_properties.items():
+        if name not in result and isinstance(prop, dict) and _declares_structure(_part_schema(prop)):
+            result[name] = "application/json"
     return result
 
 
@@ -380,34 +528,66 @@ def _is_already_serialized(value: object) -> bool:
     return False
 
 
-def _serialize_part_value(ctx: SerializationContext, value: Any, content_type: str) -> Any:
-    """Serialize a multipart field value using the registered serializer for its content-type."""
-    if _is_already_serialized(value):
-        return value
+def _property_schema(ctx: SerializationContext, name: str) -> dict[str, Any]:
+    """Return the schema of a multipart property, with `$ref` resolved."""
+    body = ctx.case.operation.get_body_for_media_type(ctx.case.media_type or "multipart/form-data")
+    assert body is not None
+    schema = body.form_properties.get(name)
+    return schema if isinstance(schema, dict) else {}
+
+
+def _serialize_part_value(ctx: SerializationContext, value: Any, name: str, content_type: str) -> tuple[object, str]:
+    """Serialize a multipart field value for its content-type, returning the part content and its content-type."""
+    if _is_already_serialized(value) or media_types.is_plain_text(content_type):
+        # Plain text parts are rendered like fields without an explicit content-type.
+        return value, content_type
+    main, sub = media_types.parse(content_type)
+    if main == "multipart" and isinstance(value, Mapping):
+        # A nested multipart document needs its own boundary, which the part content-type carries.
+        boundary = choose_boundary()
+        fields = [
+            (name, item)
+            for name, field in _prepare_form_data(dict(value)).items()
+            for item in (field if isinstance(field, list) else [field])
+        ]
+        content, _ = encode_multipart_formdata(fields, boundary=boundary)
+        return content, f"{main}/{sub}; boundary={boundary}"
     pair = REQUESTS_TRANSPORT.get_first_matching_media_type(content_type)
     if pair is None:
+        if not isinstance(value, list) and "array" in get_type(_property_schema(ctx, name)):
+            # An array's media type describes its items. A value of another type, e.g. `0` for a list of files,
+            # has no items to encode, so it goes out as the text it would have without `encoding`.
+            return value, content_type
         raise SerializationNotPossible.for_media_type(content_type)
     _, serializer = pair
-    result = serializer(ctx, value)
-    if "data" in result:
-        return result["data"]
+    if serializer is xml_serializer:
+        # The part is its own XML document, so its root comes from the part schema.
+        result = serialize_xml_with_schema(value, _property_schema(ctx, name), resource_name=name)
+    else:
+        result = serializer(ctx, value)
     if "json" in result:
-        return json.dumps(result["json"]).encode()
-    return value
+        return json.dumps(result["json"]).encode(), content_type
+    data = result.get("data", value)
+    if isinstance(data, Mapping):
+        # Requests form-encodes a mapping body itself, while a part needs the encoded text.
+        return urlencode(_prepare_form_data(dict(data)), doseq=True), content_type
+    return data, content_type
 
 
 def prepare_multipart_parts(
     ctx: SerializationContext, value: dict[str, Any]
 ) -> tuple[list | None, dict[str, Any] | None]:
     """Split a form payload into file parts and plain form fields."""
+    # Fields are replaced with their wire form; the case body must keep its generated values.
+    value = dict(value)
     encoded_fields = _collect_encoded_fields(ctx)
     for name, content_type in encoded_fields.items():
         if name in value:
-            value[name] = _serialize_part_value(ctx, value[name], content_type)
+            value[name], encoded_fields[name] = _serialize_part_value(ctx, value[name], name, content_type)
     multipart = _prepare_form_data(value)
     # Surface auto-discovered per-part content types on the wire; case-level overrides still win.
     selected = {**encoded_fields, **(ctx.case.multipart_content_types or {})}
-    return ctx.case.operation.prepare_multipart(multipart, selected)
+    return ctx.case.operation.prepare_multipart(multipart, ctx.case.media_type or "multipart/form-data", selected)
 
 
 @REQUESTS_TRANSPORT.serializer("multipart/form-data", "multipart/mixed")
@@ -416,20 +596,24 @@ def multipart_serializer(ctx: SerializationContext, value: Body) -> dict[str, An
         return {"data": value}
     if isinstance(value, dict):
         files, data = prepare_multipart_parts(ctx, value)
+        main, sub = media_types.parse(ctx.case.media_type or "multipart/form-data")
         if not files and not data:
             boundary = choose_boundary()
-            main, sub = media_types.parse(ctx.case.media_type or "multipart/form-data")
             content_type = f"{main}/{sub}; boundary={boundary}"
             return {
                 "files": None,
                 "data": f"--{boundary}--\r\n".encode("latin-1"),
                 "headers": {"Content-Type": content_type},
             }
+        if sub == "mixed":
+            # `requests` labels every encoded body `multipart/form-data`; keep the declared subtype instead.
+            prepared = requests.PreparedRequest()
+            prepared.prepare_headers(None)
+            prepared.prepare_body(data, files)
+            content_type = prepared.headers["Content-Type"].replace("multipart/form-data", "multipart/mixed", 1)
+            return {"data": prepared.body, "headers": {"Content-Type": content_type}}
         return {"files": files, "data": data}
-    # Uncommon schema. For example - `{"type": "string"}`
-    boundary = choose_boundary()
-    raw_data = _encode_multipart(value, boundary)
-    content_type = f"multipart/form-data; boundary={boundary}"
+    raw_data, content_type = encode_non_object_multipart(value)
     return {"data": raw_data, "headers": {"Content-Type": content_type}}
 
 
@@ -451,9 +635,9 @@ def urlencoded_serializer(ctx: SerializationContext, value: Body) -> dict[str, A
 def text_serializer(ctx: SerializationContext, value: Body) -> dict[str, Any]:
     if isinstance(value, bytes):
         return {"data": value}
-    return {"data": to_wire_string(value).encode("utf8")}
+    return {"data": to_wire_text(value).encode("utf8")}
 
 
-@REQUESTS_TRANSPORT.serializer("application/octet-stream")
+@REQUESTS_TRANSPORT.serializer("application/octet-stream", *MEDIA_TYPE_FILE_SAMPLES)
 def binary_serializer(ctx: SerializationContext, value: Body) -> dict[str, Any]:
     return {"data": serialize_binary(value)}

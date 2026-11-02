@@ -5,19 +5,18 @@ import json
 import jsonschema_rs
 import pytest
 from flask import Response, jsonify, request
-from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 
 from schemathesis.config import GenerationConfig
 from schemathesis.core import transport
 from schemathesis.core.deserialization import register_deserializer
+from schemathesis.generation.feedback import FeedbackSources
+from schemathesis.generation.hypothesis.examples import generate_many
 from schemathesis.generation.modes import GenerationMode
-from schemathesis.generation.value import GeneratedValue
+from schemathesis.generation.value import MISSING, GeneratedValue, get_at_path
 from schemathesis.python._constants.pool import ConstantEntry, ConstantsPool, Origin
 from schemathesis.resources import SemanticDraw
 from schemathesis.specs.openapi.adapter.parameters import (
-    _MISSING,
-    _get_at_path,
     _set_at_path,
     build_constants_overlay_strategy,
     build_semantic_overlay,
@@ -36,6 +35,7 @@ from schemathesis.specs.openapi.semantic_pool import (
     iter_ingestion_leaves,
     pattern_hash,
 )
+from test.utils import run_given
 
 
 def test_pattern_hash_is_stable_for_equal_inputs():
@@ -457,6 +457,36 @@ _PRODUCER_SCHEMA = {
     }
 }
 
+_RECURSIVE_NODE = {
+    "allOf": [
+        {"$ref": "#/components/schemas/Node"},
+        {
+            "type": "object",
+            "properties": {"id": {"type": "string"}},
+            "required": ["id"],
+        },
+    ]
+}
+_RECURSIVE_OPERATIONS = {
+    "/nodes": {
+        "get": {
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Node"}}},
+                }
+            }
+        },
+        "post": {
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Node"}}},
+            },
+            "responses": {"201": {"description": "Created"}},
+        },
+    }
+}
+
 
 def test_extra_data_source_built_when_schema_has_successful_response(ctx):
     schema = ctx.openapi.load_schema(_PRODUCER_SCHEMA)
@@ -495,8 +525,8 @@ def _lookup_by_descriptor(index, descriptor):
     )
 
 
-def _extra_data_source_for(ctx, schema_dict):
-    schema = ctx.openapi.load_schema(schema_dict)
+def _extra_data_source_for(ctx, schema_dict, **kwargs):
+    schema = ctx.openapi.load_schema(schema_dict, **kwargs)
     extra_data_source = schema.analysis.extra_data_source
     assert isinstance(extra_data_source, OpenApiExtraDataSource)
     assert extra_data_source.semantic_index is not None
@@ -516,6 +546,38 @@ def test_record_response_populates_semantic_index(ctx, case_factory, response_fa
     assert extra_data_source.semantic_index.lookup(
         type_token="string", format_token="email", pattern_hash=None, normalized_name="contact"
     ) == (SemanticCandidate("alice@example.com", operation.label),)
+
+
+def test_record_response_handles_recursive_all_of(ctx, case_factory, response_factory):
+    schema, extra_data_source = _extra_data_source_for(
+        ctx, _RECURSIVE_OPERATIONS, components={"schemas": {"Node": _RECURSIVE_NODE}}
+    )
+    operation = schema["/nodes"]["GET"]
+    _ingest_2xx(
+        operation,
+        body={"id": "node-1"},
+        extra_data_source=extra_data_source,
+        case_factory=case_factory,
+        response_factory=response_factory,
+    )
+    assert extra_data_source.semantic_index.lookup(
+        type_token="string", format_token=None, pattern_hash=None, normalized_name="id"
+    ) == (SemanticCandidate("node-1", operation.label),)
+
+
+def test_request_body_strategy_handles_recursive_all_of(ctx):
+    schema, extra_data_source = _extra_data_source_for(
+        ctx, _RECURSIVE_OPERATIONS, components={"schemas": {"Node": _RECURSIVE_NODE}}
+    )
+    operation = schema["/nodes"]["POST"]
+    strategy = operation.body[0].get_strategy(
+        operation,
+        GenerationConfig(),
+        GenerationMode.POSITIVE,
+        feedback=FeedbackSources(extra_data_source=extra_data_source),
+    )
+    values = generate_many(strategy, 1)
+    assert values and all(isinstance(value, dict) and isinstance(value.get("id"), str) for value in values)
 
 
 def test_record_response_skips_non_2xx(ctx, case_factory, response_factory):
@@ -585,28 +647,139 @@ def test_record_response_excludes_path_parameter_names(ctx, case_factory, respon
     assert "owner@example.com" in pool_values
 
 
-def test_scenario_email_cross_operation_flow(ctx, case_factory, response_factory):
+@pytest.mark.parametrize(
+    ("path", "properties", "body", "consumer", "expected"),
+    [
+        pytest.param(
+            "/api/users",
+            {"email": {"type": "string", "format": "email"}},
+            {"email": "alice@example.com"},
+            {
+                "type": "object",
+                "properties": {"recipient_email": {"type": "string", "format": "email"}},
+            },
+            "alice@example.com",
+            id="scenario_email_cross_operation_flow",
+        ),
+        pytest.param(
+            "/api/products",
+            {"currency": {"type": "string"}},
+            {"currency": "EUR"},
+            {"type": "object", "properties": {"currency": {"type": "string"}}},
+            "EUR",
+            id="scenario_currency_named_fallback_cross_operation_flow",
+        ),
+        pytest.param(
+            "/api/events",
+            {"start_at": {"type": "string", "format": "date-time"}},
+            {"start_at": "2026-05-08T10:00:00Z"},
+            {
+                "type": "object",
+                "properties": {"start_at": {"type": "string", "format": "date-time"}},
+            },
+            "2026-05-08T10:00:00Z",
+            id="scenario_date_time_cross_operation_flow",
+        ),
+        pytest.param(
+            "/api/webhooks",
+            {"url": {"type": "string", "format": "uri"}},
+            {"url": "https://example.com/cb"},
+            {
+                "type": "object",
+                "properties": {"callback_url": {"type": "string", "format": "uri"}},
+            },
+            "https://example.com/cb",
+            id="scenario_url_cross_operation_flow",
+        ),
+        pytest.param(
+            "/customer",
+            {"name": {"type": "string"}},
+            {"name": "alice"},
+            {"type": "object", "properties": {"name": {"type": "string"}}},
+            "alice",
+            id="restgym_market_name_query_cross_operation",
+        ),
+    ],
+)
+def test_pooled_response_value_reaches_consumer(
+    ctx, case_factory, response_factory, path, properties, body, consumer, expected
+):
+    response = {
+        "description": "OK",
+        "content": {"application/json": {"schema": {"type": "object", "properties": properties}}},
+    }
+    schema, extra_data_source = _extra_data_source_for(ctx, {path: {"get": {"responses": {"200": response}}}})
+    _ingest_2xx(
+        schema[path]["GET"],
+        body=body,
+        extra_data_source=extra_data_source,
+        case_factory=case_factory,
+        response_factory=response_factory,
+    )
+    [descriptor] = iter_consumer_leaves(consumer)
+    assert expected in _lookup_by_descriptor(extra_data_source.semantic_index, descriptor)
+
+
+@pytest.mark.parametrize(
+    ("consumer_path", "location", "name", "field", "value", "sent", "reaches"),
+    [
+        ("/api/search", "query", "recipient", {"format": "email"}, "alice@example.com", "alice@example.com", True),
+        ("/api/users/{nickname}", "path", "nickname", {}, "alice", "alice", True),
+        (
+            "/api/mail/{recipient}",
+            "path",
+            "recipient",
+            {"format": "email"},
+            "alice@example.com",
+            "alice%40example.com",
+            False,
+        ),
+    ],
+    ids=["query-by-format", "path-by-name", "path-not-by-format"],
+)
+def test_pooled_response_value_reaches_consumer_parameter(
+    ctx, case_factory, response_factory, consumer_path, location, name, field, value, sent, reaches
+):
+    field_schema = {"type": "string", **field}
+    producer = {
+        "description": "OK",
+        "content": {"application/json": {"schema": {"type": "object", "properties": {"nickname": field_schema}}}},
+    }
+    consumer = {
+        "parameters": [{"name": name, "in": location, "required": True, "schema": field_schema}],
+        "responses": {"200": {"description": "OK"}},
+    }
     schema, extra_data_source = _extra_data_source_for(
-        ctx,
-        {
-            "/api/users": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"email": {"type": "string", "format": "email"}},
-                                    }
-                                }
-                            },
-                        }
-                    }
-                }
-            }
-        },
+        ctx, {"/api/users": {"get": {"responses": {"200": producer}}}, consumer_path: {"get": consumer}}
+    )
+    _ingest_2xx(
+        schema["/api/users"]["GET"],
+        body={"nickname": value},
+        extra_data_source=extra_data_source,
+        case_factory=case_factory,
+        response_factory=response_factory,
+    )
+    strategy = schema[consumer_path]["GET"].as_strategy(
+        generation_mode=GenerationMode.POSITIVE, feedback=FeedbackSources(extra_data_source=extra_data_source)
+    )
+    cases = generate_many(strategy, 30)
+    values = {case.query[name] if location == "query" else case.path_parameters[name] for case in cases}
+    assert (sent in values) is reaches
+
+
+# A pool supplied after an operation already generated data still feeds its parameters.
+def test_parameter_strategy_follows_the_current_semantic_pool(ctx, case_factory, response_factory):
+    email = {"type": "string", "format": "email"}
+    producer = {
+        "description": "OK",
+        "content": {"application/json": {"schema": {"type": "object", "properties": {"email": email}}}},
+    }
+    consumer = {
+        "parameters": [{"name": "recipient", "in": "query", "required": True, "schema": email}],
+        "responses": {"200": {"description": "OK"}},
+    }
+    schema, extra_data_source = _extra_data_source_for(
+        ctx, {"/api/users": {"get": {"responses": {"200": producer}}}, "/api/search": {"get": consumer}}
     )
     _ingest_2xx(
         schema["/api/users"]["GET"],
@@ -615,125 +788,13 @@ def test_scenario_email_cross_operation_flow(ctx, case_factory, response_factory
         case_factory=case_factory,
         response_factory=response_factory,
     )
-    consumer = {
-        "type": "object",
-        "properties": {"recipient_email": {"type": "string", "format": "email"}},
-    }
-    [descriptor] = iter_consumer_leaves(consumer)
-    assert "alice@example.com" in _lookup_by_descriptor(extra_data_source.semantic_index, descriptor)
+    operation = schema["/api/search"]["GET"]
 
+    def drawn(feedback):
+        strategy = operation.as_strategy(generation_mode=GenerationMode.POSITIVE, feedback=feedback)
+        return "alice@example.com" in {case.query["recipient"] for case in generate_many(strategy, 30)}
 
-def test_scenario_currency_named_fallback_cross_operation_flow(ctx, case_factory, response_factory):
-    schema, extra_data_source = _extra_data_source_for(
-        ctx,
-        {
-            "/api/products": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"currency": {"type": "string"}},
-                                    }
-                                }
-                            },
-                        }
-                    }
-                }
-            }
-        },
-    )
-    _ingest_2xx(
-        schema["/api/products"]["GET"],
-        body={"currency": "EUR"},
-        extra_data_source=extra_data_source,
-        case_factory=case_factory,
-        response_factory=response_factory,
-    )
-    consumer = {"type": "object", "properties": {"currency": {"type": "string"}}}
-    [descriptor] = iter_consumer_leaves(consumer)
-    assert "EUR" in _lookup_by_descriptor(extra_data_source.semantic_index, descriptor)
-
-
-def test_scenario_date_time_cross_operation_flow(ctx, case_factory, response_factory):
-    schema, extra_data_source = _extra_data_source_for(
-        ctx,
-        {
-            "/api/events": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {
-                                            "start_at": {"type": "string", "format": "date-time"},
-                                        },
-                                    }
-                                }
-                            },
-                        }
-                    }
-                }
-            }
-        },
-    )
-    _ingest_2xx(
-        schema["/api/events"]["GET"],
-        body={"start_at": "2026-05-08T10:00:00Z"},
-        extra_data_source=extra_data_source,
-        case_factory=case_factory,
-        response_factory=response_factory,
-    )
-    consumer = {
-        "type": "object",
-        "properties": {"start_at": {"type": "string", "format": "date-time"}},
-    }
-    [descriptor] = iter_consumer_leaves(consumer)
-    assert "2026-05-08T10:00:00Z" in _lookup_by_descriptor(extra_data_source.semantic_index, descriptor)
-
-
-def test_scenario_url_cross_operation_flow(ctx, case_factory, response_factory):
-    schema, extra_data_source = _extra_data_source_for(
-        ctx,
-        {
-            "/api/webhooks": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"url": {"type": "string", "format": "uri"}},
-                                    }
-                                }
-                            },
-                        }
-                    }
-                }
-            }
-        },
-    )
-    _ingest_2xx(
-        schema["/api/webhooks"]["GET"],
-        body={"url": "https://example.com/cb"},
-        extra_data_source=extra_data_source,
-        case_factory=case_factory,
-        response_factory=response_factory,
-    )
-    consumer = {
-        "type": "object",
-        "properties": {"callback_url": {"type": "string", "format": "uri"}},
-    }
-    [descriptor] = iter_consumer_leaves(consumer)
-    assert "https://example.com/cb" in _lookup_by_descriptor(extra_data_source.semantic_index, descriptor)
+    assert [drawn(FeedbackSources()), drawn(FeedbackSources(extra_data_source=extra_data_source))] == [False, True]
 
 
 def test_restgym_flight_search_departure_time_cross_operation(ctx, case_factory, response_factory):
@@ -826,41 +887,6 @@ def test_restgym_traccar_device_time_cross_operation(ctx, case_factory, response
     assert "2026-05-08T12:00:00Z" in pool
 
 
-def test_restgym_market_name_query_cross_operation(ctx, case_factory, response_factory):
-    schema, extra_data_source = _extra_data_source_for(
-        ctx,
-        {
-            "/customer": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"name": {"type": "string"}},
-                                    }
-                                }
-                            },
-                        }
-                    }
-                }
-            }
-        },
-    )
-    _ingest_2xx(
-        schema["/customer"]["GET"],
-        body={"name": "alice"},
-        extra_data_source=extra_data_source,
-        case_factory=case_factory,
-        response_factory=response_factory,
-    )
-    consumer = {"type": "object", "properties": {"name": {"type": "string"}}}
-    [descriptor] = iter_consumer_leaves(consumer)
-    assert "alice" in _lookup_by_descriptor(extra_data_source.semantic_index, descriptor)
-
-
 def test_restgym_pet_clinic_last_name_query_cross_operation(ctx, case_factory, response_factory):
     schema, extra_data_source = _extra_data_source_for(
         ctx,
@@ -944,253 +970,58 @@ def test_restgym_user_management_email_login_chain(ctx, case_factory, response_f
     assert "DE" in _lookup_by_descriptor(extra_data_source.semantic_index, country_desc)
 
 
-_HARVESTED_EMAIL = "harvested@example.com"
-_HARVESTED_CURRENCY = "EUR"
-_HARVESTED_DATETIME = "2026-05-08T10:00:00Z"
-_HARVESTED_URL = "https://example.com/cb"
+# Each consumer crashes only on the exact value its producer returns, so only the matching pool can reach it.
+_PLANTED_BUGS = [
+    ("/api/contacts", "email", "harvested@example.com", "/api/messages", "recipient_email", {"format": "email"}),
+    ("/api/catalog", "currency", "EUR", "/api/orders", "currency", {}),
+    ("/api/calendar", "start_at", "2026-05-08T10:00:00Z", "/api/events", "start_at", {"format": "date-time"}),
+    ("/api/integrations", "url", "https://example.com/cb", "/api/webhooks", "callback_url", {"format": "uri"}),
+]
 
 
-def _attach_planted_bug(app, producer_path, producer_payload, consumer_path, trigger):
-    @app.route(producer_path)
+def _object_with(name, property_schema):
+    return {"type": "object", "properties": {name: {"type": "string", **property_schema}}, "required": [name]}
+
+
+def _attach_planted_bug(app, producer_path, producer_property, value, consumer_path, consumer_property):
+    @app.route(producer_path, endpoint=f"producer {producer_path}")
     def _producer():
-        return jsonify(producer_payload)
+        return jsonify({producer_property: value})
 
-    @app.route(consumer_path, methods=["POST"])
+    @app.route(consumer_path, methods=["POST"], endpoint=f"consumer {consumer_path}")
     def _consumer():
-        body = request.get_json(silent=True) or {}
-        if trigger(body):
+        body = request.get_json(silent=True)
+        if isinstance(body, dict) and body.get(consumer_property) == value:
             raise RuntimeError("planted bug")
         return Response(status=200)
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
-def test_planted_bug_surfaces_via_email_format_pool(ctx, cli, snapshot_cli):
-    app, _ = ctx.openapi.make_flask_app(
-        {
-            "/api/contacts": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"email": {"type": "string", "format": "email"}},
-                                        "required": ["email"],
-                                    }
-                                }
-                            },
-                        }
+def test_planted_bugs_surface_via_semantic_pools(ctx, cli, snapshot_cli):
+    paths = {}
+    for producer_path, producer_property, _, consumer_path, consumer_property, property_schema in _PLANTED_BUGS:
+        paths[producer_path] = {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {"application/json": {"schema": _object_with(producer_property, property_schema)}},
                     }
                 }
-            },
-            "/api/messages": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {"recipient_email": {"type": "string", "format": "email"}},
-                                    "required": ["recipient_email"],
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            },
+            }
         }
-    )
-    _attach_planted_bug(
-        app,
-        "/api/contacts",
-        {"email": _HARVESTED_EMAIL},
-        "/api/messages",
-        lambda body: body.get("recipient_email") == _HARVESTED_EMAIL,
-    )
-    assert (
-        cli.run_openapi_app(
-            app,
-            "--max-examples=30",
-            "--seed=42",
-            "--checks=not_a_server_error",
-            "--suppress-health-check=filter_too_much",
-        )
-        == snapshot_cli
-    )
-
-
-@pytest.mark.snapshot(replace_reproduce_with=True)
-def test_planted_bug_surfaces_via_named_fallback_pool(ctx, cli, snapshot_cli):
-    app, _ = ctx.openapi.make_flask_app(
-        {
-            "/api/catalog": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"currency": {"type": "string"}},
-                                        "required": ["currency"],
-                                    }
-                                }
-                            },
-                        }
-                    }
-                }
-            },
-            "/api/orders": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {"currency": {"type": "string"}},
-                                    "required": ["currency"],
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            },
+        paths[consumer_path] = {
+            "post": {
+                "requestBody": {
+                    "required": True,
+                    "content": {"application/json": {"schema": _object_with(consumer_property, property_schema)}},
+                },
+                "responses": {"200": {"description": "OK"}},
+            }
         }
-    )
-    _attach_planted_bug(
-        app,
-        "/api/catalog",
-        {"currency": _HARVESTED_CURRENCY},
-        "/api/orders",
-        lambda body: body.get("currency") == _HARVESTED_CURRENCY,
-    )
-    assert (
-        cli.run_openapi_app(
-            app,
-            "--max-examples=30",
-            "--seed=42",
-            "--checks=not_a_server_error",
-            "--suppress-health-check=filter_too_much",
-        )
-        == snapshot_cli
-    )
-
-
-@pytest.mark.snapshot(replace_reproduce_with=True)
-def test_planted_bug_surfaces_via_date_time_format_pool(ctx, cli, snapshot_cli):
-    app, _ = ctx.openapi.make_flask_app(
-        {
-            "/api/calendar": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"start_at": {"type": "string", "format": "date-time"}},
-                                        "required": ["start_at"],
-                                    }
-                                }
-                            },
-                        }
-                    }
-                }
-            },
-            "/api/events": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {"start_at": {"type": "string", "format": "date-time"}},
-                                    "required": ["start_at"],
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            },
-        }
-    )
-    _attach_planted_bug(
-        app,
-        "/api/calendar",
-        {"start_at": _HARVESTED_DATETIME},
-        "/api/events",
-        lambda body: body.get("start_at") == _HARVESTED_DATETIME,
-    )
-    assert (
-        cli.run_openapi_app(
-            app,
-            "--max-examples=30",
-            "--seed=42",
-            "--checks=not_a_server_error",
-            "--suppress-health-check=filter_too_much",
-        )
-        == snapshot_cli
-    )
-
-
-@pytest.mark.snapshot(replace_reproduce_with=True)
-def test_planted_bug_surfaces_via_uri_format_pool(ctx, cli, snapshot_cli):
-    app, _ = ctx.openapi.make_flask_app(
-        {
-            "/api/integrations": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "properties": {"url": {"type": "string", "format": "uri"}},
-                                        "required": ["url"],
-                                    }
-                                }
-                            },
-                        }
-                    }
-                }
-            },
-            "/api/webhooks": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {"callback_url": {"type": "string", "format": "uri"}},
-                                    "required": ["callback_url"],
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            },
-        }
-    )
-    _attach_planted_bug(
-        app,
-        "/api/integrations",
-        {"url": _HARVESTED_URL},
-        "/api/webhooks",
-        lambda body: isinstance(body, dict) and body.get("callback_url") == _HARVESTED_URL,
-    )
+    app, _ = ctx.openapi.make_flask_app(paths)
+    for producer_path, producer_property, value, consumer_path, consumer_property, _ in _PLANTED_BUGS:
+        _attach_planted_bug(app, producer_path, producer_property, value, consumer_path, consumer_property)
     assert (
         cli.run_openapi_app(
             app,
@@ -1228,16 +1059,7 @@ def test_overlay_skips_candidate_violating_consumer_constraint():
 
     drawn: list[dict] = []
 
-    @given(overlay)
-    @settings(
-        max_examples=30,
-        deadline=None,
-        suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much],
-    )
-    def collect(value):
-        drawn.append(value)
-
-    collect()
+    drawn.extend(generate_many(overlay, 30))
     assert drawn, "no values were drawn"
     assert all(v["recipient_email"] != too_long for v in drawn), (
         f"validity gate should have rejected the too-long substitution; saw {drawn}"
@@ -1462,16 +1284,7 @@ def test_overlay_validates_against_container_when_substitution_violates_parent_c
 
     drawn: list[dict] = []
 
-    @given(overlay)
-    @settings(
-        max_examples=30,
-        deadline=None,
-        suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much],
-    )
-    def collect(value):
-        drawn.append(value)
-
-    collect()
+    drawn.extend(generate_many(overlay, 30))
     assert drawn
     for body in drawn:
         assert body.get("email") != blocked, (
@@ -1548,16 +1361,10 @@ def test_overlay_does_not_mutate_shared_example_dict():
     inner = st.just(shared)
     overlay = build_semantic_overlay(inner, [descriptor], index, jsonschema_rs.Draft202012Validator)
 
-    @given(overlay)
-    @settings(
-        max_examples=30,
-        deadline=None,
-        suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much],
-    )
+    @run_given(overlay, max_examples=30)
     def collect(value):
         pass
 
-    collect()
     assert shared == {"email": "ok@example.com"}, f"overlay mutated shared example dict in place; saw {shared}"
 
 
@@ -1621,8 +1428,12 @@ def test_strategy_caching_remains_enabled_for_semantic_only_operations(ctx):
     body = operation.body[0]
     config = schema.config.generation_for(operation=operation, phase="fuzzing")
 
-    first = body.get_strategy(operation, config, GenerationMode.POSITIVE, extra_data_source=extra_data_source)
-    second = body.get_strategy(operation, config, GenerationMode.POSITIVE, extra_data_source=extra_data_source)
+    first = body.get_strategy(
+        operation, config, GenerationMode.POSITIVE, feedback=FeedbackSources(extra_data_source=extra_data_source)
+    )
+    second = body.get_strategy(
+        operation, config, GenerationMode.POSITIVE, feedback=FeedbackSources(extra_data_source=extra_data_source)
+    )
     assert first is second, "semantic-only data source should not disable the body-strategy cache"
 
 
@@ -1665,8 +1476,10 @@ def test_body_cache_distinguishes_semantic_source_from_no_source(ctx):
     body = operation.body[0]
     config = schema.config.generation_for(operation=operation, phase="fuzzing")
 
-    no_source = body.get_strategy(operation, config, GenerationMode.POSITIVE, extra_data_source=None)
-    with_source = body.get_strategy(operation, config, GenerationMode.POSITIVE, extra_data_source=extra_data_source)
+    no_source = body.get_strategy(operation, config, GenerationMode.POSITIVE)
+    with_source = body.get_strategy(
+        operation, config, GenerationMode.POSITIVE, feedback=FeedbackSources(extra_data_source=extra_data_source)
+    )
     assert no_source is not with_source, "cache must differentiate strategies built with vs without a semantic source"
 
 
@@ -1699,9 +1512,9 @@ def test_parameter_set_cache_distinguishes_semantic_source_from_no_source(ctx):
     parameter_set = operation.query
     config = schema.config.generation_for(operation=operation, phase="fuzzing")
 
-    no_source = parameter_set.get_strategy(operation, config, GenerationMode.POSITIVE, extra_data_source=None)
+    no_source = parameter_set.get_strategy(operation, config, GenerationMode.POSITIVE)
     with_source = parameter_set.get_strategy(
-        operation, config, GenerationMode.POSITIVE, extra_data_source=extra_data_source
+        operation, config, GenerationMode.POSITIVE, feedback=FeedbackSources(extra_data_source=extra_data_source)
     )
     assert no_source is not with_source, (
         "parameter-set cache must differentiate strategies built with vs without a semantic source"
@@ -1749,24 +1562,14 @@ def test_parameter_set_strategy_does_not_leak_generated_value_through_filter(ctx
     parameter_set = operation.query
     config = schema.config.generation_for(operation=operation, phase="fuzzing")
     strategy = parameter_set.get_strategy(
-        operation, config, GenerationMode.POSITIVE, extra_data_source=extra_data_source
+        operation, config, GenerationMode.POSITIVE, feedback=FeedbackSources(extra_data_source=extra_data_source)
     )
 
     drawn: list[object] = []
 
     # 30 draws at 0.5 per-leaf substitution probability make it overwhelmingly likely the
     # overlay fires at least once; a single substitution exercises the filter path.
-    @given(strategy)
-    @settings(
-        max_examples=30,
-        derandomize=True,
-        database=None,
-        suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much],
-    )
-    def collect(value):
-        drawn.append(value)
-
-    collect()
+    drawn.extend(generate_many(strategy, 30))
     assert drawn, "strategy produced no values"
 
 
@@ -1803,8 +1606,12 @@ def test_strategy_caching_disabled_for_captured_variant_consumer(ctx):
     parameter_set = consumer.path_parameters
     config = schema.config.generation_for(operation=consumer, phase="fuzzing")
 
-    first = parameter_set.get_strategy(consumer, config, GenerationMode.POSITIVE, extra_data_source=extra_data_source)
-    second = parameter_set.get_strategy(consumer, config, GenerationMode.POSITIVE, extra_data_source=extra_data_source)
+    first = parameter_set.get_strategy(
+        consumer, config, GenerationMode.POSITIVE, feedback=FeedbackSources(extra_data_source=extra_data_source)
+    )
+    second = parameter_set.get_strategy(
+        consumer, config, GenerationMode.POSITIVE, feedback=FeedbackSources(extra_data_source=extra_data_source)
+    )
     assert first is not second, (
         "consumer-side captured variants are bound at build time; the strategy must not be cached"
     )
@@ -1846,12 +1653,7 @@ def test_overlay_records_semantic_draw_when_substitution_fires():
     drawn: list[GeneratedValue] = []
 
     # 50 draws make at least one substitution near-certain at the 0.5 per-leaf probability.
-    @given(overlay)
-    @settings(max_examples=50, derandomize=True, database=None)
-    def collect(value):
-        drawn.append(value)
-
-    collect()
+    drawn.extend(generate_many(overlay, 50))
     substituted = [v for v in drawn if isinstance(v, GeneratedValue) and v.semantic_draws]
     assert substituted, "expected at least one overlay substitution to be recorded"
     for value in substituted:
@@ -1881,12 +1683,7 @@ def test_overlay_emits_no_semantic_draws_when_index_is_empty():
 
     drawn: list[object] = []
 
-    @given(overlay)
-    @settings(max_examples=30, derandomize=True, database=None)
-    def collect(value):
-        drawn.append(value)
-
-    collect()
+    drawn.extend(generate_many(overlay, 30))
     for value in drawn:
         if isinstance(value, GeneratedValue):
             assert value.semantic_draws == ()
@@ -2112,6 +1909,34 @@ def test_schemaless_walker_skips_nameless_scalar_body():
     assert list(iter_ingestion_leaves(None, "a@b.com")) == []
 
 
+def test_name_only_lookup_without_name_returns_nothing():
+    index = SemanticValueIndex()
+    index.add(
+        type_token="string",
+        format_token=None,
+        pattern_hash=None,
+        normalized_name="city",
+        value="Berlin",
+        source_operation="GET /producer",
+    )
+    assert (
+        index.lookup(type_token="string", format_token=None, pattern_hash=None, normalized_name=None, name_only=True)
+        == ()
+    )
+
+
+def test_walker_skips_top_level_array_of_scalars():
+    assert list(iter_ingestion_leaves({"type": "array", "items": {"type": "string"}}, ["a@b.com"])) == []
+
+
+def test_schemaless_walker_stops_list_when_node_budget_runs_out():
+    body = {"emails": [f"u{i}@example.com" for i in range(10)]}
+    assert list(iter_ingestion_leaves(None, body, max_nodes=5)) == [
+        IngestionLeaf("string", "email", None, "email", "u0@example.com"),
+        IngestionLeaf("string", "email", None, "email", "u1@example.com"),
+    ]
+
+
 def test_consumer_walker_respects_max_depth():
     schema = {
         "type": "object",
@@ -2174,12 +1999,7 @@ def test_overlay_returns_base_unchanged_when_inner_yields_non_dict():
 
     drawn: list[object] = []
 
-    @given(overlay)
-    @settings(max_examples=5, derandomize=True, database=None)
-    def collect(value):
-        drawn.append(value)
-
-    collect()
+    drawn.extend(generate_many(overlay, 5))
     assert drawn and all(value == "plain string" for value in drawn)
 
 
@@ -2212,12 +2032,7 @@ def test_overlay_skips_substitution_when_descriptor_path_is_absent_from_body():
 
     drawn: list[object] = []
 
-    @given(overlay)
-    @settings(max_examples=20, derandomize=True, database=None)
-    def collect(value):
-        drawn.append(value.value if isinstance(value, GeneratedValue) else value)
-
-    collect()
+    drawn.extend(value.value if isinstance(value, GeneratedValue) else value for value in generate_many(overlay, 20))
     for body in drawn:
         assert set(body) == {"present_email"}
 
@@ -2246,12 +2061,7 @@ def test_overlay_unwraps_inner_generated_value_and_appends_semantic_draws():
     drawn: list[GeneratedValue] = []
 
     # 50 draws make recording at least one substitution near-certain at 0.5 per-leaf probability.
-    @given(overlay)
-    @settings(max_examples=50, derandomize=True, database=None)
-    def collect(value):
-        drawn.append(value)
-
-    collect()
+    drawn.extend(generate_many(overlay, 50))
     assert drawn and all(isinstance(value, GeneratedValue) for value in drawn)
     assert any(value.semantic_draws for value in drawn)
 
@@ -2292,13 +2102,11 @@ def test_overlay_records_multiple_substitutions_in_a_single_draw():
 
     # Two independent substitutions at p=0.5 each, so ~25% of draws hit both; 80 examples make
     # missing every multi-substitution draw vanishingly unlikely.
-    @given(overlay)
-    @settings(max_examples=80, derandomize=True, database=None)
+    @run_given(overlay, max_examples=80, derandomize=True)
     def collect(value):
         if isinstance(value, GeneratedValue) and len(value.semantic_draws) == 2:
             multi_subs.append(value)
 
-    collect()
     assert multi_subs, "expected at least one draw with two simultaneous substitutions"
 
 
@@ -2313,11 +2121,11 @@ def test_overlay_records_multiple_substitutions_in_a_single_draw():
     ids=["missing-top-level", "non-dict-intermediate", "missing-last-segment", "empty-target"],
 )
 def test_get_at_path_returns_missing_for_absent_paths(target, path):
-    assert _get_at_path(target, path) is _MISSING
+    assert get_at_path(target, path) is MISSING
 
 
 def test_get_at_path_returns_value_for_present_path():
-    assert _get_at_path({"a": {"b": 42}}, ("a", "b")) == 42
+    assert get_at_path({"a": {"b": 42}}, ("a", "b")) == 42
 
 
 @pytest.mark.parametrize(
@@ -2367,12 +2175,7 @@ def test_overlay_continues_when_descriptor_schema_breaks_validator_construction(
 
     drawn: list[object] = []
 
-    @given(overlay)
-    @settings(max_examples=30, derandomize=True, database=None)
-    def collect(value):
-        drawn.append(value)
-
-    collect()
+    drawn.extend(generate_many(overlay, 30))
     assert any(isinstance(value, GeneratedValue) and value.value == {"phone": "+12025551234"} for value in drawn), (
         "overlay swallowed validator failure but stopped substituting"
     )
@@ -2407,12 +2210,7 @@ def test_overlay_continues_when_container_validator_construction_fails():
 
     drawn: list[object] = []
 
-    @given(overlay)
-    @settings(max_examples=20, derandomize=True, database=None)
-    def collect(value):
-        drawn.append(value)
-
-    collect()
+    drawn.extend(generate_many(overlay, 20))
     assert any(isinstance(value, GeneratedValue) and value.value == {"email": "x@y.com"} for value in drawn), (
         "container validator failure stopped overlay substitution"
     )
@@ -2448,15 +2246,12 @@ def test_semantic_overlay_drops_overwritten_constant_provenance():
     )
     overlay = build_semantic_overlay(inner, [descriptor], index, jsonschema_rs.Draft202012Validator)
 
-    @given(overlay)
-    @settings(max_examples=60, deadline=None, suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much])
+    @run_given(overlay, max_examples=60)
     def collect(result):
         if not isinstance(result, GeneratedValue):
             return
         for draw in result.constants_draws:
             assert result.value["code"] == draw.value, "stale constant provenance after semantic overwrite"
-
-    collect()
 
 
 def test_walker_recurses_into_arrays_of_objects():

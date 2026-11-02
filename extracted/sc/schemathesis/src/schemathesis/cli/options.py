@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import click
 
 from schemathesis.checks import CHECKS
@@ -26,7 +28,6 @@ from schemathesis.cli.validation import (
 )
 from schemathesis.config import DEFAULT_REPORT_DIRECTORY, HealthCheck, ReportFormat
 from schemathesis.core import HYPOTHESIS_IN_MEMORY_DATABASE_IDENTIFIER
-from schemathesis.core.transport import DEFAULT_RESPONSE_TIMEOUT
 from schemathesis.generation import GenerationMode
 from schemathesis.generation.metrics import METRICS
 
@@ -34,7 +35,8 @@ from schemathesis.generation.metrics import METRICS
 class OptionSpec:
     __slots__ = ("args", "kwargs")
 
-    def __init__(self, *args: object, **kwargs: object) -> None:
+    # Forwarded to `click.option` / `click.argument`, which type their attributes as `Any`.
+    def __init__(self, *args: str, **kwargs: Any) -> None:
         self.args = args
         self.kwargs = kwargs
 
@@ -136,7 +138,7 @@ CONTINUE_ON_FAILURE = OptionSpec(
     "continue_on_failure",
     help="Continue executing all test cases within a scenario, even after encountering failures",
     is_flag=True,
-    default=False,
+    default=None,
     metavar="",
 )
 
@@ -252,7 +254,7 @@ REQUEST_TIMEOUT = OptionSpec(
     "--request-timeout",
     help="Timeout limit, in seconds, for each network request during tests",
     type=click.FloatRange(min=0.0, min_open=True),
-    default=DEFAULT_RESPONSE_TIMEOUT,
+    default=None,
 )
 
 REQUEST_RETRIES = OptionSpec(
@@ -521,9 +523,30 @@ REPORT_JSON_PATH = OptionSpec(
     is_eager=True,
 )
 
+REPORT_WFC_PATH = OptionSpec(
+    "--report-wfc-path",
+    help="Custom path for the WFC Report JSON file",
+    type=click.File("w", encoding="utf-8"),
+    is_eager=True,
+)
+
+REPORT_PYTEST_PATH = OptionSpec(
+    "--report-pytest-path",
+    help="Custom path for the pytest file reproducing failures",
+    type=click.File("w", encoding="utf-8"),
+    is_eager=True,
+)
+
 REPORT_ALLURE_PATH = OptionSpec(
     "--report-allure-path",
     help="Directory for Allure result files",
+    type=click.Path(file_okay=False),
+    is_eager=True,
+)
+
+REPORT_HTML_PATH = OptionSpec(
+    "--report-html-path",
+    help="Directory for the HTML report",
     type=click.Path(file_okay=False),
     is_eager=True,
 )

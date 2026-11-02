@@ -19,9 +19,9 @@ class Alphabet:
     codec: str | None = "utf-8"
     max_codepoint: int | None = None
     exclude_characters: str = ""
-    # Whether a drawn string may open with whitespace. Header values cannot, and that is a property
+    # Whether a drawn string may open or close with whitespace. Header values cannot, and that is a property
     # of the value rather than of its characters, so it rides along here as a filter on each leaf.
-    allow_leading_whitespace: bool = True
+    allow_surrounding_whitespace: bool = True
     # Shortest name a drawn key may carry. Header names cannot be empty, and that is a property of
     # the key rather than of its characters, so it rides along here too.
     min_name_length: int = 0
@@ -52,7 +52,10 @@ def _characters(
     if not allow_x00 and "\x00" not in exclude_characters:
         exclude_characters += "\x00"
     if codec is None:
-        return st.characters(max_codepoint=max_codepoint, exclude_characters=exclude_characters)
+        # Lone surrogates cannot be encoded for the wire.
+        return st.characters(
+            max_codepoint=max_codepoint, exclude_characters=exclude_characters, exclude_categories=["Cs"]
+        )
     return st.characters(codec=codec, max_codepoint=max_codepoint, exclude_characters=exclude_characters)
 
 
@@ -91,3 +94,8 @@ class StrategyContext:
     complementing: set[jsonschema_rs.CanonicalSchema] = field(default_factory=set)
     # Whether an integer may be drawn spelled as a float, which only a JSON carrier keeps apart.
     whole_floats: bool = False
+
+    @property
+    def building_cycle(self) -> bool:
+        """Whether a placeholder stands for something still being built, which `is_empty` would force too early."""
+        return bool(self.pending or self.folding)

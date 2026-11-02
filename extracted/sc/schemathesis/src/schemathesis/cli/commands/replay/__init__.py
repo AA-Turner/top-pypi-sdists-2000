@@ -8,8 +8,11 @@ from typing import TYPE_CHECKING
 
 import click
 
+from schemathesis.cli.constants import ExitCode
 from schemathesis.cli.core import get_terminal_width
+from schemathesis.cli.options import AUTH, AUTH_WFC, AUTH_WFC_USER, HEADER
 from schemathesis.cli.output import make_console, make_progress_bar
+from schemathesis.cli.validation import validate_auth_overlap, validate_wfc_user
 from schemathesis.core import storage
 from schemathesis.core.timing import Instant
 
@@ -21,22 +24,38 @@ if TYPE_CHECKING:
     from schemathesis.schemas import BaseSchema
 
 
-@click.command(  # type: ignore[untyped-decorator]
+@click.command(
     name="replay",
     short_help="Replay stored crash files",
     context_settings={"terminal_width": get_terminal_width(), "help_option_names": ["-h", "--help"]},
 )
-@click.argument("path", default=None, required=False, type=click.Path())  # type: ignore[untyped-decorator]
-@click.option("--url", "base_url", default=None, help="Override base URL for replay.")  # type: ignore[untyped-decorator]
-@click.option(  # type: ignore[untyped-decorator]
-    "--schema-location", default=None, help="Override schema location for loading."
-)
-@click.option(  # type: ignore[untyped-decorator]
-    "--keep", is_flag=True, default=False, help="Retain fixed crashes instead of removing them."
-)
-@click.pass_context  # type: ignore[untyped-decorator]
-def replay(ctx: click.Context, path: str | None, base_url: str | None, schema_location: str | None, keep: bool) -> None:
+@click.argument("path", default=None, required=False, type=click.Path())
+@click.option("--url", "base_url", default=None, help="Override base URL for replay.")
+@click.option("--schema-location", default=None, help="Override schema location for loading.")
+@click.option("--keep", is_flag=True, default=False, help="Retain fixed crashes instead of removing them.")
+@click.option(*HEADER.args, **HEADER.kwargs)
+@click.option(*AUTH.args, **AUTH.kwargs)
+@click.option(*AUTH_WFC.args, **AUTH_WFC.kwargs)
+@click.option(*AUTH_WFC_USER.args, **AUTH_WFC_USER.kwargs)
+@click.pass_context
+def replay(
+    ctx: click.Context,
+    path: str | None,
+    base_url: str | None,
+    schema_location: str | None,
+    keep: bool,
+    headers: dict[str, str],
+    auth: tuple[str, str] | None,
+    auth_wfc: str | None,
+    auth_wfc_user: str | None,
+) -> None:
     """Replay stored crash files."""
+    validate_auth_overlap(auth, headers)
+    validate_wfc_user(ctx.obj, auth_wfc, auth_wfc_user)
+    # Credentials override every project's config, as in `st run`.
+    ctx.obj.projects.override.update(
+        headers=headers or None, basic_auth=auth, wfc_auth=auth_wfc, wfc_user=auth_wfc_user
+    )
     if path is None:
         units = [
             (directory, files, str(directory))
@@ -60,11 +79,11 @@ def replay(ctx: click.Context, path: str | None, base_url: str | None, schema_lo
             found = _find_by_case_id(ctx, path)
             if found is None:
                 click.echo(f"Error: no crash file found for case ID: {path}", err=True)
-                sys.exit(2)
+                sys.exit(ExitCode.ERROR)
             units = [(found[0], found[1], str(target))]
         else:
             click.echo(f"Error: path not found: {target}", err=True)
-            sys.exit(2)
+            sys.exit(ExitCode.ERROR)
 
     console = make_console()
     has_failing_or_changed = False
@@ -83,12 +102,12 @@ def replay(ctx: click.Context, path: str | None, base_url: str | None, schema_lo
         has_failing_or_changed = has_failing_or_changed or failing
         has_error = has_error or error
         if interrupted:
-            sys.exit(1)
+            sys.exit(ExitCode.INTERRUPTED)
 
     if has_failing_or_changed:
-        sys.exit(1)
+        sys.exit(ExitCode.FAILURES)
     if has_error:
-        sys.exit(2)
+        sys.exit(ExitCode.ERROR)
 
 
 def _replay_directory(
@@ -103,7 +122,10 @@ def _replay_directory(
     source: str,
 ) -> tuple[bool, bool, bool]:
     """Replay one project's crash directory; returns (has_failing_or_changed, has_error, interrupted)."""
-    from schemathesis.cli.commands.replay.executor import ReplayStatus, replay_crash_file
+    from schemathesis.cli.commands.replay.executor import (
+        ReplayStatus,
+        replay_crash_file,
+    )
     from schemathesis.cli.commands.replay.output import render_replay
     from schemathesis.reporting.crashes import CrashFile, CrashWriter, load_manifest
 
@@ -126,6 +148,9 @@ def _replay_directory(
     if not effective_schema_location:
         click.echo("Error: cannot replay without a schema. Pass --schema-location <url-or-path>.", err=True)
         return False, True, False
+    # Reach the API the same way the recorded run did, e.g. a server with a self-signed certificate.
+    if manifest is not None and manifest.tls_verify is not None:
+        ctx.obj.projects.override.update(tls_verify=manifest.tls_verify)
 
     schema = _load_schema(ctx, effective_schema_location)
     if schema is None:
@@ -133,6 +158,11 @@ def _replay_directory(
         return False, True, False
 
     project_config = ctx.obj.projects.get(schema.raw_schema)
+    if schema.config.auth.is_defined:
+        from schemathesis import auths
+
+        # Configured auth replaces providers from hooks, as in `st run`.
+        auths.unregister()
 
     # One case that failed several checks is stored as one file per check; replay it once and verify all checks.
     units = _merge_by_case(crashes, crash_files)
@@ -164,10 +194,6 @@ def _replay_directory(
     files_to_remove: set[str] = set()
     if not keep and not interrupted:
         for unit, outcome in zip(units, outcomes, strict=True):
-            # Sanitization stripped values the replay cannot restore, so a `fixed` verdict here says
-            # nothing about the API. Report it, keep the file - same rule as incompatible files.
-            if unit.crash.has_sanitized_values():
-                continue
             fixed = {check.name for check in outcome.check_outcomes if check.status is ReplayStatus.FIXED}
             for path, check_name in unit.sources:
                 if check_name in fixed:
@@ -182,6 +208,7 @@ def _replay_directory(
             base_url=base_url,
             duration_ms=duration_ms,
             output_config=ctx.obj.output,
+            schema=schema,
             removal_count=removal_count,
             incompatible_count=len(incompatible),
             interrupted=interrupted,
@@ -249,6 +276,7 @@ def _load_schema(ctx: click.Context, location: str) -> BaseSchema | None:
 
 def _find_by_case_id(ctx: click.Context, case_id: str) -> tuple[Path, list[Path]] | None:
     # One case that failed several checks is stored as one file per check, all sharing this case_id.
+    # A later run that records the same failure keeps earlier case IDs as aliases.
     for crashes_dir in _all_crash_dirs(ctx):
         matches = []
         for crash_path in _crash_files_in(crashes_dir):
@@ -256,7 +284,7 @@ def _find_by_case_id(ctx: click.Context, case_id: str) -> tuple[Path, list[Path]
                 data = json.loads(crash_path.read_text())
             except (json.JSONDecodeError, OSError):
                 continue
-            if isinstance(data, dict) and data.get("case_id") == case_id:
+            if isinstance(data, dict) and (data.get("case_id") == case_id or case_id in data.get("aliases", [])):
                 matches.append(crash_path)
         if matches:
             return crashes_dir, matches

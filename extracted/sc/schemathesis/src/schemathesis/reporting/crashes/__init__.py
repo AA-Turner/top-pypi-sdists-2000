@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import schemathesis
-from schemathesis.config._output import DEFAULT_REPLACEMENT
 from schemathesis.core import NOT_SET
 from schemathesis.core.failures import Failure, is_reproducible_failure
 from schemathesis.core.output.sanitization import sanitize_url, sanitize_value
@@ -29,6 +28,8 @@ if TYPE_CHECKING:
 
 CRASH_FORMAT_VERSION = 1
 MANIFEST_FILENAME = "manifest.json"
+# Case IDs from earlier runs that recorded the same failure stay replayable; older ones are dropped to bound file size.
+MAX_CASE_ID_ALIASES = 20
 
 _FILENAME_NON_ALNUM = re.compile(r"[^A-Za-z0-9]+")
 
@@ -44,13 +45,15 @@ def _failure_fingerprint(failure: Failure) -> str:
 
 @dataclass(slots=True)
 class CrashManifest:
-    """Run-level metadata for a crash directory: format version, schema location, base URL."""
+    """Run-level metadata for a crash directory: format version, schema location, base URL, TLS verification."""
 
     format_version: int
     schemathesis_version: str
     schema_location: str
     base_url: str
     created_at: str
+    # `None` for manifests written before the setting was recorded.
+    tls_verify: bool | str | None = None
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> CrashManifest:
@@ -63,6 +66,7 @@ class CrashManifest:
             schema_location=data["schema_location"],
             base_url=data["base_url"],
             created_at=data["created_at"],
+            tls_verify=data.get("tls_verify"),
         )
 
 
@@ -124,6 +128,10 @@ class CrashStep:
     media_type: str | None = None
     # Index of the step this link extracts from — the recorded parent, not always the previous step. None at root.
     parent_index: int | None = None
+    # The configured identity that sent this step; None when no named identity did, or in older crash files.
+    auth_identity: str | None = None
+    # The step's operation label; None in older crash files, which are looked up by path and method.
+    operation: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -138,7 +146,7 @@ class CrashStep:
             },
             "link": self.link.to_dict() if self.link is not None else None,
             "checks": [asdict(c) for c in self.checks],
-            "meta": self.meta,
+            "meta": to_json_safe(self.meta),
             "path": self.path,
             "path_parameters": to_json_safe(self.path_parameters),
             "query": to_json_safe(self.query),
@@ -147,6 +155,8 @@ class CrashStep:
             "case_body": encode_case_body(self.case_body),
             "media_type": self.media_type,
             "parent_index": self.parent_index,
+            "auth_identity": self.auth_identity,
+            "operation": self.operation,
         }
 
     @classmethod
@@ -162,7 +172,7 @@ class CrashStep:
             response_body=response["body"],
             link=CrashLink.from_dict(data["link"]) if data.get("link") is not None else None,
             checks=[CrashCheck.from_dict(c) for c in data["checks"]],
-            meta=data.get("meta"),
+            meta=from_json_safe(data.get("meta")),
             path=data.get("path", ""),
             path_parameters=from_json_safe(data.get("path_parameters", {})),
             query=from_json_safe(data.get("query", {})),
@@ -171,6 +181,8 @@ class CrashStep:
             case_body=decode_case_body(data["case_body"]) if "case_body" in data else NOT_SET,
             media_type=data.get("media_type"),
             parent_index=data.get("parent_index"),
+            auth_identity=data.get("auth_identity"),
+            operation=data.get("operation"),
         )
 
 
@@ -185,15 +197,8 @@ class CrashFile:
     case_id: str
     code_sample: str
     sequence: list[CrashStep]
-
-    def has_sanitized_values(self) -> bool:
-        """Whether a stored request lost values to sanitization, so a replay cannot be faithful."""
-        return any(
-            DEFAULT_REPLACEMENT in str(value)
-            for step in self.sequence
-            for container in (step.request_headers, step.query, step.case_headers, step.path_parameters)
-            for value in container.values()
-        )
+    # Case IDs that earlier runs printed for the same failure, oldest first.
+    aliases: list[str] = field(default_factory=list)
 
     def filename(self) -> str:
         terminal = self.sequence[-1]
@@ -209,6 +214,7 @@ class CrashFile:
             "case_id": self.case_id,
             "code_sample": self.code_sample,
             "sequence": [step.to_dict() for step in self.sequence],
+            "aliases": self.aliases,
         }
 
     @classmethod
@@ -224,6 +230,7 @@ class CrashFile:
             case_id=data["case_id"],
             code_sample=data["code_sample"],
             sequence=sequence,
+            aliases=data.get("aliases", []),
         )
 
 
@@ -234,7 +241,7 @@ class CrashWriter:
         self._directory = directory
         self._written: set[str] = set()
 
-    def open(self, *, schema_location: str, base_url: str) -> None:
+    def open(self, *, schema_location: str, base_url: str, tls_verify: bool | str | None = True) -> None:
         self._directory.mkdir(parents=True, exist_ok=True)
         manifest = CrashManifest(
             format_version=CRASH_FORMAT_VERSION,
@@ -242,6 +249,7 @@ class CrashWriter:
             schema_location=schema_location,
             base_url=base_url,
             created_at=format_timestamp(time.time()),
+            tls_verify=tls_verify,
         )
         atomic_write_text(self._directory / MANIFEST_FILENAME, json.dumps(asdict(manifest), indent=2))
 
@@ -250,7 +258,15 @@ class CrashWriter:
         # Write each crash once per run so its stored case_id matches the run's output.
         if filename in self._written:
             return
-        atomic_write_text(self._directory / filename, json.dumps(crash.to_dict(), indent=2))
+        path = self._directory / filename
+        try:
+            previous = CrashFile.from_dict(json.loads(path.read_text()))
+        except (OSError, KeyError, TypeError, ValueError):
+            previous_case_ids = []
+        else:
+            previous_case_ids = [*previous.aliases, previous.case_id]
+        aliases = [case_id for case_id in previous_case_ids if case_id != crash.case_id][-MAX_CASE_ID_ALIASES:]
+        atomic_write_text(path, json.dumps(replace(crash, aliases=aliases).to_dict(), indent=2))
         self._written.add(filename)
 
     def remove_by_operation(self, operation: str) -> None:
@@ -360,7 +376,7 @@ def build_crashes_from_recorder(
             link = CrashLink(operation_id=transition.id, parameters=link_parameters, request_body=request_body)
 
         base_url = case.operation.base_url or ""
-        url_template = sanitize_uri(f"{base_url.rstrip('/')}{case.path}")
+        url_template = sanitize_uri(case.operation.schema.build_url_template(case, base_url))
 
         meta_dict = case.meta.to_dict() if case.meta is not None else None
 
@@ -399,6 +415,8 @@ def build_crashes_from_recorder(
                 case_body=case_body,
                 media_type=case.media_type,
                 parent_index=index_by_case_id.get(node.parent_id) if node.parent_id is not None else None,
+                auth_identity=case.auth_identity,
+                operation=case.operation.label,
             )
         )
 

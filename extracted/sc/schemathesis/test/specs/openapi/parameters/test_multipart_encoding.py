@@ -8,10 +8,12 @@ from hypothesis import strategies as st
 import schemathesis
 from schemathesis.core.errors import SerializationNotPossible
 from schemathesis.generation import GenerationMode
+from schemathesis.generation.hypothesis.examples import generate_many
 from schemathesis.transport.asgi import ASGI_TRANSPORT
 from schemathesis.transport.requests import REQUESTS_TRANSPORT
 from schemathesis.transport.serialization import Binary
 from schemathesis.transport.wsgi import WSGI_TRANSPORT
+from test.utils import run_given
 
 
 @pytest.fixture
@@ -38,6 +40,7 @@ def make_operation(
     method: str = "post",
     required: bool = True,
     responses: dict | None = None,
+    **kwargs,
 ):
     request_body = {"content": {media_type: content}}
     if required:
@@ -52,37 +55,40 @@ def make_operation(
             }
         },
         version="3.0.0",
+        **kwargs,
     )
     return schema[path][method.upper()]
 
 
-def test_multipart_with_custom_encoding(ctx):
+@pytest.mark.parametrize("declared", ["inline", "ref"])
+def test_multipart_with_custom_encoding(ctx, declared):
     xml_strategy = st.just(b"<?xml version='1.0'?><root>test</root>")
     schemathesis.openapi.media_type("text/xml", xml_strategy)
 
     # Given an OpenAPI schema with multipart/form-data and custom encoding
+    upload = {
+        "type": "object",
+        "required": ["name", "file"],
+        "properties": {
+            # Keeps a referenced body bundled with a `$ref` at its root
+            "name": {"$ref": "#/components/schemas/Name"},
+            "file": {"type": "string", "format": "binary"},
+        },
+    }
     operation = make_operation(
         ctx,
         {
-            "schema": {
-                "type": "object",
-                "required": ["name", "file"],
-                "properties": {
-                    "name": {"type": "string"},
-                    "file": {"type": "string", "format": "binary"},
-                },
-            },
+            "schema": upload if declared == "inline" else {"$ref": "#/components/schemas/Upload"},
             "encoding": {"file": {"contentType": "text/xml"}},
         },
+        components={"schemas": {"Upload": upload, "Name": {"type": "string"}}},
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         # Then the file property should use the XML strategy
         assert case.body["file"] == b"<?xml version='1.0'?><root>test</root>"
         assert isinstance(case.body["name"], str)
-
-    test()
 
 
 def test_multipart_without_custom_encoding_uses_default(ctx):
@@ -101,12 +107,10 @@ def test_multipart_without_custom_encoding_uses_default(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
-        assert isinstance(case.body["file"], (bytes | Binary))
+        assert isinstance(case.body["file"], ((bytes, Binary)))
         assert isinstance(case.body["name"], str)
-
-    test()
 
 
 def test_multipart_encoding_without_registered_strategy_falls_back(ctx):
@@ -125,12 +129,10 @@ def test_multipart_encoding_without_registered_strategy_falls_back(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         # Should fall back to default strategy
-        assert isinstance(case.body["file"], (bytes | Binary))
-
-    test()
+        assert isinstance(case.body["file"], ((bytes, Binary)))
 
 
 def test_multipart_multiple_properties_with_different_encodings(ctx):
@@ -159,13 +161,11 @@ def test_multipart_multiple_properties_with_different_encodings(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         assert case.body["document"] == b"<xml>data</xml>"
         assert case.body["spreadsheet"] == b"col1,col2\nval1,val2"
         assert isinstance(case.body["description"], str)
-
-    test()
 
 
 def test_multipart_encoding_with_multiple_content_types(ctx):
@@ -189,12 +189,10 @@ def test_multipart_encoding_with_multiple_content_types(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         # Should use one of the registered strategies
         assert case.body["image"] in (b"\x89PNG\r\n\x1a\n", b"\xff\xd8\xff\xe0")
-
-    test()
 
 
 def test_urlencoded_form_with_encoding(ctx):
@@ -217,11 +215,9 @@ def test_urlencoded_form_with_encoding(ctx):
         path="/submit",
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         assert case.body["data"] == b"<data>test</data>"
-
-    test()
 
 
 def test_multipart_optional_properties(ctx):
@@ -243,13 +239,11 @@ def test_multipart_optional_properties(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         assert isinstance(case.body["name"], str)
         if "file" in case.body:
             assert case.body["file"] == b"<optional/>"
-
-    test()
 
 
 def test_multipart_wildcard_matching_specific_to_wildcard(ctx):
@@ -275,18 +269,15 @@ def test_multipart_wildcard_matching_specific_to_wildcard(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         assert case.body["avatar"] == b"\x89PNG\r\n\x1a\n"
 
-    test()
-
 
 def test_multipart_wildcard_matching_wildcard_to_specific(ctx):
-    png_strategy = st.just(b"\x89PNG")
-    jpeg_strategy = st.just(b"\xff\xd8\xff")
-    schemathesis.openapi.media_type("image/png", png_strategy)
-    schemathesis.openapi.media_type("image/jpeg", jpeg_strategy)
+    payloads = {"image/png": b"\x89PNG", "image/jpeg": b"\xff\xd8\xff"}
+    for media_type, payload in payloads.items():
+        schemathesis.openapi.media_type(media_type, st.just(payload))
 
     operation = make_operation(
         ctx,
@@ -307,11 +298,15 @@ def test_multipart_wildcard_matching_wildcard_to_specific(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
-    def test(case):
-        assert case.body["photo"] in (b"\x89PNG", b"\xff\xd8\xff")
+    seen = set()
 
-    test()
+    @run_given(case=operation.as_strategy(), max_examples=10)
+    def test(case):
+        content_type = case.multipart_content_types["photo"]
+        assert case.body["photo"] == payloads[content_type]
+        seen.add(content_type)
+
+    assert seen == set(payloads)
 
 
 def test_multipart_exact_match_preferred_over_wildcard(ctx):
@@ -334,11 +329,9 @@ def test_multipart_exact_match_preferred_over_wildcard(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         assert case.body["icon"] == b"EXACT"
-
-    test()
 
 
 def test_multipart_defensive_non_string_content_type(ctx):
@@ -361,7 +354,7 @@ def test_multipart_defensive_non_string_content_type(ctx):
     @settings(suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
     def test(case):
         # Should fall back to default strategy
-        assert isinstance(case.body["data"], (bytes | Binary))
+        assert isinstance(case.body["data"], ((bytes, Binary)))
 
     test()
 
@@ -402,10 +395,13 @@ def test_nested_object_with_encoding(ctx):
     test()
 
 
-def test_additional_properties_with_encoding(ctx):
-    xml_strategy = st.just(b"<xml/>")
-    schemathesis.openapi.media_type("text/xml", xml_strategy)
-
+@pytest.mark.parametrize(
+    "content_type",
+    ["text/xml", "text/plain, text/csv"],
+    ids=["registered-strategy", "multiple-content-types"],
+)
+def test_additional_properties_with_encoding(ctx, content_type):
+    schemathesis.openapi.media_type("text/xml", st.just(b"<xml/>"))
     operation = make_operation(
         ctx,
         {
@@ -417,18 +413,64 @@ def test_additional_properties_with_encoding(ctx):
                 "required": ["file"],
                 "additionalProperties": {"type": "string"},
             },
+            "encoding": {"file": {"contentType": content_type}},
+        },
+    )
+
+    bodies = [case.body for case in generate_many(operation.as_strategy(), 50)]
+
+    extras = [value for body in bodies for key, value in body.items() if key != "file"]
+    assert extras
+    assert all(isinstance(value, str) for value in extras)
+
+
+def test_object_keywords_with_encoding(ctx):
+    schemathesis.openapi.media_type("text/xml", st.just(b"<xml/>"))
+    operation = make_operation(
+        ctx,
+        {
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "file": {"type": "string", "format": "binary"},
+                    "name": {"type": "string"},
+                },
+                "required": ["file"],
+                "minProperties": 3,
+                "additionalProperties": {"type": "integer"},
+            },
             "encoding": {"file": {"contentType": "text/xml"}},
         },
     )
 
-    @given(case=operation.as_strategy())
-    def test(case):
-        assert case.body["file"] == b"<xml/>"
-        for key, value in case.body.items():
-            if key != "file":
-                assert isinstance(value, str)
+    bodies = [case.body for case in generate_many(operation.as_strategy(), 50)]
 
-    test()
+    assert [body for body in bodies if len(body) < 3 or body["file"] != b"<xml/>"] == []
+
+
+def test_negative_body_violations_with_encoding(ctx):
+    schemathesis.openapi.media_type("text/xml", st.just(b"<xml/>"))
+    operation = make_operation(
+        ctx,
+        {
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "file": {"type": "string"},
+                    "age": {"type": "integer"},
+                },
+                "required": ["file", "age"],
+                "additionalProperties": False,
+            },
+            "encoding": {"file": {"contentType": "text/xml"}},
+        },
+    )
+
+    bodies = [case.body for case in generate_many(operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), 50)]
+
+    # Missing required properties, extra properties and non-object bodies are violations too.
+    assert any(not isinstance(body, dict) or set(body) != {"file", "age"} for body in bodies)
+    assert all(body["file"] == b"<xml/>" for body in bodies if isinstance(body, dict) and "file" in body)
 
 
 def test_empty_encoding_object(ctx):
@@ -446,11 +488,9 @@ def test_empty_encoding_object(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         assert "file" in case.body
-
-    test()
 
 
 def test_encoding_with_invalid_content_type_format(ctx):
@@ -468,12 +508,10 @@ def test_encoding_with_invalid_content_type_format(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         # Should handle empty string gracefully
         assert "file" in case.body
-
-    test()
 
 
 def test_multipart_comma_separated_without_custom_strategy(ctx):
@@ -494,10 +532,10 @@ def test_multipart_comma_separated_without_custom_strategy(ctx):
 
     content_types_seen = set()
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         if isinstance(case.body, dict):
-            files, _ = case.operation.prepare_multipart(case.body, case.multipart_content_types)
+            files, _ = case.operation.prepare_multipart(case.body, case.media_type, case.multipart_content_types)
 
             if files:
                 for file_tuple in files:
@@ -514,7 +552,6 @@ def test_multipart_comma_separated_without_custom_strategy(ctx):
                         )
                         content_types_seen.add(content_type)
 
-    test()
     assert len(content_types_seen) == 2, f"Expected both content types, got: {content_types_seen}"
 
 
@@ -538,13 +575,11 @@ def test_multipart_optional_encoding_not_always_present(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         # Required field must always be present
         assert "required_field" in case.body
         # Optional field may or may not be present - both are valid
-
-    test()
 
 
 def test_multipart_json_encoding_serializes_object_field(ctx):
@@ -567,7 +602,7 @@ def test_multipart_json_encoding_serializes_object_field(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         kwargs = case.as_transport_kwargs(base_url="http://example.com")
         files = kwargs["files"]
@@ -581,8 +616,6 @@ def test_multipart_json_encoding_serializes_object_field(ctx):
                     f"expected JSON-serialized value, got {type(value).__name__}: {value!r}"
                 )
                 assert isinstance(json.loads(value), dict)
-
-    test()
 
 
 def test_multipart_yaml_encoding_serializes_object_field(ctx):
@@ -604,7 +637,7 @@ def test_multipart_yaml_encoding_serializes_object_field(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         kwargs = case.as_transport_kwargs(base_url="http://example.com")
         files = kwargs["files"]
@@ -616,8 +649,6 @@ def test_multipart_yaml_encoding_serializes_object_field(ctx):
                 assert isinstance(value, (str, bytes))
                 parsed = yaml.safe_load(value)
                 assert isinstance(parsed, dict) and "tag" in parsed
-
-    test()
 
 
 def test_multipart_custom_serializer_encoding(ctx, custom_part_serializer):
@@ -639,7 +670,7 @@ def test_multipart_custom_serializer_encoding(ctx, custom_part_serializer):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         kwargs = case.as_transport_kwargs(base_url="http://example.com")
         files = kwargs["files"]
@@ -649,8 +680,6 @@ def test_multipart_custom_serializer_encoding(ctx, custom_part_serializer):
                 _, value, content_type = payload
                 assert content_type == "application/x-part-custom"
                 assert value.startswith(b"CUSTOM:")
-
-    test()
 
 
 def test_multipart_encoding_with_unknown_content_type_fails(ctx):
@@ -672,12 +701,10 @@ def test_multipart_encoding_with_unknown_content_type_fails(ctx):
         },
     )
 
-    @given(case=operation.as_strategy())
+    @run_given(case=operation.as_strategy(), max_examples=100)
     def test(case):
         with pytest.raises(SerializationNotPossible, match="application/x-unknown-foo"):
             case.as_transport_kwargs(base_url="http://example.com")
-
-    test()
 
 
 def test_multipart_empty_body_sends_valid_terminator(ctx, case_factory):
@@ -715,9 +742,7 @@ def test_multipart_encoding_with_negative_mode(ctx):
         responses={"default": {}},
     )
 
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=100)
     def test(case):
         # Should not raise "unhashable type: 'GeneratedValue'"
         pass
-
-    test()

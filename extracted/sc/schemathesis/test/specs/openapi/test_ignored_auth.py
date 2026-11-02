@@ -1,28 +1,42 @@
 import json
+import time
 from typing import Annotated
 
 import pytest
 import requests
-from fastapi import FastAPI, HTTPException, Security, status
+from fastapi import FastAPI, Header, HTTPException, Security, status
 from fastapi.security import APIKeyHeader, HTTPAuthorizationCredentials, HTTPBearer
+from flask import jsonify, redirect, request
 from hypothesis import Phase, given, settings
 
 import schemathesis
-from schemathesis.checks import CheckContext
-from schemathesis.config import ChecksConfig
-from schemathesis.core.failures import FailureGroup
+from schemathesis.core.failures import AuthScenario, FailureGroup, IgnoredAuth
+from schemathesis.core.parameters import ParameterLocation
 from schemathesis.core.transport import Response
 from schemathesis.engine import Status
 from schemathesis.engine.events import ScenarioFinished
 from schemathesis.engine.run import PhaseName
+from schemathesis.generation.overrides import Override
 from schemathesis.python.asgi import ASGIClient
-from schemathesis.specs.openapi.checks import AuthKind, IgnoredAuth, _contains_auth, ignored_auth, remove_auth
-from schemathesis.transport.requests import RequestsTransport
-from test.utils import EventStream
+from schemathesis.schemas import BaseSchema
+from schemathesis.specs.openapi._auth_retry import build_retry_transport_kwargs
+from schemathesis.specs.openapi.adapter.security import SecurityParameter
+from schemathesis.specs.openapi.checks import AuthKind, _contains_auth, ignored_auth, remove_auth
+from test.utils import EventStream, check_context, run_given
 
 
-def run(schema_url, **config):
-    schema = schemathesis.openapi.from_url(schema_url)
+def api_key(name, location):
+    return SecurityParameter(
+        name=name,
+        location=ParameterLocation(location),
+        scheme_type="apiKey",
+        definition={"name": name, "in": location},
+    )
+
+
+def run(schema, **config):
+    if not isinstance(schema, BaseSchema):
+        schema = schemathesis.openapi.from_url(schema)
     stream = EventStream(
         schema,
         phases=[PhaseName.FUZZING],
@@ -74,38 +88,54 @@ def test_no_failure(ctx):
     assert event.status == Status.SUCCESS
 
 
-def test_keep_tls_verification(ctx, mocker):
-    # See GH-2613
-    # `verify` and other options should not be ignored in `ignored_auth`
-    api = ctx.openapi.apps.ignored_auth()
-    send = mocker.spy(RequestsTransport, "send")
-    run(
-        api.schema_url,
-        request_timeout=5,
+def _https_api_stalling_without_auth(ctx, app_runner):
+    # Untrusted certificate: only unverified clients connect. Requests without auth stall, so only the
+    # check's unauthenticated retries are slow.
+    app, _ = ctx.openapi.make_flask_app(
+        {"/api/ignored_auth": {"get": {"security": [{"basicAuth": []}], "responses": {"200": {"description": "OK"}}}}},
+        components={"securitySchemes": {"basicAuth": {"type": "http", "scheme": "basic"}}},
+    )
+    received = []
+
+    @app.route("/api/ignored_auth")
+    def endpoint():
+        received.append("Authorization" in request.headers)
+        if "Authorization" not in request.headers:
+            time.sleep(1)
+        return jsonify({"has_auth": "Authorization" in request.headers})
+
+    port = app_runner.run_https_flask_app(app)
+    return schemathesis.openapi.from_url(f"https://127.0.0.1:{port}/openapi.json", verify=False), received
+
+
+@pytest.mark.parametrize(
+    ("request_timeout", "expected"),
+    [(5, Status.FAILURE), (0.3, Status.ERROR)],
+    ids=["retry-completes", "retry-times-out"],
+)
+def test_keep_tls_verification(ctx, app_runner, request_timeout, expected):
+    # See GH-2613: the check's unauthenticated retries keep `verify` and `timeout`.
+    schema, received = _https_api_stalling_without_auth(ctx, app_runner)
+    event = run(
+        schema,
+        max_examples=1,
+        request_timeout=request_timeout,
         tls_verify=False,
         headers={"Authorization": "Basic dGVzdDp0ZXN0"},
     )
-    for call in send.mock_calls:
-        assert call.kwargs["timeout"] == 5
-        assert not call.kwargs["verify"]
-    send.reset_mock()
+    assert event.status == expected
+    assert False in received
 
-    schema = schemathesis.openapi.from_url(api.schema_url)
 
-    operation = schema["/api/ignored_auth"]["get"]
+def test_keep_tls_verification_in_call_and_validate(ctx, app_runner):
+    schema, received = _https_api_stalling_without_auth(ctx, app_runner)
 
-    @given(operation.as_strategy())
+    @run_given(schema["/api/ignored_auth"]["GET"].as_strategy(), max_examples=1)
     def test(case):
-        try:
-            case.call_and_validate(verify=False, timeout=5)
-        except FailureGroup:
-            pass
+        with pytest.raises(requests.exceptions.ReadTimeout):
+            case.call_and_validate(verify=False, timeout=0.3, headers={"Authorization": "Basic dGVzdDp0ZXN0"})
 
-    test()
-
-    for call in send.mock_calls:
-        assert call.kwargs["timeout"] == 5
-        assert not call.kwargs["verify"]
+    assert received[:2] == [True, False]
 
 
 def test_file_loaded_schema_requires_explicit_base_url(ctx, tmp_path):
@@ -120,130 +150,169 @@ def test_file_loaded_schema_requires_explicit_base_url(ctx, tmp_path):
     assert any(isinstance(failure, IgnoredAuth) for failure in exc_info.value.exceptions)
 
 
+def _call(case, base_url, headers):
+    return case.call(base_url=base_url, headers=headers)
+
+
+def _send(case, base_url, headers):
+    return requests.get(f"{base_url}{case.formatted_path}", headers=headers)
+
+
+@pytest.mark.parametrize("send", [_call, _send])
+@pytest.mark.parametrize("redirects", [False, True], ids=["direct", "same-host-redirect"])
+@pytest.mark.parametrize("enforces_auth", [True, False], ids=["enforces-auth", "ignores-auth"])
+def test_validate_response_probes_the_server_that_answered(ctx, app_runner, enforces_auth, redirects, send):
+    app, raw_schema = ctx.openapi.make_flask_app(
+        {
+            "/items/{item_id}": {
+                "get": {
+                    "parameters": [{"name": "item_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "security": [{"basicAuth": []}],
+                    "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
+                }
+            }
+        },
+        servers=[{"url": "/v1"}],
+        components={"securitySchemes": {"basicAuth": {"type": "http", "scheme": "basic"}}},
+    )
+
+    @app.route("/v1/items/<int:item_id>")
+    def item(item_id):
+        if redirects:
+            return redirect(f"/v1/items/{item_id}/")
+        return item_with_slash(item_id)
+
+    @app.route("/v1/items/<int:item_id>/")
+    def item_with_slash(item_id):
+        if enforces_auth and request.headers.get("Authorization") != "Basic dGVzdDp0ZXN0":
+            return jsonify({"detail": "Unauthorized"}), 401
+        return jsonify({"id": item_id})
+
+    base_url = app_runner.openapi_url(app, path="/v1")
+    schema = schemathesis.openapi.from_dict(raw_schema)
+    headers = {"Authorization": "Basic dGVzdDp0ZXN0"}
+    case = schema["/items/{item_id}"]["GET"].Case(path_parameters={"item_id": 42})
+    response = send(case, base_url, headers)
+    if enforces_auth:
+        case.validate_response(response, checks=[ignored_auth], headers=headers, transport_kwargs={"headers": headers})
+    else:
+        with pytest.raises(FailureGroup) as exc_info:
+            case.validate_response(
+                response, checks=[ignored_auth], headers=headers, transport_kwargs={"headers": headers}
+            )
+        assert [type(failure) for failure in exc_info.value.exceptions] == [IgnoredAuth]
+        assert str(exc_info.value.exceptions[0]).startswith("API accepts requests without authentication")
+
+
 @pytest.mark.parametrize(
-    ("check_context", "request_kwargs", "parameters", "expected"),
+    ("context", "request_kwargs", "parameters", "expected"),
     [
         (
-            CheckContext(
-                override=None,
-                auth=None,
-                headers=None,
-                config=ChecksConfig(),
-                transport_kwargs=None,
-                response_checks=None,
-            ),
+            check_context(),
             {"url": "https://example.com", "headers": {"A": "V"}},
-            [{"name": "A", "in": "header"}],
+            [api_key("A", "header")],
             AuthKind.GENERATED,
         ),
         (
-            CheckContext(
-                override=None,
-                auth=None,
-                headers={"Foo": "Bar"},
-                config=ChecksConfig(),
-                transport_kwargs=None,
-                response_checks=None,
-            ),
+            check_context(headers={"Foo": "Bar"}),
             {"url": "https://example.com", "headers": {"A": "V"}},
-            [{"name": "A", "in": "header"}],
+            [api_key("A", "header")],
             AuthKind.GENERATED,
         ),
         (
-            CheckContext(
-                override=None,
-                auth=None,
-                headers={"A": "V"},
-                config=ChecksConfig(),
-                transport_kwargs=None,
-                response_checks=None,
-            ),
+            check_context(headers={"A": "V"}),
             {"url": "https://example.com", "headers": {"A": "V"}},
-            [{"name": "A", "in": "header"}],
+            [api_key("A", "header")],
             AuthKind.EXPLICIT,
         ),
         (
-            CheckContext(
-                override=None, auth=None, headers={}, config=ChecksConfig(), transport_kwargs=None, response_checks=None
-            ),
+            check_context(headers={}),
             {"url": "https://example.com", "headers": {"A": "V"}},
-            [{"name": "B", "in": "header"}],
+            [api_key("B", "header")],
             None,
         ),
         (
-            CheckContext(
-                override=None, auth=None, headers={}, config=ChecksConfig(), transport_kwargs=None, response_checks=None
-            ),
+            check_context(headers={}),
             {"url": "https://example.com?A=V"},
-            [{"name": "A", "in": "query"}],
+            [api_key("A", "query")],
             AuthKind.GENERATED,
         ),
         (
-            CheckContext(
-                override=None, auth=None, headers={}, config=ChecksConfig(), transport_kwargs=None, response_checks=None
-            ),
+            check_context(headers={}),
             {"url": "https://example.com?A=V"},
-            [{"name": "B", "in": "query"}],
+            [api_key("B", "query")],
             None,
         ),
         (
-            CheckContext(
-                override=None, auth=None, headers={}, config=ChecksConfig(), transport_kwargs=None, response_checks=None
-            ),
+            check_context(headers={}),
             {"url": "https://example.com", "cookies": {"A": "V"}},
-            [{"name": "A", "in": "cookie"}],
+            [api_key("A", "cookie")],
             AuthKind.GENERATED,
         ),
         (
-            CheckContext(
-                override=None,
-                auth=None,
-                headers={"Cookie": "A=v;"},
-                config=ChecksConfig(),
-                transport_kwargs=None,
-                response_checks=None,
-            ),
+            check_context(headers={"Cookie": "A=v;"}),
             {"url": "https://example.com", "cookies": {"A": "V"}},
-            [{"name": "A", "in": "cookie"}],
+            [api_key("A", "cookie")],
             AuthKind.EXPLICIT,
         ),
         (
-            CheckContext(
-                override=None,
-                auth=None,
-                headers={"Cookie": "B=v;"},
-                config=ChecksConfig(),
-                transport_kwargs=None,
-                response_checks=None,
-            ),
+            check_context(headers={"Cookie": "B=v;"}),
             {"url": "https://example.com", "cookies": {"A": "V"}},
-            [{"name": "A", "in": "cookie"}],
+            [api_key("A", "cookie")],
             AuthKind.GENERATED,
         ),
         (
-            CheckContext(
-                override=None, auth=None, headers={}, config=ChecksConfig(), transport_kwargs=None, response_checks=None
-            ),
+            check_context(headers={}),
             {"url": "https://example.com", "cookies": {"A": "V"}},
-            [{"name": "B", "in": "cookie"}],
+            [api_key("B", "cookie")],
             None,
         ),
         # A generated value containing `; $` makes the outgoing `Cookie` header unparsable by the stdlib parser.
         (
-            CheckContext(
-                override=None, auth=None, headers={}, config=ChecksConfig(), transport_kwargs=None, response_checks=None
-            ),
+            check_context(headers={}),
             {"url": "https://example.com", "cookies": {"A": "a; $=b"}},
-            [{"name": "A", "in": "cookie"}],
+            [api_key("A", "cookie")],
             AuthKind.GENERATED,
+        ),
+        (
+            check_context(headers={}),
+            {"url": "https://example.com", "headers": {"Cookie": "B=a; $=b"}},
+            [api_key("A", "cookie")],
+            None,
         ),
     ],
 )
-def test_contains_auth(check_context, request_kwargs, parameters, expected, response_factory, case_factory):
+def test_contains_auth(context, request_kwargs, parameters, expected, response_factory, case_factory):
     response = response_factory.requests()
     response.request = requests.Request("GET", **request_kwargs).prepare()
     assert (
-        _contains_auth(check_context, case_factory(), Response.from_requests(response, verify=True), parameters)
+        _contains_auth(context, case_factory(), Response.from_requests(response, verify=True), parameters) == expected
+    )
+
+
+@pytest.mark.parametrize(
+    ("transport_kwargs", "override", "url", "parameters", "expected"),
+    [
+        ({"params": {"A": "V"}}, None, "https://example.com?A=V", [api_key("A", "query")], AuthKind.EXPLICIT),
+        ({"params": {"B": "V"}}, None, "https://example.com?A=V", [api_key("A", "query")], AuthKind.GENERATED),
+        (None, Override(), "https://example.com?A=V", [api_key("A", "query")], AuthKind.GENERATED),
+        (None, Override(query={"A": "V"}), "https://example.com?A=V", [api_key("A", "query")], AuthKind.EXPLICIT),
+        (None, Override(), "https://example.com", [api_key("A", "cookie")], AuthKind.GENERATED),
+    ],
+    ids=["transport-params", "other-transport-params", "empty-override", "query-override", "cookie-empty-override"],
+)
+def test_contains_auth_reads_sent_overrides(
+    transport_kwargs, override, url, parameters, expected, response_factory, case_factory
+):
+    response = response_factory.requests()
+    response.request = requests.Request("GET", url=url, cookies={"A": "V"}).prepare()
+    assert (
+        _contains_auth(
+            check_context(transport_kwargs=transport_kwargs),
+            case_factory(),
+            Response.from_requests(response, True, _override=override),
+            parameters,
+        )
         == expected
     )
 
@@ -251,9 +320,9 @@ def test_contains_auth(check_context, request_kwargs, parameters, expected, resp
 @pytest.mark.parametrize(
     ("key", "parameters"),
     [
-        ("headers", [{"name": "A", "in": "header"}]),
-        ("query", [{"name": "A", "in": "query"}]),
-        ("cookies", [{"name": "A", "in": "cookie"}]),
+        ("headers", [api_key("A", "header")]),
+        ("query", [api_key("A", "query")]),
+        ("cookies", [api_key("A", "cookie")]),
     ],
 )
 def test_remove_auth_from_case(ctx, key, parameters):
@@ -280,8 +349,22 @@ def test_remove_auth_strips_cookie_from_headers(ctx, case_factory, cookie_header
     api = ctx.openapi.apps.success()
     schema = schemathesis.openapi.from_url(api.schema_url)
     case = case_factory(operation=schema["/api/success"]["GET"], headers={"Cookie": cookie_header})
-    result = remove_auth(case, [{"name": param_name, "in": "cookie"}])
+    result = remove_auth(case, [api_key(param_name, "cookie")])
     assert result.headers.get("Cookie") == expected_cookie_header
+
+
+@pytest.mark.parametrize(
+    ("headers", "expected"),
+    [
+        ({"Cookie": "sid=abc"}, {}),
+        ({"Cookie": "sid=abc; theme=dark", "X-Trace": "1"}, {"Cookie": "theme=dark", "X-Trace": "1"}),
+        ({"cookie": "sid=abc; theme=dark"}, {"cookie": "theme=dark"}),
+        ({"Cookie": "sid=a; $=b"}, {}),
+    ],
+    ids=["only-param", "mixed", "lowercase", "unparsable"],
+)
+def test_retry_transport_kwargs_strip_auth_cookie_from_headers(headers, expected):
+    assert build_retry_transport_kwargs({"headers": headers}, [api_key("sid", "cookie")]) == {"headers": expected}
 
 
 @pytest.mark.parametrize("ignores_auth", [True, False])
@@ -346,31 +429,51 @@ def test_accepts_any_auth_if_explicit_is_present(ignores_auth, expected):
     assert str(exc.value.exceptions[0]).startswith(expected)
 
 
-# Frameworks whose first authentication scheme offers no challenge answer 403 instead of 401.
-def test_forbidden_response_counts_as_enforced_auth():
+def test_ignored_auth_with_cookie_jar_kwarg():
+    app = FastAPI()
+
+    @app.get("/", responses={200: {"model": {}}, 401: {"model": {}}, 403: {"model": {}}})
+    async def root(credentials: str | None = Security(APIKeyHeader(name="x-api-key", auto_error=False))):
+        return {"message": "Hello world"}
+
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app)
+    case = schema["/"]["GET"].Case()
+    with pytest.raises(FailureGroup) as exc:
+        case.call_and_validate(
+            session=ASGIClient(app),
+            headers={"x-api-key": "INCORRECT"},
+            cookies=requests.cookies.cookiejar_from_dict({"theme": "dark"}),
+            checks=[ignored_auth],
+        )
+    assert [str(error) for error in exc.value.exceptions] == [
+        "API accepts requests without authentication\n\nExpected 401 or 403, got `200 OK` for `GET /`"
+    ]
+
+
+def _api_with_basic_auth(*, missing=401, invalid=401, documented=(200, 401)):
     app = FastAPI()
     api_key = APIKeyHeader(name="Authorization", auto_error=False)
 
-    @app.get("/", responses={200: {"model": {}}, 401: {"model": {}}, 403: {"model": {}}})
+    @app.get("/", responses={status_code: {"model": {}} for status_code in documented})
     def root(credentials: Annotated[str | None, Security(api_key)]):
+        if credentials is None:
+            raise HTTPException(status_code=missing)
         if credentials != "Basic dGVzdDp0ZXN0":
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+            raise HTTPException(status_code=invalid)
         return {"message": "OK"}
 
+    return app
+
+
+# Frameworks whose first authentication scheme offers no challenge answer 403 instead of 401.
+def test_forbidden_response_counts_as_enforced_auth():
+    app = _api_with_basic_auth(missing=403, invalid=403, documented=(200, 401, 403))
     schema = schemathesis.openapi.from_asgi("/openapi.json", app)
     schema["/"]["GET"].Case().call_and_validate(session=ASGIClient(app), auth=("test", "test"), checks=[ignored_auth])
 
 
 def test_server_error_without_auth_is_reported():
-    app = FastAPI()
-    api_key = APIKeyHeader(name="Authorization", auto_error=False)
-
-    @app.get("/", responses={200: {"model": {}}, 401: {"model": {}}})
-    def root(credentials: Annotated[str | None, Security(api_key)]):
-        if credentials != "Basic dGVzdDp0ZXN0":
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return {"message": "OK"}
-
+    app = _api_with_basic_auth(missing=500, invalid=500)
     schema = schemathesis.openapi.from_asgi("/openapi.json", app)
     with pytest.raises(FailureGroup) as exc:
         schema["/"]["GET"].Case().call_and_validate(
@@ -379,6 +482,70 @@ def test_server_error_without_auth_is_reported():
     assert str(exc.value.exceptions[0]) == (
         "Unexpected response to a request without authentication\n\n"
         "Expected 401 or 403, got `500 Internal Server Error` for `GET /`"
+    )
+
+
+@pytest.mark.parametrize(
+    ("status_code", "expected"),
+    [
+        (300, []),
+        (399, []),
+        (400, ["400 Bad Request"]),
+        (500, ["500 Internal Server Error"]),
+        (599, ["599 Unknown"]),
+    ],
+    ids=["redirect", "last-redirect-status", "bad-request", "server-error", "unknown-status"],
+)
+def test_invalid_auth_probe_response(status_code, expected):
+    app = _api_with_basic_auth(invalid=status_code)
+    case = schemathesis.openapi.from_asgi("/openapi.json", app)["/"]["GET"].Case()
+    try:
+        case.call_and_validate(session=ASGIClient(app), auth=("test", "test"), checks=[ignored_auth])
+    except FailureGroup as exc:
+        failures = list(exc.exceptions)
+    else:
+        failures = []
+    assert [(str(failure), failure.operation, failure.scenario) for failure in failures] == [
+        (
+            "Unexpected response to invalid authentication\n\n"
+            f"Expected 401 or 403, got `{response}` for `GET /` (invalid credentials provided)",
+            "GET /",
+            AuthScenario.INVALID_AUTH,
+        )
+        for response in expected
+    ]
+    assert all(failure.case_id is not None for failure in failures)
+
+
+# An explicit `Authorization` header the schema does not declare may be the real credential.
+def test_explicit_authorization_header_beside_other_declared_scheme():
+    app = FastAPI()
+    api_key = APIKeyHeader(name="X-API-Key", auto_error=False)
+
+    @app.get("/", responses={200: {"model": {}}, 401: {"model": {}}})
+    def root(credentials: Annotated[str | None, Security(api_key)]):
+        return {"message": "OK"}
+
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app)
+    schema["/"]["GET"].Case().call_and_validate(
+        session=ASGIClient(app), headers={"Authorization": "Bearer secret"}, checks=[ignored_auth]
+    )
+
+
+# A probe missing another required header gets a validation error instead of an auth verdict.
+def test_invalid_auth_probe_keeps_other_headers():
+    app = FastAPI()
+    api_key = APIKeyHeader(name="X-API-Key", auto_error=False)
+
+    @app.get("/", responses={200: {"model": {}}, 401: {"model": {}}})
+    def root(x_tenant: Annotated[str, Header()], credentials: Annotated[str | None, Security(api_key)]):
+        if credentials != "valid":
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        return {"tenant": x_tenant}
+
+    schema = schemathesis.openapi.from_asgi("/openapi.json", app)
+    schema["/"]["GET"].Case(headers={"x-tenant": "acme"}).call_and_validate(
+        session=ASGIClient(app), headers={"X-API-Key": "valid"}, checks=[ignored_auth]
     )
 
 
@@ -410,6 +577,41 @@ def test_explicit_auth_cli(ctx, cli, snapshot_cli):
     api = ctx.openapi.apps.basic()
     assert (
         cli.run(api.schema_url, "-c", "ignored_auth", "--auth=test:test", "--max-examples=1", "--mode=positive")
+        == snapshot_cli
+    )
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+@pytest.mark.parametrize("header_name", ["Cookie", "cookie"], ids=["canonical", "lowercase"])
+def test_explicit_cookie_header_cli(ctx, cli, snapshot_cli, header_name):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/cookie": {
+                "get": {
+                    "security": [{"cookieAuth": []}],
+                    "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
+                }
+            }
+        },
+        components={"securitySchemes": {"cookieAuth": {"type": "apiKey", "in": "cookie", "name": "sid"}}},
+    )
+
+    @app.route("/cookie")
+    def cookie():
+        if request.cookies.get("sid") != "abc":
+            return jsonify({"error": "unauthorized"}), 401
+        return jsonify({})
+
+    assert (
+        cli.run_openapi_app(
+            app,
+            "-H",
+            f"{header_name}: sid=abc; theme=dark",
+            "-c",
+            "ignored_auth",
+            "--phases=fuzzing",
+            "--max-examples=3",
+        )
         == snapshot_cli
     )
 
@@ -511,13 +713,10 @@ def test_custom_auth():
             case.headers = case.headers or {}
             case.headers["x-api-key"] = data
 
-    @given(case=schema["/"]["GET"].as_strategy())
-    @settings(max_examples=10, deadline=None)
+    @run_given(case=schema["/"]["GET"].as_strategy(), max_examples=10)
     def test(case):
         client = ASGIClient(app)
         case.call_and_validate(session=client)
-
-    test()
 
 
 def make_app(auth_location):
@@ -554,15 +753,7 @@ async def data(api_key: str = Depends(get_api_key)):
 
 def test_explicit_auth_tuple_in_call_and_validate():
     # GH-3386: `auth` kwarg passed to `call_and_validate` is not forwarded to CheckContext
-    app = FastAPI()
-    api_key = APIKeyHeader(name="Authorization", auto_error=False)
-
-    @app.get("/", responses={200: {"model": {}}, 401: {"model": {}}})
-    def root(credentials: Annotated[str | None, Security(api_key)]):
-        if credentials is None or credentials != "Basic dGVzdDp0ZXN0":
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-        return {"message": "OK"}
-
+    app = _api_with_basic_auth()
     schema = schemathesis.openapi.from_asgi("/openapi.json", app)
     case = schema["/"]["GET"].Case()
     client = ASGIClient(app)
@@ -627,3 +818,100 @@ def test_override(case):
     )
     result = testdir.runpytest("-v", "-s")
     result.assert_outcomes(passed=4)
+
+
+ITEM_WITH_API_KEY = {
+    "/items/{item_id}": {
+        "get": {
+            "security": [{"apiKey": []}],
+            "parameters": [{"name": "item_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+            "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
+        }
+    }
+}
+API_KEY_SCHEME = {"securitySchemes": {"apiKey": {"type": "apiKey", "in": "header", "name": "X-API-Key"}}}
+
+
+@pytest.mark.parametrize("enforces_auth", [True, False], ids=["login-redirect", "ignores-auth"])
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_redirect_to_login_page_without_auth(ctx, cli, snapshot_cli, enforces_auth):
+    app, _ = ctx.openapi.make_flask_app(ITEM_WITH_API_KEY, components=API_KEY_SCHEME)
+
+    @app.route("/items/<int:item_id>")
+    def item(item_id):
+        if enforces_auth and request.headers.get("X-API-Key") != "secret":
+            return redirect(f"/login?next=/items/{item_id}")
+        return jsonify({"id": item_id})
+
+    @app.route("/login")
+    def login():
+        return "<!doctype html><title>Sign in</title>", 200, {"Content-Type": "text/html"}
+
+    assert (
+        cli.run_openapi_app(app, "-c", "ignored_auth", "--phases=fuzzing", "--mode=positive", "--max-examples=3")
+        == snapshot_cli
+    )
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_invalid_path_parameter_missing_the_route(ctx, cli, snapshot_cli):
+    app, _ = ctx.openapi.make_flask_app(ITEM_WITH_API_KEY, components=API_KEY_SCHEME)
+
+    @app.route("/items/<int:item_id>")
+    def item(item_id):
+        if "X-API-Key" not in request.headers:
+            return jsonify({"error": "unauthorized"}), 401
+        return jsonify({"id": item_id})
+
+    @app.route("/items/<path:rest>")
+    def catch_all(rest):
+        return "<!doctype html><title>App</title>", 200, {"Content-Type": "text/html"}
+
+    assert (
+        cli.run_openapi_app(app, "-c", "ignored_auth", "--phases=coverage", "--mode=negative", "--max-examples=10")
+        == snapshot_cli
+    )
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_explicit_api_key_header_in_other_case_cli(ctx, cli, snapshot_cli):
+    app, _ = ctx.openapi.make_flask_app(ITEM_WITH_API_KEY, components=API_KEY_SCHEME)
+
+    @app.route("/items/<int:item_id>")
+    def item(item_id):
+        if request.headers.get("X-API-Key") != "secret":
+            return jsonify({"error": "unauthorized"}), 401
+        return jsonify({"id": item_id})
+
+    assert (
+        cli.run_openapi_app(
+            app,
+            "-H",
+            "x-api-key: secret",
+            "-c",
+            "ignored_auth",
+            "--phases=coverage,fuzzing",
+            "--mode=positive",
+            "--max-examples=3",
+        )
+        == snapshot_cli
+    )
+
+
+@pytest.mark.parametrize("source", ["case", "call"])
+def test_explicit_api_key_header_in_other_case(source):
+    app = FastAPI()
+    api_key = APIKeyHeader(name="X-API-Key", auto_error=False)
+
+    @app.get("/", responses={200: {"model": {}}, 401: {"model": {}}})
+    def root(credentials: Annotated[str | None, Security(api_key)]):
+        if credentials != "secret":
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        return {"message": "OK"}
+
+    headers = {"x-api-key": "secret"}
+    operation = schemathesis.openapi.from_asgi("/openapi.json", app)["/"]["GET"]
+    if source == "case":
+        operation.Case(headers=headers).call_and_validate(session=ASGIClient(app), checks=[ignored_auth])
+    else:
+        operation.Case().call_and_validate(session=ASGIClient(app), headers=headers, checks=[ignored_auth])

@@ -9,16 +9,25 @@ import jsonschema_rs
 
 from schemathesis.core import NOT_SET, deserialization
 from schemathesis.core.errors import InvalidSchema, MalformedMediaType
-from schemathesis.core.jsonschema import make_validator, schema_with_bundle
+from schemathesis.core.jsonschema import BUNDLE_STORAGE_KEY, make_validator, schema_with_bundle
 from schemathesis.core.jsonschema.bundler import BundleError
 from schemathesis.core.jsonschema.types import JsonSchema
 from schemathesis.core.parameters import ParameterLocation, plain_str_values
-from schemathesis.generation import GenerationMode
+from schemathesis.core.transforms import UNRESOLVABLE, format_body_key, resolve_path, split_body_key
+from schemathesis.core.transport import response_content_type
+from schemathesis.generation.meta import CoverageScenario, coverage_scenario
 from schemathesis.resources import ExtraDataSource, PoolDraw, PoolPick
 from schemathesis.resources.repository import ResourceInstance, ResourceRepository
+from schemathesis.specs.openapi.error_feedback import _walk_to_property
 from schemathesis.specs.openapi.semantic_pool import SemanticValueIndex, iter_ingestion_leaves
-from schemathesis.specs.openapi.stateful.dependencies.models import DependencyGraph, InputSlot
-from schemathesis.specs.openapi.stateful.dependencies.naming import normalize_for_matching
+from schemathesis.specs.openapi.stateful.dependencies.models import (
+    DependencyGraph,
+    InputSlot,
+    build_nested_body,
+    merge_request_body,
+)
+from schemathesis.specs.openapi.stateful.dependencies.naming import normalize_for_matching, referenced_values
+from schemathesis.specs.openapi.utils import read_from_wire
 
 if TYPE_CHECKING:
     from random import Random
@@ -170,20 +179,17 @@ class CapturedVariant:
     can attribute the case to its semantic predecessor(s).
     """
 
-    overlay: dict[str, Any]
+    overlay: dict[str, Any] | list[Any]
     draws: tuple[PoolDraw, ...]
 
 
-def _build_pool_draw(slot: InputSlot, instance: ResourceInstance) -> PoolDraw:
-    """Build a `PoolDraw` provenance record for a slot that was filled from `instance`."""
-    parameter_name = slot.parameter_name if isinstance(slot.parameter_name, str) else ""
-    return PoolDraw(
-        location=slot.parameter_location.value,
-        parameter_name=parameter_name,
-        resource_name=slot.resource.name,
-        resource_field=slot.resource_field or "",
-        source_operation=instance.source_operation,
-        source_status=instance.status_code,
+def _build_pool_draw(slot: InputSlot, instance: ResourceInstance, value: object) -> PoolDraw:
+    return _build_pool_draw_from_requirement(
+        location=slot.parameter_location,
+        parameter_name=slot.parameter_name if isinstance(slot.parameter_name, str) else "",
+        requirement=ParameterRequirement(resource_name=slot.resource.name, resource_field=slot.resource_field or ""),
+        instance=instance,
+        value=value,
     )
 
 
@@ -193,8 +199,8 @@ def _build_pool_draw_from_requirement(
     parameter_name: str,
     requirement: ParameterRequirement,
     instance: ResourceInstance,
+    value: object,
 ) -> PoolDraw:
-    """Variant of `_build_pool_draw` for sites that hold a `ParameterRequirement` rather than an `InputSlot`."""
     return PoolDraw(
         location=location.value,
         parameter_name=parameter_name,
@@ -202,7 +208,33 @@ def _build_pool_draw_from_requirement(
         resource_field=requirement.resource_field,
         source_operation=instance.source_operation,
         source_status=instance.status_code,
+        source_identity=instance.identity,
+        source_input=str(value) in instance.referenced,
+        source_query=instance.query or None,
     )
+
+
+def referenced_by(case: Case) -> frozenset[str]:
+    """Values `case` sent to name existing objects, rather than the one it creates."""
+    node = case.operation.schema.analysis.dependency_graph.operations.get(case.operation.label)
+    created = {output.body_field for output in node.outputs if output.body_field} if node is not None else set()
+    path_parameters = case.path_parameters or {}
+    return frozenset(referenced_values(case.operation.path, path_parameters, case.query or {}, case.body, created))
+
+
+def declared_response_schema(
+    operation: APIOperation, status_code: int, content_type: str | None
+) -> dict[str, Any] | None:
+    """Response schema for `status_code`, or `None` when it is missing, malformed or boolean."""
+    response_def = operation.responses.find_by_status_code(status_code)
+    if response_def is None:
+        return None
+    # An unresolvable `$ref` or malformed response schema must not fail the operation when only non-schema checks run.
+    try:
+        schema = response_def.get_schema(content_type).schema
+    except (BundleError, InvalidSchema, MalformedMediaType):
+        return None
+    return schema if isinstance(schema, dict) else None
 
 
 def build_parameter_requirements(graph: DependencyGraph) -> dict[RequirementKey, ParameterRequirement]:
@@ -233,6 +265,27 @@ def build_inputs_by_label(graph: DependencyGraph) -> dict[str, list[InputSlot]]:
     return inputs_by_label
 
 
+def build_created_keys_by_label(graph: DependencyGraph) -> dict[str, list[InputSlot]]:
+    """Index request body fields that name what a create makes, e.g. a client-chosen `title`.
+
+    Recorded after a 2xx like inputs, but never drawn: a create needs a fresh key.
+    """
+    created: dict[str, list[InputSlot]] = {}
+    for label, operation in graph.operations.items():
+        bound = {slot.parameter_name for slot in operation.inputs if slot.parameter_location == ParameterLocation.BODY}
+        for output in operation.outputs:
+            if output.body_field is not None and output.body_field not in bound:
+                created.setdefault(label, []).append(
+                    InputSlot(
+                        resource=output.resource,
+                        resource_field=output.body_field,
+                        parameter_name=output.body_field,
+                        parameter_location=ParameterLocation.BODY,
+                    )
+                )
+    return created
+
+
 def _build_property_validator(
     prop_schema: object, container_schema: JsonSchema, validator_cls: type
 ) -> jsonschema_rs.Validator | None:
@@ -248,42 +301,28 @@ def _build_property_validator(
 
 @dataclass(slots=True, frozen=True)
 class _VariantSlot:
-    # `path` is where the value lands in the variant; `lookup_key` is the slash-joined
-    # form used as the requirements-dict key and `instance.context` lookup.
-    path: tuple[str, ...]
+    # `path` is where the value lands in the variant, integers marking array items; `lookup_key` is
+    # the slash-joined form used as the requirements-dict key and `instance.context` lookup.
+    path: tuple[str | int, ...]
     leaf_schema: JsonSchema
     requirement: ParameterRequirement
 
     @property
     def lookup_key(self) -> str:
-        return "/".join(self.path)
+        return format_body_key(self.path)
 
 
-def _assemble_path(path: tuple[str, ...], value: Any) -> dict[str, Any]:
-    result: dict[str, Any] = {}
-    cursor = result
-    for key in path[:-1]:
-        nxt: dict[str, Any] = {}
-        cursor[key] = nxt
-        cursor = nxt
-    cursor[path[-1]] = value
-    return result
-
-
-def _assemble_variant(slots: list[_VariantSlot], values_by_lookup_key: dict[str, Any]) -> dict[str, Any]:
-    variant: dict[str, Any] = {}
+def _assemble_variant(slots: list[_VariantSlot], values_by_lookup_key: dict[str, Any]) -> dict[str, Any] | list[Any]:
+    variant: dict[str, Any] | list[Any] = {}
     for slot in slots:
-        if slot.lookup_key not in values_by_lookup_key:
-            continue
-        cursor = variant
-        for key in slot.path[:-1]:
-            cursor = cursor.setdefault(key, {})
-        cursor[slot.path[-1]] = values_by_lookup_key[slot.lookup_key]
+        if slot.lookup_key in values_by_lookup_key:
+            overlay = build_nested_body(slot.path, values_by_lookup_key[slot.lookup_key])
+            variant = merge_request_body(variant, overlay)
     return variant
 
 
 def _variant_satisfies_paths(
-    variant: dict[str, Any],
+    variant: dict[str, Any] | list[Any],
     slots: list[_VariantSlot],
     validators: dict[str, jsonschema_rs.Validator | None],
 ) -> bool:
@@ -291,17 +330,21 @@ def _variant_satisfies_paths(
         validator = validators.get(slot.lookup_key)
         if validator is None:
             continue
-        cursor: Any = variant
-        for key in slot.path:
-            if not isinstance(cursor, dict) or key not in cursor:
-                cursor = None
-                break
-            cursor = cursor[key]
-        if cursor is None:
+        value = resolve_path(variant, slot.path)
+        if value is UNRESOLVABLE or value is None:
             continue
-        if not validator.is_valid(cursor):
+        if not validator.is_valid(value):
             return False
     return True
+
+
+def _path_parameters_as_read(operation: APIOperation, case: Case) -> dict[str, Any]:
+    """The path parameters the request carried, in their declared types.
+
+    The coverage phase sends path parameters as text, so `"2"` for an integer `parent_pk`. Captured as is, it
+    would never pair with or lead a schema that declares an integer.
+    """
+    return read_from_wire(operation, ParameterLocation.PATH, case.path_parameters or {})
 
 
 @dataclass(slots=True)
@@ -311,6 +354,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
     repository: ResourceRepository
     requirements: dict[RequirementKey, ParameterRequirement]
     inputs_by_label: dict[str, list[InputSlot]]
+    created_keys_by_label: dict[str, list[InputSlot]]
     usage_tracker: VariantUsageTracker
     semantic_index: SemanticValueIndex | None
     semantic_eligible_operations: frozenset[str]
@@ -321,20 +365,27 @@ class OpenApiExtraDataSource(ExtraDataSource):
         repository: ResourceRepository,
         requirements: dict[RequirementKey, ParameterRequirement],
         inputs_by_label: dict[str, list[InputSlot]] | None = None,
-        usage_tracker: VariantUsageTracker | None = None,
         semantic_index: SemanticValueIndex | None = None,
         semantic_eligible_operations: frozenset[str] = frozenset(),
+        created_keys_by_label: dict[str, list[InputSlot]] | None = None,
     ) -> None:
         self.repository = repository
         self.requirements = requirements
         self.inputs_by_label = inputs_by_label if inputs_by_label is not None else {}
-        self.usage_tracker = usage_tracker if usage_tracker is not None else VariantUsageTracker()
+        self.created_keys_by_label = created_keys_by_label if created_keys_by_label is not None else {}
+        self.usage_tracker = VariantUsageTracker()
         self.semantic_index = semantic_index
         self.semantic_eligible_operations = semantic_eligible_operations
         # Operations whose strategies bind captured variants at build time (consumer side).
         self.consumer_labels: frozenset[str] = frozenset(key[0] for key in requirements)
         # Values that have been successfully DELETEd; pool draws skip them.
         self._tombstoned: set[tuple[str, Any]] = set()
+        # Body fields below the top level, e.g. `data/0/groupId`, by operation label.
+        self._nested_body_requirements: dict[str, list[tuple[tuple[str, ...], ParameterRequirement]]] = {}
+        for (label, location, name), requirement in requirements.items():
+            if location == ParameterLocation.BODY and "/" in name:
+                path = tuple(split_body_key(name))
+                self._nested_body_requirements.setdefault(label, []).append((path, requirement))
 
     # Opaque repr so Hypothesis' argument rendering never walks the live pool that concurrent workers mutate.
     def _repr_pretty_(self, *args: Any, **kwargs: Any) -> None: ...
@@ -344,6 +395,23 @@ class OpenApiExtraDataSource(ExtraDataSource):
             return (resource_name, value) in self._tombstoned
         except TypeError:  # unhashable value
             return False
+
+    def _context_value(self, instance: ResourceInstance, name: str, requirement: ParameterRequirement) -> Any:
+        # Producer and consumer may name the parent differently (`id` vs `project_id`); unbound keys match by name.
+        for key, value in instance.context.items():
+            bound = self.requirements.get((instance.source_operation, ParameterLocation.PATH, key))
+            if bound == requirement or (bound is None and key == name):
+                return value
+        return None
+
+    def _matches_context(
+        self, instance: ResourceInstance, constraints: list[tuple[str, ParameterRequirement, Any]]
+    ) -> bool:
+        """Whether `instance` was recorded under the already chosen parents; unrecorded parents match anything."""
+        return all(
+            self._context_value(instance, name, requirement) in (None, value)
+            for name, requirement, value in constraints
+        )
 
     def get_captured_variants(
         self,
@@ -356,30 +424,30 @@ class OpenApiExtraDataSource(ExtraDataSource):
 
         For single requirements, each variant has a single-property overlay.
         For multiple requirements, each variant has a complete value set preserving relationships.
-        For BODY location, walks one level into nested objects so nested foreign-key fields get overlays.
+        For BODY location, also reaches nested foreign-key fields through objects, array items and `$ref`.
         """
         if not isinstance(schema, dict):
             return None
 
         properties = schema.get("properties")
         if not isinstance(properties, dict):
-            return None
+            # A top-level array body has no properties; its item fields are nested requirements.
+            properties = {}
 
         slots: list[_VariantSlot] = []
         for name, prop_schema in properties.items():
             requirement = self.requirements.get((operation.label, location, name))
             if requirement is not None:
                 slots.append(_VariantSlot((name,), prop_schema, requirement))
-                continue
-            if location != ParameterLocation.BODY or not isinstance(prop_schema, dict):
-                continue
-            sub_props = prop_schema.get("properties")
-            if not isinstance(sub_props, dict):
-                continue
-            for sub_name, sub_schema in sub_props.items():
-                req = self.requirements.get((operation.label, location, f"{name}/{sub_name}"))
-                if req is not None:
-                    slots.append(_VariantSlot((name, sub_name), sub_schema, req))
+        if location == ParameterLocation.BODY:
+            bound = {slot.path[0] for slot in slots}
+            bundled = schema.get(BUNDLE_STORAGE_KEY)
+            for path, requirement in self._nested_body_requirements.get(operation.label, ()):
+                if path[0] in bound:
+                    continue
+                found = _walk_to_property(schema, path, bundled)
+                if found is not None:
+                    slots.append(_VariantSlot(*found, requirement))
 
         if not slots:
             return None
@@ -389,13 +457,14 @@ class OpenApiExtraDataSource(ExtraDataSource):
             slot = slots[0]
             variants = [
                 CapturedVariant(
-                    overlay=_assemble_path(slot.path, value),
+                    overlay=build_nested_body(slot.path, value),
                     draws=(
                         _build_pool_draw_from_requirement(
                             location=location,
                             parameter_name=slot.lookup_key,
                             requirement=slot.requirement,
                             instance=instance,
+                            value=value,
                         ),
                     ),
                 )
@@ -413,7 +482,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
 
     def _collect_object_variants(self, slots: list[_VariantSlot], location: ParameterLocation) -> list[CapturedVariant]:
         """Collect complete value sets that preserve relationships between properties."""
-        resource_names = {slot.requirement.resource_name for slot in slots}
+        resource_names = dict.fromkeys(slot.requirement.resource_name for slot in slots)
 
         variants: list[CapturedVariant] = []
         seen: set[str] = set()
@@ -429,7 +498,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
                     if req.resource_name == resource_name:
                         value = instance.data.get(req.resource_field)
                     else:
-                        value = instance.context.get(slot.lookup_key)
+                        value = self._context_value(instance, slot.lookup_key, req)
                     if value is not None and not self._is_tombstoned(req.resource_name, value):
                         filled[slot.lookup_key] = value
                         draws.append(
@@ -438,6 +507,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
                                 parameter_name=slot.lookup_key,
                                 requirement=req,
                                 instance=instance,
+                                value=value,
                             )
                         )
                 if len(filled) == len(slots):
@@ -453,6 +523,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
         # No instance covered every slot; chain picks across resources, each constrained
         # by the context of slots already chosen.
         chosen: dict[str, Any] = {}
+        constraints: list[tuple[str, ParameterRequirement, Any]] = []
         chained_draws: list[PoolDraw] = []
         for slot in slots:
             req = slot.requirement
@@ -463,18 +534,20 @@ class OpenApiExtraDataSource(ExtraDataSource):
                     continue
                 if self._is_tombstoned(req.resource_name, value):
                     continue
-                if any(instance.context.get(k) not in (None, v) for k, v in chosen.items()):
+                if not self._matches_context(instance, constraints):
                     continue
                 best = (value, instance)
                 break
             if best is not None:
                 chosen[slot.lookup_key] = best[0]
+                constraints.append((slot.lookup_key, req, best[0]))
                 chained_draws.append(
                     _build_pool_draw_from_requirement(
                         location=location,
                         parameter_name=slot.lookup_key,
                         requirement=req,
                         instance=best[1],
+                        value=best[0],
                     )
                 )
         if chosen:
@@ -495,7 +568,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
                 continue
 
             dedup_key: DedupKey
-            if isinstance(value, str | int | float | bool) or value is None:
+            if isinstance(value, (str, int, float, bool)) or value is None:
                 dedup_key = (type(value), value)
             else:
                 try:
@@ -517,7 +590,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
         operation: APIOperation,
         location: ParameterLocation,
         name: str,
-        context_constraints: dict[str, Any] | None = None,
+        context_constraints: list[tuple[str, ParameterRequirement, Any]] | None = None,
     ) -> tuple[Any, ResourceInstance] | None:
         """Return one weighted-selected pool value plus the `ResourceInstance` whose draw won.
 
@@ -536,9 +609,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
             if self._is_tombstoned(requirement.resource_name, value):
                 continue
             all_candidates.append((instance, value))
-            if context_constraints and any(
-                instance.context.get(k) not in (None, v) for k, v in context_constraints.items()
-            ):
+            if context_constraints and not self._matches_context(instance, context_constraints):
                 continue
             constrained.append((instance, value))
         candidates = constrained or all_candidates
@@ -568,7 +639,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
         if not slots:
             return PoolPick()
 
-        resource_names = {slot.resource.name for slot in slots}
+        resource_names = dict.fromkeys(slot.resource.name for slot in slots)
         # Each "satisfying" entry records the seed instance and per-slot (instance, value) so
         # provenance stays attached even when context-only fields come from a different parent.
         satisfying: list[
@@ -586,7 +657,9 @@ class OpenApiExtraDataSource(ExtraDataSource):
                     if slot.resource.name == resource_name:
                         value = instance.data.get(resource_field)
                     else:
-                        value = instance.context.get(param_name)
+                        value = self._context_value(
+                            instance, param_name, ParameterRequirement(slot.resource.name, resource_field)
+                        )
                     if value is None:
                         break
                     # Same-resource slots and context-only slots both attribute to `instance`:
@@ -604,7 +677,8 @@ class OpenApiExtraDataSource(ExtraDataSource):
             slot_by_key = {(slot.parameter_location, slot.parameter_name): slot for slot in slots}
             values = {key: value for key, (_, value) in chosen.items()}
             draws = tuple(
-                _build_pool_draw(slot_by_key[key], source_instance) for key, (source_instance, _) in chosen.items()
+                _build_pool_draw(slot_by_key[key], source_instance, value)
+                for key, (source_instance, value) in chosen.items()
             )
             return PoolPick(values=values, draws=draws)
 
@@ -612,7 +686,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
         values_result: dict[tuple[ParameterLocation, str], Any] = {}
         draws_result: list[PoolDraw] = []
         misses_result: list[tuple[str, str]] = []
-        context_constraints: dict[str, Any] = {}
+        context_constraints: list[tuple[str, ParameterRequirement, Any]] = []
         for slot in slots:
             param_name = slot.parameter_name
             assert isinstance(param_name, str)
@@ -625,8 +699,11 @@ class OpenApiExtraDataSource(ExtraDataSource):
             if picked is not None:
                 value, source_instance = picked
                 values_result[(slot.parameter_location, param_name)] = value
-                draws_result.append(_build_pool_draw(slot, source_instance))
-                context_constraints[param_name] = value
+                draws_result.append(_build_pool_draw(slot, source_instance, value))
+                assert slot.resource_field is not None
+                context_constraints.append(
+                    (param_name, ParameterRequirement(slot.resource.name, slot.resource_field), value)
+                )
             else:
                 misses_result.append((slot.parameter_location.value, param_name))
         return PoolPick(values=values_result, draws=tuple(draws_result), misses=tuple(misses_result))
@@ -639,7 +716,7 @@ class OpenApiExtraDataSource(ExtraDataSource):
 
     def should_record_request(self, *, operation: str) -> bool:
         """Check if request inputs should be captured for this operation."""
-        return operation in self.inputs_by_label
+        return operation in self.inputs_by_label or operation in self.created_keys_by_label
 
     def record_request(
         self,
@@ -649,24 +726,25 @@ class OpenApiExtraDataSource(ExtraDataSource):
         status_code: int,
     ) -> None:
         """Capture path-parameter and body-field values from a successful request."""
-        slots = self.inputs_by_label.get(operation.label)
-        if not slots:
+        slots = [*self.inputs_by_label.get(operation.label, ()), *self.created_keys_by_label.get(operation.label, ())]
+        # A server accepting an oversized string says nothing about it being usable as an identifier elsewhere.
+        if not slots or coverage_scenario(case) == CoverageScenario.OVERSIZED_STRING:
             return
         if case.meta is not None:
-            slots = [
-                slot
-                for slot in slots
-                if (component := case.meta.components.get(slot.parameter_location)) is None
-                or component.mode == GenerationMode.POSITIVE
-            ]
+            slots = [slot for slot in slots if not case.meta.is_negative_at(slot.parameter_location)]
             if not slots:
                 return
+        path_parameters = _path_parameters_as_read(operation, case)
         self.repository.record_request(
             operation=operation.label,
             inputs=slots,
             case=case,
+            path_parameters=path_parameters,
             status_code=status_code,
-            context=case.path_parameters or {},
+            context=path_parameters,
+            identity=case.auth_identity,
+            query=case.query or {},
+            referenced=referenced_by(case),
         )
 
     def record_response(
@@ -680,6 +758,9 @@ class OpenApiExtraDataSource(ExtraDataSource):
 
         Handles deserialization and extraction of response data internally.
         """
+        # An echoed oversized string would reach later requests as an identifier.
+        if coverage_scenario(case) == CoverageScenario.OVERSIZED_STRING:
+            return
         # Decide eligibility before deserializing so semantic-only operations don't pay the
         # deserialization cost (or risk a custom-deserializer exception) for non-2xx responses
         # that the pool would discard anyway.
@@ -691,10 +772,9 @@ class OpenApiExtraDataSource(ExtraDataSource):
         )
         if not has_descriptors and not semantic_active:
             return
-        content_types = response.headers.get("content-type")
-        if not content_types:
+        content_type = response_content_type(response)
+        if content_type is None:
             return
-        content_type = content_types[0]
         context = deserialization.DeserializationContext(operation=operation, case=case)
         try:
             payload = deserialization.deserialize_response(response, content_type, context=context)
@@ -705,22 +785,14 @@ class OpenApiExtraDataSource(ExtraDataSource):
                 operation=operation.label,
                 status_code=response.status_code,
                 payload=payload,
-                context=case.path_parameters or {},
+                context=_path_parameters_as_read(operation, case),
+                identity=case.auth_identity,
+                query=case.query or {},
+                referenced=referenced_by(case),
             )
         if semantic_active:
-            response_def = operation.responses.find_by_status_code(response.status_code)
-            response_schema: dict[str, Any] | None = None
-            if response_def is not None:
-                # Recording runs outside the response-schema check path; an unresolvable
-                # `$ref` or other malformed response schema must not fail the operation
-                # when only non-schema checks are enabled. Fall back to a schemaless walk.
-                try:
-                    resolved_schema = response_def.get_schema(content_type).schema
-                except (BundleError, InvalidSchema, MalformedMediaType):
-                    resolved_schema = None
-                # A boolean JSON Schema (true/false) carries no leaf info; treat as schemaless.
-                if isinstance(resolved_schema, dict):
-                    response_schema = resolved_schema
+            # Without a usable schema, fall back to a schemaless walk.
+            response_schema = declared_response_schema(operation, response.status_code, content_type)
             # Normalize so a response echoing `user_id` is excluded when the path declares `userId`.
             excluded = (
                 frozenset(normalize_for_matching(name) for name in case.path_parameters)

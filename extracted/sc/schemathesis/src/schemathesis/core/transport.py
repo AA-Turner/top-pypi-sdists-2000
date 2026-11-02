@@ -1,11 +1,16 @@
 from __future__ import annotations
 
 import base64
+import copy
 import enum
 import json
+import re
 import string
-from collections.abc import Mapping
-from itertools import product
+import time
+from collections.abc import Callable, Iterable, Mapping, Sequence
+from dataclasses import dataclass
+from functools import lru_cache
+from itertools import chain, product
 from typing import TYPE_CHECKING, Any, Literal, TypeAlias, TypeGuard, get_args, overload
 
 from schemathesis.core import NOT_SET
@@ -22,6 +27,11 @@ HttpMethod: TypeAlias = Literal["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD",
 # so `APIOperation.method` carries this form; the wire `HttpMethod` is its uppercase counterpart.
 HttpMethodSchema: TypeAlias = Literal["get", "post", "put", "patch", "delete", "head", "options", "trace", "query"]
 HTTP_METHODS_SCHEMA: frozenset[HttpMethodSchema] = frozenset(get_args(HttpMethodSchema))
+# Methods that must not change server state.
+SAFE_METHODS = frozenset({"GET", "HEAD", "OPTIONS", "TRACE"})
+# Statuses an API answers when it does not accept the credentials a request carries. Frameworks whose first
+# authentication scheme offers no challenge answer 403 instead of 401, and gateways do the same.
+AUTH_REJECTION_STATUSES = frozenset({401, 403})
 
 
 def is_http_method_schema(value: str) -> TypeGuard[HttpMethodSchema]:
@@ -44,6 +54,96 @@ if TYPE_CHECKING:
 
 USER_AGENT = f"schemathesis/{SCHEMATHESIS_VERSION}"
 DEFAULT_RESPONSE_TIMEOUT = 10
+# Enough events to check a stream's shape, without waiting out the timeout on endless ones
+DEFAULT_MAX_STREAM_EVENTS = 20
+_LINE_BREAK_RE = re.compile(rb"\r\n|\r|\n")
+# Two line breaks in a row end an event
+_EVENT_END_RE = re.compile(rb"(?:\r\n|\r|\n)(?:\r\n|\r|\n)")
+_UTF8_BOM = b"\xef\xbb\xbf"
+# Marks a `requests.Response` whose event stream was cut short, until it becomes a `Response`
+STREAM_CUT_SHORT_ATTRIBUTE = "_schemathesis_stream_cut_short"
+
+
+def response_content_type(response: Response) -> str | None:
+    """The first `Content-Type` value of a response, or `None` when it has no such header."""
+    values = response.headers.get("content-type")
+    return values[0] if values else None
+
+
+def read_event_stream(
+    chunks: Iterable[bytes], timeout: float | tuple[float, float] | None, max_events: int = DEFAULT_MAX_STREAM_EVENTS
+) -> tuple[bytes, bool]:
+    """Read an event stream until it ends, sends `max_events` events or `timeout` seconds pass.
+
+    Returns the content and whether the stream was cut short.
+    `chunks` raises `TimeoutError` when the stream goes silent for too long.
+    """
+    # A `(connect, read)` pair limits the stream by its read half
+    if isinstance(timeout, tuple):
+        timeout = timeout[1]
+    deadline = time.monotonic() + (timeout or DEFAULT_RESPONSE_TIMEOUT)
+    buffer = EventStreamBuffer(max_events)
+    try:
+        for chunk in chunks:
+            if buffer.feed(chunk) or time.monotonic() >= deadline:
+                return buffer.complete_events, True
+    except TimeoutError:
+        return buffer.complete_events, True
+    return bytes(buffer.content), False
+
+
+@dataclass(slots=True)
+class RequestSettings:
+    """Timeout, TLS and proxy settings for requests to the API under test."""
+
+    # `None` leaves the choice to the caller: in-process apps run without a timeout.
+    timeout: float | int | None
+    verify: bool | str | None
+    cert: str | tuple[str, str] | None
+    proxy: str | None
+
+    @property
+    def network_timeout(self) -> float | int:
+        """Timeout for requests sent over the network, where none would let a request hang forever."""
+        return DEFAULT_RESPONSE_TIMEOUT if self.timeout is None else self.timeout
+
+    @property
+    def proxies(self) -> dict[str, str] | None:
+        return None if self.proxy is None else {"all": self.proxy}
+
+
+class EventStreamBuffer:
+    """Event stream bytes, with the end of the last complete event tracked as they arrive."""
+
+    __slots__ = ("content", "max_events", "_events", "_end")
+
+    def __init__(self, max_events: int) -> None:
+        self.content = bytearray()
+        self.max_events = max_events
+        # Events that carry data; comments and metadata-only blocks are not events
+        self._events = 0
+        self._end = 0
+
+    def feed(self, chunk: bytes) -> bool:
+        """Add a chunk; `True` once `max_events` events are complete."""
+        self.content += chunk
+        for match in _EVENT_END_RE.finditer(self.content, self._end):
+            block = self.content[self._end : match.start()]
+            self._end = match.end()
+            if _carries_data(block.removeprefix(_UTF8_BOM)):
+                self._events += 1
+                if self._events >= self.max_events:
+                    return True
+        return False
+
+    @property
+    def complete_events(self) -> bytes:
+        """Content without the event still arriving when the stream was cut short."""
+        return bytes(self.content[: self._end])
+
+
+def _carries_data(block: bytes | bytearray) -> bool:
+    return any(line == b"data" or line.startswith(b"data:") for line in _LINE_BREAK_RE.split(block))
 
 
 def decode_lossy(content: bytes, encoding: str | None) -> str:
@@ -62,6 +162,18 @@ def load_json_lossy(content: bytes, encoding: str | None) -> Any:
         return json.loads(content)
     except UnicodeDecodeError:
         return json.loads(decode_lossy(content, encoding))
+
+
+def parse_set_cookie(headers: Iterable[str]) -> dict[str, str]:
+    """Cookie names and values from `Set-Cookie` headers, read as leniently as an HTTP client's cookie jar."""
+    cookies: dict[str, str] = {}
+    for header in headers:
+        # Attributes after the first `;` describe the cookie and are never cookies themselves.
+        name, separator, value = header.split(";", 1)[0].partition("=")
+        name = name.strip()
+        if separator and name:
+            cookies[name] = value.strip()
+    return cookies
 
 
 def prepare_urlencoded(data: Any) -> Any:
@@ -83,10 +195,23 @@ class CallOutcome(enum.Enum):
     ACCEPTED = "accepted"
     # Well-formed, but the addressed resource does not exist.
     UNREACHABLE = "unreachable"
+    # Well-formed, but at odds with the current state of the resource, e.g. a duplicate of a unique value.
+    CONFLICT = "conflict"
     # Refused on the data itself.
     REJECTED = "rejected"
     # Says nothing about whether the data was acceptable, e.g. an auth failure or a server error.
     UNINFORMATIVE = "uninformative"
+    # The server does not serve the operation at this address, whatever the data.
+    NOT_SERVED = "not_served"
+
+
+def is_uninformative_status(status_code: int) -> bool:
+    """Whether a response status says nothing about the data the request carried.
+
+    Auth failures, rate limiting, and server errors depend on who sent the request, how often, and the server's
+    health, not on what the request contained.
+    """
+    return status_code in (401, 403, 429) or status_code >= 500
 
 
 class Response:
@@ -116,7 +241,13 @@ class Response:
     """HTTP protocol version ("1.0" or "1.1")."""
     encoding: str | None
     """Character encoding for text content, if detected."""
+    stream_cut_short: bool
+    """Whether an event stream was read only up to `max-stream-events` or the request timeout."""
     _override: Override | None
+    # Turns `content` into display text for failure output, for bodies that are not text.
+    render_content: Callable[[bytes], str | None] | None
+    # Replaces "[<code>] <reason>" in failure output, for responses whose status is not an HTTP status.
+    status_line: str | None
 
     __slots__ = (
         "status_code",
@@ -130,8 +261,11 @@ class Response:
         "message",
         "http_version",
         "encoding",
+        "stream_cut_short",
         "_encoded_body",
         "_override",
+        "render_content",
+        "status_line",
     )
 
     def __init__(
@@ -146,7 +280,10 @@ class Response:
         http_version: str = "1.1",
         encoding: str | None = None,
         content_size: int | None = None,
+        stream_cut_short: bool = False,
         _override: Override | None = None,
+        render_content: Callable[[bytes], str | None] | None = None,
+        status_line: str | None = None,
     ):
         self.status_code = status_code
         self.headers = {key.lower(): value for key, value in headers.items()}
@@ -161,7 +298,10 @@ class Response:
         self.message = message
         self.http_version = http_version
         self.encoding = encoding
+        self.stream_cut_short = stream_cut_short
         self._override = _override
+        self.render_content = render_content
+        self.status_line = status_line
 
     @overload
     @classmethod
@@ -199,7 +339,8 @@ class Response:
         else:
             if isinstance(response, httpx2.Response):
                 return Response.from_httpx2(response, verify=True)
-        return response
+        # Unknown response types pass through unchanged.
+        return response  # type: ignore[return-value]
 
     @classmethod
     def from_requests(cls, response: requests.Response, verify: bool, _override: Override | None = None) -> Response:
@@ -219,6 +360,7 @@ class Response:
             encoding=response.encoding,
             http_version=http_version,
             verify=verify,
+            stream_cut_short=getattr(response, STREAM_CUT_SHORT_ATTRIBUTE, False),
             _override=_override,
         )
 
@@ -316,19 +458,12 @@ class Response:
 
     def truncated(self, limit: int) -> Response:
         """A copy keeping at most `limit` bytes of the body; `body_size` still reports the full size."""
-        return Response(
-            status_code=self.status_code,
-            headers=self.headers,
-            content=self.content[:limit] if self.content else self.content,
-            request=self.request,
-            elapsed=self.elapsed,
-            verify=self.verify,
-            message=self.message,
-            http_version=self.http_version,
-            encoding=self.encoding,
-            content_size=self.content_size,
-            _override=self._override,
-        )
+        response = copy.copy(self)
+        response.content = self.content[:limit] if self.content else self.content
+        # Values derived from the full body must not leak into the copy.
+        response._deserialized = NOT_SET
+        response._encoded_body = None
+        return response
 
     @property
     def is_truncated(self) -> bool:
@@ -367,6 +502,16 @@ def expand_status_code(status_code: StatusCodePattern | int) -> list[int]:
         return []
     chars = [list(string.digits) if digit == "X" else [digit] for digit in pattern]
     return [int("".join(expanded)) for expanded in product(*chars)]
+
+
+def expand_status_codes(status_codes: Sequence[StatusCodePattern]) -> frozenset[int]:
+    return _expand_status_codes(tuple(status_codes))
+
+
+# Checks expand the same configured patterns for every response.
+@lru_cache(maxsize=64)
+def _expand_status_codes(status_codes: tuple[StatusCodePattern, ...]) -> frozenset[int]:
+    return frozenset(chain.from_iterable(expand_status_code(code) for code in status_codes))
 
 
 def status_code_matches(pattern: StatusCodePattern, response_code: int) -> bool:

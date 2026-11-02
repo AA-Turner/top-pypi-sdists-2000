@@ -15,12 +15,10 @@ if Path.cwd() != Path(__file__).parent:
     os.chdir(Path(__file__).parent)
 
 # checking if user is running pytest without installing test dependencies:
-missing = [
-    module for module in ["ansible", "black", "mypy", "pylint"] if not find_spec(module)
-]
+missing = [module for module in ["ansible", "black", "mypy"] if not find_spec(module)]
 if missing:
     pytest.exit(
-        reason=f"FATAL: Missing modules: {', '.join(missing)} -- probably you missed installing test requirements with: pip install -e '.[test]'",
+        reason=f"FATAL: Missing modules: {', '.join(missing)} -- probably you missed installing test requirements with: uv pip install --group dev -e '.'",
         returncode=1,
     )
 
@@ -45,7 +43,7 @@ def pytest_configure(config: pytest.Config) -> None:
                 text=True,
             )
         except subprocess.CalledProcessError as exc:
-            print(f"{exc}\n{exc.stderr}\n{exc.stdout}", file=sys.stderr)  # noqa: T201
+            print(f"{exc}\n{exc.stderr}\n{exc.stdout}", file=sys.stderr)  # ruff:ignore[print]
             sys.exit(1)
 
 
@@ -59,7 +57,7 @@ def is_master(config: pytest.Config) -> bool:
     return not hasattr(config, "workerinput")
 
 
-# ruff: noqa: E402
+# ruff:file-ignore[module-import-not-at-top-of-file]
 from ansible.module_utils.common.yaml import (  # pylint: disable=wrong-import-position
     HAS_LIBYAML,
 )

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import time
 from collections.abc import Callable
-from itertools import groupby
 from typing import TYPE_CHECKING
 
 import click
@@ -10,25 +9,25 @@ import click
 from schemathesis.cli.commands.run.handlers.base import BaseOutputHandler
 from schemathesis.cli.events import LoadingFinished, LoadingStarted
 from schemathesis.cli.output import (
-    BLOCK_PADDING,
+    Indent,
     display_api_operations,
-    display_errors_summary,
+    display_errors,
     display_failures,
-    display_failures_summary,
     display_final_line,
     display_header,
     display_section_name,
-    display_seed,
-    display_test_cases,
-    format_duration,
+    display_summary_counts,
+    display_summary_footer,
+    display_warning_blocks,
+    duration_phrase,
+    get_status_icon,
+    issue_parts,
     make_console,
     print_lines,
+    reauth_summary_lines,
+    unmatched_filter_block,
 )
-from schemathesis.cli.summary import (
-    reduce_errors,
-    reduce_failures,
-    reduce_test_cases,
-)
+from schemathesis.core.output import pluralize
 from schemathesis.core.timing import Instant
 from schemathesis.core.version import SCHEMATHESIS_VERSION
 from schemathesis.engine import Status, StopReason
@@ -51,13 +50,6 @@ if TYPE_CHECKING:
 
 SEPARATOR = " * "
 _INDENT = "    "
-
-_STOP_REASON_LABELS = {
-    StopReason.MAX_TIME: "Time limit reached",
-    StopReason.FAILURE_LIMIT: "Failure limit reached",
-    StopReason.COMPLETED: "Completed",
-    StopReason.INTERRUPTED: "Interrupted",
-}
 
 
 class _LiveText:
@@ -83,6 +75,7 @@ class FuzzProgressManager:
     title_task_id: TaskID
     live: Live | None
     total_scenarios: int
+    passed_scenarios: int
     stats: dict[Status, int]
     last_failure_time: float | None
     unique_failures: int
@@ -94,6 +87,7 @@ class FuzzProgressManager:
         "title_task_id",
         "live",
         "total_scenarios",
+        "passed_scenarios",
         "stats",
         "last_failure_time",
         "unique_failures",
@@ -106,6 +100,7 @@ class FuzzProgressManager:
         self.console = console
         self.started_at = Instant()
         self.total_scenarios = 0
+        self.passed_scenarios = 0
         self.stats: dict[Status, int] = {Status.ERROR: 0}
         self.last_failure_time = None
         self.unique_failures = 0
@@ -126,16 +121,11 @@ class FuzzProgressManager:
         rate = self.total_scenarios / elapsed if elapsed > 0 else 0.0
         return (
             f"{_INDENT}{hours}:{minutes:02d}:{seconds:02d}"
-            f"{SEPARATOR}{rate:.1f}/s{SEPARATOR}{self.total_scenarios} scenarios"
+            f"{SEPARATOR}{rate:.1f}/s{SEPARATOR}{pluralize(self.total_scenarios, 'scenario')}"
         )
 
     def _counters_line(self) -> str:
-        errors = self.stats[Status.ERROR]
-        parts = []
-        if self.unique_failures:
-            parts.append(f"❌ {self.unique_failures} unique failures")
-        if errors:
-            parts.append(f"🚫 {errors} errors")
+        parts = issue_parts(unique_failures=self.unique_failures, errors=self.stats[Status.ERROR])
         text = SEPARATOR.join(parts) if parts else "No issues found yet"
         return f"{_INDENT}{text}"
 
@@ -167,37 +157,46 @@ class FuzzProgressManager:
         if self.live is not None:
             self.live.stop()
 
-    def get_completion_message(self) -> str:
-        duration = format_duration(self.started_at.elapsed_ms)
+    def get_completion_message(self, *, is_interrupted: bool, without_checks: bool = False) -> str:
         errors = self.stats[Status.ERROR]
-
-        if self.unique_failures > 0 or errors > 0:
-            icon = "🚫" if errors > 0 else "❌"
-        elif self.total_scenarios > 0:
-            icon = "✅"
-        else:
-            icon = "🕛"
+        stats = {
+            Status.ERROR: errors,
+            Status.FAILURE: self.unique_failures,
+            Status.SUCCESS: 0 if without_checks else self.passed_scenarios,
+            Status.SKIP: self.passed_scenarios if without_checks else 0,
+        }
+        icon = get_status_icon(stats, is_interrupted=is_interrupted)
 
         parts = []
-        if self.total_scenarios:
-            parts.append(f"✅ {self.total_scenarios} scenarios")
-        if self.unique_failures:
-            parts.append(f"❌ {self.unique_failures} unique failures")
-        if errors:
-            suffix = "s" if errors > 1 else ""
-            parts.append(f"🚫 {errors} error{suffix}")
+        if self.passed_scenarios:
+            if without_checks:
+                parts.append(f"⏭  {self.passed_scenarios} without checks")
+            else:
+                parts.append(f"✅ {pluralize(self.passed_scenarios, 'scenario')}")
+        parts.extend(issue_parts(unique_failures=self.unique_failures, errors=errors))
         stats_line = "  ".join(parts) if parts else "No scenarios were run"
 
-        return f"{icon}  Fuzzing (in {duration})\n\n    {stats_line}"
+        duration_message = duration_phrase(self.started_at.elapsed_ms, interrupted=is_interrupted)
+        return f"{icon}  Fuzzing ({duration_message})\n\n    {stats_line}"
 
-    def update(self, unique_failures: int) -> None:
+    def update(self, unique_failures: int, *, passed: bool) -> None:
         self.total_scenarios += 1
+        if passed:
+            self.passed_scenarios += 1
         if unique_failures > self.unique_failures:
             self.last_failure_time = time.monotonic()
         self.unique_failures = unique_failures
 
     def update_error_count(self, error_count: int) -> None:
         self.stats[Status.ERROR] = error_count
+
+
+def _has_passed(event: FuzzScenarioFinished) -> bool:
+    # Transport errors leave steps unanswered without changing the scenario status.
+    if event.status != Status.SUCCESS:
+        return False
+    recorder = event.recorder
+    return all(recorder.find_response(case_id=case_id) is not None for case_id in recorder.cases)
 
 
 class FuzzOutputHandler(BaseOutputHandler["FuzzExecutionContext"]):
@@ -219,21 +218,17 @@ class FuzzOutputHandler(BaseOutputHandler["FuzzExecutionContext"]):
 
     def handle_event(self, ctx: FuzzExecutionContext, event: events.EngineEvent) -> None:
         if isinstance(event, LoadingStarted):
-            self._on_loading_started(event)
+            self._on_loading_started(ctx, event)
         elif isinstance(event, LoadingFinished):
-            from rich.padding import Padding
-
-            assert self.loading_manager is not None
-            self.loading_manager.stop()
-            self.console.print(Padding(self.loading_manager.get_completion_message(), BLOCK_PADDING))
-            self.console.print()
-            self.loading_manager = None
+            self._finish_loading()
             if ctx.initialization_lines:
                 print_lines(ctx.initialization_lines)
         elif isinstance(event, EngineStarted):
             self.progress_manager.start()
         elif isinstance(event, FuzzScenarioFinished):
-            self.progress_manager.update(unique_failures=len(ctx.statistic.unique_failures_map))
+            self.progress_manager.update(
+                unique_failures=len(ctx.statistic.unique_failures_map), passed=_has_passed(event)
+            )
         elif isinstance(event, NonFatalError):
             self.progress_manager.update_error_count(len(ctx.errors))
         elif isinstance(event, FatalError):
@@ -248,58 +243,49 @@ class FuzzOutputHandler(BaseOutputHandler["FuzzExecutionContext"]):
             self.loading_manager.stop()
 
     def _render_report(self, ctx: FuzzExecutionContext, event: EngineFinished) -> None:
-        from rich.padding import Padding
         from rich.text import Text
 
-        self.console.print(Padding(Text(self.progress_manager.get_completion_message(), style="white"), BLOCK_PADDING))
+        is_interrupted = event.stop_reason is StopReason.INTERRUPTED
+        without_checks = ctx.statistic.no_checks_ran and not event.failures
+        message = self.progress_manager.get_completion_message(
+            is_interrupted=is_interrupted, without_checks=without_checks
+        )
+        self.console.print(Indent(Text(message, style="white")))
         self.console.print()
 
         if ctx.errors:
-            display_section_name("ERRORS")
-            sorted_errors = sorted(ctx.errors, key=lambda r: (r.label, r.info.title))
-            for label, group_errors in groupby(sorted_errors, key=lambda r: r.label):
-                display_section_name(label, "_", fg="red")
-                _errors = list(group_errors)
-                for idx, error in enumerate(_errors, 1):
-                    click.echo(error.info.format(bold=lambda x: click.style(x, bold=True)))
-                    if idx < len(_errors):
-                        click.echo()
+            display_errors(ctx.errors, base_url_is_set=ctx.base_url_is_set)
 
         display_failures(ctx.statistic, ctx.config.output, record_crashes=ctx.config.cache.enabled)
+
+        unmatched_filter = ctx.warning_collector.data.unmatched_filter
+        if unmatched_filter:
+            display_warning_blocks([unmatched_filter_block(unmatched_filter)])
 
         display_section_name("SUMMARY")
         click.echo()
 
-        if ctx.api_statistic is not None:
-            _display_api_operations(ctx)
+        summary = ctx.summary()
 
-        click.echo(f"Stop reason: {_STOP_REASON_LABELS.get(event.stop_reason, str(event.stop_reason))}")
-        click.echo()
+        if summary.operations is not None:
+            display_api_operations(summary.operations)
 
-        if ctx.statistic.failures:
-            display_failures_summary(reduce_failures(ctx.statistic))
-
-        if ctx.errors:
-            display_errors_summary(reduce_errors(ctx.errors))
-
-        if ctx.summary_lines:
-            print_lines(ctx.summary_lines)
+        # The final line says why nothing was tested; a stop reason next to it would read as a normal run.
+        if ctx.nothing_tested_reason is None:
+            click.echo(f"Stop reason: {event.stop_reason.skip_explanation or 'Completed'}")
             click.echo()
 
-        display_test_cases(reduce_test_cases(ctx.statistic))
-        display_seed(ctx.config)
-        unique_failures = sum(
-            len(group.failures) for grouped in ctx.statistic.failures.values() for group in grouped.values()
-        )
+        display_summary_counts(summary)
+        ctx.summary_lines.extend(reauth_summary_lines(event.payload))
+        display_summary_footer(ctx, summary)
         display_final_line(
-            failures=unique_failures,
+            failures=ctx.statistic.total_failures,
             errors=len(ctx.errors),
+            warnings=ctx.warning_collector.data.kind_count,
             running_time=event.running_time,
             total_cases=ctx.statistic.total_cases,
+            nothing_tested_reason=ctx.nothing_tested_reason,
+            exit_code=ctx.exit_code,
+            no_checks_ran=ctx.statistic.no_checks_ran,
+            interrupted=event.stop_reason == StopReason.INTERRUPTED,
         )
-
-
-def _display_api_operations(ctx: FuzzExecutionContext) -> None:
-    operations = ctx.summary().operations
-    assert operations is not None
-    display_api_operations(operations)

@@ -4,8 +4,9 @@ import time
 from dataclasses import dataclass
 from typing import Literal
 
-from flask import Flask, request
+from flask import Flask, jsonify, request
 
+from schemathesis.engine.run.probes import HEADER_NAME
 from test.apps.catalog.openapi.stateful import UserStore
 
 
@@ -27,6 +28,17 @@ class EnsureResourceAvailability:
 
     def apply(self, app: Flask, store: UserStore) -> None:
         store.config.ensure_resource_availability = True
+
+
+@dataclass(slots=True)
+class ServedFromCache:
+    priority: int = 0
+
+    def apply(self, app: Flask, store: UserStore) -> None:
+        @app.after_request
+        def mark_as_cached(response):
+            response.headers["Age"] = "120"
+            return response
 
 
 @dataclass(slots=True)
@@ -148,7 +160,33 @@ class Slowdown:
     priority: int = 0
 
     def apply(self, app: Flask, store: UserStore) -> None:
-        store.config.slowdown = self.seconds
+        seconds = self.seconds
+
+        # Every API request, including the router's own 404 and 405 answers; capability probes stay fast.
+        @app.before_request
+        def delay_request() -> None:
+            if request.path != "/openapi.json" and HEADER_NAME not in request.headers:
+                time.sleep(seconds)
+
+
+@dataclass(slots=True)
+class FailAfterRequests:
+    # Server answers 500 once it served `count` API requests, so a failure limit ends the run after known work.
+    count: int
+    priority: int = 0
+
+    def apply(self, app: Flask, store: UserStore) -> None:
+        served = {"count": 0}
+        limit = self.count
+
+        @app.before_request
+        def fail_when_exhausted() -> tuple[str, int] | None:
+            if request.path == "/openapi.json" or HEADER_NAME in request.headers:
+                return None
+            served["count"] += 1
+            if served["count"] > limit:
+                return "Exhausted", 500
+            return None
 
 
 @dataclass(slots=True)
@@ -253,6 +291,15 @@ class ReturnPlainText:
         spec = app.config["schema"]
         # Pin name to a fixed value so snapshots stay stable.
         spec["components"]["schemas"]["NewUser"]["properties"]["name"] = {"enum": ["fixed-name"]}
+        # Every user gets the same ID, so a `GET` linked from `DELETE` finds a re-created user and the reported chain
+        # would depend on which path a seed reaches first
+        spec["paths"]["/users/{userId}"]["delete"]["responses"]["204"].pop("links")
+        # Only `POST -> GET -> DELETE` extracts data from the plain-text response, so every scenario takes that path.
+        post_links = spec["paths"]["/users"]["post"]["responses"]["201"]["links"]
+        get_link = post_links["GetUser"]
+        post_links.clear()
+        post_links["GetUser"] = get_link
+        spec["paths"]["/orders/{orderId}"]["delete"]["responses"]["200"]["links"].clear()
 
 
 @dataclass(slots=True)
@@ -294,6 +341,40 @@ class RequireBearerAuth:
         store.config.enforce_auth = True
         spec = app.config["schema"]
         spec["components"]["securitySchemes"] = {"BearerAuth": {"type": "http", "scheme": "bearer"}}
+
+
+@dataclass(slots=True)
+class SingleUseBearerTokens:
+    # `POST /auth/token` issues tokens each accepted once; every later request with one is an expired-token use.
+    priority: int = 0
+
+    def apply(self, app: Flask, store: UserStore) -> None:
+        issued: set[str] = set()
+        used: set[str] = set()
+        expired_token_uses: list[str] = []
+        app.config["expired_token_uses"] = expired_token_uses
+
+        @app.route("/auth/token", methods=["POST"])
+        def issue_token():
+            token = f"token-{len(issued)}"
+            issued.add(token)
+            return jsonify({"token": token})
+
+        @app.before_request
+        def require_fresh_token():
+            if request.endpoint in ("issue_token", "openapi_spec"):
+                return None
+            token = request.headers.get("Authorization", "").removeprefix("Bearer ")
+            if token in used:
+                expired_token_uses.append(token)
+            elif token in issued:
+                used.add(token)
+                return None
+            return jsonify({"detail": "Invalid or expired token"}), 401
+
+        spec = app.config["schema"]
+        spec["components"]["securitySchemes"] = {"BearerAuth": {"type": "http", "scheme": "bearer"}}
+        spec["security"] = [{"BearerAuth": []}]
 
 
 @dataclass(slots=True)
@@ -352,9 +433,8 @@ class WrongLinkTypeMismatch:
     def apply(self, app: Flask, store: UserStore) -> None:
         store.config.wrong_link_type_mismatch = True
         spec = app.config["schema"]
-        # Empty `name` would yield `/users/` which Flask routes to NotFound before any handler runs,
-        # turning every link execution into a 404 the calibrator early-returns on.
-        spec["components"]["schemas"]["NewUser"]["properties"]["name"]["minLength"] = 1
+        # Empty or digit-only names route to NotFound or a real user, never to the mismatch the calibrator counts.
+        spec["components"]["schemas"]["NewUser"]["properties"]["name"]["pattern"] = "^[A-Za-z]+$"
         spec["paths"]["/users"]["post"]["responses"]["201"]["links"]["DeleteUser"]["parameters"]["userId"] = (
             "$response.body#/name"
         )
@@ -368,9 +448,8 @@ class WrongLinkParserAttributed:
     def apply(self, app: Flask, store: UserStore) -> None:
         store.config.wrong_link_parser_attributed = True
         spec = app.config["schema"]
-        # Empty `name` would yield `/users/` which Flask routes to NotFound before any handler runs,
-        # turning every link execution into a 404 the calibrator early-returns on.
-        spec["components"]["schemas"]["NewUser"]["properties"]["name"]["minLength"] = 1
+        # Empty or digit-only names route to NotFound or a real user, never to the mismatch the calibrator counts.
+        spec["components"]["schemas"]["NewUser"]["properties"]["name"]["pattern"] = "^[A-Za-z]+$"
         spec["paths"]["/users"]["post"]["responses"]["201"]["links"]["DeleteUser"]["parameters"]["userId"] = (
             "$response.body#/name"
         )

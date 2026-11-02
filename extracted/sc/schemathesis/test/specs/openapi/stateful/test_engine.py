@@ -4,15 +4,13 @@ from dataclasses import dataclass
 import hypothesis
 import hypothesis.errors
 import pytest
-import requests
 from flask import Flask, jsonify, request
 
 import schemathesis
 import schemathesis.openapi
-from schemathesis.checks import CheckContext, not_a_server_error
-from schemathesis.config import ChecksConfig
+from schemathesis.checks import not_a_server_error
 from schemathesis.core.failures import FailureGroup
-from schemathesis.core.transport import Response
+from schemathesis.core.transforms import deepclone
 from schemathesis.engine import Status, events
 from schemathesis.engine.context import EngineContext
 from schemathesis.engine.core import ExecutionPlan
@@ -41,12 +39,13 @@ from test.apps.catalog.openapi.modifiers.stateful import (
     MultipleSourceLinks,
     NoReliableTransitions,
     ReuseDeletedIds,
+    ServedFromCache,
     SingleLink,
     Slowdown,
     Unsatisfiable,
     UseAfterFree,
 )
-from test.utils import flaky
+from test.utils import check_context
 
 
 @dataclass
@@ -137,15 +136,25 @@ def test_explicit_stop(engine_factory, event_cls, stop_event):
     assert collected[-1].status == Status.INTERRUPTED
 
 
-def test_stop_outside_of_state_machine_execution(engine_factory, mocker, stop_event):
-    # When stop signal is received outside of state machine execution
-    engine = engine_factory(
-        IndependentInternalError(),
-    )
-    mocker.patch(
-        "schemathesis.engine.run.stateful._executor.StatefulContext.mark_as_seen_in_run",
-        side_effect=lambda *_, **__: stop_event.set(),
-    )
+def test_exception_thrown_into_phase_stops_state_machines(engine_factory, stop_event):
+    engine = engine_factory()
+    for event in engine:
+        if isinstance(event, events.ScenarioFinished):
+            break
+    with pytest.raises(RuntimeError, match="Timeout"):
+        engine.throw(RuntimeError("Timeout"))
+    assert stop_event.is_set()
+
+
+@pytest.mark.usefixtures("restore_checks")
+def test_stop_outside_of_state_machine_execution(engine_factory, stop_event):
+    # The stop arrives with a failure, so it is first seen between suites rather than inside a scenario.
+    @schemathesis.check
+    def stop_on_server_error(ctx, response, case):
+        if response.status_code >= 500:
+            stop_event.set()
+
+    engine = engine_factory(IndependentInternalError(), checks=[not_a_server_error, stop_on_server_error])
     result = collect_result(engine)
     assert result.events[-1].status == Status.INTERRUPTED
 
@@ -164,6 +173,16 @@ def test_internal_error_in_check(engine_factory, kwargs):
     result = collect_result(engine)
     assert result.errors
     assert isinstance(result.errors[0].value, ZeroDivisionError)
+
+
+@pytest.mark.usefixtures("restore_checks")
+def test_assumption_in_check_skips_step(engine_factory):
+    @schemathesis.check
+    def skip_reads(ctx, response, case):
+        hypothesis.assume(case.method != "GET")
+
+    result = collect_result(engine_factory(checks=[skip_reads], max_examples=10))
+    assert (result.events[-1].status, result.errors, result.failures) == (Status.SUCCESS, [], [])
 
 
 @pytest.mark.parametrize("exception_args", [(), ("Oops!",)])
@@ -265,29 +284,31 @@ def test_flaky_assertions(engine_factory, kwargs):
         assert "Second" in messages
 
 
-@flaky(max_runs=10, min_passes=1)
 @pytest.mark.usefixtures("restore_checks")
 def test_failure_hidden_behind_another_failure(engine_factory):
-    # The same API operation, but one error is far less frequent and is located behind another one that happens more often, so it is not found in the first test suite
+    # The same API operation fails in two ways, and the second one is checked only after the first is found,
+    # so it surfaces in a later test suite
 
-    suite_number = 0
+    first_failure_found = False
 
     @schemathesis.check
     def dynamic_check(*args, **kwargs):
-        if suite_number == 0:
-            not_a_server_error(*args, **kwargs)
-        else:
+        if first_failure_found:
             response_schema_conformance(*args, **kwargs)
+        else:
+            not_a_server_error(*args, **kwargs)
 
     engine = engine_factory(
         FailureBehindFailure(),
         checks=[dynamic_check],
+        # The bug needs a specific call sequence, which takes many scenarios to reach.
         max_examples=60,
     )
     failures = []
     for event in engine:
-        if isinstance(event, events.SuiteFinished):
-            suite_number += 1
+        # A suite may also restart without a failure, e.g. when a replayed scenario draws different data
+        if isinstance(event, events.SuiteFinished) and failures:
+            first_failure_found = True
         if isinstance(event, events.ScenarioFinished):
             failures.extend(
                 [
@@ -311,20 +332,22 @@ def test_multiple_conformance_issues(engine_factory):
     }
 
 
-@flaky(max_runs=10, min_passes=1)
+@pytest.mark.flaky(reruns=9)
 def test_find_use_after_free(engine_factory):
     engine = engine_factory(
         UseAfterFree(),
         checks=[use_after_free],
+        # The bug needs a specific call sequence, which takes many scenarios to reach.
         max_examples=60,
     )
     result = collect_result(engine)
     assert len(result.failures) == 1
-    assert result.failures[0].failure_info.failure.title == "Use after free"
+    assert result.failures[0].failure_info.failure.title == "Deleted resource still available"
     assert result.events[-1].status == Status.FAILURE
 
 
 _STATE_MACHINE_SETTINGS = hypothesis.settings(
+    # Planted bugs need specific call sequences, which take many scenarios to reach.
     max_examples=60,
     stateful_step_count=10,
     deadline=None,
@@ -349,14 +372,14 @@ def _use_after_free_state_machine(ctx):
     return StateMachine
 
 
-@flaky(max_runs=10, min_passes=1)
+@pytest.mark.flaky(reruns=9)
 def test_find_use_after_free_via_state_machine(ctx):
     with pytest.raises(FailureGroup) as exc_info:
         _use_after_free_state_machine(ctx).run(settings=_STATE_MACHINE_SETTINGS)
-    assert any("Use after free" in str(e) for e in exc_info.value.exceptions)
+    assert any("Deleted resource still available" in str(e) for e in exc_info.value.exceptions)
 
 
-@flaky(max_runs=10, min_passes=1)
+@pytest.mark.flaky(reruns=9)
 def test_find_use_after_free_via_state_machine_with_overridden_validate_response(ctx):
     class CustomStateMachine(_use_after_free_state_machine(ctx)):
         def validate_response(self, response, case, additional_checks=None, **kwargs):
@@ -364,7 +387,7 @@ def test_find_use_after_free_via_state_machine_with_overridden_validate_response
 
     with pytest.raises(FailureGroup) as exc_info:
         CustomStateMachine.run(settings=_STATE_MACHINE_SETTINGS)
-    assert any("Use after free" in str(e) for e in exc_info.value.exceptions)
+    assert any("Deleted resource still available" in str(e) for e in exc_info.value.exceptions)
 
 
 def test_no_false_positive_use_after_free_when_id_reused(engine_factory):
@@ -380,6 +403,7 @@ def test_no_false_positive_use_after_free_when_id_reused(engine_factory):
         CircularLinks(),
         ReuseDeletedIds(),
         checks=[use_after_free],
+        # A false positive needs a specific call sequence, which takes many scenarios to reach.
         max_examples=60,
     )
     result = collect_result(engine)
@@ -401,6 +425,7 @@ def test_no_false_positive_ensure_resource_availability_when_id_reused(engine_fa
         CircularLinks(),
         ReuseDeletedIds(),
         checks=[ensure_resource_availability],
+        # A false positive needs a specific call sequence, which takes many scenarios to reach.
         max_examples=60,
     )
     result = collect_result(engine)
@@ -428,6 +453,27 @@ def test_flaky(engine_factory, kwargs):
     failures = result.failures
     assert len(failures) == 1
     assert failures[0].failure_info.failure.message == "Flaky"
+
+
+def test_flaky_suite_retries_only_after_new_failure(ctx, stop_event):
+    config = schemathesis.Config.from_dict(
+        {
+            "seed": 6,
+            "checks": {"enabled": False, "positive_data_acceptance": {"enabled": True}},
+            "generation": {"mode": "positive", "max-examples": 25, "database": "none"},
+        }
+    )
+    schema = schemathesis.openapi.from_wsgi(
+        "/openapi.json", ctx.openapi.apps.flaky_branch_blocks().wsgi_app, config=config
+    )
+    result = collect_result(
+        stateful.execute(
+            engine=EngineContext(schema=schema, stop_event=stop_event),
+            phase=Phase(name=PhaseName.STATEFUL_TESTING, is_enabled=True),
+        )
+    )
+
+    assert len([event for event in result.events if isinstance(event, events.SuiteStarted)]) == 2
 
 
 def test_unsatisfiable(engine_factory):
@@ -524,99 +570,17 @@ def test_external_link(ctx):
             "parameters": {"userId": "$request.path.userId"},
         },
     }
-    delete_links = {
-        "GetUser": {
-            "operationId": "getUser",
-            "parameters": {"userId": "$request.path.userId"},
-        },
-    }
-    schema = ctx.openapi.load_schema(
-        {
-            "/users": {
-                "post": {
-                    "operationId": "createUser",
-                    "requestBody": {
-                        "required": True,
-                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/NewUser"}}},
-                    },
-                    "responses": {
-                        "201": {
-                            "description": "Successful response",
-                            "content": {"application/json": {"schema": {"$ref": "#/components/schemas/User"}}},
-                            "links": post_links,
-                        },
-                        "400": {"description": "Bad request"},
-                        "default": {"description": "Default"},
-                    },
-                },
-            },
-            "/users/{userId}": {
-                "parameters": [{"in": "path", "name": "userId", "required": True, "schema": {"type": "integer"}}],
-                "get": {
-                    "summary": "Get a user",
-                    "operationId": "getUser",
-                    "responses": {
-                        "200": {
-                            "description": "Successful response",
-                            "content": {"application/json": {"schema": {"$ref": "#/components/schemas/User"}}},
-                            "links": get_links,
-                        },
-                        "404": {"description": "User not found"},
-                        "default": {"description": "Default"},
-                    },
-                },
-                "delete": {
-                    "summary": "Delete a user",
-                    "operationId": "deleteUser",
-                    "responses": {
-                        "204": {
-                            "description": "Successful response",
-                            "links": delete_links,
-                        },
-                        "404": {"description": "User not found"},
-                        "default": {"description": "Default"},
-                    },
-                },
-                "patch": {
-                    "summary": "Update a user",
-                    "operationId": "updateUser",
-                    "requestBody": {
-                        "required": True,
-                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/UpdateUser"}}},
-                    },
-                    "responses": {
-                        "200": {
-                            "description": "Successful response",
-                            "content": {"application/json": {"schema": {"$ref": "#/components/schemas/User"}}},
-                        },
-                        "404": {"description": "User not found"},
-                        "default": {"description": "Default"},
-                    },
-                },
-            },
-        },
-        components={
-            "schemas": {
-                "User": {
-                    "type": "object",
-                    "properties": {
-                        "id": {"type": "integer"},
-                        "name": {"type": "string"},
-                        "last_modified": {"type": "string"},
-                    },
-                    "required": ["id", "name", "last_modified"],
-                },
-                "NewUser": {
-                    "type": "object",
-                    "required": ["name"],
-                    "properties": {"name": {"type": "string", "maxLength": 50}},
-                    "additionalProperties": False,
-                },
-            }
-        },
-    )
+    # 75 examples reach the bug only in this scenario space, so drop what the links never use.
+    raw_schema = deepclone(remote_api.spec)
+    del raw_schema["paths"]["/users"]["get"]
+    del raw_schema["paths"]["/orders/{orderId}"]
+    del raw_schema["components"]["schemas"]["UpdateUser"]
+    raw_schema["paths"]["/users"]["post"]["responses"]["201"]["links"] = post_links
+    raw_schema["paths"]["/users/{userId}"]["get"]["responses"]["200"]["links"] = get_links
+    schema = ctx.openapi.from_full_schema(raw_schema)
     root_api = ctx.openapi.apps.stateful_users(IndependentInternalError())
     schema.config.update(base_url=f"{root_api.base_url}/")
+    # The bug needs a specific call sequence, which takes many scenarios to reach.
     schema.config.generation.update(max_examples=75, database="none", modes=[GenerationMode.POSITIVE])
     engine = stateful.execute(
         engine=EngineContext(schema=schema, stop_event=threading.Event()),
@@ -635,7 +599,15 @@ def test_new_resource_is_not_available(engine_factory):
     result = collect_result(engine)
     # Then it is a failure
     assert result.events[-1].status == Status.FAILURE
-    assert result.failures[0].failure_info.failure.title == "Resource is not available after creation"
+    assert result.failures[0].failure_info.failure.title == "Created resource not found"
+
+
+def test_new_resource_is_not_available_behind_cache(engine_factory):
+    engine = engine_factory(EnsureResourceAvailability(), ServedFromCache(), max_examples=50)
+    result = collect_result(engine)
+    assert result.failures[0].failure_info.failure.message.endswith(
+        "The response came from a cache (`Age: 120`) and may be stale"
+    )
 
 
 def test_resource_availability(engine_factory):
@@ -844,6 +816,26 @@ def test_unique_inputs(engine_factory):
             assert len(cases) == len(set(cases)), "Duplicate cases found"
 
 
+def test_explicit_hypothesis_default_max_steps(ctx):
+    api = ctx.openapi.apps.stateful_users()
+    # Hypothesis may end a scenario early at random, so the run is seeded.
+    config = schemathesis.Config.from_dict(
+        {
+            "seed": 0,
+            "phases": {"stateful": {"max-steps": 50}},
+            "generation": {"max-examples": 1, "database": "none"},
+            "checks": {"enabled": False},
+        }
+    )
+    schema = schemathesis.openapi.from_url(api.schema_url, config=config)
+    engine = stateful.execute(
+        engine=EngineContext(schema=schema, stop_event=threading.Event()),
+        phase=Phase(name=PhaseName.STATEFUL_TESTING, is_enabled=True),
+    )
+
+    assert [len(event.recorder.cases) for event in engine if isinstance(event, events.ScenarioFinished)][-1] == 50
+
+
 def test_ignored_auth_valid(engine_factory):
     # When auth works properly
     token = "Test"
@@ -881,6 +873,38 @@ def test_multiple_incoming_link_without_override(ctx):
         sum(len(operation.outgoing) for operation in state_machine._transitions.operations.values())
         == schema.statistic.transitions.total
     )
+
+
+def test_transition_count_follows_chained_response_references(ctx):
+    schema = ctx.openapi.load_schema(
+        {
+            "/users": {"post": {"responses": {"201": {"$ref": "#/components/responses/Alias"}}}},
+            "/users/{id}": {
+                "get": {
+                    "operationId": "getUser",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        },
+        components={
+            "responses": {
+                "Alias": {"$ref": "#/components/responses/Created"},
+                "Created": {
+                    "description": "Created",
+                    "links": {"Get": {"operationId": "getUser", "parameters": {"id": "$response.body#/id"}}},
+                },
+            },
+        },
+    )
+    assert (schema.statistic.transitions.total, schema.statistic.transitions.selected) == (1, 1)
+
+
+def test_transition_count_with_non_object_links(ctx):
+    schema = ctx.openapi.load_schema(
+        {"/users": {"get": {"responses": {"200": {"description": "OK", "links": {"A": "note", "B": [1]}}}}}}
+    )
+    assert (schema.statistic.transitions.total, schema.statistic.transitions.selected) == (2, 0)
 
 
 SHARED_RESPONSE_SCHEMA = {
@@ -979,7 +1003,7 @@ def test_no_reliable_transitions(engine_factory):
     assert result.events[-1].status != Status.ERROR
 
 
-def test_no_false_positive_ensure_resource_availability_cross_subtree(ctx):
+def test_no_false_positive_ensure_resource_availability_cross_subtree(ctx, response_factory):
     # When a DELETE in one root's subtree deletes a resource that was re-created by a different
     # root, ensure_resource_availability must not be triggered for operations from that second root.
     #
@@ -1019,14 +1043,8 @@ def test_no_false_positive_ensure_resource_availability_cross_subtree(ctx):
     delete_op = schema["/users/{userId}"]["DELETE"]
 
     def make_http_response(method, url, status_code):
-        req = requests.Request(method, url).prepare()
-        return Response(
-            status_code=status_code,
-            headers={},
-            content=b"",
-            request=req,
-            elapsed=0.0,
-            verify=False,
+        return response_factory.core(
+            status_code=status_code, content=b"", content_type=None, method=method, url=url, elapsed=0.0
         )
 
     recorder = ScenarioRecorder(label="test")
@@ -1051,15 +1069,7 @@ def test_no_false_positive_ensure_resource_availability_cross_subtree(ctx):
     response_404 = make_http_response("GET", "http://localhost/users/1", 404)
     recorder.record_response(case_id=get_b.id, response=response_404)
 
-    check_ctx = CheckContext(
-        override=None,
-        auth=None,
-        headers=None,
-        config=ChecksConfig(),
-        transport_kwargs=None,
-        recorder=recorder,
-        response_checks=None,
-    )
+    check_ctx = check_context(recorder=recorder)
 
     # Should not raise — the DELETE that explains the 404 is in A's subtree.
     assert ensure_resource_availability(check_ctx, response_404, get_b) is None
@@ -1147,8 +1157,19 @@ def test_reproduce_chain_renders_each_step_with_its_own_headers(ctx, app_runner,
     )
 
 
-# A POST to the resource's own URI need not have created it, so a later 404 is not proof of a bug.
-def test_no_false_positive_ensure_resource_availability_without_creation_evidence(ctx, app_runner, stop_event):
+# A POST to the resource's own URI created it only if it says so with `201` or a `Location` header.
+@pytest.mark.parametrize(
+    ("status_code", "with_location", "expected"),
+    [
+        (200, False, []),
+        (200, True, ["Created resource not found"]),
+        (201, False, ["Created resource not found"]),
+    ],
+    ids=["no-creation-evidence", "location-header", "created-status"],
+)
+def test_ensure_resource_availability_after_own_path_post(
+    ctx, app_runner, stop_event, status_code, with_location, expected
+):
     app, _ = ctx.openapi.make_flask_app(
         {
             "/users/{userId}": {
@@ -1156,7 +1177,7 @@ def test_no_false_positive_ensure_resource_availability_without_creation_evidenc
                 "post": {
                     "operationId": "removeUser",
                     "responses": {
-                        "200": {
+                        str(status_code): {
                             "description": "Removed",
                             "content": {
                                 "application/json": {
@@ -1179,7 +1200,8 @@ def test_no_false_positive_ensure_resource_availability_without_creation_evidenc
 
     @app.route("/users/<int:user_id>", methods=["POST"])
     def remove_user(user_id):
-        return jsonify({"userId": user_id}), 200
+        headers = {"Location": f"/users/{user_id}"} if with_location else {}
+        return jsonify({"userId": user_id}), status_code, headers
 
     @app.route("/users/<int:user_id>", methods=["GET"])
     def get_user(user_id):
@@ -1201,7 +1223,7 @@ def test_no_false_positive_ensure_resource_availability_without_creation_evidenc
         )
     )
 
-    assert result.failures == [], [failure.failure_info.failure.title for failure in result.failures]
+    assert [failure.failure_info.failure.title for failure in result.failures] == expected
 
 
 # A resource removed by a POST is as gone as one removed by DELETE; the follow-up 404 explains itself.
@@ -1290,3 +1312,376 @@ def test_removal_by_non_delete_verb_suppresses_resource_availability(ctx, app_ru
     )
 
     assert result.failures == [], [failure.failure_info.failure.title for failure in result.failures]
+
+
+@pytest.mark.parametrize("media_type", ["application/json", "application/x-www-form-urlencoded"])
+def test_inferred_body_link_sends_a_listed_value(ctx, app_runner, stop_event, media_type):
+    language = {
+        "type": "object",
+        "properties": {"name": {"type": "string"}, "code": {"type": "string"}},
+        "required": ["name", "code"],
+    }
+    check = {"type": "object", "properties": {"language": {"type": "string"}}, "required": ["language"]}
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/languages": {
+                "get": {
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {"application/json": {"schema": {"type": "array", "items": language}}},
+                        }
+                    }
+                }
+            },
+            "/check": {
+                "post": {
+                    "requestBody": {"required": True, "content": {media_type: {"schema": check}}},
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+    sent = []
+
+    @app.route("/languages", methods=["GET"])
+    def list_languages():
+        return jsonify([{"name": "Planted", "code": "planted-code"}])
+
+    @app.route("/check", methods=["POST"])
+    def check_text():
+        payload = request.get_json(silent=True) if request.is_json else request.form
+        sent.append((payload or {}).get("language"))
+        return jsonify({}), 200
+
+    port = app_runner.run_flask_app(app)
+    config = schemathesis.Config.from_dict(
+        {"checks": {"enabled": False}, "generation": {"mode": "positive", "max-examples": 10, "database": "none"}}
+    )
+    schema = schemathesis.openapi.from_url(f"http://127.0.0.1:{port}/openapi.json", config=config)
+    collect_result(
+        stateful.execute(
+            engine=EngineContext(schema=schema, stop_event=stop_event),
+            phase=Phase(name=PhaseName.STATEFUL_TESTING, is_enabled=True),
+        )
+    )
+
+    assert "planted-code" in sent
+
+
+def test_inferred_form_body_link_sends_credentials_from_unique_producer(ctx, app_runner, stop_event):
+    application = {
+        "type": "object",
+        "properties": {
+            "client_id": {"type": "string"},
+            "client_secret": {"type": "string"},
+            "name": {"type": "string"},
+            "msg": {"type": "string"},
+        },
+        "required": ["client_id", "client_secret", "name", "msg"],
+    }
+    token_request = {
+        "type": "object",
+        "properties": {
+            "client_id": {"type": "string"},
+            "client_secret": {"type": "string"},
+            "grant_type": {"type": "string", "enum": ["client_credentials"]},
+        },
+        "required": ["client_id", "client_secret", "grant_type"],
+    }
+    components = {"schemas": {"OAuth2Application": application, "OAuth2TokenRequest": token_request}}
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/v1/auth_tokens/register/": {
+                "post": {
+                    "operationId": "register",
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {
+                                "application/json": {"schema": {"$ref": "#/components/schemas/OAuth2Application"}}
+                            },
+                        }
+                    },
+                }
+            },
+            "/v1/auth_tokens/token/": {
+                "post": {
+                    "operationId": "token",
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/x-www-form-urlencoded": {
+                                "schema": {"$ref": "#/components/schemas/OAuth2TokenRequest"}
+                            }
+                        },
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        },
+        components=components,
+    )
+    sent = []
+
+    @app.route("/v1/auth_tokens/register/", methods=["POST"])
+    def register_application():
+        return jsonify(
+            {
+                "client_id": "registered-client",
+                "client_secret": "registered-secret",
+                "name": "Test application",
+                "msg": "Created",
+            }
+        ), 201
+
+    @app.route("/v1/auth_tokens/token/", methods=["POST"])
+    def create_token():
+        sent.append((request.form.get("client_id"), request.form.get("client_secret")))
+        return jsonify({}), 200
+
+    config = schemathesis.Config.from_dict(
+        {"checks": {"enabled": False}, "generation": {"mode": "positive", "max-examples": 10, "database": "none"}}
+    )
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app), config=config)
+    collect_result(
+        stateful.execute(
+            engine=EngineContext(schema=schema, stop_event=stop_event),
+            phase=Phase(name=PhaseName.STATEFUL_TESTING, is_enabled=True),
+        )
+    )
+
+    assert ("registered-client", "registered-secret") in sent
+
+
+def _first_step_of_first_scenario(app_runner, app, stop_event, seed):
+    config = schemathesis.Config.from_dict(
+        {
+            "seed": seed,
+            "generation": {"mode": "positive", "max-examples": 1, "database": "none"},
+            "phases": {"stateful": {"inference": {"algorithms": []}}},
+        }
+    )
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app), config=config)
+    result = collect_result(
+        stateful.execute(
+            engine=EngineContext(schema=schema, stop_event=stop_event),
+            phase=Phase(name=PhaseName.STATEFUL_TESTING, is_enabled=True),
+        )
+    )
+    first_scenario = next(
+        event for event in result.events if isinstance(event, events.ScenarioFinished) and event.recorder.cases
+    )
+    return next(iter(first_scenario.recorder.cases.values())).value.operation.label
+
+
+def test_suites_start_from_different_roots(ctx, app_runner, stop_event):
+    # Every suite opens with its simplest scenario, which must not always start from the alphabetically first root.
+    roots = ["alpha", "beta", "gamma", "delta"]
+    link = {"item": {"operationId": "getItem", "parameters": {"itemId": "$response.body#/itemId"}}}
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            **{f"/{name}": {"get": {"responses": {"200": {"description": "OK", "links": link}}}} for name in roots},
+            "/items/{itemId}": {
+                "get": {
+                    "operationId": "getItem",
+                    "parameters": [{"name": "itemId", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+
+    @app.route("/<name>", methods=["GET"])
+    def list_root(name):
+        return jsonify({"itemId": name})
+
+    @app.route("/items/<item_id>", methods=["GET"])
+    def get_item(item_id):
+        return jsonify({})
+
+    first_steps = [_first_step_of_first_scenario(app_runner, app, stop_event, seed) for seed in range(12)]
+    assert first_steps.count("GET /alpha") <= 6, first_steps
+    assert len(set(first_steps)) >= 3, first_steps
+
+
+ITEM_SCHEMA = {
+    "type": "object",
+    "properties": {"id": {"type": "integer"}, "name": {"type": "string"}},
+    "required": ["id", "name"],
+}
+
+
+def _listed_items_app(ctx):
+    return ctx.openapi.make_flask_app(
+        {
+            "/announcements": {
+                "get": {
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {"application/json": {"schema": {"type": "array", "items": ITEM_SCHEMA}}},
+                            "links": {
+                                "GetItem": {"operationId": "getItem", "parameters": {"id": "$response.body#/0/id"}}
+                            },
+                        },
+                        "401": {"description": "Unauthorized"},
+                    }
+                }
+            },
+            "/items": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {"name": {"type": "string"}},
+                                    "required": ["name"],
+                                }
+                            }
+                        },
+                    },
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {"application/json": {"schema": ITEM_SCHEMA}},
+                            "links": {
+                                "GetItem": {"operationId": "getItem", "parameters": {"id": "$response.body#/id"}}
+                            },
+                        }
+                    },
+                }
+            },
+            "/items/{id}": {
+                "get": {
+                    "operationId": "getItem",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                }
+            },
+        }
+    )
+
+
+def _run_items_app(app, app_runner, stop_event, *, max_examples):
+    config = schemathesis.Config.from_dict(
+        {
+            "seed": 1,
+            "checks": {"enabled": False},
+            "generation": {"mode": "positive", "max-examples": max_examples, "database": "none"},
+        }
+    )
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app), config=config)
+    return collect_result(
+        stateful.execute(
+            engine=EngineContext(schema=schema, stop_event=stop_event),
+            phase=Phase(name=PhaseName.STATEFUL_TESTING, is_enabled=True),
+        )
+    )
+
+
+def _root_steps(result):
+    return [
+        [
+            f"{node.value.method} {node.value.path}"
+            for node in event.recorder.cases.values()
+            if node.parent_id is None and node.transition is None
+        ]
+        for event in result.events
+        if isinstance(event, events.ScenarioFinished)
+    ]
+
+
+@pytest.mark.parametrize(
+    "unproductive_response",
+    [({"detail": "Unauthorized"}, 401), ([], 200)],
+    ids=["unauthorized", "empty-list"],
+)
+def test_root_that_feeds_no_link_is_not_repeated(ctx, app_runner, stop_event, unproductive_response):
+    app, _ = _listed_items_app(ctx)
+    items = {}
+
+    @app.route("/announcements", methods=["GET"])
+    def list_announcements():
+        return jsonify(unproductive_response[0]), unproductive_response[1]
+
+    @app.route("/items", methods=["POST"])
+    def create_item():
+        item_id = len(items) + 1
+        items[item_id] = {"id": item_id, "name": "item"}
+        return jsonify(items[item_id]), 201
+
+    @app.route("/items/<int:item_id>", methods=["GET"])
+    def get_item(item_id):
+        if item_id not in items:
+            return jsonify({"detail": "Not found"}), 404
+        return jsonify(items[item_id]), 200
+
+    scenarios = _root_steps(_run_items_app(app, app_runner, stop_event, max_examples=50))
+
+    assert [steps for steps in scenarios if steps.count("GET /announcements") > 2] == []
+
+
+def _run_items_app_with_server_errors(app, app_runner, stop_event):
+    config = schemathesis.Config.from_dict(
+        {
+            "seed": 1,
+            "checks": {"enabled": False, "not_a_server_error": {"enabled": True}},
+            "generation": {"mode": "positive", "max-examples": 50, "database": "none"},
+        }
+    )
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app), config=config)
+    return collect_result(
+        stateful.execute(
+            engine=EngineContext(schema=schema, stop_event=stop_event),
+            phase=Phase(name=PhaseName.STATEFUL_TESTING, is_enabled=True),
+        )
+    )
+
+
+def test_server_error_on_root_that_feeds_no_link_is_reported(ctx, app_runner, stop_event):
+    app, _ = _listed_items_app(ctx)
+
+    @app.route("/announcements", methods=["GET"])
+    def list_announcements():
+        return jsonify({"detail": "Internal Server Error"}), 500
+
+    @app.route("/items", methods=["POST"])
+    def create_item():
+        return jsonify({"id": 1, "name": "item"}), 201
+
+    @app.route("/items/<int:item_id>", methods=["GET"])
+    def get_item(item_id):
+        return jsonify({"id": item_id, "name": "item"}), 200
+
+    result = _run_items_app_with_server_errors(app, app_runner, stop_event)
+
+    assert {failure.failure_info.failure.title for failure in result.failures} == {"Server error"}
+
+
+def test_bug_behind_root_that_feeds_links_once_data_exists(ctx, app_runner, stop_event):
+    # Listing is empty until an item is created; only the listing exposes item ids.
+    app, _ = _listed_items_app(ctx)
+    items = set()
+
+    @app.route("/announcements", methods=["GET"])
+    def list_announcements():
+        return jsonify([{"id": item_id, "name": "item"} for item_id in sorted(items)]), 200
+
+    @app.route("/items", methods=["POST"])
+    def create_item():
+        item_id = 10_000_000 + len(items)
+        items.add(item_id)
+        return jsonify({"id": 0, "name": "item"}), 201
+
+    @app.route("/items/<int:item_id>", methods=["GET"])
+    def get_item(item_id):
+        if item_id in items:
+            return jsonify({"detail": "Internal Server Error"}), 500
+        return jsonify({"detail": "Not found"}), 404
+
+    result = _run_items_app_with_server_errors(app, app_runner, stop_event)
+
+    assert {failure.failure_info.failure.title for failure in result.failures} == {"Server error"}

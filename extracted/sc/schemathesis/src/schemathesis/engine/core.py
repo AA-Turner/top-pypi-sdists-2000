@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from schemathesis import auths
-from schemathesis.config import ConfigError, FuzzConfig
+from schemathesis.config import ConfigError, FuzzConfig, InferenceAlgorithm
 from schemathesis.core import SpecificationFeature
 from schemathesis.core.errors import HookExecutionError, InvalidSchema
 from schemathesis.engine import Status, StopReason, events, fuzz, run
@@ -13,7 +13,7 @@ from schemathesis.engine._check_context import run_after_run_checks
 from schemathesis.engine.context import EngineContext
 from schemathesis.engine.events import EventGenerator, StatefulPhasePayload
 from schemathesis.engine.observations import Observations
-from schemathesis.engine.run import ELASTIC_PHASES, Phase, PhaseName, PhaseSkipReason
+from schemathesis.engine.run import ELASTIC_PHASES, TESTING_PHASES, Phase, PhaseName, PhaseSkipReason
 
 if TYPE_CHECKING:
     from schemathesis.core.spec import ApiSchema
@@ -36,7 +36,9 @@ class Engine:
             if (
                 phase.name == PhaseName.STATEFUL_TESTING
                 and phase.skip_reason in (None, PhaseSkipReason.NOT_APPLICABLE)
-                and self.schema.config.phases.stateful.inference.is_enabled
+                and self.schema.config.phases.stateful.inference.is_algorithm_enabled(
+                    InferenceAlgorithm.LOCATION_HEADERS
+                )
             ):
                 observations = Observations()
 
@@ -67,6 +69,11 @@ class Engine:
                 requires_transitions=False,
             ),
             self.get_phase_config(
+                PhaseName.AUTH_BOOTSTRAP,
+                is_supported=self.schema.specification.supports_feature(SpecificationFeature.AUTH_BOOTSTRAP),
+                requires_transitions=False,
+            ),
+            self.get_phase_config(
                 PhaseName.EXAMPLES,
                 is_supported=self.schema.specification.supports_feature(SpecificationFeature.EXAMPLES),
                 requires_transitions=False,
@@ -89,8 +96,8 @@ class Engine:
         self,
         phase_name: PhaseName,
         *,
-        is_supported: bool = True,
-        requires_transitions: bool = False,
+        is_supported: bool,
+        requires_transitions: bool,
     ) -> Phase:
         """Helper to determine phase configuration with proper skip reasons."""
         # Check if feature is supported by the schema
@@ -102,10 +109,7 @@ class Engine:
             )
 
         phase = phase_name.value
-        if (
-            phase in ("examples", "coverage", "fuzzing", "stateful")
-            and not self.schema.config.phases.get_by_name(name=phase).enabled
-        ):
+        if phase_name in TESTING_PHASES and not self.schema.config.phases.get_by_name(name=phase).enabled:
             return Phase(
                 name=phase_name,
                 is_enabled=False,
@@ -126,6 +130,20 @@ class Engine:
         )
 
 
+def preflight_error(engine: EngineContext) -> events.NonFatalError | None:
+    """Report run-wide configuration problems before any test starts."""
+    try:
+        # Build checks up front: config errors surface here, not in a worker thread mid-run.
+        _ = engine.checks
+        # Same for the base URL - a malformed `servers` entry is a schema error, not a phase crash.
+        engine.schema.get_base_url()
+    except ConfigError as exc:
+        return events.NonFatalError(error=exc, phase=PhaseName.PROBING, label="checks", related_to_operation=False)
+    except InvalidSchema as exc:
+        return events.NonFatalError(error=exc, phase=PhaseName.PROBING, label="schema", related_to_operation=False)
+    return None
+
+
 # An API whose rejections keep naming something new never stops teaching; without a cap it would
 # keep coverage regenerating until the budget is gone and leave the other phases nothing.
 MAX_COVERAGE_CATCHUP_PASSES = 3
@@ -139,21 +157,15 @@ class ExecutionPlan:
     catchup_passes: int = 0
     # Elastic phases still worth a turn; a phase that proved idle is dropped and stops being reserved for.
     elastic: list[Phase] = field(default_factory=list)
+    # Title and message of errors already reported on an operation.
+    operation_errors: set[tuple[str, str]] = field(default_factory=set)
 
     def execute(self, engine: EngineContext) -> EventGenerator:
         """Execute all phases in sequence."""
         yield events.EngineStarted()
-        try:
-            # Build checks up front: config errors surface here, not in a worker thread mid-run.
-            _ = engine.checks
-            # Same for the base URL - a malformed `servers` entry is a schema error, not a phase crash.
-            engine.schema.get_base_url()
-        except ConfigError as exc:
-            yield events.NonFatalError(error=exc, phase=PhaseName.PROBING, label="checks", related_to_operation=False)
-            yield events.EngineFinished(running_time=engine.running_time, stop_reason=engine.stop_reason)
-            return
-        except InvalidSchema as exc:
-            yield events.NonFatalError(error=exc, phase=PhaseName.PROBING, label="schema", related_to_operation=False)
+        error = preflight_error(engine)
+        if error is not None:
+            yield error
             yield events.EngineFinished(running_time=engine.running_time, stop_reason=engine.stop_reason)
             return
         try:
@@ -189,9 +201,15 @@ class ExecutionPlan:
                     if engine.is_interrupted:
                         break  # type: ignore[unreachable]
                     for event in self._run_phase(engine, phase):
-                        if isinstance(event, events.ScenarioFinished):
+                        # A scenario that sent no request, e.g. one whose inputs were all sent before, explores nothing.
+                        if isinstance(event, events.ScenarioFinished) and event.recorder.interactions:
                             executed += 1
-                        elif isinstance(event, events.PhaseFinished) and event.status == Status.SKIP:
+                        elif (
+                            isinstance(event, events.PhaseFinished)
+                            and event.status == Status.SKIP
+                            # Requests went out; a later cycle may still reach operations its checks apply to.
+                            and phase.skip_reason is not PhaseSkipReason.NO_CHECKS_RAN
+                        ):
                             idle.append(phase)
                         yield event
                     if not engine.is_interrupted:
@@ -235,15 +253,20 @@ class ExecutionPlan:
         try:
             payload = self._adapt_execution(engine, phase)
         except HookExecutionError as exc:
-            yield events.NonFatalError(
-                error=exc, phase=phase.name, label=f"`{exc.hook_name}` hook", related_to_operation=False
-            )
-            yield events.PhaseFinished(phase=phase, status=Status.ERROR, payload=None)
+            yield from events.fail_phase(phase, exc, label=f"`{exc.hook_name}` hook")
             return
-        yield events.PhaseStarted(phase=phase, payload=payload)
+        yield events.PhaseStarted(phase=phase, payload=payload, operations=only)
         engine.reserve_time(self._time_to_reserve_after(phase, engine))
         if phase.should_execute(engine):
-            yield from run.execute(engine, phase, only=only)
+            for event in run.execute(engine, phase, only=only):
+                if isinstance(event, events.NonFatalError):
+                    key = (event.info.title, event.info.message)
+                    if event.related_to_operation:
+                        self.operation_errors.add(key)
+                    # Skip run-level errors already shown on an operation.
+                    elif key in self.operation_errors:
+                        continue
+                yield event
         else:
             if engine.has_reached_the_failure_limit:
                 phase.skip_reason = PhaseSkipReason.FAILURE_LIMIT_REACHED
@@ -317,8 +340,8 @@ class ExecutionPlan:
         # Phase can be enabled if certain conditions are met
         if phase.name == PhaseName.STATEFUL_TESTING:
             inference = engine.apply_stateful_inference()
-            # Enable stateful testing if we successfully inferred any transitions
-            if inference.inferred:
+            # Enable stateful testing if links were only missing statically, not disabled by the user
+            if inference.inferred and phase.skip_reason in (None, PhaseSkipReason.NOT_APPLICABLE):
                 phase.enable()
             return StatefulPhasePayload(
                 inferred_transitions=inference.inferred,

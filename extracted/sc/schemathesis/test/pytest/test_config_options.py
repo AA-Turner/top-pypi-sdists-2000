@@ -167,15 +167,72 @@ def test_max_examples(request, case):
     result.stdout.re_match_lines([rf"Hypothesis calls: {max_examples}"])
 
 
+def test_examples_fill_missing_generates_a_case_for_operations_without_examples(testdir):
+    testdir.make_test(
+        """
+schema.config.phases.examples.fill_missing = True
+schema.config.phases.fuzzing.enabled = False
+schema.config.phases.coverage.enabled = False
+
+@schema.include(path_regex="test").parametrize()
+def test_fill_missing(request, case):
+    request.config.HYPOTHESIS_CASES += 1
+    assert set(case.query) == {"id"}
+""",
+        paths={
+            "/test": {
+                "get": {
+                    "parameters": [{"name": "id", "in": "query", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+    )
+    result = testdir.runpytest("-v", "-s")
+    result.assert_outcomes(passed=1)
+    result.stdout.re_match_lines([r"Hypothesis calls: 1$"])
+
+
+def test_examples_fill_missing_uses_parameter_overrides_and_examples_phase(testdir):
+    testdir.makefile(
+        ".toml",
+        schemathesis="""
+[parameters]
+code = "OVR"
+""",
+    )
+    testdir.make_test(
+        """
+config = SchemathesisConfig.from_path("schemathesis.toml")
+schema = schemathesis.openapi.from_dict(raw_schema, config=config)
+schema.config.phases.examples.fill_missing = True
+schema.config.phases.fuzzing.enabled = False
+schema.config.phases.coverage.enabled = False
+
+@schema.include(path_regex="test").parametrize()
+def test_fill_missing(case):
+    assert (case.query, case.meta.phase.name.value) == ({"code": "OVR"}, "examples")
+""",
+        paths={
+            "/test": {
+                "get": {
+                    "parameters": [{"name": "code", "in": "query", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+    )
+    testdir.runpytest("-q").assert_outcomes(passed=1)
+
+
 @pytest.mark.skipif(
     platform.system() == "Windows", reason="conn.close() on Windows does not raise ConnectionError on the client side"
 )
 @pytest.mark.parametrize("is_lazy", [False, True])
 def test_config_request_retries_is_used(testdir, is_lazy):
-    # Server drops first 2 connections, succeeds on 3rd.
-    # Without request_retries=2 the test would raise ConnectionError; with it, it passes.
+    # The server drops the first connection, so only a retry gets a response.
     schema_setup = _schema_setup_from_project_config(
-        'request_retries=2, base_url=f"http://127.0.0.1:{port}"',
+        'request_retries=1, base_url=f"http://127.0.0.1:{port}"',
         is_lazy=is_lazy,
     )
 
@@ -198,7 +255,7 @@ def _serve():
         except OSError:
             break
         _attempt[0] += 1
-        if _attempt[0] <= 2:
+        if _attempt[0] <= 1:
             conn.close()  # drop → ConnectionError → retry
         else:
             conn.sendall(

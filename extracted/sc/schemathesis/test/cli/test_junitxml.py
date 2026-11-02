@@ -1,11 +1,12 @@
 import platform
 import re
-import sys
 from xml.etree import ElementTree
 
 import pytest
 from _pytest.main import ExitCode
 from flask import Response, jsonify
+
+from test.utils import allure_results
 
 
 def test_junitxml_option(ctx, cli, hypothesis_max_examples, tmp_path):
@@ -69,7 +70,7 @@ def test_junitxml_file(ctx, cli, hypothesis_max_examples, tmp_path, path, in_con
     failure = testcases_by_name["GET /api/failure"]
     assert failure.tag == "testcase"
     assert failure[0].tag == "failure"
-    assert failure[0].attrib["type"] == "failure"
+    assert failure[0].attrib == {"type": "failure", "message": "ST101"}
     message = extract_message(failure[0], server_host)
     assert "Server error" in message
     assert "[500] Internal Server Error" in message
@@ -102,7 +103,7 @@ def with_error(ctx, response, case):
 
 
 @pytest.mark.skipif(
-    sys.version_info < (3, 11) or platform.system() == "Windows",
+    platform.system() == "Windows",
     reason="Cover only tracebacks that highlight error positions in every line",
 )
 def test_error_with_traceback(ctx, with_error, cli, tmp_path):
@@ -153,8 +154,6 @@ def test_binary_response(ctx, cli, app_runner, tmp_path):
 
     @app.route("/api/binary")
     def binary():
-        from flask import Response
-
         return Response(
             b"\xa7\xf5=\x18H\xc7\xff'\xf0\xeep\x06M-RX",
             content_type="application/octet-stream",
@@ -178,7 +177,7 @@ def test_binary_response(ctx, cli, app_runner, tmp_path):
     assert testcases[0][0].attrib["type"] == "failure"
     assert (
         extract_message(testcases[0][0], base_url.removeprefix("http://"))
-        == "1. Test Case ID: <PLACEHOLDER>  - Server error  [500] Internal Server Error:      <BINARY>  Reproduce with:      curl -X GET http://localhost/api/binary"
+        == "1. Test Case ID: <PLACEHOLDER>  - ST101 Server error  [500] Internal Server Error:      <BINARY>  Reproduce with:      curl -X GET http://localhost/api/binary"
     )
 
 
@@ -205,7 +204,7 @@ def test_bad_charset_response(ctx, cli, app_runner, tmp_path, charset):
     assert testcases[0][0].tag == "failure"
     assert (
         extract_message(testcases[0][0], base_url.removeprefix("http://"))
-        == "1. Test Case ID: <PLACEHOLDER>  - Server error  [500] Internal Server Error:      `boom`  Reproduce with:      curl -X GET http://localhost/api/boom"
+        == "1. Test Case ID: <PLACEHOLDER>  - ST101 Server error  [500] Internal Server Error:      `boom`  Reproduce with:      curl -X GET http://localhost/api/boom"
     )
 
 
@@ -227,7 +226,7 @@ def test_control_characters_in_failure_message(ctx, cli, app_runner, tmp_path):
     testcase = ElementTree.parse(xml_path).getroot()[0][0]
     assert (
         extract_message(testcase[0], base_url.removeprefix("http://"))
-        == r"1. Test Case ID: <PLACEHOLDER>  - Server error  [500] Internal Server Error:      `bad token \x12\x00\ufffe in body`  Reproduce with:      curl -X GET http://localhost/api/boom"
+        == r"1. Test Case ID: <PLACEHOLDER>  - ST101 Server error  [500] Internal Server Error:      `bad token \x12\x00\ufffe in body`  Reproduce with:      curl -X GET http://localhost/api/boom"
     )
 
 
@@ -305,6 +304,21 @@ def test_permission_denied(ctx, cli, tmp_path, path):
     assert "Permission denied" in result.stdout or "Permission denied" in result.stderr
 
 
+@pytest.mark.snapshot(replace_reproduce_with=True)
+@pytest.mark.skipif(platform.system() != "Linux", reason="Requires /dev/full")
+def test_report_write_error(ctx, cli, snapshot_cli):
+    api = ctx.openapi.apps.success()
+    result = cli.run(
+        api.schema_url,
+        "--phases=fuzzing",
+        "--max-examples=1",
+        "--checks=not_a_server_error",
+        "--report-junit-path=/dev/full",
+    )
+    assert result.exit_code == ExitCode.OK
+    assert result == snapshot_cli
+
+
 def test_coverage_unspecified_method_in_junit(cli, ctx, tmp_path):
     # See GH-3699
     # When coverage phase triggers an `unsupported_method` failure via UNSPECIFIED_HTTP_METHOD,
@@ -353,3 +367,31 @@ def test_after_run_failure_in_junit(ctx, cli, ensure_reachability_module, tmp_pa
     assert run_checks is not None, list(testcases_by_name)
     assert run_checks[0].tag == "failure"
     assert "never returned 2xx" in (run_checks[0].text or run_checks[0].attrib.get("message", ""))
+
+
+def test_after_run_failures_in_reports_are_sorted_and_deduplicated(
+    ctx, cli, unsorted_run_check_failures_module, tmp_path
+):
+    api = ctx.openapi.apps.success()
+    xml_path = tmp_path / "junit.xml"
+    allure_dir = tmp_path / "allure-results"
+    cli.main(
+        "run",
+        api.schema_url,
+        "-c",
+        "ZRunCheck,ARunCheck",
+        "--max-examples=1",
+        "--phases=fuzzing",
+        f"--report-junit-path={xml_path}",
+        f"--report-allure-path={allure_dir}",
+        hooks=unsorted_run_check_failures_module,
+    )
+    testcases_by_name = {testcase.attrib["name"]: testcase for testcase in ElementTree.parse(xml_path).getroot()[0]}
+    assert testcases_by_name["Run checks"][0].text == (
+        "\n- ST901 dup\n\n    aaa duplicated\n\n- ST901 Custom check failed: `ZRunCheck`\n\n    zzz run-level failure"
+    )
+    results = allure_results(allure_dir)
+    [run_checks] = [result for result in results if result["name"] == "Run checks"]
+    assert [step["statusDetails"]["message"] for step in run_checks["steps"]] == [
+        "- ST901 dup\n\n    aaa duplicated\n\n- ST901 Custom check failed: `ZRunCheck`\n\n    zzz run-level failure"
+    ]

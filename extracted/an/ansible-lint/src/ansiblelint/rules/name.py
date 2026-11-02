@@ -274,7 +274,9 @@ class NameRule(AnsibleLintRule, TransformMixin):
                 """Capitalize the first work of the task name."""
                 # Not using capitalize(), since that rewrites the rest of the name to lower case
                 if "|" in task_name:  # if using prefix
-                    [file_name, update_task_name] = task_name.split("|")
+                    # Split on the last pipe only so multi-segment prefixes
+                    # (e.g. "dir | subdir | task") are preserved.
+                    [file_name, update_task_name] = task_name.rsplit("|", 1)
                     return f"{file_name.strip()} | {update_task_name.strip()[:1].upper()}{update_task_name.strip()[1:]}"
 
                 return f"{task_name[:1].upper()}{task_name[1:]}"
@@ -416,5 +418,5 @@ if "pytest" in sys.modules:
     def test_when_no_lintable() -> None:
         """Test when lintable is None."""
         name_rule = NameRule()
-        result = name_rule._prefix_check("Foo", None, 1)  # noqa: SLF001
+        result = name_rule._prefix_check("Foo", None, 1)  # ruff:ignore[private-member-access]
         assert len(result) == 0

@@ -4,40 +4,49 @@ from __future__ import annotations
 
 import io
 import os
+import re
 import sys
 from collections.abc import Iterable
 from dataclasses import dataclass
+from itertools import groupby
 from types import GeneratorType
 from typing import TYPE_CHECKING, Any
 
 import click
 
-from schemathesis.cli.constants import ISSUE_TRACKER_URL
+from schemathesis.cli.constants import DISCORD_LINK, EXTENSIONS_DOCUMENTATION_URL, ISSUE_TRACKER_URL, ExitCode
 from schemathesis.cli.core import get_terminal_width
-from schemathesis.cli.summary import (
+from schemathesis.core.errors import LoaderError, LoaderErrorKind
+from schemathesis.core.failures import (
+    CustomFailure,
+    MessageBlock,
+    is_reproducible_failure,
+)
+from schemathesis.core.output import pluralize
+from schemathesis.core.timing import Instant
+from schemathesis.engine import Status
+from schemathesis.engine.summary import (
     BaselineSummary,
     ErrorGroup,
     FailureGroup,
     OperationsSummary,
+    SummaryData,
     TestCasesSummary,
+    WarningBlock,
+    WarningGroup,
+    WarningItem,
 )
-from schemathesis.core.errors import LoaderErrorKind
-from schemathesis.core.failures import (
-    MessageBlock,
-    format_failures,
-    is_reproducible_failure,
-)
-from schemathesis.core.timing import Instant
 
 if TYPE_CHECKING:
     from collections.abc import Generator
 
-    from rich.console import Console, Group
+    from rich.console import Console, ConsoleOptions, Group, RenderableType, RenderResult
     from rich.progress import Progress, TaskID
+    from rich.segment import Segment
     from rich.text import Text
 
+    from schemathesis.cli.context import BaseExecutionContext
     from schemathesis.config import OutputConfig, ProjectConfig
-    from schemathesis.core.errors import LoaderError
     from schemathesis.core.failures import MessageBlock
     from schemathesis.engine import events
     from schemathesis.engine.statistic import GroupedFailures, Statistic
@@ -47,18 +56,52 @@ IO_ENCODING = os.getenv("PYTHONIOENCODING", "utf-8")
 if IO_ENCODING != "utf-8":
     HEADER_SEPARATOR = "-"
 
-    def _style(text: str, **kwargs: Any) -> str:
+    def style(text: str, **kwargs: Any) -> str:
         text = text.encode(IO_ENCODING, errors="replace").decode("utf-8")
         return click.style(text, **kwargs)
 
 else:
     HEADER_SEPARATOR = "━"
 
-    def _style(text: str, **kwargs: Any) -> str:
+    def style(text: str, **kwargs: Any) -> str:
         return click.style(text, **kwargs)
 
 
-BLOCK_PADDING = (0, 1, 0, 1)
+@dataclass
+class Indent:
+    """Shift a renderable right by `left` columns, keeping `right` columns free for wrapping.
+
+    Lines carry no trailing whitespace, so output piped to a file or CI log has no padding to the console width.
+    """
+
+    renderable: RenderableType
+    left: int = 1
+    right: int = 1
+
+    def __rich_console__(self, console: Console, options: ConsoleOptions) -> RenderResult:
+        from rich.segment import Segment
+
+        width = options.max_width - self.left - self.right
+        lines = console.render_lines(self.renderable, options.update_width(width), pad=False)
+        margin = Segment(" " * self.left)
+        for line in lines:
+            stripped = _rstrip_segments(line)
+            if stripped:
+                yield margin
+                yield from stripped
+            yield Segment.line()
+
+
+def _rstrip_segments(line: list[Segment]) -> list[Segment]:
+    from rich.segment import Segment
+
+    end = len(line)
+    while end and not line[end - 1].text.rstrip():
+        end -= 1
+    if not end:
+        return []
+    last = line[end - 1]
+    return [*line[: end - 1], Segment(last.text.rstrip(), last.style, last.control)]
 
 
 def print_lines(lines: list[str | Generator[str, None, None]]) -> None:
@@ -71,7 +114,7 @@ def print_lines(lines: list[str | Generator[str, None, None]]) -> None:
 
 
 def display_seed(config: ProjectConfig) -> None:
-    click.echo(_style("Seed: ", bold=True), nl=False)
+    click.echo(style("Seed: ", bold=True), nl=False)
     # Deterministic mode can be applied to a subset of tests, but we only care if it is enabled everywhere.
     # If not everywhere, then the seed matters and should be displayed.
     if config.seed is None or config.generation.deterministic:
@@ -88,42 +131,70 @@ def display_final_line(
     warnings: int = 0,
     running_time: float,
     total_cases: int,
+    nothing_tested_reason: str | None = None,
+    exit_code: int = 0,
+    baseline_not_saved: bool = False,
+    no_checks_ran: bool = False,
+    interrupted: bool = False,
 ) -> None:
-    parts = []
-    if failures:
-        suffix = "s" if failures > 1 else ""
-        parts.append(f"{failures} failure{suffix}")
-    if errors:
-        suffix = "s" if errors > 1 else ""
-        parts.append(f"{errors} error{suffix}")
-    if warnings:
-        suffix = "s" if warnings > 1 else ""
-        parts.append(f"{warnings} warning{suffix}")
+    parts = [
+        pluralize(count, word)
+        for count, word in ((failures, "failure"), (errors, "error"), (warnings, "warning"))
+        if count
+    ]
 
-    if parts:
+    if nothing_tested_reason is not None:
+        message = nothing_tested_reason
+        color = "red"
+    # Counts after Ctrl-C cover only the part that ran, so the line says the run did not finish.
+    elif interrupted:
+        message = f"{', '.join([*parts, 'interrupted']) if parts else 'Interrupted'} after {running_time:.2f}s"
+        color = "red" if failures or errors else "yellow"
+    elif failures or errors:
+        labels = [*parts, "baseline not saved"] if baseline_not_saved else parts
+        message = f"{', '.join(labels)} in {running_time:.2f}s"
+        color = "red"
+    elif baseline_not_saved:
+        reason = ", ".join([*parts, "baseline not saved"]) if parts else "Baseline not saved"
+        message = f"{reason} in {running_time:.2f}s"
+        color = "red"
+    # Without failures or errors, a failing exit code comes from warnings configured with `fail-on`.
+    # `fail-on` may name only some of the shown warnings, so the line does not count them.
+    elif warnings and exit_code == ExitCode.FAILURES:
+        message = f"Warnings fail the run in {running_time:.2f}s"
+        color = "red"
+    elif parts:
         message = f"{', '.join(parts)} in {running_time:.2f}s"
-        color = "red" if (failures or errors) else "yellow"
+        color = "yellow"
     elif total_cases == 0:
         message = "Empty test suite"
+        color = "yellow"
+    elif no_checks_ran:
+        message = f"No checks ran in {running_time:.2f}s"
         color = "yellow"
     else:
         message = f"No issues found in {running_time:.2f}s"
         color = "green"
 
     banner = format_summary_banner(message, width=get_terminal_width())
-    click.echo(_style(banner, bold=True, fg=color))
+    click.echo(style(banner, bold=True, fg=color))
 
 
 def display_header(version: str) -> None:
     prefix = "v" if version != "dev" else ""
     header = f"Schemathesis {prefix}{version}"
-    click.echo(_style(header, bold=True))
-    click.echo(_style(HEADER_SEPARATOR * len(header), bold=True))
+    click.echo(style(header, bold=True))
+    click.echo(style(HEADER_SEPARATOR * len(header), bold=True))
     click.echo()
 
 
 def format_summary_banner(message: str, *, width: int) -> str:
-    return f" {message} ".center(width, "=")
+    return format_banner(message, width=width, separator="=")
+
+
+def format_banner(text: str, *, width: int, separator: str) -> str:
+    # Keep at least one separator on each side, even when the text is as wide as the terminal.
+    return f" {text} ".center(max(width, len(text) + 4), separator)
 
 
 def append_replay_command(code_sample: str | None, case_id: str | None) -> str | None:
@@ -136,6 +207,12 @@ def append_replay_command(code_sample: str | None, case_id: str | None) -> str |
 def format_duration(duration_ms: int) -> str:
     """Format duration in milliseconds to seconds with 2 decimal places."""
     return f"{duration_ms / 1000:.2f}s"
+
+
+def duration_phrase(duration_ms: int, *, interrupted: bool) -> str:
+    """How long a phase or run took, as `in 1.00s` or `interrupted after 1.00s`."""
+    duration = format_duration(duration_ms)
+    return f"interrupted after {duration}" if interrupted else f"in {duration}"
 
 
 def make_progress_bar(console: Console, *, indent: str = "", transient: bool = True) -> Progress:
@@ -172,53 +249,62 @@ def make_console(**kwargs: Any) -> Console:
 
 
 @dataclass(slots=True)
-class LoadingProgressManager:
-    """Manage the loading spinner and completion/error messages for schema loading."""
+class SpinnerProgressManager:
+    """A transient spinner next to a message while one step runs, e.g. schema loading."""
 
     console: Console
-    location: str
     started_at: Instant
     progress: Progress
     progress_task_id: TaskID | None
     is_interrupted: bool
 
-    def __init__(self, console: Console, location: str) -> None:
+    def __init__(self, console: Console, message: Text) -> None:
         from rich.progress import Progress, RenderableColumn, SpinnerColumn, TextColumn
-        from rich.style import Style
-        from rich.text import Text
 
         self.console = console
-        self.location = location
         self.started_at = Instant()
-        progress_message = Text.assemble(
-            ("Loading specification from ", Style(color="white")),
-            (location, Style(color="cyan")),
-        )
         self.progress = Progress(
             TextColumn(""),
             SpinnerColumn("clock"),
-            RenderableColumn(progress_message),
+            RenderableColumn(message),
             console=console,
             transient=True,
+            # A spinner has nothing to show outside a terminal, and stopping it there prints a blank line.
+            disable=not console.is_interactive,
         )
         self.progress_task_id = None
         self.is_interrupted = False
 
     def start(self) -> None:
-        """Start loading progress display."""
-        self.progress_task_id = self.progress.add_task("Loading", total=None)
+        self.progress_task_id = self.progress.add_task("", total=None)
         self.progress.start()
 
     def stop(self) -> None:
-        """Stop loading progress display."""
         assert self.progress_task_id is not None
         self.progress.stop_task(self.progress_task_id)
         self.progress.stop()
 
     def interrupt(self) -> None:
-        """Handle interruption during loading."""
         self.is_interrupted = True
         self.stop()
+
+
+@dataclass(slots=True)
+class LoadingProgressManager(SpinnerProgressManager):
+    """Manage the loading spinner and completion/error messages for schema loading."""
+
+    location: str
+
+    def __init__(self, console: Console, location: str) -> None:
+        from rich.style import Style
+        from rich.text import Text
+
+        SpinnerProgressManager.__init__(
+            self,
+            console,
+            Text.assemble(("Loading specification from ", Style(color="white")), (location, Style(color="cyan"))),
+        )
+        self.location = location
 
     def get_completion_message(self) -> Text:
         """Generate completion message including duration."""
@@ -239,7 +325,7 @@ class LoadingProgressManager:
             (f" (in {duration})", Style(color="bright_white")),
         )
 
-    def get_error_message(self, error: LoaderError) -> Group:
+    def get_error_message(self, title: str, message: str) -> Group:
         from rich.console import Group
         from rich.style import Style
         from rich.text import Text
@@ -253,8 +339,8 @@ class LoadingProgressManager:
             (f" after {duration}", Style(color="white")),
         )
 
-        error_title = Text("Schema Loading Error", style=Style(color="red", bold=True))
-        error_message = Text(error.message)
+        error_title = Text(title, style=Style(color="red", bold=True))
+        error_message = Text(message)
 
         return Group(
             attempted,
@@ -267,20 +353,27 @@ class LoadingProgressManager:
 
 def display_section_name(title: str, separator: str = "=", **kwargs: object) -> None:
     """Print section name centered with separators."""
-    message = f" {title} ".center(get_terminal_width(), separator)
+    message = format_banner(title, width=get_terminal_width(), separator=separator)
     kwargs.setdefault("bold", True)
-    click.echo(_style(message, **kwargs))
+    click.echo(style(message, **kwargs))
 
 
 def failure_formatter(block: MessageBlock, content: str) -> str:
     if block == MessageBlock.CASE_ID:
-        return _style(content, bold=True)
+        return style(content, bold=True)
     if block == MessageBlock.FAILURE:
-        return _style(content, fg="red", bold=True)
+        return style(content, fg="red", bold=True)
     if block == MessageBlock.STATUS:
-        return _style(content, bold=True)
+        return style(content, bold=True)
     assert block == MessageBlock.CURL
-    return _style(content.replace("Reproduce with", click.style("Reproduce with", bold=True)))
+    return style(content.replace("Reproduce with", click.style("Reproduce with", bold=True)))
+
+
+def replay_command(group: GroupedFailures, *, record_crashes: bool) -> str | None:
+    # Only hint `st replay` when a crash file was actually recorded for this case.
+    if record_crashes and group.case_id and any(is_reproducible_failure(failure) for failure in group.failures):
+        return f"st replay {group.case_id}"
+    return None
 
 
 def display_failures_for_single_test(
@@ -289,19 +382,11 @@ def display_failures_for_single_test(
     """Display failures for a single operation."""
     display_section_name(label, "_", fg="red")
     for idx, group in enumerate(checks, 1):
-        case_id = f"{idx}. Test Case ID: {group.case_id}" if group.case_id is not None else None
-        # Only hint `st replay` when a crash file was actually recorded for this case.
-        if record_crashes and any(is_reproducible_failure(failure) for failure in group.failures):
-            reproduce = append_replay_command(group.code_sample, group.case_id)
-        else:
-            reproduce = group.code_sample
+        replay = replay_command(group, record_crashes=record_crashes)
         click.echo(
-            format_failures(
-                case_id=case_id,
-                response=group.response,
-                failures=group.failures,
-                curl=reproduce,
-                auth_identity=group.auth_identity,
+            group.format(
+                index=idx,
+                curl=group.code_sample if replay is None else append_replay_command(group.code_sample, group.case_id),
                 formatter=failure_formatter,
                 config=config,
             )
@@ -321,87 +406,119 @@ def display_failures(statistic: Statistic, config: OutputConfig, *, record_crash
 
 
 def display_api_operations(operations: OperationsSummary) -> None:
-    click.echo(_style("API Operations:", bold=True))
+    click.echo(style("API Operations:", bold=True))
     click.echo(
-        _style(
+        style(
             f"  Selected: {click.style(str(operations.selected), bold=True)}"
             f"/{click.style(str(operations.total), bold=True)}"
         )
     )
-    click.echo(_style(f"  Tested: {click.style(str(operations.tested), bold=True)}"))
+    click.echo(style(f"  Tested: {click.style(str(operations.tested), bold=True)}"))
     if operations.errored:
-        click.echo(_style(f"  Errored: {click.style(str(operations.errored), bold=True)}"))
+        click.echo(style(f"  Errored: {click.style(str(operations.errored), bold=True)}"))
     if operations.skipped:
-        click.echo(_style(f"  Skipped: {click.style(str(operations.skipped), bold=True)}"))
+        click.echo(style(f"  Skipped: {click.style(str(operations.skipped), bold=True)}"))
         for reason in sorted(set(operations.skip_reasons)):
-            click.echo(_style(f"    - {reason.rstrip('.')}"))
+            click.echo(style(f"    - {reason.rstrip('.')}"))
     click.echo()
 
 
 def display_failures_summary(failures: list[FailureGroup]) -> None:
-    click.echo(_style("Failures:", bold=True))
+    click.echo(style("Failures:", bold=True))
     for group in failures:
-        click.echo(_style(f"  ❌ {group.title}: "), nl=False)
-        click.echo(_style(str(group.count), bold=True))
+        click.echo(style(f"  ❌ {group.code} {group.title}: "), nl=False)
+        click.echo(style(str(group.count), bold=True))
     click.echo()
+    # Custom checks share one code, so its page has nothing specific to add.
+    codes = sorted({group.code for group in failures} - {CustomFailure.code})
+    if len(codes) == 1:
+        click.echo(style(f"For more information, run `st explain {codes[0]}`."))
+        click.echo()
+    elif codes:
+        click.echo(style(f"For more information, run `st explain <code>` for {', '.join(codes)}."))
+        click.echo()
 
 
 def display_filtered_summary(filtered: int) -> None:
-    click.echo(_style("Filtered: "), nl=False)
-    click.echo(_style(str(filtered), bold=True), nl=False)
-    click.echo(_style(" (dropped by `filter_failure`)"))
+    click.echo(style("Filtered: "), nl=False)
+    click.echo(style(str(filtered), bold=True), nl=False)
+    click.echo(style(" (dropped by `filter_failure`)"))
     click.echo()
 
 
 def display_baseline_summary(baseline: BaselineSummary) -> None:
-    click.echo(_style("Baseline:", bold=True))
-    click.echo(_style("  Known failures: "), nl=False)
-    click.echo(_style(str(baseline.known), bold=True))
+    click.echo(style("Baseline:", bold=True))
+    click.echo(style("  Known failures: "), nl=False)
+    click.echo(style(str(baseline.known), bold=True))
     if baseline.recorded is not None:
-        click.echo(_style("  Recorded: "), nl=False)
-        click.echo(_style(str(baseline.recorded), bold=True))
+        click.echo(style("  Recorded: "), nl=False)
+        click.echo(style(str(baseline.recorded), bold=True))
     if baseline.pruned is not None:
-        click.echo(_style("  Pruned: "), nl=False)
-        click.echo(_style(str(len(baseline.pruned)), bold=True))
+        click.echo(style("  Pruned: "), nl=False)
+        click.echo(style(str(len(baseline.pruned)), bold=True))
     if baseline.unobserved:
-        click.echo(_style("  Unobserved entries: "), nl=False)
-        click.echo(_style(str(baseline.unobserved), bold=True))
+        click.echo(style("  Unobserved entries: "), nl=False)
+        click.echo(style(str(baseline.unobserved), bold=True))
     if baseline.expired_ids:
-        click.echo(_style(f"  Expired entries: {len(baseline.expired_ids)}", fg="yellow"))
-        click.echo(_style(f"    {', '.join(baseline.expired_ids)}", fg="yellow"))
+        click.echo(style(f"  Expired entries: {len(baseline.expired_ids)}", fg="yellow"))
+        click.echo(style(f"    {', '.join(baseline.expired_ids)}", fg="yellow"))
+    if baseline.write_error is not None:
+        click.echo(style(f"  {baseline.write_error}", fg="red"))
     click.echo()
+
+
+def _unchecked_parts(test_cases: TestCasesSummary) -> list[str]:
+    parts = []
+    if test_cases.errored > 0:
+        parts.append(f"{click.style(str(test_cases.errored), bold=True)} errored")
+    if test_cases.without_checks > 0:
+        parts.append(f"{click.style(str(test_cases.without_checks), bold=True)} skipped")
+    return parts
 
 
 def display_test_cases(test_cases: TestCasesSummary) -> None:
     if test_cases.generated == 0:
-        click.echo(_style("Test cases:", bold=True))
+        click.echo(style("Test cases:", bold=True))
         click.echo("  No test cases were generated\n")
         return
 
-    click.echo(_style("Test cases:", bold=True))
+    click.echo(style("Test cases:", bold=True))
     parts = [f"  {click.style(str(test_cases.generated), bold=True)} generated"]
 
-    if test_cases.without_checks == test_cases.generated:
-        parts.append(f"{click.style(str(test_cases.without_checks), bold=True)} skipped")
-    else:
-        if test_cases.unique_failures > 0:
+    unchecked = test_cases.without_checks + test_cases.errored
+    if unchecked != test_cases.generated:
+        unique = test_cases.unique_failures
+        if unique > 0:
             parts.append(
                 f"{click.style(str(test_cases.with_failures), bold=True)} found "
-                f"{click.style(str(test_cases.unique_failures), bold=True)} unique failures"
+                f"{click.style(str(unique), bold=True)} unique failure{'' if unique == 1 else 's'}"
             )
         else:
-            parts.append(f"{click.style(str(test_cases.generated), bold=True)} passed")
-        if test_cases.without_checks > 0:
-            parts.append(f"{click.style(str(test_cases.without_checks), bold=True)} skipped")
+            parts.append(f"{click.style(str(test_cases.generated - unchecked), bold=True)} passed")
+    parts.extend(_unchecked_parts(test_cases))
 
-    click.echo(_style(", ".join(parts) + "\n"))
+    click.echo(style(", ".join(parts) + "\n"))
+
+
+def display_errors(errors: Iterable[events.NonFatalError], *, base_url_is_set: bool) -> None:
+    display_section_name("ERRORS")
+    sorted_errors = sorted(errors, key=lambda r: (r.phase.value if r.phase is not None else "", r.label, r.info.title))
+    for label, group_errors in groupby(sorted_errors, key=lambda r: r.label):
+        display_section_name(label, "_", fg="red")
+        _errors = list(group_errors)
+        for idx, error in enumerate(_errors, 1):
+            click.echo(error.info.format(bold=_bold, base_url_is_set=base_url_is_set))
+            if idx < len(_errors):
+                click.echo()
+    click.echo(style(f"\nNeed more help?\n    Join our Discord server: {DISCORD_LINK}", fg="red"))
+    click.echo()
 
 
 def display_errors_summary(errors: list[ErrorGroup]) -> None:
-    click.echo(_style("Errors:", bold=True))
+    click.echo(style("Errors:", bold=True))
     for group in errors:
-        click.echo(_style(f"  🚫 {group.title}: "), nl=False)
-        click.echo(_style(str(group.count), bold=True))
+        click.echo(style(f"  🚫 {group.title}: "), nl=False)
+        click.echo(style(str(group.count), bold=True))
     click.echo()
 
 
@@ -410,8 +527,8 @@ def _bold(text: str) -> str:
 
 
 LOADER_ERROR_SUGGESTIONS: dict[LoaderErrorKind, str] = {
-    LoaderErrorKind.CONNECTION_SSL: f"Bypass SSL verification with {_bold('`--tls-verify=false`')}.",
-    LoaderErrorKind.CONNECTION_OTHER: f"Use {_bold('`--wait-for-schema=NUM`')} to wait up to NUM seconds for schema availability.",
+    LoaderErrorKind.CONNECTION_SSL: "Bypass SSL verification with `--tls-verify=false`.",
+    LoaderErrorKind.CONNECTION_OTHER: "Use `--wait-for-schema=NUM` to wait up to NUM seconds for schema availability.",
     LoaderErrorKind.UNEXPECTED_CONTENT_TYPE: "Verify that the URL points directly to the Open API schema or GraphQL endpoint",
     LoaderErrorKind.HTTP_FORBIDDEN: "Verify your API keys or authentication headers.",
     LoaderErrorKind.HTTP_NOT_FOUND: "Verify that the URL points directly to the Open API schema or GraphQL endpoint",
@@ -421,6 +538,14 @@ LOADER_ERROR_SUGGESTIONS: dict[LoaderErrorKind, str] = {
     LoaderErrorKind.UNCLASSIFIED: f"If you suspect this is a Schemathesis issue and the schema is valid, please report it and include the schema if you can:\n\n  {ISSUE_TRACKER_URL}",
 }
 
+
+def loader_error_tip(exception: LoaderError, *, wait_for_schema: float | int | None) -> str | None:
+    # The run already waited for the schema, so suggesting a wait would repeat what failed.
+    if exception.kind == LoaderErrorKind.CONNECTION_OTHER and wait_for_schema is not None:
+        return None
+    return LOADER_ERROR_SUGGESTIONS.get(exception.kind)
+
+
 DEFAULT_INTERNAL_ERROR_MESSAGE = "An internal error occurred during the test run"
 
 
@@ -428,7 +553,62 @@ def _display_extras(extras: list[str]) -> None:
     if extras:
         click.echo()
     for extra in extras:
-        click.echo(_style(f"    {extra}"))
+        click.echo(style(f"    {extra}"))
+
+
+def display_reports(ctx: BaseExecutionContext) -> None:
+    reports = ctx.all_reports()
+    if reports:
+        click.echo(style("Reports:", bold=True))
+        for name, path in reports:
+            click.echo(style(f"  - {name}: {path}"))
+        click.echo()
+
+
+def issue_parts(*, unique_failures: int, errors: int) -> list[str]:
+    parts = []
+    if unique_failures:
+        parts.append(f"❌ {pluralize(unique_failures, 'unique failure')}")
+    if errors:
+        parts.append(f"🚫 {pluralize(errors, 'error')}")
+    return parts
+
+
+def display_summary_counts(summary: SummaryData) -> None:
+    if summary.failures:
+        display_failures_summary(summary.failures)
+    if summary.baseline:
+        display_baseline_summary(summary.baseline)
+    if summary.filtered:
+        display_filtered_summary(summary.filtered)
+    if summary.errors:
+        display_errors_summary(summary.errors)
+
+
+def reauth_summary_lines(summary: events.RunSummary | None) -> list[str]:
+    """Lines noting how often expired credentials were refreshed and whether re-login stopped working."""
+    if summary is None:
+        return []
+    lines = []
+    if summary.reauth_count > 0:
+        lines.append(f"  Re-authenticated {pluralize(summary.reauth_count, 'time')}")
+    if summary.reauth_broke:
+        lines.append(
+            style(
+                "  ⚠️ Authentication stopped working mid-run - credentials likely invalidated",
+                fg="yellow",
+            )
+        )
+    return lines
+
+
+def display_summary_footer(ctx: BaseExecutionContext, summary: SummaryData) -> None:
+    if ctx.summary_lines:
+        print_lines(ctx.summary_lines)
+        click.echo()
+    display_test_cases(summary.test_cases)
+    display_reports(ctx)
+    display_seed(ctx.config)
 
 
 def display_fatal_error(
@@ -442,35 +622,123 @@ def display_fatal_error(
 
     Handles both loader errors (schema loading failures) and internal execution errors.
     """
-    from rich.padding import Padding
     from rich.text import Text
 
-    from schemathesis.core.errors import LoaderError, format_exception, split_traceback
+    from schemathesis.core.errors import HookExecutionError, format_exception, split_traceback
+    from schemathesis.engine.errors import EngineErrorInfo
 
     if isinstance(event.exception, LoaderError):
         assert loading_manager is not None
-        message = Padding(loading_manager.get_error_message(event.exception), BLOCK_PADDING)
+        message = Indent(loading_manager.get_error_message("Schema Loading Error", event.exception.message))
         console.print(message)
         console.print()
 
         if event.exception.extras:
             for extra in event.exception.extras:
-                console.print(Padding(Text(extra), (0, 0, 0, 5)))
+                console.print(Indent(Text(extra), left=5, right=0))
             console.print()
 
-        if not (event.exception.kind == LoaderErrorKind.CONNECTION_OTHER and wait_for_schema is not None):
-            suggestion = LOADER_ERROR_SUGGESTIONS.get(event.exception.kind)
-            if suggestion is not None:
-                click.echo(_style(f"{click.style('Tip:', bold=True, fg='green')} {suggestion}"))
+        suggestion = loader_error_tip(event.exception, wait_for_schema=wait_for_schema)
+        if suggestion is not None:
+            suggestion = re.sub(r"`[^`]+`", lambda match: _bold(match.group()), suggestion)
+            click.echo(style(f"{click.style('Tip:', bold=True, fg='green')} {suggestion}\n"))
 
+        raise click.Abort
+
+    # Schema loading hooks are the only hooks whose errors stop the run.
+    if isinstance(event.exception, HookExecutionError):
+        assert loading_manager is not None
+        info = EngineErrorInfo(event.exception)
+        console.print(Indent(loading_manager.get_error_message(info.title, info.message)))
+        console.print()
+        for extra in split_traceback(info.traceback):
+            console.print(Indent(Text(extra), left=5, right=0))
+        console.print()
+        click.echo(f"For more information on how to work with hooks, visit {EXTENSIONS_DOCUMENTATION_URL}\n")
         raise click.Abort
 
     traceback = format_exception(event.exception, with_traceback=True)
     extras = split_traceback(traceback)
     suggestion = f"Please consider reporting the traceback above to our issue tracker:\n\n  {ISSUE_TRACKER_URL}."
-    click.echo(_style("Test Execution Error", fg="red", bold=True))
+    click.echo(style("Test Execution Error", fg="red", bold=True))
     click.echo()
     click.echo(DEFAULT_INTERNAL_ERROR_MESSAGE)
     _display_extras(extras)
-    click.echo(_style(f"\n{click.style('Tip:', bold=True, fg='green')} {suggestion}"))
+    click.echo(style(f"\n{click.style('Tip:', bold=True, fg='green')} {suggestion}\n"))
     raise click.Abort
+
+
+UNMATCHED_FILTER_TIP = "Check the filter for a typo, or update it if the operation was renamed"
+
+
+def get_status_icon(stats: dict[Status, int], *, is_interrupted: bool) -> str:
+    if is_interrupted:
+        return "⚡"
+    if stats[Status.ERROR] > 0:
+        return "🚫"
+    if stats[Status.FAILURE] > 0:
+        return "❌"
+    if stats[Status.SUCCESS] > 0:
+        return "✅"
+    if stats[Status.SKIP] > 0:
+        return "⏭ "
+    return "🕛"
+
+
+def warning_items(values: set[str], *, operations: bool = True) -> list[WarningItem]:
+    return [WarningItem(text=value, operation=value if operations else None) for value in sorted(values)]
+
+
+def list_block(
+    title: str,
+    values: set[str],
+    suffix: str,
+    tips: list[str],
+    entity: str = "operation",
+    *,
+    short_suffix: str,
+    affects_verdict: bool = False,
+) -> WarningBlock:
+    return WarningBlock(
+        title=title,
+        count=len(values),
+        entity=entity,
+        suffix=suffix,
+        short_suffix=short_suffix,
+        groups=[WarningGroup(items=warning_items(values, operations=entity == "operation"), tips=tips)],
+        affects_verdict=affects_verdict,
+    )
+
+
+def unmatched_filter_block(filters: set[str]) -> WarningBlock:
+    return list_block(
+        "Unmatched filters",
+        filters,
+        " matched no API operations",
+        [UNMATCHED_FILTER_TIP],
+        entity="filter",
+        short_suffix="matched no API operations",
+    )
+
+
+def display_warning_blocks(blocks: list[WarningBlock]) -> None:
+    display_section_name("WARNINGS")
+    click.echo()
+    for block in blocks:
+        click.echo(style(f"{block.title}: {block.summary}\n", fg="yellow"))
+        for group in block.groups:
+            if group.heading is not None:
+                click.echo(style(f"{group.heading}:", fg="yellow"))
+            for index, item in enumerate(group.items):
+                click.echo(style(f"  - {item.text}", fg="yellow"))
+                for detail in item.details:
+                    click.echo(style(f"    {detail}", fg="yellow"))
+                # Items with details read as separate paragraphs.
+                if item.details and index < len(group.items) - 1:
+                    click.echo()
+            if group.tips is not None:
+                click.echo()
+                for tip in group.tips:
+                    click.echo(style(f"💡 {tip}", fg="yellow"))
+                if group.tips:
+                    click.echo()

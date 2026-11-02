@@ -10,30 +10,44 @@ from typing import TYPE_CHECKING, Any
 
 from schemathesis.core import NOT_SET
 from schemathesis.core.errors import InvalidSchema, OperationNotFound, RefResolutionError
+from schemathesis.core.jsonschema.types import JsonSchema, get_type
 from schemathesis.core.result import Ok
+from schemathesis.core.transforms import format_body_key
 from schemathesis.specs.openapi.adapter.parameters import ParameterLocation
 from schemathesis.specs.openapi.adapter.references import maybe_resolve_with_resolver
+from schemathesis.specs.openapi.adapter.responses import OpenApiResponses
 from schemathesis.specs.openapi.stateful.dependencies import naming
 from schemathesis.specs.openapi.stateful.dependencies.inputs import (
+    align_created_identifiers,
+    bind_created_item_keys,
+    bind_echoed_body_fields,
+    bind_id_fields_to_returned_resources,
+    bind_item_parameters_to_collections,
+    bind_parent_keys_to_item_fields,
+    declared_parameter_types,
     disambiguate_module_variants,
     disambiguate_path_suffix_matches,
     extract_inputs,
     merge_related_resources,
+    rebind_body_fields_to_unique_producers,
+    rebind_inherited_suffix_matches,
     rebind_orphan_synthetics,
     update_input_field_bindings,
 )
 from schemathesis.specs.openapi.stateful.dependencies.models import (
-    CanonicalizationCache,
+    Cardinality,
+    DeferredBindings,
+    DefinitionSource,
     DependencyGraph,
     InputSlot,
     NormalizedLink,
     OperationMap,
     OperationNode,
-    ResourceMap,
+    ResourceDefinition,
 )
 from schemathesis.specs.openapi.stateful.dependencies.outputs import extract_outputs
 from schemathesis.specs.openapi.stateful.dependencies.resources import (
-    ResponseResourceCache,
+    InferenceState,
     remove_unused_resources,
 )
 from schemathesis.specs.openapi.stateful.links import find_link_target
@@ -53,71 +67,38 @@ __all__ = [
 def analyze(schema: OpenApiSchema) -> DependencyGraph:
     """Build a dependency graph by inferring resource producers and consumers from API operations."""
     operations: OperationMap = {}
-    resources: ResourceMap = {}
-    # Track resources that got upgraded (e.g., from parameter inference to schema definition)
-    # to propagate better field information to existing input slots
-    updated_resources: set[str] = set()
-    # Cache for expensive canonicalize() calls - same schemas are often processed multiple times
-    canonicalization_cache: CanonicalizationCache = {}
-    # Per-operation response resources, materialized once and replayed by input + output extraction
-    response_resource_cache: ResponseResourceCache = {}
+    state = InferenceState.for_schema(schema)
+    resources = state.resources
 
-    # Nested-body FK lookups whose target resource wasn't yet registered when the consumer
-    # was scanned. Keyed by operation label so we can land the slot in the right OperationNode.
-    deferred_nested_fks: dict[str, list[tuple[str, str, str]]] = {}
-    deferred_named_scalars: dict[str, list[tuple[str, str]]] = {}
+    # Inputs that bind only after every operation is scanned, keyed by operation label.
+    deferred: dict[str, DeferredBindings] = {}
 
-    # Backs the body-FK gate so `<word>_name` fields without a real target don't spawn ghosts.
-    candidate_resource_names = naming.collect_candidate_resource_names(schema.raw_schema)
-
+    # Declared types of each operation's path parameters, so a bound value can be checked against them
+    path_parameter_types: dict[str, dict[str, list[str]]] = {}
     for result in schema.get_all_operations():
         if isinstance(result, Ok):
             operation = result.ok()
-            try:
-                pending: list[tuple[str, str, str]] = []
-                pending_named_scalars: list[tuple[str, str]] = []
-                inputs = list(
-                    extract_inputs(
-                        operation=operation,
-                        resources=resources,
-                        updated_resources=updated_resources,
-                        resolver=schema.root_resolver,
-                        canonicalization_cache=canonicalization_cache,
-                        response_resource_cache=response_resource_cache,
-                        deferred_nested_fks=pending,
-                        deferred_named_scalars=pending_named_scalars,
-                        candidate_resource_names=candidate_resource_names,
-                    )
-                )
-                outputs = extract_outputs(
-                    operation=operation,
-                    inputs=inputs,
-                    resources=resources,
-                    updated_resources=updated_resources,
-                    resolver=schema.root_resolver,
-                    canonicalization_cache=canonicalization_cache,
-                    response_resource_cache=response_resource_cache,
-                )
-                operations[operation.label] = OperationNode(
-                    method=operation.method,
-                    path=operation.path,
-                    inputs=inputs,
-                    outputs=list(outputs),
-                )
-                if pending:
-                    deferred_nested_fks[operation.label] = pending
-                if pending_named_scalars:
-                    deferred_named_scalars[operation.label] = pending_named_scalars
-            except RefResolutionError:
-                # Skip operations with unresolvable $refs (e.g., unavailable external references or references with typos)
-                # These won't participate in dependency detection
-                continue
+            path_parameter_types[operation.label] = {
+                parameter.name: declared_parameter_types(parameter)
+                for parameter in operation.iter_parameters()
+                if parameter.location == ParameterLocation.PATH
+            }
+            bindings = DeferredBindings()
+            inputs = list(extract_inputs(operation=operation, state=state, deferred=bindings))
+            outputs = extract_outputs(operation=operation, inputs=inputs, state=state)
+            operations[operation.label] = OperationNode(
+                method=operation.method,
+                path=operation.path,
+                inputs=inputs,
+                outputs=list(outputs),
+            )
+            deferred[operation.label] = bindings
 
     # Replay nested-FK lookups whose target resource was registered later in the scan -
     # producer paths can sort after their consumers (e.g. /departments alphabetises before
     # /locations) and the per-operation pass would otherwise drop those slots.
-    for label, items in deferred_nested_fks.items():
-        for target_resource_name, target_field, parameter_name in items:
+    for label, bindings in deferred.items():
+        for target_resource_name, target_field, body_path in bindings.nested_fks:
             target_resource = resources.get(target_resource_name)
             if target_resource is None:
                 continue
@@ -125,48 +106,85 @@ def analyze(schema: OpenApiSchema) -> DependencyGraph:
                 InputSlot(
                     resource=target_resource,
                     resource_field=target_field,
-                    parameter_name=parameter_name,
+                    parameter_name=format_body_key(body_path),
                     parameter_location=ParameterLocation.BODY,
+                    body_path=body_path,
+                )
+            )
+
+    # Bind path parameters named after a field of the resource owning the path (`/projects/{code}` -> `Project.code`,
+    # `/rounds/{round_seq}` -> `Round.seq`). Deferred to here so the resource's fields are known regardless of order.
+    for label, bindings in deferred.items():
+        for resource_name, parameter_name in bindings.field_named_path_parameters:
+            owner = resources.get(resource_name)
+            if owner is None or owner.source < DefinitionSource.SCHEMA_WITH_PROPERTIES:
+                continue
+            field = naming.find_matching_field(parameter=parameter_name, resource=owner.name, fields=owner.fields)
+            # `{project_key}` under `/project-members` names a project, not the member's `key`.
+            if field is None or not naming.parameter_names_resource_field(
+                parameter=parameter_name, field=field, resource=owner.name
+            ):
+                continue
+            operations[label].inputs.append(
+                InputSlot(
+                    resource=owner,
+                    resource_field=field,
+                    parameter_name=parameter_name,
+                    parameter_location=ParameterLocation.PATH,
                 )
             )
 
     # Bind body fields named after a collection whose responses list the values they accept
     # (`country` <- `GET /countries`). Deferred to here so the producer is known.
-    primitive_producers = {
-        output.resource.name
-        for node in operations.values()
-        for output in node.outputs
-        if output.is_primitive_identifier
-    }
-    for label, named_scalars in deferred_named_scalars.items():
+    primitive_producers = set()
+    object_collection_producers = set()
+    for node in operations.values():
+        for output in node.outputs:
+            if output.is_primitive_identifier:
+                primitive_producers.add(output.resource.name)
+            elif output.cardinality == Cardinality.MANY:
+                object_collection_producers.add(output.resource.name)
+    for label, bindings in deferred.items():
         node = operations[label]
         bound = {slot.parameter_name for slot in node.inputs}
-        for resource_name, property_name in named_scalars:
-            if property_name in bound or resource_name not in primitive_producers:
+        for resource_name, property_name, property_schema in bindings.named_scalars:
+            if property_name in bound or (
+                resource_name not in primitive_producers and resource_name not in object_collection_producers
+            ):
                 continue
             target = resources[resource_name]
             if any(output.resource.name == resource_name for output in node.outputs):
                 continue
+            if resource_name in primitive_producers:
+                field = target.fields[0] if target.fields else "id"
+            elif _accepts_code(property_schema, target):
+                field = "code"
+            else:
+                continue
             node.inputs.append(
                 InputSlot(
                     resource=target,
-                    resource_field=target.fields[0] if target.fields else "id",
+                    resource_field=field,
                     parameter_name=property_name,
                     parameter_location=ParameterLocation.BODY,
                 )
             )
             bound.add(property_name)
 
+    rebind_inherited_suffix_matches(operations, resources)
+
     # Update input slots with improved resource definitions discovered during extraction
     #
     # Example:
     #   - `DELETE /users/{userId}` initially inferred `User.fields=["userId"]`
     #   - then `POST /users` response revealed `User.fields=["id", "email"]`
-    for resource in updated_resources:
-        update_input_field_bindings(resource, operations)
+    update_input_field_bindings(state.updated_resources, operations)
 
     # Merge parameter-inferred resources with schema-defined ones
     merge_related_resources(operations, resources)
+
+    # Bind required body fields to a producer only when the response field identifies it uniquely.
+    rebind_body_fields_to_unique_producers(operations, deferred)
 
     # Rebind orphan synthetics (e.g. `Spouse` from `spouse_id`) to the path-derived parent.
     rebind_orphan_synthetics(operations, resources)
@@ -177,10 +195,34 @@ def analyze(schema: OpenApiSchema) -> DependencyGraph:
     # Steer path slots away from cross-module suffix-match hits (`KeyDateResource` -> `ResourceItem`).
     disambiguate_path_suffix_matches(operations, resources)
 
+    # Bind `/things/{id}` to what `GET /things` lists when nothing else can supply the id (`partition_id`, `{name}`).
+    bind_item_parameters_to_collections(operations, path_parameter_types)
+
+    # A bare id `POST /things` returns is what `/things/{id}` takes, whatever each response names its schema.
+    align_created_identifiers(operations)
+
+    # A key the client chooses on `POST /things` is what `/things/{key}` takes when the response does not echo it.
+    bind_created_item_keys(schema, operations, deferred)
+
+    # `fromAirportId` names what responses return under `fromAirport` (`AirportResponse.id`).
+    bind_id_fields_to_returned_resources(operations)
+
+    # An item carries the key of the parent it lives under (`Shipment.warehouseId`) when nothing produces the parent.
+    bind_parent_keys_to_item_fields(schema, operations)
+
+    # Bind update body fields to values only the item `GET` returns (`version`, `checksum`).
+    bind_echoed_body_fields(schema, operations, deferred)
+
     # Clean up orphaned resources
     remove_unused_resources(operations, resources)
 
     return DependencyGraph(operations=operations, resources=resources)
+
+
+def _accepts_code(schema: JsonSchema, resource: ResourceDefinition) -> bool:
+    # Listed objects are passed around by their plain `code` (`language` <- `GET /languages[*].code`). Ids, slugs
+    # and formatted strings are not: fields named after a collection often take URLs or unrelated enums instead.
+    return isinstance(schema, dict) and "format" not in schema and resource.types.get("code") == set(get_type(schema))
 
 
 def inject_links(schema: OpenApiSchema) -> int:
@@ -189,11 +231,15 @@ def inject_links(schema: OpenApiSchema) -> int:
     operation_cache: dict[str, APIOperation] = {}
     # A response is visited once per inferred link, so normalize its links once and index them by
     # target - only same-target links can be subsets. Values keep the mapping alive so `id` is unique.
-    normalized_cache: dict[int, tuple[dict[str, Any], dict[tuple[str, str], list[NormalizedLink]]]] = {}
+    # Next to them, the next suffix to try per colliding link name, as names taken once stay taken.
+    normalized_cache: dict[int, tuple[dict[str, Any], dict[tuple[str, str], list[NormalizedLink]], dict[str, int]]] = {}
+    _unshare_responses(schema)
+    # Operations built earlier still point at the response definitions that were just replaced
+    schema._operations.clear_cache()
     for response_links in schema.analysis.dependency_graph.iter_links():
         operation = _find_operation_by_reference(schema, response_links.producer_operation_ref, operation_cache)
         response = operation.responses.get(response_links.status_code)
-        links = response.definition.setdefault(schema.adapter.links_keyword, {})
+        links = response.source.setdefault(schema.adapter.links_keyword, {})
 
         entry = normalized_cache.get(id(links))
         if entry is None:
@@ -205,9 +251,10 @@ def inject_links(schema: OpenApiSchema) -> int:
                     # Dangling links are reported when the stateful phase validates them
                     continue
                 index.setdefault((normalized.path, normalized.method), []).append(normalized)
-            normalized_cache[id(links)] = (links, index)
+            next_suffixes: dict[str, int] = {}
+            normalized_cache[id(links)] = (links, index, next_suffixes)
         else:
-            index = entry[1]
+            _, index, next_suffixes = entry
 
         # Compared against what was known before this response, not against each other.
         pending: list[NormalizedLink] = []
@@ -223,7 +270,7 @@ def inject_links(schema: OpenApiSchema) -> int:
                 continue
 
             # Find unique name if collision exists
-            final_name = _resolve_link_name_collision(link_name, links)
+            final_name = _resolve_link_name_collision(link_name, links, next_suffixes)
             links[final_name] = inferred_link
             pending.append(normalized)
             injected += 1
@@ -231,6 +278,41 @@ def inject_links(schema: OpenApiSchema) -> int:
         for normalized in pending:
             index.setdefault((normalized.path, normalized.method), []).append(normalized)
     return injected
+
+
+def _unshare_responses(schema: OpenApiSchema) -> None:
+    """Give each operation its own copy of a response it shares, so links inferred for one never reach another.
+
+    A link may forward the producer's own path parameters, which another operation sharing the response lacks.
+    """
+    slots: list[tuple[dict[str, Any], str, Mapping[str, Any]]] = []
+    uses: dict[int, int] = {}
+    # Raw definitions, as building every operation costs far more than resolving its responses
+    try:
+        entries = schema._operation_lookup.entries()
+    except RefResolutionError:
+        # An unresolvable path item is reported as a schema error for its operations
+        return
+    for entry in entries:
+        raw_responses = entry.definition.get("responses", {})
+        try:
+            responses = OpenApiResponses.from_definition(
+                raw_responses, entry.resolver, entry.scope, schema.adapter, schema.response_schema_cache
+            )
+        except (InvalidSchema, RefResolutionError):
+            continue
+        # Resolving already rejected anything but an object
+        assert isinstance(raw_responses, dict)
+        keys = {str(key): key for key in raw_responses}
+        for status_code, response in responses.items():
+            uses[id(response.source)] = uses.get(id(response.source), 0) + 1
+            # Copied elsewhere, its own references would resolve against the wrong document
+            if response.resolver.base_uri == entry.resolver.base_uri:
+                slots.append((raw_responses, keys[status_code], response.source))
+    links_keyword = schema.adapter.links_keyword
+    for raw_responses, key, definition in slots:
+        if uses[id(definition)] > 1:
+            raw_responses[key] = {**definition, links_keyword: dict(definition.get(links_keyword, {}))}
 
 
 def _find_operation_by_reference(schema: OpenApiSchema, reference: str, cache: dict[str, APIOperation]) -> APIOperation:
@@ -276,17 +358,18 @@ def _normalize_parameter_keys(parameters: dict, operation: APIOperation) -> set[
     return normalized
 
 
-def _resolve_link_name_collision(proposed_name: str, existing_links: dict[str, Any]) -> str:
+def _resolve_link_name_collision(
+    proposed_name: str, existing_links: dict[str, Any], next_suffixes: dict[str, int]
+) -> str:
     """Find unique link name if collision exists."""
     if proposed_name not in existing_links:
         return proposed_name
 
-    suffix = 0
-    while True:
-        candidate = f"{proposed_name}_{suffix}"
-        if candidate not in existing_links:
-            return candidate
+    suffix = next_suffixes.get(proposed_name, 0)
+    while f"{proposed_name}_{suffix}" in existing_links:
         suffix += 1
+    next_suffixes[proposed_name] = suffix + 1
+    return f"{proposed_name}_{suffix}"
 
 
 def _is_subset_link(inferred: NormalizedLink, existing: NormalizedLink) -> bool:

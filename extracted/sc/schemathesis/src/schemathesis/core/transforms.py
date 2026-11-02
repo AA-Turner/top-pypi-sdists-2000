@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import string
 from collections.abc import Callable, Iterable, Iterator, Mapping
 from functools import lru_cache
@@ -13,18 +14,20 @@ deepclone = jsonschema_rs.canonical.schema.clone
 
 
 @lru_cache
-def get_template_fields(template: str) -> frozenset[str]:
-    """Extract named placeholders from a string template.
+def get_template_fields(template: str) -> tuple[str, ...]:
+    """Extract named placeholders from a string template, in the order they appear.
 
-    "/users/{userId}/posts/{postId}" -> {"userId", "postId"}
+    "/users/{userId}/posts/{postId}" -> ("userId", "postId")
     """
     try:
-        parameters = frozenset(name for _, name, _, _ in string.Formatter().parse(template) if name is not None)
+        parameters = tuple(
+            dict.fromkeys(name for _, name, _, _ in string.Formatter().parse(template) if name is not None)
+        )
         # Check for malformed params to avoid injecting them
         template.format(**dict.fromkeys(parameters, ""))
         return parameters
     except (ValueError, IndexError):
-        return frozenset()
+        return ()
 
 
 def to_wire_string(value: object) -> str:
@@ -34,6 +37,59 @@ def to_wire_string(value: object) -> str:
     if value is None:
         return "null"
     return str(value)
+
+
+def jsonify_python_specific_types(value: Any) -> Any:
+    """Spell `None` and booleans inside a value as their JSON text, e.g. `True` -> "true".
+
+    Builds a new value: the input may be a spec-declared example that every other case reuses.
+    """
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if value is None:
+        return "null"
+    if isinstance(value, dict):
+        return {key: jsonify_python_specific_types(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [jsonify_python_specific_types(item) for item in value]
+    return value
+
+
+def to_wire_text(value: object) -> str:
+    """Render a whole value as text on the wire: containers as JSON, scalars as their JSON spelling."""
+    if isinstance(value, (dict, list)):
+        return json.dumps(value)
+    return to_wire_string(value)
+
+
+def stringify_keys(document: object) -> None:
+    """Spell every non-string mapping key in place as the wire does, e.g. a YAML 1.1 `on:` read as `True`."""
+    try:
+        # Serializing rejects non-string keys and is several times faster than the walk below.
+        # Any object is accepted; one that is not JSON raises, which is the check here.
+        jsonschema_rs.canonical.json.to_string(document)
+        return
+    except ValueError:
+        pass
+    stack = [document]
+    # YAML anchors can make a container its own descendant.
+    seen: set[int] = set()
+    while stack:
+        item = stack.pop()
+        if isinstance(item, dict):
+            if id(item) in seen:
+                continue
+            seen.add(id(item))
+            if not all(isinstance(key, str) for key in item):
+                items = [(key if isinstance(key, str) else to_wire_string(key), value) for key, value in item.items()]
+                item.clear()
+                item.update(items)
+            stack.extend(item.values())
+        elif isinstance(item, list):
+            if id(item) in seen:
+                continue
+            seen.add(id(item))
+            stack.extend(item)
 
 
 def diff(left: Mapping[str, Any], right: Mapping[str, Any]) -> dict[str, Any]:
@@ -95,6 +151,36 @@ def encode_pointer(pointer: str) -> str:
 
 def decode_pointer(value: str) -> str:
     return value.replace("~1", "/").replace("~0", "~")
+
+
+def is_array_index(segment: str) -> bool:
+    """Whether a path segment is an array index; non-ASCII digits such as `²` are object keys."""
+    return segment.isascii() and segment.isdigit()
+
+
+def as_index_or_key(segment: str) -> str | int:
+    """`"0"` -> 0 for array indices, any other segment unchanged."""
+    return int(segment) if is_array_index(segment) else segment
+
+
+def format_body_key(path: Iterable[str | int]) -> str:
+    """`("items", 0, "id")` -> `"items/0/id"`, the key a nested body field is required and captured under."""
+    return "/".join(map(str, path))
+
+
+def split_body_key(key: str) -> list[str]:
+    """`"items/0/id"` -> `["items", "0", "id"]`, every segment kept as text."""
+    return key.split("/")
+
+
+def format_body_path(path: Iterable[str]) -> str:
+    """`("items", "id")` -> `"/items/id"`, the path a body binding or a body draw is recorded under."""
+    return "/" + format_body_key(path)
+
+
+def split_body_path(body_path: str) -> list[str]:
+    """`"/items/id"` -> `["items", "id"]`, every segment kept as text."""
+    return split_body_key(body_path[1:])
 
 
 def iter_decoded_pointer_segments(pointer: str) -> Iterator[str]:

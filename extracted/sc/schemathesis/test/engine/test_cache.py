@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import json
-import socket
 import threading
 from pathlib import Path
 
@@ -21,6 +19,7 @@ from schemathesis.engine.recorder import ScenarioRecorder
 from schemathesis.engine.run import cache
 from schemathesis.engine.supervisor import SchedulingDirective
 from schemathesis.specs.openapi.auth_inference import record_auth_inference
+from test.utils import refusing_url
 
 
 def _manifest() -> Manifest:
@@ -266,6 +265,24 @@ def test_entry_without_media_type_is_skipped_when_several_are_declared(ctx, tmp_
     assert _engine_for(schema).cache.run() == cache.CacheReport(replayed=0, dropped=0, skipped=1)
 
 
+def test_auth_required_entry_without_media_type_is_skipped_when_several_are_declared(ctx, tmp_path, app_runner):
+    schema = _multi_media_type_schema(ctx, app_runner)
+    _point_cache_at(schema, tmp_path)
+    _seed(
+        tmp_path,
+        [
+            Entry(
+                id=1,
+                kind=Kind.AUTH_REQUIRED,
+                operation="POST /w",
+                request=Request(method="POST", body={"name": ""}),
+            )
+        ],
+    )
+
+    assert _engine_for(schema).cache.run() == cache.CacheReport(replayed=0, dropped=0, skipped=1)
+
+
 def test_auth_required_confirmed_with_valid_credentials(ctx, tmp_path):
     api = ctx.openapi.apps.under_declared_security()
     schema = schemathesis.openapi.from_url(api.schema_url)
@@ -285,6 +302,20 @@ def test_auth_required_confirmed_with_valid_credentials(ctx, tmp_path):
         for obs in engine.error_feedback.observations(operation_label="GET /protected", location=ParameterLocation.PATH)
     )
     assert "GET /protected" in schema._inferred_security
+
+
+def test_auth_required_replay_uses_configured_client_certificate(ctx, tmp_path):
+    api = ctx.openapi.apps.under_declared_security()
+    schema = schemathesis.openapi.from_url(api.schema_url)
+    schema.config.auth.openapi.schemes["BearerAuth"] = HttpBearerAuthConfig(bearer="real-token")
+    schema.config.request_cert = str(Path(__file__).parent.parent / "cli" / "cert.pem")
+    _point_cache_at(schema, tmp_path)
+    _seed(
+        tmp_path,
+        [Entry(id=1, kind=Kind.AUTH_REQUIRED, operation="GET /protected", request=Request(method="GET"))],
+    )
+
+    assert _engine_for(schema).cache.run() == cache.CacheReport(replayed=1, dropped=0, skipped=0)
 
 
 def test_auth_required_contradicted_when_unauth_response_succeeds(ctx, tmp_path, app_runner):
@@ -355,27 +386,21 @@ def test_auth_required_skipped_when_no_credentials_configured(ctx, tmp_path):
     assert [entry.id for entry in entries] == [1]
 
 
-def test_skipped_on_network_error(ctx, tmp_path, app_runner):
+@pytest.mark.parametrize("kind", [Kind.METHOD_NOT_ALLOWED, Kind.ERROR_FEEDBACK, Kind.AUTH_REQUIRED])
+def test_skipped_on_network_error(ctx, tmp_path, app_runner, kind):
     app, _ = ctx.openapi.make_flask_app({"/x": {"post": {"responses": {"200": {"description": "OK"}}}}})
     schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.bind(("127.0.0.1", 0))
-        closed_port = sock.getsockname()[1]
-    schema.config.base_url = f"http://127.0.0.1:{closed_port}"
     schema.config.request_timeout = 1
     _point_cache_at(schema, tmp_path)
-    _seed(
-        tmp_path,
-        [Entry(id=1, kind=Kind.METHOD_NOT_ALLOWED, operation="POST /x", request=Request(method="POST"))],
-    )
+    _seed(tmp_path, [Entry(id=1, kind=kind, operation="POST /x", request=Request(method="POST"))])
 
-    report = _engine_for(schema).cache.run()
+    with refusing_url() as url:
+        schema.config.base_url = url
+        report = _engine_for(schema).cache.run()
 
     assert report.skipped == 1
-    surviving = load(tmp_path)
-    assert surviving is not None
-    _, entries = surviving
-    assert [entry.id for entry in entries] == [1]
+    _, entries = load(tmp_path)
+    assert entries == [Entry(id=1, kind=kind, operation="POST /x", request=Request(method="POST"), last_replayed_run=1)]
 
 
 def test_replay_rotates_across_runs_when_cache_exceeds_budget(ctx, tmp_path):
@@ -640,64 +665,21 @@ def test_flush_caps_entries_per_operation(ctx, tmp_path):
     assert len(surviving) <= len(seen)
 
 
-def test_cache_metrics_serialize_in_ndjson(ctx, cli, tmp_path):
-    api = ctx.openapi.apps.unimplemented_method()
-    cache_dir = tmp_path / "cache"
+def test_flush_does_not_duplicate_known_observations(ctx, tmp_path):
+    api = ctx.openapi.apps.success()
+    schema = schemathesis.openapi.from_url(api.schema_url)
+    _point_cache_at(schema, tmp_path)
+    request = Request(method="POST", headers={"content-type": "application/json"}, body={"x": 1})
     _seed(
-        cache_dir,
-        [
-            Entry(
-                id=1,
-                kind=Kind.METHOD_NOT_ALLOWED,
-                operation="POST /missing",
-                request=Request(
-                    method="POST",
-                    headers={"content-type": "application/json"},
-                    body={"name": "x"},
-                ),
-            )
-        ],
+        tmp_path,
+        [Entry(id=1, kind=Kind.ERROR_FEEDBACK, operation="POST /users", request=request, observation_keys=["key"])],
     )
-    ndjson_path = tmp_path / "events.ndjson"
-    result = cli.run(
-        api.schema_url,
-        "--max-examples=1",
-        "--phases=fuzzing",
-        config={
-            "cache": {"directory": str(cache_dir)},
-            "reports": {"ndjson": {"enabled": True, "path": str(ndjson_path)}},
-        },
-    )
-    assert result.exit_code == 0
+    engine = _engine_for(schema)
+    engine.cache.record(Kind.ERROR_FEEDBACK, "POST /users", request, observation_keys=["key"])
+    engine.cache.flush()
 
-    cache_report = None
-    for line in ndjson_path.read_text(encoding="utf-8").splitlines():
-        if not line:
-            continue
-        event = json.loads(line)
-        ((name, payload),) = event.items()
-        if name != "PhaseFinished":
-            continue
-        phase = payload.get("phase") or {}
-        if phase.get("name") != "probing":
-            continue
-        cache_report = payload.get("payload", {}).get("cache")
-        break
-    assert cache_report is not None, "PhaseFinished(PROBING) should carry a `cache` payload"
-    assert cache_report.get("replayed") == 1
-    assert cache_report.get("dropped", 0) == 0
-
-    summary = None
-    for line in ndjson_path.read_text(encoding="utf-8").splitlines():
-        if not line:
-            continue
-        event = json.loads(line)
-        ((name, payload),) = event.items()
-        if name == "EngineFinished":
-            summary = payload.get("payload")
-            break
-    assert summary is not None, "EngineFinished should carry a RunSummary payload"
-    assert isinstance(summary["cache"]["observations_total"], int)
+    _, surviving = load(tmp_path)
+    assert [entry.id for entry in surviving] == [1]
 
 
 def test_error_feedback_dedups_by_observation_not_by_request(ctx, tmp_path):

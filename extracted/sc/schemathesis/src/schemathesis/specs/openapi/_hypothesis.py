@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Callable, Iterable
+from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, cast
 
@@ -22,76 +22,79 @@ from schemathesis.core.errors import (
     MalformedMediaType,
     SerializationNotPossible,
 )
-from schemathesis.core.jsonschema import CANONICALIZE_DRAFT_BY_VALIDATOR
+from schemathesis.core.jsonschema import CANONICALIZE_DRAFT_BY_VALIDATOR, resolve_bundled_root
 from schemathesis.core.jsonschema.numeric import (
     bounds_are_unsatisfiable,
     is_numeric_bound,
     next_float32,
     resolve_inclusive_bounds,
 )
-from schemathesis.core.jsonschema.types import JsonSchema, JsonValue
-from schemathesis.core.media_types import FORM_MEDIA_TYPES, find_media_type_strategy
+from schemathesis.core.jsonschema.types import JsonSchema, JsonValue, as_object_schema
+from schemathesis.core.media_types import (
+    FORM_MEDIA_TYPES,
+    find_media_type_strategy,
+    iter_matching_media_type_strategies,
+)
+from schemathesis.core.mutations import MutationMetadata
 from schemathesis.core.parameters import ParameterLocation
 from schemathesis.core.timing import Instant
-from schemathesis.core.transforms import deepclone, to_wire_string
+from schemathesis.core.transforms import deepclone, jsonify_python_specific_types
 from schemathesis.core.transport import prepare_urlencoded
 from schemathesis.generation import GenerationMode
+from schemathesis.generation.feedback import NO_FEEDBACK, FeedbackSources
 from schemathesis.generation.hypothesis import custom_formats_cache
-from schemathesis.generation.hypothesis.reporting import build_unsatisfiable_schema_error
 from schemathesis.generation.jsonschema.builder import EMPTY_STRATEGY, build
 from schemathesis.generation.jsonschema.context import Alphabet
 from schemathesis.generation.meta import (
     CaseMetadata,
     ComponentInfo,
-    ExamplesPhaseData,
-    FuzzingPhaseData,
     GenerationInfo,
+    PhaseData,
     PhaseInfo,
-    StatefulPhaseData,
     TestPhase,
+    build_phase_data,
 )
 from schemathesis.generation.value import GeneratedValue
 from schemathesis.hooks import HookContext, HookDispatcher, apply_to_all_dispatchers
 from schemathesis.openapi.generation.filters import is_valid_urlencoded
-from schemathesis.resources import ExtraDataSource, PoolDraw, SemanticDraw
+from schemathesis.resources import PoolDraw, SemanticDraw
 from schemathesis.schemas import APIOperation
 from schemathesis.specs.openapi.adapter.parameters import (
     OpenApiBody,
     OpenApiParameterSet,
     build_constants_overlay_strategy,
 )
+from schemathesis.specs.openapi.coverage._schema import ANNOTATION_KEYWORDS
+from schemathesis.specs.openapi.diagnostics import build_unsatisfiable_schema_error
 from schemathesis.specs.openapi.formats import (
     DEFAULT_HEADER_EXCLUDE_CHARACTERS,
     HEADER_FORMAT,
     INVALID_HEADER_CHARS,
     STRING_FORMATS,
-    cookie_alphabet,
+    alphabet_for,
     format_lengths_for,
     get_alphabet_format_strategies,
     get_default_format_strategies,
-    header_alphabet,
     header_values,
 )
-from schemathesis.specs.openapi.headers import KNOWN_HEADER_FORMATS, get_header_format_strategies
+from schemathesis.specs.openapi.headers import PLAIN_HEADER_FORMATS, get_header_format_strategies
 from schemathesis.specs.openapi.negative import (
     negative_schema,
     wrap_filter_hook_for_generated_value,
     wrap_flatmap_hook_for_generated_value,
     wrap_map_hook_for_generated_value,
 )
-from schemathesis.specs.openapi.negative.mutations import MutationMetadata, has_negatable_target
+from schemathesis.specs.openapi.negative.mutations import has_negatable_target
 from schemathesis.specs.openapi.negative.utils import is_binary_format
-from schemathesis.transport.serialization import quote_all
+from schemathesis.transport.serialization import Binary, quote_all
 
 if TYPE_CHECKING:
     from schemathesis.generation.dictionaries import DictionaryDraw
     from schemathesis.python._constants.pool import ConstantDraw, ConstantsPool
     from schemathesis.specs.openapi.schemas import OpenApiOperation
 
-SLASH = "/"
 # Probability of generating valid headers in negative mode
 VALID_HEADER_PROBABILITY = 0.95
-_PLAIN_HEADER_FORMATS = {HEADER_FORMAT} | set(KNOWN_HEADER_FORMATS.values())
 # Strategies that take no varying input are deterministic and reusable; allocating
 # them once at import avoids ~300–600ns of fresh `LazyStrategy` construction per call.
 _NONE_STRATEGY: st.SearchStrategy = st.none()
@@ -103,10 +106,6 @@ _LOCATION_NAME_TO_ENUM: dict[str, ParameterLocation] = {
     "cookie": ParameterLocation.COOKIE,
     "body": ParameterLocation.BODY,
 }
-StrategyFactory = Callable[
-    [JsonSchema, str, ParameterLocation, str | None, GenerationConfig, type[jsonschema_rs.Validator]],
-    st.SearchStrategy,
-]
 
 
 def _draw(draw: st.DrawFn, strategy: st.SearchStrategy, operation: APIOperation) -> Any:
@@ -125,7 +124,7 @@ def _draw(draw: st.DrawFn, strategy: st.SearchStrategy, operation: APIOperation)
         ) from None
 
 
-@st.composite  # type: ignore[untyped-decorator]
+@st.composite
 def openapi_cases(
     draw: st.DrawFn,
     *,
@@ -140,9 +139,7 @@ def openapi_cases(
     body: Any = NOT_SET,
     media_type: str | None = None,
     phase: TestPhase = TestPhase.FUZZING,
-    extra_data_source: ExtraDataSource | None = None,
-    error_feedback: ErrorFeedbackStore | None = None,
-    constants_value_source: ConstantsPool | None = None,
+    feedback: FeedbackSources = NO_FEEDBACK,
 ) -> Any:
     """A strategy that creates `Case` instances.
 
@@ -165,339 +162,89 @@ def openapi_cases(
     # Don't mix in schema examples during EXAMPLES phase - they're handled separately there
     mix_examples = phase != TestPhase.EXAMPLES
 
-    path_parameters_ = generate_parameter(
-        ParameterLocation.PATH,
-        path_parameters,
-        operation,
+    negated = _draw_negated_locations(
         draw,
-        ctx,
-        hooks,
-        generation_mode,
-        generation_config,
-        extra_data_source=extra_data_source,
-        error_feedback=error_feedback,
-        mix_examples=mix_examples,
-        constants_value_source=constants_value_source,
-    )
-    headers_ = generate_parameter(
-        ParameterLocation.HEADER,
-        headers,
         operation,
-        draw,
-        ctx,
-        hooks,
         generation_mode,
-        generation_config,
-        extra_data_source=extra_data_source,
-        error_feedback=error_feedback,
-        mix_examples=mix_examples,
-        constants_value_source=constants_value_source,
-    )
-    cookies_ = generate_parameter(
-        ParameterLocation.COOKIE,
-        cookies,
-        operation,
-        draw,
-        ctx,
-        hooks,
-        generation_mode,
-        generation_config,
-        extra_data_source=extra_data_source,
-        error_feedback=error_feedback,
-        mix_examples=mix_examples,
-        constants_value_source=constants_value_source,
-    )
-    query_ = generate_parameter(
-        ParameterLocation.QUERY,
-        query,
-        operation,
-        draw,
-        ctx,
-        hooks,
-        generation_mode,
-        generation_config,
-        extra_data_source=extra_data_source,
-        error_feedback=error_feedback,
-        mix_examples=mix_examples,
-        constants_value_source=constants_value_source,
+        explicit={
+            ParameterLocation.PATH: path_parameters,
+            ParameterLocation.HEADER: headers,
+            ParameterLocation.COOKIE: cookies,
+            ParameterLocation.QUERY: query,
+        },
+        body_is_generated=body is NOT_SET,
     )
 
-    if body is NOT_SET:
-        if operation.body:
-            body_generator = generation_mode
-            if generation_mode.is_negative:
-                # Consider only schemas that are possible to negate
-                candidates = [item for item in operation.body.items if item.is_negatable]
-                # Not possible to negate body, fallback to positive data generation
-                if not candidates:
-                    candidates = operation.body.items
-                    body_generator = GenerationMode.POSITIVE
-            else:
-                candidates = operation.body.items
-            parameter = draw(st.sampled_from(candidates))
-            strategy = _get_body_strategy(
-                parameter,
-                operation,
-                generation_config,
-                draw,
-                body_generator,
-                extra_data_source=extra_data_source,
-                error_feedback=error_feedback,
-                mix_examples=mix_examples,
-                constants_value_source=constants_value_source,
-            )
-            strategy = apply_hooks(operation, ctx, hooks, strategy, ParameterLocation.BODY)
-            # Parameter may have a wildcard media type. In this case, choose any supported one
-            try:
-                possible_media_types = sorted(
-                    operation.schema.transport.get_matching_media_types(parameter.media_type), key=lambda x: x[0]
-                )
-            except MalformedMediaType as exc:
-                raise InvalidSchema.from_malformed_media_type(
-                    exc, parameter.media_type, path=operation.path, method=operation.method
-                ) from exc
-            if not possible_media_types:
-                all_media_types = operation.get_request_payload_content_types()
-                if all(
-                    operation.schema.transport.get_first_matching_media_type(media_type) is None
-                    for media_type in all_media_types
-                ):
-                    # None of media types defined for this operation are not supported
-                    raise SerializationNotPossible.from_media_types(*all_media_types) from None
-                # Other media types are possible - avoid choosing this media type in the future
-                event_text = f"Can't serialize data to `{parameter.media_type}`."
-                note(f"{event_text} {SERIALIZERS_SUGGESTION_MESSAGE}")
-                event(event_text)
-                reject()
-            media_type, _ = draw(st.sampled_from(possible_media_types))
-            if media_types.is_form_urlencoded(media_type):
-                # Helper to transform FormBodyWithContentTypes while preserving it
-                def prepare_urlencoded_form(x: Any) -> Any:
-                    if isinstance(x, FormBodyWithContentTypes):
-                        return FormBodyWithContentTypes(body=prepare_urlencoded(x.body), content_types=x.content_types)
-                    return prepare_urlencoded(x)
+    # Drawn in this order: path, headers, cookies, query.
+    path_parameters_, headers_, cookies_, query_ = (
+        generate_parameter(
+            location,
+            explicit,
+            operation,
+            draw,
+            ctx,
+            hooks,
+            _mode_for(location, generation_mode, negated),
+            generation_config,
+            feedback=feedback,
+            mix_examples=mix_examples,
+            # Configured auth overwrites these on the wire, so drawing them only repeats the same request.
+            exclude=feedback.auth_headers
+            if location == ParameterLocation.HEADER and generation_mode.is_positive
+            else frozenset(),
+        )
+        for location, explicit in (
+            (ParameterLocation.PATH, path_parameters),
+            (ParameterLocation.HEADER, headers),
+            (ParameterLocation.COOKIE, cookies),
+            (ParameterLocation.QUERY, query),
+        )
+    )
 
-                def is_valid_urlencoded_form(x: Any) -> bool:
-                    if isinstance(x, FormBodyWithContentTypes):
-                        return is_valid_urlencoded(x.body)
-                    return is_valid_urlencoded(x)
-
-                # The hybrid strategy wraps in `GeneratedValue` when it picks a captured pool
-                # variant, so both positive and negative paths must unwrap before
-                # transforming/filtering and rewrap to keep `pool_draws` flowing.
-                strategy = strategy.map(
-                    lambda x: (
-                        GeneratedValue(
-                            prepare_urlencoded_form(x.value),
-                            x.meta,
-                            x.pool_draws,
-                            x.semantic_draws,
-                            x.dictionary_draws,
-                            x.constants_draws,
-                        )
-                        if isinstance(x, GeneratedValue)
-                        else prepare_urlencoded_form(x)
-                    )
-                ).filter(lambda x: is_valid_urlencoded_form(x.value if isinstance(x, GeneratedValue) else x))
-            body_result = _draw(draw, strategy, operation)
-            body_metadata = None
-            body_pool_draws: tuple[PoolDraw, ...] = ()
-            body_semantic_draws: tuple[SemanticDraw, ...] = ()
-            body_dictionary_draws: tuple[DictionaryDraw, ...] = ()
-            body_constants_draws: tuple[ConstantDraw, ...] = ()
-            # Negative strategy returns GeneratedValue, positive returns just value
-            if isinstance(body_result, GeneratedValue):
-                body_metadata = body_result.meta
-                body_pool_draws = body_result.pool_draws
-                body_semantic_draws = body_result.semantic_draws
-                body_dictionary_draws = body_result.dictionary_draws
-                body_constants_draws = body_result.constants_draws
-                body_result = body_result.value
-            body_ = ValueContainer(
-                value=body_result,
-                location="body",
-                generator=body_generator,
-                meta=body_metadata,
-                pool_draws=body_pool_draws,
-                semantic_draws=body_semantic_draws,
-                dictionary_draws=body_dictionary_draws,
-                constants_draws=body_constants_draws,
-            )
-        else:
-            body_ = ValueContainer(value=body, location="body", generator=None, meta=None)
+    if body is not NOT_SET:
+        _ensure_explicit_body_is_serializable(operation, body, media_type)
+        body_ = ValueContainer(value=body, location="body", generator=None, meta=None)
+    elif operation.body:
+        body_, media_type = _generate_body(
+            draw,
+            operation,
+            ctx,
+            hooks,
+            _mode_for(ParameterLocation.BODY, generation_mode, negated),
+            generation_config,
+            feedback=feedback,
+            mix_examples=mix_examples,
+        )
     else:
-        # This explicit body payload comes for a media type that has a custom strategy registered
-        # Such strategies only support binary payloads, otherwise they can't be serialized
-        if not isinstance(body, bytes) and media_type and find_media_type_strategy(media_type) is not None:
-            all_media_types = operation.get_request_payload_content_types()
-            raise SerializationNotPossible.from_media_types(*all_media_types)
         body_ = ValueContainer(value=body, location="body", generator=None, meta=None)
 
-    # If we need to generate negative cases but no generated values were negated, then skip the whole test
-    if generation_mode.is_negative and not any_negated_values([query_, cookies_, headers_, path_parameters_, body_]):
-        if generation_config.modes == [GenerationMode.NEGATIVE]:
-            raise SkipTest("Impossible to generate negative test cases")
-        else:
-            reject()
-
-    # A schema-invalid dictionary draw carries negative content even when no mutator
-    # produced surviving metadata (the overlay strips mutations for overwritten parameters).
-    first_invalid_dictionary_draw: DictionaryDraw | None = next(
-        (
-            draw
-            for container in (query_, cookies_, headers_, path_parameters_, body_)
-            for draw in container.dictionary_draws
-            if not draw.matches_schema
-        ),
-        None,
-    )
-
-    effective_generation_mode = generation_mode
+    # Reject a negative case with no negated values, or skip the test when only negative mode is enabled.
+    # A stateful step is exempt: rejecting it discards the whole scenario, so it goes out as a positive one.
     if (
         generation_mode.is_negative
-        and not any(
-            container.generator == GenerationMode.NEGATIVE and container.meta is not None
-            for container in [query_, cookies_, headers_, path_parameters_, body_]
-            if container.is_generated
-        )
-        and first_invalid_dictionary_draw is None
+        and phase != TestPhase.STATEFUL
+        and not any_negated_values([query_, cookies_, headers_, path_parameters_, body_])
     ):
-        effective_generation_mode = GenerationMode.POSITIVE
+        if generation_config.modes == [GenerationMode.NEGATIVE]:
+            raise SkipTest("Impossible to generate negative test cases")
+        reject()
 
-    # Extract mutation metadata from negated values and create phase-appropriate data
-    if effective_generation_mode.is_negative:
-        # Every negated container contributes; each mutation carries the location it was applied to.
-        metadata = MutationMetadata(
-            mutations=tuple(
-                mutation
-                for container in (query_, cookies_, headers_, path_parameters_, body_)
-                if container.generator == GenerationMode.NEGATIVE and container.meta is not None
-                for mutation in container.meta.mutations
-            )
-        )
-
-        if metadata.mutations:
-            _phase_data = {
-                TestPhase.EXAMPLES: ExamplesPhaseData(
-                    description=metadata.description,
-                    parameter=metadata.parameter,
-                    parameter_location=metadata.parameter_location,
-                    location=metadata.location,
-                    mutations=metadata.mutations,
-                ),
-                TestPhase.FUZZING: FuzzingPhaseData(
-                    description=metadata.description,
-                    parameter=metadata.parameter,
-                    parameter_location=metadata.parameter_location,
-                    location=metadata.location,
-                    mutations=metadata.mutations,
-                ),
-                TestPhase.STATEFUL: StatefulPhaseData(
-                    description=metadata.description,
-                    parameter=metadata.parameter,
-                    parameter_location=metadata.parameter_location,
-                    location=metadata.location,
-                    mutations=metadata.mutations,
-                ),
-            }[phase]
-            phase_data = cast(ExamplesPhaseData | FuzzingPhaseData | StatefulPhaseData, _phase_data)
-        elif first_invalid_dictionary_draw is not None:
-            draw = first_invalid_dictionary_draw
-            description = f"Dictionary `{draw.dictionary}` entry violates the schema for `{draw.parameter_name}`"
-            parameter_location = _LOCATION_NAME_TO_ENUM.get(draw.parameter_location)
-            _phase_data = {
-                TestPhase.EXAMPLES: ExamplesPhaseData(
-                    description=description,
-                    parameter=draw.parameter_name,
-                    parameter_location=parameter_location,
-                    location=None,
-                ),
-                TestPhase.FUZZING: FuzzingPhaseData(
-                    description=description,
-                    parameter=draw.parameter_name,
-                    parameter_location=parameter_location,
-                    location=None,
-                ),
-                TestPhase.STATEFUL: StatefulPhaseData(
-                    description=description,
-                    parameter=draw.parameter_name,
-                    parameter_location=parameter_location,
-                    location=None,
-                ),
-            }[phase]
-            phase_data = cast(ExamplesPhaseData | FuzzingPhaseData | StatefulPhaseData, _phase_data)
-        else:
-            _phase_data = {
-                TestPhase.EXAMPLES: ExamplesPhaseData(
-                    description="Schema mutated",
-                    parameter=None,
-                    parameter_location=None,
-                    location=None,
-                ),
-                TestPhase.FUZZING: FuzzingPhaseData(
-                    description="Schema mutated",
-                    parameter=None,
-                    parameter_location=None,
-                    location=None,
-                ),
-                TestPhase.STATEFUL: StatefulPhaseData(
-                    description="Schema mutated",
-                    parameter=None,
-                    parameter_location=None,
-                    location=None,
-                ),
-            }[phase]
-            phase_data = cast(ExamplesPhaseData | FuzzingPhaseData | StatefulPhaseData, _phase_data)
-    else:
-        _phase_data = {
-            TestPhase.EXAMPLES: ExamplesPhaseData(
-                description="Positive test case",
-                parameter=None,
-                parameter_location=None,
-                location=None,
-            ),
-            TestPhase.FUZZING: FuzzingPhaseData(
-                description="Positive test case",
-                parameter=None,
-                parameter_location=None,
-                location=None,
-            ),
-            TestPhase.STATEFUL: StatefulPhaseData(
-                description="Positive test case",
-                parameter=None,
-                parameter_location=None,
-                location=None,
-            ),
-        }[phase]
-        phase_data = cast(ExamplesPhaseData | FuzzingPhaseData | StatefulPhaseData, _phase_data)
-
-    # Extract body and content types if using form encoding
-    body_value = body_.value
-    multipart_content_types = None
-    if isinstance(body_value, FormBodyWithContentTypes):
-        multipart_content_types = body_value.content_types
-        body_value = body_value.body
-
-    pool_draws = tuple(
-        draw for container in (query_, path_parameters_, headers_, cookies_, body_) for draw in container.pool_draws
+    effective_generation_mode, phase_data = _describe_generation(
+        generation_mode, phase, (query_, cookies_, headers_, path_parameters_, body_)
     )
-    semantic_draws = tuple(
-        draw for container in (query_, path_parameters_, headers_, cookies_, body_) for draw in container.semantic_draws
+    body_value, multipart_content_types = _split_form_body(body_.value)
+    # Provenance is reported in this order: query, path, headers, cookies, body.
+    pool_draws, semantic_draws, dictionary_draws, constants_draws = _collect_draws(
+        (query_, path_parameters_, headers_, cookies_, body_)
     )
-    dictionary_draws = tuple(
-        draw
-        for container in (query_, path_parameters_, headers_, cookies_, body_)
-        for draw in container.dictionary_draws
-    )
-    constants_draws = tuple(
-        draw
-        for container in (query_, path_parameters_, headers_, cookies_, body_)
-        for draw in container.constants_draws
-    )
+    header_values = headers_.value
+    # A positive `Content-Type` header must describe the body it is sent with; a negated one stays a fuzz target.
+    if media_type is not None and header_values and headers_.generator != GenerationMode.NEGATIVE:
+        header_values = _pin_content_type_header(operation, header_values, headers, media_type)
     instance = operation.Case(
         media_type=media_type,
         path_parameters=path_parameters_.value or {},
-        headers=headers_.value or CaseInsensitiveDict(),
+        headers=header_values or CaseInsensitiveDict(),
         cookies=cookies_.value or {},
         query=query_.value or {},
         body=body_value,
@@ -508,17 +255,7 @@ def openapi_cases(
                 mode=effective_generation_mode,
             ),
             phase=PhaseInfo(name=phase, data=phase_data),
-            components={
-                kind: ComponentInfo(mode=value.generator)
-                for kind, value in [
-                    (ParameterLocation.QUERY, query_),
-                    (ParameterLocation.PATH, path_parameters_),
-                    (ParameterLocation.HEADER, headers_),
-                    (ParameterLocation.COOKIE, cookies_),
-                    (ParameterLocation.BODY, body_),
-                ]
-                if value.generator is not None
-            },
+            components=_component_modes(query_, path_parameters_, headers_, cookies_, body_),
             pool_draws=pool_draws,
             semantic_draws=semantic_draws,
             dictionary_draws=dictionary_draws,
@@ -529,8 +266,248 @@ def openapi_cases(
         operation=operation,
         app=operation.app,
     )
-    auths.set_on_case(instance, auth_context, auth_storage)
+    supplied = _supplied_parameters(headers, query, cookies, pool_draws)
+    log = feedback.auth_header_log if generation_mode.is_positive and operation.headers else None
+    declared = [parameter.name for parameter in operation.headers] if log is not None else []
+    before = {name: instance.headers.get(name) for name in declared}
+    auths.set_on_generated_case(instance, auth_context, auth_storage, supplied)
+    if log is not None:
+        # Auth may replace the container with a plain dict, so look names up case-insensitively.
+        after = CaseInsensitiveDict(instance.headers)
+        written = {name for name in declared if name in after and after[name] is not before[name]}
+        log.record(operation.label, written=written, kept=set(declared) - written)
     return instance
+
+
+def _mode_for(
+    location: ParameterLocation, generation_mode: GenerationMode, negated: set[ParameterLocation] | None
+) -> GenerationMode:
+    if negated is None or location in negated:
+        return generation_mode
+    return GenerationMode.POSITIVE
+
+
+def _ensure_explicit_body_is_serializable(operation: APIOperation, body: Any, media_type: str | None) -> None:
+    # This explicit body payload comes for a media type that has a custom strategy registered
+    # Such strategies only support binary payloads, otherwise they can't be serialized
+    if not isinstance(body, bytes) and media_type and find_media_type_strategy(media_type) is not None:
+        all_media_types = operation.schema.get_request_payload_content_types(operation)
+        raise SerializationNotPossible.from_media_types(*all_media_types)
+
+
+def _generate_body(
+    draw: st.DrawFn,
+    operation: APIOperation,
+    ctx: HookContext,
+    hooks: HookDispatcher | None,
+    generation_mode: GenerationMode,
+    generation_config: GenerationConfig,
+    *,
+    feedback: FeedbackSources,
+    mix_examples: bool,
+) -> tuple[ValueContainer, str]:
+    """Draw a body and the media type it is sent with."""
+    candidates, generation_mode = _body_candidates(operation.body.items, generation_mode)
+    parameter = draw(st.sampled_from(candidates))
+    media_type = _draw_body_media_type(draw, operation, parameter)
+    strategy = _get_body_strategy(
+        parameter,
+        media_type,
+        operation,
+        generation_config,
+        draw,
+        generation_mode,
+        feedback=feedback,
+        mix_examples=mix_examples,
+    )
+    strategy = apply_hooks(operation, ctx, hooks, strategy, ParameterLocation.BODY)
+    if media_types.is_form_urlencoded(media_type):
+        # The hybrid strategy wraps in `GeneratedValue` when it picks a captured pool
+        # variant, so both positive and negative paths must unwrap before
+        # transforming/filtering and rewrap to keep `pool_draws` flowing.
+        strategy = strategy.map(
+            wrap_map_hook_for_generated_value(_prepare_urlencoded_form, prune_constants=False)
+        ).filter(wrap_filter_hook_for_generated_value(_is_valid_urlencoded_form))
+    generated = _draw(draw, strategy, operation)
+    # Negative strategy returns GeneratedValue, positive returns just value
+    if not isinstance(generated, GeneratedValue):
+        generated = GeneratedValue(generated, None)
+    body = generated.value
+    credentials = operation.schema.bootstrapped_credentials.get(operation.label)
+    # Generated credentials never match an account, so logins and the session operations behind them stay untested.
+    if credentials is not None and generation_mode.is_positive and isinstance(body, dict) and draw(st.booleans()):
+        body = {**body, **credentials}
+    container = ValueContainer(
+        value=body,
+        location="body",
+        generator=generation_mode,
+        meta=generated.meta,
+        pool_draws=generated.pool_draws,
+        semantic_draws=generated.semantic_draws,
+        dictionary_draws=generated.dictionary_draws,
+        constants_draws=generated.constants_draws,
+    )
+    return container, media_type
+
+
+def _body_candidates(
+    items: list[OpenApiBody], generation_mode: GenerationMode
+) -> tuple[list[OpenApiBody], GenerationMode]:
+    if generation_mode.is_negative:
+        # Consider only schemas that are possible to negate
+        candidates = [item for item in items if item.is_negatable]
+        if candidates:
+            return candidates, generation_mode
+        # Not possible to negate body, fallback to positive data generation
+        return items, GenerationMode.POSITIVE
+    return items, generation_mode
+
+
+def _draw_body_media_type(draw: st.DrawFn, operation: APIOperation, parameter: OpenApiBody) -> str:
+    # Parameter may have a wildcard media type. In this case, choose any supported one
+    try:
+        possible_media_types = sorted(
+            operation.schema.transport.get_matching_media_types(parameter.media_type), key=lambda x: x[0]
+        )
+    except MalformedMediaType as exc:
+        raise InvalidSchema.from_malformed_media_type(
+            exc, parameter.media_type, path=operation.path, method=operation.method
+        ) from exc
+    if not possible_media_types:
+        all_media_types = operation.schema.get_request_payload_content_types(operation)
+        if all(
+            operation.schema.transport.get_first_matching_media_type(media_type) is None
+            for media_type in all_media_types
+        ):
+            # None of media types defined for this operation are not supported
+            raise SerializationNotPossible.from_media_types(*all_media_types) from None
+        # Other media types are possible - avoid choosing this media type in the future
+        event_text = f"Can't serialize data to `{parameter.media_type}`."
+        note(f"{event_text} {SERIALIZERS_SUGGESTION_MESSAGE}")
+        event(event_text)
+        reject()
+    media_type, _ = draw(st.sampled_from(possible_media_types))
+    return media_type
+
+
+def _prepare_urlencoded_form(value: Any) -> Any:
+    # Keep the per-property content types a form body carries.
+    if isinstance(value, FormBodyWithContentTypes):
+        return FormBodyWithContentTypes(body=prepare_urlencoded(value.body), content_types=value.content_types)
+    return prepare_urlencoded(value)
+
+
+def _is_valid_urlencoded_form(value: Any) -> bool:
+    if isinstance(value, FormBodyWithContentTypes):
+        return is_valid_urlencoded(value.body)
+    return is_valid_urlencoded(value)
+
+
+def _describe_generation(
+    generation_mode: GenerationMode, phase: TestPhase, containers: tuple[ValueContainer, ...]
+) -> tuple[GenerationMode, PhaseData]:
+    """The mode the drawn case ended up in, and what made it negative."""
+    # A schema-invalid dictionary draw carries negative content even when no mutator
+    # produced surviving metadata (the overlay strips mutations for overwritten parameters).
+    first_invalid_dictionary_draw: DictionaryDraw | None = next(
+        (draw for container in containers for draw in container.dictionary_draws if not draw.matches_schema),
+        None,
+    )
+    if not generation_mode.is_negative or (
+        not any(
+            container.generator == GenerationMode.NEGATIVE and container.meta is not None
+            for container in containers
+            if container.is_generated
+        )
+        and first_invalid_dictionary_draw is None
+    ):
+        return GenerationMode.POSITIVE, build_phase_data(phase, "Positive test case")
+    # Every negated container contributes; each mutation carries the location it was applied to.
+    metadata = MutationMetadata(
+        mutations=tuple(
+            mutation
+            for container in containers
+            if container.generator == GenerationMode.NEGATIVE and container.meta is not None
+            for mutation in container.meta.mutations
+        )
+    )
+    if metadata.mutations:
+        return generation_mode, build_phase_data(
+            phase,
+            metadata.description,
+            parameter=metadata.parameter,
+            parameter_location=metadata.parameter_location,
+            location=metadata.location,
+            mutations=metadata.mutations,
+        )
+    # Mutators reject empty mutation lists and overlays drop emptied metadata, so an invalid draw is what is left.
+    draw = first_invalid_dictionary_draw
+    assert draw is not None
+    return generation_mode, build_phase_data(
+        phase,
+        f"Dictionary `{draw.dictionary}` entry violates the schema for `{draw.parameter_name}`",
+        parameter=draw.parameter_name,
+        parameter_location=_LOCATION_NAME_TO_ENUM.get(draw.parameter_location),
+    )
+
+
+def _split_form_body(value: Any) -> tuple[Any, dict[str, str] | None]:
+    """Separate a form body from the per-property content types it was generated with."""
+    if isinstance(value, FormBodyWithContentTypes):
+        return value.body, value.content_types
+    return value, None
+
+
+def _collect_draws(
+    containers: tuple[ValueContainer, ...],
+) -> tuple[tuple[PoolDraw, ...], tuple[SemanticDraw, ...], tuple[DictionaryDraw, ...], tuple[ConstantDraw, ...]]:
+    return (
+        tuple(draw for container in containers for draw in container.pool_draws),
+        tuple(draw for container in containers for draw in container.semantic_draws),
+        tuple(draw for container in containers for draw in container.dictionary_draws),
+        tuple(draw for container in containers for draw in container.constants_draws),
+    )
+
+
+def _component_modes(
+    query: ValueContainer,
+    path_parameters: ValueContainer,
+    headers: ValueContainer,
+    cookies: ValueContainer,
+    body: ValueContainer,
+) -> dict[ParameterLocation, ComponentInfo]:
+    return {
+        kind: ComponentInfo(mode=value.mode)
+        for kind, value in [
+            (ParameterLocation.QUERY, query),
+            (ParameterLocation.PATH, path_parameters),
+            (ParameterLocation.HEADER, headers),
+            (ParameterLocation.COOKIE, cookies),
+            (ParameterLocation.BODY, body),
+        ]
+        if value.mode is not None
+    }
+
+
+def _supplied_parameters(
+    headers: dict[str, Any] | None,
+    query: dict[str, Any] | None,
+    cookies: dict[str, Any] | None,
+    pool_draws: tuple[PoolDraw, ...],
+) -> frozenset[tuple[ParameterLocation, str]]:
+    # Values from links, explicit arguments or the resource pool are real; only freshly generated credentials are dropped.
+    return frozenset(
+        [
+            (location, name)
+            for location, given in (
+                (ParameterLocation.HEADER, headers),
+                (ParameterLocation.QUERY, query),
+                (ParameterLocation.COOKIE, cookies),
+            )
+            for name in given or ()
+        ]
+        + [(ParameterLocation(draw.location), draw.parameter_name) for draw in pool_draws]
+    )
 
 
 OPTIONAL_BODY_RATE = 0.05
@@ -542,23 +519,6 @@ class FormBodyWithContentTypes:
 
     body: dict[str, Any]
     content_types: dict[str, str]  # property_name -> selected content type
-
-
-def _form_property_value(value: GeneratedValue | dict[str, Any], key: str) -> Any:
-    """Reduce a `{key: value}` overlay result to its single value, keeping any constants provenance."""
-    if isinstance(value, GeneratedValue):
-        inner = value.value[key]
-        if value.constants_draws:
-            return GeneratedValue(
-                inner,
-                value.meta,
-                value.pool_draws,
-                value.semantic_draws,
-                value.dictionary_draws,
-                value.constants_draws,
-            )
-        return inner
-    return value[key]
 
 
 def _body_required_per_feedback(operation: APIOperation, error_feedback: ErrorFeedbackStore | None) -> bool:
@@ -606,8 +566,8 @@ def _build_form_strategy_with_encoding(
 
     Returns `None` if no custom encoding with registered strategies or comma-separated content types is found.
     """
-    schema = parameter.optimized_schema
-    if not isinstance(schema, dict) or schema.get("type") != "object":
+    schema = resolve_bundled_root(as_object_schema(parameter.optimized_schema))
+    if schema.get("type") != "object":
         return None
 
     properties = schema.get("properties", {})
@@ -620,33 +580,17 @@ def _build_form_strategy_with_encoding(
     property_content_type_selections: dict[str, list[str]] = {}
 
     for property_name in properties:
-        raw_content_type = parameter.get_property_content_type(property_name)
-
-        # contentType can be a string (or comma-separated list) or an array of strings per the spec
-        content_types: list[str] = []
-        if isinstance(raw_content_type, str):
-            content_types = [ct.strip() for ct in raw_content_type.split(",")]
-        elif isinstance(raw_content_type, list):
-            content_types = [ct.strip() for ct in raw_content_type if isinstance(ct, str)]
-
+        content_types = parameter.get_property_content_types(property_name)
         if content_types:
+            if generation_mode.is_negative and is_binary_format(properties[property_name]):
+                continue
             strategies_for_types = []
             for ct in content_types:
-                strategy = find_media_type_strategy(ct)
-                if strategy is not None:
+                for media_type, strategy in iter_matching_media_type_strategies(ct):
                     # Pair strategy with its content type so we know which was selected
-                    strategies_for_types.append(st.tuples(st.just(ct), strategy))
+                    strategies_for_types.append(st.tuples(st.just(media_type), strategy))
 
             if strategies_for_types:
-                # In negative mode with binary format, custom strategies always produce valid data
-                # Skip them to allow structural mutations instead
-                if generation_mode.is_negative:
-                    prop_schema = properties.get(property_name, {})
-                    if is_binary_format(prop_schema):
-                        # Skip custom strategy but still select content type if multiple
-                        if len(content_types) > 1:
-                            property_content_type_selections[property_name] = content_types
-                        continue
                 # Store strategy that returns (content_type, data) tuple
                 property_with_content_type_strategies[property_name] = st.one_of(*strategies_for_types)
             elif len(content_types) > 1:
@@ -657,83 +601,59 @@ def _build_form_strategy_with_encoding(
     if not property_with_content_type_strategies and not property_content_type_selections:
         return None
 
-    # Build strategies for properties
-    property_strategies = {}
-    for property_name, subschema in properties.items():
-        if property_name in property_with_content_type_strategies:
-            # This property has custom content type - will be handled separately
-            continue
-        else:
-            strategy_factory = GENERATOR_MODE_TO_STRATEGY_FACTORY[generation_mode]
-            strategy = strategy_factory(
-                subschema,
-                operation.label,
-                ParameterLocation.BODY,
-                parameter.media_type,
-                generation_config,
-                operation.schema.adapter.jsonschema_validator_cls,
-            )
-            if constants_value_source is not None and generation_mode.is_positive:
-                strategy = build_constants_overlay_strategy(
-                    st.fixed_dictionaries({property_name: strategy}),
-                    source=constants_value_source,
-                    schema_properties={property_name: subschema},
-                    validator_cls=operation.schema.adapter.jsonschema_validator_cls,
-                    location="body",
-                    generation_config=generation_config,
-                ).map(lambda value, key=property_name: _form_property_value(value, key))
-            property_strategies[property_name] = strategy
+    # Encoded properties take their values from the media type strategy; whether they are present, and every other
+    # property and object-level keyword, still follows the schema.
+    base_schema = {
+        **schema,
+        "properties": {
+            name: {} if name in property_with_content_type_strategies else subschema
+            for name, subschema in properties.items()
+        },
+    }
+    validator_cls = operation.schema.adapter.jsonschema_validator_cls
+    body_strategy = GENERATOR_MODE_TO_STRATEGY_FACTORY[generation_mode](
+        base_schema,
+        operation.label,
+        ParameterLocation.BODY,
+        parameter.media_type,
+        generation_config,
+        validator_cls,
+    )
+    if constants_value_source is not None and generation_mode.is_positive:
+        body_strategy = build_constants_overlay_strategy(
+            body_strategy,
+            source=constants_value_source,
+            schema_properties={
+                name: subschema
+                for name, subschema in properties.items()
+                if name not in property_with_content_type_strategies
+            },
+            validator_cls=validator_cls,
+            location="body",
+            generation_config=generation_config,
+            container_schema=base_schema,
+        )
 
-    # Build fixed dictionary strategy with optional properties
-    required = set(schema.get("required", []))
-    required_strategies = {k: v for k, v in property_strategies.items() if k in required}
-    optional_strategies = {k: _JUST_NOT_SET | v for k, v in property_strategies.items() if k not in required}
-
-    @st.composite  # type: ignore[untyped-decorator]
-    def build_body(draw: st.DrawFn) -> FormBodyWithContentTypes | GeneratedValue:
-        body: dict[str, Any] = {}
+    @st.composite
+    def build_body(draw: st.DrawFn) -> object:
+        generated = draw(body_strategy)
+        value = generated.value if isinstance(generated, GeneratedValue) else generated
+        # Negative bodies may not be objects at all, and then there are no parts to encode.
+        if not isinstance(value, dict):
+            return generated
+        body = dict(value)
         selected_content_types: dict[str, str] = {}
-        constants_draws: list[ConstantDraw] = []
-
-        def _take(strategy: st.SearchStrategy) -> Any:
-            result = draw(strategy)
-            if isinstance(result, GeneratedValue):
-                constants_draws.extend(result.constants_draws)
-                return result.value
-            return result
-
-        # Generate required properties
-        for key, strategy in required_strategies.items():
-            body[key] = _take(strategy)
-        # Generate optional properties, filtering out NOT_SET
-        for key, strategy in optional_strategies.items():
-            value = _take(strategy)
-            if value is not NOT_SET:
-                body[key] = value
-
-        # Generate properties with content type strategies (respecting optional)
-        for property_name, ct_strategy in property_with_content_type_strategies.items():
-            if property_name in required:
-                # Required - always generate
-                content_type, data = draw(ct_strategy)
+        for property_name, content_type_strategy in property_with_content_type_strategies.items():
+            if property_name in body:
+                content_type, data = draw(content_type_strategy)
                 body[property_name] = data
                 selected_content_types[property_name] = content_type
-            else:
-                # Optional - may omit
-                should_include = draw(st.booleans())
-                if should_include:
-                    content_type, data = draw(ct_strategy)
-                    body[property_name] = data
-                    selected_content_types[property_name] = content_type
-
-        # For properties with comma-separated content types (but no custom strategy),
-        # randomly select one of the content types
+        # Properties with several content types but no registered strategy get one of those content types
         for property_name, content_type_list in property_content_type_selections.items():
             selected_content_types[property_name] = draw(st.sampled_from(content_type_list))
-
         result = FormBodyWithContentTypes(body=body, content_types=selected_content_types)
-        if constants_draws:
-            return GeneratedValue(result, None, (), (), (), tuple(constants_draws))
+        if isinstance(generated, GeneratedValue):
+            return generated.map_value(lambda _: result)
         return result
 
     return build_body()
@@ -741,14 +661,13 @@ def _build_form_strategy_with_encoding(
 
 def _get_body_strategy(
     parameter: OpenApiBody,
+    media_type: str,
     operation: APIOperation,
     generation_config: GenerationConfig,
     draw: st.DrawFn,
     generation_mode: GenerationMode,
-    extra_data_source: ExtraDataSource | None = None,
+    feedback: FeedbackSources = NO_FEEDBACK,
     mix_examples: bool = True,
-    error_feedback: ErrorFeedbackStore | None = None,
-    constants_value_source: ConstantsPool | None = None,
 ) -> st.SearchStrategy:
     # Check for custom encoding in form bodies (multipart/form-data or application/x-www-form-urlencoded)
     if parameter.media_type in FORM_MEDIA_TYPES:
@@ -757,30 +676,46 @@ def _get_body_strategy(
             operation,
             generation_config,
             generation_mode,
-            constants_value_source,
+            feedback.constants_value_source,
         )
         if custom_strategy is not None:
             return custom_strategy
 
     # Check for custom media type strategy
-    custom_strategy = find_media_type_strategy(parameter.media_type)
+    custom_strategy = find_media_type_strategy(media_type)
     if custom_strategy is not None:
         # Always use custom strategies for raw bodies - they produce transmittable bytes.
         # In negative mode, bypassing them would generate non-bytes values (e.g., integers)
         # that can't be sent over HTTP for raw binary media types like application/x-tar.
         return custom_strategy
 
+    strategy = _get_body_value_strategy(
+        parameter, media_type, operation, generation_config, generation_mode, feedback, mix_examples
+    )
+    return _maybe_set_optional_body(strategy, parameter, operation, draw, feedback.error_feedback)
+
+
+def _get_body_value_strategy(
+    parameter: OpenApiBody,
+    media_type: str,
+    operation: APIOperation,
+    generation_config: GenerationConfig,
+    generation_mode: GenerationMode,
+    feedback: FeedbackSources,
+    mix_examples: bool,
+) -> st.SearchStrategy:
+    # A media type naming a file format gets a real file of that format in positive mode.
+    file_sample = next(parameter.iter_file_samples(media_type), None)
+    if file_sample is not None and generation_mode.is_positive:
+        return st.just(Binary(file_sample[1]))
     # Use the cached strategy from the parameter
-    strategy = parameter.get_strategy(
+    return parameter.get_strategy(
         operation,
         generation_config,
         generation_mode,
-        extra_data_source=extra_data_source,
-        error_feedback=error_feedback,
+        feedback=feedback,
         mix_examples=mix_examples,
-        constants_value_source=constants_value_source,
     )
-    return _maybe_set_optional_body(strategy, parameter, operation, draw, error_feedback)
 
 
 def get_parameters_value(
@@ -792,10 +727,9 @@ def get_parameters_value(
     hooks: HookDispatcher | None,
     generation_mode: GenerationMode,
     generation_config: GenerationConfig,
-    extra_data_source: ExtraDataSource | None = None,
+    feedback: FeedbackSources = NO_FEEDBACK,
     mix_examples: bool = True,
-    error_feedback: ErrorFeedbackStore | None = None,
-    constants_value_source: ConstantsPool | None = None,
+    exclude: frozenset[str] = frozenset(),
 ) -> GeneratedValue:
     """Get the final value for the specified location.
 
@@ -808,10 +742,9 @@ def get_parameters_value(
             generation_mode,
             location,
             generation_config,
-            extra_data_source=extra_data_source,
+            exclude=exclude,
+            feedback=feedback,
             mix_examples=mix_examples,
-            error_feedback=error_feedback,
-            constants_value_source=constants_value_source,
         )
         strategy = apply_hooks(operation, ctx, hooks, strategy, location)
         result = _draw(draw, strategy, operation)
@@ -824,11 +757,9 @@ def get_parameters_value(
         generation_mode,
         location,
         generation_config,
-        exclude=value.keys(),
-        extra_data_source=extra_data_source,
-        error_feedback=error_feedback,
+        exclude=value.keys() | exclude,
+        feedback=feedback,
         mix_examples=mix_examples,
-        constants_value_source=constants_value_source,
     )
     strategy = apply_hooks(operation, ctx, hooks, strategy, location)
     new = _draw(draw, strategy, operation)
@@ -846,8 +777,9 @@ def get_parameters_value(
         dictionary_draws = ()
         constants_draws = ()
     if new is not None:
+        # Explicit values win over anything hooks put into the generated part
         copied = dict(value)
-        copied.update(new)
+        copied.update((key, item) for key, item in new.items() if key not in value)
         return GeneratedValue(
             value=copied,
             meta=meta,
@@ -884,6 +816,35 @@ class ValueContainer:
         """If value was generated."""
         return self.generator is not None and (self.location == "body" or self.value is not None)
 
+    @property
+    def mode(self) -> GenerationMode | None:
+        """Mode of the drawn value: a negative strategy may still yield a valid, unmutated value."""
+        if (
+            self.generator == GenerationMode.NEGATIVE
+            and self.meta is None
+            and all(draw.matches_schema for draw in self.dictionary_draws)
+        ):
+            return GenerationMode.POSITIVE
+        return self.generator
+
+
+def _pin_content_type_header(
+    operation: APIOperation, headers: dict[str, Any], explicit: dict[str, Any] | None, media_type: str
+) -> dict[str, Any]:
+    """Point a generated `Content-Type` header parameter at the body media type when its schema admits it."""
+    explicit_names = {name.lower() for name in explicit or ()}
+    validator_cls = operation.schema.adapter.jsonschema_validator_cls
+    for parameter in operation.headers:
+        name = parameter.name
+        if (
+            name.lower() == "content-type"
+            and name in headers
+            and "content-type" not in explicit_names
+            and parameter.admits(media_type, validator_cls)
+        ):
+            return {**headers, name: media_type}
+    return headers
+
 
 def any_negated_values(values: list[ValueContainer]) -> bool:
     """Check if any generated values are negated."""
@@ -912,10 +873,9 @@ def generate_parameter(
     hooks: HookDispatcher | None,
     generator: GenerationMode,
     generation_config: GenerationConfig,
-    extra_data_source: ExtraDataSource | None = None,
+    feedback: FeedbackSources = NO_FEEDBACK,
     mix_examples: bool = True,
-    error_feedback: ErrorFeedbackStore | None = None,
-    constants_value_source: ConstantsPool | None = None,
+    exclude: frozenset[str] = frozenset(),
 ) -> ValueContainer:
     """Generate a value for a parameter.
 
@@ -937,10 +897,9 @@ def generate_parameter(
         hooks,
         generator,
         generation_config,
-        extra_data_source=extra_data_source,
-        error_feedback=error_feedback,
+        feedback=feedback,
         mix_examples=mix_examples,
-        constants_value_source=constants_value_source,
+        exclude=exclude,
     )
     value = generated.value
     if value is not None and location == ParameterLocation.PATH:
@@ -949,9 +908,9 @@ def generate_parameter(
             value = _strip_path_decoder_unsafe(value)
 
     used_generator: GenerationMode | None = generator
-    if value == explicit:
-        # When we pass `explicit`, then its parts are excluded from generation of the final value
-        # If the final value is the same, then other parameters were generated at all
+    # When we pass `explicit`, then its parts are excluded from generation of the final value
+    # If the final value is the same, then other parameters were not generated, unless a mutation removed them
+    if value == explicit and generated.meta is None:
         used_generator = None
     return ValueContainer(
         value=value,
@@ -963,6 +922,45 @@ def generate_parameter(
         dictionary_draws=generated.dictionary_draws,
         constants_draws=generated.constants_draws,
     )
+
+
+def _draw_negated_locations(
+    draw: st.DrawFn,
+    operation: APIOperation,
+    generation_mode: GenerationMode,
+    *,
+    explicit: dict[ParameterLocation, dict[str, Any] | None],
+    body_is_generated: bool,
+) -> set[ParameterLocation] | None:
+    """Pick which negatable locations a negative case breaks; `None` leaves every location negative."""
+    if not generation_mode.is_negative:
+        return None
+    candidates = []
+    for location in (
+        ParameterLocation.PATH,
+        ParameterLocation.HEADER,
+        ParameterLocation.COOKIE,
+        ParameterLocation.QUERY,
+    ):
+        properties = cast(OpenApiParameterSet, operation.get_parameter_set(location)).schema["properties"]
+        # Explicit values are sent as given, so a location they fully cover has nothing left to negate.
+        # Only header names are case-insensitive.
+        fold = str.lower if location == ParameterLocation.HEADER else str
+        given = {fold(name) for name in explicit[location] or ()}
+        if not properties or {fold(name) for name in properties} <= given:
+            continue
+        if location == ParameterLocation.PATH and not can_negate_path_parameters(operation):
+            continue
+        if location.is_in_header and not can_negate_headers(operation, location):
+            continue
+        candidates.append(location)
+    if body_is_generated and operation.body and any(item.is_negatable for item in operation.body.items):
+        candidates.append(ParameterLocation.BODY)
+    if not candidates:
+        return None
+    # Breaking every location at once lets the first check a server runs hide how it handles the others.
+    negated = {location for location in candidates if draw(st.booleans())}
+    return negated or {draw(st.sampled_from(candidates))}
 
 
 def can_negate_path_parameters(operation: APIOperation) -> bool:
@@ -985,13 +983,37 @@ def can_negate_path_parameters(operation: APIOperation) -> bool:
 
 def can_negate_headers(operation: APIOperation, location: ParameterLocation) -> bool:
     """Check if any header can be negated."""
-    container = getattr(operation, location.container_name)
+    container = cast(OpenApiParameterSet, operation.get_parameter_set(location))
     # No headers to negate
     headers = container.schema["properties"]
     if not headers:
         return True
-    plain = ({"type": "string"}, *({"type": "string", "format": f} for f in _PLAIN_HEADER_FORMATS))
-    return any(header not in plain for header in headers.values())
+    required = container.schema.get("required", ())
+    # Omitting a required header always violates it; an optional one is negatable only through a constraint
+    # on its value, and any string passes a plain string schema.
+    return any(name in required or not _is_plain_header(header) for name, header in headers.items())
+
+
+_PLAIN_HEADERS = ({"type": "string"}, *({"type": "string", "format": f} for f in PLAIN_HEADER_FORMATS))
+_NULL_SCHEMA = {"type": "null"}
+
+
+def _is_plain_header(schema: JsonSchema) -> bool:
+    """Whether the header accepts any string, ignoring annotations and a `null` alternative."""
+    if not isinstance(schema, dict):
+        return False
+    keywords = {
+        key: value
+        for key, value in schema.items()
+        if key not in ANNOTATION_KEYWORDS and key != "nullable" and not key.startswith("x-")
+    }
+    if len(keywords) == 1:
+        branches = keywords.get("anyOf", keywords.get("oneOf"))
+        if isinstance(branches, list):
+            return all(branch == _NULL_SCHEMA or _is_plain_header(branch) for branch in branches)
+    if isinstance(keywords.get("type"), list) and sorted(keywords["type"]) == ["null", "string"]:
+        keywords["type"] = "string"
+    return keywords in _PLAIN_HEADERS
 
 
 def get_parameters_strategy(
@@ -1000,13 +1022,11 @@ def get_parameters_strategy(
     location: ParameterLocation,
     generation_config: GenerationConfig,
     exclude: Iterable[str] = (),
-    extra_data_source: ExtraDataSource | None = None,
+    feedback: FeedbackSources = NO_FEEDBACK,
     mix_examples: bool = True,
-    error_feedback: ErrorFeedbackStore | None = None,
-    constants_value_source: ConstantsPool | None = None,
 ) -> st.SearchStrategy:
     """Create a new strategy for the case's component from the API operation parameters."""
-    container = getattr(operation, location.container_name)
+    container = cast(OpenApiParameterSet, operation.get_parameter_set(location))
     # Direct list bool check skips ParameterSet.__len__ method dispatch.
     if container.items:
         return container.get_strategy(
@@ -1014,27 +1034,11 @@ def get_parameters_strategy(
             generation_config,
             generation_mode,
             exclude,
-            extra_data_source=extra_data_source,
+            feedback=feedback,
             mix_examples=mix_examples,
-            error_feedback=error_feedback,
-            constants_value_source=constants_value_source,
         )
     # No parameters defined for this location
     return _NONE_STRATEGY
-
-
-def jsonify_python_specific_types(value: Any) -> Any:
-    """Convert Python-specific values to their JSON equivalents.
-
-    Builds a new value: the input may be a spec-declared example that every other case reuses.
-    """
-    if value is None or isinstance(value, bool):
-        return to_wire_string(value)
-    if isinstance(value, dict):
-        return {key: jsonify_python_specific_types(item) for key, item in value.items()}
-    if isinstance(value, list):
-        return [jsonify_python_specific_types(item) for item in value]
-    return value
 
 
 def jsonify_query_parameters(value: dict[str, Any], optional: frozenset[str]) -> dict[str, Any]:
@@ -1049,8 +1053,15 @@ def jsonify_query_parameters(value: dict[str, Any], optional: frozenset[str]) ->
     }
 
 
+def _custom_formats_cache_key(
+    generation_config: GenerationConfig, mode: GenerationMode
+) -> tuple[str | None, bool, str | None, GenerationMode]:
+    # Keyed by the settings the strategies depend on, so an updated or different config never reuses another's entry.
+    return (generation_config.exclude_header_characters, generation_config.allow_x00, generation_config.codec, mode)
+
+
 def _build_custom_formats(generation_config: GenerationConfig, mode: GenerationMode) -> dict[str, st.SearchStrategy]:
-    cache_key = (id(generation_config), mode)
+    cache_key = _custom_formats_cache_key(generation_config, mode)
     cached = custom_formats_cache.get(cache_key)
     if cached is not MISSING:
         return cached
@@ -1083,7 +1094,7 @@ def _build_custom_formats_uncached(
             custom_formats[HEADER_FORMAT] = header_values(codec="ascii", exclude_characters=valid_exclude)
         else:
             # Negative mode: Occasionally allow invalid characters
-            @st.composite  # type: ignore[untyped-decorator]
+            @st.composite
             def header_strategy(draw: st.DrawFn) -> str:
                 random = draw(st.randoms())
                 if random.random() < VALID_HEADER_PROBABILITY:
@@ -1091,6 +1102,8 @@ def _build_custom_formats_uncached(
                 return draw(header_values(**header_values_kwargs))
 
             custom_formats[HEADER_FORMAT] = header_strategy()
+    # Bearer tokens follow the header character set in force, so positive ones stay ASCII.
+    custom_formats["_bearer_auth"] = custom_formats[HEADER_FORMAT].map("Bearer {}".format)
     custom_formats.update(get_header_format_strategies(mode))
     # Pinned to the character set in force, since this map goes to callers that cannot supply one.
     alphabet = Alphabet(allow_x00=generation_config.allow_x00, codec=generation_config.codec).as_strategy()
@@ -1183,11 +1196,13 @@ def _drop_empty_float_branch(schema: dict[str, Any]) -> None:
 
 
 def _schema_has_float_format(node: object) -> bool:
-    if isinstance(node, dict):
-        return node.get("format") == "float" or any(_schema_has_float_format(value) for value in node.values())
-    if isinstance(node, list):
-        return any(_schema_has_float_format(item) for item in node)
-    return False
+    # Escaping keeps the marker from matching inside a string value, so this finds the same dicts as a walk.
+    try:
+        # Any object is accepted; one that is not JSON raises.
+        return '"format":"float"' in jsonschema_rs.canonical.json.to_string(node)
+    except (TypeError, ValueError):
+        # Generation reports such a schema as invalid, so there is nothing to snap.
+        return False
 
 
 def snapped_float32_clone(schema: JsonSchema) -> JsonSchema:
@@ -1224,16 +1239,12 @@ def _canonical_strategy(
     media_type: str | None = None,
 ) -> st.SearchStrategy[JsonValue]:
     """Strategy for a fully modeled document; raises `UnsupportedSchema` when the schema is not one."""
+    # What a header may carry is a rule about characters, so it is spelled as one: every string
+    # in the container obeys it, and the length and pattern keywords around it keep working.
+    alphabet = alphabet_for(location, generation_config)
     if location is not None and location.is_in_header:
-        # What a header may carry is a rule about characters, so it is spelled as one: every string
-        # in the container obeys it, and the length and pattern keywords around it keep working.
-        if location == ParameterLocation.COOKIE:
-            alphabet = cookie_alphabet(generation_config)
-        else:
-            alphabet = header_alphabet(generation_config)
         formats = _build_header_formats(generation_config, GenerationMode.POSITIVE)
     else:
-        alphabet = Alphabet(allow_x00=generation_config.allow_x00, codec=generation_config.codec)
         formats = _build_custom_formats(generation_config, GenerationMode.POSITIVE)
     return build(
         schema,
@@ -1261,7 +1272,7 @@ def _build_header_formats(generation_config: GenerationConfig, mode: GenerationM
     Leaving the plain header-value generator in would hand every plain string an opaque strategy
     that no length or pattern keyword can steer.
     """
-    cache_key = (id(generation_config), mode, "header")
+    cache_key = (*_custom_formats_cache_key(generation_config, mode), "header")
     cached = custom_formats_cache.get(cache_key)
     if cached is not MISSING:
         return cached
@@ -1278,7 +1289,7 @@ def _can_skip_header_filter(schema: dict[str, Any]) -> bool:
     # All headers should have a known format key in order to avoid the header filter.
     # A header written as a boolean names no format, and claims either every value or none.
     return all(
-        isinstance(sub_schema, dict) and sub_schema.get("format") in _PLAIN_HEADER_FORMATS
+        isinstance(sub_schema, dict) and sub_schema.get("format") in PLAIN_HEADER_FORMATS
         for sub_schema in schema.get("properties", {}).values()
     )
 
@@ -1295,17 +1306,19 @@ def make_negative_strategy(
     target_descriptors: tuple | None = None,
 ) -> st.SearchStrategy:
     custom_formats = _build_custom_formats(generation_config, GenerationMode.NEGATIVE)
-    return negative_schema(
-        schema,
-        operation_name=operation_name,
-        location=location,
-        media_type=media_type,
-        custom_formats=custom_formats,
-        generation_config=generation_config,
-        validator_cls=validator_cls,
-        validation_schema=validation_schema,
-        name_to_uri=name_to_uri,
-        target_descriptors=target_descriptors,
+    return st.deferred(
+        lambda: negative_schema(
+            schema,
+            operation_name=operation_name,
+            location=location,
+            media_type=media_type,
+            custom_formats=custom_formats,
+            generation_config=generation_config,
+            validator_cls=validator_cls,
+            validation_schema=validation_schema,
+            name_to_uri=name_to_uri,
+            target_descriptors=target_descriptors,
+        )
     )
 
 

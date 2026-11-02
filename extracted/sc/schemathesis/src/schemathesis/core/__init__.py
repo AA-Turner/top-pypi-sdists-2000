@@ -14,6 +14,9 @@ INTERNAL_BUFFER_SIZE = 32 * 1024
 # two per character matched against a `pattern`. Past these sizes it never returns a value.
 MAX_GENERATED_ITEMS = INTERNAL_BUFFER_SIZE // 2
 MAX_GENERATED_PATTERN_LENGTH = INTERNAL_BUFFER_SIZE // 4
+# Longest array still drawn element by element; a pattern-matched element spends budget per
+# character, so past this the draw stops being affordable.
+MAX_DRAWN_ARRAY_ITEMS = 64
 # Longest string worth building; specs spell "no real limit" as `Integer.MAX_VALUE`.
 MAX_STRING_LENGTH = 1024 * 1024
 DEFAULT_MAX_SCENARIO_STEPS = 6
@@ -29,13 +32,18 @@ NOT_SET = NotSet()
 Body: TypeAlias = "JsonValue | bytes | NotSet"
 
 
-class SpecificationFeature(str, enum.Enum):
+class SpecificationFeature(enum.StrEnum):
     """Features that Schemathesis can provide for different specifications."""
 
     SCHEMA_ANALYSIS = "schema_analysis"
     STATEFUL_TESTING = "stateful_testing"
     COVERAGE = "coverage_tests"
     EXAMPLES = "example_tests"
+    AUTH_BOOTSTRAP = "auth_bootstrap"
+    # Telling served requests from refused ones by the response status code.
+    STATUS_CODE_ANALYSIS = "status_code_analysis"
+    # Probing how the server handles HTTP edge cases (null bytes in headers, encoded path separators).
+    HTTP_PROBES = "http_probes"
 
 
 @dataclass(slots=True)
@@ -51,28 +59,57 @@ class Specification:
     def graphql(cls, version: str) -> Specification:
         return cls(kind=SpecificationKind.GRAPHQL, version=version)
 
+    @classmethod
+    def grpc(cls, version: str) -> Specification:
+        return cls(kind=SpecificationKind.GRPC, version=version)
+
     @property
     def name(self) -> str:
-        name = {SpecificationKind.GRAPHQL: "GraphQL", SpecificationKind.OPENAPI: "Open API"}[self.kind]
-        return f"{name} {self.version}".strip()
+        return f"{_DISPLAY_NAMES[self.kind]} {self.version}".strip()
 
     def supports_feature(self, feature: SpecificationFeature) -> bool:
         """Check if Schemathesis supports a given feature for this specification."""
-        if self.kind == SpecificationKind.OPENAPI:
-            return feature in {
-                SpecificationFeature.SCHEMA_ANALYSIS,
-                SpecificationFeature.STATEFUL_TESTING,
-                SpecificationFeature.COVERAGE,
-                SpecificationFeature.EXAMPLES,
-            }
-        return feature == SpecificationFeature.STATEFUL_TESTING
+        return feature in _FEATURES[self.kind]
 
 
-class SpecificationKind(str, enum.Enum):
+class SpecificationKind(enum.StrEnum):
     """Specification of the given schema."""
 
     OPENAPI = "openapi"
     GRAPHQL = "graphql"
+    GRPC = "grpc"
+
+
+# Every kind needs an entry in both tables, so a new kind fails loudly instead of borrowing another's answers.
+_DISPLAY_NAMES: dict[SpecificationKind, str] = {
+    SpecificationKind.OPENAPI: "Open API",
+    SpecificationKind.GRAPHQL: "GraphQL",
+    SpecificationKind.GRPC: "gRPC",
+}
+_FEATURES: dict[SpecificationKind, frozenset[SpecificationFeature]] = {
+    SpecificationKind.OPENAPI: frozenset(
+        {
+            SpecificationFeature.SCHEMA_ANALYSIS,
+            SpecificationFeature.STATEFUL_TESTING,
+            SpecificationFeature.COVERAGE,
+            SpecificationFeature.EXAMPLES,
+            SpecificationFeature.AUTH_BOOTSTRAP,
+            SpecificationFeature.STATUS_CODE_ANALYSIS,
+            SpecificationFeature.HTTP_PROBES,
+        }
+    ),
+    SpecificationKind.GRAPHQL: frozenset(
+        {SpecificationFeature.STATEFUL_TESTING, SpecificationFeature.COVERAGE, SpecificationFeature.HTTP_PROBES}
+    ),
+    SpecificationKind.GRPC: frozenset(
+        {
+            SpecificationFeature.STATUS_CODE_ANALYSIS,
+            SpecificationFeature.SCHEMA_ANALYSIS,
+            SpecificationFeature.STATEFUL_TESTING,
+            SpecificationFeature.COVERAGE,
+        }
+    ),
+}
 
 
 def string_to_boolean(value: str) -> str | bool:

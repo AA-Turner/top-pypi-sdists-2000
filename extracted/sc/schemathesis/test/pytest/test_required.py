@@ -35,7 +35,7 @@ def test_(request, case):
     )
     result = testdir.runpytest("-v", "-s")
     result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 21$"])
+    result.stdout.re_match_lines([r"Hypothesis calls: 22$"])
 
 
 def test_not_required_parameters(testdir):
@@ -81,6 +81,7 @@ def test_without_required(ctx, testdir, version, param):
             path["parameters"] = [param]
             location = param["in"]
         schema = ctx.openapi.build_schema({"/users": {"post": path}})
+    # The inner test must hit a rare draw with the parameter missing, so it gets a large budget.
     testdir.make_test(
         f"""
 @schema.parametrize()

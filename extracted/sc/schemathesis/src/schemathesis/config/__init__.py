@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import os
-import sys
+import tomllib
 from dataclasses import dataclass
 from os import PathLike
 from pathlib import Path
 from random import Random
+from typing import ClassVar
 
 from schemathesis.config._analysis import AnalysisConfig, ConstantsConfig
 from schemathesis.config._auth import (
@@ -43,11 +44,6 @@ from schemathesis.config._phases import (
 from schemathesis.config._projects import ProjectConfig, ProjectsConfig, get_workers_count
 from schemathesis.config._report import DEFAULT_REPORT_DIRECTORY, ReportConfig, ReportFormat, ReportsConfig
 from schemathesis.config._warnings import SchemathesisWarning, WarningsConfig
-
-if sys.version_info < (3, 11):
-    import tomli
-else:
-    import tomllib as tomli
 
 __all__ = [
     "SchemathesisConfig",
@@ -107,6 +103,8 @@ class SchemathesisConfig(DiffBase):
     output: OutputConfig
     projects: ProjectsConfig
     dictionaries: dict[str, DictionaryDefinition]
+    # Seed for configs without an explicit one, shared by all processes of a run (e.g. pytest-xdist workers)
+    shared_seed: ClassVar[int | None] = None
 
     def __init__(
         self,
@@ -126,6 +124,8 @@ class SchemathesisConfig(DiffBase):
         self.color = color
         self.suppress_health_check = suppress_health_check or []
         self._seed = seed
+        if seed is not None:
+            self._mark_source_keys(("seed",))
         self._config_path = None
         self.wait_for_schema = wait_for_schema
         self.max_failures = max_failures
@@ -140,8 +140,13 @@ class SchemathesisConfig(DiffBase):
     @property
     def seed(self) -> int:
         if self._seed is None:
-            self._seed = Random().getrandbits(128)
+            self._seed = self.shared_seed if self.shared_seed is not None else Random().getrandbits(128)
         return self._seed
+
+    @property
+    def has_explicit_seed(self) -> bool:
+        """Whether the user provided the seed, as opposed to one generated for this run."""
+        return "seed" in self._source_keys
 
     @property
     def config_path(self) -> str | None:
@@ -196,6 +201,7 @@ class SchemathesisConfig(DiffBase):
         """Set top-level configuration options."""
         if seed is not None:
             self._seed = seed
+            self._mark_source_keys(("seed",))
         self._apply(
             color=color,
             suppress_health_check=suppress_health_check,
@@ -217,7 +223,7 @@ class SchemathesisConfig(DiffBase):
     @classmethod
     def from_str(cls, data: str, *, base_dir: str | None = None) -> SchemathesisConfig:
         """Parse configuration from a string."""
-        parsed = tomli.loads(data)
+        parsed = tomllib.loads(data)
         return cls.from_dict(parsed, base_dir=base_dir)
 
     @classmethod
@@ -225,12 +231,18 @@ class SchemathesisConfig(DiffBase):
         """Create a config instance from a dictionary."""
         from jsonschema_rs import ValidationError
 
-        from schemathesis.config._validator import CONFIG_VALIDATOR
+        from schemathesis.config._validator import CONFIG_VALIDATOR, InstancePath, without_temporal_values
 
+        replaced: dict[InstancePath, object] = {}
+        instance = without_temporal_values(data, (), replaced)
         try:
-            CONFIG_VALIDATOR.validate(data)
+            CONFIG_VALIDATOR.validate(instance)
         except ValidationError as exc:
-            raise ConfigError.from_validation_error(exc) from None
+            raise ConfigError.from_validation_error(exc, replaced) from None
+        if replaced:
+            # Only free-form tables, such as `[parameters]`, accept a `null` in place of a date or time
+            path, value = next(iter(replaced.items()))
+            raise ConfigError.from_temporal_value(path, value)
         dictionaries = parse_dictionaries(data, base_dir=base_dir)
         projects = ProjectsConfig.from_dict(data, dictionaries=dictionaries)
         return cls(
@@ -245,4 +257,4 @@ class SchemathesisConfig(DiffBase):
             output=OutputConfig.from_dict(data.get("output", {})),
             projects=projects,
             dictionaries=dictionaries,
-        )
+        )._mark_source_keys(data)

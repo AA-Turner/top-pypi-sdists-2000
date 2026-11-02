@@ -8,12 +8,37 @@
 from __future__ import annotations
 
 import logging
+from contextvars import ContextVar
 
 from cloudsplaining.shared import utils
 from cloudsplaining.shared.constants import DEFAULT_EXCLUSIONS_CONFIG
 from cloudsplaining.shared.validation import check_exclusions_schema
 
 logger = logging.getLogger(__name__)
+
+# Whether exclusion-match messages print to stdout. The CLI turns this on for the duration
+# of an invocation (and restores it on teardown); library usage leaves it off so the
+# messages go to logger.debug and can be silenced via standard logging configuration. A
+# ContextVar (rather than a module global) keeps the CLI override scoped and avoids leaking
+# printing state across threads or back into later library use.
+_print_exclusion_matches: ContextVar[bool] = ContextVar("cloudsplaining_print_exclusion_matches", default=False)
+
+
+def set_exclusion_output(enabled: bool) -> bool:
+    """Toggle stdout printing of exclusion-match messages and return the PREVIOUS value so
+    the caller can restore it. The CLI enables this so the grey 'Excluded prefix/suffix'
+    lines still print; library usage leaves it off."""
+    previous = _print_exclusion_matches.get()
+    _print_exclusion_matches.set(enabled)
+    return previous
+
+
+def _report_exclusion(message: str) -> None:
+    """Emit an exclusion-match message: print to stdout (CLI) or logger.debug (library)."""
+    if _print_exclusion_matches.get():
+        utils.print_grey(message)
+    else:
+        logger.debug(message)
 
 
 class Exclusions:
@@ -28,42 +53,42 @@ class Exclusions:
         self.users = self._users()
         self.groups = self._groups()
         self.policies = self._policies()
+        self.known_accounts = self._known_accounts()
 
     def _roles(self) -> list[str]:
         provided_roles = self.config.get("roles", [])
         # Normalize for comparisons
-        roles = [role.lower() for role in provided_roles]
-        return roles
+        return [role.lower() for role in provided_roles]
 
     def _users(self) -> list[str]:
         provided_users = self.config.get("users", [])
         # Normalize for comparisons
-        users = [user.lower() for user in provided_users]
-        return users
+        return [user.lower() for user in provided_users]
 
     def _groups(self) -> list[str]:
         provided_groups = self.config.get("groups", [])
         # Normalize for comparisons
-        groups = [group.lower() for group in provided_groups]
-        return groups
+        return [group.lower() for group in provided_groups]
 
     def _policies(self) -> list[str]:
         provided_policies = self.config.get("policies", [])
         # Normalize for comparisons
-        policies = [policy.lower() for policy in provided_policies]
-        return policies
+        return [policy.lower() for policy in provided_policies]
 
     def _include_actions(self) -> list[str]:
         include_actions = self.config.get("include-actions", [])
         # Set to lowercase so subsequent evaluations are faster.
-        always_include_actions = [x.lower() for x in include_actions]
-        return always_include_actions
+        return [x.lower() for x in include_actions]
 
     def _exclude_actions(self) -> list[str]:
         exclude_actions = self.config.get("exclude-actions", [])
         # Set to lowercase so subsequent evaluations are faster.
-        always_exclude_actions = [x.lower() for x in exclude_actions]
-        return always_exclude_actions
+        return [x.lower() for x in exclude_actions]
+
+    def _known_accounts(self) -> set[str]:
+        provided_known_accounts = self.config.get("known-accounts", [])
+        # Normalize for comparisons - remove empty strings
+        return {account for account in provided_known_accounts if account.strip()}
 
     def is_action_always_included(self, action_in_question: str) -> bool | str:
         """
@@ -73,8 +98,8 @@ class Exclusions:
         """
         if action_in_question.lower() in self.include_actions:
             return action_in_question
-        else:
-            return False
+
+        return False
 
     def is_action_always_excluded(self, action_in_question: str) -> bool:
         """
@@ -84,8 +109,8 @@ class Exclusions:
         """
         if self.exclude_actions:
             return is_name_excluded(action_in_question.lower(), self.exclude_actions)
-        else:
-            return False  # pragma: no cover
+
+        return False  # pragma: no cover
 
     def is_policy_excluded(self, policy_name: str) -> bool:
         """
@@ -106,12 +131,12 @@ class Exclusions:
         """
         if principal_type == "User":
             return is_name_excluded(principal.lower(), self.users)
-        elif principal_type == "Group":
+        if principal_type == "Group":
             return is_name_excluded(principal.lower(), self.groups)
-        elif principal_type == "Role":
+        if principal_type == "Role":
             return is_name_excluded(principal.lower(), self.roles)
-        else:  # pragma: no cover
-            raise Exception("Please supply User, Group, or Role as the principal argument.")
+
+        raise Exception("Please supply User, Group, or Role as the principal argument.")  # pragma: no cover
 
     def get_allowed_actions(self, requested_actions: list[str]) -> list[str]:
         """Given a list of actions, it will evaluate those actions against the exclusions configuration and return a
@@ -155,13 +180,12 @@ def is_name_excluded(name: str, exclusions_list: str | list[str]) -> bool:
             prefix = exclusion[:-1]
             # print(prefix)
             if name.lower().startswith(prefix.lower()):
-                # logger.debug(f"Excluded prefix: {exclusion}")
-                utils.print_grey(f"\tExcluded prefix: {exclusion}")
+                _report_exclusion(f"\tExcluded prefix: {exclusion}")
                 return True
         if exclusion.startswith("*"):
             suffix = exclusion[1:]
             if name.lower().endswith(suffix.lower()):
-                utils.print_grey(f"\tExcluded suffix: {exclusion}")
+                _report_exclusion(f"\tExcluded suffix: {exclusion}")
                 return True
     return False
 

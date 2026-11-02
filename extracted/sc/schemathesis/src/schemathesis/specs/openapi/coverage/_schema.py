@@ -11,21 +11,22 @@ from contextlib import ExitStack, contextmanager, nullcontext
 from dataclasses import dataclass, replace
 from decimal import Decimal
 from fractions import Fraction
-from functools import partial
+from functools import cache, partial
 from hashlib import blake2b
-from itertools import combinations, count, islice
+from itertools import count, islice
 from math import ceil, floor, inf, isinf, nextafter, ulp
 
 from schemathesis.core.jsonschema import (
     CANONICALIZE_DRAFT_BY_VALIDATOR,
     FANCY_REGEX_OPTIONS,
+    STANDARD_FORMATS,
     VALIDATED_FORMATS_BY_DRAFT,
-    compile_ecma_pattern,
     is_unsatisfiable,
     is_valid,
     make_validator,
     make_validator_for,
     make_validator_with_seed,
+    matches_pattern,
 )
 from schemathesis.core.jsonschema.bundler import BUNDLE_STORAGE_KEY
 from schemathesis.core.jsonschema.keywords import ALL_KEYWORDS
@@ -56,6 +57,7 @@ from hypothesis.errors import InvalidArgument, Unsatisfiable
 
 from schemathesis.core import (
     INTERNAL_BUFFER_SIZE,
+    MAX_DRAWN_ARRAY_ITEMS,
     MAX_GENERATED_ITEMS,
     MAX_GENERATED_PATTERN_LENGTH,
     MAX_STRING_LENGTH,
@@ -63,16 +65,28 @@ from schemathesis.core import (
 )
 from schemathesis.core.cache import MISSING
 from schemathesis.core.errors import InvalidSchema, RefResolutionError
+from schemathesis.core.jsonschema.patterns import (
+    CharacterRules,
+    character_rules,
+    compile_ecma_pattern,
+    matches_every_string,
+    pattern_length_bounds,
+    pattern_length_is_unreachable,
+    pattern_requires_char_outside,
+    pattern_requires_literal,
+    pin_pattern_length,
+)
 from schemathesis.core.jsonschema.resolver import Resolver, make_root_resolver, resolve_reference
-from schemathesis.core.jsonschema.types import JsonSchema, JsonSchemaObject, get_type, to_json_type_name
-from schemathesis.core.parameters import ParameterLocation
-from schemathesis.core.transforms import deepclone
+from schemathesis.core.jsonschema.types import JsonSchema, JsonSchemaObject, JsonValue, get_type, to_json_type_name
+from schemathesis.core.parameters import EXTRA_PROPERTY_LOCATIONS, HEADER_LOCATIONS, ParameterLocation
+from schemathesis.core.transforms import deepclone, jsonify_python_specific_types
 from schemathesis.core.validation import contains_unicode_surrogate_pair, has_invalid_characters, is_latin_1_encodable
 from schemathesis.generation import GenerationMode
 from schemathesis.generation._cache import schema_cache_key
 from schemathesis.generation.coverage import DEFAULT_GENERATION_SESSION, GenerationSession
 from schemathesis.generation.hypothesis import UNSATISFIABLE_RESULT, examples
 from schemathesis.generation.jsonschema.builder import build
+from schemathesis.generation.jsonschema.context import Alphabet
 from schemathesis.generation.jsonschema.strategy import json_identity
 from schemathesis.generation.meta import CoverageScenario
 from schemathesis.openapi.generation.filters import is_invalid_path_parameter
@@ -82,43 +96,10 @@ from schemathesis.specs.openapi.coverage._wire import (
     WireSemantics,
     ensure_valid_headers_schema,
     ensure_valid_path_parameter_schema,
-    jsonify,
 )
 from schemathesis.specs.openapi.formats import format_length_bounds, format_lengths_for
-from schemathesis.specs.openapi.patterns import (
-    matches_every_string,
-    pattern_length_bounds,
-    pattern_length_is_unreachable,
-    pattern_requires_char_outside,
-    pattern_requires_literal,
-    pin_pattern_length,
-)
-from schemathesis.transport.serialization import contains_binary
-
-VALIDATED_FORMATS = frozenset(
-    {
-        "date",
-        "date-time",
-        "duration",
-        "email",
-        "hostname",
-        "idn-email",
-        "idn-hostname",
-        "ipv4",
-        "ipv6",
-        "iri",
-        "iri-reference",
-        "json-pointer",
-        "regex",
-        "relative-json-pointer",
-        "time",
-        "uri",
-        "uri-reference",
-        "uri-template",
-        "uuid",
-    }
-)
-
+from schemathesis.specs.openapi.utils import parameter_types, sent_text_is_valid
+from schemathesis.transport.serialization import Binary, contains_binary
 
 # A string where these alone surround `format`: nothing else can widen what the generator produces.
 _FORMAT_WITH_LENGTH_KEYS = frozenset({"format", "maxLength", "minLength", "type"})
@@ -201,9 +182,22 @@ def _admitted(value: Any, schema: JsonSchema, ctx: CoverageContext, *, unjudged:
     return all(judge.is_valid(value) for judge in judges)
 
 
+def _extra_property_schema(schema: JsonSchemaObject) -> JsonSchema:
+    """What a property no other keyword names has to satisfy."""
+    # `additionalProperties` evaluates every such name, leaving nothing for `unevaluatedProperties`.
+    if "additionalProperties" in schema:
+        return schema["additionalProperties"]
+    return schema.get("unevaluatedProperties", True)
+
+
 def _is_strictly_valid(value: Any, schema: dict[str, Any], ctx: CoverageContext) -> bool:
-    # Fails closed, so a value nothing can check is dropped rather than shipped as a valid positive.
-    return _admitted(value, schema, ctx, unjudged=False)
+    # Binary payloads cannot be validated and pass, as elsewhere in this module. Anything else fails closed,
+    # so a value nothing can check is dropped rather than shipped as a valid positive.
+    declared_type = schema.get("type")
+    # Bytes go out as strings, so a schema whose `type` rules strings out cannot take them.
+    if isinstance(value, bytes) and declared_type is not None:
+        return "string" in (declared_type if isinstance(declared_type, list) else [declared_type])
+    return contains_binary(value) or _admitted(value, schema, ctx, unjudged=False)
 
 
 def _without_forbidden_keys(value: Any, schema: dict[str, Any]) -> Any:
@@ -234,15 +228,27 @@ def json_recursive_strategy(strategy: st.SearchStrategy) -> st.SearchStrategy:
 
 
 # Keywords that describe a schema without restricting the values it accepts.
-ANNOTATION_KEYWORDS = frozenset(("description", "example", "examples", "title", "deprecated", "externalDocs", "xml"))
+ANNOTATION_KEYWORDS = frozenset(
+    {
+        "$comment",
+        "default",
+        "deprecated",
+        "description",
+        "discriminator",
+        "example",
+        "examples",
+        "externalDocs",
+        "readOnly",
+        "title",
+        "writeOnly",
+        "xml",
+    }
+)
 NEGATIVE_MODE_MAX_LENGTH_WITH_PATTERN = 100
 NEGATIVE_MODE_MAX_ITEMS = 15
 # How many levels of one object graph may merge the same base before the walk stops unfolding it.
 # Keeps a base reused all the way down a deep document from turning every level into its own sweep.
 SHARED_BASE_REUSE_LIMIT = 3
-# Longest array still drawn element by element; a pattern-matched element spends budget per
-# character, so past this the draw stops being affordable.
-MAX_DRAWN_ARRAY_ITEMS = 64
 # Largest object still drawn whole; free values past this overrun the buffer before the floor is met.
 MAX_DRAWN_OBJECT_PROPERTIES = 64
 FLOAT_STRATEGY: st.SearchStrategy = st.floats(allow_nan=False, allow_infinity=False).map(_replace_zero_with_nonzero)
@@ -290,7 +296,7 @@ STRATEGIES_FOR_TYPE = {
 def get_strategy_for_type(ty: str | list[str]) -> st.SearchStrategy:
     if isinstance(ty, str):
         return STRATEGIES_FOR_TYPE[ty]
-    return st.one_of(STRATEGIES_FOR_TYPE[t] for t in ty if t in STRATEGIES_FOR_TYPE)
+    return st.one_of([STRATEGIES_FOR_TYPE[t] for t in ty if t in STRATEGIES_FOR_TYPE])
 
 
 UNKNOWN_PROPERTY_KEY = "x-schemathesis-unknown-property"
@@ -331,7 +337,7 @@ def _unexpected_property_key(schema: dict, existing_keys: set[str]) -> str | Non
     return None
 
 
-@dataclass
+@dataclass(slots=True)
 class GeneratedValue:
     value: Any
     generation_mode: GenerationMode
@@ -339,11 +345,20 @@ class GeneratedValue:
     description: str
     parameter: str | None
     location: str | None
-
-    __slots__ = ("value", "generation_mode", "scenario", "description", "parameter", "location")
+    deduplication_key: tuple | None = None
+    # Canonical JSON of `value` at yield time, so enclosing values can spell themselves without serializing it again.
+    canonical: str | None = None
 
     @classmethod
-    def with_positive(cls, value: Any, *, scenario: CoverageScenario, description: str) -> GeneratedValue:
+    def with_positive(
+        cls,
+        value: Any,
+        *,
+        scenario: CoverageScenario,
+        description: str,
+        deduplication_key: tuple | None = None,
+        canonical: str | None = None,
+    ) -> GeneratedValue:
         return cls(
             value=value,
             generation_mode=GenerationMode.POSITIVE,
@@ -351,6 +366,8 @@ class GeneratedValue:
             description=description,
             location=None,
             parameter=None,
+            deduplication_key=deduplication_key,
+            canonical=canonical,
         )
 
     @classmethod
@@ -380,6 +397,11 @@ def cached_draw(session: GenerationSession, strategy: st.SearchStrategy) -> Any:
             outcome = (examples.generate_one(strategy), None)
         except Unsatisfiable as exc:
             outcome = (None, exc)
+        except InvalidArgument as exc:
+            # A size past what Hypothesis draws, e.g. a pattern quantifier asking for 100000 characters, has no value.
+            if "larger than Hypothesis supports" not in str(exc):
+                raise
+            outcome = (None, Unsatisfiable(str(exc)))
         session.draw_outcomes[strategy] = outcome
     value, failure = outcome
     if failure is not None:
@@ -395,13 +417,51 @@ def _keeps_length_within(pattern: str, min_length: int | None, max_length: int |
     return max_length is None or (pattern_max is not None and pattern_max <= max_length)
 
 
+def _character_rules_strategy(rules: CharacterRules, alphabet: Alphabet) -> st.SearchStrategy[str]:
+    # Lookaheads only filter what the rest of the pattern draws, and a random string rarely holds a
+    # character of every required class; placing one of each first leaves nothing to chance.
+    forbidden = [re.compile(text, re.ASCII) for text in rules.forbidden]
+    body = re.compile(rules.body, re.ASCII)
+
+    def is_allowed(char: str) -> bool:
+        return body.fullmatch(char) is not None and not any(pattern.fullmatch(char) for pattern in forbidden)
+
+    def characters(text: str) -> st.SearchStrategy[str]:
+        return _from_regex_within(re.compile(text, re.ASCII), alphabet).filter(is_allowed)
+
+    required = st.tuples(*(characters(text) for text in rules.required))
+    count = len(rules.required)
+    rest = st.lists(
+        characters(rules.body),
+        min_size=max(rules.min_size - count, 0),
+        max_size=None if rules.max_size is None else max(rules.max_size - count, 0),
+    )
+    return st.tuples(required, rest).flatmap(lambda parts: st.permutations([*parts[0], *parts[1]])).map("".join)
+
+
+def _from_regex_within(compiled: re.Pattern[str], alphabet: Alphabet) -> st.SearchStrategy[str]:
+    """Full matches drawn from the alphabet, or from any character when the alphabet bars every match."""
+    strategy = st.from_regex(compiled, fullmatch=True, alphabet=alphabet.as_strategy())
+    try:
+        strategy.validate()
+    except InvalidArgument:
+        # The schema outranks the alphabet.
+        return st.from_regex(compiled, fullmatch=True)
+    return strategy
+
+
 def _pattern_strategy(
-    session: GenerationSession, pattern: str, min_length: int | None, max_length: int | None, fmt: str | None
+    session: GenerationSession,
+    pattern: str,
+    min_length: int | None,
+    max_length: int | None,
+    fmt: str | None,
+    alphabet: Alphabet,
 ) -> st.SearchStrategy | None:
     """Strings the pattern matches within the length bounds, or `None` when Python `re` cannot read it."""
     # Memoized because `cached_draw` keys on the strategy itself: a pattern rebuilt per draw arrives as
     # a fresh object every time, so the same regex gets drawn from again instead of answering from cache.
-    key = (pattern, min_length, max_length, fmt)
+    key = (pattern, min_length, max_length, fmt, alphabet)
     cached = session.pattern_strategies.get(key)
     if cached is not MISSING:
         return cached
@@ -409,7 +469,12 @@ def _pattern_strategy(
     if compiled is None:
         session.pattern_strategies[key] = None
         return None
-    strategy = st.from_regex(compiled, fullmatch=True)
+    rules = character_rules(compiled.pattern)
+    if rules is None:
+        strategy = _from_regex_within(compiled, alphabet)
+    else:
+        strategy = _character_rules_strategy(rules, alphabet)
+    strategy = strategy.filter(matches_pattern(pattern))
     if min_length is not None and max_length is not None:
         strategy = strategy.filter(lambda s: min_length <= len(s) <= max_length)
     elif min_length is not None:
@@ -433,6 +498,7 @@ class CoverageContext:
     custom_formats: dict[str, st.SearchStrategy]
     validator_cls: type[jsonschema_rs.Validator]
     update_pattern: Callable[[str, int | None, int | None], str] | None
+    alphabet: Alphabet
     _resolver: Resolver | None
     allow_extra_parameters: bool
     expanding: dict[str, int]
@@ -449,6 +515,7 @@ class CoverageContext:
         "custom_formats",
         "validator_cls",
         "update_pattern",
+        "alphabet",
         "_resolver",
         "_root_token_cell",
         "_leaf_reference_cache",
@@ -471,6 +538,7 @@ class CoverageContext:
         custom_formats: dict[str, st.SearchStrategy],
         validator_cls: type[jsonschema_rs.Validator],
         update_pattern: Callable[[str, int | None, int | None], str] | None = None,
+        alphabet: Alphabet | None = None,
         _resolver: Resolver | None = None,
         _path_str_cache_cell: list[str | None] | None = None,
         _root_token_cell: list[object] | None = None,
@@ -495,6 +563,7 @@ class CoverageContext:
         self.custom_formats = custom_formats
         self.validator_cls = validator_cls
         self.update_pattern = update_pattern
+        self.alphabet = alphabet if alphabet is not None else Alphabet()
         self._resolver = _resolver
         # Shared like the path cell: every context over this document answers with the same token.
         self._root_token_cell: list[object] = _root_token_cell if _root_token_cell is not None else [None]
@@ -609,6 +678,7 @@ class CoverageContext:
             custom_formats=self.custom_formats,
             validator_cls=self.validator_cls,
             update_pattern=self.update_pattern,
+            alphabet=self.alphabet,
             _resolver=self._resolver,
             _path_str_cache_cell=self._path_str_cache_cell,
             _root_token_cell=self._root_token_cell,
@@ -630,6 +700,7 @@ class CoverageContext:
             custom_formats=self.custom_formats,
             validator_cls=self.validator_cls,
             update_pattern=self.update_pattern,
+            alphabet=self.alphabet,
             _resolver=self._resolver,
             _path_str_cache_cell=self._path_str_cache_cell,
             _root_token_cell=self._root_token_cell,
@@ -678,6 +749,7 @@ class CoverageContext:
                 draft=draft,
                 formats=self.custom_formats,
                 format_lengths=format_lengths_for(self.custom_formats),
+                alphabet=self.alphabet,
             )
         except InvalidSchema:
             return None
@@ -713,6 +785,55 @@ class CoverageContext:
             return NOT_SET
         return candidate
 
+    def _distinct_array(self, schema: JsonSchemaObject, length: int) -> list[JsonValue]:
+        """An array of this many distinct elements, gathered from many small draws rather than drawn whole."""
+        batch_schema = {**schema, "type": "array", "minItems": MAX_DRAWN_ARRAY_ITEMS, "maxItems": MAX_DRAWN_ARRAY_ITEMS}
+        # Lengths around one boundary differ only in how many elements they take, so they share one set.
+        try:
+            cache_key: tuple | None = (
+                self.schema_key(batch_schema),
+                self.session.token_for(self.custom_formats),
+                self.session.token_for(self.update_pattern),
+                self.validator_cls,
+                self.alphabet,
+            )
+        except (TypeError, ValueError):
+            cache_key = None
+        cached = MISSING if cache_key is None else self.session.distinct_elements.get(cache_key)
+        # Draw again only when the set is too short for this floor yet met the one it was drawn for.
+        if isinstance(cached, tuple) and (len(cached[0]) >= length or len(cached[0]) < cached[1]):
+            elements = cached[0]
+        else:
+            elements = self._draw_distinct(self._strategy_for(batch_schema), length)
+            if cache_key is not None:
+                self.session.distinct_elements[cache_key] = (elements, length)
+        if len(elements) < length:
+            raise Unsatisfiable
+        # A shared element would let one caller's edit show up in another array.
+        return [deepclone(element) if isinstance(element, (dict, list)) else element for element in elements[:length]]
+
+    def _draw_distinct(self, batch: st.SearchStrategy[list[JsonValue]], length: int) -> list[JsonValue]:
+        """Up to this many distinct elements from batches of draws; fewer when the domain runs out."""
+        needed = -(-length // MAX_DRAWN_ARRAY_ITEMS)
+        # Draws overlap, so twice the batches the floor needs to start with.
+        budget = 2 * needed
+        elements: dict[object, JsonValue] = {}
+        while True:
+            batches: list[list[JsonValue]] = examples.generate_many(batch, max_examples=budget)
+            elements = {}
+            for drawn in batches:
+                for element in drawn:
+                    elements.setdefault(json_identity(element), element)
+            # Fewer batches than asked for means the domain ran out.
+            if len(elements) >= length or len(batches) < budget or not elements:
+                break
+            # Short of the floor: draw again, as many batches as the yield so far suggests it takes. Past four
+            # times the batches the floor needs, the domain is running out and more draws would not reach it.
+            budget = -(-budget * length * 3 // (2 * len(elements)))
+            if budget > 4 * needed:
+                break
+        return list(elements.values())
+
     def _tiled_array(self, schema: JsonSchemaObject, length: int) -> list:
         """An array of this length, repeated from a one-element draw rather than drawn whole."""
         # A one-element array rather than a bare element: drawing the element on its own skips how
@@ -729,7 +850,7 @@ class CoverageContext:
         # draw every later caller of the same schema gets.
         base = {key: value for key, value in schema.items() if key != "minProperties"}
         result = dict(self.generate_from_schema({**base, "type": "object"}))
-        additional = schema.get("additionalProperties", True)
+        additional = _extra_property_schema(schema)
         filler = self.generate_from_schema(additional if isinstance(additional, dict) else {})
         declared = schema.get("properties", {})
         for index in count():
@@ -751,7 +872,7 @@ class CoverageContext:
             raise Unsatisfiable
         without_pattern = {key: value for key, value in schema.items() if key != "pattern"}
         candidate = self.generate_from_schema({**without_pattern, "minLength": length, "maxLength": length})
-        if not isinstance(candidate, str) or not compiled.search(candidate):
+        if not isinstance(candidate, str) or not matches_pattern(schema["pattern"])(candidate):
             raise Unsatisfiable
         return candidate
 
@@ -766,7 +887,7 @@ class CoverageContext:
                 # Deep clone to avoid circular references in Python objects
                 resolved = deepclone(self.resolve_ref(reference))
                 rest = {key: value for key, value in schema.items() if key != "$ref"}
-                if isinstance(resolved, dict) and any(key not in _ANNOTATION_KEYWORDS for key in rest):
+                if isinstance(resolved, dict) and any(key not in ANNOTATION_KEYWORDS for key in rest):
                     # Keywords beside the reference constrain the value too.
                     return self._generate_from_resolved({"allOf": [resolved, rest]})
                 return self._generate_from_resolved(resolved)
@@ -785,6 +906,7 @@ class CoverageContext:
                 self.session.token_for(self.custom_formats),
                 self.session.token_for(self.update_pattern),
                 self.validator_cls,
+                self.alphabet,
             )
         except (TypeError, ValueError):
             cache_key = None
@@ -800,42 +922,62 @@ class CoverageContext:
             if cache_key is not None:
                 self.session.values[cache_key] = UNSATISFIABLE_RESULT
             raise
-        if isinstance(value, list) and isinstance(schema, dict) and "contains" in schema:
+        if isinstance(value, list) and isinstance(schema, dict) and _honors_contains(schema):
             value = _ensure_contains_bounds(self, value, schema)
         if cache_key is not None:
             self.session.values[cache_key] = deepclone(value) if isinstance(value, (dict, list)) else value
         return value
 
     def _generate_from_schema_inner(self, schema: JsonSchemaObject) -> Any:
-        if isinstance(schema, dict):
-            described = _prepared(schema, drop=_CONDITIONAL_KEYS)
-            if described is not schema:
-                # What the rest of the schema describes usually already clears its `not` / `if`
-                # guards, and describing beats filtering: the value stays as small as the rest allows.
-                candidate = self._generate_around_conditionals(schema, described)
-                if candidate is not NOT_SET:
-                    return candidate
+        # Each step either settles the value, raises `Unsatisfiable`, or returns `NOT_SET` to defer to the next one.
+        value = self._try_around_conditionals(schema)
+        if value is not NOT_SET:
+            return value
+        value = self._try_spec_value(schema)
+        if value is not NOT_SET:
+            return value
+        keys = sorted([k for k in schema if not k.startswith("x-") and k not in ANNOTATION_KEYWORDS])
+        self._reject_unreachable_sizes(schema, keys)
+        value = self._try_large_array(schema)
+        if value is not NOT_SET:
+            return value
+        # Shortcuts read the describing keywords alone, which a combinator beside them can still narrow;
+        # such a schema is built whole instead.
+        if not any(key in schema for key in _FOLDED_KEYS):
+            value = self._try_shortcut(schema, keys)
+            if value is not NOT_SET:
+                return value
+        return self._generate_whole(schema, keys)
+
+    def _try_around_conditionals(self, schema: JsonSchemaObject) -> Any:
+        described = _prepared(schema, drop=_CONDITIONAL_KEYS)
+        if described is schema:
+            return NOT_SET
+        # What the rest of the schema describes usually already clears its `not` / `if`
+        # guards, and describing beats filtering: the value stays as small as the rest allows.
+        return self._generate_around_conditionals(schema, described)
+
+    def _try_spec_value(self, schema: JsonSchemaObject) -> Any:
         # Prefer spec-declared concrete values when valid: example > examples[0] > default.
         # Surfaces author intent into recursively-generated templates; without this, nested
         # properties whose schemas declare `example`/`default` get synthetic Hypothesis values.
-        if isinstance(schema, dict):
-            example = schema.get("example", NOT_SET)
-            if example is not NOT_SET:
-                accepted = _accept_spec_value(example, schema, self)
+        example = schema.get("example", NOT_SET)
+        if example is not NOT_SET:
+            accepted = _accept_spec_value(example, schema, self)
+            if accepted is not NOT_SET:
+                return accepted
+        examples = schema.get("examples")
+        if isinstance(examples, list):
+            for candidate in examples:
+                accepted = _accept_spec_value(candidate, schema, self)
                 if accepted is not NOT_SET:
                     return accepted
-            examples = schema.get("examples")
-            if isinstance(examples, list):
-                for candidate in examples:
-                    accepted = _accept_spec_value(candidate, schema, self)
-                    if accepted is not NOT_SET:
-                        return accepted
-            default = schema.get("default", NOT_SET)
-            if default is not NOT_SET:
-                accepted = _accept_spec_value(default, schema, self)
-                if accepted is not NOT_SET:
-                    return accepted
-        keys = sorted([k for k in schema if not k.startswith("x-") and k not in ANNOTATION_KEYWORDS])
+        default = schema.get("default", NOT_SET)
+        if default is not NOT_SET:
+            return _accept_spec_value(default, schema, self)
+        return NOT_SET
+
+    def _reject_unreachable_sizes(self, schema: JsonSchemaObject, keys: list[str]) -> None:
         # Past the generation buffer there is no container worth building, whatever else the schema says.
         min_properties = schema.get("minProperties")
         if isinstance(min_properties, int) and min_properties > INTERNAL_BUFFER_SIZE and "object" in get_type(schema):
@@ -856,179 +998,237 @@ class CoverageContext:
                     isinstance(max_length, int) and max_length < shortest
                 ):
                     raise Unsatisfiable
-        # Shortcuts read the describing keywords alone, which a combinator beside them can still narrow;
-        # such a schema is built whole instead.
-        if not any(key in schema for key in _FOLDED_KEYS):
-            if keys == ["type"]:
-                return cached_draw(self.session, get_strategy_for_type(schema["type"]))
-            if keys == ["format", "type"]:
-                if schema["type"] != "string":
-                    return cached_draw(self.session, get_strategy_for_type(schema["type"]))
-                fmt = schema["format"]
-                if fmt in self.custom_formats:
-                    return cached_draw(self.session, self.custom_formats[fmt])
-            if (
-                "properties" in keys
-                and set(keys) <= {"properties", "required", "type", "minProperties"}
-                and schema.get("type", "object") == "object"
-            ):
-                obj = {}
-                properties = schema["properties"]
-                for key, sub_schema in properties.items():
-                    if (
-                        isinstance(sub_schema, dict)
-                        and "const" in sub_schema
-                        and _is_valid_with_formats(sub_schema["const"], sub_schema, self)
-                    ):
-                        obj[key] = sub_schema["const"]
-                    else:
-                        try:
-                            obj[key] = self.generate_from_schema(sub_schema)
-                        except Unsatisfiable:
-                            pass
-                for key in schema.get("required", []):
-                    if key not in properties:
-                        try:
-                            obj[key] = self.generate_from_schema({})
-                        except Unsatisfiable:
-                            pass
-                if any(key not in obj for key in schema.get("required", [])):
-                    raise Unsatisfiable
-                # Properties that cannot be generated leave the object short of `minProperties`;
-                # names the schema does not mention carry the rest.
-                names = ("x" * size for size in count())
-                while len(obj) < schema.get("minProperties", 0):
-                    obj.setdefault(next(names), None)
-                return obj
-            if "enum" in schema:
-                enum_values = [v for v in schema["enum"] if _is_valid_with_formats(v, schema, self)]
-                if not enum_values:
-                    raise Unsatisfiable
-                return cached_draw(self.session, st.sampled_from(enum_values))
-            if "pattern" in schema and "string" in get_type(schema):
-                pattern = schema["pattern"]
-                try:
-                    re.compile(pattern)
-                except re.error:
-                    raise Unsatisfiable from None
-                if self.location == ParameterLocation.PATH and pattern_requires_literal(pattern, "/{}"):
-                    raise Unsatisfiable
-                min_length = schema.get("minLength")
-                max_length = schema.get("maxLength")
-                length_is_pinned = False
-                if min_length is not None or max_length is not None:
-                    pattern_min, pattern_max = pattern_length_bounds(pattern)
-                    if max_length is not None and max_length < pattern_min:
-                        raise Unsatisfiable
-                    if min_length is not None and pattern_max is not None and min_length > pattern_max:
-                        raise Unsatisfiable
-                    # A floor above the sizes the pattern emits on its own is where drawing and
-                    # discarding never lands, so the length gets worked out rather than searched for.
-                    doomed = min_length is not None and min_length > pattern_min
-                    if doomed and pattern_length_is_unreachable(pattern, min_length, max_length):
-                        raise Unsatisfiable
-                    updated = pattern
-                    if self.update_pattern is not None:
-                        updated = self.update_pattern(pattern, min_length, max_length)
-                    if doomed and not _keeps_length_within(updated, min_length, max_length):
-                        # The quantifier rewrite left the window open, so one length gets spelled into
-                        # the pattern outright; shapes it cannot rewrite keep whatever it managed.
-                        pinned = pin_pattern_length(pattern, min_length, max_length)
-                        if pinned != pattern:
-                            updated = pinned
-                            length_is_pinned = True
-                    pattern = updated
-                if min_length is not None and min_length > MAX_GENERATED_PATTERN_LENGTH:
-                    return self._long_string_matching(schema, min_length)
-                fmt = schema.get("format")
-                validated = fmt if fmt in VALIDATED_FORMATS else None
-                # Spelling the length into the pattern fixes the shape of every match, so a format the
-                # first match fails is one no redraw satisfies; checking once beats searching for it.
-                strategy = _pattern_strategy(
-                    self.session, pattern, min_length, max_length, None if length_is_pinned else validated
-                )
-                if strategy is None:
-                    raise Unsatisfiable from None
-                try:
-                    value = cached_draw(self.session, strategy)
-                except Unsatisfiable:
-                    # Regex matches the format rejects starve the filter even where a conforming one
-                    # exists; building from the format instead reaches it, so this is not the answer yet.
-                    if validated is None or length_is_pinned:
-                        raise
-                    value = NOT_SET
-                if value is not NOT_SET:
-                    if length_is_pinned and validated is not None:
-                        validator = _get_format_validator(self.session, validated, self.validator_cls)
-                        if not validator.is_valid(value):
-                            raise Unsatisfiable
-                    return value
-            if (
-                isinstance(min_properties, int)
-                and min_properties > MAX_DRAWN_OBJECT_PROPERTIES
-                and "object" in get_type(schema)
-            ):
-                # Synthesized names only go where any name is admitted and takes the same value, and
-                # only where the ceiling leaves room for the floor.
-                max_properties = schema.get("maxProperties")
-                if (
-                    schema.get("additionalProperties", True) is not False
-                    and "propertyNames" not in schema
-                    and "patternProperties" not in schema
-                    and (not isinstance(max_properties, int) or max_properties >= min_properties)
-                ):
-                    return self._filled_object(schema, min_properties)
-            if isinstance(min_items, int) and min_items > MAX_DRAWN_ARRAY_ITEMS and "array" in get_type(schema):
-                items = schema.get("items", True)
-                max_items = schema.get("maxItems")
-                # Repeating one element cannot satisfy either of these, and no length fits a ceiling under the floor.
-                if (
-                    (items is True or isinstance(items, dict))
-                    and not schema.get("uniqueItems")
-                    and "contains" not in schema
-                    and (not isinstance(max_items, int) or max_items >= min_items)
-                ):
-                    return self._tiled_array(schema, min_items)
-            if (
-                (keys == ["items", "type"] or keys == ["items", "minItems", "type"])
-                and isinstance(schema["items"], dict)
-                and "array" in get_type(schema)
-            ):
-                items = schema["items"]
-                min_items = schema.get("minItems", 0)
-                if "enum" in items:
-                    enum_values = [v for v in items["enum"] if _is_valid_with_formats(v, items, self)]
-                    if not enum_values:
-                        # Nothing matches, so only an empty array can conform.
-                        if min_items:
-                            raise Unsatisfiable
-                        return []
-                    return cached_draw(self.session, st.lists(st.sampled_from(enum_values), min_size=min_items))
-                # Recurse so `items`-level `example`/`examples`/`default` reach generation.
-                if any(k in items for k in ("example", "examples", "default")):
-                    size = max(min_items, 1)
-                    return [self.generate_from_schema(items) for _ in range(size)]
-                sub_keys = sorted([k for k in items if not k.startswith("x-") and k not in ["description", "example"]])
-                if sub_keys == ["type"] and items["type"] == "string":
-                    return cached_draw(self.session, st.lists(st.text(), min_size=min_items))
-                if (
-                    sub_keys == ["properties", "required", "type"]
-                    or sub_keys == ["properties", "type"]
-                    or sub_keys == ["properties"]
-                ):
-                    required = items.get("required", [])
-                    # A required name outside `properties` never appears in these drawn objects.
-                    if not isinstance(required, list) or all(name in items["properties"] for name in required):
-                        strategies = {key: self.build_strategy(sub) for key, sub in items["properties"].items()}
-                        if all(strategy is not None for strategy in strategies.values()):
-                            return cached_draw(
-                                self.session,
-                                st.lists(
-                                    st.fixed_dictionaries(cast("dict[str, st.SearchStrategy]", strategies)),
-                                    min_size=min_items,
-                                ),
-                            )
 
+    def _try_large_array(self, schema: JsonSchemaObject) -> Any:
+        min_items = schema.get("minItems")
+        if not (isinstance(min_items, int) and min_items > MAX_DRAWN_ARRAY_ITEMS and "array" in get_type(schema)):
+            return NOT_SET
+        items = schema.get("items", True)
+        max_items = schema.get("maxItems")
+        # Elements placed by position or demanded by `contains` are not interchangeable, and no length fits
+        # a ceiling under the floor.
+        if not (
+            (items is True or isinstance(items, dict))
+            and "contains" not in schema
+            and (not isinstance(max_items, int) or max_items >= min_items)
+        ):
+            return NOT_SET
+        if schema.get("uniqueItems"):
+            built = self._distinct_array(schema, min_items)
+        else:
+            built = self._tiled_array(schema, min_items)
+        # Each element satisfies `items`, but not what depends on its position, on the whole array, or on a
+        # combinator beside it; an array that misses those is drawn whole below instead.
+        if _is_strictly_valid(built, schema, self):
+            return built
+        return NOT_SET
+
+    def _try_shortcut(self, schema: JsonSchemaObject, keys: list[str]) -> Any:
+        value = self._try_type_only(schema, keys)
+        if value is NOT_SET:
+            value = self._try_plain_object(schema, keys)
+        if value is NOT_SET:
+            value = self._try_enum(schema)
+        if value is NOT_SET:
+            value = self._try_pattern(schema)
+        if value is NOT_SET:
+            value = self._try_large_object(schema)
+        if value is NOT_SET:
+            value = self._try_items_array(schema, keys)
+        return value
+
+    def _try_type_only(self, schema: JsonSchemaObject, keys: list[str]) -> Any:
+        if keys == ["type"]:
+            return cached_draw(self.session, get_strategy_for_type(schema["type"]))
+        if keys == ["format", "type"]:
+            if schema["type"] != "string":
+                return cached_draw(self.session, get_strategy_for_type(schema["type"]))
+            fmt = schema["format"]
+            if fmt in self.custom_formats:
+                return cached_draw(self.session, self.custom_formats[fmt])
+        return NOT_SET
+
+    def _try_plain_object(self, schema: JsonSchemaObject, keys: list[str]) -> Any:
+        if not (
+            "properties" in keys
+            and set(keys) <= {"properties", "required", "type", "minProperties"}
+            and schema.get("type", "object") == "object"
+        ):
+            return NOT_SET
+        obj = {}
+        properties = schema["properties"]
+        for key, sub_schema in properties.items():
+            if (
+                isinstance(sub_schema, dict)
+                and "const" in sub_schema
+                and _is_valid_with_formats(sub_schema["const"], sub_schema, self)
+            ):
+                obj[key] = sub_schema["const"]
+            else:
+                try:
+                    obj[key] = self.generate_from_schema(sub_schema)
+                except Unsatisfiable:
+                    pass
+        for key in schema.get("required", []):
+            if key not in properties:
+                obj[key] = self.generate_from_schema({})
+        if any(key not in obj for key in schema.get("required", [])):
+            raise Unsatisfiable
+        # Properties that cannot be generated leave the object short of `minProperties`;
+        # names the schema does not mention carry the rest.
+        names = ("x" * size for size in count())
+        while len(obj) < schema.get("minProperties", 0):
+            obj.setdefault(next(names), None)
+        return obj
+
+    def _try_enum(self, schema: JsonSchemaObject) -> Any:
+        if "enum" not in schema:
+            return NOT_SET
+        judge = _judge(schema, self)
+        enum_values = [v for v in schema["enum"] if judge is None or judge(v)]
+        if not enum_values:
+            raise Unsatisfiable
+        return cached_draw(self.session, st.sampled_from(enum_values))
+
+    def _try_pattern(self, schema: JsonSchemaObject) -> Any:
+        if not ("pattern" in schema and "string" in get_type(schema)):
+            return NOT_SET
+        pattern = schema["pattern"]
+        fmt = schema.get("format")
+        try:
+            re.compile(pattern)
+        except re.error:
+            raise Unsatisfiable from None
+        if self.location == ParameterLocation.PATH and pattern_requires_literal(pattern, "/{}"):
+            raise Unsatisfiable
+        min_length = schema.get("minLength")
+        max_length = schema.get("maxLength")
+        length_is_pinned = False
+        if min_length is not None or max_length is not None:
+            pattern_min, pattern_max = pattern_length_bounds(pattern)
+            if max_length is not None and max_length < pattern_min:
+                raise Unsatisfiable
+            if min_length is not None and pattern_max is not None and min_length > pattern_max:
+                raise Unsatisfiable
+            # A floor above the sizes the pattern emits on its own is where drawing and
+            # discarding never lands, so the length gets worked out rather than searched for.
+            doomed = min_length is not None and min_length > pattern_min
+            if doomed and pattern_length_is_unreachable(pattern, min_length, max_length):
+                raise Unsatisfiable
+            # A length-aware format generator can supply a boundary value without the rejection
+            # search that broad character classes need. Check one candidate against the original
+            # schema; a restrictive pattern still gets its own generator below.
+            lengths = format_lengths_for(self.custom_formats).get(fmt or "")
+            if lengths is not None and lengths.within is not None and fmt in STANDARD_FORMATS:
+                strategy = lengths.within(min_length or 0, max_length if max_length is not None else inf)
+                if strategy is not None:
+                    candidate = cached_draw(self.session, strategy)
+                    if _is_strictly_valid(candidate, schema, self):
+                        return candidate
+            updated = pattern
+            if self.update_pattern is not None:
+                updated = self.update_pattern(pattern, min_length, max_length)
+            if doomed and not _keeps_length_within(updated, min_length, max_length):
+                # The quantifier rewrite left the window open, so one length gets spelled into
+                # the pattern outright; shapes it cannot rewrite keep whatever it managed.
+                pinned = pin_pattern_length(pattern, min_length, max_length)
+                if pinned != pattern:
+                    updated = pinned
+                    length_is_pinned = True
+            pattern = updated
+        if min_length is not None and min_length > MAX_GENERATED_PATTERN_LENGTH:
+            return self._long_string_matching(schema, min_length)
+        validated = fmt if fmt in STANDARD_FORMATS else None
+        # Spelling the length into the pattern fixes the shape of every match, so a format the
+        # first match fails is one no redraw satisfies; checking once beats searching for it.
+        strategy = _pattern_strategy(
+            self.session, pattern, min_length, max_length, None if length_is_pinned else validated, self.alphabet
+        )
+        if strategy is None:
+            raise Unsatisfiable from None
+        try:
+            value = cached_draw(self.session, strategy)
+        except Unsatisfiable:
+            # Regex matches the format rejects starve the filter even where a conforming one
+            # exists; building from the format instead reaches it, so this is not the answer yet.
+            if validated is None or length_is_pinned:
+                raise
+            return NOT_SET
+        if length_is_pinned and validated is not None:
+            validator = _get_format_validator(self.session, validated, self.validator_cls)
+            if not validator.is_valid(value):
+                raise Unsatisfiable
+        return value
+
+    def _try_large_object(self, schema: JsonSchemaObject) -> Any:
+        min_properties = schema.get("minProperties")
+        if not (
+            isinstance(min_properties, int)
+            and min_properties > MAX_DRAWN_OBJECT_PROPERTIES
+            and "object" in get_type(schema)
+        ):
+            return NOT_SET
+        # Synthesized names only go where any name is admitted and takes the same value, and
+        # only where the ceiling leaves room for the floor.
+        max_properties = schema.get("maxProperties")
+        if not (
+            _extra_property_schema(schema) is not False
+            and "propertyNames" not in schema
+            and "patternProperties" not in schema
+            and (not isinstance(max_properties, int) or max_properties >= min_properties)
+        ):
+            return NOT_SET
+        filled = self._filled_object(schema, min_properties)
+        # Keywords about the whole object, like `if` / `then`, can still reject the synthesized names;
+        # such an object is drawn whole below instead.
+        if _is_strictly_valid(filled, schema, self):
+            return filled
+        return NOT_SET
+
+    def _try_items_array(self, schema: JsonSchemaObject, keys: list[str]) -> Any:
+        if not (
+            (keys == ["items", "type"] or keys == ["items", "minItems", "type"])
+            and isinstance(schema["items"], dict)
+            and "array" in get_type(schema)
+        ):
+            return NOT_SET
+        items = schema["items"]
+        min_items = schema.get("minItems", 0)
+        if "enum" in items:
+            judge = _judge(items, self)
+            enum_values = [v for v in items["enum"] if judge is None or judge(v)]
+            if not enum_values:
+                # Nothing matches, so only an empty array can conform.
+                if min_items:
+                    raise Unsatisfiable
+                return []
+            return cached_draw(self.session, st.lists(st.sampled_from(enum_values), min_size=min_items))
+        # Recurse so `items`-level `example`/`examples`/`default` reach generation.
+        if any(k in items for k in ("example", "examples", "default")):
+            size = max(min_items, 1)
+            return [self.generate_from_schema(items) for _ in range(size)]
+        sub_keys = sorted([k for k in items if not k.startswith("x-") and k not in ["description", "example"]])
+        if sub_keys == ["type"] and items["type"] == "string":
+            return cached_draw(self.session, st.lists(st.text(), min_size=min_items))
+        if not (
+            sub_keys == ["properties", "required", "type"]
+            or sub_keys == ["properties", "type"]
+            or sub_keys == ["properties"]
+        ):
+            return NOT_SET
+        required = items.get("required", [])
+        # A required name outside `properties` never appears in these drawn objects.
+        if isinstance(required, list) and not all(name in items["properties"] for name in required):
+            return NOT_SET
+        strategies = {key: self.build_strategy(sub) for key, sub in items["properties"].items()}
+        if not all(strategy is not None for strategy in strategies.values()):
+            return NOT_SET
+        return cached_draw(
+            self.session,
+            st.lists(st.fixed_dictionaries(cast("dict[str, st.SearchStrategy]", strategies)), min_size=min_items),
+        )
+
+    def _generate_whole(self, schema: JsonSchemaObject, keys: list[str]) -> Any:
         if keys == ["allOf"]:
             references = [item["$ref"] for item in schema["allOf"] if isinstance(item, dict) and "$ref" in item]
             if any(self.is_exhausted(reference, counters=self.generating) for reference in references):
@@ -1045,7 +1245,40 @@ class CoverageContext:
                         stack.enter_context(self.expand(reference, counters=self.generating))
                     return self.generate_from_schema(merged)
             schema = inlined
+        pinned = self._with_spec_values_pinned(schema)
+        if pinned is not schema:
+            try:
+                return self.generate_from(self._strategy_for(pinned))
+            except Unsatisfiable:
+                # Pinned values can clash with keywords about the whole value, like `uniqueItems`.
+                pass
+        return self.generate_from(self._strategy_for(schema))
 
+    def _with_spec_values_pinned(self, schema: JsonSchemaObject) -> JsonSchemaObject:
+        """`schema` with each property and `items` schema below it narrowed to its declared example when one fits."""
+        updated = schema
+        properties = schema.get("properties")
+        if isinstance(properties, dict):
+            pinned = {name: self._pinned_to_spec_value(sub) for name, sub in properties.items()}
+            if any(pinned[name] is not sub for name, sub in properties.items()):
+                updated = {**updated, "properties": pinned}
+        items = schema.get("items")
+        if isinstance(items, dict):
+            pinned_items = self._pinned_to_spec_value(items)
+            if pinned_items is not items:
+                updated = {**updated, "items": pinned_items}
+        return updated
+
+    def _pinned_to_spec_value(self, schema: JsonSchema) -> JsonSchema:
+        if not isinstance(schema, dict):
+            return schema
+        value = self._try_spec_value(schema)
+        # Binary values cannot be drawn from, so such a schema keeps generating its own.
+        if value is NOT_SET or contains_binary(value):
+            return self._with_spec_values_pinned(schema)
+        return {"enum": [value]}
+
+    def _strategy_for(self, schema: JsonSchema) -> st.SearchStrategy:
         if isinstance(schema, dict) and "examples" in schema:
             # Examples may contain binary data, which canonicalization rejects
             schema = {key: value for key, value in schema.items() if key != "examples"}
@@ -1066,12 +1299,12 @@ class CoverageContext:
         # This avoids producing positive values that the validator for the same schema would reject.
         if (
             isinstance(schema, dict)
-            and (fmt := schema.get("format")) in VALIDATED_FORMATS
+            and (fmt := schema.get("format")) in STANDARD_FORMATS
             and fmt in self.custom_formats
         ):
             validator = _get_format_validator(self.session, fmt, self.validator_cls)
             strategy = strategy.filter(lambda v: not isinstance(v, str) or validator.is_valid(v))
-        return self.generate_from(strategy)
+        return strategy
 
 
 def _update_schema_pattern(
@@ -1095,11 +1328,7 @@ def _update_schema_pattern(
             apply_rewritten_pattern(schema, new_pattern, min_length, max_length)
 
 
-def _apply_pattern_optimizations(
-    obj: object, update_pattern: Callable[[str, int | None, int | None], str] | None
-) -> None:
-    if update_pattern is None:
-        return
+def _apply_pattern_optimizations(obj: object, update_pattern: Callable[[str, int | None, int | None], str]) -> None:
     if isinstance(obj, dict):
         _update_schema_pattern(obj, update_pattern)
         for value in obj.values():
@@ -1154,6 +1383,8 @@ def _convert_bytes_for_hashing(value: Any) -> Any:
     """Convert bytes/non-string keys to a hashable string representation for JSON encoding."""
     if isinstance(value, bytes):
         return f"__bytes__:{value.hex()}"
+    if isinstance(value, Binary):
+        return f"__binary__:{value.data.hex()}"
     if isinstance(value, dict):
         return {(k if isinstance(k, str) else str(k)): _convert_bytes_for_hashing(v) for k, v in value.items()}
     if isinstance(value, list):
@@ -1186,6 +1417,7 @@ def _to_hashable_key(value: T, _encode: Callable = _encode) -> tuple[type, str |
         # an intermediate Python-side deep-copy. Bytes inside the value reject the
         # native call; fall back to the bytes-aware path.
         try:
+            # `type(...) is` checks do not narrow a TypeVar.
             return type(value), _digest(jsonschema_rs.canonical.json.to_string(value))
         except (TypeError, ValueError):
             pass
@@ -1193,6 +1425,91 @@ def _to_hashable_key(value: T, _encode: Callable = _encode) -> tuple[type, str |
         serialized = _encode(converted)
         return type(value), _digest(serialized)
     return type(value), value
+
+
+def _canonical_json(value: object) -> str | None:
+    try:
+        return jsonschema_rs.canonical.json.to_string(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _key_from_canonical(value: object, canonical: str | None) -> tuple:
+    """The `_to_hashable_key` of `value`, reusing its already known canonical JSON."""
+    if canonical is not None and (type(value) is dict or type(value) is list):
+        return type(value), _digest(canonical)
+    return _to_hashable_key(value)
+
+
+def _serialized_entries(value: dict) -> list[tuple[str, str]] | None:
+    """The `"key":value` spellings of a string-keyed object, in canonical JSON order."""
+    if not all(type(key) is str for key in value):
+        return None
+    try:
+        # Canonical JSON orders keys by code point, which is how Python sorts strings.
+        return [
+            (key, f"{jsonschema_rs.canonical.json.to_string(key)}:{jsonschema_rs.canonical.json.to_string(item)}")
+            for key, item in sorted(value.items())
+        ]
+    except (TypeError, ValueError):
+        return None
+
+
+class _ObjectSpelling:
+    """Canonical JSON of a template object with one entry replaced, built from pre-serialized entries."""
+
+    __slots__ = ("_template", "_entries", "_serialized", "_name", "_frame")
+
+    def __init__(self, template: dict) -> None:
+        self._template = template
+        self._entries: list[tuple[str, str]] | None = None
+        self._serialized = False
+        # The spelling before and after the value of the entry named last; callers vary one entry at a time.
+        self._name: str | None = None
+        self._frame = ("", "")
+
+    def with_entry(self, name: str, canonical: str | None) -> str | None:
+        if canonical is None or type(name) is not str:
+            return None
+        if name != self._name:
+            if not self._serialized:
+                self._serialized = True
+                self._entries = _serialized_entries(self._template)
+            if self._entries is None:
+                return None
+            before = ",".join(entry for key, entry in self._entries if key < name)
+            after = ",".join(entry for key, entry in self._entries if key > name)
+            head = f"{{{before}{',' if before else ''}{jsonschema_rs.canonical.json.to_string(name)}:"
+            self._name = name
+            self._frame = (head, f"{',' if after else ''}{after}}}")
+        head, tail = self._frame
+        return f"{head}{canonical}{tail}"
+
+
+def _to_hashable_key_with_json_parts(
+    value: dict[str, Any], known: dict[str, str] | None = None
+) -> tuple[tuple, dict[str, int]]:
+    """Key `value`, taking the canonical JSON of the entries in `known` as given."""
+    serialized_parts: dict[str, str] = {}
+    try:
+        for name, item in value.items():
+            if known is not None and name in known:
+                serialized_parts[name] = known[name]
+            else:
+                serialized_parts[name] = jsonschema_rs.canonical.json.to_string(item)
+    except (TypeError, ValueError):
+        return _to_hashable_key(value), {}
+    serialized = (
+        "{"
+        + ",".join(f"{jsonschema_rs.canonical.json.to_string(name)}:{serialized_parts[name]}" for name in sorted(value))
+        + "}"
+    )
+    hashes = {
+        name: hash((type(value[name]), item))
+        for name, item in serialized_parts.items()
+        if type(value[name]) is dict or type(value[name]) is list
+    }
+    return (dict, _digest(serialized)), hashes
 
 
 class HashSet:
@@ -1209,8 +1526,15 @@ class HashSet:
     def __contains__(self, value: Any) -> bool:
         return _to_hashable_key(value) in self._data
 
-    def insert(self, value: Any) -> bool:
-        key = _to_hashable_key(value)
+    def insert(self, value: Any, *, key: tuple | None = None) -> bool:
+        return self._insert_key(_to_hashable_key(value) if key is None else key)
+
+    def insert_unless_in(self, other: HashSet, value: Any, *, key: tuple | None = None) -> bool:
+        """Insert the value unless `other` already holds it; the key is built once for both sets."""
+        key = _to_hashable_key(value) if key is None else key
+        return key not in other._data and self._insert_key(key)
+
+    def _insert_key(self, key: tuple) -> bool:
         before = len(self._data)
         self._data.add(key)
         return len(self._data) > before
@@ -1296,22 +1620,6 @@ def _without_conditionals(schema: JsonSchemaObject) -> JsonSchemaObject | None:
     return {"anyOf": branches}
 
 
-# Keywords that describe rather than constrain; a second, different one changes nothing.
-_ANNOTATION_KEYWORDS = frozenset(
-    {
-        "$comment",
-        "default",
-        "deprecated",
-        "description",
-        "discriminator",
-        "example",
-        "examples",
-        "readOnly",
-        "title",
-        "writeOnly",
-        "xml",
-    }
-)
 # Keywords holding one subschema; two of them on a node both apply to the same values.
 # `contains` is not one of them: two of them each want their own matching item, not one item
 # matching both, so folding them into a single subschema over-constrains the array.
@@ -1360,9 +1668,16 @@ def _merge_all_of(schema: JsonSchemaObject, *, judge_inherited_names: bool = Fal
     if _requires_an_impossible_name(merged):
         # Requiring a name whose merged schema admits nothing leaves no object to satisfy the fold.
         return {"not": {}}
-    if "$ref" in merged and any(key != "$ref" and key not in _ANNOTATION_KEYWORDS for key in merged):
+    if "$ref" in merged and any(key != "$ref" and key not in ANNOTATION_KEYWORDS for key in merged):
         # A reference that stays unresolved overrides everything folded in beside it, so those
         # constraints would silently vanish from the value.
+        return None
+    if any(
+        branch.get("additionalProperties", True) is not True
+        and any(other is not branch and other.get("patternProperties") for other in folded_branches)
+        for branch in folded_branches
+    ):
+        # A branch judging the names it does not match would stop judging the ones another branch's patterns match.
         return None
     merged_names = set(merged.get("properties", {}))
     for branch in folded_branches:
@@ -1444,7 +1759,7 @@ def _merge_keyword(merged: dict[str, Any], key: str, value: Any) -> bool:
         merged[key] = properties
     elif key in _CHILD_SLOTS and isinstance(current, dict) and isinstance(value, dict):
         merged[key] = {"allOf": [current, value]}
-    elif current != value and key not in _ANNOTATION_KEYWORDS:
+    elif current != value and key not in ANNOTATION_KEYWORDS:
         # Two constraints on the same keyword, e.g. a pair of formats. Both hold, and folding
         # would keep only one of them.
         return False
@@ -1499,21 +1814,24 @@ def _intersect_types(current: Any, value: Any) -> Any:
     return shared[0] if len(shared) == 1 else shared
 
 
-def _with_effective_required(schema: JsonSchemaObject) -> JsonSchemaObject:
-    existing_required: list[str] = schema.get("required", [])
-    properties = schema.get("properties", {})
-    if not properties:
-        return schema
-    for key in ("anyOf", "oneOf"):
-        sub_schemas = schema.get(key)
-        if sub_schemas:
-            for sub_schema in sub_schemas:
-                if isinstance(sub_schema, dict) and "required" in sub_schema:
-                    extra = [f for f in sub_schema["required"] if f not in existing_required and f in properties]
-                    if extra:
-                        return {**schema, "required": list(existing_required) + extra}
-                    break
-    return schema
+def _merge_ref_siblings(ctx: CoverageContext, resolved: JsonSchemaObject, schema: JsonSchemaObject) -> JsonSchema:
+    """The `$ref` target combined with the keywords written beside the reference."""
+    rest = {key: value for key, value in schema.items() if key != "$ref"}
+    if ctx.validator_cls is not jsonschema_rs.Draft4Validator and any(key not in ANNOTATION_KEYWORDS for key in rest):
+        # Later drafts apply keywords beside `$ref` together with the target, so a looser sibling
+        # must not replace the target's bound.
+        both = {"allOf": [resolved, rest]}
+        return _merge_all_of(both) or both
+    # Deep-merge so sibling `properties`/`required` extend the resolved schema; discriminator pinning yields this shape.
+    merged = {**resolved}
+    for key, value in rest.items():
+        if key == "properties" and isinstance(value, dict) and isinstance(merged.get("properties"), dict):
+            merged["properties"] = {**merged["properties"], **value}
+        elif key == "required" and isinstance(value, list) and isinstance(merged.get("required"), list):
+            merged["required"] = list(dict.fromkeys(merged["required"] + value))
+        else:
+            merged[key] = value
+    return merged
 
 
 def _resolve_sub_schema(ctx: CoverageContext, sub: JsonSchema) -> JsonSchema:
@@ -1524,20 +1842,7 @@ def _resolve_sub_schema(ctx: CoverageContext, sub: JsonSchema) -> JsonSchema:
         resolved = ctx.resolve_ref(sub["$ref"])
         if not isinstance(resolved, dict):
             return resolved
-        # Deep-merge so sibling `properties`/`required` augment the resolved schema
-        # rather than wiping it; the discriminator-pinning rewrite produces exactly
-        # this shape (sibling pins the discriminator key, resolved carries the rest).
-        merged = {**resolved}
-        for key, value in sub.items():
-            if key == "$ref":
-                continue
-            if key == "properties" and isinstance(value, dict) and isinstance(merged.get("properties"), dict):
-                merged["properties"] = {**merged["properties"], **value}
-            elif key == "required" and isinstance(value, list) and isinstance(merged.get("required"), list):
-                merged["required"] = list(dict.fromkeys(merged["required"] + value))
-            else:
-                merged[key] = value
-        return merged
+        return _merge_ref_siblings(ctx, resolved, sub)
     except RefResolutionError:
         # Schemas are bundled, so this should not happen in practice
         return sub
@@ -1548,7 +1853,7 @@ def _branch_as_judged(ctx: CoverageContext, branch: JsonSchema) -> JsonSchema:
     if (
         isinstance(branch, dict)
         and "$ref" in branch
-        and any(key not in ("$ref", "properties", "required") and key not in _ANNOTATION_KEYWORDS for key in branch)
+        and any(key not in ("$ref", "properties", "required") and key not in ANNOTATION_KEYWORDS for key in branch)
     ):
         # The discriminator pin models server behavior and counts under every draft; any other keyword
         # beside `$ref` counts only under drafts that read it, so each judge gets the branch as written.
@@ -1565,9 +1870,7 @@ def _has_array_sibling(sub_schemas: list) -> bool:
     return False
 
 
-def _generate_oversized_string(
-    ctx: CoverageContext, original_schema: JsonSchemaObject, new_schema: dict[str, Any], target_length: int
-) -> str | None:
+def _generate_oversized_string(ctx: CoverageContext, new_schema: dict[str, Any], target_length: int) -> str | None:
     pattern = new_schema.get("pattern")
     if not isinstance(pattern, str):
         try:
@@ -1575,9 +1878,7 @@ def _generate_oversized_string(
         except (InvalidArgument, Unsatisfiable):
             # Format constrains the length (e.g. uuid is fixed at 36); synthesize a plain
             # string that violates maxLength regardless.
-            if target_length < MAX_STRING_LENGTH:
-                return "a" * target_length
-            return None
+            return "a" * target_length
     try:
         if target_length - 1 > NEGATIVE_MODE_MAX_LENGTH_WITH_PATTERN:
             # Pattern combined with a large length is too slow; drop it.
@@ -1612,6 +1913,16 @@ def _generate_template_with_deflation_fallback(
             "required": [k for k in original_required if properties.get(k) != {"not": {}}],
         }
         return ctx.generate_from_schema(deflated)
+
+
+def _honors_contains(schema: JsonSchemaObject) -> bool:
+    """Whether `contains` and its bounds are well-formed; Draft 4 never checks them and ignores them, as fuzzing does."""
+    if "contains" not in schema:
+        return False
+    contains: JsonSchemaObject = {
+        key: schema[key] for key in ("contains", "minContains", "maxContains") if key in schema
+    }
+    return jsonschema_rs.meta.is_valid(contains)
 
 
 def _ensure_contains_bounds(ctx: CoverageContext, value: list, schema: JsonSchemaObject) -> list:
@@ -1805,7 +2116,7 @@ def _fold_pattern_properties_into_declared(schema: JsonSchemaObject) -> JsonSche
 
 
 def _cover_positive_for_type(
-    ctx: CoverageContext, schema: JsonSchemaObject, ty: str | None, seen: HashSet | None = None
+    ctx: CoverageContext, schema: JsonSchemaObject, ty: str | None
 ) -> Generator[GeneratedValue, None, None]:
     # In negative-only mode this function never yields values.
     # Avoid expensive template generation in that case.
@@ -1827,31 +2138,30 @@ def _cover_positive_for_type(
     else:
         # Another type's values need no container template, and one that cannot be built must not take them along.
         template = None
-    if GenerationMode.POSITIVE in ctx.generation_modes:
-        ctx = ctx.with_positive()
-        enum = schema.get("enum", NOT_SET)
-        const = schema.get("const", NOT_SET)
-        if enum is not NOT_SET:
-            for value in enum:
-                if _is_valid_with_formats(value, schema, ctx) and _is_representable(value, ctx, declared=True):
-                    yield PositiveValue(value, scenario=CoverageScenario.ENUM_VALUE, description="Enum value")
-        elif const is not NOT_SET:
-            if _is_valid_with_formats(const, schema, ctx) and _is_representable(const, ctx, declared=True):
-                yield PositiveValue(const, scenario=CoverageScenario.CONST_VALUE, description="Const value")
-        elif ty is not None or _implies_object_type(schema) or _implies_array_type(schema):
-            yield from _positive_for_describing_keywords(ctx, schema, ty, template)
-        if "not" in schema and isinstance(schema["not"], dict | bool):
-            # For 'not' schemas: generate negative cases of inner schema (violations)
-            # These violations are positive for the outer schema, so flip the mode.
-            # The inner-violation alone doesn't guarantee the value satisfies the outer's
-            # other constraints (type, properties, etc.); validate before yielding.
-            nctx = ctx.with_negative()
-            for flipped in _flip_generation_mode_for_not(cover_schema_iter(nctx, schema["not"], seen)):
-                if flipped.generation_mode == GenerationMode.POSITIVE and not _is_valid_with_formats(
-                    flipped.value, schema, ctx
-                ):
-                    continue
-                yield flipped
+    ctx = ctx.with_positive()
+    enum = schema.get("enum", NOT_SET)
+    const = schema.get("const", NOT_SET)
+    if enum is not NOT_SET:
+        judge = _judge(schema, ctx)
+        for value in enum:
+            if (judge is None or judge(value)) and _is_representable(value, ctx, declared=True):
+                yield PositiveValue(value, scenario=CoverageScenario.ENUM_VALUE, description="Enum value")
+    elif const is not NOT_SET:
+        if _is_valid_with_formats(const, schema, ctx) and _is_representable(const, ctx, declared=True):
+            yield PositiveValue(const, scenario=CoverageScenario.CONST_VALUE, description="Const value")
+    elif ty is not None or _implies_object_type(schema) or _implies_array_type(schema):
+        yield from _positive_for_describing_keywords(ctx, schema, ty, template)
+    if "not" in schema and isinstance(schema["not"], (dict, bool)):
+        # Values invalid for the inner schema are valid for the outer one only if they also satisfy
+        # its other constraints (type, properties, etc.).
+        nctx = ctx.with_negative()
+        for generated in cover_schema_iter(nctx, schema["not"]):
+            if _is_valid_with_formats(generated.value, schema, ctx):
+                yield PositiveValue(
+                    generated.value,
+                    scenario=CoverageScenario.DEFAULT_POSITIVE_TEST,
+                    description="Value not matching the 'not' schema",
+                )
 
 
 def _inline_allof_refs(
@@ -1897,17 +2207,14 @@ def _inline_allof_refs(
 
 
 @contextmanager
-def _ignore_unfixable(
-    *,
-    ref_error: type[Exception] = RefResolutionError,
-) -> Generator:
+def _ignore_unfixable() -> Generator:
     try:
         yield
     except GeneratorExit:
         # Interpreter shutdown clears module globals before closing suspended generators, so the
         # clauses below can no longer be evaluated.
         raise
-    except (Unsatisfiable, ref_error, jsonschema_rs.ValidationError):
+    except (Unsatisfiable, RefResolutionError, jsonschema_rs.ValidationError):
         pass
     except InvalidArgument as exc:
         message = str(exc)
@@ -1969,9 +2276,17 @@ def _negative_format_for_declared_types(
         yield from _negative_format(ctx, schema, value)
 
 
+def _admits_number(schema: dict) -> bool:
+    types = get_type(schema)
+    return "number" in types or "integer" in types
+
+
 def _negative_maximum(
     ctx: CoverageContext, schema: dict, value: Any, seen: HashSet
 ) -> Generator[GeneratedValue, None, None]:
+    # Numeric bounds constrain nothing when the schema admits no number.
+    if not _admits_number(schema):
+        return
     # A bound the schema declares beyond the width of its integer format is still the bound to step past.
     value = schema.get(DECLARED_MAXIMUM_KEY, value)
     # Legacy draft-4 `exclusiveMaximum: true` makes `maximum` itself the excluded boundary.
@@ -1988,6 +2303,8 @@ def _negative_maximum(
 def _negative_minimum(
     ctx: CoverageContext, schema: dict, value: Any, seen: HashSet
 ) -> Generator[GeneratedValue, None, None]:
+    if not _admits_number(schema):
+        return
     # A bound the schema declares beyond the width of its integer format is still the bound to step past.
     value = schema.get(DECLARED_MINIMUM_KEY, value)
     # Legacy draft-4 `exclusiveMinimum: true` makes `minimum` itself the excluded boundary.
@@ -2004,7 +2321,7 @@ def _negative_minimum(
 def _negative_exclusive_maximum(
     ctx: CoverageContext, schema: dict, value: Any, seen: HashSet
 ) -> Generator[GeneratedValue, None, None]:
-    if isinstance(value, bool):
+    if isinstance(value, bool) or not _admits_number(schema):
         return
     yield NegativeValue(
         value,
@@ -2019,7 +2336,7 @@ def _negative_exclusive_minimum(
 ) -> Generator[GeneratedValue, None, None]:
     if not seen.insert(value):
         return
-    if isinstance(value, bool):
+    if isinstance(value, bool) or not _admits_number(schema):
         return
     yield NegativeValue(
         value,
@@ -2100,7 +2417,7 @@ def _negative_max_length(
             new_schema.pop("enum", None)
             new_schema.pop("const", None)
             new_schema["type"] = "string"
-            new_value = _generate_oversized_string(ctx, schema, new_schema, target_length)
+            new_value = _generate_oversized_string(ctx, new_schema, target_length)
         if new_value is not None and seen.insert(new_value):
             yield NegativeValue(
                 new_value,
@@ -2161,8 +2478,18 @@ def _negative_max_items(
         # Force the array to have one more item than allowed
         new_schema = {**schema, "minItems": value + 1, "maxItems": value + 1, "type": "array"}
         oversized: list | None = None
+        items = schema.get("items", True)
         try:
-            oversized = ctx.generate_from_schema(new_schema)
+            if (
+                (items is True or isinstance(items, dict))
+                and not schema.get("uniqueItems")
+                and "contains" not in schema
+                and "prefixItems" not in schema
+            ):
+                # One valid item repeated breaks `maxItems` alone; drawing each item is a search per item.
+                oversized = ctx._tiled_array(schema, value + 1)
+            else:
+                oversized = ctx.generate_from_schema(new_schema)
         except (InvalidArgument, Unsatisfiable):
             # `uniqueItems: true` over a finite items domain (e.g. enum) makes a
             # length-(max+1) unique array unsatisfiable; drop uniqueness so the
@@ -2265,22 +2592,41 @@ def _negative_all_of(
                 yield from cover_schema_iter(nctx, folded, seen)
 
 
+def _branches_to_negate(branches: list[JsonSchema]) -> list[tuple[int, JsonSchema]]:
+    # A `false` branch matches nothing, so beside other branches it adds no negatives of its own: everything
+    # it rejects is negated through them, where wire rules (e.g. any query value is a string) still apply.
+    if all(branch is False for branch in branches):
+        return list(enumerate(branches))
+    return [(idx, branch) for idx, branch in enumerate(branches) if branch is not False]
+
+
 def _negative_any_of(
     ctx: CoverageContext, schema: dict, value: Any, seen: HashSet
 ) -> Generator[GeneratedValue, None, None]:
     nctx = ctx.with_negative()
     resolved_schemas = [ctx.resolve_ref(s["$ref"]) if isinstance(s, dict) and "$ref" in s else s for s in value]
-    validators = _make_branch_validators(resolved_schemas, ctx)
+    validators = _make_branch_validators(value, ctx)
     # Body fields in multipart/form-urlencoded are serialized as strings via str().
     # Query/path/header parameters are also stringified, but servers parse them
     # back to their declared type before validation, so str() doesn't make them
     # valid for explicitly string-typed branches in that case.
     stringify_body_fields = ctx.wire.form_body()
-    for idx, sub_schema in enumerate(value):
+    types = parameter_types(schema)
+
+    def is_valid(instance: Any) -> bool:
+        return any(branch.is_valid(instance) for judge in validators for branch in judge)
+
+    for idx, sub_schema in _branches_to_negate(value):
         with nctx.at(idx):
             for generated in cover_schema_iter(nctx, sub_schema, seen):
                 # Negative value for this schema could be a positive value for another one
-                if is_valid_for_others(generated.value, idx, validators, resolved_schemas, stringify_body_fields):
+                if not contains_binary(generated.value) and any(
+                    is_valid_for_others(generated.value, idx, judge, resolved_schemas, stringify_body_fields)
+                    for judge in validators
+                ):
+                    continue
+                # A parameter value is judged as the server reads its text, e.g. `null` as null or `0.5` as a string.
+                if any(sent_text_is_valid(text, is_valid, types) for text in ctx.wire.sent_texts(generated.value)):
                     continue
                 yield generated
 
@@ -2292,25 +2638,46 @@ def _negative_one_of(
     # Branches as written: the validator resolves `$ref` itself, so keywords beside it
     # count exactly as the operation's draft reads them.
     validators = _make_branch_validators(value, ctx)
-    for idx, sub_schema in enumerate(value):
+    for idx, sub_schema in _branches_to_negate(value):
         with nctx.at(idx):
             for generated in cover_schema_iter(nctx, sub_schema, seen):
-                if is_invalid_for_oneOf(generated.value, idx, validators):
+                # Binary values cannot be validated by jsonschema_rs; treat as not matching any other sub-schema
+                if contains_binary(generated.value) or all(
+                    is_invalid_for_oneOf(generated.value, idx, judge) for judge in validators
+                ):
                     yield generated
 
 
 def _negative_not(
     ctx: CoverageContext, schema: dict, value: Any, seen: HashSet
 ) -> Generator[GeneratedValue, None, None]:
-    if not isinstance(value, dict | bool):
+    if not isinstance(value, (dict, bool)):
         return
-    # For 'not' schemas: generate positive cases of inner schema (valid values)
-    # These valid values are negative for the outer schema, so flip the mode
+    # Values valid for the inner schema are invalid for the outer one, and are reported by the `not` they violate.
     pctx = ctx.with_positive()
     # Nothing satisfies the schema around a `not` that admits everything, so what a value is
     # says nothing about why it is rejected.
-    description = "Value is not allowed" if value == {} or value is True else None
-    yield from _flip_generation_mode_for_not(cover_schema_iter(pctx, value, seen), description=description)
+    description = "Value is not allowed" if value == {} or value is True else "Value matches the 'not' schema"
+    for generated in cover_schema_iter(pctx, value, seen):
+        yield NegativeValue(
+            generated.value,
+            scenario=CoverageScenario.MATCHES_NOT_SCHEMA,
+            description=description,
+            location=ctx.current_path,
+        )
+
+
+_ALL_TYPES = ("null", "boolean", "string", "number", "array", "object")
+
+
+def _admits_every_type(schema: JsonSchemaObject) -> bool:
+    # For JSON values, a keyword constrains only its own type; without `type`, every other type passes untouched.
+    return (
+        "type" not in schema
+        and not any(key in schema for key in _SINGLE_PASS_KEYWORDS)
+        and not _implies_object_type(schema)
+        and not _implies_array_type(schema)
+    )
 
 
 def cover_schema_iter(
@@ -2328,19 +2695,7 @@ def cover_schema_iter(
         try:
             resolved = ctx.resolve_ref(reference)
             if isinstance(resolved, dict):
-                merged = {**resolved}
-                for k, v in schema.items():
-                    if k == "$ref":
-                        continue
-                    if k == "properties" and isinstance(v, dict) and isinstance(merged.get("properties"), dict):
-                        # Deep-merge: resolved's properties take lower priority than sibling properties,
-                        # but both must be present so that 'required' fields from the resolved schema
-                        # are included in the merged properties dict.
-                        merged["properties"] = {**merged["properties"], **v}
-                    elif k == "required" and isinstance(v, list) and isinstance(merged.get("required"), list):
-                        merged["required"] = list(dict.fromkeys(merged["required"] + v))
-                    else:
-                        merged[k] = v
+                merged = _merge_ref_siblings(ctx, resolved, schema)
                 # Draft 4 silently drops `$ref` siblings; the merged form is what generation
                 # walks but the body validator only honors the bare ref target. Build a view
                 # validator from the un-merged schema and skip negative values it accepts.
@@ -2349,7 +2704,11 @@ def cover_schema_iter(
                     bundle = ctx.root_schema.get(BUNDLE_STORAGE_KEY) if isinstance(ctx.root_schema, dict) else None
                     check_schema = schema if bundle is None else {**schema, BUNDLE_STORAGE_KEY: bundle}
                     try:
-                        unmerged_validator = ctx.validator_cls(check_schema, pattern_options=FANCY_REGEX_OPTIONS)
+                        unmerged_validator = ctx.validator_cls(
+                            check_schema,
+                            validate_formats=True,
+                            pattern_options=FANCY_REGEX_OPTIONS,
+                        )
                     except Exception:
                         pass
                 with ctx.expand(reference):
@@ -2375,37 +2734,43 @@ def cover_schema_iter(
             return
 
     if schema is True:
-        types = ["null", "boolean", "string", "number", "array", "object"]
+        types = list(_ALL_TYPES)
         schema = {}
     elif schema is False:
         types = []
         schema = {"not": {}}
-    elif not any(k in ALL_KEYWORDS for k in schema):
-        types = ["null", "boolean", "string", "number", "array", "object"]
+    elif not any(k in ALL_KEYWORDS for k in schema) or (
+        GenerationMode.POSITIVE in ctx.generation_modes
+        and ctx.location == ParameterLocation.BODY
+        and not ctx.wire.form_body()
+        and not ctx.wire.xml_body()
+        and _admits_every_type(schema)
+    ):
+        types = list(_ALL_TYPES)
     else:
         types = schema.get("type", [])
-    push_examples_to_properties(schema)
+    schema = push_examples_to_properties(schema)
     if not isinstance(types, list):
         types = [types]  # type: ignore[unreachable]
     leaves = _fold(schema, ctx) if GenerationMode.POSITIVE in ctx.generation_modes else None
     if leaves is not None:
         allow_negative_fallback = GenerationMode.NEGATIVE in ctx.generation_modes
         with _ignore_unfixable():
-            yield from _filter_against_not(
+            yield from _filter_against_conditionals(
                 _positive_for_leaves(ctx.with_positive(), schema, leaves, allow_negative_fallback), schema, ctx
             )
     elif not types:
         with _ignore_unfixable():
-            yield from _filter_against_not(_cover_positive_for_type(ctx, schema, None), schema, ctx)
+            yield from _filter_against_conditionals(_cover_positive_for_type(ctx, schema, None), schema, ctx)
     for ty in types if leaves is None else []:
         with _ignore_unfixable():
-            yield from _filter_against_not(_cover_positive_for_type(ctx, schema, ty), schema, ctx)
+            yield from _filter_against_conditionals(_cover_positive_for_type(ctx, schema, ty), schema, ctx)
     if GenerationMode.NEGATIVE in ctx.generation_modes:
         template = None
+        baseline_emitted = False
         if not ctx.wire.can_be_negated(schema):
             return
-        # Snapshot: walking a keyword can push examples down into a schema shared with this one,
-        # and a key landing here mid-walk is not one this pass was meant to cover anyway.
+        # Snapshot: a key landing here mid-walk is not one this pass was meant to cover.
         for key, value in list(schema.items()):
             with _ignore_unfixable(), ctx.at(key):
                 if _negation_ignored_by_dialect(ctx, key):
@@ -2416,13 +2781,16 @@ def cover_schema_iter(
                     if key == "items" and types and "array" not in types and _implies_array_type(schema):
                         yield from _negative_array_for_conflicting_type(ctx, schema)
                 elif key == "properties":
-                    template = yield from _ensure_object_template_with_baseline(ctx, schema, template)
+                    template = yield from _ensure_object_template_with_baseline(ctx, schema, template, baseline_emitted)
+                    baseline_emitted = True
                     yield from _negative_properties(ctx, template, value)
                 elif key == "patternProperties":
-                    template = yield from _ensure_object_template_with_baseline(ctx, schema, template)
+                    template = yield from _ensure_object_template_with_baseline(ctx, schema, template, baseline_emitted)
+                    baseline_emitted = True
                     yield from _negative_pattern_properties(ctx, template, value)
                 elif key == "propertyNames" and isinstance(value, dict):
-                    template = yield from _ensure_object_template_with_baseline(ctx, schema, template)
+                    template = yield from _ensure_object_template_with_baseline(ctx, schema, template, baseline_emitted)
+                    baseline_emitted = True
                     if isinstance(template, dict):
                         yield from _negative_property_names(ctx, template, value)
                 elif key == "required":
@@ -2433,12 +2801,7 @@ def cover_schema_iter(
                 elif key == "additionalProperties" and schema.get("type") in ["object", None]:
                     if value is False and "pattern" not in schema:
                         # additionalProperties: false - add unexpected property
-                        if not ctx.allow_extra_parameters and ctx.location in (
-                            ParameterLocation.QUERY,
-                            ParameterLocation.HEADER,
-                            ParameterLocation.COOKIE,
-                            ParameterLocation.BODY,
-                        ):
+                        if not ctx.allow_extra_parameters and ctx.location in EXTRA_PROPERTY_LOCATIONS:
                             continue
                         template = template or _generate_template_with_deflation_fallback(
                             ctx, schema, _get_template_schema(schema, "object", ctx)
@@ -2508,11 +2871,9 @@ def is_valid_for_others(
     value: Any,
     idx: int,
     validators: list[jsonschema_rs.Validator],
-    schemas: list[dict | bool] | None = None,
-    will_be_serialized_to_string: bool = False,
+    schemas: list[dict | bool] | None,
+    will_be_serialized_to_string: bool,
 ) -> bool:
-    if contains_binary(value):
-        return False
     for vidx, validator in enumerate(validators):
         if idx == vidx:
             # This one is being negated
@@ -2536,9 +2897,6 @@ def is_valid_for_others(
 
 
 def is_invalid_for_oneOf(value: object, idx: int, validators: list[jsonschema_rs.Validator]) -> bool:
-    if contains_binary(value):
-        # Binary values cannot be validated by jsonschema_rs; treat as not matching any other sub-schema
-        return True
     valid_count = 0
     for vidx, validator in enumerate(validators):
         if idx == vidx:
@@ -2558,7 +2916,7 @@ def _positive_for_describing_keywords(
 ) -> Generator[GeneratedValue, None, None]:
     """Positive values built from the describing keywords alone (type, bounds, `items`, `properties`, ...)."""
     if ty == "null":
-        yield PositiveValue(None, scenario=CoverageScenario.NULL_VALUE, description="Value null value")
+        yield PositiveValue(None, scenario=CoverageScenario.NULL_VALUE, description="Valid null value")
     elif ty == "boolean":
         yield PositiveValue(True, scenario=CoverageScenario.VALID_BOOLEAN, description="Valid boolean value")
         yield PositiveValue(False, scenario=CoverageScenario.VALID_BOOLEAN, description="Valid boolean value")
@@ -2569,24 +2927,20 @@ def _positive_for_describing_keywords(
     elif ty == "array":
         yield from _drop_invalid_for_location(_positive_array(ctx, schema, cast(list, template)), ctx)
     elif ty == "object":
-        yield from _drop_invalid_for_location(
-            _positive_object(ctx, _with_effective_required(schema), cast(dict, template)), ctx
-        )
+        yield from _drop_invalid_for_location(_positive_object(ctx, schema, cast(dict, template)), ctx)
     elif ty is None:
         if _implies_object_type(schema):
-            yield from _drop_invalid_for_location(
-                _positive_object(ctx, _with_effective_required(schema), cast(dict, template)), ctx
-            )
-        elif _implies_array_type(schema):
+            yield from _drop_invalid_for_location(_positive_object(ctx, schema, cast(dict, template)), ctx)
+        else:
             yield from _drop_invalid_for_location(_positive_array(ctx, schema, cast(list, template)), ctx)
 
 
 def _is_representable(value: Any, ctx: CoverageContext, *, declared: bool = False) -> bool:
     """Whether the location can carry this value, e.g. without blanking a path segment."""
-    if isinstance(value, dict):
-        # `representable` judges a dict by its `repr`, which is not what a path
-        # parameter sends; only an empty object is unrepresentable there.
-        return not (ctx.location == ParameterLocation.PATH and not value)
+    if isinstance(value, dict) and ctx.location == ParameterLocation.PATH:
+        # The path filter judges a dict by its `repr`, which is not what a path parameter sends;
+        # only an empty object is unrepresentable there.
+        return bool(value)
     return ctx.wire.representable(value, declared=declared)
 
 
@@ -2599,15 +2953,15 @@ def _drop_invalid_for_location(
             yield case
 
 
-def _filter_against_not(
+def _filter_against_conditionals(
     cases: Generator[GeneratedValue, None, None], schema: JsonSchema, ctx: CoverageContext
 ) -> Generator[GeneratedValue, None, None]:
-    """Drop values that a sibling `not` rules out.
+    """Drop values that a sibling `not` or `if` rules out.
 
     Values are built from the describing keywords alone (bounds, `items`, `properties`, ...), so a
-    `not` beside them can still reject what those keywords allow.
+    `not` or a conditional beside them can still reject what those keywords allow.
     """
-    if not isinstance(schema, dict) or not isinstance(schema.get("not"), (dict, bool)):
+    if not isinstance(schema, dict) or not (isinstance(schema.get("not"), (dict, bool)) or "if" in schema):
         yield from cases
         return
     for case in cases:
@@ -2615,23 +2969,102 @@ def _filter_against_not(
             yield case
 
 
-def _is_valid_with_formats(value: object, schema: JsonSchema, ctx: CoverageContext) -> bool:
+def _is_valid_with_formats(value: object, schema: JsonSchemaObject, ctx: CoverageContext) -> bool:
     """Whether the schema admits the value, passing a value nothing can check."""
-    if not isinstance(schema, dict):
-        return True
     return _admitted(value, schema, ctx, unjudged=True)
 
 
-def _make_branch_validators(schemas: list[JsonSchema], ctx: CoverageContext) -> list[jsonschema_rs.Validator]:
+def _make_branch_validators(
+    schemas: list[JsonSchema], ctx: CoverageContext, *, strict: bool = True
+) -> list[list[jsonschema_rs.Validator]]:
+    """Validators for each branch, once per draft reading them; only the operation's draft is required to load."""
     bundle = ctx.root_schema.get(BUNDLE_STORAGE_KEY)
-    result = []
+    judges: list[list[jsonschema_rs.Validator]] = []
+    for draft in _branch_drafts(schemas, ctx):
+        try:
+            judges.append([make_validator(_with_bundle(schema, bundle, draft, ctx), draft) for schema in schemas])
+        except Exception:
+            if strict and draft is ctx.validator_cls:
+                raise
+    return judges
+
+
+def drop_negatives_any_draft_admits(
+    ctx: CoverageContext, schema: JsonSchema, values: Iterator[GeneratedValue]
+) -> Generator[GeneratedValue, None, None]:
+    """Negatives a judge of any draft rejects; a value one reading admits is a valid request under it."""
+    judges = [judge for (judge,) in _make_branch_validators([schema], ctx, strict=False)]
+    for value in values:
+        if value.generation_mode == GenerationMode.NEGATIVE and _admitted_by_any(judges, value.value):
+            continue
+        yield value
+
+
+def _admitted_by_any(judges: list[jsonschema_rs.Validator], value: Any) -> bool:
+    """Whether a judge admits the value; a binary payload is never judged."""
+    # Validation stops at the first violation, so judging first spares most values a full walk for binary payloads.
+    try:
+        admitted = any(judge.is_valid(value) for judge in judges)
+    except ValueError:
+        # Binary a judge reaches cannot be validated.
+        if contains_binary(value):
+            return False
+        raise
+    return admitted and not contains_binary(value)
+
+
+def _branch_drafts(schemas: list[JsonSchema], ctx: CoverageContext) -> dict[type, None]:
+    drafts: dict[type, None] = {ctx.validator_cls: None}
     for schema in schemas:
-        if bundle is not None and isinstance(schema, dict):
-            schema = {**schema, BUNDLE_STORAGE_KEY: bundle}
-        # The operation's draft, not one inferred per branch: Draft 4 ignores keywords beside
-        # `$ref`, so a branch judged under a newer draft would reject values the wire accepts.
-        result.append(make_validator(schema, ctx.validator_cls))
-    return result
+        drafts[jsonschema_rs.validator_cls_for(schema)] = None
+    return drafts
+
+
+def _with_bundle(schema: JsonSchema, bundle: Any, draft: type, ctx: CoverageContext) -> JsonSchema:
+    if bundle is not None and draft is not ctx.validator_cls:
+        anchors, bundle = _static_bundle(ctx.session, bundle)
+        schema = _static_dynamic_refs(schema, anchors)
+    if bundle is not None and isinstance(schema, dict):
+        return {**schema, BUNDLE_STORAGE_KEY: bundle}
+    return schema
+
+
+def _static_bundle(session: GenerationSession, bundle: dict) -> tuple[dict[str, str], dict]:
+    cached = session.static_bundles.get(id(bundle))
+    if cached is MISSING or cached[2] is not bundle:
+        anchors: dict[str, str] = {}
+        _collect_anchors(bundle, f"#/{BUNDLE_STORAGE_KEY}", anchors)
+        cached = (anchors, _static_dynamic_refs(bundle, anchors), bundle)
+        session.static_bundles[id(bundle)] = cached
+    return cached[0], cached[1]
+
+
+def _collect_anchors(schema: Any, pointer: str, anchors: dict[str, str]) -> None:
+    if isinstance(schema, dict):
+        name = schema.get("$dynamicAnchor")
+        if isinstance(name, str):
+            anchors.setdefault(f"#{name}", pointer)
+        for key, value in schema.items():
+            _collect_anchors(value, f"{pointer}/{key.replace('~', '~0').replace('/', '~1')}", anchors)
+    elif isinstance(schema, list):
+        for idx, item in enumerate(schema):
+            _collect_anchors(item, f"{pointer}/{idx}", anchors)
+
+
+def _static_dynamic_refs(schema: Any, anchors: dict[str, str]) -> Any:
+    # Exact while no outer resource re-binds the anchor.
+    if isinstance(schema, dict):
+        dynamic = schema.get("$dynamicRef")
+        target = anchors.get(dynamic) if isinstance(dynamic, str) and "$ref" not in schema else None
+        return {
+            ("$ref" if key == "$dynamicRef" and target is not None else key): (
+                target if key == "$dynamicRef" and target is not None else _static_dynamic_refs(value, anchors)
+            )
+            for key, value in schema.items()
+        }
+    if isinstance(schema, list):
+        return [_static_dynamic_refs(item, anchors) for item in schema]
+    return schema
 
 
 def _get_properties(schema: JsonSchema, ctx: CoverageContext) -> JsonSchema:
@@ -2703,6 +3136,9 @@ def _get_properties(schema: JsonSchema, ctx: CoverageContext) -> JsonSchema:
 _FAST_PATH_KEYS = frozenset({"properties", "required", "type"})
 
 
+# An untyped schema covers these keywords positively in one pass or per combinator branch, not per type.
+_SINGLE_PASS_KEYWORDS = ("enum", "const", "not", *_FOLDED_KEYS)
+
 _OBJECT_ONLY_KEYWORDS = ("properties", "required", "patternProperties", "propertyNames", "dependencies")
 
 _ARRAY_ONLY_KEYWORDS = (
@@ -2746,15 +3182,12 @@ def _type_excludes_object(schema: JsonSchemaObject) -> bool:
 
 
 def _ensure_object_template_with_baseline(
-    ctx: CoverageContext, schema: JsonSchemaObject, template: Any
+    ctx: CoverageContext, schema: JsonSchemaObject, template: Any, baseline_emitted: bool
 ) -> Generator[GeneratedValue, None, Any]:
-    # First-time object template build emits a baseline `NegativeValue` when the outer type
-    # excludes object; the inner `properties` applicator otherwise never sees an
-    # all-children-valid case (per-leaf negatives each break one child).
-    if template is not None:
-        return template
-    template = _generate_template_with_deflation_fallback(ctx, schema, _get_template_schema(schema, "object", ctx))
-    if isinstance(template, dict) and _type_excludes_object(schema):
+    # Outer type excludes object: emit one all-valid object as a negative baseline; per-property negatives never do.
+    if template is None:
+        template = _generate_template_with_deflation_fallback(ctx, schema, _get_template_schema(schema, "object", ctx))
+    if not baseline_emitted and isinstance(template, dict) and _type_excludes_object(schema):
         yield NegativeValue(
             template,
             scenario=CoverageScenario.INCORRECT_TYPE,
@@ -2810,6 +3243,40 @@ def _get_template_schema(schema: JsonSchemaObject, ty: str, ctx: CoverageContext
     return {**schema, "type": ty}
 
 
+_SPEC_HINT_KEYS = frozenset({"example", "examples", "default"})
+# Past 16-bit length prefixes and TEXT-sized columns, which servers often assume without declaring `maxLength`.
+OVERSIZED_STRING_LENGTH = 2**16 + 1
+OVERSIZED_STRING = "a" * OVERSIZED_STRING_LENGTH
+# Deduplication spelling; not valid JSON, so it matches no other value and keeps every enclosing key short.
+OVERSIZED_STRING_SPELLING = "<oversized>"
+LARGE_NUMBER = 2**63
+
+
+def _spec_hint_values(
+    schema: JsonSchemaObject, accepts: Callable[[Any], bool], seen: HashSet
+) -> Generator[GeneratedValue, None, None]:
+    """The `example`, `examples` and `default` values `accepts` admits, each one not yet in `seen`."""
+    # Sentinel-based reads so falsy spec hints (`default: 0`, `example: ""`) and explicit
+    # `default: null` / `example: null` aren't confused with "key absent".
+    example = schema.get("example", NOT_SET)
+    examples = schema.get("examples")
+    default = schema.get("default", NOT_SET)
+    if example is not NOT_SET and accepts(example) and seen.insert(example):
+        yield PositiveValue(example, scenario=CoverageScenario.EXAMPLE_VALUE, description="Example value")
+    if examples:
+        for item in examples:
+            if accepts(item) and seen.insert(item):
+                yield PositiveValue(item, scenario=CoverageScenario.EXAMPLE_VALUE, description="Example value")
+    if (
+        default is not NOT_SET
+        and not (example is not NOT_SET and default == example)
+        and not (examples is not None and any(default == ex for ex in examples))
+        and accepts(default)
+        and seen.insert(default)
+    ):
+        yield PositiveValue(default, scenario=CoverageScenario.DEFAULT_VALUE, description="Default value")
+
+
 def _positive_string(ctx: CoverageContext, schema: JsonSchemaObject) -> Generator[GeneratedValue, None, None]:
     """Generate positive string values."""
     # Pin type to "string"; for unions like ["string","null"] the dispatcher yields null separately,
@@ -2827,7 +3294,7 @@ def _positive_string(ctx: CoverageContext, schema: JsonSchemaObject) -> Generato
     if ctx.location == "path" and not ("format" in schema and schema["format"] in ctx.custom_formats):
         schema = ensure_valid_path_parameter_schema(schema)
         declared = schema
-    elif ctx.location in ("header", "cookie") and not ("format" in schema and schema["format"] in ctx.custom_formats):
+    elif ctx.location in HEADER_LOCATIONS and not ("format" in schema and schema["format"] in ctx.custom_formats):
         pattern = schema.get("pattern")
         if isinstance(pattern, str) and pattern_requires_char_outside(pattern, HEADER_ALLOWED_CHARS):
             return
@@ -2838,51 +3305,17 @@ def _positive_string(ctx: CoverageContext, schema: JsonSchemaObject) -> Generato
         declared = schema
         min_length = 1
 
-    # Sentinel-based reads so falsy spec hints (`default: 0`, `example: ""`) and explicit
-    # `default: null` / `example: null` aren't confused with "key absent".
-    example = schema.get("example", NOT_SET)
-    examples = schema.get("examples")
-    default = schema.get("default", NOT_SET)
-
     # Two-layer check to avoid potentially expensive data generation using schema constraints as a key
     seen_values = HashSet()
     seen_constraints: set[tuple] = set()
 
-    if example is not NOT_SET or examples or default is not NOT_SET:
-        has_valid_example = False
-        if (
-            example is not NOT_SET
-            and _is_valid_with_formats(example, declared, ctx)
-            and ctx.wire.representable(example)
-            and seen_values.insert(example)
-        ):
-            has_valid_example = True
-            yield PositiveValue(example, scenario=CoverageScenario.EXAMPLE_VALUE, description="Example value")
-        if examples:
-            for example in examples:
-                if (
-                    _is_valid_with_formats(example, declared, ctx)
-                    and ctx.wire.representable(example)
-                    and seen_values.insert(example)
-                ):
-                    has_valid_example = True
-                    yield PositiveValue(example, scenario=CoverageScenario.EXAMPLE_VALUE, description="Example value")
-        if (
-            default is not NOT_SET
-            and not (example is not NOT_SET and default == example)
-            and not (examples is not None and any(default == ex for ex in examples))
-            and _is_valid_with_formats(default, declared, ctx)
-            and ctx.wire.representable(default)
-            and seen_values.insert(default)
-        ):
-            has_valid_example = True
-            yield PositiveValue(default, scenario=CoverageScenario.DEFAULT_VALUE, description="Default value")
-        if not has_valid_example and (not min_length and not max_length or "pattern" in schema):
-            value = ctx.generate_from_schema(schema)
-            seen_values.insert(value)
-            seen_constraints.add((min_length, max_length))
-            yield PositiveValue(value, scenario=CoverageScenario.VALID_STRING, description="Valid string")
-    elif not min_length and not max_length or "pattern" in schema:
+    if not _SPEC_HINT_KEYS.isdisjoint(schema):
+        yield from _spec_hint_values(
+            schema,
+            lambda value: _is_valid_with_formats(value, declared, ctx) and ctx.wire.representable(value),
+            seen_values,
+        )
+    if not seen_values and (not min_length and not max_length or "pattern" in schema):
         value = ctx.generate_from_schema(schema)
         seen_values.insert(value)
         seen_constraints.add((min_length, max_length))
@@ -2951,6 +3384,26 @@ def _positive_string(ctx: CoverageContext, schema: JsonSchemaObject) -> Generato
             value = ctx.generate_from_schema(schema)
             yield PositiveValue(value, scenario=CoverageScenario.VALID_STRING, description="Valid string")
 
+    # Only bodies: proxies and servers reject long URLs and headers before the application sees them.
+    if (
+        max_length is None
+        and ctx.location == ParameterLocation.BODY
+        and "pattern" not in schema
+        and "format" not in schema
+        and "enum" not in schema
+        and "const" not in schema
+        and (
+            all(key == "type" or key in ANNOTATION_KEYWORDS for key in declared)
+            or _is_valid_with_formats(OVERSIZED_STRING, declared, ctx)
+        )
+    ):
+        yield PositiveValue(
+            OVERSIZED_STRING,
+            scenario=CoverageScenario.OVERSIZED_STRING,
+            description="String longer than common implicit limits",
+            canonical=OVERSIZED_STRING_SPELLING,
+        )
+
 
 def _rational(value: int | float) -> Fraction:
     """A number as the decimal its JSON text spells, which is what the validator computes with."""
@@ -2964,6 +3417,8 @@ def _as_number(value: Fraction) -> int | float:
 
 def _spelled_multiple(candidate: Fraction, step: Fraction, *, going_up: bool) -> int | float | None:
     """The candidate where a float's JSON text spells it exactly, else the nearest multiple past it one does."""
+    integer_step = step.numerator
+    integer_candidate = (ceil(candidate / integer_step) if going_up else floor(candidate / integer_step)) * integer_step
     # Multiples of an awkward step can miss every float for a stretch; a few floats on is as far as it is worth going.
     for _ in range(8):
         number = _as_number(candidate)
@@ -2974,7 +3429,7 @@ def _spelled_multiple(candidate: Fraction, step: Fraction, *, going_up: bool) ->
         edge = _rational(nextafter(number, inf if going_up else -inf))
         quotient, remainder = divmod(edge, step)
         candidate = edge if remainder == 0 else step * (quotient + 1 if going_up else quotient)
-    return None
+    return integer_candidate
 
 
 def closest_multiple_greater_than(y: int | float, x: int | float) -> int | float | None:
@@ -3070,52 +3525,21 @@ def _positive_number(ctx: CoverageContext, schema: JsonSchemaObject) -> Generato
     if is_integer and multiple_of is not None and not isinstance(multiple_of, int):
         # Integer multiples of `p/q` are exactly the multiples of `p`.
         multiple_of = Fraction(Decimal(str(multiple_of))).numerator
-    example = schema.get("example", NOT_SET)
-    examples = schema.get("examples")
-    default = schema.get("default", NOT_SET)
-
     seen = HashSet()
 
-    def _within_adjusted_bounds(value: int | float) -> bool:
+    def _within_adjusted_bounds(value: object) -> bool:
+        if not isinstance(value, (int, float)) or isinstance(value, bool):
+            return False
         # Read in decimal, the way the validator reads both the value and the bound: past 2**53 a
         # multiple that fits the bound's text can still compare outside the float that spells it.
         exact = _exact(value)
         return (minimum is None or exact >= _exact(minimum)) and (maximum is None or exact <= _exact(maximum))
 
-    if example is not NOT_SET or examples or default is not NOT_SET:
-        has_valid_example = False
-        if (
-            example is not NOT_SET
-            and _is_valid_with_formats(example, schema, ctx)
-            and _within_adjusted_bounds(example)
-            and seen.insert(example)
-        ):
-            has_valid_example = True
-            yield PositiveValue(example, scenario=CoverageScenario.EXAMPLE_VALUE, description="Example value")
-        if examples:
-            for example in examples:
-                if (
-                    _is_valid_with_formats(example, schema, ctx)
-                    and _within_adjusted_bounds(example)
-                    and seen.insert(example)
-                ):
-                    has_valid_example = True
-                    yield PositiveValue(example, scenario=CoverageScenario.EXAMPLE_VALUE, description="Example value")
-        if (
-            default is not NOT_SET
-            and not (example is not NOT_SET and default == example)
-            and not (examples is not None and any(default == ex for ex in examples))
-            and _is_valid_with_formats(default, schema, ctx)
-            and _within_adjusted_bounds(default)
-            and seen.insert(default)
-        ):
-            has_valid_example = True
-            yield PositiveValue(default, scenario=CoverageScenario.DEFAULT_VALUE, description="Default value")
-        if not has_valid_example and minimum is None and maximum is None:
-            value = ctx.generate_from_schema(schema)
-            if seen.insert(value):
-                yield PositiveValue(value, scenario=CoverageScenario.VALID_NUMBER, description="Valid number")
-    elif minimum is None and maximum is None:
+    if not _SPEC_HINT_KEYS.isdisjoint(schema):
+        yield from _spec_hint_values(
+            schema, lambda value: _is_valid_with_formats(value, schema, ctx) and _within_adjusted_bounds(value), seen
+        )
+    if not seen and minimum is None and maximum is None:
         value = ctx.generate_from_schema(schema)
         seen.insert(value)
         yield PositiveValue(value, scenario=CoverageScenario.VALID_NUMBER, description="Valid number")
@@ -3157,6 +3581,18 @@ def _positive_number(ctx: CoverageContext, schema: JsonSchemaObject) -> Generato
             yield PositiveValue(
                 smaller, scenario=CoverageScenario.NEAR_BOUNDARY_NUMBER, description="Near-boundary number"
             )
+    else:
+        # Past both 32- and 64-bit integer ranges, so a narrower server-side type overflows.
+        large = LARGE_NUMBER if multiple_of is None else closest_multiple_greater_than(LARGE_NUMBER, multiple_of)
+        if (
+            large is not None
+            and _within_adjusted_bounds(large)
+            and _is_valid_with_formats(large, schema, ctx)
+            and seen.insert(large)
+        ):
+            yield PositiveValue(
+                large, scenario=CoverageScenario.LARGE_NUMBER, description="Number beyond common integer widths"
+            )
 
 
 def _tuple_prefix_values(ctx: CoverageContext, schema: JsonSchemaObject) -> list | None:
@@ -3185,9 +3621,6 @@ def _fits_array_length(schema: JsonSchemaObject, length: int) -> bool:
 def _positive_array(
     ctx: CoverageContext, schema: JsonSchemaObject, template: list
 ) -> Generator[GeneratedValue, None, None]:
-    example = schema.get("example", NOT_SET)
-    examples = schema.get("examples")
-    default = schema.get("default", NOT_SET)
     # The first `prefixItems` positions answer to their own schemas, so an `items` value can only
     # sit behind values that fill them.
     prefix_values = _tuple_prefix_values(ctx, schema)
@@ -3195,22 +3628,10 @@ def _positive_array(
     seen = HashSet()
     seen_constraints: set[tuple] = set()
 
-    if example is not NOT_SET or examples or default is not NOT_SET:
-        if example is not NOT_SET and _is_valid_with_formats(example, schema, ctx) and seen.insert(example):
-            yield PositiveValue(example, scenario=CoverageScenario.EXAMPLE_VALUE, description="Example value")
-        if examples:
-            for example in examples:
-                if _is_valid_with_formats(example, schema, ctx) and seen.insert(example):
-                    yield PositiveValue(example, scenario=CoverageScenario.EXAMPLE_VALUE, description="Example value")
-        if (
-            default is not NOT_SET
-            and not (example is not NOT_SET and default == example)
-            and not (examples is not None and any(default == ex for ex in examples))
-            and _is_valid_with_formats(default, schema, ctx)
-            and seen.insert(default)
-        ):
-            yield PositiveValue(default, scenario=CoverageScenario.DEFAULT_VALUE, description="Default value")
-    else:
+    if not _SPEC_HINT_KEYS.isdisjoint(schema):
+        yield from _spec_hint_values(schema, lambda value: _is_valid_with_formats(value, schema, ctx), seen)
+    # Rejected annotations must not suppress the generated baseline.
+    if not seen:
         # An empty template skips every items-level keyword on the wire; surface a non-empty
         # baseline first so the recorder sees items satisfied. Skip when `maxItems` forbids any.
         items = schema.get("items")
@@ -3238,7 +3659,7 @@ def _positive_array(
     min_items = schema.get("minItems")
     max_items = schema.get("maxItems")
     # `minContains` matching items must fit, so the array can never be shorter than it.
-    if "contains" in schema:
+    if _honors_contains(schema):
         min_contains = schema.get("minContains", 1)
         if min_contains > 1:
             min_items = max(min_items or 0, min_contains)
@@ -3293,7 +3714,8 @@ def _positive_array(
         # Ensure there is enough items to pass `minItems` if it is specified
         length = min_items or 1
         item_schema = schema["items"]
-        enum_values = [v for v in item_schema["enum"] if _is_valid_with_formats(v, item_schema, ctx)]
+        judge = _judge(item_schema, ctx)
+        enum_values = [v for v in item_schema["enum"] if judge is None or judge(v)]
         if schema.get("uniqueItems") and length > 1:
             for i, variant in enumerate(enum_values):
                 others = [enum_values[j] for j in range(len(enum_values)) if j != i]
@@ -3324,14 +3746,27 @@ def _positive_array(
         # Single-item arrays exercise each items-schema branch individually.
         # `maxItems`-sized boundary arrays (above) repeat one shape and miss multi-branch coverage.
         sub_schema = schema["items"]
+        prefix_parts = _canonical_json(prefix_values)
         for item in cover_schema_iter(ctx, sub_schema):
             candidate = [*prefix_values, item.value]
-            if seen.insert(candidate):
+            item_canonical = item.canonical if item.canonical is not None else _canonical_json(item.value)
+            canonical = None
+            if prefix_parts is not None and item_canonical is not None:
+                canonical = f"[{item_canonical}]" if prefix_parts == "[]" else f"{prefix_parts[:-1]},{item_canonical}]"
+            deduplication_key = _key_from_canonical(candidate, canonical)
+            if seen.insert(candidate, key=deduplication_key):
                 yield PositiveValue(
                     candidate,
-                    scenario=CoverageScenario.VALID_ARRAY,
+                    scenario=_nested_scenario(item, CoverageScenario.VALID_ARRAY),
                     description=f"Single-item array: {item.description}",
+                    deduplication_key=deduplication_key,
+                    canonical=canonical,
                 )
+
+
+def _nested_scenario(nested: GeneratedValue, container: CoverageScenario) -> CoverageScenario:
+    # Keep oversized strings recognizable once wrapped, so their cases stay out of the resource pool.
+    return nested.scenario if nested.scenario is CoverageScenario.OVERSIZED_STRING else container
 
 
 def _positive_object(
@@ -3436,6 +3871,7 @@ def _iter_positive_object(
                 description="Object with only required properties",
             )
     seen = HashSet()
+    spelling = _ObjectSpelling(template)
     max_properties = schema.get("maxProperties")
     for name, sub_schema in properties.items():
         # A property the template left out adds a key, which the size window may not have room for.
@@ -3448,11 +3884,14 @@ def _iter_positive_object(
         if name in template:
             seen.insert(template[name])
         for new in cover_schema_iter(ctx, sub_schema):
-            if seen.insert(new.value):
+            canonical = new.canonical if new.canonical is not None else _canonical_json(new.value)
+            key = new.deduplication_key or _key_from_canonical(new.value, canonical)
+            if seen.insert(new.value, key=key):
                 yield PositiveValue(
                     {**template, name: new.value},
-                    scenario=CoverageScenario.VALID_OBJECT,
+                    scenario=_nested_scenario(new, CoverageScenario.VALID_OBJECT),
                     description=f"Object with valid '{name}' value: {new.description}",
+                    canonical=spelling.with_entry(name, canonical),
                 )
         seen.clear()
     # Handle additionalProperties with schema
@@ -3465,17 +3904,20 @@ def _iter_positive_object(
         if additional_key is None:
             return
         for new in cover_schema_iter(ctx, additional_properties):
-            if seen.insert(new.value):
+            canonical = new.canonical if new.canonical is not None else _canonical_json(new.value)
+            key = new.deduplication_key or _key_from_canonical(new.value, canonical)
+            if seen.insert(new.value, key=key):
                 yield PositiveValue(
                     {**template, additional_key: new.value},
                     scenario=CoverageScenario.OBJECT_ADDITIONAL_PROPERTY,
                     description=f"Object with additional property: {new.description}",
+                    canonical=spelling.with_entry(additional_key, canonical),
                 )
 
 
-def select_combinations(optional: list[str]) -> Iterator[tuple[str, ...]]:
+def select_combinations(optional: list[str]) -> Iterator[frozenset[str]]:
     for size in range(2, len(optional)):
-        yield next(combinations(optional, size))
+        yield frozenset(optional[:size])
 
 
 # `enum`/`const` without a sibling `type` (e.g. `canonicalish` strips `type` from `{type: string, enum: [...]}`
@@ -3497,6 +3939,26 @@ def _negative_const(
     yield from _negative_enum(ctx, schema, [value], seen)
 
 
+INVALID_ENUM_STRATEGY: st.SearchStrategy = NEGATIVE_STRING_STRATEGY | st.none() | st.booleans() | NUMERIC_STRATEGY
+
+
+@cache
+def _invalid_enum_candidates() -> tuple[Any, ...]:
+    # A seeded run is decided by what its filter rejected so far, so the values a filter that
+    # rejects everything sees are the ones any filter sees until it first accepts one.
+    candidates: list[Any] = []
+
+    def reject(value: Any) -> bool:
+        candidates.append(value)
+        return False
+
+    try:
+        examples.generate_one(INVALID_ENUM_STRATEGY.filter(reject))
+    except Exception:
+        pass
+    return tuple(candidates)
+
+
 def _negative_enum(
     ctx: CoverageContext, schema: dict, value: list, seen: HashSet
 ) -> Generator[GeneratedValue, None, None]:
@@ -3505,33 +3967,38 @@ def _negative_enum(
             return False
         return seen.insert(x)
 
-    strategy = (NEGATIVE_STRING_STRATEGY | st.none() | st.booleans() | NUMERIC_STRATEGY).filter(is_not_in_value)
+    invalid = next((x for x in _invalid_enum_candidates() if is_not_in_value(x)), NOT_SET)
+    if invalid is NOT_SET:
+        invalid = ctx.generate_from(INVALID_ENUM_STRATEGY.filter(is_not_in_value))
     yield NegativeValue(
-        ctx.generate_from(strategy),
+        invalid,
         scenario=CoverageScenario.INVALID_ENUM_VALUE,
         description="Invalid enum value",
         location=ctx.current_path,
     )
     # Self-contradictory schemas (e.g. `enum: [2, 4]` or `const: 2` with `type: string`) skip every entry
     # on the positive path, so emit each mismatched entry as a negative to keep the keyword covered.
-    if isinstance(schema, dict):
-        declared_types = set(get_type(schema))
-        if declared_types:
-            for entry in value:
-                entry_type = to_json_type_name(entry)
-                if entry_type in declared_types:
-                    continue
-                # Integer values satisfy `type: number` in JSON Schema.
-                if entry_type == "integer" and "number" in declared_types:
-                    continue
-                if not ctx.wire.representable(entry) or not seen.insert(entry):
-                    continue
-                yield NegativeValue(
-                    entry,
-                    scenario=CoverageScenario.INCORRECT_TYPE,
-                    description="Enum value with type mismatching the declared 'type'",
-                    location=ctx.current_path,
-                )
+    declared_types = set(get_type(schema))
+    if declared_types:
+        reads_as_valid = _reads_as_valid(ctx, schema)
+        for entry in value:
+            entry_type = to_json_type_name(entry)
+            if entry_type in declared_types:
+                continue
+            # Integer values satisfy `type: number` in JSON Schema.
+            if entry_type == "integer" and "number" in declared_types:
+                continue
+            # A parameter entry travels as text the server may read as valid, e.g. `"1"` as `true`.
+            if reads_as_valid(entry):
+                continue
+            if not ctx.wire.representable(entry) or not seen.insert(entry):
+                continue
+            yield NegativeValue(
+                entry,
+                scenario=CoverageScenario.INCORRECT_TYPE,
+                description="Enum value with type mismatching the declared 'type'",
+                location=ctx.current_path,
+            )
     inferred = _inferred_value_types(schema)
     if inferred:
         yield from _negative_type(ctx, schema, inferred, seen)
@@ -3547,8 +4014,12 @@ def _negative_properties(
     for key, sub_schema in properties.items():
         validator: jsonschema_rs.Validator | None = None
         # Draft 4 ignores siblings of `$ref`, so generation against `{$ref, sibling}` may yield
-        # values the body validator silently accepts; filter those out below.
-        sub_has_ref = isinstance(sub_schema, dict) and "$ref" in sub_schema
+        # values the body validator silently accepts; filter those out below. Annotations constrain nothing.
+        sub_has_ref = (
+            isinstance(sub_schema, dict)
+            and "$ref" in sub_schema
+            and any(key != "$ref" and key not in ANNOTATION_KEYWORDS for key in sub_schema)
+        )
         if isinstance(sub_schema, dict):
             # Cache by (sub_schema, bundle) identity — same pair recurs across operations.
             def _builder(s: dict = sub_schema, b: dict | None = bundle) -> JsonSchema:
@@ -3606,8 +4077,6 @@ def _negative_property_names(
         if not isinstance(bad_key, str) or bad_key in template:
             continue
         candidate = {**template, bad_key: ""}
-        if not ctx.wire.leads_to_negative_test_case(candidate):
-            continue
         yield NegativeValue(
             candidate,
             scenario=CoverageScenario.OBJECT_INVALID_PROPERTY_NAME,
@@ -3624,7 +4093,7 @@ def _negative_pattern_properties(
         compiled = compile_ecma_pattern(pattern)
         if compiled is None:
             continue
-        key = ctx.generate_from(st.from_regex(compiled))
+        key = ctx.generate_from(st.from_regex(compiled).filter(matches_pattern(pattern)))
         with nctx.at(pattern):
             for value in cover_schema_iter(nctx, sub_schema):
                 yield NegativeValue(
@@ -3643,7 +4112,11 @@ def _negative_array_for_conflicting_type(
     # Forcing `type: array` keeps an `example`/`default` describing the declared (non-array) type
     # from validating as a positive array value and leaking through unchanged below.
     array_schema = {**schema, "type": "array"}
+    reads_as_valid = _reads_as_valid(ctx, schema)
     for value in _cover_positive_for_type(ctx.with_positive(), array_schema, "array"):
+        # A parameter array travels as text the server may read as valid, e.g. `[""]` as an empty header.
+        if reads_as_valid(value.value):
+            continue
         if value.generation_mode == GenerationMode.POSITIVE:
             yield NegativeValue(
                 value.value,
@@ -3723,16 +4196,17 @@ def _negative_prefix_items(
     # For each position, generate negative values and yield arrays with one invalid item
     nctx = ctx.with_negative()
     for idx, item_schema in enumerate(item_schemas):
-        for neg_value in cover_schema_iter(nctx, item_schema):
-            items = valid_items.copy()
-            items[idx] = neg_value.value
-            if ctx.wire.leads_to_negative_test_case(items):
-                yield NegativeValue(
-                    items,
-                    scenario=neg_value.scenario,
-                    description=f"Array with invalid item at index {idx}: {neg_value.description}",
-                    location=nctx.current_path,
-                )
+        with nctx.at(idx):
+            for neg_value in cover_schema_iter(nctx, item_schema):
+                items = valid_items.copy()
+                items[idx] = neg_value.value
+                if ctx.wire.leads_to_negative_test_case(items):
+                    yield NegativeValue(
+                        items,
+                        scenario=neg_value.scenario,
+                        description=f"Array with invalid item at index {idx}: {neg_value.description}",
+                        location=nctx.current_path,
+                    )
 
 
 def _not_matching_pattern(value: str, pattern: re.Pattern) -> bool:
@@ -3757,24 +4231,26 @@ def _negative_pattern(
         return
     # The same regex recurs verbatim across operations; one Hypothesis search covers the whole audit.
     # `representable` makes the outcome location-dependent, so the location is part of the key.
-    cache_key = ("negative_pattern", pattern, min_length, max_length, ctx.location, ctx.validator_cls)
+    cache_key = ("negative_pattern", pattern, min_length, max_length, ctx.location, ctx.validator_cls, ctx.alphabet)
     value = ctx.session.values.get(cache_key)
     if value is UNSATISFIABLE_RESULT:
         raise Unsatisfiable
     if value is MISSING:
         try:
             validator: jsonschema_rs.Validator | None = ctx.validator_cls(
-                {"type": "string", "pattern": pattern}, pattern_options=FANCY_REGEX_OPTIONS
+                {"type": "string", "pattern": pattern},
+                pattern_options=FANCY_REGEX_OPTIONS,
             )
         except Exception:
             validator = None
         strategy = (
-            st.text(min_size=min_length or 0, max_size=max_length)
+            st.text(ctx.alphabet.as_strategy(), min_size=min_length or 0, max_size=max_length)
             .filter(partial(_not_matching_pattern, pattern=compiled))
             .filter(ctx.wire.representable)
         )
         if validator is not None:
-            strategy = strategy.filter(lambda v, _v=validator: not _v.is_valid(v))
+            is_valid = validator.is_valid
+            strategy = strategy.filter(lambda v: not is_valid(v))
         try:
             value = ctx.generate_from(strategy)
         except Unsatisfiable:
@@ -3812,18 +4288,41 @@ def _negative_multiple_of(
         )
 
 
+def _sent_text_judge(ctx: CoverageContext, schema: JsonSchemaObject) -> Callable[[Any], bool]:
+    """Whether the server reads an array value's single text as valid, e.g. a path array joined with commas."""
+    # A body array stays an array, and a query array travels as repeated parameters the server reads as one list.
+    if ctx.location in (ParameterLocation.BODY, ParameterLocation.QUERY):
+        return lambda value: False
+    return _reads_as_valid(ctx, schema)
+
+
+def _reads_as_valid(ctx: CoverageContext, schema: JsonSchema) -> Callable[[Any], bool]:
+    """Whether a server reads one of a value's wire texts as valid under any draft's reading of the schema."""
+    judges = [judge for (judge,) in _make_branch_validators([schema], ctx, strict=False)]
+    types = parameter_types(schema)
+
+    def is_valid(instance: Any) -> bool:
+        return any(judge.is_valid(instance) for judge in judges)
+
+    return lambda value: any(sent_text_is_valid(text, is_valid, types) for text in ctx.wire.sent_texts(value))
+
+
 def _negative_unique_items(
     ctx: CoverageContext, schema: JsonSchemaObject, unique_items: Any, seen: HashSet
 ) -> Generator[GeneratedValue, None, None]:
     if not unique_items:
         return
-    unique = jsonify(ctx.generate_from_schema({**schema, "type": "array", "minItems": 1, "maxItems": 1}))
-    yield NegativeValue(
-        unique + unique,
-        scenario=CoverageScenario.NON_UNIQUE_ITEMS,
-        description="Non-unique items",
-        location=ctx.current_path,
+    reads_back_valid = _sent_text_judge(ctx, schema)
+    unique = jsonify_python_specific_types(
+        ctx.generate_from_schema({**schema, "type": "array", "minItems": 1, "maxItems": 1})
     )
+    if not reads_back_valid(unique + unique):
+        yield NegativeValue(
+            unique + unique,
+            scenario=CoverageScenario.NON_UNIQUE_ITEMS,
+            description="Non-unique items",
+            location=ctx.current_path,
+        )
     # When the declared type forbids arrays (e.g. Kubernetes paints `uniqueItems: true`
     # onto every scalar query parameter), also emit a 2-element unique-array case so
     # the uniqueItems-valid branch is exercised alongside the duplicate above. Schemas
@@ -3840,10 +4339,10 @@ def _negative_unique_items(
             "uniqueItems": True,
         }
         try:
-            pair = jsonify(ctx.generate_from_schema(pair_schema))
+            pair = jsonify_python_specific_types(ctx.generate_from_schema(pair_schema))
         except (InvalidArgument, Unsatisfiable):
             return
-        if isinstance(pair, list) and len(pair) == 2 and pair[0] != pair[1]:
+        if isinstance(pair, list) and len(pair) == 2 and pair[0] != pair[1] and not reads_back_valid(pair):
             yield NegativeValue(
                 pair,
                 scenario=CoverageScenario.UNIQUE_ITEMS_ARRAY,
@@ -3875,14 +4374,64 @@ def _violates_hostname(value: object, session: GenerationSession, validator_cls:
     return value == "" or not conforms_to_format(session, value, "hostname", validator_cls)
 
 
+# Values valid for the format, and near misses a regex tailored to it rejects
+_FORMAT_PROBES = {
+    "uuid": (
+        (
+            "123e4567-e89b-12d3-a456-426614174000",
+            "123e4567-e89b-42d3-a456-426614174000",
+            "0190a6f4-e89b-72d3-a456-426614174000",
+        ),
+        (
+            "123e4567e-89b-42d3-a456-426614174000",
+            "g23e4567-e89b-42d3-a456-426614174000",
+            "123e4567e89b-42d3-a456-426614174000",
+            "x123e4567-e89b-42d3-a456-426614174000",
+            "123e4567-e89b-42d3-a456-426614174000x",
+        ),
+    ),
+    "date": (
+        ("2024-01-31", "2024-02-29"),
+        (
+            "2024-13-01",
+            "2024-00-10",
+            "2024-01-00",
+            "2024-01-32",
+            "2024-04-31",
+            "2023-02-29",
+            "2024-1-01",
+            "x2024-01-31",
+            "2024-01-31x",
+        ),
+    ),
+}
+
+
+# Keywords that describe a value without changing what is drawn for it
+_UNDRAWN_KEYWORDS = ANNOTATION_KEYWORDS - _DATA_KEYWORDS
+
+
+@cache
+def _pattern_implies_format(pattern: str, format: str) -> bool:
+    """Whether every value matching `pattern` is valid for `format`, so no value can break only the format."""
+    probes = _FORMAT_PROBES.get(format)
+    if probes is None:
+        return False
+    matches = make_validator_for({"pattern": pattern}).is_valid
+    valid, near = probes
+    return any(matches(value) or matches(value.upper()) for value in valid) and not any(
+        matches(value) or matches(value.upper()) for value in near
+    )
+
+
 def _negative_format(
     ctx: CoverageContext, schema: JsonSchemaObject, format: str
 ) -> Generator[GeneratedValue, None, None]:
     # Only generate negative format cases for formats that have validation semantics.
     # In OpenAPI 3.0, `format` is an annotation and does NOT impose validation constraints by itself.
     # Formats like "password" have no validation - any string is valid.
-    # We can only generate truly invalid data for formats in VALIDATED_FORMATS (e.g., "email", "uri", "uuid").
-    if format not in VALIDATED_FORMATS:
+    # We can only generate truly invalid data for formats in STANDARD_FORMATS (e.g., "email", "uri", "uuid").
+    if format not in STANDARD_FORMATS:
         return
     # The active draft determines which formats actually validate (Draft 4 treats
     # iri-reference / json-pointer / etc. as annotation-only). Skip when the format
@@ -3890,6 +4439,9 @@ def _negative_format(
     validator_cls = ctx.validator_cls
     if format not in VALIDATED_FORMATS_BY_DRAFT.get(validator_cls, frozenset()):
         return
+    pattern = schema.get("pattern")
+    if isinstance(pattern, str) and _pattern_implies_format(pattern, format):
+        raise Unsatisfiable
     # Drawing under the format and filtering for values that violate it can never succeed
     without_format = {k: v for k, v in schema.items() if k != "format"}
     without_format["type"] = "string"
@@ -3899,7 +4451,8 @@ def _negative_format(
     # Negative-format draws can spend seconds on JS-style `/.../`-wrapped patterns; cache by
     # the structural inputs so the same shape across 100s of operations runs Hypothesis once.
     try:
-        cache_key = ("negative_format", ctx.schema_key(without_format), format, validator_cls)
+        shape = {k: v for k, v in without_format.items() if k not in _UNDRAWN_KEYWORDS and not k.startswith("x-")}
+        cache_key = ("negative_format", ctx.schema_key(shape), format, validator_cls)
     except (TypeError, ValueError):
         cache_key = None
     if cache_key is not None:
@@ -3973,7 +4526,7 @@ def _accepts_every_stringified_value(schema: dict[str, Any], types: list[str]) -
     if "string" not in types:
         return False
     for key, value in schema.items():
-        if key in _ANNOTATION_KEYWORDS or key in ("type", BUNDLE_STORAGE_KEY):
+        if key in ANNOTATION_KEYWORDS or key in ("type", BUNDLE_STORAGE_KEY):
             continue
         # The shortest violation is a single character, so only a longer minimum can reject one.
         if key == "minLength" and isinstance(value, int) and value <= 1:
@@ -4100,7 +4653,8 @@ def _negative_type(
         for ty in ("integer", "number", "string"):
             if ty in strategies:
                 restrict(ty, _is_not_boolean_coercible)
-    if ctx.wire.url_part():
+    # An object's text always carries `{`, which no path segment may hold, so the path filter rejects every one.
+    if ctx.wire.url_part() or ctx.location == ParameterLocation.PATH:
         strategies.pop("object", None)
     # Form-urlencoded property-level mutations with null/array/object serialize to empty
     if ctx.wire.urlencoded_body():
@@ -4141,11 +4695,18 @@ def _negative_type(
         # positive failure
         apply_validation = False
 
-        def is_valid(x: object) -> bool:
-            return True
+    def _server_accepts(value: Any) -> bool:
+        text = ctx.wire.observed(value)
+        # Servers read parameter text into the declared type, so `0` sent for a boolean is a valid boolean.
+        if ctx.location != ParameterLocation.BODY:
+            return sent_text_is_valid(text, is_valid, types)
+        return is_valid(text)
 
     def _does_not_match_the_original_schema(value: Any) -> bool:
-        return not is_valid(ctx.wire.observed(value))
+        # A query list travels as one repeated parameter per item, and the server may read any of them.
+        if ctx.location == ParameterLocation.QUERY and isinstance(value, list):
+            return not any(_server_accepts(item) for item in value)
+        return not _server_accepts(value)
 
     if ctx.wire.url_part():
         for ty, strategy in strategies.items():
@@ -4166,6 +4727,16 @@ def _negative_type(
                 generated_values.append(ctx.generate_from(strategy))
             except Unsatisfiable:
                 break
+    # Spring reads a blank numeric parameter as null; a path segment stays non-empty with a single space.
+    if (
+        ctx.wire.url_part()
+        and ctx.path == ["type"]
+        and {"integer", "number"} & set(types)
+        and {"string", "null"} <= strategies.keys()
+    ):
+        blank = ctx.wire.rendered(" " if ctx.location == ParameterLocation.PATH else "")
+        if not apply_validation or _does_not_match_the_original_schema(blank):
+            generated_values.append(blank)
     if cache_key is not None:
         ctx.session.values[cache_key] = generated_values
     for value in generated_values:
@@ -4175,42 +4746,28 @@ def _negative_type(
             )
 
 
-def _flip_generation_mode_for_not(
-    values: Generator[GeneratedValue, None, None],
-    description: str | None = None,
-) -> Generator[GeneratedValue, None, None]:
-    """Flip generation mode for values from 'not' schemas.
-
-    For 'not' schemas, the semantic is inverted:
-    - Positive values for the inner schema are negative for the outer schema
-    - Negative values for the inner schema are positive for the outer schema
-    """
-    for value in values:
-        flipped_mode = (
-            GenerationMode.NEGATIVE if value.generation_mode == GenerationMode.POSITIVE else GenerationMode.POSITIVE
-        )
-        yield GeneratedValue(
-            value=value.value,
-            generation_mode=flipped_mode,
-            scenario=value.scenario,
-            description=description or value.description,
-            location=value.location,
-            parameter=value.parameter,
-        )
-
-
-def push_examples_to_properties(schema: JsonSchemaObject) -> None:
-    """Push examples from the top-level 'examples' field to the corresponding properties."""
-    if "examples" in schema and "properties" in schema:
-        properties = schema["properties"]
-        for example in schema["examples"]:
-            if isinstance(example, dict):
-                for prop, value in example.items():
-                    if prop in properties and isinstance(properties[prop], dict):
-                        if "examples" not in properties[prop]:
-                            properties[prop]["examples"] = []
-                        if value not in properties[prop]["examples"]:
-                            properties[prop]["examples"].append(value)
+def push_examples_to_properties(schema: JsonSchemaObject) -> JsonSchemaObject:
+    """`schema` with its top-level `examples` values also listed on the matching properties; never modifies the input."""
+    if "examples" not in schema or "properties" not in schema:
+        return schema
+    properties = schema["properties"]
+    pushed: dict[str, list[JsonValue]] = {}
+    for example in schema["examples"]:
+        if isinstance(example, dict):
+            for prop, value in example.items():
+                if prop in properties and isinstance(properties[prop], dict):
+                    values = pushed.setdefault(prop, list(properties[prop].get("examples", [])))
+                    if value not in values:
+                        values.append(value)
+    if not pushed:
+        return schema
+    return {
+        **schema,
+        "properties": {
+            **properties,
+            **{prop: {**properties[prop], "examples": values} for prop, values in pushed.items()},
+        },
+    }
 
 
 # Negative handlers for keywords that need no shared object template; the template-bound

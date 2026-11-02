@@ -3,24 +3,30 @@
 from __future__ import annotations
 
 import difflib
+from collections import Counter
 from collections.abc import Iterator
-from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from dataclasses import dataclass, replace
+from typing import TYPE_CHECKING, Any, cast
 
 from schemathesis.config import SchemathesisWarning
 from schemathesis.core import deserialization
 from schemathesis.core.errors import InvalidSchema, MalformedMediaType
+from schemathesis.core.jsonschema import make_validator
+from schemathesis.core.jsonschema.patterns import enforced_pattern, is_valid_python_regex, normalize_regex
 from schemathesis.core.jsonschema.resolver import find_unresolvable_reference
 from schemathesis.core.jsonschema.types import get_type
-from schemathesis.specs.openapi.patterns import enforced_pattern, is_valid_python_regex, normalize_regex
+from schemathesis.core.parameters import CONCRETE_LOCATIONS
+from schemathesis.core.result import Ok
+from schemathesis.core.schema_analysis import SchemaWarning
 
 if TYPE_CHECKING:
     from schemathesis.schemas import APIOperation
-    from schemathesis.specs.openapi.schemas import OpenApiSchema
+    from schemathesis.specs.openapi.adapter.parameters import OpenApiParameterSet
+    from schemathesis.specs.openapi.schemas import OpenApiOperation, OpenApiSchema
 
 
 @dataclass(slots=True)
-class MissingDeserializerWarning:
+class MissingDeserializerWarning(SchemaWarning):
     """Warning for responses with structured schemas but no registered deserializer."""
 
     operation_label: str | None
@@ -63,7 +69,10 @@ def detect_missing_deserializers(operation: APIOperation) -> list[MissingDeseria
                 continue
 
             try:
-                has_deserializer = deserialization.has_deserializer(content_type)
+                # JSON sequences documented with `itemSchema` are read without a registered deserializer
+                has_deserializer = deserialization.has_deserializer(content_type) or response.describes_json_sequence(
+                    content_type
+                )
             except MalformedMediaType:
                 continue
 
@@ -80,7 +89,7 @@ def detect_missing_deserializers(operation: APIOperation) -> list[MissingDeseria
 
 
 @dataclass(slots=True)
-class UnusedOpenAPIAuthWarning:
+class UnusedOpenAPIAuthWarning(SchemaWarning):
     """Warning for configured OpenAPI auth schemes that are not used in the schema."""
 
     operation_label: str | None
@@ -104,9 +113,102 @@ class UnusedOpenAPIAuthWarning:
             return f"'{self.scheme_name}' - Did you mean '{self.suggestion}'?"
         return f"'{self.scheme_name}'"
 
+
+@dataclass(slots=True, frozen=True)
+class DictionaryMismatch:
+    """A parameter binding whose entries mostly fail the parameter schema."""
+
+    dictionary: str
+    # The bound parameter, as `<location>.<name>`.
+    parameter: str
+    mismatched: int
+    total: int
+    # Validation error for the first entry that fails.
+    example: str
+    # Operations whose parameter schema rejects the entries, out of all operations the binding applies to.
+    rejecting: int = 1
+    operations: int = 1
+
+
+def check_dictionary_bindings(
+    operation: OpenApiOperation,
+) -> Iterator[tuple[tuple[str, str], DictionaryMismatch | None]]:
+    """Each binding of the operation's parameters, with a mismatch when more than half of its entries fail the schema."""
+    from schemathesis.generation.dictionaries import resolve_parameter_bindings
+
+    generation_config = operation.schema.config.generation_for(operation=operation)
+    validator_cls = operation.schema.adapter.jsonschema_validator_cls
+    for location in CONCRETE_LOCATIONS:
+        try:
+            properties = cast("OpenApiParameterSet", operation.get_parameter_set(location)).schema.get("properties", {})
+        except InvalidSchema:
+            continue
+        bindings = resolve_parameter_bindings(
+            operation=operation, location=location, properties=properties, generation_config=generation_config
+        )
+        for parameter_name, binding in bindings.items():
+            validator = make_validator(properties[parameter_name], validator_cls)
+            failing = [value for _, value in binding.entries if not validator.is_valid(value)]
+            parameter = f"{location.value}.{parameter_name}"
+            mismatch = None
+            if len(failing) * 2 > len(binding.entries):
+                mismatch = DictionaryMismatch(
+                    dictionary=binding.dictionary.name,
+                    parameter=parameter,
+                    mismatched=len(failing),
+                    total=len(binding.entries),
+                    example=next(validator.iter_errors(failing[0])).message,
+                )
+            yield (binding.dictionary.name, parameter), mismatch
+
+
+@dataclass(slots=True)
+class DictionaryMismatchWarning(SchemaWarning):
+    """Warning for a dictionary binding whose entries mostly fail the schema of the bound parameter."""
+
+    operation_label: str | None
+    """Always None: one binding is reported once, however many operations it applies to."""
+
+    mismatch: DictionaryMismatch
+
     @property
-    def group(self) -> str | None:
-        return None
+    def kind(self) -> SchemathesisWarning:
+        return SchemathesisWarning.DICTIONARY_MISMATCH
+
+    @property
+    def message(self) -> str:
+        mismatch = self.mismatch
+        scope = ""
+        if mismatch.rejecting < mismatch.operations:
+            scope = f" on {mismatch.rejecting} of {mismatch.operations} operations"
+        return (
+            f"`{mismatch.dictionary}` bound to `{mismatch.parameter}`: {mismatch.mismatched} of {mismatch.total} "
+            f"entries do not match the parameter schema{scope} and are used only in negative cases. "
+            f"Example: {mismatch.example}"
+        )
+
+
+def detect_dictionary_mismatches(schema: OpenApiSchema) -> list[DictionaryMismatchWarning]:
+    """Report each dictionary binding once per parameter when most operations it applies to reject its entries."""
+    if not schema.config.dictionaries:
+        return []
+    operations: Counter[tuple[str, str]] = Counter()
+    rejected: dict[tuple[str, str], list[DictionaryMismatch]] = {}
+    for result in schema.get_all_operations():
+        if not isinstance(result, Ok):
+            continue
+        for key, mismatch in check_dictionary_bindings(result.ok()):
+            operations[key] += 1
+            if mismatch is not None:
+                rejected.setdefault(key, []).append(mismatch)
+    return [
+        DictionaryMismatchWarning(
+            operation_label=None,
+            mismatch=replace(mismatches[0], rejecting=len(mismatches), operations=operations[key]),
+        )
+        for key, mismatches in rejected.items()
+        if len(mismatches) * 2 > operations[key]
+    ]
 
 
 def detect_unused_openapi_auth(schema: OpenApiSchema) -> list[UnusedOpenAPIAuthWarning]:
@@ -138,7 +240,7 @@ def _find_closest_match(value: str, candidates: list[str]) -> str | None:
 
 
 @dataclass(slots=True)
-class UnsupportedRegexWarning:
+class UnsupportedRegexWarning(SchemaWarning):
     """Warning for a regex pattern Schemathesis cannot use as written."""
 
     operation_label: str | None
@@ -159,10 +261,6 @@ class UnsupportedRegexWarning:
         if self.dropped:
             return f"Dropped `{self.pattern}` - generated values may not match it"
         return f"No value can be generated for `{self.pattern}`"
-
-    @property
-    def group(self) -> str | None:
-        return None
 
 
 def detect_unsupported_regex(operation: APIOperation) -> list[UnsupportedRegexWarning]:
@@ -207,7 +305,7 @@ def _iter_patterns(schema: Any) -> Iterator[str]:
 
 
 @dataclass(slots=True)
-class UnresolvableReferenceWarning:
+class UnresolvableReferenceWarning(SchemaWarning):
     """Warning for a part of an operation skipped because its schema names a missing component."""
 
     operation_label: str | None
@@ -226,10 +324,6 @@ class UnresolvableReferenceWarning:
     @property
     def message(self) -> str:
         return f"{self.subject} - unresolvable reference `{self.reference}`"
-
-    @property
-    def group(self) -> str | None:
-        return None
 
 
 def detect_unresolvable_references(

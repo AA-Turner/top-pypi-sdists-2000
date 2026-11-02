@@ -2,10 +2,9 @@ import pytest
 from hypothesis import given, settings
 from hypothesis.database import InMemoryExampleDatabase
 
-from schemathesis.core.mutations import Mutation, MutationChannel, OperatorKind
+from schemathesis.core.mutations import Mutation, MutationChannel, MutationMetadata, OperatorKind
 from schemathesis.core.parameters import ParameterLocation
 from schemathesis.generation import GenerationMode
-from schemathesis.specs.openapi.negative.mutations import MutationMetadata
 
 
 def _mutation(
@@ -172,25 +171,21 @@ def test_description_names_each_location_when_they_differ():
 
 
 def test_mutations_cover_every_negated_location(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /data",
         {
-            "/data": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "X-Token",
-                            "in": "header",
-                            "required": True,
-                            "schema": {"type": "string", "minLength": 5},
-                        },
-                        {"name": "offset", "in": "query", "schema": {"type": "integer"}},
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "parameters": [
+                {
+                    "name": "X-Token",
+                    "in": "header",
+                    "required": True,
+                    "schema": {"type": "string", "minLength": 5},
+                },
+                {"name": "offset", "in": "query", "schema": {"type": "integer"}},
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schema["/data"]["GET"]
 
     # A single case has to negate both containers for the omission to surface, hence the wider search.
     @given(operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))

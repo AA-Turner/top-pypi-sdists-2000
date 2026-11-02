@@ -2,23 +2,14 @@ from __future__ import annotations
 
 import hypothesis
 import pytest
-from hypothesis import strategies as st
 from hypothesis.stateful import RuleBasedStateMachine
 
 import schemathesis
 from schemathesis.core.errors import NoProducers
 from schemathesis.core.failures import FailureGroup
-from schemathesis.graphql import nodes
-from schemathesis.specs.graphql.scalars import CUSTOM_SCALARS
+from schemathesis.generation.stateful.state_machine import BundleStateMachine
 from schemathesis.specs.graphql.stateful import GraphQLStateMachine, create_state_machine
-
-
-@pytest.fixture
-def _register_book_id_scalar():
-    schemathesis.graphql.scalar("BookID", st.uuids().map(str).map(nodes.String))
-    yield
-    CUSTOM_SCALARS.clear()
-
+from test.utils import saved_example_keys
 
 _FULL_SCHEMA_SDL = """
     type Book { id: ID! }
@@ -62,6 +53,22 @@ def test_create_state_machine_returns_a_subclass(ctx):
     )
     assert issubclass(cls, GraphQLStateMachine)
     assert issubclass(cls, RuleBasedStateMachine)
+
+
+def test_repeated_as_state_machine_builds_same_rules(ctx):
+    schema = ctx.graphql.load_sdl("""
+        type Book { id: ID! }
+        type Query { book(id: ID!): Book }
+        type Mutation { addBook(title: String!): Book! }
+    """)
+    first = schema.as_state_machine()
+    second = schema.as_state_machine()
+    rules = [
+        sorted(name for name, value in machine.__dict__.items() if hasattr(value, "hypothesis_stateful_rule"))
+        for machine in (first, second)
+    ]
+    assert first is not second
+    assert rules == [["Mutation_addBook", "Query_book"], ["Mutation_addBook", "Query_book"]]
 
 
 @pytest.mark.parametrize(
@@ -120,6 +127,89 @@ def test_cleanup_with_multiple_id_args_wires_secondary_bundles(ctx):
     assert "Mutation_removeBookFromAuthor_double" in cls.__dict__
 
 
+@pytest.mark.parametrize(
+    ("sdl", "expected"),
+    [
+        (
+            """
+            type Book { id: ID! isbnCode: String! title: String! }
+            type Query { books: [Book!]! }
+            type Mutation { addBook(title: String!): Book! tagBook(bookPrimaryIsbnCode: String!): Boolean }
+            """,
+            [
+                "Book__isbnCode",
+                "Mutation_addBook",
+                "Mutation_addBook__isbnCode",
+                "Mutation_tagBook",
+                "Query_books__isbnCode",
+            ],
+        ),
+        (
+            """
+            type Book { id: ID! slug: String! urlSlug: String! pathSlug: String! shortSlug: String! oldSlug: String! }
+            type Query { books: [Book!]! book(slug: String!): Book }
+            type Mutation { addBook(title: String!): Book! }
+            """,
+            [
+                "Book__slug",
+                "Mutation_addBook",
+                "Mutation_addBook__slug",
+                "Query_book",
+                "Query_book__slug",
+                "Query_books__slug",
+            ],
+        ),
+        (
+            """
+            type Book { id: ID! slug: String! urlSlug: String! pathSlug: String! shortSlug: String! oldSlug: String! }
+            type Query { books: [Book!]! }
+            type Mutation { addBook(title: String!): Book! tagBook(bookSlug: String!): Boolean }
+            """,
+            ["Book__slug", "Mutation_addBook", "Mutation_addBook__slug", "Mutation_tagBook", "Query_books__slug"],
+        ),
+        (
+            """
+            type Book { id: ID! title: String! }
+            type Query { books: [Book!]! book(code: String!): Book }
+            type Mutation { addBook(title: String!): Book! }
+            """,
+            ["Mutation_addBook"],
+        ),
+    ],
+    ids=[
+        "qualified-argument-ends-with-field",
+        "bare-argument-prefers-exact-field",
+        "typed-argument-prefers-exact-field",
+        "bare-argument-without-matching-field",
+    ],
+)
+def test_identifier_argument_bound_to_producer_field(ctx, sdl, expected):
+    cls = ctx.graphql.load_sdl(sdl).as_state_machine()
+    common = {"Book_ids", "deleted_Book_ids", "schema"}
+    assert sorted(name for name in cls.__dict__ if not name.startswith("_") and name not in common) == expected
+
+
+def test_operation_returning_other_type_does_not_produce_foreign_handle(ctx):
+    sdl = """
+    type Book { id: ID! slug: String! title: String! }
+    type Author { id: ID! name: String! }
+    type Query { books: [Book!]! authors: [Author!]! book(slug: String!): Book }
+    type Mutation { addBook(title: String!): Book! }
+    """
+    cls = ctx.graphql.load_sdl(sdl).as_state_machine()
+    common = {"Book_ids", "deleted_Book_ids", "schema"}
+    assert sorted(name for name in cls.__dict__ if not name.startswith("_") and name not in common) == [
+        "Author_ids",
+        "Book__slug",
+        "Mutation_addBook",
+        "Mutation_addBook__slug",
+        "Query_book",
+        "Query_book__slug",
+        "Query_books__slug",
+        "deleted_Author_ids",
+    ]
+
+
 def test_init_raises_NoProducers_when_no_rules(ctx):
     cls = create_state_machine(
         ctx.graphql.load_sdl("""
@@ -139,7 +229,7 @@ def test_init_raises_NoProducers_when_no_rules(ctx):
 )
 def test_routing_override_present(method_name):
     # Regression: rule-declared target= must populate its bundle (overrides the parent's filter).
-    assert method_name in GraphQLStateMachine.__dict__
+    assert method_name in BundleStateMachine.__dict__
 
 
 def test_state_machine_has_real_transition_controller(ctx):
@@ -155,7 +245,7 @@ def test_state_machine_has_real_transition_controller(ctx):
     assert "Query.book" in add_outgoing
 
 
-def test_state_machine_finds_planted_bug_via_python_api(_register_book_id_scalar, ctx):
+def test_state_machine_finds_planted_bug_via_python_api(book_id_scalar, ctx):
     # The CLI path wraps validate_response with its own version; `.run()` is the only path
     # that exercises the state-machine override.
     api = ctx.graphql.apps.use_after_create()
@@ -173,3 +263,11 @@ def test_state_machine_finds_planted_bug_via_python_api(_register_book_id_scalar
                 suppress_health_check=list(hypothesis.HealthCheck),
             )
         )
+
+
+def test_saved_scenarios_are_kept_per_schema(ctx):
+    use_after_create = ctx.graphql.apps.use_after_create().schema_url
+    keys = saved_example_keys(schemathesis.graphql.from_url(use_after_create).as_state_machine())
+    assert keys == saved_example_keys(schemathesis.graphql.from_url(use_after_create).as_state_machine())
+    use_after_delete = ctx.graphql.apps.use_after_delete().schema_url
+    assert keys.isdisjoint(saved_example_keys(schemathesis.graphql.from_url(use_after_delete).as_state_machine()))

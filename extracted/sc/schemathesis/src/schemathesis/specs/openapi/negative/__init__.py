@@ -4,7 +4,7 @@ import json
 from collections.abc import Callable
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 from urllib.parse import urlencode
 
 import jsonschema_rs
@@ -18,27 +18,29 @@ from schemathesis.core.jsonschema import (
     CANONICALIZE_DRAFT_BY_VALIDATOR,
     DRAFT4_SUPPLEMENTAL_FORMATS,
     FANCY_REGEX_OPTIONS,
+    STANDARD_FORMATS,
     VALIDATED_FORMATS_BY_DRAFT,
 )
-from schemathesis.core.jsonschema.types import JsonSchema, JsonSchemaObject
+from schemathesis.core.jsonschema.types import JsonSchema, JsonSchemaObject, JsonValue
 from schemathesis.core.media_types import is_json
-from schemathesis.core.mutations import OperatorKind
+from schemathesis.core.mutations import MutationMetadata, OperatorKind
 from schemathesis.core.parameters import ParameterLocation
+from schemathesis.core.transforms import deepclone, to_wire_string
 from schemathesis.generation.jsonschema.builder import build
-from schemathesis.generation.jsonschema.context import Alphabet
+from schemathesis.generation.jsonschema.context import Alphabet, FormatLengths
 from schemathesis.generation.jsonschema.strategy import DECLINED
 from schemathesis.generation.value import GeneratedValue
 from schemathesis.specs.openapi.adapter.parameters import _constant_values_at_draws, _prune_modified_constants
-from schemathesis.specs.openapi.formats import HEADER_FORMAT, format_lengths_for, header_alphabet
+from schemathesis.specs.openapi.formats import HEADER_FORMAT, alphabet_for, format_lengths_for
 from schemathesis.specs.openapi.negative.mutations import (
     Mutation,
     MutationChannel,
     MutationContext,
-    MutationMetadata,
     MutationTargetDescriptor,
     compute_mutation_targets,
 )
 from schemathesis.specs.openapi.negative.value_channel import apply_value_channel, collect_value_targets
+from schemathesis.specs.openapi.utils import parameter_types, sent_text_is_valid
 from schemathesis.transport.serialization import Binary, contains_binary
 
 SYNTAX_FUZZING_PROBABILITY = 0.05
@@ -84,22 +86,20 @@ def wrap_map_hook_for_generated_value(hook: Callable, *, prune_constants: bool =
     """Adapter so user-supplied map hooks see plain values when negative-mode wraps them."""
 
     def wrapper(value: Any) -> Any:
-        if isinstance(value, GeneratedValue):
-            previous_constants = _constant_values_at_draws(value.constants_draws, value.value)
-            result = hook(value.value)
-            return GeneratedValue(
-                value=result,
-                meta=value.meta,
-                pool_draws=value.pool_draws,
-                semantic_draws=value.semantic_draws,
-                dictionary_draws=value.dictionary_draws,
-                constants_draws=(
-                    _prune_modified_constants(value.constants_draws, previous_constants, result)
-                    if prune_constants
-                    else value.constants_draws
-                ),
-            )
-        return hook(value)
+        if not isinstance(value, GeneratedValue):
+            return hook(value)
+        if not prune_constants:
+            return value.map_value(hook)
+        previous_constants = _constant_values_at_draws(value.constants_draws, value.value)
+        result = hook(value.value)
+        return GeneratedValue(
+            value=result,
+            meta=value.meta,
+            pool_draws=value.pool_draws,
+            semantic_draws=value.semantic_draws,
+            dictionary_draws=value.dictionary_draws,
+            constants_draws=_prune_modified_constants(value.constants_draws, previous_constants, result),
+        )
 
     return wrapper
 
@@ -176,10 +176,6 @@ def _is_unconstrained_binary_schema(schema: JsonSchema) -> bool:
     return schema.get("format") in _ALWAYS_INVALID_FORMATS and "type" not in schema
 
 
-# Formats with a standard definition; servers validate them that way whatever draft the schema declares.
-_STANDARD_FORMATS = VALIDATED_FORMATS_BY_DRAFT[jsonschema_rs.Draft202012Validator]
-
-
 @lru_cache
 def _standard_format_check(name: str) -> Callable[[str], bool]:
     return jsonschema_rs.Draft202012Validator({"format": name}, validate_formats=True).is_valid
@@ -193,7 +189,7 @@ def get_validator(cache_key: CacheKey) -> jsonschema_rs.Validator:
         formats.update(DRAFT4_SUPPLEMENTAL_FORMATS)
     natively_validated = VALIDATED_FORMATS_BY_DRAFT.get(cache_key.validator_cls, frozenset())
     for name in cache_key.custom_format_names - _ALWAYS_INVALID_FORMATS - natively_validated - formats.keys():
-        formats[name] = _standard_format_check(name) if name in _STANDARD_FORMATS else _always_invalid
+        formats[name] = _standard_format_check(name) if name in STANDARD_FORMATS else _always_invalid
     return cache_key.validator_cls(
         cache_key.schema,
         formats=formats,
@@ -306,12 +302,45 @@ def negative_schema(
         def filter_values(value: Any, validator: jsonschema_rs.Validator) -> bool:
             return skip_validation_filter or contains_binary(value) or not validator.is_valid(value)
 
+    # Parameters reach the server as text, so a mutated one that spells an accepted value is not negative.
+    is_sent_as_text = location != ParameterLocation.BODY
+    if is_sent_as_text:
+        container = validation_schema if validation_schema is not None else schema
+        assert isinstance(container, dict)
+        # Without `required`, a single parameter is checked against its own schema.
+        parameter_cache_key = CacheKey(
+            operation_name,
+            location,
+            {key: value for key, value in container.items() if key != "required"},
+            validator_cls,
+            frozenset(custom_formats),
+        )
+        types_by_parameter = {
+            name: parameter_types(subschema) for name, subschema in container.get("properties", {}).items()
+        }
+
+    def parameter_reads_as_valid(name: str | int, item: object, validator: jsonschema_rs.Validator) -> bool:
+        if item is not None and not isinstance(item, (str, int, float)):
+            return False
+        return sent_text_is_valid(
+            to_wire_string(item),
+            lambda reading: validator.is_valid({name: reading}),
+            types_by_parameter.get(str(name), []),
+        )
+
+    def mutated_parameter_reads_as_valid(
+        value: dict[str, Any], metadata: MutationMetadata, validator: jsonschema_rs.Validator
+    ) -> bool:
+        return any(
+            parameter_reads_as_valid(mutation.path[0], value[mutation.path[0]], validator)
+            for mutation in metadata.mutations
+            if mutation.path and mutation.path[0] in value
+        )
+
+    # Header names and values answer to the same character rules whoever asks for them.
+    alphabet = alphabet_for(location, generation_config)
     if location.is_in_header:
-        # Header names and values answer to the same character rules whoever asks for them.
-        alphabet = header_alphabet(generation_config)
         custom_formats = {name: strategy for name, strategy in custom_formats.items() if name != HEADER_FORMAT}
-    else:
-        alphabet = Alphabet(allow_x00=generation_config.allow_x00, codec=generation_config.codec)
 
     format_lengths = format_lengths_for(custom_formats)
 
@@ -330,10 +359,24 @@ def negative_schema(
             return st.nothing()
         # Failing every format on principle only speaks for a negated `format`; elsewhere it hides
         # that the mutation left the value conforming.
-        chosen = validator if _negates_format(metadata) else get_real_validator(validator_cache_key)
-        return strategy.filter(lambda value: filter_values(value, chosen)).map(
-            lambda value: GeneratedValue(value, metadata)
-        )
+        negates_format = _negates_format(metadata)
+        chosen = validator if negates_format else get_real_validator(validator_cache_key)
+        if is_sent_as_text:
+            parameter_validator = (
+                get_validator(parameter_cache_key) if negates_format else get_real_validator(parameter_cache_key)
+            )
+            strategy = strategy.filter(
+                lambda value: (
+                    filter_values(value, chosen)
+                    # Parameter containers are always objects.
+                    and not mutated_parameter_reads_as_valid(
+                        cast("dict[str, Any]", value), metadata, parameter_validator
+                    )
+                )
+            )
+        else:
+            strategy = strategy.filter(lambda value: filter_values(value, chosen))
+        return strategy.map(lambda value: GeneratedValue(value, metadata))
 
     if target_descriptors is None:
         target_descriptors = compute_mutation_targets(schema)
@@ -348,98 +391,131 @@ def negative_schema(
         target_descriptors=target_descriptors,
     ).flatmap(generate_value_with_metadata)
 
-    positive_strategy: st.SearchStrategy | None = None
     if location == ParameterLocation.BODY:
-        try:
-            _candidate = build(
-                schema,
-                draft=CANONICALIZE_DRAFT_BY_VALIDATOR[validator_cls],
-                formats=custom_formats,
-                format_lengths=format_lengths,
-                alphabet=alphabet,
-            )
-            _candidate.validate()
-        except (InvalidArgument, InvalidSchema):
-            pass
-        else:
-            if not _candidate.is_empty:
-                positive_strategy = _candidate
-    if positive_strategy is not None:
-        body_schema: JsonSchemaObject = schema if isinstance(schema, dict) else {}
-        inner_mutated_strategy = mutated_strategy
-        # Use the real-format validator here: `filter_values` artificially fails
-        # custom formats, so a permissive sibling target (e.g. `minLength: 0`)
-        # alongside a format-bearing field would let an unchanged-but-valid body
-        # slip through as negative data.
-        real_validator = get_real_validator(validator_cache_key)
-
-        @st.composite  # type: ignore[untyped-decorator]
-        def hybrid(draw: Any) -> GeneratedValue:
-            random = draw(st.randoms())
-            if random.random() < VALUE_CHANNEL_PROBABILITY:
-                positive = draw(positive_strategy)
-                targets = collect_value_targets(positive, body_schema)
-                if not targets:
-                    return draw(inner_mutated_strategy)
-                target_path, schema_pointer, _value, keyword, schema_at_path = draw(st.sampled_from(targets))
-                new_body, original_value, new_value = apply_value_channel(
-                    positive, target_path, keyword, schema_at_path
-                )
-                # Violators are no-ops on permissive schemas; fall back to schema-channel to avoid
-                # false-positive `negative_data_rejection`. Strip Binary to "" before validating —
-                # jsonschema_rs rejects the wrapper but structure-level keywords still fire.
-                body_for_validation = _strip_binary(new_body) if contains_binary(new_body) else new_body
-                if real_validator.is_valid(body_for_validation):
-                    return draw(inner_mutated_strategy)
-                mutation = Mutation(
-                    path=target_path,
-                    parameter_location=location,
-                    schema_pointer=schema_pointer,
-                    channel=MutationChannel.VALUE,
-                    operator=OperatorKind.VALUE_VIOLATOR,
-                    keywords=(keyword,),
-                    parameter=str(target_path[-1]) if target_path else None,
-                    original_value=original_value,
-                    new_value=new_value,
-                )
-                return GeneratedValue(new_body, MutationMetadata(mutations=(mutation,)))
-            return draw(inner_mutated_strategy)
-
-        mutated_strategy = hybrid()
-
-    # For JSON bodies, add syntax-level fuzzing with random bytes (~5% of cases)
-    if location == ParameterLocation.BODY and media_type is not None and is_json(media_type):
-        syntax_fuzzing_strategy = _random_non_json_bytes().map(
-            lambda b: GeneratedValue(
-                b,
-                MutationMetadata(
-                    mutations=(
-                        Mutation(
-                            path=(),
-                            parameter_location=location,
-                            schema_pointer="",
-                            channel=MutationChannel.SCHEMA,
-                            operator=OperatorKind.SYNTAX_FUZZING,
-                            keywords=(),
-                            parameter=None,
-                            original_value=None,
-                            new_value=None,
-                        ),
-                    )
-                ),
-            )
+        positive_strategy = _positive_body_strategy(
+            schema, validator_cls, custom_formats=custom_formats, format_lengths=format_lengths, alphabet=alphabet
         )
-
-        @st.composite  # type: ignore[untyped-decorator]
-        def with_syntax_fuzzing(draw: Any) -> GeneratedValue:
-            random = draw(st.randoms())
-            if random.random() < SYNTAX_FUZZING_PROBABILITY:
-                return draw(syntax_fuzzing_strategy)
-            return draw(mutated_strategy)
-
-        return with_syntax_fuzzing()
+        if positive_strategy is not None:
+            # Use the real-format validator here: `filter_values` artificially fails
+            # custom formats, so a permissive sibling target (e.g. `minLength: 0`)
+            # alongside a format-bearing field would let an unchanged-but-valid body
+            # slip through as negative data.
+            mutated_strategy = _with_value_channel(
+                mutated_strategy,
+                positive_strategy,
+                schema if isinstance(schema, dict) else {},
+                get_real_validator(validator_cache_key),
+                location,
+            )
+        # For JSON bodies, add syntax-level fuzzing with random bytes (~5% of cases)
+        if media_type is not None and is_json(media_type):
+            return _with_syntax_fuzzing(mutated_strategy, location)
 
     return mutated_strategy
+
+
+def _positive_body_strategy(
+    schema: JsonSchema,
+    validator_cls: type[jsonschema_rs.Validator],
+    *,
+    custom_formats: dict[str, st.SearchStrategy[str]],
+    format_lengths: dict[str, FormatLengths],
+    alphabet: Alphabet,
+) -> st.SearchStrategy | None:
+    """Valid bodies to break one value at a time, or None when the schema has none to offer."""
+    try:
+        candidate = build(
+            schema,
+            draft=CANONICALIZE_DRAFT_BY_VALIDATOR[validator_cls],
+            formats=custom_formats,
+            format_lengths=format_lengths,
+            alphabet=alphabet,
+        )
+        candidate.validate()
+    except (InvalidArgument, InvalidSchema):
+        return None
+    if candidate.is_empty:
+        return None
+    return candidate
+
+
+def _with_value_channel(
+    mutated_strategy: st.SearchStrategy,
+    positive_strategy: st.SearchStrategy,
+    body_schema: JsonSchemaObject,
+    real_validator: jsonschema_rs.Validator,
+    location: ParameterLocation,
+) -> st.SearchStrategy:
+    """Sometimes break a single value of a valid body instead of mutating the schema."""
+
+    @st.composite
+    def hybrid(draw: Any) -> GeneratedValue:
+        random = draw(st.randoms())
+        if random.random() < VALUE_CHANNEL_PROBABILITY:
+            positive = draw(positive_strategy)
+            targets = collect_value_targets(positive, body_schema)
+            if not targets:
+                return draw(mutated_strategy)
+            target_path, schema_pointer, _value, keyword, schema_at_path = draw(st.sampled_from(targets))
+            # Breaking happens in place, and positive draws can share objects across draws (e.g. `enum` members).
+            new_body, original_value, new_value = apply_value_channel(
+                cast(JsonValue, deepclone(positive)), target_path, keyword, schema_at_path
+            )
+            # Breaking a value can leave a permissive schema satisfied; fall back to schema mutation to avoid a
+            # false-positive `negative_data_rejection`. Binary values validate as "": the validator rejects the
+            # wrapper, but structure-level keywords still apply.
+            body_for_validation = _strip_binary(new_body) if contains_binary(new_body) else new_body
+            if real_validator.is_valid(body_for_validation):
+                return draw(mutated_strategy)
+            mutation = Mutation(
+                path=target_path,
+                parameter_location=location,
+                schema_pointer=schema_pointer,
+                channel=MutationChannel.VALUE,
+                operator=OperatorKind.VALUE_VIOLATOR,
+                keywords=(keyword,),
+                parameter=str(target_path[-1]) if target_path else None,
+                original_value=original_value,
+                new_value=new_value,
+            )
+            return GeneratedValue(new_body, MutationMetadata(mutations=(mutation,)))
+        return draw(mutated_strategy)
+
+    return hybrid()
+
+
+def _syntax_fuzzing_metadata(location: ParameterLocation) -> MutationMetadata:
+    return MutationMetadata(
+        mutations=(
+            Mutation(
+                path=(),
+                parameter_location=location,
+                schema_pointer="",
+                channel=MutationChannel.SCHEMA,
+                operator=OperatorKind.SYNTAX_FUZZING,
+                keywords=(),
+                parameter=None,
+                original_value=None,
+                new_value=None,
+            ),
+        )
+    )
+
+
+def _with_syntax_fuzzing(mutated_strategy: st.SearchStrategy, location: ParameterLocation) -> st.SearchStrategy:
+    """Sometimes send random bytes that are not JSON at all."""
+    syntax_fuzzing_strategy = _random_non_json_bytes().map(
+        lambda data: GeneratedValue(data, _syntax_fuzzing_metadata(location))
+    )
+
+    @st.composite
+    def with_syntax_fuzzing(draw: Any) -> GeneratedValue:
+        random = draw(st.randoms())
+        if random.random() < SYNTAX_FUZZING_PROBABILITY:
+            return draw(syntax_fuzzing_strategy)
+        return draw(mutated_strategy)
+
+    return with_syntax_fuzzing()
 
 
 def is_non_empty_query(query: dict[str, Any]) -> bool:
@@ -459,7 +535,7 @@ def is_non_empty_query(query: dict[str, Any]) -> bool:
     return urlencode(result, doseq=True) != ""
 
 
-@st.composite  # type: ignore[untyped-decorator]
+@st.composite
 def mutated(
     draw: Draw,
     *,

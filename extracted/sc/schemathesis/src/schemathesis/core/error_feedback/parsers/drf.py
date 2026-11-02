@@ -8,7 +8,7 @@ from schemathesis.core.error_feedback.parsers import PARSERS
 from schemathesis.core.error_feedback.parsers.extractors import (
     ClassificationResult,
     RegexHandler,
-    location_for_method,
+    location_for_parameter,
     numeric_bound,
     size_bound,
 )
@@ -20,6 +20,7 @@ from schemathesis.core.error_feedback.store import (
     ParameterPath,
     TypeMismatchPayload,
 )
+from schemathesis.core.transforms import as_index_or_key
 
 if TYPE_CHECKING:
     from schemathesis.generation.case import Case
@@ -38,9 +39,7 @@ def _walk(body: object, path: ParameterPath = ()) -> Iterator[WalkPair]:
             if key == "non_field_errors":
                 continue
             # DRF emits index-keyed errors as ASCII-digit strings ("0", "1", ...).
-            # `str.isdigit()` would also accept non-ASCII digits, which we don't want.
-            child_key: str | int = int(key) if key.isascii() and key.isdigit() else key
-            yield from _walk(value, path + (child_key,))
+            yield from _walk(value, path + (as_index_or_key(key),))
         return
     if isinstance(body, list):
         had_string = False
@@ -160,6 +159,16 @@ def _has_string_list_leaf(value: object, depth: int = 0) -> bool:
     return False
 
 
+def _unwrap_detail_envelope(operation: APIOperation, body: object) -> object:
+    # Some DRF views wrap query errors as `{"detail": {<field>: [...]}}`; a declared `detail` parameter is a real field.
+    if not isinstance(body, dict) or body.keys() != {"detail"} or "detail" in operation.query:
+        return body
+    inner = body["detail"]
+    if isinstance(inner, dict) and any(isinstance(key, str) and key in operation.query for key in inner):
+        return inner
+    return body
+
+
 @PARSERS.register
 class DRFParser:
     """Parser for Django REST Framework `ValidationError` envelopes — `{<field>: ["...message..."], ...}`."""
@@ -177,7 +186,7 @@ class DRFParser:
         return _has_string_list_leaf(body)
 
     def parse(self, *, operation: APIOperation, body: object, case: Case) -> tuple[Observation, ...]:
-        location = location_for_method(operation.method)
+        body = _unwrap_detail_envelope(operation, body)
         observations: list[Observation] = []
         for path, message in _walk(body):
             classification = _classify(message)
@@ -187,7 +196,7 @@ class DRFParser:
             observations.append(
                 Observation(
                     operation_label=operation.label,
-                    location=location,
+                    location=location_for_parameter(operation, path, case),
                     parameter_path=path,
                     kind=kind,
                     raw_message=message,

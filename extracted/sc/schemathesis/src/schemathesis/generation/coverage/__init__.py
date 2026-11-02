@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import threading
 from collections import OrderedDict
+from collections.abc import Hashable
 
 import jsonschema_rs
 
@@ -18,11 +19,15 @@ class GenerationSession:
     __slots__ = (
         "_lock",
         "_pinned",
+        "distinct_elements",
         "draw_outcomes",
         "format_validators",
         "pattern_strategies",
         "ready_bundles",
         "removed_examples",
+        "shared_targets_seen",
+        "static_bundles",
+        "unexpected_methods_seen",
         "values",
     )
 
@@ -32,7 +37,13 @@ class GenerationSession:
         self.removed_examples: BoundedCache = BoundedCache(maxsize=4096)
         self.ready_bundles: BoundedCache = BoundedCache(maxsize=64)
         self.draw_outcomes: BoundedCache = BoundedCache(maxsize=128)
+        self.distinct_elements: BoundedCache = BoundedCache(maxsize=16)
         self.pattern_strategies: BoundedCache = BoundedCache(maxsize=128)
+        self.static_bundles: BoundedCache = BoundedCache(maxsize=64)
+        # `(path, method)` pairs already probed with an undeclared method, so each path gets one probe per method.
+        self.unexpected_methods_seen: set[tuple[str, str]] = set()
+        # Cases that read the same for every operation reaching their target, so the run sends each once.
+        self.shared_targets_seen: set[Hashable] = set()
         # Pinning a registry keeps its `id` from being recycled into a colliding token.
         self._pinned: OrderedDict[int, object] = OrderedDict()
         self._lock = threading.Lock()
@@ -57,7 +68,9 @@ class GenerationSession:
         self.removed_examples.clear()
         self.ready_bundles.clear()
         self.draw_outcomes.clear()
+        self.distinct_elements.clear()
         self.pattern_strategies.clear()
+        self.static_bundles.clear()
         with self._lock:
             self._pinned.clear()
 

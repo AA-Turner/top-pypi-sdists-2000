@@ -1,3 +1,4 @@
+import math
 import uuid
 from urllib.parse import unquote, urlparse
 
@@ -6,17 +7,21 @@ import pytest
 import requests
 from _pytest.main import ExitCode
 from flask import jsonify
-from hypothesis import HealthCheck, Phase, given, seed, settings
+from hypothesis import HealthCheck, Phase, find, given, settings
 from hypothesis import strategies as st
+from hypothesis.errors import NoSuchExample
 from jsonschema_rs import canonical
 
 import schemathesis
 from schemathesis.config import GenerationConfig
+from schemathesis.core import string_to_boolean
+from schemathesis.core.control import SkipTest
 from schemathesis.core.jsonschema import CANONICALIZE_DRAFT_BY_VALIDATOR, _is_valid_uuid, make_validator
 from schemathesis.core.jsonschema.bundler import BUNDLE_STORAGE_KEY
 from schemathesis.core.parameters import ParameterLocation
 from schemathesis.core.transforms import deepclone
 from schemathesis.generation import GenerationMode
+from schemathesis.generation.hypothesis.examples import generate_many
 from schemathesis.generation.jsonschema.builder import build
 from schemathesis.generation.value import GeneratedValue
 from schemathesis.openapi.generation.filters import is_valid_header
@@ -32,7 +37,7 @@ from schemathesis.specs.openapi.negative.mutations import (
     remove_required_property,
 )
 from schemathesis.specs.openapi.negative.utils import can_negate
-from test.utils import assert_requests_call
+from test.utils import assert_requests_call, run_given
 
 MAX_EXAMPLES = 15
 SUPPRESSED_HEALTH_CHECKS = [HealthCheck.too_slow, HealthCheck.filter_too_much, HealthCheck.data_too_large]
@@ -276,7 +281,7 @@ def test_path_parameters_are_string(data, schema):
     validate_schema(new_schema)
     # And parameters remain primitive types
     new_instance = data.draw(from_schema(new_schema))
-    assert not isinstance(new_instance["foo"], (list | dict))
+    assert not isinstance(new_instance["foo"], ((list, dict)))
     # And there should be no additional parameters
     assert len(new_instance) == 1
     # And instances valid for this schema are not valid for the original one
@@ -378,7 +383,8 @@ def test_no_unsatisfiable_schemas(data):
 
 
 @given(data=st.data())
-@settings(deadline=None, suppress_health_check=SUPPRESSED_HEALTH_CHECKS, max_examples=200, derandomize=True)
+# The crashing mutation is rare, so the sweep needs many draws.
+@settings(deadline=None, suppress_health_check=SUPPRESSED_HEALTH_CHECKS, max_examples=100, derandomize=True)
 def test_mutated_body_with_shared_ref_does_not_crash(data):
     schema = {
         "type": "object",
@@ -426,7 +432,8 @@ def test_mutated_body_with_shared_ref_does_not_crash(data):
 
 
 @given(data=st.data())
-@settings(deadline=None, suppress_health_check=SUPPRESSED_HEALTH_CHECKS, max_examples=200, derandomize=True)
+# The crashing mutation is rare, so the sweep needs many draws.
+@settings(deadline=None, suppress_health_check=SUPPRESSED_HEALTH_CHECKS, max_examples=100, derandomize=True)
 def test_mutated_body_with_bundled_ref_and_inline_enum_does_not_crash(data):
     keywords = {
         "type": "object",
@@ -495,30 +502,26 @@ def test_mutated_query_with_anyof_null_bundled_ref_and_inline_enum_does_not_cras
 
 
 def test_openapi_31_legacy_exclusive_bounds_in_response_schema(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /data",
         {
-            "/data": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "integer",
-                                        "minimum": 1,
-                                        "exclusiveMinimum": True,
-                                    }
-                                }
-                            },
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "exclusiveMinimum": True,
+                            }
                         }
                     },
-                },
+                }
             },
         },
         version="3.1.0",
     )
-    operation = schema["/data"]["GET"]
     response_def = operation.responses.get("200")
     assert response_def is not None
     resolved = response_def.get_schema("application/json")
@@ -528,30 +531,21 @@ def test_openapi_31_legacy_exclusive_bounds_in_response_schema(ctx):
 
 
 def test_openapi_31_legacy_exclusive_bounds_in_negative_generation(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /data",
         {
-            "/data": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {"schema": {"type": "number", "minimum": 0, "exclusiveMinimum": True}}
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                },
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": {"type": "number", "minimum": 0, "exclusiveMinimum": True}}},
             },
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.1.0",
     )
-    operation = schema["/data"]["POST"]
 
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(max_examples=1, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=1)
     def test(case):
         pass
-
-    test()
 
 
 def test_openapi_31_prefix_items_query_param_negative_generation(ctx):
@@ -586,50 +580,39 @@ def test_openapi_31_prefix_items_query_param_negative_generation(ctx):
 
     operation = schema["/box"]["GET"]
 
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(max_examples=1, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=1)
     def test(case):
         pass
 
-    test()
-
 
 def test_openapi_31_prefix_items_body_negative_generation(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /box",
         {
-            "/box": {
-                "post": {
-                    "requestBody": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "box": {
-                                            "type": "array",
-                                            "prefixItems": [{"type": "integer"}],
-                                            "items": False,
-                                        }
-                                    },
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "box": {
+                                    "type": "array",
+                                    "prefixItems": [{"type": "integer"}],
+                                    "items": False,
                                 }
-                            }
+                            },
                         }
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                },
+                    }
+                }
             },
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.1.0",
     )
 
-    operation = schema["/box"]["POST"]
-
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(max_examples=1, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=1)
     def test(case):
         pass
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -648,15 +631,217 @@ def test_optional_query_param_negation(ctx):
         }
     )
 
-    @given(case=schema["/bug"]["get"].as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(deadline=None, max_examples=10, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    @run_given(case=schema["/bug"]["get"].as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=10)
     def test(case):
         request = requests.PreparedRequest()
         request.prepare(**case.as_transport_kwargs(base_url="http://127.0.0.1"))
         # Then negative schema should not generate empty queries
         assert urlparse(request.url).query != ""
 
-    test()
+
+@pytest.mark.parametrize(
+    "parameter_schema",
+    [{"type": "boolean"}, {"type": "string", "enum": ["asc"]}, {"type": "string", "minLength": 1}],
+    ids=["boolean", "enum", "min-length"],
+)
+def test_allow_empty_value_is_not_generated_as_negative(ctx, parameter_schema):
+    schema = ctx.openapi.load_schema(
+        {
+            "/items": {
+                "get": {
+                    "parameters": [
+                        {
+                            "name": "filter",
+                            "in": "query",
+                            "required": True,
+                            "allowEmptyValue": True,
+                            "schema": parameter_schema,
+                        }
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        }
+    )
+
+    with pytest.raises(NoSuchExample):
+        find(
+            schema["/items"]["GET"].as_strategy(generation_mode=GenerationMode.NEGATIVE),
+            lambda case: case.query == {"filter": ""},
+            # The excluded value is rare, so a small budget would pass without looking.
+            settings=settings(max_examples=100, deadline=None),
+        )
+
+
+def _wire_readings(value):
+    if isinstance(value, bool):
+        text = "true" if value else "false"
+    elif value is None:
+        text = "null"
+    else:
+        text = str(value)
+    readings = [text]
+    if text.lower() == "null":
+        readings.append(None)
+    boolean = string_to_boolean(text)
+    if isinstance(boolean, bool):
+        readings.append(boolean)
+    return readings
+
+
+@pytest.mark.hypothesis_nested
+@pytest.mark.parametrize(
+    ("version", "parameter_schema", "allow_empty_value"),
+    [
+        ("3.0.2", {"type": "boolean", "nullable": True}, True),
+        ("3.0.2", {"type": "boolean"}, True),
+        ("3.1.0", {"type": ["boolean", "null"]}, True),
+        ("3.0.2", {"type": "boolean", "nullable": True}, False),
+    ],
+    ids=["nullable-empty", "empty", "type-array-empty", "nullable"],
+)
+def test_negative_query_value_is_invalid_as_sent(ctx, version, parameter_schema, allow_empty_value):
+    # A string that spells a value a sibling branch accepts is that value once it reaches the server.
+    parameter = {"name": "value", "in": "query", "required": True, "schema": parameter_schema}
+    if allow_empty_value:
+        parameter["allowEmptyValue"] = True
+    operation = ctx.openapi.load_operation(
+        "GET /items", {"parameters": [parameter], "responses": {"200": {"description": "OK"}}}, version=version
+    )
+    validator = make_validator(
+        operation.get_parameter_set(ParameterLocation.QUERY).items[0].validation_schema,
+        operation.schema.adapter.jsonschema_validator_cls,
+    )
+
+    # Strings that spell an accepted value are a small slice of the negative space.
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=100, derandomize=True)
+    def test(case):
+        query = case.query or {}
+        mutations = case.meta.phase.data.mutations
+        if (
+            "value" not in query
+            or isinstance(query["value"], (dict, list))
+            or not any(mutation.schema_pointer.startswith("/properties/value") for mutation in mutations)
+        ):
+            return
+        assert not any(validator.is_valid(reading) for reading in _wire_readings(query["value"])), (
+            f"Valid as sent: {query['value']!r}, mutations: {mutations!r}"
+        )
+
+
+@pytest.mark.hypothesis_nested
+def test_negative_query_does_not_negate_annotation_keywords(ctx):
+    annotation_keywords = {"default", "title", "description", "deprecated", "$comment", "readOnly", "writeOnly"}
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [
+                {
+                    "name": "value",
+                    "in": "query",
+                    "required": True,
+                    "schema": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 10,
+                        "default": 5,
+                        "title": "Value",
+                        "description": "An integer value",
+                        "deprecated": True,
+                        "$comment": "Internal note",
+                        "readOnly": False,
+                        "writeOnly": True,
+                    },
+                }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+    )
+
+    # Annotation mutations are rare enough that a small sample can miss them.
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=300, derandomize=True)
+    def test(case):
+        mutations = case.meta.phase.data.mutations
+        assert all(annotation_keywords.isdisjoint(mutation.keywords) for mutation in mutations), mutations
+        description = case.meta.phase.data.description or ""
+        assert all(f"`{keyword}`" not in description for keyword in annotation_keywords), description
+
+
+@pytest.mark.hypothesis_nested
+def test_negative_body_property_is_invalid_against_one_of_siblings(ctx):
+    property_schema = {"oneOf": [{"type": "boolean"}, {"type": "null"}]}
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"value": property_schema},
+                            "required": ["value"],
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    validator = make_validator(property_schema, operation.schema.adapter.jsonschema_validator_cls)
+
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=50, derandomize=True)
+    def test(case):
+        mutations = case.meta.phase.data.mutations
+        if (
+            not isinstance(case.body, dict)
+            or "value" not in case.body
+            or not any(mutation.schema_pointer.startswith("/properties/value") for mutation in mutations)
+        ):
+            return
+        assert not validator.is_valid(case.body["value"]), f"Valid: {case.body['value']!r}, mutations: {mutations!r}"
+
+
+@pytest.mark.parametrize("negated", [False, True])
+@pytest.mark.parametrize(
+    "body_schema",
+    [
+        {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {"value": {"type": "integer", "minimum": 1}},
+                "required": ["value"],
+            },
+        },
+        {
+            "type": "object",
+            "properties": {"value": {"type": "array", "items": {"type": "integer"}, "minItems": 1}},
+            "required": ["value"],
+        },
+    ],
+)
+@pytest.mark.hypothesis_nested
+def test_boolean_not_in_negative_body_schema(ctx, body_schema, negated):
+    body_schema["not"] = negated
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": body_schema}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+    )
+    validator = make_validator(body_schema, operation.schema.adapter.jsonschema_validator_cls)
+
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=10, derandomize=True)
+    def test(case):
+        if not isinstance(case.body, bytes):
+            assert not validator.is_valid(case.body)
 
 
 @pytest.mark.hypothesis_nested
@@ -744,13 +929,10 @@ def test_negative_body_respects_allow_extra_parameter_toggle(ctx):
     schema.config.generation.update(allow_extra_parameters=False)
 
     # Roughly one negative body in five carries an extra property; enough draws to surface it reliably.
-    @given(case=schema["/items"]["POST"].as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(deadline=None, max_examples=50, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    @run_given(case=schema["/items"]["POST"].as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=50)
     def test(case):
         if isinstance(case.body, dict):
             assert set(case.body) <= {"name"}, f"undeclared body properties: {sorted(set(case.body) - {'name'})}"
-
-    test()
 
 
 @pytest.mark.parametrize(
@@ -811,12 +993,9 @@ def test_non_default_styles(ctx, location, schema, style, explode):
         }
     )
 
-    @given(case=schema["/bug"]["get"].as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(deadline=None, max_examples=10, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    @run_given(case=schema["/bug"]["get"].as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=10)
     def test(case):
         assert_requests_call(case)
-
-    test()
 
 
 @pytest.mark.snapshot
@@ -876,23 +1055,20 @@ def test_negative_body_never_validates_against_its_own_schema(ctx):
         "required": ["name", "age", "tag"],
         "additionalProperties": False,
     }
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /items",
         {
-            "/items": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {"application/json": {"schema": body_schema}},
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": body_schema}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
     )
     validator = jsonschema_rs.validator_for(body_schema)
     stacked = 0
 
-    @given(case=schema["/items"]["POST"].as_strategy(generation_mode=GenerationMode.NEGATIVE))
+    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
     @settings(deadline=None, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
     def test(case):
         nonlocal stacked
@@ -910,22 +1086,18 @@ def test_negative_body_never_validates_against_its_own_schema(ctx):
 @pytest.mark.hypothesis_nested
 def test_negative_format_generates_invalid_values(ctx):
     # When a path parameter has `format: uuid`
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /items/{id}",
         {
-            "/items/{id}": {
-                "get": {
-                    "parameters": [
-                        {"name": "id", "in": "path", "required": True, "schema": {"type": "string", "format": "uuid"}}
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "parameters": [
+                {"name": "id", "in": "path", "required": True, "schema": {"type": "string", "format": "uuid"}}
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
     invalid_uuid_found = False
 
-    @given(case=schema["/items/{id}"]["GET"].as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(deadline=None, max_examples=10, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=10)
     def test(case):
         nonlocal invalid_uuid_found
         id_value = case.path_parameters["id"]
@@ -933,7 +1105,6 @@ def test_negative_format_generates_invalid_values(ctx):
         if not _is_valid_uuid(id_value):
             invalid_uuid_found = True
 
-    test()
     # Then at least some generated values should be invalid UUIDs
     assert invalid_uuid_found, "Negative mode should generate invalid UUID values"
 
@@ -951,22 +1122,18 @@ def test_negative_custom_format_generates_invalid_values(ctx):
     # When a user registers a custom format (uuid4)
     schemathesis.openapi.format("uuid4", st.uuids(version=4).map(str))
     # And a path parameter uses that custom format
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /items/{id}",
         {
-            "/items/{id}": {
-                "get": {
-                    "parameters": [
-                        {"name": "id", "in": "path", "required": True, "schema": {"type": "string", "format": "uuid4"}}
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "parameters": [
+                {"name": "id", "in": "path", "required": True, "schema": {"type": "string", "format": "uuid4"}}
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
     invalid_uuid4_found = False
 
-    @given(case=schema["/items/{id}"]["GET"].as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(deadline=None, max_examples=10, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=10)
     def test(case):
         nonlocal invalid_uuid4_found
         id_value = case.path_parameters["id"]
@@ -974,7 +1141,6 @@ def test_negative_custom_format_generates_invalid_values(ctx):
         if not is_valid_uuid4(id_value):
             invalid_uuid4_found = True
 
-    test()
     # Then at least some generated values should be invalid UUID4s
     assert invalid_uuid4_found, "Negative mode should generate invalid UUID4 values for custom formats"
 
@@ -987,30 +1153,24 @@ def test_negative_custom_format_generates_invalid_values(ctx):
     ids=["regex", "uri-reference", "uri-template", "iri-reference", "json-pointer", "hostname"],
 )
 def test_negative_format_values_violate_the_format(ctx, format, version):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /items",
         {
-            "/items": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {"application/json": {"schema": {"type": "string", "format": format}}},
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": {"type": "string", "format": format}}},
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         version=version,
     )
     validator = jsonschema_rs.Draft202012Validator({"type": "string", "format": format}, validate_formats=True)
 
     # Hostnames rarely come out valid by accident, so fewer examples would miss the leak.
-    @given(case=schema["/items"]["POST"].as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(deadline=None, max_examples=30, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=30)
     def test(case):
         if isinstance(case.body, str):
             assert not validator.is_valid(case.body), f"Negative body satisfies '{format}': {case.body!r}"
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -1033,16 +1193,13 @@ def test_multiple_mutations_render_one_line_each():
         target_descriptors=compute_mutation_targets(schema),
     )
 
-    @given(data=st.data())
-    @settings(deadline=None, max_examples=50, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    @run_given(data=st.data(), max_examples=50)
     def test(data):
         draw = data.draw
         _, metadata = ctx.mutate(draw)
         if metadata is not None and metadata.mutations:
             assert metadata.description is not None
             assert metadata.description.count("\n") == max(len(metadata.mutations) - 1, 0)
-
-    test()
 
 
 @pytest.mark.parametrize(
@@ -1058,36 +1215,29 @@ def test_multiple_mutations_render_one_line_each():
 @pytest.mark.hypothesis_nested
 def test_ecma_regex_patterns(ctx, pattern):
     # Large quantifiers can exceed jsonschema_rs's default compiled regex size limit
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "value": {"type": "string", "pattern": pattern},
-                                    },
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "value": {"type": "string", "pattern": pattern},
+                            },
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schema["/test"]["POST"]
 
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(deadline=None, max_examples=10, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=10)
     def inner(case):
         pass
-
-    inner()
 
 
 @pytest.mark.hypothesis_nested
@@ -1098,69 +1248,57 @@ def test_path_parameters_never_contain_slash(ctx):
     # which could match `/api/groups/{id}/{user_id}` instead.
     #
     # This can happen when the generated value is a dict/object that gets stringified with `/` in keys
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /api/groups/{id}",
         {
-            "/api/groups/{id}": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "id",
-                            "in": "path",
-                            "required": True,
-                            "schema": {
-                                "anyOf": [
-                                    {
-                                        "type": "string",
-                                        "examples": ["bqf7a2d9gbgud9a0jgfgt1ie"],
-                                        "pattern": "^[a-zA-Z0-9\\-]+$",
-                                    },
-                                    {"enum": ["valid-id-1", "valid-id-2"]},
-                                ]
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": True,
+                    "schema": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "examples": ["bqf7a2d9gbgud9a0jgfgt1ie"],
+                                "pattern": "^[a-zA-Z0-9\\-]+$",
                             },
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+                            {"enum": ["valid-id-1", "valid-id-2"]},
+                        ]
+                    },
                 }
-            },
+            ],
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.0.0",
     )
-    operation = schema["/api/groups/{id}"]["GET"]
 
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(deadline=None, max_examples=250, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    # The violating draw is rare, so fewer examples would let a regression pass.
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=250)
     def test(case):
         for value in case.path_parameters.values():
             assert "/" not in unquote(str(value))
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
 def test_path_boolean_param_is_not_coerced_to_int_alongside_integer_param(ctx):
     # The integer positive-bias must not rewrite `False` into `1` for a sibling boolean param.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /items/{id}/{flag}",
         {
-            "/items/{id}/{flag}": {
-                "get": {
-                    "parameters": [
-                        {"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}},
-                        {"name": "flag", "in": "path", "required": True, "schema": {"type": "boolean"}},
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            },
-        }
+            "parameters": [
+                {"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}},
+                {"name": "flag", "in": "path", "required": True, "schema": {"type": "boolean"}},
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schema["/items/{id}/{flag}"]["GET"]
 
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.POSITIVE))
-    @settings(deadline=None, max_examples=100, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    # The violating draw is rare, so fewer examples would let a regression pass.
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.POSITIVE), max_examples=100)
     def test(case):
         flag = case.path_parameters["flag"]
         assert flag in {"true", "false"}, f"boolean path param became {flag!r}"
-
-    test()
 
 
 def test_negative_boolean_query_not_mutated_to_object(ctx):
@@ -1182,56 +1320,88 @@ def test_negative_boolean_query_not_mutated_to_object(ctx):
     operation = schema["/users"]["GET"]
 
     # High count: ~1 in 4 boolean negatives is an object; enough draws to surface it reliably.
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(deadline=None, max_examples=50, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=50)
     def test(case):
         value = (case.query or {}).get("active")
         assert not isinstance(value, dict), f"boolean query mutated to coercible object: {value!r}"
 
-    test()
+
+def _is_fractional(value):
+    if isinstance(value, bool) or not isinstance(value, (int, float, str)):
+        return False
+    try:
+        number = float(value)
+    except ValueError:
+        return False
+    return math.isfinite(number) and not number.is_integer()
+
+
+@pytest.mark.parametrize("location", ["body", "query"])
+def test_negative_integer_produces_fractional_numbers(ctx, location):
+    if location == "body":
+        operation_schema = {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {"type": "object", "properties": {"n": {"type": "integer"}}, "required": ["n"]}
+                    }
+                },
+            }
+        }
+    else:
+        operation_schema = {
+            "parameters": [{"name": "n", "in": "query", "required": True, "schema": {"type": "integer"}}]
+        }
+    operation = ctx.openapi.load_operation(
+        "POST /items", {**operation_schema, "responses": {"200": {"description": "OK"}}}
+    )
+    values = []
+
+    # High count: a fraction needs a type change to `number` among many other mutation kinds.
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=300, seed=1)
+    def test(case):
+        container = case.body if location == "body" else case.query
+        if isinstance(container, dict) and "n" in container:
+            values.append(container["n"])
+
+    assert any(_is_fractional(value) for value in values)
 
 
 @pytest.mark.hypothesis_nested
 def test_negative_path_parameters_reject_encoded_slash_for_explicit_slash_examples(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /api/groups/{id}",
         {
-            "/api/groups/{id}": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "id",
-                            "in": "path",
-                            "required": True,
-                            "schema": {
-                                # Explicit slash intent for positive generation
-                                "example": "foo/bar",
-                                "anyOf": [
-                                    {
-                                        "type": "string",
-                                        "examples": ["bqf7a2d9gbgud9a0jgfgt1ie"],
-                                        "pattern": "^[a-zA-Z0-9\\-]+$",
-                                    },
-                                    {"enum": ["valid-id-1", "valid-id-2"]},
-                                ],
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": True,
+                    "schema": {
+                        # Explicit slash intent for positive generation
+                        "example": "foo/bar",
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "examples": ["bqf7a2d9gbgud9a0jgfgt1ie"],
+                                "pattern": "^[a-zA-Z0-9\\-]+$",
                             },
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+                            {"enum": ["valid-id-1", "valid-id-2"]},
+                        ],
+                    },
                 }
-            },
+            ],
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.0.0",
     )
-    operation = schema["/api/groups/{id}"]["GET"]
 
-    @seed(8)
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(deadline=None, max_examples=80, suppress_health_check=SUPPRESSED_HEALTH_CHECKS)
+    # The violating draw is rare, so fewer examples would let a regression pass.
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=80, seed=8)
     def test(case):
         for value in case.path_parameters.values():
             assert "/" not in unquote(str(value))
-
-    test()
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
@@ -1326,11 +1496,10 @@ def test_negative_data_rejection_enum_path_params_no_false_positive(ctx, cli, ap
     def items(kind, id):
         if kind not in VALID_KINDS:
             return jsonify({"error": "invalid kind"}), 400
-        try:
-            id_int = int(id)
-        except ValueError:
+        # Python's `int` also accepts surrounding whitespace, signs, underscores, and non-ASCII digits.
+        if not (id.isascii() and id.isdigit()):
             return jsonify({"error": "id must be an integer"}), 400
-        if not (0 <= id_int <= 2**63 - 1):
+        if int(id) > 2**63 - 1:
             return jsonify({"error": "id out of range"}), 400
         return jsonify({"ok": True}), 200
 
@@ -1339,6 +1508,7 @@ def test_negative_data_rejection_enum_path_params_no_false_positive(ctx, cli, ap
         "--checks=negative_data_rejection",
         "--mode=negative",
         "--phases=fuzzing",
+        # The mutation behind the false positive is rare, so the run needs many cases to reach it.
         "--max-examples=200",
         exit_code=ExitCode.OK,
     )
@@ -1389,6 +1559,7 @@ def test_negative_data_rejection_enum_path_params_non_validating_server(ctx, cli
             "--checks=negative_data_rejection",
             "--mode=negative",
             "--phases=fuzzing",
+            # The mutation behind the false positive is rare, so the run needs many cases to reach it.
             "--max-examples=200",
             "--seed=42",
         )
@@ -1435,7 +1606,7 @@ def test_query_param_invalid_ecma262_pattern_no_runtime_error(ctx, cli, app_runn
 
 
 def test_negative_data_rejection_array_path_param_no_false_positive(ctx, cli, app_runner):
-    # A string example like "hello,world" violates `type: array` but serializes to a valid comma-joined array.
+    # A plain string violates `type: array` but reaches the server as a valid one-item array.
     app, _ = ctx.openapi.make_flask_app(
         {
             "/get/{projects}": {
@@ -1446,8 +1617,7 @@ def test_negative_data_rejection_array_path_param_no_false_positive(ctx, cli, ap
                         "required": True,
                         "schema": {
                             "type": "array",
-                            "examples": ["hello", "world", "hello,world"],
-                            "items": {"type": "string", "enum": ["hello", "world"]},
+                            "items": {"type": "string"},
                             "minItems": 1,
                             "uniqueItems": True,
                         },
@@ -1466,8 +1636,7 @@ def test_negative_data_rejection_array_path_param_no_false_positive(ctx, cli, ap
     @app.route("/get/<projects>")
     def get_projects(projects):
         items = projects.split(",")
-        valid = {"hello", "world"}
-        if not items or any(i not in valid for i in items) or len(items) != len(set(items)):
+        if len(items) != len(set(items)):
             return jsonify({"error": "invalid"}), 422
         return jsonify({"ok": True}), 200
 
@@ -1475,7 +1644,7 @@ def test_negative_data_rejection_array_path_param_no_false_positive(ctx, cli, ap
         app_runner.openapi_url(app),
         "--checks=negative_data_rejection",
         "--mode=all",
-        "--phases=examples",
+        "--phases=coverage",
         exit_code=ExitCode.OK,
     )
 
@@ -1527,7 +1696,7 @@ def test_negative_data_rejection_array_path_param_hook_rewrite_no_false_positive
             app_runner.openapi_url(app),
             "--checks=negative_data_rejection",
             "--mode=all",
-            "--phases=examples",
+            "--phases=coverage",
             exit_code=ExitCode.OK,
         )
 
@@ -1550,11 +1719,11 @@ def test_can_negate(schema, expected):
     assert can_negate(schema) is expected
 
 
-def _operation_with_parameters(ctx, parameters):
-    schema = ctx.openapi.load_schema(
-        {"/items/{itemId}": {"get": {"parameters": parameters, "responses": {"200": {"description": "OK"}}}}}
+def _operation_with_parameters(ctx, parameters, *, version="3.0.2"):
+    operation = ctx.openapi.load_operation(
+        "GET /items/{itemId}", {"parameters": parameters, "responses": {"200": {"description": "OK"}}}, version=version
     )
-    return schema["/items/{itemId}"]["GET"]
+    return operation
 
 
 PLAIN_STRING_PARAMETER = {"name": "itemId", "in": "path", "required": True, "schema": {"type": "string"}}
@@ -1576,14 +1745,7 @@ ANNOTATED_HEADER = {
 # treating it as negatable spends the whole budget on cases that can never be negative.
 def test_plain_string_path_parameter_does_not_exhaust_generation(ctx):
     operation = _operation_with_parameters(ctx, [PLAIN_STRING_PARAMETER, PATTERN_HEADER])
-    cases = []
-
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(max_examples=1, suppress_health_check=list(HealthCheck))
-    def test(case):
-        cases.append(case)
-
-    test()
+    cases = generate_many(operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), 1)
     assert cases
 
 
@@ -1591,48 +1753,204 @@ def test_plain_string_path_parameter_does_not_exhaust_generation(ctx):
 def test_boolean_header_schema(ctx, subschema):
     # Open API 3.1 lets a header be written as a boolean, which claims every value or none. The second
     # header is what makes the whole set negatable, so the boolean one is reached at all.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /items",
         {
-            "/items": {
-                "get": {
-                    "parameters": [
-                        {"name": "X-Key", "in": "header", "schema": subschema},
-                        {
-                            "name": "X-Token",
-                            "in": "header",
-                            "required": True,
-                            "schema": {"type": "string", "pattern": r"^[a-z]+$"},
-                        },
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "parameters": [
+                {"name": "X-Key", "in": "header", "schema": subschema},
+                {
+                    "name": "X-Token",
+                    "in": "header",
+                    "required": True,
+                    "schema": {"type": "string", "pattern": r"^[a-z]+$"},
+                },
+            ],
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.1.0",
     )
-    cases = []
+    cases = generate_many(operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), 3)
+    assert cases
 
-    @given(case=schema["/items"]["GET"].as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(max_examples=3, suppress_health_check=list(HealthCheck))
-    def test(case):
-        cases.append(case)
 
-    test()
+def test_negative_multipart_boolean_property_with_content_type(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"file": True, "name": {"type": "string", "minLength": 2}},
+                            "required": ["name"],
+                        },
+                        "encoding": {"file": {"contentType": "text/plain"}},
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+    )
+    cases = generate_many(operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), 3)
     assert cases
 
 
 def test_unnegatable_path_falls_back_to_positive(ctx):
     operation = _operation_with_parameters(ctx, [PLAIN_STRING_PARAMETER, ANNOTATED_HEADER])
-    modes = []
-
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @settings(max_examples=1, suppress_health_check=list(HealthCheck))
-    def test(case):
-        modes.append({location.value: component.mode.value for location, component in case.meta.components.items()})
-
-    test()
+    modes = [
+        {location.value: component.mode.value for location, component in case.meta.components.items()}
+        for case in generate_many(operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), 1)
+    ]
     assert modes
     assert all(entry["path"] == "positive" and entry["header"] == "negative" for entry in modes), modes
+
+
+@pytest.mark.parametrize(
+    ("path_schema", "version"),
+    [
+        # Keywords for other types never apply to a string value.
+        pytest.param({"type": "string", "properties": {"a": {"type": "integer"}}}, "3.1.0", id="properties"),
+        pytest.param(
+            {"type": "string", "patternProperties": {"^a": {"type": "integer"}}}, "3.1.0", id="pattern-properties"
+        ),
+        pytest.param(
+            {"type": "string", "additionalProperties": {"type": "integer"}}, "3.1.0", id="additional-properties"
+        ),
+        pytest.param({"type": "string", "items": {"type": "integer"}}, "3.1.0", id="items"),
+        pytest.param({"type": "string", "minimum": 3}, "3.1.0", id="minimum"),
+        pytest.param({"type": "string", "prefixItems": [{"type": "integer"}]}, "3.1.0", id="prefix-items"),
+        pytest.param({"type": "string", "minContains": 1}, "3.1.0", id="min-contains"),
+        pytest.param({"type": "string", "maxContains": 1}, "3.1.0", id="max-contains"),
+        pytest.param({"type": "string", "unevaluatedItems": False}, "3.1.0", id="unevaluated-items"),
+        pytest.param({"type": "string", "unevaluatedProperties": False}, "3.1.0", id="unevaluated-properties"),
+        pytest.param({"type": "string", "dependentRequired": {"a": ["b"]}}, "3.1.0", id="dependent-required"),
+        pytest.param(
+            {"type": "string", "dependentSchemas": {"a": {"required": ["b"]}}}, "3.1.0", id="dependent-schemas"
+        ),
+        # Every path value reaches the server as a string, which one of the branches accepts.
+        pytest.param({"anyOf": [{"type": "string"}]}, "3.1.0", id="any-of"),
+        pytest.param({"oneOf": [{"type": "string"}]}, "3.1.0", id="one-of"),
+        pytest.param({"anyOf": [{"type": "string"}, {"type": "null"}]}, "3.1.0", id="any-of-null"),
+        pytest.param({"anyOf": [{"type": "string"}, {"type": "integer"}]}, "3.1.0", id="any-of-integer"),
+        pytest.param({"oneOf": [{"type": "string"}, {"type": "integer", "minimum": 0}]}, "3.1.0", id="one-of-integer"),
+        pytest.param({"anyOf": [{"type": "integer"}, {}]}, "3.1.0", id="empty-branch"),
+        pytest.param({"anyOf": [{"type": "integer"}, True]}, "3.1.0", id="true-branch"),
+        pytest.param({"properties": {"x": {"minLength": 1}}}, "3.0.2", id="untyped-object-min-length-one-property"),
+    ],
+)
+def test_path_schema_leaves_nothing_to_negate(ctx, path_schema, version):
+    operation = _operation_with_parameters(ctx, [{**PLAIN_STRING_PARAMETER, "schema": path_schema}], version=version)
+    operation.schema.config.generation.update(modes=[GenerationMode.NEGATIVE])
+
+    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
+    @settings(max_examples=1, database=None)
+    def test(case):
+        pass
+
+    with pytest.raises(SkipTest, match="Impossible to generate negative test cases"):
+        test()
+
+
+def test_path_combinator_without_string_branch_is_negated(ctx):
+    path_schema = {"anyOf": [{"type": "integer"}, {"type": "boolean"}]}
+    operation = _operation_with_parameters(ctx, [{**PLAIN_STRING_PARAMETER, "schema": path_schema}])
+    validator = make_validator(path_schema, operation.schema.adapter.jsonschema_validator_cls)
+    values = []
+
+    @run_given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), max_examples=10)
+    def test(case):
+        assert case.meta.components[ParameterLocation.PATH].mode == GenerationMode.NEGATIVE
+        values.append(case.path_parameters["itemId"])
+
+    assert values
+    assert not any(validator.is_valid(value) for value in values), values
+
+
+def test_omitting_required_header_next_to_explicit_one_is_negative(ctx):
+    # Dropping the only generated header leaves exactly the explicit headers, which is still a negative case.
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "parameters": [
+                {"name": "X-Tenant", "in": "header", "required": True, "schema": {"type": "string"}},
+                {"name": "X-Token", "in": "header", "required": True, "schema": {"type": "string"}},
+            ],
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": {"type": "object", "required": ["kind"]}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    operation.schema.config.generation.update(modes=[GenerationMode.NEGATIVE])
+    strategy = operation.as_strategy(generation_mode=GenerationMode.NEGATIVE, headers={"X-Tenant": "t"})
+
+    find(
+        strategy,
+        lambda case: "X-Token" not in case.headers and isinstance(case.body, dict) and "kind" in case.body,
+        # Ceiling for a search that stops at the first match.
+        settings=settings(max_examples=100, database=None, suppress_health_check=list(HealthCheck)),
+    )
+
+
+def test_untyped_path_object_is_negated_through_its_properties(ctx):
+    # Without a `type` the path value may be an object, so a property constraint is something to violate.
+    operation = _operation_with_parameters(
+        ctx, [{**PLAIN_STRING_PARAMETER, "schema": {"properties": {"x": {"minLength": 2}}}}]
+    )
+    modes = [
+        case.meta.components[ParameterLocation.PATH].mode
+        for case in generate_many(operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), 10)
+    ]
+    assert set(modes) == {GenerationMode.NEGATIVE}
+
+
+@pytest.mark.parametrize(
+    "header_schema",
+    [
+        {"type": "string", "title": "Authorization"},
+        {"anyOf": [{"type": "string"}, {"type": "null"}], "title": "Authorization"},
+        {"type": ["string", "null"]},
+    ],
+    ids=["annotated", "any-of-null", "type-list-null"],
+)
+def test_optional_plain_header_falls_back_to_positive(ctx, header_schema):
+    # Every header value is a string on the wire, so an optional string header has nothing left to violate.
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [
+                {"name": "Authorization", "in": "header", "required": False, "schema": header_schema},
+                {"name": "limit", "in": "query", "required": True, "schema": {"type": "integer"}},
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+    )
+    modes = [
+        {location.value: component.mode.value for location, component in case.meta.components.items()}
+        for case in generate_many(operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), MAX_EXAMPLES)
+    ]
+    assert modes
+    assert all(entry["header"] == "positive" and entry["query"] == "negative" for entry in modes), modes
+
+
+@pytest.mark.parametrize(
+    "header_schema",
+    [{"type": "string"}, {"type": "string", "title": "Authorization"}],
+    ids=["plain", "annotated"],
+)
+def test_required_string_header_is_negated_by_omission(ctx, header_schema):
+    header = {"name": "Authorization", "in": "header", "required": True, "schema": header_schema}
+    operation = _operation_with_parameters(ctx, [PLAIN_STRING_PARAMETER, header])
+    cases = [
+        (case.meta.components[ParameterLocation.HEADER].mode, "Authorization" in (case.headers or {}))
+        for case in generate_many(operation.as_strategy(generation_mode=GenerationMode.NEGATIVE), MAX_EXAMPLES)
+    ]
+    assert set(cases) == {(GenerationMode.NEGATIVE, False)}
 
 
 def test_negative_body_stays_invalid_when_a_sibling_carries_a_format(ctx):
@@ -1668,8 +1986,8 @@ def test_negative_body_stays_invalid_when_a_sibling_carries_a_format(ctx):
     body = operation.body[0]
     validator = make_validator(body.unoptimized_schema, schema.adapter.jsonschema_validator_cls)
 
-    @given(body.get_strategy(operation, GenerationConfig(), GenerationMode.NEGATIVE))
-    @settings(max_examples=300, deadline=None, database=None, suppress_health_check=list(HealthCheck))
+    # The violating draw is rare, so fewer examples would let a regression pass.
+    @run_given(body.get_strategy(operation, GenerationConfig(), GenerationMode.NEGATIVE), max_examples=300)
     def test(value):
         if isinstance(value, GeneratedValue):
             value = value.value
@@ -1677,26 +1995,21 @@ def test_negative_body_stays_invalid_when_a_sibling_carries_a_format(ctx):
             return
         assert not validator.is_valid(value), f"Negative case conforms to the schema: {value!r}"
 
-    test()
-
 
 def test_negative_declines_unbuildable_negated_body(ctx):
     # `additionalProperties: false` plus an `allOf` of `if`/`then` negates to a shape the
     # canonical strategy builder cannot draw for; must be declined, not raised as fatal.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /items",
         {
-            "/items": {
-                "post": {
-                    "operationId": "createItem",
-                    "requestBody": {
-                        "content": {
-                            "application/json": {"schema": {"$ref": "#/components/schemas/ExportCreateRequestRequest"}}
-                        },
-                        "required": True,
-                    },
-                    "responses": {"201": {"description": "OK"}},
-                }
-            }
+            "operationId": "createItem",
+            "requestBody": {
+                "content": {
+                    "application/json": {"schema": {"$ref": "#/components/schemas/ExportCreateRequestRequest"}}
+                },
+                "required": True,
+            },
+            "responses": {"201": {"description": "OK"}},
         },
         version="3.1.0",
         components={
@@ -1911,12 +2224,13 @@ def test_negative_declines_unbuildable_negated_body(ctx):
             }
         },
     )
-    operation = schema["/items"]["POST"]
 
-    @given(case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE))
-    @seed(1)
-    @settings(max_examples=200, deadline=None, suppress_health_check=list(HealthCheck), phases=[Phase.generate])
+    # The violating draw is rare, so fewer examples would let a regression pass.
+    @run_given(
+        case=operation.as_strategy(generation_mode=GenerationMode.NEGATIVE),
+        max_examples=200,
+        phases=[Phase.generate],
+        seed=1,
+    )
     def test(case):
         pass
-
-    test()

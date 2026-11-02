@@ -86,14 +86,8 @@ def deannotate(data: Any) -> Any:
     return data
 
 
-def load_yamllint_config(yamllint_file: Path | None = None) -> CustomYamlLintConfig:
-    """Load our default yamllint config and any customized override file."""
-    config = CustomYamlLintConfig(file=Path(__file__).parent / "data" / ".yamllint")
-    config.incompatible = ""
-    # Declare local yamllint config file locations.
-    # If we detect local yamllint config we use it but raise a warning
-    # as this is likely to get out of sync with our internal config.
-    yamllint_config_locations = [
+def _yamllint_config_locations(yamllint_file: Path | None = None) -> list[str]:
+    locations = [
         ".yamllint",
         ".yamllint.yaml",
         ".yamllint.yml",
@@ -101,10 +95,17 @@ def load_yamllint_config(yamllint_file: Path | None = None) -> CustomYamlLintCon
         os.getenv("XDG_CONFIG_HOME", "~/.config") + "/yamllint/config",
     ]
     if yamllint_file:
-        # Ensure the CLI option yamllint_file config is the first
-        # file to be loaded
-        yamllint_config_locations.insert(0, str(yamllint_file))
-    for path in yamllint_config_locations:
+        locations.insert(0, str(yamllint_file))
+    return locations
+
+
+def _load_custom_yamllint_config(
+    base_config: CustomYamlLintConfig,
+    yamllint_file: Path | None = None,
+) -> tuple[CustomYamlLintConfig, Path | None]:
+    config = base_config
+    loaded_file: Path | None = None
+    for path in _yamllint_config_locations(yamllint_file):
         file = Path(path).expanduser()
         if file.is_file():
             _logger.debug(
@@ -115,9 +116,15 @@ def load_yamllint_config(yamllint_file: Path | None = None) -> CustomYamlLintCon
             custom_config = CustomYamlLintConfig(file=str(file))
             custom_config.extend(config)  # type: ignore[no-untyped-call]
             config = custom_config
+            loaded_file = file
             break
+    return config, loaded_file
 
-    # Look for settings incompatible with our reformatting
+
+def _validate_yamllint_compatibility(
+    config: CustomYamlLintConfig,
+    loaded_file: Path | None,
+) -> None:
     checks: list[tuple[str, str | int | bool]] = [
         (
             "comments.min-spaces-from-content",
@@ -143,16 +150,6 @@ def load_yamllint_config(yamllint_file: Path | None = None) -> CustomYamlLintCon
             "octal-values.forbid-explicit-octal",
             True,
         ),
-        # (
-        #     "key-duplicates.forbid-duplicated-merge-keys", # v1.34.0+
-        #     True,
-        # ),
-        # (
-        #   "quoted-strings.quote-type", "double",
-        # ),
-        # (
-        #   "quoted-strings.required", "only-when-needed",
-        # ),
     ]
     errors = []
     for setting, expected_value in checks:
@@ -168,9 +165,16 @@ def load_yamllint_config(yamllint_file: Path | None = None) -> CustomYamlLintCon
             errors.append(msg)
     if errors:
         nl = "\n"
-        msg = f"Found incompatible custom yamllint configuration ({file}), please either remove the file or edit it to comply with:{nl}  - {(nl + '  - ').join(errors)}.{nl}{nl}Read https://docs.ansible.com/projects/lint/rules/yaml/ for more details regarding why we have these requirements. Fix mode will not be available."
+        msg = f"Found incompatible custom yamllint configuration ({loaded_file}), please either remove the file or edit it to comply with:{nl}  - {(nl + '  - ').join(errors)}.{nl}{nl}Read https://docs.ansible.com/projects/lint/rules/yaml/ for more details regarding why we have these requirements. Fix mode will not be available."
         config.incompatible = msg
 
+
+def load_yamllint_config(yamllint_file: Path | None = None) -> CustomYamlLintConfig:
+    """Load our default yamllint config and any customized override file."""
+    config = CustomYamlLintConfig(file=Path(__file__).parent / "data" / ".yamllint")
+    config.incompatible = ""
+    config, loaded_file = _load_custom_yamllint_config(config, yamllint_file)
+    _validate_yamllint_compatibility(config, loaded_file)
     _logger.debug("Effective yamllint rules used: %s", config.rules)
     return config
 
@@ -567,7 +571,7 @@ class CustomConstructor(RoundTripConstructor):
             value_su = self.construct_scalar(node)
             try:
                 v = value_su.rstrip("_")
-                underscore = [len(v) - v.rindex("_") - 1, False, False]  # type: Any
+                underscore: Any = [len(v) - v.rindex("_") - 1, False, False]
             except ValueError:
                 underscore = None
             except IndexError:  # pragma: no cover
@@ -620,6 +624,53 @@ class FormattedEmitter(Emitter):
 
     _in_empty_flow_map = False
 
+    # Set to False when yaml[comments] is in skip_list to avoid reformatting
+    # comments even while other fixes are applied. See github issue #5048.
+    fix_comment_spaces = True
+
+    _flow_collection_styles: tuple[bool, ...] = ()
+    _previous_event_ended_flow_collection = False
+    _pending_flow_collection_separator = False
+
+    def emit(self, event: Any) -> None:
+        """Track whether a flow collection needs a separating blank line.
+
+        A blank line between elements should survive when the previous real
+        element ended a flow collection, even if one or more comment lines and
+        intervening container-close events sit in between. A single one-step
+        look-behind is insufficient because closing an enclosing block
+        collection (or emitting comments) happens between the flow collection
+        end and the next element. So instead of resetting the state on the very
+        next event, keep it "sticky" until the next real element (scalar or
+        collection start) is emitted and can consume it.
+        """
+        ended_flow_collection = False
+        if isinstance(event, ruamel.yaml.events.CollectionStartEvent):
+            self._flow_collection_styles += (bool(event.flow_style),)
+        elif isinstance(event, ruamel.yaml.events.CollectionEndEvent):
+            ended_flow_collection = self._flow_collection_styles[-1]
+            self._flow_collection_styles = self._flow_collection_styles[:-1]
+
+        if ended_flow_collection:
+            # A flow collection just closed. Remember that a separating blank
+            # line should be preserved before the next element, surviving any
+            # intervening comment lines and container-close events.
+            self._pending_flow_collection_separator = True
+
+        if isinstance(
+            event,
+            ruamel.yaml.events.ScalarEvent | ruamel.yaml.events.CollectionStartEvent,
+        ):
+            # A new real element begins. Expose the pending separator to the
+            # comment writer for this element, then clear it so subsequent
+            # elements do not inherit it.
+            self._previous_event_ended_flow_collection = (
+                self._pending_flow_collection_separator
+            )
+            self._pending_flow_collection_separator = False
+
+        super().emit(event)
+
     @property
     def _is_root_level_sequence(self) -> bool:
         """Return True if this is a sequence at the root level of the yaml document."""
@@ -661,7 +712,7 @@ class FormattedEmitter(Emitter):
         """Select how to quote scalars if needed."""
         style = super().choose_scalar_style()
         if (
-            style == ""  # noqa: PLC1901
+            style == ""  # ruff:ignore[compare-to-empty-string]
             and self.event.value.startswith("0")
             and len(self.event.value) > 1
         ):
@@ -697,9 +748,9 @@ class FormattedEmitter(Emitter):
 
     def increase_indent(
         self,
-        flow: bool = False,  # noqa: FBT002
+        flow: bool = False,  # ruff:ignore[boolean-default-value-positional-argument]
         sequence: bool | None = None,
-        indentless: bool = False,  # noqa: FBT002
+        indentless: bool = False,  # ruff:ignore[boolean-default-value-positional-argument]
     ) -> None:
         super().increase_indent(flow, sequence, indentless)
         # If our previous node was a sequence and we are still trying to indent, don't
@@ -713,8 +764,8 @@ class FormattedEmitter(Emitter):
         self,
         indicator: str,  # ruamel.yaml typehint is wrong. This is a string.
         need_whitespace: bool,
-        whitespace: bool = False,  # noqa: FBT002
-        indention: bool = False,  # (sic) ruamel.yaml has this typo in their API # noqa: FBT002
+        whitespace: bool = False,  # ruff:ignore[boolean-default-value-positional-argument]
+        indention: bool = False,  # (sic) ruamel.yaml has this typo in their API # ruff:ignore[boolean-default-value-positional-argument]
     ) -> None:
         """Make sure that flow maps get whitespace by the curly braces."""
         # We try to go with one whitespace by the curly braces and adjust accordingly
@@ -748,6 +799,9 @@ class FormattedEmitter(Emitter):
     # "/n/n" results in one blank line (end the previous line, then newline).
     # So, "/n/n/n" or more is too many new lines. Clean it up.
     _re_repeat_blank_lines: Pattern[str] = re.compile(r"\n{3,}")
+    # Insert a space after a leading "#" run when it is missing ("#foo" -> "# foo",
+    # "##foo" -> "## foo"); leave "## foo" and bare "##" untouched.
+    _re_missing_comment_space: Pattern[str] = re.compile(r"^(#+)(?=[^#\s])")
 
     @staticmethod
     def add_octothorpe_protection(string: str) -> str:
@@ -792,7 +846,7 @@ class FormattedEmitter(Emitter):
     def write_comment(
         self,
         comment: CommentToken,
-        pre: bool = False,  # noqa: FBT002
+        pre: bool = False,  # ruff:ignore[boolean-default-value-positional-argument]
     ) -> None:
         """Clean up extra new lines and spaces in comments.
 
@@ -811,32 +865,31 @@ class FormattedEmitter(Emitter):
                 | ruamel.yaml.events.MappingStartEvent,
             )
         ):
-            # drop pure whitespace pre comments
-            # does not apply to End events since they consume one of the newlines.
-            value = ""
-        elif (
+            # Preserve a separating blank line after a flow collection. Pure
+            # whitespace comments elsewhere remain removed by the formatter.
+            value = "\n" if self._previous_event_ended_flow_collection else ""
+        elif self.fix_comment_spaces and (
             pre
             and not value.strip()
             and isinstance(self.event, ruamel.yaml.events.MappingStartEvent)
         ):
             value = self._re_repeat_blank_lines.sub("", value)
-        elif pre:
-            # preserve content in pre comment with at least one newline,
-            # but no extra blank lines.
-            value = self._re_repeat_blank_lines.sub("\n", value)
-        else:
+        elif self.fix_comment_spaces and pre:
+            # preserve content in pre comment, collapsing runs of blank lines
+            # down to a single blank line.
+            value = self._re_repeat_blank_lines.sub("\n\n", value)
+        elif self.fix_comment_spaces:
             # single blank lines in post comments
             value = self._re_repeat_blank_lines.sub("\n\n", value)
 
-        # make sure that comments have a space after #
-        if value.startswith("#") and not value.startswith("# ") and value[1:].strip():
-            value = "# " + value[1:]
-
-        comment.value = value
-
-        # make sure that the eol comment only has one space before it.
-        if comment.column > self.column + 1 and not pre:
-            comment.column = self.column + 1
+        if self.fix_comment_spaces:
+            value = self._re_missing_comment_space.sub(r"\1 ", value)
+            comment.value = value
+            # make sure that the eol comment only has one space before it.
+            if comment.column > self.column + 1 and not pre:
+                comment.column = self.column + 1
+        else:
+            comment.value = value
 
         return super().write_comment(comment, pre)
 
@@ -870,6 +923,7 @@ class FormattedYAML(YAML):
         plug_ins: list[str] | None = None,
         version: tuple[int, int] | None = None,
         config: dict[str, bool | int | str] | None = None,
+        fix_comment_spaces: bool = True,
     ):
         """Return a configured ``ruamel.yaml.YAML`` instance.
 
@@ -963,6 +1017,16 @@ class FormattedYAML(YAML):
 
         # If someone doesn't want our FormattedEmitter, they can change it.
         self.Emitter = FormattedEmitter
+
+        # When yaml[comments] is in skip_list, disable the comment-space
+        # reformatting in the emitter so --fix doesn't touch comments even
+        # while applying other transforms (see github issue #5048).
+        if not fix_comment_spaces:
+
+            class _FormattedEmitterNoCommentFix(FormattedEmitter):
+                fix_comment_spaces = False
+
+            self.Emitter = _FormattedEmitterNoCommentFix
 
         # ignore invalid preferred_quote setting
         if preferred_quote in ['"', "'"]:
@@ -1081,7 +1145,7 @@ class FormattedYAML(YAML):
             data = self.load_all(stream=text)
         except ParserError:
             data = None
-            _logger.error(  # noqa: TRY400
+            _logger.error(  # ruff:ignore[error-instead-of-exception]
                 "Invalid yaml, verify the file contents and try again.",
             )
         if preamble_comment is not None and isinstance(
@@ -1284,7 +1348,7 @@ def clean_json(
     :param func: a callable that takes a key in argument and return True for each key to delete
     """
     if isinstance(obj, dict):
-        for key in list(obj.keys()):
+        for key in tuple(obj):
             if func(key):
                 del obj[key]
             else:

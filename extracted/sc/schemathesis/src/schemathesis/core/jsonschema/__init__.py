@@ -1,6 +1,7 @@
 import re
 import uuid
 from collections.abc import Callable
+from functools import lru_cache
 from itertools import count
 from typing import Any, cast
 
@@ -28,19 +29,59 @@ FANCY_REGEX_OPTIONS = jsonschema_rs.FancyRegexOptions(size_limit=150_000_000)
 DRAFT_03_DIALECT = "http://json-schema.org/draft-03/schema#"
 
 
-def compile_ecma_pattern(pattern: str) -> re.Pattern[str] | None:
-    """The pattern under the validator's reading of it, or `None` when Python `re` rejects it."""
-    # `re.ASCII`: the validator's engine expands `\d`, `\w`, `\s` and `\b` over ASCII, Python over the
-    # whole of Unicode, so the default reading draws values the schema rejects.
+# `^X{m,n}$` over a one-character `X` compiles to `n` copies of `X`, so large bounds become huge automata.
+_BOUNDED_SINGLE_CHARACTER = re.compile(r"\^(\.|\\[dDwWsS]|\[\^?(?:[^\]\[\\]|\\.)+\])\{(\d+)(?:(,)(\d*))?\}\$")
+
+
+@lru_cache(maxsize=256)
+def pattern_matcher(pattern: str) -> Callable[[str], bool] | None:
+    """The validator's own `pattern` check, or `None` when the validator cannot compile the pattern."""
     try:
-        return re.compile(pattern, re.ASCII)
-    except (re.error, ValueError):
+        is_valid = jsonschema_rs.Draft202012Validator(
+            {"pattern": pattern}, pattern_options=FANCY_REGEX_OPTIONS
+        ).is_valid
+    except jsonschema_rs.ValidationError:
         return None
+    bounded = _BOUNDED_SINGLE_CHARACTER.fullmatch(pattern)
+    if bounded is None:
+        return is_valid
+    # The same strings, with the repetition count checked as a length instead of compiled into the automaton.
+    atom, minimum, comma, maximum = bounded.groups()
+    unbounded = jsonschema_rs.Draft202012Validator(
+        {"pattern": f"^{atom}*$"}, pattern_options=FANCY_REGEX_OPTIONS
+    ).is_valid
+    low = int(minimum)
+    high = low if comma is None else (int(maximum) if maximum else None)
+
+    def matches(value: object) -> bool:
+        if not unbounded(value):
+            return False
+        if not isinstance(value, str):
+            return True
+        return low <= len(value) and (high is None or len(value) <= high)
+
+    return matches
+
+
+def _matches_anything(_: str) -> bool:
+    return True
+
+
+def matches_pattern(pattern: str) -> Callable[[str], bool]:
+    """The validator's own `pattern` check, for the places where Python `re` reads the pattern differently."""
+    # A pattern the validator cannot compile is not enforced by it either.
+    return pattern_matcher(pattern) or _matches_anything
 
 
 def _is_valid_uuid(value: object) -> bool:
     if not isinstance(value, str):
         return True
+    return _is_uuid_string(value)
+
+
+# Generated bodies repeat the same identifiers in every case, each checked again.
+@lru_cache(maxsize=1024)
+def _is_uuid_string(value: str) -> bool:
     try:
         uuid.UUID(value)
         return True
@@ -69,6 +110,35 @@ DRAFT4_SUPPLEMENTAL_FORMATS: dict[str, Callable[[Any], bool]] = {
     "uuid": _is_valid_uuid,
 }
 
+
+def supplemental_formats(validator_cls: type) -> dict[str, Callable[[Any], bool]] | None:
+    return DRAFT4_SUPPLEMENTAL_FORMATS if validator_cls is jsonschema_rs.Draft4Validator else None
+
+
+# Formats with a standard definition; servers validate them that way whatever draft the schema declares.
+STANDARD_FORMATS = frozenset(
+    {
+        "date",
+        "date-time",
+        "duration",
+        "email",
+        "hostname",
+        "idn-email",
+        "idn-hostname",
+        "ipv4",
+        "ipv6",
+        "iri",
+        "iri-reference",
+        "json-pointer",
+        "regex",
+        "relative-json-pointer",
+        "time",
+        "uri",
+        "uri-reference",
+        "uri-template",
+        "uuid",
+    }
+)
 
 # Format names that each `jsonschema_rs` validator class actually validates (after
 # the supplemental `uuid` registration for Draft 4 above). Anything outside the
@@ -129,52 +199,8 @@ VALIDATED_FORMATS_BY_DRAFT: dict[type[jsonschema_rs.Validator], frozenset[str]] 
             "uri-template",
         }
     ),
-    jsonschema_rs.Draft201909Validator: frozenset(
-        {
-            "date",
-            "date-time",
-            "duration",
-            "email",
-            "hostname",
-            "idn-email",
-            "idn-hostname",
-            "ipv4",
-            "ipv6",
-            "iri",
-            "iri-reference",
-            "json-pointer",
-            "regex",
-            "relative-json-pointer",
-            "time",
-            "uri",
-            "uri-reference",
-            "uri-template",
-            "uuid",
-        }
-    ),
-    jsonschema_rs.Draft202012Validator: frozenset(
-        {
-            "date",
-            "date-time",
-            "duration",
-            "email",
-            "hostname",
-            "idn-email",
-            "idn-hostname",
-            "ipv4",
-            "ipv6",
-            "iri",
-            "iri-reference",
-            "json-pointer",
-            "regex",
-            "relative-json-pointer",
-            "time",
-            "uri",
-            "uri-reference",
-            "uri-template",
-            "uuid",
-        }
-    ),
+    jsonschema_rs.Draft201909Validator: STANDARD_FORMATS,
+    jsonschema_rs.Draft202012Validator: STANDARD_FORMATS,
 }
 
 
@@ -234,22 +260,36 @@ def _split_bundle(schema: JsonSchema, validator_cls: type) -> tuple[JsonSchema, 
     Spliced in, every validator compiles the entire bundle whether or not it references it -
     a shared registry compiles it once for all of them.
     """
+    schema, uri, registry = _detach_bundle(schema, validator_cls)
+    if uri is None:
+        return schema, registry
+    return cast("JsonSchema", _absolute_bundle_refs(schema, uri)), registry
+
+
+def _detach_bundle(
+    schema: JsonSchema, validator_cls: type
+) -> tuple[JsonSchema, str | None, jsonschema_rs.Registry | None]:
+    """The schema without its bundle, with the URI its references into the bundle resolve against."""
     if not isinstance(schema, dict):
-        return schema, None
+        return schema, None, None
     bundled = schema.get(BUNDLE_STORAGE_KEY)
     if not isinstance(bundled, dict) or validator_cls not in CANONICALIZE_DRAFT_BY_VALIDATOR:
-        return schema, None
+        return schema, None, None
     uri, registry = _bundle_registry(bundled, validator_cls)
     without_bundle = {key: value for key, value in schema.items() if key != BUNDLE_STORAGE_KEY}
-    return cast("JsonSchema", _absolute_bundle_refs(without_bundle, uri)), registry
+    return without_bundle, uri, registry
 
 
 def _build_validator(
     schema: JsonSchema, validator_cls: type, registry: jsonschema_rs.Registry | None = None
 ) -> jsonschema_rs.Validator:
-    kwargs: dict[str, Any] = {"validate_formats": True, "pattern_options": FANCY_REGEX_OPTIONS}
-    if validator_cls is jsonschema_rs.Draft4Validator:
-        kwargs["formats"] = DRAFT4_SUPPLEMENTAL_FORMATS
+    # References arrive bundled, so a build never needs the network; a `$schema` URL would otherwise be fetched.
+    kwargs: dict[str, Any] = {
+        "validate_formats": True,
+        "pattern_options": FANCY_REGEX_OPTIONS,
+        "offline": True,
+        "formats": supplemental_formats(validator_cls),
+    }
     if registry is not None:
         kwargs["registry"] = registry
     return validator_cls(schema, **kwargs)
@@ -257,9 +297,14 @@ def _build_validator(
 
 def make_validator(schema: JsonSchema, validator_cls: type) -> jsonschema_rs.Validator:
     """Build a validator with project-wide kwargs: format/pattern checks and Draft 4 supplements."""
-    schema, registry = _split_bundle(schema, validator_cls)
+    schema, uri, registry = _detach_bundle(schema, validator_cls)
+    # The URI names one bundle, so the schema can be keyed before its references are rewritten to point there.
     try:
-        cache_key: tuple[str, type] | None = (jsonschema_rs.canonical.json.to_string(schema), validator_cls)
+        cache_key: tuple[str, str | None, type] | None = (
+            jsonschema_rs.canonical.json.to_string(schema),
+            uri,
+            validator_cls,
+        )
     except (TypeError, ValueError):
         cache_key = None
     if cache_key is not None:
@@ -269,6 +314,8 @@ def make_validator(schema: JsonSchema, validator_cls: type) -> jsonschema_rs.Val
         failure = _validator_failure_cache.get(cache_key)
         if failure is not MISSING:
             raise failure.with_traceback(None)
+    if uri is not None:
+        schema = cast("JsonSchema", _absolute_bundle_refs(schema, uri))
     try:
         validator = _build_validator(schema, validator_cls, registry)
     except jsonschema_rs.ValidationError as exc:
@@ -321,12 +368,42 @@ def schema_with_bundle(schema: JsonSchema, root_schema: JsonSchema) -> JsonSchem
 
 def maybe_resolve_bundled(schema: dict[str, Any]) -> dict[str, Any]:
     """Follow `$ref` into a sibling `x-bundled` map; return `schema` as-is when not a bundled-ref node."""
+    return resolve_bundled_ref(schema, schema.get(BUNDLE_STORAGE_KEY))
+
+
+def resolve_bundled_root(schema: dict[str, Any]) -> dict[str, Any]:
+    """Follow a root `$ref` into `x-bundled`, keeping the bundle so `$ref`s inside the target still resolve."""
+    # `schema_with_bundle` preserves shape: dict in, dict out.
+    return cast("dict[str, Any]", schema_with_bundle(maybe_resolve_bundled(schema), schema))
+
+
+def resolve_with_root_bundle(schema: dict[str, Any], root_schema: dict[str, Any]) -> dict[str, Any]:
+    """Follow a bundled `$ref` (e.g. `#/x-bundled/Foo`) by splicing `root_schema`'s bundle into `schema`."""
+    # `schema_with_bundle` preserves shape: dict in, dict out.
+    return maybe_resolve_bundled(cast("dict[str, Any]", schema_with_bundle(schema, root_schema)))
+
+
+def resolve_bundled_ref(schema: dict[str, Any], bundled: object) -> dict[str, Any]:
+    """Follow `$ref` chains into the `bundled` map; return `schema` as-is when it does not point into it."""
     ref = schema.get("$ref")
-    bundled = schema.get(BUNDLE_STORAGE_KEY)
     if not isinstance(ref, str) or not isinstance(bundled, dict):
         return schema
     target = bundled.get(ref.rsplit("/", 1)[-1])
-    return target if isinstance(target, dict) else schema
+    if not isinstance(target, dict):
+        return schema
+    ref = target.get("$ref")
+    if not isinstance(ref, str):
+        return target
+    # Alias components chain `$ref`s; the hop bound stops reference cycles.
+    for _ in range(len(bundled)):
+        next_target = bundled.get(ref.rsplit("/", 1)[-1])
+        if not isinstance(next_target, dict):
+            return target
+        target = next_target
+        ref = target.get("$ref")
+        if not isinstance(ref, str):
+            return target
+    return target
 
 
 def is_unsatisfiable(schema: object) -> bool:
@@ -362,7 +439,9 @@ __all__ = [
     "BundleError",
     "CANONICALIZE_DRAFT_BY_VALIDATOR",
     "DRAFT4_SUPPLEMENTAL_FORMATS",
+    "supplemental_formats",
     "DRAFT_03_DIALECT",
+    "STANDARD_FORMATS",
     "VALIDATED_FORMATS_BY_DRAFT",
     "FANCY_REGEX_OPTIONS",
     "is_unsatisfiable",
@@ -370,6 +449,9 @@ __all__ = [
     "make_validator",
     "make_validator_for",
     "maybe_resolve_bundled",
+    "resolve_bundled_ref",
+    "resolve_bundled_root",
+    "resolve_with_root_bundle",
     "bundle",
     "schema_with_bundle",
     "REFERENCE_TO_BUNDLE_PREFIX",

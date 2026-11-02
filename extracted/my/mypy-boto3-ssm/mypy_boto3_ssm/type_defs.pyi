@@ -39,6 +39,7 @@ from .literals import (
     AutomationSubtypeType,
     AutomationTypeType,
     CalendarStateType,
+    CloudConnectorFilterKeyType,
     CommandFilterKeyType,
     CommandInvocationStatusType,
     CommandPluginStatusType,
@@ -48,6 +49,7 @@ from .literals import (
     ComplianceStatusType,
     ComplianceUploadTypeType,
     ConnectionStatusType,
+    DeletionModeType,
     DescribeActivationsFilterKeysType,
     DocumentFilterKeyType,
     DocumentFormatType,
@@ -112,6 +114,9 @@ from .literals import (
     SourceTypeType,
     StepExecutionFilterKeyType,
     StopTypeType,
+    ValidationFindingCodeType,
+    ValidationFindingScopeTypeType,
+    ValidationFindingTypeType,
 )
 
 if sys.version_info >= (3, 12):
@@ -150,11 +155,19 @@ __all__ = (
     "AutomationExecutionMetadataTypeDef",
     "AutomationExecutionPreviewTypeDef",
     "AutomationExecutionTypeDef",
+    "AzureConfigurationOutputTypeDef",
+    "AzureConfigurationTypeDef",
+    "AzureSubscriptionTypeDef",
     "BaselineOverrideTypeDef",
     "BlobTypeDef",
     "CancelCommandRequestTypeDef",
     "CancelMaintenanceWindowExecutionRequestTypeDef",
     "CancelMaintenanceWindowExecutionResultTypeDef",
+    "CloudConnectorConfigurationOutputTypeDef",
+    "CloudConnectorConfigurationTypeDef",
+    "CloudConnectorConfigurationUnionTypeDef",
+    "CloudConnectorFilterTypeDef",
+    "CloudConnectorSummaryTypeDef",
     "CloudWatchOutputConfigTypeDef",
     "CommandFilterTypeDef",
     "CommandInvocationTypeDef",
@@ -168,6 +181,8 @@ __all__ = (
     "ComplianceStringFilterTypeDef",
     "ComplianceSummaryItemTypeDef",
     "CompliantSummaryTypeDef",
+    "ConfigurationTargetsOutputTypeDef",
+    "ConfigurationTargetsTypeDef",
     "CreateActivationRequestTypeDef",
     "CreateActivationResultTypeDef",
     "CreateAssociationBatchRequestEntryOutputTypeDef",
@@ -177,6 +192,8 @@ __all__ = (
     "CreateAssociationBatchResultTypeDef",
     "CreateAssociationRequestTypeDef",
     "CreateAssociationResultTypeDef",
+    "CreateCloudConnectorRequestTypeDef",
+    "CreateCloudConnectorResultTypeDef",
     "CreateDocumentRequestTypeDef",
     "CreateDocumentResultTypeDef",
     "CreateMaintenanceWindowRequestTypeDef",
@@ -191,6 +208,8 @@ __all__ = (
     "CredentialsTypeDef",
     "DeleteActivationRequestTypeDef",
     "DeleteAssociationRequestTypeDef",
+    "DeleteCloudConnectorRequestTypeDef",
+    "DeleteCloudConnectorResultTypeDef",
     "DeleteDocumentRequestTypeDef",
     "DeleteInventoryRequestTypeDef",
     "DeleteInventoryResultTypeDef",
@@ -332,6 +351,8 @@ __all__ = (
     "GetAutomationExecutionResultTypeDef",
     "GetCalendarStateRequestTypeDef",
     "GetCalendarStateResponseTypeDef",
+    "GetCloudConnectorRequestTypeDef",
+    "GetCloudConnectorResultTypeDef",
     "GetCommandInvocationRequestTypeDef",
     "GetCommandInvocationRequestWaitTypeDef",
     "GetCommandInvocationResultTypeDef",
@@ -422,6 +443,9 @@ __all__ = (
     "ListAssociationsRequestPaginateTypeDef",
     "ListAssociationsRequestTypeDef",
     "ListAssociationsResultTypeDef",
+    "ListCloudConnectorsRequestPaginateTypeDef",
+    "ListCloudConnectorsRequestTypeDef",
+    "ListCloudConnectorsResultTypeDef",
     "ListCommandInvocationsRequestPaginateTypeDef",
     "ListCommandInvocationsRequestTypeDef",
     "ListCommandInvocationsResultTypeDef",
@@ -631,6 +655,8 @@ __all__ = (
     "UpdateAssociationResultTypeDef",
     "UpdateAssociationStatusRequestTypeDef",
     "UpdateAssociationStatusResultTypeDef",
+    "UpdateCloudConnectorRequestTypeDef",
+    "UpdateCloudConnectorResultTypeDef",
     "UpdateDocumentDefaultVersionRequestTypeDef",
     "UpdateDocumentDefaultVersionResultTypeDef",
     "UpdateDocumentMetadataRequestTypeDef",
@@ -650,6 +676,11 @@ __all__ = (
     "UpdatePatchBaselineResultTypeDef",
     "UpdateResourceDataSyncRequestTypeDef",
     "UpdateServiceSettingRequestTypeDef",
+    "ValidateCloudConnectorRequestPaginateTypeDef",
+    "ValidateCloudConnectorRequestTypeDef",
+    "ValidateCloudConnectorResultTypeDef",
+    "ValidationFindingScopeTypeDef",
+    "ValidationFindingTypeDef",
     "WaiterConfigTypeDef",
 )
 
@@ -753,6 +784,10 @@ class ProgressCountersTypeDef(TypedDict):
     CancelledSteps: NotRequired[int]
     TimedOutSteps: NotRequired[int]
 
+class AzureSubscriptionTypeDef(TypedDict):
+    Id: str
+    DisplayName: NotRequired[str]
+
 BlobTypeDef = Union[str, bytes, IO[Any], StreamingBody]
 
 class CancelCommandRequestTypeDef(TypedDict):
@@ -761,6 +796,18 @@ class CancelCommandRequestTypeDef(TypedDict):
 
 class CancelMaintenanceWindowExecutionRequestTypeDef(TypedDict):
     WindowExecutionId: str
+
+class CloudConnectorFilterTypeDef(TypedDict):
+    FilterKey: NotRequired[CloudConnectorFilterKeyType]
+    FilterValues: NotRequired[Sequence[str]]
+
+class CloudConnectorSummaryTypeDef(TypedDict):
+    CloudConnectorId: NotRequired[str]
+    DisplayName: NotRequired[str]
+    Description: NotRequired[str]
+    RoleArn: NotRequired[str]
+    CreatedAt: NotRequired[datetime]
+    UpdatedAt: NotRequired[datetime]
 
 class CloudWatchOutputConfigTypeDef(TypedDict):
     CloudWatchLogGroupName: NotRequired[str]
@@ -859,6 +906,9 @@ class DeleteAssociationRequestTypeDef(TypedDict):
     InstanceId: NotRequired[str]
     AssociationId: NotRequired[str]
 
+class DeleteCloudConnectorRequestTypeDef(TypedDict):
+    CloudConnectorId: str
+
 class DeleteDocumentRequestTypeDef(TypedDict):
     Name: str
     DocumentVersion: NotRequired[str]
@@ -897,6 +947,7 @@ class DeleteResourcePolicyRequestTypeDef(TypedDict):
     ResourceArn: str
     PolicyId: str
     PolicyHash: str
+    DeletionMode: NotRequired[DeletionModeType]
 
 class DeregisterManagedInstanceRequestTypeDef(TypedDict):
     InstanceId: str
@@ -1220,6 +1271,9 @@ class GetCalendarStateRequestTypeDef(TypedDict):
     CalendarNames: Sequence[str]
     AtTime: NotRequired[str]
 
+class GetCloudConnectorRequestTypeDef(TypedDict):
+    CloudConnectorId: str
+
 class GetCommandInvocationRequestTypeDef(TypedDict):
     CommandId: str
     InstanceId: str
@@ -1392,10 +1446,16 @@ class InstanceInfoTypeDef(TypedDict):
     InstanceStatus: NotRequired[str]
     IpAddress: NotRequired[str]
     ManagedStatus: NotRequired[ManagedStatusType]
+    Name: NotRequired[str]
     PlatformType: NotRequired[PlatformTypeType]
     PlatformName: NotRequired[str]
     PlatformVersion: NotRequired[str]
     ResourceType: NotRequired[ResourceTypeType]
+    SourceType: NotRequired[SourceTypeType]
+    SourceId: NotRequired[str]
+    SourceLocation: NotRequired[str]
+    AvailabilityZone: NotRequired[str]
+    AvailabilityZoneId: NotRequired[str]
 
 class InventoryDeletionSummaryItemTypeDef(TypedDict):
     Version: NotRequired[str]
@@ -1658,6 +1718,19 @@ class UpdateServiceSettingRequestTypeDef(TypedDict):
     SettingId: str
     SettingValue: str
 
+class ValidateCloudConnectorRequestTypeDef(TypedDict):
+    CloudConnectorId: str
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+
+ValidationFindingScopeTypeDef = TypedDict(
+    "ValidationFindingScopeTypeDef",
+    {
+        "Type": NotRequired[ValidationFindingScopeTypeType],
+        "Id": NotRequired[str],
+    },
+)
+
 class ActivationTypeDef(TypedDict):
     ActivationId: NotRequired[str]
     Description: NotRequired[str]
@@ -1727,6 +1800,10 @@ class CreateActivationResultTypeDef(TypedDict):
     ActivationCode: str
     ResponseMetadata: ResponseMetadataTypeDef
 
+class CreateCloudConnectorResultTypeDef(TypedDict):
+    CloudConnectorId: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
 class CreateMaintenanceWindowResultTypeDef(TypedDict):
     WindowId: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -1742,6 +1819,10 @@ class CreateOpsMetadataResultTypeDef(TypedDict):
 
 class CreatePatchBaselineResultTypeDef(TypedDict):
     BaselineId: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class DeleteCloudConnectorResultTypeDef(TypedDict):
+    CloudConnectorId: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class DeleteMaintenanceWindowResultTypeDef(TypedDict):
@@ -1961,6 +2042,10 @@ class UnlabelParameterVersionResultTypeDef(TypedDict):
     InvalidLabels: list[str]
     ResponseMetadata: ResponseMetadataTypeDef
 
+class UpdateCloudConnectorResultTypeDef(TypedDict):
+    CloudConnectorId: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
 class UpdateMaintenanceWindowResultTypeDef(TypedDict):
     WindowId: str
     Name: str
@@ -2074,10 +2159,26 @@ class AutomationExecutionPreviewTypeDef(TypedDict):
     TargetPreviews: NotRequired[list[TargetPreviewTypeDef]]
     TotalAccounts: NotRequired[int]
 
+class ConfigurationTargetsOutputTypeDef(TypedDict):
+    Subscriptions: NotRequired[list[AzureSubscriptionTypeDef]]
+
+class ConfigurationTargetsTypeDef(TypedDict):
+    Subscriptions: NotRequired[Sequence[AzureSubscriptionTypeDef]]
+
 class MaintenanceWindowLambdaParametersTypeDef(TypedDict):
     ClientContext: NotRequired[str]
     Qualifier: NotRequired[str]
     Payload: NotRequired[BlobTypeDef]
+
+class ListCloudConnectorsRequestTypeDef(TypedDict):
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+    Filters: NotRequired[Sequence[CloudConnectorFilterTypeDef]]
+
+class ListCloudConnectorsResultTypeDef(TypedDict):
+    CloudConnectors: list[CloudConnectorSummaryTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
 
 class GetCommandInvocationResultTypeDef(TypedDict):
     CommandId: str
@@ -2408,6 +2509,10 @@ class ListAssociationsRequestPaginateTypeDef(TypedDict):
     AssociationFilterList: NotRequired[Sequence[AssociationFilterTypeDef]]
     PaginationConfig: NotRequired[PaginatorConfigTypeDef]
 
+class ListCloudConnectorsRequestPaginateTypeDef(TypedDict):
+    Filters: NotRequired[Sequence[CloudConnectorFilterTypeDef]]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
 class ListCommandInvocationsRequestPaginateTypeDef(TypedDict):
     CommandId: NotRequired[str]
     InstanceId: NotRequired[str]
@@ -2441,6 +2546,10 @@ class ListResourceComplianceSummariesRequestPaginateTypeDef(TypedDict):
 
 class ListResourceDataSyncRequestPaginateTypeDef(TypedDict):
     SyncType: NotRequired[str]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+class ValidateCloudConnectorRequestPaginateTypeDef(TypedDict):
+    CloudConnectorId: str
     PaginationConfig: NotRequired[PaginatorConfigTypeDef]
 
 class DescribeAutomationStepExecutionsRequestPaginateTypeDef(TypedDict):
@@ -2851,6 +2960,7 @@ class InstanceInformationTypeDef(TypedDict):
     AssociationOverview: NotRequired[InstanceAggregatedAssociationOverviewTypeDef]
     SourceId: NotRequired[str]
     SourceType: NotRequired[SourceTypeType]
+    SourceLocation: NotRequired[str]
 
 class InstancePropertyTypeDef(TypedDict):
     Name: NotRequired[str]
@@ -2879,6 +2989,8 @@ class InstancePropertyTypeDef(TypedDict):
     AssociationOverview: NotRequired[InstanceAggregatedAssociationOverviewTypeDef]
     SourceId: NotRequired[str]
     SourceType: NotRequired[SourceTypeType]
+    SourceLocation: NotRequired[str]
+    AvailabilityZone: NotRequired[str]
 
 class InstanceAssociationOutputLocationTypeDef(TypedDict):
     S3Location: NotRequired[S3OutputLocationTypeDef]
@@ -3082,6 +3194,16 @@ class SessionTypeDef(TypedDict):
     AccessType: NotRequired[AccessTypeType]
 
 TargetUnionTypeDef = Union[TargetTypeDef, TargetOutputTypeDef]
+ValidationFindingTypeDef = TypedDict(
+    "ValidationFindingTypeDef",
+    {
+        "Type": NotRequired[ValidationFindingTypeType],
+        "Code": NotRequired[ValidationFindingCodeType],
+        "Message": NotRequired[str],
+        "ProviderMessage": NotRequired[str],
+        "Scope": NotRequired[ValidationFindingScopeTypeDef],
+    },
+)
 
 class DescribeActivationsResultTypeDef(TypedDict):
     ActivationList: list[ActivationTypeDef]
@@ -3224,6 +3346,20 @@ ComplianceExecutionSummaryUnionTypeDef = Union[
 
 class ExecutionPreviewTypeDef(TypedDict):
     Automation: NotRequired[AutomationExecutionPreviewTypeDef]
+
+class AzureConfigurationOutputTypeDef(TypedDict):
+    TenantId: str
+    ApplicationId: str
+    TenantDisplayName: NotRequired[str]
+    ApplicationDisplayName: NotRequired[str]
+    Targets: NotRequired[ConfigurationTargetsOutputTypeDef]
+
+class AzureConfigurationTypeDef(TypedDict):
+    TenantId: str
+    ApplicationId: str
+    TenantDisplayName: NotRequired[str]
+    ApplicationDisplayName: NotRequired[str]
+    Targets: NotRequired[ConfigurationTargetsTypeDef]
 
 class ListCommandInvocationsResultTypeDef(TypedDict):
     CommandInvocations: list[CommandInvocationTypeDef]
@@ -3489,6 +3625,11 @@ class UpdateMaintenanceWindowTargetRequestTypeDef(TypedDict):
     Description: NotRequired[str]
     Replace: NotRequired[bool]
 
+class ValidateCloudConnectorResultTypeDef(TypedDict):
+    ValidationFindings: list[ValidationFindingTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
 class DescribeAssociationExecutionsResultTypeDef(TypedDict):
     AssociationExecutions: list[AssociationExecutionTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
@@ -3615,6 +3756,7 @@ class StepExecutionTypeDef(TypedDict):
     Outputs: NotRequired[dict[str, list[str]]]
     Response: NotRequired[str]
     FailureMessage: NotRequired[str]
+    WarningMessage: NotRequired[str]
     FailureDetails: NotRequired[FailureDetailsTypeDef]
     StepExecutionId: NotRequired[str]
     OverriddenParameters: NotRequired[dict[str, list[str]]]
@@ -3681,6 +3823,12 @@ class GetExecutionPreviewResponseTypeDef(TypedDict):
     StatusMessage: str
     ExecutionPreview: ExecutionPreviewTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
+
+class CloudConnectorConfigurationOutputTypeDef(TypedDict):
+    AzureConfiguration: NotRequired[AzureConfigurationOutputTypeDef]
+
+class CloudConnectorConfigurationTypeDef(TypedDict):
+    AzureConfiguration: NotRequired[AzureConfigurationTypeDef]
 
 class GetMaintenanceWindowTaskResultTypeDef(TypedDict):
     WindowId: str
@@ -3835,6 +3983,7 @@ class AutomationExecutionMetadataTypeDef(TypedDict):
     CurrentStepName: NotRequired[str]
     CurrentAction: NotRequired[str]
     FailureMessage: NotRequired[str]
+    WarningMessage: NotRequired[str]
     TargetParameterName: NotRequired[str]
     Targets: NotRequired[list[TargetOutputTypeDef]]
     TargetMaps: NotRequired[list[dict[str, list[str]]]]
@@ -3865,6 +4014,7 @@ class AutomationExecutionTypeDef(TypedDict):
     Parameters: NotRequired[dict[str, list[str]]]
     Outputs: NotRequired[dict[str, list[str]]]
     FailureMessage: NotRequired[str]
+    WarningMessage: NotRequired[str]
     Mode: NotRequired[ExecutionModeType]
     ParentAutomationExecutionId: NotRequired[str]
     ExecutedBy: NotRequired[str]
@@ -3896,6 +4046,21 @@ class DescribeAutomationStepExecutionsResultTypeDef(TypedDict):
     NextToken: NotRequired[str]
 
 TargetLocationUnionTypeDef = Union[TargetLocationTypeDef, TargetLocationOutputTypeDef]
+
+class GetCloudConnectorResultTypeDef(TypedDict):
+    CloudConnectorArn: str
+    DisplayName: str
+    Description: str
+    RoleArn: str
+    Configuration: CloudConnectorConfigurationOutputTypeDef
+    ConfigConnectorArn: str
+    CreatedAt: datetime
+    UpdatedAt: datetime
+    ResponseMetadata: ResponseMetadataTypeDef
+
+CloudConnectorConfigurationUnionTypeDef = Union[
+    CloudConnectorConfigurationTypeDef, CloudConnectorConfigurationOutputTypeDef
+]
 
 class RegisterTaskWithMaintenanceWindowRequestTypeDef(TypedDict):
     WindowId: str
@@ -4115,6 +4280,20 @@ class UpdateAssociationRequestTypeDef(TypedDict):
     TargetMaps: NotRequired[Sequence[Mapping[str, Sequence[str]]]]
     AlarmConfiguration: NotRequired[AlarmConfigurationUnionTypeDef]
     AssociationDispatchAssumeRole: NotRequired[str]
+
+class CreateCloudConnectorRequestTypeDef(TypedDict):
+    DisplayName: str
+    RoleArn: str
+    Configuration: CloudConnectorConfigurationUnionTypeDef
+    ConfigConnectorArn: str
+    Description: NotRequired[str]
+    Tags: NotRequired[Sequence[TagTypeDef]]
+
+class UpdateCloudConnectorRequestTypeDef(TypedDict):
+    CloudConnectorId: str
+    DisplayName: NotRequired[str]
+    Configuration: NotRequired[CloudConnectorConfigurationUnionTypeDef]
+    Description: NotRequired[str]
 
 PatchRuleUnionTypeDef = Union[PatchRuleTypeDef, PatchRuleOutputTypeDef]
 

@@ -3,9 +3,10 @@ from cftime import datetime as datetimex
 from cftime import real_datetime
 from cftime import (Datetime360Day, DatetimeAllLeap,
                     DatetimeGregorian, DatetimeJulian, DatetimeNoLeap,
-                    DatetimeProlepticGregorian, _parse_date,
+                    DatetimeProlepticGregorian, DatetimeTAI, _parse_date,
                     date2index, date2num, num2date,  UNIT_CONVERSION_FACTORS)
 import copy
+import pickle
 import unittest
 import warnings
 from collections import namedtuple
@@ -64,6 +65,7 @@ est = timezone(timedelta(hours=-5), 'UTC')
 
 dtime = namedtuple('dtime', ('values', 'units', 'calendar'))
 dateformat =  '%Y-%m-%d %H:%M:%S'
+dateformat2 =  '%y-%m-%d %H:%M:%S'
 
 calendars=['standard', 'gregorian', 'proleptic_gregorian', 'noleap', 'julian',\
            'all_leap', '365_day', '366_day', '360_day']
@@ -201,6 +203,11 @@ class cftimeTestCase(unittest.TestCase):
         # check num2date method.
         d2 = self.cdftime_pg.num2date(t1)
         self.assertTrue(d.strftime(dateformat) == d2.strftime(dateformat))
+        # make sure two digit years work in strftime (issue #362)
+        self.assertTrue(d.strftime(dateformat2) == d2.strftime(dateformat2))
+        # issue #401 (check for %y not y)
+        t = cftime.DatetimeGregorian(2026,4,14,0)
+        self.assertTrue(t.strftime('year=%Y') == 'year=2026')
         # check day of year.
         ndayr = d.timetuple()[7]
         self.assertTrue(ndayr == 125)
@@ -943,6 +950,16 @@ class cftimeTestCase(unittest.TestCase):
         times = np.array([1,2,3,np.inf],dtype=np.float64)
         result = cftime.num2date(times, 'days since 2000-01-01', 'standard')
         np.testing.assert_equal(result, expected)
+        # issue #354: roundtrip not correct when dates are all python datetime
+        # instances and calendar not proleptic_gregorian.
+        datesin = np.array(["0002"],
+                  dtype="datetime64[s]").astype("M8[us]").astype(datetime)
+        datein = datesin.item()
+        num = cftime.date2num(datein, "seconds since 2000-01-01", calendar='standard')
+        dateout = cftime.num2date(num, "seconds since 2000-01-01", calendar='standard')
+        dateout2 = cftime.datetime(datein.year, datein.month, datein.day,
+                   calendar='standard')
+        assert(dateout==dateout2)
 
 
 class TestDate2index(unittest.TestCase):
@@ -1542,6 +1559,84 @@ def test_zero_year(date_type):
             assert d.has_year_zero # (issue #248)
             with pytest.raises(ValueError):
                 date_type(0, 1, 1, has_year_zero=False)
+
+
+
+@pytest.fixture(params=[
+    (datetimex, 'noleap', 365),
+    (datetimex, '365_day', 365),
+    (datetimex, 'all_leap', 366),
+    (datetimex, '366_day', 366),
+    (datetimex, '360_day', 360),
+    (DatetimeNoLeap, 'noleap', 365),
+    (DatetimeAllLeap, 'all_leap', 366),
+    (Datetime360Day, '360_day', 360),
+], ids=[
+    'noleap', '365_day', 'all_leap', '366_day', '360_day',
+    'DatetimeNoLeap', 'DatetimeAllLeap', 'Datetime360Day',
+])
+def idealized_year_zero_calendar(request):
+    return request.param
+
+
+@pytest.mark.parametrize('year', [-1, 0, 1, 2000])
+def test_idealized_has_year_zero_false(idealized_year_zero_calendar, year):
+    # Issue #419: the ignored argument must not change the stored convention.
+    date_type, calendar, _ = idealized_year_zero_calendar
+    with pytest.warns(UserWarning, match='has_year_zero kwarg ignored'):
+        date = date_type(year, 1, 1, 12, calendar=calendar, has_year_zero=False)
+    expected = date_type(year, 1, 1, 12, calendar=calendar)
+    assert date.has_year_zero is True
+    assert date == expected
+    assert date - expected == timedelta(0)
+    assert datetimex.fromordinal(
+        date.toordinal(), calendar=calendar,
+        has_year_zero=date.has_year_zero) == date
+    restored = pickle.loads(pickle.dumps(date))
+    assert type(restored) is type(date)
+    assert restored.has_year_zero is True
+    assert restored == date
+
+
+@pytest.mark.parametrize('year', [-1, 0, 1])
+def test_idealized_replace_has_year_zero_false(idealized_year_zero_calendar, year):
+    date_type, calendar, _ = idealized_year_zero_calendar
+    date = date_type(1, 1, 1, calendar=calendar)
+    with pytest.warns(UserWarning, match='has_year_zero kwarg ignored'):
+        replaced = date.replace(year=year, has_year_zero=False)
+    assert replaced.has_year_zero is True
+    assert replaced == date_type(year, 1, 1, calendar=calendar)
+
+
+@pytest.mark.parametrize('year', [-1, 0])
+def test_idealized_has_year_zero_false_arithmetic(
+        idealized_year_zero_calendar, year):
+    date_type, calendar, days_per_year = idealized_year_zero_calendar
+    with pytest.warns(UserWarning, match='has_year_zero kwarg ignored'):
+        start = date_type(year, 1, 1, calendar=calendar, has_year_zero=False)
+    end = date_type(year + 1, 1, 1, calendar=calendar)
+    delta = timedelta(days=days_per_year)
+    assert end - start == delta
+    assert start + delta == end
+    assert end - delta == start
+    assert (start + delta).has_year_zero is True
+    assert (end - delta).has_year_zero is True
+
+
+@pytest.mark.parametrize('calendar', [
+    'standard', 'gregorian', 'julian', 'proleptic_gregorian',
+])
+def test_real_world_has_year_zero_false(calendar):
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', cftime.CFWarning)
+        before = datetimex(-1, 12, 31, calendar=calendar, has_year_zero=False)
+        after = datetimex(1, 1, 1, calendar=calendar, has_year_zero=False)
+        assert before.has_year_zero is False
+        assert after.has_year_zero is False
+        assert before + timedelta(days=1) == after
+        assert after - before == timedelta(days=1)
+        with pytest.raises(ValueError, match='year zero requested'):
+            datetimex(0, 1, 1, calendar=calendar, has_year_zero=False)
 
 
 def test_invalid_month(date_type):
@@ -2157,6 +2252,22 @@ def test_date2num_missing_data():
     assert out is np.ma.masked
 
 
+def test_date2num_numpy_datetime64():
+    # Array
+    array = np.array([
+        np.datetime64(123, "s"),
+        np.datetime64(124, "s"),
+        np.datetime64(125, "s")
+    ])
+    out = date2num(array, units="seconds since 1970-01-01T00:00:00", calendar="gregorian")
+    assert ((out == np.array([123, 124, 125]))).all()
+
+    # Scalar
+    array = np.datetime64(123, "s")
+    out = date2num(array, units="seconds since 1970-01-01T00:00:00", calendar="gregorian")
+    assert out == np.int64(123)
+
+
 def test_num2date_preserves_shape():
     # The optimized num2date algorithm operates on a flattened array.  This
     # check ensures that the original shape of the times is restored in the
@@ -2234,6 +2345,77 @@ def test_num2date_precision():
             date2 = num2date(num, units, calendar=cc)
             assert np.ma.is_masked(date2[0])
             assert date[1] == date2[1]
+
+# NOTE: using pytest style tests -- these won't run without pytest
+#       but it looks like you're using pytest, so this is cleaner and easier
+
+#       There's really no reason to put these in a class, but it does organize things
+class Test_tai:
+    """
+    tests specific to the tai calendar
+    """
+    def test_dateparse_valid(self):
+        """
+        It should raise for an epoch before 1958
+        """
+        # This is directly testing the _dateparse function
+        # Which is a "proper" unit test, but also testing an internal function.
+        timestring = "seconds since 1958-01-01T00:00:00"
+        basedate = cftime._dateparse(timestring, 'tai')
+
+        print(repr(basedate))
+
+        assert basedate == cftime.datetime(1958, 1, 1, 0, 0, 0, 0, calendar='tai', has_year_zero=False)
+
+    def test_dateparse_before_1958(self):
+        """
+        It should raise for an epoch before 1958
+        """
+        # This is directly testing the _dateparse function
+        # Which is a "proper" unit test, but also testing an internal function.
+        timestring = "seconds since 1957-01-01T00:00:00"
+        with pytest.raises(ValueError):
+            basedate = cftime._dateparse(timestring, 'tai')
+            # cftime._dateparse(timestring, 'tai', has_year_zero=None)
+            print(basedate)
+
+    def test_dateparse_with_offset(self):
+        """
+        It should raise if there's an offset
+        """
+        # This is directly testing the _dateparse function
+        # Which is a "proper" unit test, but also testing an internal function.
+        timestring = "seconds since 1965-01-01T00:00:00+08:00"
+        with pytest.raises(ValueError):
+            basedate = cftime._dateparse(timestring, 'tai')
+            # cftime._dateparse(timestring, 'tai', has_year_zero=None)
+            print(basedate)
+
+    def test_year_zero(self):
+        """
+        tai does not have a year zero -- not sure this is worth testing, but for full coverage.
+        """
+        # This is directly testing the _dateparse function
+        # Which is a "proper" unit test, but also testing an internal function.
+        timestring = "seconds since 1965-01-01T00:00:00"
+        with pytest.raises(ValueError):
+            basedate = cftime._dateparse(timestring, 'tai', has_year_zero=True)
+            # cftime._dateparse(timestring, 'tai', has_year_zero=None)
+            print(basedate)
+
+    def test_creation_valid(self):
+        dt = DatetimeTAI(2025, 1, 9, 14, 18)
+
+        assert dt.calendar == 'tai'
+        assert dt.has_year_zero is False
+
+        print(repr(dt))
+
+    def test_creation_before_1958(self):
+        with pytest.raises(ValueError):
+            dt = DatetimeTAI(1957, 1, 9, 14, 18)
+            print(repr(dt))
+
 
 
 if __name__ == '__main__':

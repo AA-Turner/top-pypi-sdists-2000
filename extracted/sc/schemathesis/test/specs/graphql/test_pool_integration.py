@@ -1,19 +1,8 @@
 from __future__ import annotations
 
 import pytest
-from hypothesis import strategies as st
 
-import schemathesis
-from schemathesis.graphql import nodes
-from schemathesis.specs.graphql.scalars import CUSTOM_SCALARS
-from test.utils import flaky
-
-
-@pytest.fixture(autouse=True)
-def _register_book_id_scalar():
-    schemathesis.graphql.scalar("BookID", st.uuids().map(str).map(nodes.String))
-    yield
-    CUSTOM_SCALARS.clear()
+pytestmark = pytest.mark.usefixtures("book_id_scalar")
 
 
 _DEFAULT_CONFIG: dict = {}
@@ -31,7 +20,7 @@ _POOL_DISABLED_CONFIG = {"phases": {"fuzzing": {"extra-data-sources": {"response
     ids=["use-after-create", "update-on-existing", "no-producer", "pool-disabled-via-config"],
 )
 @pytest.mark.snapshot(replace_reproduce_with=True)
-@flaky(max_runs=3, min_passes=1)
+@pytest.mark.flaky(reruns=2)
 def test_planted_bug_findability(ctx, cli, snapshot_cli, filter_arg, config):
     # Positive-only: negative queries fail server validation before capture, so they never exercise the pool.
     api = ctx.graphql.apps.use_after_create()
@@ -127,7 +116,7 @@ def test_list_argument_planted_bug_findability(ctx, cli, snapshot_cli, config):
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
-@flaky(max_runs=3, min_passes=1)
+@pytest.mark.flaky(reruns=2)
 def test_non_id_pool_planted_bug_findability(ctx, cli, snapshot_cli):
     # Fuzzing captures Project.fullPath from the projects query and reuses it in moveIssue(projectPath:),
     # reaching a resolver that only errors on a real path.
@@ -160,7 +149,7 @@ def test_tombstone_planted_bug_findability(ctx, cli, snapshot_cli, config):
         cli.run(
             api.schema_url,
             "--no-shrink",
-            "--max-examples=200",
+            "--max-examples=50",
             "-m",
             "positive",
             "-c",

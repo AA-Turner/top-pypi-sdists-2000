@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Generator
+from collections.abc import Generator, Iterator
 from functools import lru_cache
 from typing import TYPE_CHECKING
 
@@ -29,26 +29,35 @@ MEDIA_TYPE_STRATEGIES: dict[str, st.SearchStrategy[bytes]] = {}
 
 def find_media_type_strategy(content_type: str) -> st.SearchStrategy[bytes] | None:
     """Find a registered strategy for a content type, supporting wildcard patterns."""
-    if content_type in MEDIA_TYPE_STRATEGIES:
-        return MEDIA_TYPE_STRATEGIES[content_type]
+    pair = next(iter_matching_media_type_strategies(content_type), None)
+    return pair[1] if pair is not None else None
+
+
+def iter_matching_media_type_strategies(
+    content_type: str,
+) -> Iterator[tuple[str, st.SearchStrategy[bytes]]]:
+    """Yield concrete media types and their registered strategies matching the given media type."""
+    strategy = MEDIA_TYPE_STRATEGIES.get(content_type)
+    if strategy is not None:
+        yield content_type, strategy
+        return
 
     try:
-        main, sub = parse(content_type)
+        parsed = parse(content_type)
     except MalformedMediaType:
         return None
 
     for registered_type, strategy in MEDIA_TYPE_STRATEGIES.items():
         try:
-            target_main, target_sub = parse(registered_type)
+            target = parse(registered_type)
         except MalformedMediaType:
             continue
-        # `*` on either side acts as a wildcard.
-        main_match = main == "*" or target_main == "*" or main == target_main
-        sub_match = sub == "*" or target_sub == "*" or sub == target_sub
-        if main_match and sub_match:
-            return strategy
-
-    return None
+        if matches_either(parsed, target):
+            main, sub = parsed
+            target_main, target_sub = target
+            resolved_main = target_main if main == "*" else main
+            resolved_sub = target_sub if sub == "*" else sub
+            yield f"{resolved_main}/{resolved_sub}", strategy
 
 
 def _parseparam(s: str) -> Generator[str]:
@@ -116,9 +125,25 @@ def is_plain_text(value: str) -> bool:
     return parse(value) == ("text", "plain")
 
 
-def is_sse(value: str) -> bool:
+def is_sse(value: str | None) -> bool:
     """Detect the text/event-stream media type for Server-Sent Events."""
-    return parse(value) == ("text", "event-stream")
+    if value is None:
+        return False
+    try:
+        return parse(value) == ("text", "event-stream")
+    except MalformedMediaType:
+        return False
+
+
+def is_json_sequence(value: str | None) -> bool:
+    """Detect JSON Lines and JSON Text Sequences, which carry one JSON value per line or record."""
+    if value is None:
+        return False
+    try:
+        main, sub = parse(value)
+    except MalformedMediaType:
+        return False
+    return main == "application" and (sub in ("jsonl", "x-ndjson", "json-seq") or sub.endswith("+json-seq"))
 
 
 def is_form_urlencoded(value: str | None) -> bool:
@@ -127,6 +152,16 @@ def is_form_urlencoded(value: str | None) -> bool:
         return False
     try:
         return parse(value) == ("application", "x-www-form-urlencoded")
+    except MalformedMediaType:
+        return False
+
+
+def is_multipart(value: str | None) -> bool:
+    """Detect any ``multipart/*`` media type."""
+    if value is None:
+        return False
+    try:
+        return parse(value)[0] == "multipart"
     except MalformedMediaType:
         return False
 
@@ -165,6 +200,15 @@ def matches_parts(expected: tuple[str, str], actual: tuple[str, str]) -> bool:
     return main_matches and sub_matches
 
 
-def matches(expected: str, actual: str) -> bool:
-    """Check if two media type strings match with wildcard support."""
-    return matches_parts(parse(expected), parse(actual))
+def matches_either(first: tuple[str, str], second: tuple[str, str]) -> bool:
+    """Check if two parsed media types match, with `*` on either side acting as a wildcard."""
+    first_main, first_sub = first
+    second_main, second_sub = second
+    main_matches = first_main == "*" or second_main == "*" or first_main == second_main
+    sub_matches = first_sub == "*" or second_sub == "*" or first_sub == second_sub
+    return main_matches and sub_matches
+
+
+def same_family(first: str, second: str) -> bool:
+    """Whether both media types are variations of the same well-known type, e.g. `application/json` and `+json`."""
+    return any(check(first) and check(second) for check in (is_json, is_xml, is_plain_text, is_yaml))

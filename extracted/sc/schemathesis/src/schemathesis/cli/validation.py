@@ -6,12 +6,11 @@ import pathlib
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from functools import reduce
-from urllib.parse import urlparse
 
 import click
 
 from schemathesis.cli.ext.options import CsvEnumChoice
-from schemathesis.config import ReportFormat, SchemathesisWarning, get_workers_count
+from schemathesis.config import ReportFormat, SchemathesisConfig, SchemathesisWarning, get_workers_count
 from schemathesis.core import errors, rate_limit, string_to_boolean, validation
 from schemathesis.core.fs import file_exists
 from schemathesis.core.validation import has_invalid_characters, is_latin_1_encodable
@@ -34,11 +33,20 @@ INVALID_ORIGIN_MESSAGE = (
     "from the schema. Use `--url` if you want to set the path yourself."
 )
 CONFLICTING_URL_MESSAGE = "The `--url` and `--origin` options are mutually exclusive."
+WFC_USER_REQUIRES_PATH_MESSAGE = "--auth-wfc-user requires --auth-wfc or path under [auth.wfc]"
+
+
+def validate_wfc_user(config: SchemathesisConfig, path: str | None, user: str | None) -> None:
+    if user is None or path is not None:
+        return
+    projects = (config.projects.default, *config.projects.named.values())
+    if not any(project.auth.wfc is not None and project.auth.wfc.path for project in projects):
+        raise click.UsageError(WFC_USER_REQUIRES_PATH_MESSAGE)
 
 
 def validate_schema_location(ctx: click.core.Context, param: click.core.Parameter, location: str) -> str:
     try:
-        netloc = urlparse(location).netloc
+        netloc = validation.parse_url(location).netloc
         if netloc:
             validate_url(location)
             return location
@@ -65,11 +73,9 @@ def validate_url(value: str) -> None:
 
 def validate_base_url(ctx: click.core.Context, param: click.core.Parameter, raw_value: str) -> str:
     try:
-        netloc = urlparse(raw_value).netloc
-    except ValueError as exc:
-        raise click.UsageError(INVALID_BASE_URL_MESSAGE) from exc
-    if raw_value and not netloc:
-        raise click.UsageError(INVALID_BASE_URL_MESSAGE)
+        validation.validate_base_url(raw_value)
+    except ValueError:
+        raise click.UsageError(INVALID_BASE_URL_MESSAGE) from None
     return raw_value
 
 

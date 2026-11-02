@@ -10,6 +10,7 @@ from schemathesis.core.error_feedback.parsers.extractors import (
     ClassificationResult,
     RegexHandler,
     location_for_method,
+    location_for_parameter,
     numeric_bound,
     required_handler,
     size_bound,
@@ -27,7 +28,7 @@ from schemathesis.core.error_feedback.store import (
     TypeMismatchPayload,
 )
 from schemathesis.core.parameters import ParameterLocation
-from schemathesis.core.transforms import decode_pointer
+from schemathesis.core.transforms import as_index_or_key, decode_pointer
 
 if TYPE_CHECKING:
     from schemathesis.generation.case import Case
@@ -47,8 +48,7 @@ _FASTIFY_VALIDATION_CODE = "FST_ERR_VALIDATION"
 
 def _to_segment(raw: str) -> str | int:
     """Decode an RFC 6901 segment; ASCII-digit segments become ints (array indices)."""
-    decoded = decode_pointer(raw)
-    return int(decoded) if decoded.isascii() and decoded.isdigit() else decoded
+    return as_index_or_key(decode_pointer(raw))
 
 
 def _split_instance_path(raw: str) -> ParameterPath:
@@ -85,7 +85,7 @@ def _bound_handler(direction: BoundDirection, exclusive: bool) -> KeywordHandler
         return (
             (
                 ObservationKind.NUMERIC_BOUND,
-                NumericBoundPayload(bound=float(limit), direction=direction, exclusive=exclusive),
+                NumericBoundPayload(bound=limit, direction=direction, exclusive=exclusive),
             ),
         )
 
@@ -306,9 +306,7 @@ def _fastify_observations(body: dict, operation_label: str) -> tuple[Observation
     return tuple(observations)
 
 
-def _array_observations(
-    errors: list[dict], operation_label: str, location: ParameterLocation, case: Case
-) -> tuple[Observation, ...]:
+def _array_observations(errors: list[dict], operation: APIOperation, case: Case) -> tuple[Observation, ...]:
     observations: list[Observation] = []
     for error in errors:
         handler = _KEYWORD_HANDLERS.get(error["keyword"])
@@ -319,11 +317,11 @@ def _array_observations(
         base_path = _array_base_path(error)
         path = _array_form_path(error, base_path)
         if path is None:
-            if not base_path and _is_root_body_type_error(error, location, case):
+            if not base_path and _is_root_body_type_error(error, location_for_method(operation.method), case):
                 observations.append(
                     Observation(
-                        operation_label=operation_label,
-                        location=location,
+                        operation_label=operation.label,
+                        location=ParameterLocation.BODY,
                         parameter_path=(),
                         kind=ObservationKind.MUST_NOT_BE_BLANK,
                         raw_message=raw_message,
@@ -334,8 +332,8 @@ def _array_observations(
         for kind, payload in handler(error):
             observations.append(
                 Observation(
-                    operation_label=operation_label,
-                    location=location,
+                    operation_label=operation.label,
+                    location=location_for_parameter(operation, path, case),
                     parameter_path=path,
                     kind=kind,
                     raw_message=raw_message,
@@ -362,7 +360,7 @@ class AjvParser:
     def parse(self, *, operation: APIOperation, body: object, case: Case) -> tuple[Observation, ...]:
         errors = _extract_array_errors(body)
         if errors is not None:
-            return _array_observations(errors, operation.label, location_for_method(operation.method), case)
+            return _array_observations(errors, operation, case)
         if _is_fastify_envelope(body):
             assert isinstance(body, dict)
             return _fastify_observations(body, operation.label)

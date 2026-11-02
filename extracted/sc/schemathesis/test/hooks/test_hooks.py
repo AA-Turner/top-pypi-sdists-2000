@@ -1,5 +1,6 @@
 from unittest.mock import ANY
 
+import graphql
 import pytest
 from hypothesis import HealthCheck, Phase, given, settings
 from hypothesis import strategies as st
@@ -8,6 +9,7 @@ import schemathesis
 from schemathesis.core.failures import FailureGroup
 from schemathesis.core.transport import USER_AGENT
 from schemathesis.engine import Status
+from schemathesis.generation.hypothesis import examples
 from schemathesis.generation.modes import GenerationMode
 from schemathesis.hooks import (
     HookContext,
@@ -19,7 +21,7 @@ from schemathesis.hooks import (
 )
 from schemathesis.pytest.plugin import SchemaHandleMark
 from schemathesis.transport.prepare import get_default_headers
-from test.utils import assert_requests_call, flaky
+from test.utils import assert_requests_call, run_given
 
 
 def integer_id(query):
@@ -83,8 +85,7 @@ def test_hook_dispatch_accepts_multiple_dispatchers(dispatcher):
 
 
 def test_hook_dispatch_skips_filtered_hooks(ctx, dispatcher):
-    schema = ctx.openapi.load_schema({"/users": {"get": {"responses": {"200": {"description": "OK"}}}}})
-    operation = schema["/users"]["GET"]
+    operation = ctx.openapi.load_operation("GET /users", {"responses": {"200": {"description": "OK"}}})
     calls = []
 
     @dispatcher.hook.apply_to(method="POST")
@@ -118,6 +119,22 @@ def test_before_call_dispatch_preserves_kwargs_styles():
     ]
 
 
+@pytest.mark.parametrize(
+    ("outcome", "expected"),
+    [(pytest.skip, pytest.skip.Exception), (pytest.fail, pytest.fail.Exception)],
+    ids=["skip", "fail"],
+)
+def test_before_call_propagates_pytest_outcomes(outcome, expected):
+    dispatcher = HookDispatcher(scope=HookScope.GLOBAL)
+
+    @dispatcher.hook
+    def before_call(context, case, kwargs):
+        outcome("from hook")
+
+    with pytest.raises(expected, match="from hook"):
+        dispatch_before_call(dispatcher, context=HookContext(), case=object(), kwargs={})
+
+
 @pytest.mark.hypothesis_nested
 @pytest.mark.usefixtures("global_hook")
 def test_global_query_hook(ctx):
@@ -125,12 +142,9 @@ def test_global_query_hook(ctx):
     schema = schemathesis.openapi.from_wsgi("/openapi.json", api.wsgi_app)
     strategy = schema["/api/custom_format"]["GET"].as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=3, suppress_health_check=list(HealthCheck), deadline=None)
+    @run_given(case=strategy, max_examples=3)
     def test(case):
         assert case.query["id"].isdigit()
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -172,12 +186,9 @@ def test_schema_query_hook(ctx):
 
     strategy = schema["/api/custom_format"]["GET"].as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=3, suppress_health_check=list(HealthCheck), deadline=None)
+    @run_given(case=strategy, max_examples=3)
     def test(case):
         assert case.query["id"].isdigit()
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -194,62 +205,46 @@ def test_hooks_combination(ctx):
     strategy = schema["/api/custom_format"]["GET"].as_strategy()
 
     # Both filters together admit ~0.15% of the unconstrained strings; a random draw sequence sometimes finds none.
-    @given(case=strategy)
-    @settings(max_examples=3, suppress_health_check=list(HealthCheck), deadline=None, derandomize=True)
+    @run_given(case=strategy, max_examples=3, derandomize=True)
     def test(case):
         assert case.query["id"].isdigit()
         assert int(case.query["id"]) % 2 == 0
 
-    test()
 
-
-def test_map_hooks_receive_dict_in_negative_mode(testdir, simple_openapi):
-    # Regression test for GH-3471
-    # map_* hooks should receive raw dict values, not GeneratedValue wrappers
-    testdir.make_test(
-        """
-def replacement(context, query):
-    # Should always receive a dict, never a GeneratedValue
-    assert isinstance(query, dict), f"Expected dict, got {type(query).__name__}"
-    return {"id": "fixed"}
-
-@schema.hooks.apply(replacement, name="map_query")
-@schema.parametrize()
-@settings(max_examples=5)
-def test_hook_receives_dict(case):
-    pass
-""",
-        schema=simple_openapi,
-        generation_modes=[GenerationMode.NEGATIVE],
-    )
-    result = testdir.runpytest()
-    result.assert_outcomes(passed=1)
-
-
-def test_flatmap_hooks_work_in_negative_mode(testdir, simple_openapi):
-    # See GH-3652
+def test_map_and_flatmap_hooks_work_in_negative_mode(testdir, simple_openapi):
+    # Regression for GH-3471 and GH-3652: hooks receive raw dicts, not generated-value wrappers.
     testdir.make_test(
         """
 from hypothesis import strategies as st
+
+def map_replacement(context, query):
+    assert isinstance(query, dict), f"Expected dict, got {type(query).__name__}"
+    return {"id": "fixed"}
+
+@schema.hooks.apply(map_replacement, name="map_query")
+@schema.parametrize()
+@settings(max_examples=5)
+def test_map_hook_receives_dict(case):
+    pass
 
 @st.composite
 def new_query(draw, query):
     return {"id": str(draw(st.integers(min_value=1, max_value=100)))}
 
-def replacement(context, query):
+def flatmap_replacement(context, query):
     return new_query(query)
 
-@schema.hooks.apply(replacement, name="flatmap_query")
+@schema.hooks.apply(flatmap_replacement, name="flatmap_query")
 @schema.parametrize()
 @settings(max_examples=5)
-def test_hook_works(case):
+def test_flatmap_hook_works(case):
     pass
 """,
         schema=simple_openapi,
         generation_modes=[GenerationMode.NEGATIVE],
     )
     result = testdir.runpytest()
-    result.assert_outcomes(passed=1)
+    result.assert_outcomes(passed=2)
 
 
 def test_per_test_hooks(testdir, simple_openapi):
@@ -396,7 +391,7 @@ def test_local_dispatcher(ctx, apply_first):
     assert handle.hooks.get_all_by_name("map_cookies") == []
 
 
-@flaky(max_runs=3, min_passes=1)
+@pytest.mark.flaky(reruns=2)
 @pytest.mark.hypothesis_nested
 def test_multiple_hooks_per_spec(ctx):
     api = ctx.openapi.apps.custom_format()
@@ -414,13 +409,10 @@ def test_multiple_hooks_per_spec(ctx):
 
     strategy = schema["/api/custom_format"]["GET"].as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=3, suppress_health_check=list(HealthCheck), deadline=None)
+    @run_given(case=strategy, max_examples=3)
     def test(case):
         assert case.query["id"].isdigit()
         assert int(case.query["id"]) % 2 == 0
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -439,14 +431,11 @@ def test_flatmap(ctx):
 
     strategy = schema["/api/custom_format"]["GET"].as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=3, suppress_health_check=list(HealthCheck), deadline=None)
+    @run_given(case=strategy, max_examples=3)
     def test(case):
         value = case.query["id"]
         assert value.isdigit()
         assert case.query["square"] == int(value) ** 2
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -470,14 +459,11 @@ def test_case_hooks(ctx):
 
     strategy = schema["/api/custom_format"]["GET"].as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=3, suppress_health_check=list(HealthCheck), deadline=None)
+    @run_given(case=strategy, max_examples=3)
     def test(case):
         value = case.query["id"]
         assert value.isdigit()
         assert case.query["square"] == int(value) ** 2
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -492,12 +478,9 @@ def test_before_process_path_hook(ctx):
 
     strategy = schema["/api/custom_format"]["GET"].as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=3, suppress_health_check=list(HealthCheck), deadline=None)
+    @run_given(case=strategy, max_examples=3)
     def test(case):
         assert case.query == {"foo": "bar"}
-
-    test()
 
 
 def test_register_wrong_scope(ctx):
@@ -633,21 +616,37 @@ def test_graphql_body(ctx):
 
     @schema.hook
     def map_body(context, body):
-        node = body.definitions[0].selection_set.selections[0]
-        node.name.value = "addedViaHook"
-        node.arguments = ()
-        node.selection_set = ()
-        return body
+        return graphql.parse("mutation { addedViaHook }")
 
     strategy = schema["Mutation"]["addBook"].as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=3, phases=[Phase.generate], suppress_health_check=list(HealthCheck), deadline=None)
+    @run_given(case=strategy, max_examples=3, phases=[Phase.generate])
     def test(case):
         # Not necessarily valid GraphQL, but it is simpler to check the hook this way
         assert case.body == "mutation {\n  addedViaHook\n}"
 
-    test()
+
+def test_flatmap_query_hook_applies_to_openapi_and_graphql(ctx):
+    openapi_schema = schemathesis.openapi.from_url(ctx.openapi.apps.success().schema_url)
+    graphql_schema = schemathesis.graphql.from_url(ctx.graphql.apps.books().schema_url)
+    seen = []
+
+    for schema in (openapi_schema, graphql_schema):
+
+        @schema.hook
+        def flatmap_query(context, query):
+            return st.just({"q": "1"})
+
+    for operation in (openapi_schema["/api/success"]["GET"], graphql_schema["Query"]["getBooks"]):
+
+        @given(case=operation.as_strategy())
+        @settings(max_examples=1, phases=[Phase.generate], suppress_health_check=list(HealthCheck), deadline=None)
+        def test(case):
+            seen.append(case.query)
+
+        test()
+
+    assert seen == [{"q": "1"}, {"q": "1"}]
 
 
 def test_graphql_query(ctx):
@@ -718,12 +717,9 @@ def test_after_call_fires_for_schema_level_hook(ctx):
     def after_call(context, case, response):
         calls.append(case.id)
 
-    @given(case=api_schema["/api/success"]["GET"].as_strategy())
-    @settings(max_examples=1, deadline=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=api_schema["/api/success"]["GET"].as_strategy(), max_examples=1)
     def test(case):
         case.call()
-
-    test()
 
     assert len(calls) == 1
 
@@ -738,22 +734,234 @@ def test_after_validate_fires_for_schema_level_hook(ctx):
     def after_validate(context, case, response, check_results):
         results.extend(check_results)
 
-    @given(case=api_schema["/api/success"]["GET"].as_strategy())
-    @settings(max_examples=1, deadline=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=api_schema["/api/success"]["GET"].as_strategy(), max_examples=1)
     def test_success(case):
         case.call_and_validate(checks=[schemathesis.checks.not_a_server_error])
 
-    test_success()
-
-    @given(case=api_schema["/api/failure"]["GET"].as_strategy())
-    @settings(max_examples=1, deadline=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=api_schema["/api/failure"]["GET"].as_strategy(), max_examples=1)
     def test_failure(case):
         with pytest.raises(FailureGroup):
             case.call_and_validate(checks=[schemathesis.checks.not_a_server_error])
-
-    test_failure()
 
     assert [(r.name, r.status) for r in results] == [
         ("not_a_server_error", Status.SUCCESS),
         ("not_a_server_error", Status.FAILURE),
     ]
+
+
+def test_after_validate_reports_success_when_filter_failure_drops_every_failure(ctx, response_factory):
+    schema = ctx.openapi.load_schema({"/foo": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    results = []
+
+    @schema.hooks.hook
+    def filter_failure(context, failure, case, response):
+        return False
+
+    @schema.hooks.hook
+    def after_validate(context, case, response, check_results):
+        results.extend((r.name, r.status) for r in check_results)
+
+    case = schema["/foo"]["GET"].Case()
+    response = response_factory.requests(status_code=500)
+    assert case.validate_response(response, checks=[schemathesis.checks.not_a_server_error]) is None
+    assert results == [("not_a_server_error", Status.SUCCESS)]
+
+
+def register_recording_component_hooks(dispatcher, container, key, calls):
+    def before_generate(context, strategy):
+        calls.append(f"before_generate_{container}")
+        return strategy
+
+    def filter_hook(context, value):
+        calls.append(f"filter_{container}")
+        return True
+
+    def map_hook(context, value):
+        calls.append(f"map_{container}")
+        return {**(value or {}), key: 42}
+
+    def flatmap_hook(context, value):
+        calls.append(f"flatmap_{container}")
+        return st.just(value)
+
+    dispatcher.hook(f"before_generate_{container}")(before_generate)
+    dispatcher.hook(f"filter_{container}")(filter_hook)
+    dispatcher.hook(f"map_{container}")(map_hook)
+    dispatcher.hook(f"flatmap_{container}")(flatmap_hook)
+
+
+def test_component_hooks_leave_examples_untouched(ctx):
+    schema = ctx.openapi.load_schema(
+        {
+            "/items/{id}": {
+                "post": {
+                    "parameters": [
+                        {"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}, "example": 7},
+                        {"name": "q", "in": "query", "required": True, "schema": {"type": "string"}, "example": "e"},
+                    ],
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {"type": "object", "properties": {"name": {"type": "string"}}},
+                                "example": {"name": "example"},
+                            }
+                        },
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        }
+    )
+    calls = []
+    test_hooks = HookDispatcher(scope=HookScope.TEST)
+    for dispatcher in (schema.hooks, test_hooks):
+        for container, key in (("path_parameters", "id"), ("query", "q"), ("body", "name")):
+            register_recording_component_hooks(dispatcher, container, key, calls)
+
+    cases = [
+        examples.generate_one(strategy)
+        for strategy in schema["/items/{id}"]["POST"].get_strategies_from_examples(hooks=test_hooks)
+    ]
+
+    assert [(case.path_parameters, case.query, case.body) for case in cases] == [
+        ({"id": 7}, {"q": "e"}, {"name": "example"})
+    ]
+    # Hooks see only the generated remainder of each location; a body taken from an example is never hooked.
+    assert set(calls) == {
+        f"{hook}_{container}"
+        for hook in ("before_generate", "filter", "map", "flatmap")
+        for container in ("path_parameters", "query")
+    }
+
+
+def test_test_scoped_case_hooks_apply_in_coverage_phase(testdir):
+    testdir.make_test(
+        """
+schema.config.phases.examples.enabled = False
+schema.config.phases.fuzzing.enabled = False
+
+filtered = []
+
+def local_filter_case(context, case):
+    filtered.append(case)
+    return True
+
+def local_map_case(context, case):
+    case.headers = {**(case.headers or {}), "X-Mapped": "yes"}
+    return case
+
+@schema.hooks.apply(local_map_case, name="map_case")
+@schema.hooks.apply(local_filter_case, name="filter_case")
+@schema.parametrize()
+def test_api(case):
+    assert case.meta.phase.name.value == "coverage"
+    assert case.headers["X-Mapped"] == "yes"
+    assert filtered
+""",
+        paths={
+            "/users": {
+                "get": {
+                    "parameters": [{"name": "id", "in": "query", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(passed=1)
+
+
+def test_schema_filter_case_sees_global_map_case_in_coverage_phase(testdir):
+    testdir.make_test(
+        """
+schema.config.phases.examples.enabled = False
+schema.config.phases.fuzzing.enabled = False
+
+seen = []
+
+@schemathesis.hook
+def map_case(context, case):
+    case.headers = {**(case.headers or {}), "X-Mapped": "yes"}
+    return case
+
+@schema.hook
+def filter_case(context, case):
+    return (case.headers or {}).get("X-Mapped") == "yes"
+
+@schema.parametrize()
+def test_api(case):
+    seen.append(case.meta.phase.name.value)
+
+def test_coverage_cases_generated():
+    assert "coverage" in seen
+""",
+        paths={
+            "/users": {
+                "get": {
+                    "parameters": [{"name": "id", "in": "query", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+    )
+    result = testdir.runpytest("-p", "no:randomly")
+    result.assert_outcomes(passed=2)
+
+
+def test_test_scoped_after_validate_hook(testdir, ctx):
+    api = ctx.openapi.apps.success()
+    testdir.make_test(
+        f"""
+schema.config.update(base_url="{api.base_url}/api")
+
+validated = []
+
+def local_after_validate(context, case, response, results):
+    validated.extend((result.name, result.status.name) for result in results)
+
+@schema.hooks.apply(local_after_validate, name="after_validate")
+@schema.include(path_regex="success").parametrize()
+@settings(max_examples=1, phases=[Phase.generate])
+def test_api(case):
+    validated.clear()
+    case.call_and_validate(checks=[schemathesis.checks.not_a_server_error])
+    assert validated == [("not_a_server_error", "SUCCESS")]
+""",
+        paths={"/success": {"get": {"responses": {"200": {"description": "OK"}}}}},
+        schema_name="simple_openapi.yaml",
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(passed=1)
+
+
+def test_component_hooks_shape_generated_parts_in_examples_phase(ctx):
+    schema = ctx.openapi.load_schema(
+        {
+            "/items": {
+                "get": {
+                    "parameters": [
+                        {"name": "q", "in": "query", "required": True, "schema": {"type": "string"}, "example": "e"},
+                        {"name": "limit", "in": "query", "required": True, "schema": {"type": "integer"}},
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        }
+    )
+    filtered = []
+
+    @schema.hook
+    def filter_query(context, query):
+        filtered.append(query)
+        return True
+
+    @schema.hook
+    def map_headers(context, headers):
+        return {**(headers or {}), "X-Token": "secret"}
+
+    cases = [examples.generate_one(strategy) for strategy in schema["/items"]["GET"].get_strategies_from_examples()]
+
+    assert [(case.query["q"], case.headers) for case in cases] == [("e", {"X-Token": "secret"})]
+    assert filtered
+    assert all(set(query) == {"limit"} for query in filtered), filtered

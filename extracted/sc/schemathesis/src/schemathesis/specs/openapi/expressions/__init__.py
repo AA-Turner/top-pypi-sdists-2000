@@ -5,14 +5,15 @@ https://swagger.io/docs/specification/links/#runtime-expressions
 
 from __future__ import annotations
 
-import json
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
 from schemathesis.core.deserialization import DeserializationContext, deserialize_response
-from schemathesis.core.transforms import UNRESOLVABLE, Unresolvable, resolve_pointer_all
+from schemathesis.core.transforms import UNRESOLVABLE, Unresolvable, resolve_pointer_all, to_wire_text
 from schemathesis.generation.stateful.state_machine import StepOutput
 from schemathesis.specs.openapi.expressions import lexer, nodes, parser
+from schemathesis.specs.openapi.expressions.errors import RuntimeExpressionError
 from schemathesis.specs.openapi.expressions.nodes import BodyResponse
 
 __all__ = ["MultiMatch", "lexer", "nodes", "parser"]
@@ -28,7 +29,7 @@ class MultiMatch:
 def evaluate(expr: Any, output: StepOutput, evaluate_nested: bool = False) -> Any:
     """Evaluate runtime expression in context."""
     if isinstance(expr, (dict, list)) and evaluate_nested:
-        return _evaluate_nested(expr, output)
+        return _evaluate_nested(expr, output, _evaluate_nested_value)
     if not isinstance(expr, str):
         # Can be a non-string constant
         return expr
@@ -48,14 +49,16 @@ def evaluate_wildcard(expr: Any, output: StepOutput) -> Any:
     on zero matches or structural failure.
 
     Inference produces single-node `$response.body#/.../*/...` expressions; that's
-    the only shape this function is contracted to handle.
+    the only shape this function is contracted to handle. Request bodies are evaluated per value.
     """
+    if isinstance(expr, (dict, list)):
+        return _evaluate_nested(expr, output, evaluate_wildcard)
     if not isinstance(expr, str) or "/*" not in expr:
         return evaluate(expr, output)
     [node] = parser.parse(expr)
     assert isinstance(node, BodyResponse) and node.pointer is not None
     response = output.response
-    content_type = response.headers.get("content-type", ["application/json"])[0]
+    content_type = nodes.link_media_type(response)
     context = DeserializationContext(operation=output.case.operation, case=output.case)
     document = deserialize_response(response, content_type, context=context)
     matches = resolve_pointer_all(document, node.pointer[1:])
@@ -67,21 +70,48 @@ def evaluate_wildcard(expr: Any, output: StepOutput) -> Any:
     return UNRESOLVABLE
 
 
-def _evaluate_nested(expr: dict[str, Any] | list, output: StepOutput) -> Any:
+def body_pointers(expressions: object) -> list[str]:
+    """JSON Pointers into the parent's response body that link expressions, possibly nested, extract from."""
+    pointers: list[str] = []
+    pending = [expressions]
+    while pending:
+        item = pending.pop()
+        if isinstance(item, dict):
+            pending.extend(item.values())
+        elif isinstance(item, list):
+            pending.extend(item)
+        elif isinstance(item, str):
+            try:
+                parsed = parser.parse(item)
+            except RuntimeExpressionError:
+                continue
+            pointers.extend(
+                node.pointer[1:] for node in parsed if isinstance(node, nodes.BodyResponse) and node.pointer
+            )
+    return pointers
+
+
+def _evaluate_nested_value(expr: Any, output: StepOutput) -> Any:
+    return evaluate(expr, output, evaluate_nested=True)
+
+
+def _evaluate_nested(
+    expr: dict[str, Any] | list, output: StepOutput, evaluate_value: Callable[[Any, StepOutput], Any]
+) -> Any:
     if isinstance(expr, dict):
         result_dict = {}
         for key, value in expr.items():
             new_key = _evaluate_object_key(key, output)
             if new_key is UNRESOLVABLE:
                 return new_key
-            new_value = evaluate(value, output, evaluate_nested=True)
+            new_value = evaluate_value(value, output)
             if new_value is UNRESOLVABLE:
                 return new_value
             result_dict[new_key] = new_value
         return result_dict
     result_list = []
     for item in expr:
-        new_value = evaluate(item, output, evaluate_nested=True)
+        new_value = evaluate_value(item, output)
         if new_value is UNRESOLVABLE:
             return new_value
         result_list.append(new_value)
@@ -92,12 +122,4 @@ def _evaluate_object_key(key: str, output: StepOutput) -> Any:
     evaluated = evaluate(key, output)
     if evaluated is UNRESOLVABLE:
         return evaluated
-    if isinstance(evaluated, str):
-        return evaluated
-    if isinstance(evaluated, bool):
-        return "true" if evaluated else "false"
-    if isinstance(evaluated, int | float):
-        return str(evaluated)
-    if evaluated is None:
-        return "null"
-    return json.dumps(evaluated)
+    return to_wire_text(evaluated)

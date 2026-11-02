@@ -13,6 +13,10 @@ from schemathesis.config._validator import CONFIG_SCHEMA
 from schemathesis.core.transforms import deepclone
 from schemathesis.generation.jsonschema.builder import build
 from schemathesis.generation.metrics import METRICS
+from test.utils import profile_max_examples
+
+# Each example is a full CLI run; the scheduled `CI` Hypothesis profile keeps its own, larger budget.
+MAX_EXAMPLES = profile_max_examples() or 20
 
 
 @pytest.fixture(scope="module")
@@ -68,6 +72,7 @@ def csv_strategy(enum, exclude=()):
     suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture],
     phases=[Phase.explicit, Phase.reuse, Phase.target, Phase.generate],
     deadline=None,
+    max_examples=MAX_EXAMPLES,
 )
 @given(
     params=st.fixed_dictionaries(
@@ -140,6 +145,7 @@ def test_valid_parameters_combos(cli, schema_url, params, flags, multiple_params
     suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture],
     phases=[Phase.explicit, Phase.reuse, Phase.target, Phase.generate],
     deadline=None,
+    max_examples=MAX_EXAMPLES,
 )
 @given(
     params=st.fixed_dictionaries(
@@ -203,6 +209,7 @@ def test_random_parameters_combos(cli, schema_url, params, flags, multiple_param
 @settings(
     deadline=None,
     phases=[Phase.explicit, Phase.generate],
+    max_examples=MAX_EXAMPLES,
     suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture],
 )
 @given(schema=urls() | paths() | st.text(), base_url=urls() | paths() | st.text() | st.none())
@@ -241,7 +248,7 @@ def remove_nones(value):
     verbosity=Verbosity.quiet,
     max_examples=7,
 )
-@pytest.mark.usefixtures("mocked_schema", "mocked_call")
+@pytest.mark.usefixtures("mocked_schema")
 def test_random_config(cli, config, schema_url, tmp_path):
     reports = config.get("reports", {})
     report_enabled = False
@@ -257,5 +264,9 @@ def test_random_config(cli, config, schema_url, tmp_path):
         reports["directory"] = str(tmp_path / reports["directory"])
     elif report_enabled:
         reports["directory"] = str(tmp_path / "report")
+    # Random baseline paths would land in the working directory.
+    for section in (config, *config.get("project", [])):
+        if "baseline" in section:
+            section["baseline"] = str(tmp_path / "baseline.json")
     result = cli.main("run", schema_url, "-n 1", "--phases=examples", config=config)
     check_result(result)

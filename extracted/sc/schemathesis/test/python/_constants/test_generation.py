@@ -11,19 +11,18 @@ from hypothesis.errors import NoSuchExample
 import schemathesis
 from schemathesis.config import GenerationConfig, SchemathesisConfig
 from schemathesis.generation.body_overrides import build_body_override_overlay_strategy
+from schemathesis.generation.feedback import FeedbackSources
+from schemathesis.generation.hypothesis.examples import generate_many
 from schemathesis.generation.meta import CaseMetadata, CoverageScenario, GenerationInfo, PhaseInfo
 from schemathesis.generation.modes import GenerationMode
-from schemathesis.generation.value import GeneratedValue
+from schemathesis.generation.value import GeneratedValue, prune_overwritten_body_constants
 from schemathesis.python._constants.adapters import default_adapters
 from schemathesis.python._constants.orchestrator import extract_all, extract_registered
 from schemathesis.python._constants.pool import ConstantDraw, ConstantEntry, ConstantsPool, Origin
-from schemathesis.python._constants.registry import SourceRegistry, default_registry
+from schemathesis.python._constants.registry import SourceRegistry
 from schemathesis.specs.graphql.substitution import substitute_constants
 from schemathesis.specs.openapi._hypothesis import _build_form_strategy_with_encoding
-from schemathesis.specs.openapi.adapter.parameters import (
-    _prune_overwritten_body_constants,
-    build_constants_overlay_strategy,
-)
+from schemathesis.specs.openapi.adapter.parameters import build_constants_overlay_strategy
 from schemathesis.specs.openapi.negative import (
     wrap_flatmap_hook_for_generated_value,
     wrap_map_hook_for_generated_value,
@@ -40,6 +39,8 @@ from test.python._constants.fixtures import (
 
 # Constant substitution is probabilistic; `find` drives generation until it fires (or proves it can't).
 _FIND = settings(max_examples=200, database=None)
+# Stops at the first match; shrinking it adds seconds and nothing these tests read.
+_FIND_FIRST = settings(_FIND, phases=[Phase.generate])
 
 
 def _app_constants(source, *, name="provider"):
@@ -58,20 +59,14 @@ def _harvested(source, type_):
     return [entry.value for entry in _app_constants(source).entries_for(type_)]
 
 
-@pytest.fixture
-def _clean_registry():
-    default_registry().clear()
-    yield
-    default_registry().clear()
-
-
 def test_constant_from_wsgi_app_unlocks_bug():
     # The high-entropy unlock code exists only in the app source; reaching it requires harvesting it.
     assert buggy_app.UNLOCK_CODE in _harvested(buggy_app.app, "string")
     operation = schemathesis.openapi.from_dict(buggy_app.SCHEMA)["/unlock"]["POST"]
     case = find(
         operation.as_strategy(
-            generation_mode=GenerationMode.POSITIVE, constants_value_source=_source("string", buggy_app.UNLOCK_CODE)
+            generation_mode=GenerationMode.POSITIVE,
+            feedback=FeedbackSources(constants_value_source=_source("string", buggy_app.UNLOCK_CODE)),
         ),
         lambda case: isinstance(case.body, dict) and case.body.get("code") == buggy_app.UNLOCK_CODE,
         settings=_FIND,
@@ -85,7 +80,7 @@ def test_constant_from_fastapi_app_unlocks_bug():
     case = find(
         operation.as_strategy(
             generation_mode=GenerationMode.POSITIVE,
-            constants_value_source=_source("string", buggy_asgi_app.UNLOCK_CODE),
+            feedback=FeedbackSources(constants_value_source=_source("string", buggy_asgi_app.UNLOCK_CODE)),
         ),
         lambda case: isinstance(case.body, dict) and case.body.get("code") == buggy_asgi_app.UNLOCK_CODE,
         settings=_FIND,
@@ -93,7 +88,7 @@ def test_constant_from_fastapi_app_unlocks_bug():
     assert case.body["code"] == buggy_asgi_app.UNLOCK_CODE
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_registered_constants_apply_to_direct_operation_strategy():
     @schemathesis.python.constants
     def source():
@@ -106,13 +101,14 @@ def test_registered_constants_apply_to_direct_operation_strategy():
             case._meta is not None
             and any(draw.value == graphql_string_pool.TOKEN for draw in case._meta.constants_draws)
         ),
+        # Ceiling for a search that stops at the first match.
         settings=settings(max_examples=200, database=None),
     )
 
     assert case.body["code"] == graphql_string_pool.TOKEN
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_registered_constants_apply_to_direct_state_machine():
     @schemathesis.python.constants
     def source():
@@ -152,7 +148,9 @@ def test_constant_applied_to_body_in_fuzz_mode():
     pool = _app_constants(buggy_app.app)
     operation = schemathesis.openapi.from_dict(buggy_app.SCHEMA)["/unlock"]["POST"]
     case = find(
-        operation.as_strategy(generation_mode=GenerationMode.POSITIVE, constants_value_source=pool),
+        operation.as_strategy(
+            generation_mode=GenerationMode.POSITIVE, feedback=FeedbackSources(constants_value_source=pool)
+        ),
         lambda case: case._meta is not None and any(d.parameter_name == "code" for d in case._meta.constants_draws),
         settings=_FIND,
     )
@@ -163,7 +161,9 @@ def test_constant_applied_to_query_parameter():
     pool = _app_constants(buggy_query_app.app)
     operation = schemathesis.openapi.from_dict(buggy_query_app.SCHEMA)["/unlock"]["GET"]
     case = find(
-        operation.as_strategy(generation_mode=GenerationMode.POSITIVE, constants_value_source=pool),
+        operation.as_strategy(
+            generation_mode=GenerationMode.POSITIVE, feedback=FeedbackSources(constants_value_source=pool)
+        ),
         lambda case: case._meta is not None and any(d.parameter_name == "code" for d in case._meta.constants_draws),
         settings=_FIND,
     )
@@ -171,52 +171,126 @@ def test_constant_applied_to_query_parameter():
     assert case.query["code"] == draw.value
 
 
+def test_constant_rejected_by_generation_settings_does_not_hide_the_rest():
+    strategy = build_constants_overlay_strategy(
+        st.just({"code": "placeholder"}),
+        source=_source("string", "pre\x00post", "fine"),
+        schema_properties={"code": {"type": "string"}},
+        validator_cls=jsonschema_rs.Draft4Validator,
+        location="query",
+        generation_config=GenerationConfig(allow_x00=False),
+        probability=1.0,
+    )
+    assert find(strategy, lambda value: True, settings=_FIND).value == {"code": "fine"}
+
+
+def _nul_constant_strategy(ctx, allow_x00):
+    schema = _unlock_schema(ctx, _CODE_BODY)
+    schema.config.generation.update(allow_x00=allow_x00)
+    return schema["/unlock"]["POST"].as_strategy(
+        generation_mode=GenerationMode.POSITIVE,
+        feedback=FeedbackSources(constants_value_source=_source("string", "pre\x00post")),
+    )
+
+
 def test_constants_respect_allow_x00(ctx):
     # A NUL harvested from the app's source must not reach data when the user disabled `\x00`.
-    schema = ctx.openapi.load_schema(
-        {
-            "/unlock": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {"code": {"type": "string"}},
-                                    "required": ["code"],
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
-    )
-    schema.config.generation.update(allow_x00=False)
-    operation = schema["/unlock"]["POST"]
     with pytest.raises(NoSuchExample):
         find(
-            operation.as_strategy(
-                generation_mode=GenerationMode.POSITIVE, constants_value_source=_source("string", "pre\x00post")
-            ),
+            _nul_constant_strategy(ctx, allow_x00=False),
             lambda case: isinstance(case.body, dict) and "\x00" in str(case.body.get("code", "")),
             settings=_FIND,
         )
 
 
-def test_constants_not_substituted_into_security_parameters(ctx):
-    # A harvested key makes "generated" auth valid, so `ignored_auth` reports the API accepting it.
-    schema = ctx.openapi.load_schema(
-        {"/data": {"get": {"security": [{"ApiKeyQuery": []}], "responses": {"200": {"description": "OK"}}}}},
-        components={"securitySchemes": {"ApiKeyQuery": {"type": "apiKey", "in": "query", "name": "api_key"}}},
+def test_constant_with_nul_is_substituted_when_allowed(ctx):
+    find(
+        _nul_constant_strategy(ctx, allow_x00=True),
+        lambda case: case.body == {"code": "pre\x00post"},
+        settings=_FIND_FIRST,
     )
-    operation = schema["/data"]["GET"]
+
+
+_CODE_BODY = {
+    "type": "object",
+    "properties": {"code": {"type": "string"}},
+    "required": ["code"],
+}
+
+
+def _unlock_schema(ctx, body_schema, version="3.0.2"):
+    return ctx.openapi.load_schema(
+        {
+            "/unlock": {
+                "post": {
+                    "requestBody": {"required": True, "content": {"application/json": {"schema": body_schema}}},
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+        version=version,
+    )
+
+
+def test_constants_respect_codec(ctx):
+    schema = _unlock_schema(ctx, _CODE_BODY)
+    schema.config.generation.update(codec="ascii")
+    operation = schema["/unlock"]["POST"]
     with pytest.raises(NoSuchExample):
         find(
             operation.as_strategy(
-                generation_mode=GenerationMode.POSITIVE, constants_value_source=_source("string", "42")
+                generation_mode=GenerationMode.POSITIVE,
+                feedback=FeedbackSources(constants_value_source=_source("string", "café")),
+            ),
+            lambda case: isinstance(case.body, dict) and case.body.get("code") == "café",
+            settings=_FIND,
+        )
+
+
+@pytest.mark.parametrize(("codec", "substituted"), [("ascii", False), (None, True)], ids=["ascii", "no-codec"])
+def test_constants_substituted_only_when_codec_admits_them(ctx, codec, substituted):
+    schema = _unlock_schema(ctx, _CODE_BODY)
+    schema.config.generation.codec = codec
+    strategy = schema["/unlock"]["POST"].as_strategy(
+        generation_mode=GenerationMode.POSITIVE,
+        feedback=FeedbackSources(constants_value_source=_source("string", "café")),
+    )
+
+    def has_constant(case):
+        return isinstance(case.body, dict) and case.body.get("code") == "café"
+
+    if substituted:
+        assert has_constant(find(strategy, has_constant, settings=_FIND))
+    else:
+        with pytest.raises(NoSuchExample):
+            find(strategy, has_constant, settings=_FIND)
+
+
+def test_constants_overlay_keeps_non_object_body(ctx):
+    schema = _unlock_schema(
+        ctx, {"type": ["object", "string"], "properties": {"code": {"type": "string"}}}, version="3.1.0"
+    )
+    operation = schema["/unlock"]["POST"]
+    case = find(
+        operation.as_strategy(feedback=FeedbackSources(constants_value_source=_source("string", "TOKEN"))),
+        lambda case: isinstance(case.body, str),
+        settings=_FIND,
+    )
+    assert case.body == ""
+
+
+def test_constants_not_substituted_into_security_parameters(ctx):
+    # A harvested key makes "generated" auth valid, so `ignored_auth` reports the API accepting it.
+    operation = ctx.openapi.load_operation(
+        "GET /data",
+        {"security": [{"ApiKeyQuery": []}], "responses": {"200": {"description": "OK"}}},
+        components={"securitySchemes": {"ApiKeyQuery": {"type": "apiKey", "in": "query", "name": "api_key"}}},
+    )
+    with pytest.raises(NoSuchExample):
+        find(
+            operation.as_strategy(
+                generation_mode=GenerationMode.POSITIVE,
+                feedback=FeedbackSources(constants_value_source=_source("string", "42")),
             ),
             lambda case: (
                 case._meta is not None and any(draw.parameter_name == "api_key" for draw in case._meta.constants_draws)
@@ -229,7 +303,9 @@ def test_constant_applied_to_integer_path_parameter():
     pool = _app_constants(buggy_path_app.app)
     operation = schemathesis.openapi.from_dict(buggy_path_app.SCHEMA)["/item/{item_id}"]["GET"]
     case = find(
-        operation.as_strategy(generation_mode=GenerationMode.POSITIVE, constants_value_source=pool),
+        operation.as_strategy(
+            generation_mode=GenerationMode.POSITIVE, feedback=FeedbackSources(constants_value_source=pool)
+        ),
         lambda case: case._meta is not None and any(d.parameter_name == "item_id" for d in case._meta.constants_draws),
         settings=_FIND,
     )
@@ -239,12 +315,79 @@ def test_constant_applied_to_integer_path_parameter():
     assert case.path_parameters["item_id"] == draw.value
 
 
+@pytest.mark.parametrize(("style", "sent"), [({}, "a%20b"), ({"style": "label"}, ".a%20b")], ids=["simple", "label"])
+def test_constant_keeps_its_provenance_after_path_serialization(ctx, style, sent):
+    operation = ctx.openapi.load_operation(
+        "GET /items/{name}",
+        {
+            "parameters": [{"name": "name", "in": "path", "required": True, "schema": {"type": "string"}, **style}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = find(
+        operation.as_strategy(
+            generation_mode=GenerationMode.POSITIVE,
+            feedback=FeedbackSources(constants_value_source=_source("string", "a b")),
+        ),
+        lambda case: case.path_parameters["name"] == sent,
+        settings=_FIND,
+    )
+    assert [(draw.location, draw.parameter_name, draw.value) for draw in case._meta.constants_draws] == [
+        ("path", "name", "a b")
+    ]
+
+
+# Constants supplied after an operation already generated data still reach its parameters.
+def test_constants_reach_a_parameter_whose_strategy_was_built_without_them(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [{"name": "code", "in": "query", "required": True, "schema": {"type": "string"}}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    generate_many(operation.as_strategy(generation_mode=GenerationMode.POSITIVE), 1)
+    find(
+        operation.as_strategy(
+            generation_mode=GenerationMode.POSITIVE,
+            feedback=FeedbackSources(constants_value_source=_source("string", "TOKEN_XYZ")),
+        ),
+        lambda case: case.query["code"] == "TOKEN_XYZ",
+        settings=_FIND_FIRST,
+    )
+
+
+def test_constant_substituted_into_referenced_query_parameter(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /items",
+        {
+            "parameters": [
+                {"name": "code", "in": "query", "required": True, "schema": {"$ref": "#/components/schemas/Code"}}
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+        components={
+            "schemas": {"Code": {"allOf": [{"$ref": "#/components/schemas/Text"}]}, "Text": {"type": "string"}}
+        },
+    )
+    find(
+        operation.as_strategy(
+            generation_mode=GenerationMode.POSITIVE,
+            feedback=FeedbackSources(constants_value_source=_source("string", "TOKEN_XYZ")),
+        ),
+        lambda case: case.query["code"] == "TOKEN_XYZ",
+        settings=_FIND_FIRST,
+    )
+
+
 def test_bug_stays_unfindable_without_the_feature():
     # No source: the overlay is off, so no constant provenance is ever recorded.
     operation = schemathesis.openapi.from_dict(buggy_app.SCHEMA)["/unlock"]["POST"]
     with pytest.raises(NoSuchExample):
         find(
-            operation.as_strategy(generation_mode=GenerationMode.POSITIVE, constants_value_source=None),
+            operation.as_strategy(
+                generation_mode=GenerationMode.POSITIVE, feedback=FeedbackSources(constants_value_source=None)
+            ),
             lambda case: case._meta is not None and bool(case._meta.constants_draws),
             settings=_FIND,
         )
@@ -254,7 +397,9 @@ def test_constant_usage_recorded_in_case_metadata():
     pool = _app_constants(buggy_app.app)
     operation = schemathesis.openapi.from_dict(buggy_app.SCHEMA)["/unlock"]["POST"]
     case = find(
-        operation.as_strategy(generation_mode=GenerationMode.POSITIVE, constants_value_source=pool),
+        operation.as_strategy(
+            generation_mode=GenerationMode.POSITIVE, feedback=FeedbackSources(constants_value_source=pool)
+        ),
         lambda case: case._meta is not None and any(d.parameter_name == "code" for d in case._meta.constants_draws),
         settings=_FIND,
     )
@@ -267,7 +412,7 @@ def test_constant_usage_recorded_in_case_metadata():
     assert draw.origin.module == "test.python._constants.fixtures.buggy_app"
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_constants_auto_extracted_from_wsgi_app():
     # No registered source and no explicit pool: loading a WSGI app introspects its modules by default.
     operation = schemathesis.openapi.from_wsgi("/openapi.json", app=buggy_app.app)["/unlock"]["POST"]
@@ -279,7 +424,7 @@ def test_constants_auto_extracted_from_wsgi_app():
     assert any(draw.origin.source == "application" for draw in case._meta.constants_draws)
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_app_constants_are_cached_across_strategy_builds():
     calls = 0
 
@@ -297,7 +442,7 @@ def test_app_constants_are_cached_across_strategy_builds():
     assert calls == 1
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_app_constants_cache_survives_schema_clone():
     # `@schema.parametrize()` clones the schema per test function; each clone must not re-import the app.
     calls = 0
@@ -316,7 +461,7 @@ def test_app_constants_cache_survives_schema_clone():
     assert calls == 1
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_app_constants_cache_is_invalidated_when_registry_changes():
     calls = []
 
@@ -338,7 +483,7 @@ def test_app_constants_cache_is_invalidated_when_registry_changes():
     assert calls == ["first", "first", "second"]
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_constants_auto_extracted_from_asgi_app():
     operation = schemathesis.openapi.from_asgi("/openapi.json", app=buggy_asgi_app.app)["/unlock"]["POST"]
     case = find(
@@ -349,7 +494,7 @@ def test_constants_auto_extracted_from_asgi_app():
     assert any(draw.origin.source == "application" for draw in case._meta.constants_draws)
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_auto_extraction_disabled_by_config():
     config = SchemathesisConfig.from_str("[analysis.constants]\nenabled = false\n")
     operation = schemathesis.openapi.from_wsgi("/openapi.json", app=buggy_app.app, config=config)["/unlock"]["POST"]
@@ -368,7 +513,9 @@ def _graphql_operations():
 
 def _graphql_case(operation, pool, predicate):
     return find(
-        operation.as_strategy(generation_mode=GenerationMode.POSITIVE, constants_value_source=pool),
+        operation.as_strategy(
+            generation_mode=GenerationMode.POSITIVE, feedback=FeedbackSources(constants_value_source=pool)
+        ),
         predicate,
         settings=_FIND,
     )
@@ -391,7 +538,7 @@ def test_constant_applied_to_graphql_argument():
     assert any(d.value == graphql_app.SECRET_CODE for d in case._meta.constants_draws)
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_constants_auto_extracted_from_graphql_wsgi_app():
     # The strawberry request handler is a library view, but Flask records the app's own module,
     # so its resolver literals are reached without manual registration.
@@ -451,6 +598,22 @@ def test_graphql_constants_cover_scalar_shapes():
         _graphql_case(operations["Query.byColor"], pool, _has_any_draw)
 
 
+@pytest.mark.usefixtures("clean_constants_registry")
+def test_graphql_constants_replace_only_some_list_elements():
+    def partly_substituted(case):
+        tags = graphql.value_from_ast_untyped(
+            graphql.parse(case.body).definitions[0].selection_set.selections[0].arguments[0].value
+        )
+        return case._meta is not None and 0 < len(case._meta.constants_draws) < len(tags)
+
+    case = find(
+        _graphql_operations()["Query.byTags"].as_strategy(generation_mode=GenerationMode.POSITIVE),
+        partly_substituted,
+        settings=_FIND,
+    )
+    assert all(draw.body_path == "/byTags/tags" for draw in case._meta.constants_draws)
+
+
 def test_graphql_numeric_argument_untouched_without_numeric_constants():
     pool = _app_constants(graphql_string_pool)
     operations = _graphql_operations()
@@ -507,7 +670,7 @@ _GRAPHQL_SCALAR_SCHEMA = graphql.build_schema(
     ],
 )
 def test_graphql_int_scalar_rejects_out_of_range_constants(value, substituted):
-    draws = substitute_constants(
+    _, draws = substitute_constants(
         operation_node=_parse_graphql("{ byNumber(n: 0) }"),
         client_schema=_GRAPHQL_SCALAR_SCHEMA,
         pool=_source("integer", value),
@@ -518,7 +681,7 @@ def test_graphql_int_scalar_rejects_out_of_range_constants(value, substituted):
 
 
 def test_graphql_meta_field_does_not_abort_substitution():
-    draws = substitute_constants(
+    _, draws = substitute_constants(
         operation_node=_parse_graphql('{ lookup(code: "x") __typename }'),
         client_schema=_GRAPHQL_SCALAR_SCHEMA,
         pool=_source("string", "REPLACED"),
@@ -529,7 +692,7 @@ def test_graphql_meta_field_does_not_abort_substitution():
 
 
 def test_graphql_constants_leave_dictionary_filled_arguments_alone():
-    draws = substitute_constants(
+    _, draws = substitute_constants(
         operation_node=_parse_graphql('{ lookup(code: "x") }'),
         client_schema=_GRAPHQL_SCALAR_SCHEMA,
         pool=_source("string", "REPLACED"),
@@ -543,7 +706,7 @@ def test_graphql_constants_leave_dictionary_filled_arguments_alone():
 def test_graphql_float_scalar_rejects_overflowing_integer_constant():
     # `float(10**400)` overflows; such an integer can never be a finite `Float` literal, so it must be
     # filtered out rather than crash the draw with `OverflowError`.
-    draws = substitute_constants(
+    _, draws = substitute_constants(
         operation_node=_parse_graphql("{ byRatio(r: 1.0) }"),
         client_schema=_GRAPHQL_SCALAR_SCHEMA,
         pool=_source("integer", 10**400),
@@ -558,10 +721,10 @@ def test_stateful_prune_keeps_non_body_constant_draws():
     kept_body = _constant_draw("a", "AVAL", body_path="/a")
     overwritten_body = _constant_draw("b", "BVAL", body_path="/b")
     body = {"a": "AVAL", "b": "CHANGED"}
-    assert _prune_overwritten_body_constants((query_draw, kept_body, overwritten_body), body) == (query_draw, kept_body)
+    assert prune_overwritten_body_constants((query_draw, kept_body, overwritten_body), body) == (query_draw, kept_body)
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_registered_constants_extracted_once_until_registry_changes():
     calls = []
 
@@ -655,10 +818,13 @@ def test_oversized_binary_constant_is_not_substituted(data):
     assert _draw(data, source, schema_properties={"blob": schema}) == "placeholder"
 
 
+@pytest.mark.parametrize(
+    "bounds", [{"maxLength": 4}, {"minLength": 2}, {"maxLength": 2}], ids=["shorter", "at-min", "at-max"]
+)
 @given(data=st.data())
 @settings(max_examples=5)
-def test_valid_binary_constant_is_substituted(data):
-    schema = {"type": "string", "format": "binary", "maxLength": 4}
+def test_valid_binary_constant_is_substituted(data, bounds):
+    schema = {"type": "string", "format": "binary", **bounds}
     blob = _draw(data, _source("bytes", b"OK"), schema_properties={"blob": schema})
     assert isinstance(blob, Binary)
     assert blob.data == b"OK"
@@ -683,14 +849,29 @@ def test_undersized_binary_constant_is_not_substituted(data):
     assert _draw(data, _source("bytes", b"x"), schema_properties={"blob": schema}) == "placeholder"
 
 
+@pytest.mark.parametrize(
+    "schema",
+    [
+        {"properties": {"code": {"type": "string"}}},
+        {"items": {"type": "string"}},
+        {"additionalProperties": {"type": "string"}},
+    ],
+    ids=["properties", "items", "additionalProperties"],
+)
 @given(data=st.data())
 @settings(max_examples=5)
-def test_typeless_object_property_is_not_scalar_substituted(data):
+def test_typeless_object_property_is_not_scalar_substituted(data, schema):
     # A property that is object-shaped (has `properties`) but omits an explicit `type` must not be
     # replaced by a scalar constant -- that would corrupt the body structure.
     source = _source("string", "SCALAR_CONST")
-    blob = _draw(data, source, schema_properties={"blob": {"properties": {"code": {"type": "string"}}}})
+    blob = _draw(data, source, schema_properties={"blob": schema})
     assert blob == "placeholder"
+
+
+@given(data=st.data())
+@settings(max_examples=5)
+def test_float_constant_is_substituted_into_number_property(data):
+    assert _draw(data, _source("float", 2.5), schema_properties={"blob": {"type": "number"}}) == 2.5
 
 
 @given(data=st.data())
@@ -935,6 +1116,23 @@ def test_substitution_reverted_when_it_breaks_container_validation(data):
     assert blob == "placeholder"
 
 
+@given(data=st.data())
+@settings(max_examples=5)
+def test_substitution_reverted_when_container_not_constraint_rejects_it(data):
+    container = {
+        "type": "object",
+        "properties": {"blob": {"type": "string"}},
+        "not": {"required": ["blob"], "properties": {"blob": {"enum": ["FORBIDDEN"]}}},
+    }
+    blob = _draw(
+        data,
+        _source("string", "FORBIDDEN"),
+        schema_properties={"blob": {"type": "string"}},
+        container_schema=container,
+    )
+    assert blob == "placeholder"
+
+
 def _nested_body_schema(depth):
     schema = {
         "type": "object",
@@ -1029,7 +1227,7 @@ def test_constant_substituted_into_composed_or_nested_body(ctx, body_schema, bod
     case = find(
         operation.as_strategy(
             generation_mode=GenerationMode.POSITIVE,
-            constants_value_source=_source("string", value),
+            feedback=FeedbackSources(constants_value_source=_source("string", value)),
         ),
         lambda case: (
             case._meta is not None
@@ -1041,6 +1239,138 @@ def test_constant_substituted_into_composed_or_nested_body(ctx, body_schema, bod
     for segment in body_path[1:].split("/"):
         actual = actual[segment]
     assert actual == value
+
+
+def _nested_body_operation(ctx, body_schema):
+    return ctx.openapi.load_operation(
+        "POST /unlock",
+        {
+            "requestBody": {"required": True, "content": {"application/json": {"schema": body_schema}}},
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+    )
+
+
+def _leaf_at(body, depth):
+    for _ in range(depth):
+        if not isinstance(body, dict):
+            return None
+        body = body.get("nested")
+    return body
+
+
+# Leaves past the walk's depth limit are never substitution candidates.
+@pytest.mark.parametrize(("depth", "substituted"), [(8, True), (9, False)], ids=["depth-8", "depth-9"])
+def test_constant_substitution_depth_limit(ctx, depth, substituted):
+    body_schema = {"type": "string"}
+    for _ in range(depth):
+        body_schema = {"type": "object", "properties": {"nested": body_schema}, "required": ["nested"]}
+    operation = _nested_body_operation(ctx, body_schema)
+    strategy = operation.as_strategy(feedback=FeedbackSources(constants_value_source=_source("string", "TOKEN_XYZ")))
+    if substituted:
+        case = find(strategy, lambda case: _leaf_at(case.body, depth) == "TOKEN_XYZ", settings=_FIND)
+        assert _leaf_at(case.body, depth) == "TOKEN_XYZ"
+    else:
+        with pytest.raises(NoSuchExample):
+            find(strategy, lambda case: _leaf_at(case.body, depth) == "TOKEN_XYZ", settings=_FIND)
+
+
+@pytest.mark.parametrize(
+    "node",
+    [
+        {
+            "type": "object",
+            "properties": {"name": {"type": "string"}, "child": {"$ref": "#/components/schemas/Node"}},
+            "required": ["name"],
+        },
+        {
+            "type": "object",
+            "allOf": [{"properties": {"name": {"type": "string"}, "child": {"$ref": "#/components/schemas/Node"}}}],
+            "required": ["name"],
+        },
+        {
+            "type": "object",
+            "properties": {"name": {"allOf": [{"$ref": "#/components/schemas/Name"}]}},
+            "required": ["name"],
+        },
+    ],
+    ids=["properties", "all-of", "referenced-leaf"],
+)
+def test_constant_substituted_into_referencing_body(ctx, node):
+    operation = ctx.openapi.load_operation(
+        "POST /nodes",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Node"}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+        components={"schemas": {"Node": node, "Name": {"type": "string"}}},
+    )
+    find(
+        operation.as_strategy(feedback=FeedbackSources(constants_value_source=_source("string", "TOKEN_XYZ"))),
+        lambda case: isinstance(case.body, dict) and case.body.get("name") == "TOKEN_XYZ",
+        settings=_FIND_FIRST,
+    )
+
+
+@pytest.mark.parametrize(
+    "outer",
+    [
+        {"$ref": "#/components/schemas/Inner"},
+        {"allOf": [{"$ref": "#/components/schemas/Inner"}]},
+        {"allOf": [{"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]}]},
+    ],
+    ids=["reference", "referenced-branch", "inline-branch"],
+)
+def test_constant_substituted_into_nested_body_property(ctx, outer):
+    operation = ctx.openapi.load_operation(
+        "POST /nodes",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {"type": "object", "properties": {"outer": outer}, "required": ["outer"]}
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+        components={
+            "schemas": {"Inner": {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]}}
+        },
+    )
+    find(
+        operation.as_strategy(feedback=FeedbackSources(constants_value_source=_source("string", "TOKEN_XYZ"))),
+        lambda case: isinstance(case.body, dict) and _leaf(case.body) == "TOKEN_XYZ",
+        settings=_FIND_FIRST,
+    )
+
+
+def _leaf(body):
+    outer = body.get("outer")
+    return outer.get("name") if isinstance(outer, dict) else None
+
+
+def test_constant_substituted_through_boolean_all_of_branch(ctx):
+    operation = _nested_body_operation(
+        ctx,
+        {
+            "type": "object",
+            "allOf": [True, {"properties": {"n": {"type": ["number", "integer"]}}, "required": ["n"]}],
+        },
+    )
+    case = find(
+        operation.as_strategy(feedback=FeedbackSources(constants_value_source=_source("integer", 987654321))),
+        lambda case: isinstance(case.body, dict) and case.body.get("n") == 987654321,
+        settings=_FIND,
+    )
+    assert case.body == {"n": 987654321}
 
 
 def test_body_override_removes_overridden_constant_provenance():
@@ -1068,6 +1398,7 @@ def test_body_override_removes_overridden_constant_provenance():
             )
         ),
         overrides={"/payload/code": "OVERRIDE"},
+        validator=None,
     )
 
     produced = find(strategy, lambda value: True)
@@ -1101,7 +1432,7 @@ def test_constant_draw_survives_metadata_round_trip(value):
     assert restored.constants_draws[0].body_path == "/payload/blob"
 
 
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_stateful_body_merge_prunes_overwritten_constant_provenance():
     @schemathesis.python.constants
     def source():
@@ -1127,6 +1458,7 @@ def test_stateful_body_merge_prunes_overwritten_constant_provenance():
 
     Workflow.run(
         settings=settings(
+            # The merged request needs a specific call sequence, which takes many scenarios to reach.
             max_examples=100,
             database=None,
             deadline=None,

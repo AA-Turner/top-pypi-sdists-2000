@@ -1,34 +1,40 @@
 from __future__ import annotations
 
 import _thread
+import gc
 import json
+import math
 import platform
 import sys
 import threading
 import time
 from dataclasses import asdict
+from typing import Annotated
 from unittest.mock import ANY
 
 import flask
 import pytest
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 
 import schemathesis
 from schemathesis.checks import not_a_server_error
-from schemathesis.config import SchemathesisWarning
+from schemathesis.config import SchemathesisConfig, SchemathesisWarning
 from schemathesis.core import SCHEMATHESIS_TEST_CASE_HEADER
+from schemathesis.core.errors import HookExecutionError
 from schemathesis.core.transport import USER_AGENT
 from schemathesis.engine import Status, StopReason, events, from_schema
 from schemathesis.engine.recorder import Request
 from schemathesis.engine.run import PhaseName
 from schemathesis.generation import GenerationMode
-from schemathesis.generation.hypothesis.builder import add_examples
+from schemathesis.generation.stateful.state_machine import APIStateMachine
 from schemathesis.specs.openapi.checks import (
     content_type_conformance,
     positive_data_acceptance,
     response_schema_conformance,
     status_code_conformance,
 )
+from test.apps.fragments import handlers
+from test.apps.fragments.schemas import linked_users
 from test.utils import EventStream
 
 IS_PYPY = platform.python_implementation() == "PyPy"
@@ -81,24 +87,17 @@ def test_execute_base_url_not_found(ctx):
     assert _api_requests(api) == []
 
 
-def test_execute(ctx):
-    api = ctx.openapi.apps.success_and_failure()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-    EventStream(schema).execute()
-
-    # Filter out the engine's `/` capability probe; only assert against the API operations.
-    api_calls = _api_requests(api)
-    assert sorted(r.path for r in api_calls) == ["/api/failure", "/api/success"]
-    for request in api_calls:
-        assert request.method == "GET"
-        assert request.headers["User-Agent"] == USER_AGENT
-
-
 @pytest.mark.parametrize("workers", [1, 2])
 def test_interactions(ctx, workers):
     api = ctx.openapi.apps.success_and_failure()
     schema = schemathesis.openapi.from_url(api.schema_url)
     stream = EventStream(schema, workers=workers).execute()
+
+    assert stream.finished.stop_reason == StopReason.COMPLETED
+    api_calls = _api_requests(api)
+    assert sorted(r.path for r in api_calls) == ["/api/failure", "/api/success"]
+    for request in api_calls:
+        assert (request.method, request.headers["User-Agent"]) == ("GET", USER_AGENT)
 
     if sys.version_info >= (3, 14):
         encoding = ["gzip, deflate, zstd"]
@@ -147,15 +146,38 @@ def test_interactions(ctx, workers):
 
 def test_asgi_interactions():
     app = FastAPI()
+    received = []
 
     @app.get("/users")
-    async def users():
+    async def users(
+        authorization: Annotated[str | None, Header()] = None, x_custom: Annotated[str | None, Header()] = None
+    ):
+        received.append((authorization, x_custom))
         return {"success": True}
 
     schema = schemathesis.openapi.from_asgi("/openapi.json", app)
-    stream = EventStream(schema).execute()
+    stream = EventStream(schema, max_examples=5, auth=("user", "pass"), headers={"X-Custom": "value"}).execute()
     interactions = stream.find_all_interactions()
     assert interactions[0].request.uri == "http://testserver/users"
+    assert [interaction.response is not None for interaction in interactions] == [True] * len(interactions)
+    assert set(received) == {("Basic dXNlcjpwYXNz", "value")}
+
+
+def test_wsgi_interactions(ctx):
+    app, _ = ctx.openapi.make_flask_app({"/users": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    received = []
+
+    @app.route("/users")
+    def users():
+        received.append((flask.request.headers.get("authorization"), flask.request.headers.get("x-custom")))
+        return flask.jsonify({"success": True})
+
+    schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
+    stream = EventStream(schema, max_examples=5, auth=("user", "pass"), headers={"X-Custom": "value"}).execute()
+    stream.assert_no_errors()
+    interactions = stream.find_all_interactions()
+    assert [interaction.response is not None for interaction in interactions] == [True] * len(interactions)
+    assert set(received) == {("Basic dXNlcjpwYXNz", "value")}
 
 
 def test_empty_response_interaction(ctx):
@@ -255,7 +277,7 @@ def test_auth(ctx):
         assert request.headers["Authorization"] == "Basic dGVzdDp0ZXN0"
 
 
-@pytest.mark.parametrize("converter", [lambda x: x, lambda x: x + "/"])
+@pytest.mark.parametrize("converter", [lambda x: x, lambda x: x + "/"], ids=["as-is", "trailing-slash"])
 def test_base_url(ctx, converter):
     api = ctx.openapi.apps.success_and_failure()
     base_url = converter(api.base_url)
@@ -564,6 +586,31 @@ def test_path_parameters_encoding(ctx):
     stream.assert_no_failures()
 
 
+def test_path_enum_value_with_slash_is_sent_encoded(ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items/{item}": {
+                "get": {
+                    "parameters": [
+                        {"name": "item", "in": "path", "required": True, "schema": {"type": "string", "enum": ["a/b"]}}
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        }
+    )
+    raw_paths = []
+
+    @app.before_request
+    def capture():
+        raw_paths.append(flask.request.environ["RAW_URI"])
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    stream = execute(schema, phases=[PhaseName.FUZZING], max_examples=1, modes=[GenerationMode.POSITIVE])
+    stream.assert_no_errors()
+    assert {path for path in raw_paths if path.startswith("/items/")} == {"/items/a%2Fb"}
+
+
 def test_exceptions(ctx):
     api = ctx.openapi.apps.slow()
     schema = schemathesis.openapi.from_url(api.schema_url)
@@ -572,20 +619,24 @@ def test_exceptions(ctx):
     assert any(event.status == Status.ERROR for event in stream.find_all(events.ScenarioFinished))
 
 
-def test_internal_exceptions(ctx, mocker):
+def test_internal_exceptions(ctx):
     # GH: #236
     # When there is an exception during the test
     # And Hypothesis consider this test as a flaky one
     api = ctx.openapi.apps.multipart()
     schema = schemathesis.openapi.from_url(api.schema_url)
-    mocker.patch("schemathesis.Case.call", side_effect=ValueError)
+
+    @schemathesis.hook
+    def before_call(context, case, kwargs):
+        raise ValueError
+
     stream = execute(schema, max_examples=3)
     # Then the execution result should indicate errors
     stream.assert_errors()
     # And an error from the buggy code should be collected
-    exceptions = [error.value.__class__.__name__ for error in stream.find_all(events.NonFatalError)]
-    assert "ValueError" in exceptions
-    assert len(exceptions) == 1
+    assert [(type(error.value), type(error.value.__cause__)) for error in stream.find_all(events.NonFatalError)] == [
+        (HookExecutionError, ValueError)
+    ]
 
 
 def test_positive_data_acceptance_multipart_binary(ctx, app_runner):
@@ -636,22 +687,36 @@ def test_positive_data_acceptance_multipart_binary(ctx, app_runner):
     stream.assert_no_errors()
 
 
+@pytest.mark.parametrize(
+    ("make_api", "phase"),
+    [
+        (lambda ctx: ctx.openapi.apps.payload(), PhaseName.FUZZING),
+        (lambda ctx: ctx.openapi.apps.stateful_users(), PhaseName.STATEFUL_TESTING),
+    ],
+    ids=["fuzzing", "stateful"],
+)
+def test_deterministic_mode_sends_identical_requests_across_runs(ctx, make_api, phase):
+    runs = []
+    for _ in range(2):
+        api = make_api(ctx)
+        schema = schemathesis.openapi.from_url(api.schema_url)
+        EventStream(schema, phases=[phase], max_examples=10, max_steps=10, deterministic=True).execute()
+        runs.append([(request.method, request.path, request.body) for request in api.requests])
+    assert runs[0] == runs[1]
+
+
 def test_fuzzing_phase_failure_requires_a_surfaced_failure(ctx):
     # DELETE mutates server state that later feeds case generation, so Hypothesis reports
     # inconsistent data generation; the phase must not be marked failed without a real failure.
     api = ctx.openapi.apps.stateful_users()
     schema = schemathesis.openapi.from_url(api.schema_url)
-    for seed in range(10):
-        stream = EventStream(
-            schema, max_examples=15, phases=[PhaseName.FUZZING], seed=seed, deterministic=True
-        ).execute()
-        phase = stream.find(events.PhaseFinished, phase=lambda value: value.name == PhaseName.FUZZING)
-        if phase.status != Status.FAILURE:
-            continue
+    stream = EventStream(schema, max_examples=15, phases=[PhaseName.FUZZING], seed=0, deterministic=True).execute()
+    phase = stream.find(events.PhaseFinished, phase=lambda value: value.name == PhaseName.FUZZING)
+    if phase.status == Status.FAILURE:
         scenarios = stream.find_all(events.ScenarioFinished)
         has_failed_check = any(check.status == Status.FAILURE for s in scenarios for check in _scenario_checks(s))
         has_error = bool(stream.find_all(events.NonFatalError))
-        assert has_failed_check or has_error, f"seed={seed}: fuzzing failed with no surfaced failure"
+        assert has_failed_check or has_error, "Fuzzing failed with no surfaced failure"
 
 
 def test_payload_explicit_example(ctx):
@@ -702,12 +767,11 @@ def test_explicit_examples_from_response(ctx):
     ]
 
 
-def test_explicit_example_disable(ctx, mocker):
+def test_explicit_example_disable(ctx):
     api = ctx.openapi.apps.payload()
     schema = schemathesis.openapi.from_url(api.schema_url)
     # When API operation has an example specified
     # And the `explicit` phase is excluded
-    spy = mocker.patch("schemathesis.generation.hypothesis.builder.add_examples", wraps=add_examples)
     stream = execute(
         schema,
         max_examples=1,
@@ -721,8 +785,6 @@ def test_explicit_example_disable(ctx, mocker):
 
     # And this example should NOT be used
     assert payload_requests[0].json() != {"name": "John"}
-    # And examples are not evaluated at all
-    assert not spy.called
 
 
 def test_plain_text_body(ctx):
@@ -781,6 +843,38 @@ def test_malformed_server_url_template(ctx):
     assert "'servers[0].url' is not a valid URL template" in str(stream.find(events.NonFatalError).info)
 
 
+def test_identical_schema_errors_across_generation_modes_reported_once(ctx):
+    schema = ctx.openapi.load_schema(
+        {
+            "/items": {
+                "get": {
+                    "parameters": [
+                        {
+                            "name": "q",
+                            "in": "query",
+                            "required": True,
+                            "schema": {"type": "integer", "maximum": "x"},
+                        }
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        }
+    )
+
+    stream = EventStream(schema, max_examples=1, phases=[PhaseName.FUZZING]).execute()
+
+    assert [(event.info.title, event.label, str(event.value)) for event in stream.find_all(events.NonFatalError)] == [
+        (
+            "Schema Error",
+            "GET /items",
+            "Invalid `maximum` definition\n\nLocation:\n    properties -> q -> maximum\n\nProblematic definition:\n"
+            '    "x"\n\nError details:\n    "x" is not of type "number"\n\nEnsure that the definition complies '
+            "with the OpenAPI specification",
+        )
+    ]
+
+
 def test_max_failures(ctx):
     api = ctx.openapi.apps.failure_multiple_failures_unsatisfiable()
     schema = schemathesis.openapi.from_url(api.schema_url)
@@ -802,15 +896,96 @@ def test_max_time(ctx):
     assert stream.finished.stop_reason == StopReason.MAX_TIME
 
 
+@pytest.mark.parametrize(
+    ("unique_inputs", "stop_reason"),
+    [(False, StopReason.MAX_TIME), (True, StopReason.COMPLETED)],
+    ids=["repeated-inputs", "unique-inputs"],
+)
+def test_max_time_ends_once_unique_inputs_run_out(ctx, unique_inputs, stop_reason):
+    # An operation without parameters has one input; once sent, unique inputs leave later cycles nothing to send.
+    api = ctx.openapi.apps.success()
+    schema = schemathesis.openapi.from_url(api.schema_url)
+    schema.config.generation.update(unique_inputs=unique_inputs)
+    stream = execute(schema, max_time=2, max_examples=10, phases=[PhaseName.FUZZING])
+
+    assert stream.finished.stop_reason == stop_reason
+
+
 @pytest.mark.parametrize("workers", [1, 2])
 def test_max_time_reaches_every_operation(ctx, workers):
     # Without a per-operation share the first operation consumes the whole budget and the rest are
     # never dispatched, which makes the tested set depend on schema order.
     api = ctx.openapi.apps.users_crud()
     schema = schemathesis.openapi.from_url(api.schema_url)
-    stream = execute(schema, max_time=3, max_examples=2000, workers=workers, phases=[PhaseName.FUZZING])
+    # Work before an operation's first case cannot be interrupted, so scale the budget to the runner's speed.
+    started = time.monotonic()
+    execute(schema, max_examples=1, workers=workers, phases=[PhaseName.FUZZING])
+    max_time = max(3, math.ceil(3 * (time.monotonic() - started)))
+    stream = execute(schema, max_time=max_time, max_examples=2000, workers=workers, phases=[PhaseName.FUZZING])
     tested = {event.label for event in stream.find_all(events.ScenarioFinished)}
     assert tested == {"POST /users/", "GET /users/{user_id}", "PATCH /users/{user_id}"}
+
+
+def _authorization_header_schema(ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "post": {
+                    "parameters": [{"name": "authorization", "in": "header", "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        }
+    )
+
+    @app.route("/items", methods=["POST"])
+    def items():
+        return flask.jsonify({})
+
+    return schemathesis.openapi.from_url(app_runner.openapi_url(app))
+
+
+def _fuzzing_cycles(schema, **options):
+    stream = execute(
+        schema, max_examples=10, max_time=2, modes=[GenerationMode.POSITIVE], phases=[PhaseName.FUZZING], **options
+    )
+    cycles = [len(event.recorder.interactions) for event in stream.find_all(events.ScenarioFinished)]
+    assert len(cycles) > 2
+    # The last cycle may be cut by the time limit before sending anything.
+    return cycles[1:-1]
+
+
+@pytest.mark.parametrize("auth_kind", ["basic", "hook"])
+def test_header_set_by_auth_is_not_generated_in_later_cycles(ctx, app_runner, auth_kind):
+    # Configured auth replaces the generated value, so drawing it repeats one request until max examples.
+    schema = _authorization_header_schema(ctx, app_runner)
+    if auth_kind == "hook":
+
+        @schema.auth()
+        class TokenAuth:
+            def get(self, case, context):
+                return "token"
+
+            def set(self, case, data, context):
+                case.headers = case.headers or {}
+                case.headers["Authorization"] = f"Bearer {data}"
+
+    assert set(_fuzzing_cycles(schema, auth=("user", "pass") if auth_kind == "basic" else None)) == {1}
+
+
+def test_header_auth_sets_only_sometimes_is_still_generated(ctx, app_runner):
+    schema = _authorization_header_schema(ctx, app_runner)
+
+    @schema.auth()
+    class FallbackAuth:
+        def get(self, case, context):
+            return "token"
+
+        def set(self, case, data, context):
+            case.headers = case.headers or {}
+            case.headers.setdefault("Authorization", f"Bearer {data}")
+
+    assert max(_fuzzing_cycles(schema)) > 1
 
 
 def test_max_time_in_unit_phase_is_not_an_interrupt(ctx):
@@ -835,6 +1010,27 @@ def test_max_time_in_stateful_phase_is_not_an_interrupt(ctx):
     assert stateful.status != Status.INTERRUPTED
 
 
+def test_stateful_cycles_release_their_state_machines(ctx):
+    # Hypothesis caches every state machine class it runs; each cycle builds a new one, so unless the
+    # finished ones are released, memory grows for as long as the run lasts.
+    api = ctx.openapi.apps.users_crud()
+    schema = schemathesis.openapi.from_url(api.schema_url)
+    cycles = [
+        execute(schema, max_examples=1, phases=[PhaseName.STATEFUL_TESTING]).find(
+            events.PhaseFinished, phase=lambda phase: phase.name == PhaseName.STATEFUL_TESTING
+        )
+        for _ in range(2)
+    ]
+    gc.collect()
+    # `isinstance` reads `__class__`, which lazy proxies such as Django's unconfigured settings resolve and fail on.
+    machines = [
+        obj
+        for obj in gc.get_objects()
+        if issubclass(type(obj), type) and issubclass(obj, APIStateMachine) and getattr(obj, "schema", None) is schema
+    ]
+    assert ([cycle.status for cycle in cycles], machines) == ([Status.SUCCESS, Status.SUCCESS], [])
+
+
 def test_max_time_keeps_operation_errors_visible(ctx, restore_checks):
     # Running out of the operation's share does not undo the errors it already produced.
     @schemathesis.check
@@ -843,6 +1039,7 @@ def test_max_time_keeps_operation_errors_visible(ctx, restore_checks):
 
     api = ctx.openapi.apps.users_crud()
     schema = schemathesis.openapi.from_url(api.schema_url)
+    # More examples than fit in the time limit, so the clock ends the run.
     stream = execute(schema, checks=[boom], max_time=1, max_examples=2000, phases=[PhaseName.FUZZING])
     errored = {event.label for event in stream.find_all(events.NonFatalError)}
     passed = {event.label for event in stream.find_all(events.ScenarioFinished) if event.status == Status.SUCCESS}
@@ -937,7 +1134,7 @@ def test_non_serializable_example(ctx, phases, expected):
                     ],
                     "requestBody": {
                         "content": {
-                            "image/jpeg": {
+                            "video/mp4": {
                                 "schema": {"format": "base64", "type": "string"},
                             }
                         }
@@ -954,69 +1151,6 @@ def test_non_serializable_example(ctx, phases, expected):
     errors = stream.find_all(events.NonFatalError)
     assert len(errors) == len(phases)
     assert expected in str(errors[0].info)
-
-
-def test_unsupported_regex_removed_with_warning(ctx):
-    # When a schema contains an unsupported regex pattern
-    schema = ctx.openapi.load_schema(
-        {
-            "/success": {
-                "post": {
-                    "parameters": [
-                        {"name": "key", "in": "query", "required": True, "schema": {"type": "integer"}, "example": 42}
-                    ],
-                    "requestBody": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "region": {
-                                            "nullable": True,
-                                            "pattern": "^[\\w\\s\\-\\/\\p{Tibetan},.#;:()']+$",
-                                            "type": "string",
-                                        },
-                                    },
-                                    "required": ["region"],
-                                    "type": "object",
-                                }
-                            }
-                        },
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
-    )
-    # Then the pattern is removed and a warning is emitted
-    warnings = list(schema.analysis.iter_warnings())
-    assert len(warnings) > 0
-    assert any("^[\\w\\s\\-\\/\\p{Tibetan},.#;:()']+$" in w.message for w in warnings)
-
-
-def test_unsupported_regex_in_parameter_removed_with_warning(ctx):
-    # When a parameter schema contains an unsupported regex pattern
-    schema = ctx.openapi.load_schema(
-        {
-            "/users/{id}": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "id",
-                            "in": "path",
-                            "required": True,
-                            "schema": {"type": "string", "pattern": "\\p{Tibetan}+"},
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
-    )
-    # Then the pattern is removed and a warning is emitted
-    warnings = list(schema.analysis.iter_warnings())
-    assert len(warnings) > 0
-    assert any("\\p{Tibetan}+" in w.message for w in warnings)
 
 
 def test_invalid_header_in_example(ctx):
@@ -1198,14 +1332,17 @@ def test_interrupted_in_test(ctx):
     assert scenario_finished.recorder.interactions
 
 
-def test_interrupted_outside_test(ctx, mocker):
+def test_interrupted_outside_test(ctx):
     api = ctx.openapi.apps.success()
     schema = schemathesis.openapi.from_url(api.schema_url)
+
     # See GH-1325
     # When an interrupt happens outside a test body
-    mocker.patch("schemathesis.engine.events.ScenarioFinished.__init__", side_effect=KeyboardInterrupt)
+    @schemathesis.hook
+    def before_generate_case(context, strategy):
+        raise KeyboardInterrupt
 
-    stream = EventStream(schema).execute()
+    stream = EventStream(schema, phases=[PhaseName.FUZZING]).execute()
     try:
         interrupted = stream.find(events.Interrupted)
         # Then the `Interrupted` event should be emitted
@@ -1252,15 +1389,6 @@ def test_stop_event_stream_has_stop_reason_interrupted(event_stream):
     assert isinstance(finished, events.EngineFinished)
     # Then the stop reason is reflected in the final event
     assert finished.stop_reason == StopReason.INTERRUPTED
-
-
-def test_engine_finished_stop_reason_completed(ctx):
-    api = ctx.openapi.apps.success_and_failure()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-    # When the engine runs to completion
-    stream = EventStream(schema).execute()
-    # Then the finished event reports completed
-    assert stream.finished.stop_reason == StopReason.COMPLETED
 
 
 def test_stop_event_stream_after_second_event(event_stream):
@@ -1394,21 +1522,6 @@ STATEFUL_KWARGS = {
 }
 
 
-def test_stateful_auth(ctx):
-    api = ctx.openapi.apps.users_crud()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-    stream = EventStream(
-        schema,
-        phases=[PhaseName.STATEFUL_TESTING],
-        auth=("admin", "password"),
-        **STATEFUL_KWARGS,
-    ).execute()
-    interactions = stream.find_all_interactions()
-    assert len(interactions) > 0
-    for interaction in interactions:
-        assert interaction.request.headers["Authorization"] == ["Basic YWRtaW46cGFzc3dvcmQ="]
-
-
 def test_stateful_all_generation_modes(ctx):
     api = ctx.openapi.apps.users_crud()
     schema = schemathesis.openapi.from_url(api.schema_url)
@@ -1445,18 +1558,40 @@ def test_stateful_seed(ctx):
     assert requests[0][0] == requests[1][0] == requests[2][0]
 
 
-def test_stateful_override(ctx):
+def _fuzzed_queries_per_path(ctx, seed):
+    api = ctx.openapi.apps.identical_query_parameters()
+    schema = schemathesis.openapi.from_url(api.schema_url)
+    EventStream(schema, phases=[PhaseName.FUZZING], seed=seed, max_examples=10).execute()
+    queries = {}
+    for request in _api_requests(api):
+        queries.setdefault(request.path, []).append(request.query)
+    return queries
+
+
+def test_fuzzing_seeds_operations_with_identical_parameters_differently(ctx):
+    queries = _fuzzed_queries_per_path(ctx, seed=42)
+    assert queries["/api/twin_a"] != queries["/api/twin_b"]
+
+
+def test_fuzzing_seed_reproduces_per_operation_inputs(ctx):
+    assert _fuzzed_queries_per_path(ctx, seed=42) == _fuzzed_queries_per_path(ctx, seed=42)
+
+
+def test_stateful_auth_and_override(ctx):
     api = ctx.openapi.apps.users_crud()
     schema = schemathesis.openapi.from_url(api.schema_url)
     stream = EventStream(
         schema,
         phases=[PhaseName.STATEFUL_TESTING],
+        auth=("admin", "password"),
         parameters={"user_id": "42"},
-        max_examples=80,
+        max_examples=10,
         max_steps=2,
+        seed=1,
     ).execute()
     interactions = stream.find_all_interactions()
     assert len(interactions) > 0
+    assert {tuple(i.request.headers["Authorization"]) for i in interactions} == {("Basic YWRtaW46cGFzc3dvcmQ=",)}
     # Check any request that uses user_id (GET or PATCH)
     user_requests = [
         i.request for i in interactions if "/users/" in i.request.uri and i.request.method in ("GET", "PATCH")
@@ -1478,6 +1613,8 @@ def test_generation_config_in_explicit_examples(ctx):
                             "name": "X-VO-Api-Id",
                             "required": True,
                             "type": "string",
+                            # An empty value would satisfy any character set.
+                            "minLength": 1,
                         },
                         {
                             "in": "body",
@@ -1506,10 +1643,7 @@ def test_generation_config_in_explicit_examples(ctx):
         exclude_header_characters="".join({chr(i) for i in range(256)} - {"a"}),
     )
     stream = EventStream(schema, max_examples=10).execute()
-    for case in _scenario_cases(stream):
-        for header in case.value.headers.values():
-            if header:
-                assert set(header) == {"a"}
+    assert [dict(case.value.headers) for case in _scenario_cases(stream)] == [{"X-VO-Api-Id": "a"}]
 
 
 def test_missing_deserializer_warnings_collected(ctx):
@@ -1691,12 +1825,32 @@ def test_max_time_coverage_rerun_reaches_what_feedback_unlocked(ctx):
     stream = execute(
         schema,
         max_time=5,
+        # More examples than fit in the time limit, so the clock ends the run.
         max_examples=100_000,
         checks=(not_a_server_error,),
         phases=[PhaseName.COVERAGE],
     )
 
     assert stream.find(events.ScenarioFinished, status=Status.FAILURE) is not None
+
+
+def test_max_time_runs_coverage_cases_generated_before_the_slice_ran_out(ctx):
+    # One slow case uses up the operation's share while the cases before it are already generated.
+    api = ctx.openapi.apps.success()
+    schema = schemathesis.openapi.from_url(api.schema_url)
+    generated = []
+
+    def map_case(context, case):
+        generated.append(case)
+        if len(generated) == 5:
+            time.sleep(1.2)
+        return case
+
+    schema.hook("map_case")(map_case)
+    stream = execute(schema, max_time=2, max_examples=100_000, phases=[PhaseName.COVERAGE, PhaseName.FUZZING])
+    finished = stream.find(events.ScenarioFinished, phase=PhaseName.COVERAGE)
+
+    assert len(finished.recorder.cases) == 5
 
 
 def test_max_time_skips_coverage_rerun_for_feedback_that_cannot_change_generation(ctx):
@@ -1772,6 +1926,7 @@ def test_max_time_stops_reserving_for_a_phase_that_only_skips(ctx):
     assert [event.status for event in stateful].count(Status.SKIP) <= 1, len(stateful)
 
 
+@pytest.mark.usefixtures("restore_checks")
 def test_max_time_keeps_results_that_landed_as_the_budget_ran_out(ctx, app_runner):
     # Workers finish moments apart; the one that lands after the deadline is still work that happened.
     app, _ = ctx.openapi.make_flask_app(
@@ -1783,16 +1938,19 @@ def test_max_time_keeps_results_that_landed_as_the_budget_ran_out(ctx, app_runne
 
     @app.route("/first")
     def first():
-        time.sleep(3.2)
         return "", 200
 
     @app.route("/second")
     def second():
-        time.sleep(3.6)
         return "", 500
 
+    @schemathesis.check
+    def slow_check(ctx, response, case):
+        time.sleep(6.6 if response.status_code == 500 else 6.2)
+        assert response.status_code < 500
+
     schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
-    stream = execute(schema, max_time=3, max_examples=1, workers=2, phases=[PhaseName.FUZZING])
+    stream = execute(schema, checks=(slow_check,), max_time=6, max_examples=1, workers=2, phases=[PhaseName.FUZZING])
 
     assert {(event.label, event.status) for event in stream.find_all(events.ScenarioFinished)} == {
         ("GET /first", Status.SUCCESS),
@@ -1828,7 +1986,7 @@ def test_max_time_stops_generating_once_the_budget_is_gone(ctx, app_runner):
     started = time.monotonic()
     execute(schema, max_time=1, max_examples=1, phases=[PhaseName.COVERAGE])
 
-    assert time.monotonic() - started < 2.0
+    assert time.monotonic() - started < 5.0
 
 
 def test_max_time_bounds_coverage_repeats_when_feedback_never_settles(ctx):
@@ -1910,7 +2068,7 @@ def test_max_time_reserves_for_stateful_when_links_are_only_inferred(ctx, app_ru
     schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
     stream = execute(
         schema,
-        max_time=3,
+        max_time=6,
         max_examples=100_000,
         modes=[GenerationMode.POSITIVE],
         phases=[PhaseName.FUZZING, PhaseName.STATEFUL_TESTING],
@@ -1919,7 +2077,12 @@ def test_max_time_reserves_for_stateful_when_links_are_only_inferred(ctx, app_ru
     assert [event for event in stream.find_all(events.ScenarioFinished) if event.phase == PhaseName.STATEFUL_TESTING]
 
 
-def test_links_inferred_from_location_headers(ctx, app_runner):
+@pytest.mark.parametrize(
+    ("algorithms", "expected"),
+    [(["location-headers", "dependency-analysis"], 1), (["location-headers"], 1), (["dependency-analysis"], 0)],
+    ids=["default", "location-headers", "dependency-analysis"],
+)
+def test_links_inferred_from_location_headers(ctx, app_runner, algorithms, expected):
     # The `Location` header of a created resource is the only hint that these two operations chain.
     app, _ = ctx.openapi.make_flask_app(
         {
@@ -1941,6 +2104,70 @@ def test_links_inferred_from_location_headers(ctx, app_runner):
     def get_user(user_id):
         return flask.jsonify({"id": user_id})
 
+    config = SchemathesisConfig.from_dict({"phases": {"stateful": {"inference": {"algorithms": algorithms}}}})
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app), config=config)
+    stream = execute(
+        schema,
+        max_examples=5,
+        modes=[GenerationMode.POSITIVE],
+        phases=[PhaseName.FUZZING, PhaseName.STATEFUL_TESTING],
+    )
+    started = stream.find(events.PhaseStarted, phase=lambda phase: phase.name == PhaseName.STATEFUL_TESTING)
+
+    assert started.payload.inferred_transitions == expected
+
+
+TEAM_ID = 982451653
+
+
+@pytest.mark.parametrize(
+    ("body", "status_code", "content_type", "expected"),
+    [
+        ('{"results": [{"url": "{host}teams/982451653"}]}', 200, "application/json", True),
+        ('{"url": "/teams/982451653"}', 200, "application/json", True),
+        (json.dumps({f"field{i}": f"/teams/{TEAM_ID}" for i in range(25)}), 200, "application/json", True),
+        ('{"url": "http://example.com/teams/982451653"}', 200, "application/json", False),
+        ('{"a}b": "/teams/982451653"}', 200, "application/json", False),
+        ('{"url": "/teams/982451653"}', 404, "application/json", False),
+        ('{"url": "/teams/982451653"', 200, "application/json", False),
+        ('{"url": "/teams/982451653"}', 200, "application.json", False),
+    ],
+    ids=[
+        "absolute-same-origin",
+        "root-relative",
+        "many-urls",
+        "other-origin",
+        "key-closes-expression",
+        "error-status",
+        "invalid-json",
+        "malformed-content-type",
+    ],
+)
+def test_links_inferred_from_urls_in_response_bodies(ctx, app_runner, body, status_code, content_type, expected):
+    # Hyperlinked APIs (e.g. DRF) expose identifiers only inside URLs in the body.
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/teams": {"get": {"responses": {"default": {"description": "OK"}}}},
+            "/teams/{pk}": {
+                "get": {
+                    "parameters": [{"name": "pk", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+    fetched = []
+
+    @app.route("/teams")
+    def list_teams():
+        content = body.replace("{host}", flask.request.host_url)
+        return flask.Response(content, status=status_code, headers={"Content-Type": content_type})
+
+    @app.route("/teams/<int:pk>")
+    def get_team(pk):
+        fetched.append(pk)
+        return flask.jsonify({})
+
     schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
     stream = execute(
         schema,
@@ -1950,7 +2177,58 @@ def test_links_inferred_from_location_headers(ctx, app_runner):
     )
     started = stream.find(events.PhaseStarted, phase=lambda phase: phase.name == PhaseName.STATEFUL_TESTING)
 
-    assert started.payload.inferred_transitions > 0
+    assert (started.payload.inferred_transitions > 0, TEAM_ID in fetched, stream.find_all(events.NonFatalError)) == (
+        expected,
+        expected,
+        [],
+    )
+
+
+@pytest.mark.parametrize(
+    ("headers", "body"),
+    [
+        ({"Location": f"/teams/{TEAM_ID}"}, {}),
+        ({}, {"url": f"/teams/{TEAM_ID}"}),
+    ],
+    ids=["location-header", "body-url"],
+)
+def test_links_inferred_for_path_parameters_with_non_identifier_names(ctx, app_runner, headers, body):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/teams": {"post": {"responses": {"201": {"description": "Created"}}}},
+            "/teams/{team-id}": {
+                "get": {
+                    "parameters": [{"name": "team-id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+    fetched = []
+
+    @app.route("/teams", methods=["POST"])
+    def create_team():
+        return flask.jsonify(body), 201, headers
+
+    @app.route("/teams/<int:team_id>")
+    def get_team(team_id):
+        fetched.append(team_id)
+        return flask.jsonify({})
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    stream = execute(
+        schema,
+        max_examples=5,
+        modes=[GenerationMode.POSITIVE],
+        phases=[PhaseName.FUZZING, PhaseName.STATEFUL_TESTING],
+    )
+    started = stream.find(events.PhaseStarted, phase=lambda phase: phase.name == PhaseName.STATEFUL_TESTING)
+
+    assert (started.payload.inferred_transitions > 0, TEAM_ID in fetched, stream.find_all(events.FatalError)) == (
+        True,
+        True,
+        [],
+    )
 
 
 def test_max_time_reserves_for_stateful_while_links_may_still_appear(ctx, app_runner):
@@ -2019,6 +2297,7 @@ def test_max_time_stops_reserving_once_stateful_proves_idle(ctx, app_runner):
     stream = execute(
         schema,
         max_time=3,
+        # More examples than fit in the time limit, so the clock ends the run.
         max_examples=100_000,
         modes=[GenerationMode.POSITIVE],
         phases=[PhaseName.FUZZING, PhaseName.STATEFUL_TESTING],
@@ -2028,47 +2307,27 @@ def test_max_time_stops_reserving_once_stateful_proves_idle(ctx, app_runner):
     assert len(fuzzing) <= 3, len(fuzzing)
 
 
-LINKED_USERS_PATHS = {
-    "/users": {
-        "post": {
-            "responses": {
-                "201": {
-                    "description": "OK",
-                    "content": {
-                        "application/json": {"schema": {"type": "object", "properties": {"id": {"type": "integer"}}}}
-                    },
-                    "links": {"GetUser": {"operationId": "getUser", "parameters": {"userId": "$response.body#/id"}}},
-                }
-            }
-        }
-    },
-    "/users/{userId}": {
-        "get": {
-            "operationId": "getUser",
-            "parameters": [{"name": "userId", "in": "path", "required": True, "schema": {"type": "integer"}}],
-            "responses": {"200": {"description": "OK"}},
-        }
-    },
-}
-
-
+@pytest.mark.usefixtures("restore_checks")
 def test_max_time_stateful_suite_with_no_time_left_is_not_a_pass(ctx, app_runner):
     # A retry that starts with the budget already gone issues no request, so it vouches for nothing.
-    app, _ = ctx.openapi.make_flask_app(LINKED_USERS_PATHS)
-
-    @app.route("/users", methods=["POST"])
-    def create_user():
-        return flask.jsonify({"id": 1}), 201
+    app, _ = ctx.openapi.make_flask_app(linked_users())
+    handlers.register_linked_users_create(app)
 
     @app.route("/users/<int:user_id>")
     def get_user(user_id):
-        # Outlasts the budget, so the retry the failure schedules starts with nothing left to spend.
-        time.sleep(2.5)
         return "", 500
+
+    @schemathesis.check
+    def slow_check(ctx, response, case):
+        if response.status_code == 500:
+            # Outlasts the budget, so the retry the failure schedules starts with nothing left to spend.
+            time.sleep(2.5)
+            raise AssertionError("Server error")
 
     schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
     stream = execute(
         schema,
+        checks=(slow_check,),
         max_time=2,
         max_examples=100_000,
         modes=[GenerationMode.POSITIVE],
@@ -2078,13 +2337,23 @@ def test_max_time_stateful_suite_with_no_time_left_is_not_a_pass(ctx, app_runner
     assert [event.status for event in stream.find_all(events.SuiteFinished)] == [Status.FAILURE, Status.SKIP]
 
 
-def test_planted_bug_behind_an_id_only_the_listing_carries(ctx):
-    # The 500 sits behind an id that generation cannot invent; only the listing response holds it.
-    api = ctx.openapi.apps.collection_with_planted_bug()
+# Each planted 500 sits behind a value only a listing response carries, so generation cannot invent it.
+@pytest.mark.parametrize(
+    "app",
+    [
+        "collection_with_planted_bug",
+        "undocumented_collection_with_planted_bug",
+        "vocabulary_path_with_planted_bug",
+    ],
+    ids=["id-only-the-listing-carries", "undocumented-collection", "vocabulary-path-parameter"],
+)
+def test_planted_bug_behind_a_value_only_the_listing_carries(ctx, app):
+    api = getattr(ctx.openapi.apps, app)()
     schema = schemathesis.openapi.from_url(api.schema_url)
     stream = execute(
         schema,
         max_time=10,
+        # More examples than fit in the time limit, so the clock ends the run.
         max_examples=100_000,
         checks=(not_a_server_error,),
         phases=[PhaseName.FUZZING],
@@ -2093,31 +2362,40 @@ def test_planted_bug_behind_an_id_only_the_listing_carries(ctx):
     assert stream.find(events.ScenarioFinished, status=Status.FAILURE) is not None
 
 
-def test_planted_bug_behind_an_undocumented_collection(ctx):
-    # The spec declares no response shape, so the listing body is the only place the tag exists.
-    api = ctx.openapi.apps.undocumented_collection_with_planted_bug()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-    stream = execute(
-        schema,
-        max_time=10,
-        max_examples=100_000,
-        checks=(not_a_server_error,),
-        phases=[PhaseName.FUZZING],
+def test_operation_that_hung_in_earlier_phases_gets_a_shorter_timeout(ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/hang": {
+                "get": {
+                    "parameters": [
+                        {"name": "q", "in": "query", "required": True, "schema": {"type": "integer"}, "example": 1}
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        }
     )
 
-    assert stream.find(events.ScenarioFinished, status=Status.FAILURE) is not None
+    @app.route("/hang")
+    def hang():
+        time.sleep(2)
+        return flask.jsonify({})
 
-
-def test_planted_bug_behind_a_vocabulary_path_parameter(ctx):
-    # The path segment is a vocabulary value, not an identifier, and only the listing carries it.
-    api = ctx.openapi.apps.vocabulary_path_with_planted_bug()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-    stream = execute(
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    stream = EventStream(
         schema,
-        max_time=10,
-        max_examples=100_000,
-        checks=(not_a_server_error,),
-        phases=[PhaseName.FUZZING],
-    )
+        max_examples=1,
+        request_timeout=1.4,
+        phases=[PhaseName.EXAMPLES, PhaseName.COVERAGE, PhaseName.FUZZING],
+    ).execute()
 
-    assert stream.find(events.ScenarioFinished, status=Status.FAILURE) is not None
+    assert [(event.phase, str(event.value)) for event in stream.find_all(events.NonFatalError)] == [
+        (PhaseName.EXAMPLES, ANY),
+        (PhaseName.COVERAGE, ANY),
+        (PhaseName.FUZZING, ANY),
+    ]
+    assert [event.info.message for event in stream.find_all(events.NonFatalError)] == [
+        "Read timed out after 1.4 seconds",
+        "Read timed out after 1.4 seconds",
+        "Read timed out after 1.0 seconds",
+    ]

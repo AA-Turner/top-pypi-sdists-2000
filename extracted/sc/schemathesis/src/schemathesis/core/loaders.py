@@ -3,14 +3,36 @@ from __future__ import annotations
 import http.client
 import time
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Any, NoReturn
+from typing import TYPE_CHECKING, Any, NoReturn, Protocol, TypeVar
 
-from schemathesis.core.errors import LoaderError, LoaderErrorKind, get_request_error_extras, get_request_error_message
+from schemathesis.core.errors import (
+    LoaderError,
+    LoaderErrorKind,
+    get_request_error_extras,
+    get_request_error_message,
+    is_read_timeout,
+    read_timeout_error,
+)
 from schemathesis.core.timing import Instant
 from schemathesis.core.transport import DEFAULT_RESPONSE_TIMEOUT, USER_AGENT
 
 if TYPE_CHECKING:
     import requests
+
+
+class _SentRequest(Protocol):
+    @property
+    def url(self) -> str | None: ...
+
+
+class _SchemaResponse(Protocol):
+    @property
+    def status_code(self) -> int: ...
+    @property
+    def request(self) -> _SentRequest: ...
+
+
+SchemaResponse = TypeVar("SchemaResponse", bound=_SchemaResponse)
 
 
 def prepare_request_kwargs(kwargs: dict[str, Any]) -> None:
@@ -39,7 +61,7 @@ def handle_request_error(exc: requests.RequestException) -> NoReturn:
     ) from exc
 
 
-def raise_for_status(response: requests.Response) -> requests.Response:
+def raise_for_status(response: SchemaResponse) -> SchemaResponse:
     """Handle response status codes."""
     status_code = response.status_code
     if status_code < 400:
@@ -69,6 +91,9 @@ def make_request(func: Callable[..., requests.Response], url: str, **kwargs: Any
         response = func(url, **kwargs)
         return raise_for_status(response)
     except requests.RequestException as exc:
+        # A body that stops arriving within the timeout is reported like a response that never started.
+        if isinstance(exc, requests.exceptions.ConnectionError) and is_read_timeout(exc):
+            exc = read_timeout_error(url, kwargs["timeout"])
         handle_request_error(exc)
     except OSError as exc:
         # Possible with certificate errors

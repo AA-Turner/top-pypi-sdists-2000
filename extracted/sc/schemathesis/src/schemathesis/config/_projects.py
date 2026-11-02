@@ -17,7 +17,7 @@ from schemathesis.config._error import ConfigError
 from schemathesis.config._fuzz import FuzzConfig
 from schemathesis.config._generation import GenerationConfig
 from schemathesis.config._health_check import HealthCheck
-from schemathesis.config._operations import OperationConfig, OperationsConfig, _parse_request_retries
+from schemathesis.config._operations import OperationConfig, OperationsConfig, parse_request_retries
 from schemathesis.config._output import OutputConfig
 from schemathesis.config._parameters import load_parameters
 from schemathesis.config._phases import PhasesConfig
@@ -26,6 +26,7 @@ from schemathesis.config._report import ReportsConfig
 from schemathesis.config._servers import ServersConfig
 from schemathesis.config._warnings import WarningsConfig
 from schemathesis.core import HYPOTHESIS_IN_MEMORY_DATABASE_IDENTIFIER, NOT_SET, NotSet, hooks
+from schemathesis.core.transport import DEFAULT_MAX_STREAM_EVENTS, RequestSettings
 from schemathesis.core.validation import validate_base_url, validate_origin
 
 if TYPE_CHECKING:
@@ -36,6 +37,13 @@ if TYPE_CHECKING:
     from schemathesis.schemas import APIOperation
 
 DEFAULT_WORKERS = 1
+# Generation options and the Hypothesis setting each one controls.
+GENERATION_OPTION_TO_HYPOTHESIS_SETTING = {
+    "max_examples": "max_examples",
+    "deterministic": "derandomize",
+    "database": "database",
+    "no_shrink": "phases",
+}
 
 
 def get_workers_count() -> int:
@@ -62,8 +70,9 @@ class ProjectConfig(DiffBase):
     workers: int
     continue_on_failure: bool | None
     tls_verify: bool | str | None
-    rate_limit: Limiter | None
+    rate_limit: Limiter | Literal["auto"] | None
     max_redirects: int | None
+    max_stream_events: int | None
     request_timeout: float | int | None
     request_retries: int | None
     request_cert: str | None
@@ -94,6 +103,7 @@ class ProjectConfig(DiffBase):
         "rate_limit",
         "_rate_limit",
         "max_redirects",
+        "max_stream_events",
         "request_timeout",
         "request_retries",
         "request_cert",
@@ -125,6 +135,7 @@ class ProjectConfig(DiffBase):
         tls_verify: bool | str = True,
         rate_limit: str | None = None,
         max_redirects: int | None = None,
+        max_stream_events: int | None = None,
         request_timeout: float | int | None = None,
         request_retries: int | None = None,
         request_cert: str | None = None,
@@ -162,12 +173,15 @@ class ProjectConfig(DiffBase):
         self.proxy = proxy
         self.continue_on_failure = continue_on_failure
         self.tls_verify = tls_verify
-        if rate_limit is not None and rate_limit != "auto":
-            self.rate_limit = build_limiter(rate_limit)
+        if rate_limit is None:
+            self.rate_limit = None
+        elif rate_limit == "auto":
+            self.rate_limit = "auto"
         else:
-            self.rate_limit = rate_limit
+            self.rate_limit = build_limiter(rate_limit)
         self._rate_limit = rate_limit
         self.max_redirects = max_redirects
+        self.max_stream_events = max_stream_events
         self.request_timeout = request_timeout
         self.request_retries = request_retries
         self.request_cert = request_cert
@@ -218,8 +232,9 @@ class ProjectConfig(DiffBase):
             tls_verify=resolve(data.get("tls-verify", True)),
             rate_limit=resolve(data.get("rate-limit")),
             max_redirects=data.get("max-redirects"),
+            max_stream_events=data.get("max-stream-events"),
             request_timeout=data.get("request-timeout"),
-            request_retries=_parse_request_retries(data.get("request-retries")),
+            request_retries=parse_request_retries(data.get("request-retries")),
             request_cert=resolve(data.get("request-cert")),
             request_cert_key=resolve(data.get("request-cert-key")),
             parameters=load_parameters(data, dictionaries=dictionaries),
@@ -300,7 +315,7 @@ class ProjectConfig(DiffBase):
             if rate_limit != "auto":
                 self.rate_limit = build_limiter(rate_limit)
             else:
-                self.rate_limit = rate_limit
+                self.rate_limit = "auto"
             self._mark_source_keys(("rate_limit",))
 
         self._apply(
@@ -335,98 +350,127 @@ class ProjectConfig(DiffBase):
             return self._parent.config_path
         return None
 
+    def _operation_config(self, operation: APIOperation | None) -> OperationConfig | None:
+        if operation is None:
+            return None
+        return self.operations.get_for_operation(operation=operation)
+
     def auth_for(self, *, operation: APIOperation | None = None) -> tuple[str, str] | None:
         """Get auth credentials, prioritizing operation-specific configs."""
-        if operation is not None:
-            config = self.operations.get_for_operation(operation=operation)
-            if config.auth.basic is not None:
-                return config.auth.basic
-        if self.auth.basic is not None:
-            return self.auth.basic
-        return None
+        config = self._operation_config(operation)
+        if config is not None and config.auth.basic is not None:
+            return config.auth.basic
+        return self.auth.basic
 
     def headers_for(self, *, operation: APIOperation | None = None) -> dict[str, str]:
         """Get explicitly configured headers."""
         headers = self.headers.copy() if self.headers else {}
-        if operation is not None:
-            config = self.operations.get_for_operation(operation=operation)
-            if config.headers is not None:
-                headers.update(config.headers)
+        config = self._operation_config(operation)
+        if config is not None and config.headers is not None:
+            headers.update(config.headers)
         return headers
 
     def max_redirects_for(self, *, operation: APIOperation | None = None) -> int | None:
-        if operation is not None:
-            config = self.operations.get_for_operation(operation=operation)
-            if config.max_redirects is not None:
-                return config.max_redirects
-        if self.max_redirects is not None:
-            return self.max_redirects
-        return None
+        config = self._operation_config(operation)
+        if config is not None and config.max_redirects is not None:
+            return config.max_redirects
+        return self.max_redirects
+
+    def max_stream_events_for(self, *, operation: APIOperation | None = None) -> int:
+        config = self._operation_config(operation)
+        if config is not None and config.max_stream_events is not None:
+            return config.max_stream_events
+        if self.max_stream_events is not None:
+            return self.max_stream_events
+        return DEFAULT_MAX_STREAM_EVENTS
 
     def request_timeout_for(self, *, operation: APIOperation | None = None) -> float | int | None:
-        if operation is not None:
-            config = self.operations.get_for_operation(operation=operation)
-            if config.request_timeout is not None:
-                return config.request_timeout
-        if self.request_timeout is not None:
-            return self.request_timeout
-        return None
+        return self._request_timeout(self._operation_config(operation))
+
+    def _request_timeout(self, config: OperationConfig | None) -> float | int | None:
+        if config is not None and config.request_timeout is not None:
+            return config.request_timeout
+        return self.request_timeout
 
     def request_retries_for(self, *, operation: APIOperation | None = None) -> int | None:
-        if operation is not None:
-            config = self.operations.get_for_operation(operation=operation)
-            if config.request_retries is not None:
-                return config.request_retries
-        if self.request_retries is not None:
-            return self.request_retries
-        return None
+        config = self._operation_config(operation)
+        if config is not None and config.request_retries is not None:
+            return config.request_retries
+        return self.request_retries
+
+    def continue_on_failure_for(self, *, operation: APIOperation) -> bool:
+        config = self.operations.get_for_operation(operation=operation)
+        if config.continue_on_failure is not None:
+            return config.continue_on_failure
+        return bool(self.continue_on_failure)
 
     def tls_verify_for(self, *, operation: APIOperation | None = None) -> bool | str | None:
-        if operation is not None:
-            config = self.operations.get_for_operation(operation=operation)
-            if config.tls_verify is not None:
-                return config.tls_verify
-        if self.tls_verify is not None:
-            return self.tls_verify
-        return None
+        return self._tls_verify(self._operation_config(operation))
+
+    def _tls_verify(self, config: OperationConfig | None) -> bool | str | None:
+        if config is not None and config.tls_verify is not None:
+            return config.tls_verify
+        return self.tls_verify
 
     def request_cert_for(self, *, operation: APIOperation | None = None) -> str | tuple[str, str] | None:
-        if operation is not None:
-            config = self.operations.get_for_operation(operation=operation)
-            if config.request_cert is not None:
-                if config.request_cert_key:
-                    return config.request_cert, config.request_cert_key
-                return config.request_cert
+        return self._request_cert(self._operation_config(operation))
+
+    def _request_cert(self, config: OperationConfig | None) -> str | tuple[str, str] | None:
+        if config is not None and config.request_cert is not None:
+            if config.request_cert_key:
+                return config.request_cert, config.request_cert_key
+            return config.request_cert
         if self.request_cert is not None:
             if self.request_cert_key:
                 return self.request_cert, self.request_cert_key
             return self.request_cert
         return None
 
+    def request_settings_for(self, *, operation: APIOperation | None = None) -> RequestSettings:
+        config = self._operation_config(operation)
+        return RequestSettings(
+            timeout=self._request_timeout(config),
+            verify=self._tls_verify(config),
+            cert=self._request_cert(config),
+            proxy=self._proxy(config),
+        )
+
+    def schema_request_kwargs(self) -> dict[str, object]:
+        """Keyword arguments for the HTTP request that fetches the API schema."""
+        settings = self.request_settings_for()
+        kwargs: dict[str, object] = {"verify": settings.verify}
+        if settings.cert:
+            kwargs["cert"] = settings.cert
+        auth = self.auth_for()
+        if auth is not None:
+            kwargs["auth"] = auth
+        headers = self.headers_for()
+        if headers:
+            kwargs["headers"] = headers
+        proxies = settings.proxies
+        if proxies is not None:
+            kwargs["proxies"] = proxies
+        return kwargs
+
     def proxy_for(self, *, operation: APIOperation | None = None) -> str | None:
-        if operation is not None:
-            config = self.operations.get_for_operation(operation=operation)
-            if config.proxy is not None:
-                return config.proxy
-        if self.proxy is not None:
-            return self.proxy
-        return None
+        return self._proxy(self._operation_config(operation))
+
+    def _proxy(self, config: OperationConfig | None) -> str | None:
+        if config is not None and config.proxy is not None:
+            return config.proxy
+        return self.proxy
 
     def rate_limit_for(self, *, operation: APIOperation | None = None) -> Limiter | Literal["auto"] | None:
-        if operation is not None:
-            config = self.operations.get_for_operation(operation=operation)
-            if config.rate_limit is not None:
-                return config.rate_limit
-        if self.rate_limit is not None:
-            return self.rate_limit
-        return None
+        config = self._operation_config(operation)
+        if config is not None and config.rate_limit is not None:
+            return config.rate_limit
+        return self.rate_limit
 
     def warnings_for(self, *, operation: APIOperation | None = None) -> WarningsConfig:
         # Operation can be absent on some non-fatal errors due to schema parsing
-        if operation is not None:
-            config = self.operations.get_for_operation(operation=operation)
-            if config.warnings is not None:
-                return config.warnings
+        config = self._operation_config(operation)
+        if config is not None and config.warnings is not None:
+            return config.warnings
         return self.warnings
 
     def phases_for(self, *, operation: APIOperation | None) -> PhasesConfig:
@@ -456,9 +500,7 @@ class ProjectConfig(DiffBase):
                     configs.append(op.generation)
         if phase is not None:
             phases = self.phases_for(operation=operation)
-            phase_config = phases.get_by_name(name=phase)
-            if not phase_config._is_default:
-                configs.append(phase_config.generation)
+            configs.append(phases.get_by_name(name=phase).generation)
         if not configs:
             return self.generation
         configs.append(self.generation)
@@ -480,21 +522,43 @@ class ProjectConfig(DiffBase):
                     configs.append(op.checks)
         if phase is not None:
             phases = self.phases_for(operation=operation)
-            phase_config = phases.get_by_name(name=phase)
-            if not phase_config._is_default:
-                configs.append(phase_config.checks)
+            configs.append(phases.get_by_name(name=phase).checks)
         if not configs:
             return self.checks
         configs.append(self.checks)
         return ChecksConfig.from_hierarchy(configs)
+
+    def explicit_hypothesis_settings(
+        self,
+        *,
+        operation: APIOperation | None = None,
+        phase: str | None = None,
+    ) -> set[str]:
+        """Names of Hypothesis settings that a config file, CLI option or `update()` call set, whatever the value."""
+        generation = self.generation_for(operation=operation, phase=phase)
+        names = {
+            setting
+            for option, setting in GENERATION_OPTION_TO_HYPOTHESIS_SETTING.items()
+            if option in generation._source_keys
+        }
+        if "suppress_health_check" in self._get_parent()._source_keys:
+            names.add("suppress_health_check")
+        return names
 
     def get_hypothesis_settings(
         self,
         *,
         operation: APIOperation | None = None,
         phase: str | None = None,
+        apply_ci_profile: bool = True,
     ) -> hypothesis.settings:
+        """Hypothesis settings for this config.
+
+        With `apply_ci_profile=False`, the `ci` profile Hypothesis loads on its own in CI environments is skipped,
+        so the same command behaves the same locally and in CI.
+        """
         import hypothesis
+        from hypothesis._settings import CI
         from hypothesis.database import DirectoryBasedExampleDatabase, InMemoryExampleDatabase
 
         config = self.generation_for(operation=operation, phase=phase)
@@ -515,7 +579,11 @@ class ProjectConfig(DiffBase):
             else:
                 kwargs["database"] = DirectoryBasedExampleDatabase(database)
 
+        parent = None
+        if not apply_ci_profile and hypothesis.settings.default is CI:
+            parent = hypothesis.settings.get_profile("default")
         return hypothesis.settings(
+            parent,
             derandomize=config.deterministic,
             print_blob=False,
             deadline=None,
@@ -526,6 +594,12 @@ class ProjectConfig(DiffBase):
             stateful_step_count=self.phases.stateful.max_steps,
             **kwargs,
         )
+
+    def named_project_title(self, title: str | None) -> str | None:
+        """Return `title` when it names a `[[project]]` block."""
+        if title is not None and title in self._get_parent().projects.named:
+            return title
+        return None
 
     def _get_parent(self) -> SchemathesisConfig:
         if self._parent is None:
@@ -580,6 +654,7 @@ class ProjectConfig(DiffBase):
     def suppress_health_check(self, value: list[HealthCheck]) -> None:
         parent = self._get_parent()
         parent.suppress_health_check = value
+        parent._mark_source_keys(("suppress_health_check",))
 
     @property
     def seed(self) -> int:
@@ -589,6 +664,11 @@ class ProjectConfig(DiffBase):
     def seed(self, value: int) -> None:
         parent = self._get_parent()
         parent._seed = value
+        parent._mark_source_keys(("seed",))
+
+    @property
+    def has_explicit_seed(self) -> bool:
+        return self._get_parent().has_explicit_seed
 
 
 def _validate_base_url(base_url: str) -> None:
@@ -660,8 +740,9 @@ class ProjectsConfig(DiffBase):
         configs = []
         if not isinstance(self._override, NotSet):
             configs.append(self._override)
-        title = schema.get("info", {}).get("title")
-        if title is not None:
+        info = schema.get("info")
+        title = info.get("title") if isinstance(info, dict) else None
+        if isinstance(title, str):
             named = self.named.get(title)
             if named is not None:
                 configs.append(named)

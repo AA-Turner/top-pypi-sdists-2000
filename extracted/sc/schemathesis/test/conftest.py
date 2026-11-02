@@ -12,6 +12,9 @@ import httpx
 import httpx2
 import pytest
 import requests
+
+# Import eagerly: on Windows `rich` loads its console bindings on the first console, which `pytester` can race.
+import rich._windows  # noqa: F401
 import yaml
 from hypothesis import settings
 from urllib3 import HTTPResponse
@@ -19,17 +22,17 @@ from werkzeug import Request
 from werkzeug.datastructures import Headers
 from werkzeug.test import TestResponse
 
-# Import eagerly: `pytester` drops lazily-imported modules, and the re-created class breaks `isinstance`.
-import schemathesis.generation.value  # noqa: F401
+# Import eagerly: otherwise `pytester` drops and re-imports it around in-process runs, which shifts generated data.
+import schemathesis.specs.openapi.schemas  # noqa: F401
 from schemathesis.cli.commands.run.handlers import output
 from schemathesis.core import storage
 from schemathesis.core.transport import Response
+from schemathesis.python._constants.registry import default_registry
 
-from .utils import make_schema
+from .utils import make_schema, profile_max_examples
 
 pytest_plugins = [
     "pytester",
-    "pytest_mock",
     "test.fixtures.ctx",
     "test.fixtures.crashes",
     "test.fixtures.app_runner",
@@ -43,7 +46,10 @@ logging.getLogger("pyrate_limiter").setLevel(logging.CRITICAL)
 
 # Register Hypothesis profile. Could be used as
 # `pytest test -m hypothesis --hypothesis-profile <profile-name>`
-settings.register_profile("CI", max_examples=2000)
+settings.register_profile("CI", settings.get_profile("ci"), max_examples=2000)
+# Slow CI runners exceed the 200ms default deadline in nested `@given` tests; `--hypothesis-profile` still overrides it.
+settings.register_profile("tests", settings.get_profile(settings.get_current_profile_name()), deadline=None)
+settings.load_profile("tests")
 
 output.SCHEMATHESIS_VERSION = "dev"
 
@@ -68,9 +74,16 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
 
 @pytest.fixture(scope="session")
 def hypothesis_max_examples():
-    # Returns max_examples when overridden via `--hypothesis-profile`, else None so each test can pick its own.
-    value = settings().max_examples
-    return None if value == 100 else value
+    return profile_max_examples()
+
+
+@pytest.fixture
+def hypothesis_ci_profile():
+    previous = settings.get_current_profile_name()
+    # The same profile Hypothesis loads on import when the `CI` environment variable is set.
+    settings.load_profile("ci")
+    yield
+    settings.load_profile(previous)
 
 
 @pytest.fixture(autouse=True)
@@ -81,23 +94,7 @@ def _isolate_schemathesis_state(tmp_path, monkeypatch):
 
 @pytest.fixture
 def simple_schema():
-    return {
-        "swagger": "2.0",
-        "info": {"title": "Sample API", "description": "API description in Markdown.", "version": "1.0.0"},
-        "host": "api.example.com",
-        "basePath": "/v1",
-        "schemes": ["https"],
-        "paths": {
-            "/users": {
-                "get": {
-                    "summary": "Returns a list of users.",
-                    "description": "Optional extended description in Markdown.",
-                    "produces": ["application/json"],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-    }
+    return make_schema()
 
 
 @pytest.fixture
@@ -299,6 +296,15 @@ def openapi_31(ctx):
 
 
 @pytest.fixture
+def pytester(request, pytester, monkeypatch):
+    # Inner runs read no project config, so they get the outer loop scope instead of a pytest-asyncio warning each.
+    # `pytester` discards outer options from `PYTEST_ADDOPTS` when it starts, so this is set after it.
+    scope = request.config.getini("asyncio_default_fixture_loop_scope")
+    monkeypatch.setenv("PYTEST_ADDOPTS", f"-o asyncio_default_fixture_loop_scope={scope}")
+    return pytester
+
+
+@pytest.fixture
 def testdir(testdir):
     def maker(
         content,
@@ -390,11 +396,6 @@ def testdir(testdir):
 
     testdir.run_and_assert = run_and_assert
 
-    def make_graphql_schema_file(schema: str, extension=".gql"):
-        return testdir.makefile(extension, schema=schema)
-
-    testdir.make_graphql_schema_file = make_graphql_schema_file
-
     return testdir
 
 
@@ -404,47 +405,32 @@ class ResponseFactory:
     httpx2: Callable[..., httpx2.Response]
     requests: Callable[..., requests.Response]
     wsgi: Callable[..., TestResponse]
+    core: Callable[..., Response]
 
 
 @pytest.fixture
 def response_factory():
-    def httpx_factory(
-        *,
-        content: bytes = b"{}",
-        content_type: str | None = "application/json",
-        status_code: int = 200,
-        headers: dict[str, Any] | None = None,
-    ) -> httpx.Response:
-        headers = headers or {}
-        if content_type:
-            headers.setdefault("Content-Type", content_type)
-        response = httpx.Response(
-            status_code=status_code,
-            headers=headers,
-            content=content,
-            request=httpx.Request(method="POST", url="http://127.0.0.1", headers=headers),
-        )
-        response.elapsed = datetime.timedelta(seconds=1)
-        return response
+    def _httpx_like(module):
+        def factory(
+            *,
+            content: bytes = b"{}",
+            content_type: str | None = "application/json",
+            status_code: int = 200,
+            headers: dict[str, Any] | None = None,
+        ):
+            headers = headers or {}
+            if content_type:
+                headers.setdefault("Content-Type", content_type)
+            response = module.Response(
+                status_code=status_code,
+                headers=headers,
+                content=content,
+                request=module.Request(method="POST", url="http://127.0.0.1", headers=headers),
+            )
+            response.elapsed = datetime.timedelta(seconds=1)
+            return response
 
-    def httpx2_factory(
-        *,
-        content: bytes = b"{}",
-        content_type: str | None = "application/json",
-        status_code: int = 200,
-        headers: dict[str, Any] | None = None,
-    ) -> httpx2.Response:
-        headers = headers or {}
-        if content_type:
-            headers.setdefault("Content-Type", content_type)
-        response = httpx2.Response(
-            status_code=status_code,
-            headers=headers,
-            content=content,
-            request=httpx2.Request(method="POST", url="http://127.0.0.1", headers=headers),
-        )
-        response.elapsed = datetime.timedelta(seconds=1)
-        return response
+        return factory
 
     def requests_factory(
         *,
@@ -486,7 +472,45 @@ def response_factory():
         )
         return response
 
-    return ResponseFactory(httpx=httpx_factory, httpx2=httpx2_factory, requests=requests_factory, wsgi=werkzeug_factory)
+    def core_factory(
+        *,
+        content: bytes = b"{}",
+        content_type: str | None = "application/json",
+        status_code: int = 200,
+        headers: dict[str, list[str]] | None = None,
+        method: str = "GET",
+        url: str = "http://127.0.0.1/",
+        request_headers: dict[str, str] | None = None,
+        elapsed: float = 0.1,
+        verify: bool = False,
+        message: str = "",
+        encoding: str | None = None,
+        render_content: Callable[[bytes], str] | None = None,
+        status_line: str | None = None,
+    ) -> Response:
+        headers = dict(headers or {})
+        if content_type:
+            headers.setdefault("content-type", [content_type])
+        return Response(
+            status_code=status_code,
+            headers=headers,
+            content=content,
+            request=requests.Request(method=method, url=url, headers=request_headers).prepare(),
+            elapsed=elapsed,
+            verify=verify,
+            message=message,
+            encoding=encoding,
+            render_content=render_content,
+            status_line=status_line,
+        )
+
+    return ResponseFactory(
+        httpx=_httpx_like(httpx),
+        httpx2=_httpx_like(httpx2),
+        requests=requests_factory,
+        wsgi=werkzeug_factory,
+        core=core_factory,
+    )
 
 
 @pytest.fixture
@@ -500,16 +524,16 @@ def case_factory(swagger_20):
     return factory
 
 
-RESPONSE = Response(
-    status_code=200,
-    headers={},
-    content=b"",
-    request=requests.Request(method="GET", url="http://127.0.0.1/test").prepare(),
-    elapsed=0.1,
-    verify=False,
-)
+@pytest.fixture
+def clean_constants_registry():
+    default_registry().clear()
+    yield
+    default_registry().clear()
 
 
 @pytest.fixture
-def mocked_call(mocker):
-    mocker.patch("schemathesis.Case.call", return_value=RESPONSE)
+def make_operation(ctx):
+    def factory(method: str = "post", path: str = "/api/users"):
+        return ctx.openapi.load_operation(f"{method.upper()} {path}", {"responses": {"200": {"description": "OK"}}})
+
+    return factory

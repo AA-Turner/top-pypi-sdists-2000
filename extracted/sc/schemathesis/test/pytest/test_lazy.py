@@ -1,32 +1,10 @@
 import re
+import subprocess
+import sys
 
 import pytest
-from hypothesis import settings
 
 from schemathesis.generation.modes import GenerationMode
-
-
-@pytest.fixture
-def reload_profile():
-    yield
-    settings.load_profile("default")
-
-
-def test_default(testdir):
-    # When LazySchema is used
-    testdir.make_test(
-        """
-lazy_schema = schemathesis.pytest.from_fixture("simple_schema")
-
-@lazy_schema.parametrize()
-def test_(case):
-    pass
-"""
-    )
-    result = testdir.runpytest("-v")
-    # Then the generated test should use this fixture
-    result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"test_default.py::test_ PASSED", r".*1 passed"])
 
 
 def test_deadline_is_none(testdir):
@@ -111,8 +89,39 @@ def test_(request, case):
         ]
     )
     # 100 for /valid, 1 for /users; /invalid yields no positive case (required `id` has no valid value)
-    hypothesis_calls = (hypothesis_max_examples or 100) + 3
+    hypothesis_calls = (hypothesis_max_examples or 100) + 4
     result.stdout.re_match_lines([rf"Hypothesis calls: {hypothesis_calls}$"])
+
+
+def test_malformed_media_type_beside_valid_one(testdir):
+    testdir.make_test(
+        """
+lazy_schema = schemathesis.pytest.from_fixture("simple_schema")
+
+@lazy_schema.parametrize()
+@settings(max_examples=1)
+def test_(case):
+    pass
+""",
+        schema_name="simple_openapi.yaml",
+        paths={
+            "/payload": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application.json": {"schema": {"type": "object"}},
+                            "application/json": {"schema": {"type": "object"}},
+                        },
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+    )
+    result = testdir.runpytest("-v", "-rf")
+    result.assert_outcomes(passed=1, failed=1)
+    result.stdout.re_match_lines([r".*Malformed media type: `application.json`"])
 
 
 def test_with_fixtures(testdir):
@@ -135,7 +144,7 @@ def test_(request, case, another):
     # Then the generated test should use these fixtures
     result.assert_outcomes(passed=1)
     result.stdout.re_match_lines([r"test_with_fixtures.py::test_ PASSED", r".*1 passed"])
-    result.stdout.re_match_lines([r"Hypothesis calls: 9$"])
+    result.stdout.re_match_lines([r"Hypothesis calls: 10$"])
 
 
 def test_with_parametrize_filters(testdir):
@@ -414,6 +423,41 @@ def pytest_terminal_summary(terminalreporter) -> None:
     result.stdout.re_match_lines([r"test_generation_modes.py::test_\[GET /users\] SUBPASSED"])
 
 
+def test_disabled_fuzzing_phase_leaves_only_examples(testdir):
+    testdir.make_test(
+        """
+@pytest.fixture()
+def api_schema():
+    schema = schemathesis.openapi.from_dict(raw_schema)
+    schema.config.phases.fuzzing.enabled = False
+    schema.config.phases.coverage.enabled = False
+    return schema
+
+lazy_schema = schemathesis.pytest.from_fixture("api_schema")
+
+@lazy_schema.parametrize()
+@settings(max_examples=10)
+def test_(case):
+    assert case.query == {"key": 42}
+""",
+        paths={
+            "/users": {
+                "get": {
+                    "parameters": [
+                        {"in": "query", "name": "key", "required": True, "type": "integer", "x-example": 42}
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                },
+            }
+        },
+    )
+    result = testdir.runpytest("-v")
+    result.assert_outcomes(passed=1)
+    result.stdout.re_match_lines(
+        [r"test_disabled_fuzzing_phase_leaves_only_examples.py::test_\[GET /users\] SUBPASSED"]
+    )
+
+
 def test_error_on_no_matches(testdir):
     # When test filters don't match any operation
     testdir.make_test(
@@ -535,7 +579,7 @@ def test_(case):
     result = testdir.runpytest()
     result.assert_outcomes(passed=1, failed=1)
     stdout = result.stdout.str()
-    assert "[500] Internal Server Error" in stdout
+    assert "[504] Gateway Timeout" in stdout
     # And internal frames should not be displayed
     assert "def run_subtest" not in stdout
 
@@ -590,6 +634,7 @@ def test_(case):
         expected = rf"curl -X GET -H 'Authorization: [Filtered]' {api.base_url}/api/failure"
     else:
         expected = rf"curl -X GET -H 'Authorization: {auth}' {api.base_url}/api/failure"
+    result.stdout.re_match_lines([".+ Reproduce with:"])
     assert expected in result.stdout.str()
 
 
@@ -811,9 +856,6 @@ class TestAPI:
 def test_checks_available_with_from_fixture(tmp_path):
     # When using from_fixture, checks should be accessible without AttributeError
     # Run in subprocess to avoid test pre-loading modules
-    import subprocess
-    import sys
-
     test_file = tmp_path / "test_isolated.py"
     test_file.write_text("""
 import pytest
@@ -1109,3 +1151,18 @@ def test_(case):
     result = testdir.runpytest("-v", "-s")
     # Then the custom database from the decorator should be used
     result.assert_outcomes(passed=1)
+
+
+def test_without_capture_plugin(testdir):
+    testdir.make_test(
+        """
+lazy_schema = schemathesis.pytest.from_fixture("simple_schema")
+
+@lazy_schema.parametrize()
+def test_api(case):
+    pass
+"""
+    )
+    result = testdir.runpytest("-v", "-p", "no:capture")
+    result.assert_outcomes(passed=1)
+    result.stdout.re_match_lines([r"test_without_capture_plugin.py::test_api PASSED"])

@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import inspect
 from collections import defaultdict
-from collections.abc import Callable, Generator
+from collections.abc import Callable, Generator, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from enum import Enum, unique
 from functools import lru_cache, partial
-from typing import TYPE_CHECKING, Any, ClassVar, cast
+from typing import TYPE_CHECKING, Any, ClassVar, Literal, TypeVar, cast
 
+from schemathesis.config import SchemathesisConfig
 from schemathesis.core.errors import HookExecutionError
 from schemathesis.core.jsonschema.types import JsonSchemaObject
 from schemathesis.core.marks import Mark
@@ -20,6 +21,7 @@ if TYPE_CHECKING:
     from hypothesis import strategies as st
 
     from schemathesis.checks import CheckResult
+    from schemathesis.config import ProjectConfig
     from schemathesis.core.failures import Failure
     from schemathesis.core.parameters import ContainerName
     from schemathesis.core.spec import SchemaMetadata
@@ -82,10 +84,11 @@ def to_filterable_hook(dispatcher: HookDispatcher) -> Callable:
                 if filter_used:
                     with _reset_on_error():
                         validate_filterable_hook(hook)
-                func.filter_set = filter_set  # type: ignore[attr-defined]
+                # Filters chained on the named form apply only to the hook this decorator registers
+                func.filter_set = decorator_filter_set  # type: ignore[attr-defined]
                 return dispatcher.register_hook_with_name(func, hook_name)
 
-            init_filter_set(decorator)
+            decorator_filter_set = init_filter_set(decorator)
             return decorator
 
         hook.filter_set = filter_set  # type: ignore[attr-defined]
@@ -217,6 +220,12 @@ class HookDispatcher:
         """Get a list of hooks registered for a name."""
         return self._hooks.get(name, [])
 
+    def applicable(self, name: str, context: HookContext) -> Iterator[Callable]:
+        """Hooks registered for a name whose filters accept the operation in `context`."""
+        for hook in self.get_all_by_name(name):
+            if not _should_skip_hook(hook, context):
+                yield hook
+
     def defines(self, name: str) -> bool:
         """Return True if any hooks are registered under the given name."""
         return bool(self._hooks.get(name))
@@ -227,34 +236,26 @@ class HookDispatcher:
     def apply_to_container(
         self,
         strategy: st.SearchStrategy,
-        container: ContainerName,
+        container: ContainerName | Literal["case"],
         context: HookContext,
         *,
         filter_wrapper: Callable[[Callable], Callable] | None = None,
         map_wrapper: Callable[[Callable], Callable] | None = None,
         flatmap_wrapper: Callable[[Callable], Callable] | None = None,
     ) -> st.SearchStrategy:
-        for hook in self.get_all_by_name(f"before_generate_{container}"):
-            if _should_skip_hook(hook, context):
-                continue
+        for hook in self.applicable(f"before_generate_{container}", context):
             strategy = hook(context, strategy)
-        for hook in self.get_all_by_name(f"filter_{container}"):
-            if _should_skip_hook(hook, context):
-                continue
+        for hook in self.applicable(f"filter_{container}", context):
             hook = partial(hook, context)
             if filter_wrapper is not None:
                 hook = filter_wrapper(hook)
             strategy = strategy.filter(hook)
-        for hook in self.get_all_by_name(f"map_{container}"):
-            if _should_skip_hook(hook, context):
-                continue
+        for hook in self.applicable(f"map_{container}", context):
             hook = partial(hook, context)
             if map_wrapper is not None:
                 hook = map_wrapper(hook)
             strategy = strategy.map(hook)
-        for hook in self.get_all_by_name(f"flatmap_{container}"):
-            if _should_skip_hook(hook, context):
-                continue
+        for hook in self.applicable(f"flatmap_{container}", context):
             hook = partial(hook, context)
             if flatmap_wrapper is not None:
                 hook = flatmap_wrapper(hook)
@@ -293,12 +294,10 @@ def _dispatch_to_all(
     *args: Any,
 ) -> None:
     for dispatcher in dispatchers:
-        for hook in dispatcher.get_all_by_name(name):
-            if _should_skip_hook(hook, context):
-                continue
+        for hook in dispatcher.applicable(name, context):
             try:
                 hook(context, *args)
-            except Exception as exc:
+            except (Exception, SystemExit) as exc:
                 raise HookExecutionError(name, exc) from exc
 
 
@@ -345,12 +344,16 @@ unregister = GLOBAL_HOOK_DISPATCHER.unregister
 unregister_all = GLOBAL_HOOK_DISPATCHER.unregister_all
 
 
-def _dispatch_schema_cascade(schema: SchemaMetadata, name: str, context: HookContext, *args: Any) -> None:
-    dispatchers: tuple[HookDispatcher, ...] = (GLOBAL_HOOK_DISPATCHER, schema.hooks)
+def schema_hook_dispatchers(schema: SchemaMetadata) -> tuple[HookDispatcher, ...]:
+    """Global, schema-level, and test-scoped dispatchers, in the order their hooks run."""
     local = schema.get_local_hook_dispatcher()
-    if local is not None:
-        dispatchers = (*dispatchers, local)
-    _dispatch_to_all(name, dispatchers, context, *args)
+    if local is None:
+        return (GLOBAL_HOOK_DISPATCHER, schema.hooks)
+    return (GLOBAL_HOOK_DISPATCHER, schema.hooks, local)
+
+
+def _dispatch_schema_cascade(schema: SchemaMetadata, name: str, context: HookContext, *args: Any) -> None:
+    _dispatch_to_all(name, schema_hook_dispatchers(schema), context, *args)
 
 
 def dispatch_before_process_path(
@@ -373,6 +376,24 @@ def dispatch_after_load_schema(*dispatchers: HookDispatcher, context: HookContex
     _dispatch_to_all("after_load_schema", dispatchers, context, schema)
 
 
+SchemaT = TypeVar("SchemaT", bound="BaseSchema")
+
+
+def load_with_hooks(
+    raw_schema: JsonSchemaObject, config: SchemathesisConfig | None, build: Callable[[ProjectConfig], SchemaT]
+) -> SchemaT:
+    """Build a schema from `raw_schema` under its project config, between the global load hooks."""
+    context = HookContext()
+    dispatch_before_load_schema(GLOBAL_HOOK_DISPATCHER, context=context, raw_schema=raw_schema)
+    if config is None:
+        config = SchemathesisConfig.discover()
+    project_config = config.projects.get(raw_schema)
+    instance = build(project_config)
+    instance.filter_set = project_config.operations.filter_set_with(include=instance.filter_set)
+    dispatch_after_load_schema(GLOBAL_HOOK_DISPATCHER, context=context, schema=instance)
+    return instance
+
+
 def dispatch_before_add_examples(*dispatchers: HookDispatcher, context: HookContext, examples: list[Case]) -> None:
     _dispatch_to_all("before_add_examples", dispatchers, context, examples)
 
@@ -382,16 +403,14 @@ def dispatch_before_call(
 ) -> None:
     name = "before_call"
     for dispatcher in dispatchers:
-        for hook in dispatcher.get_all_by_name(name):
-            if _should_skip_hook(hook, context):
-                continue
+        for hook in dispatcher.applicable(name, context):
             try:
                 # Support both `def before_call(ctx, case, kwargs)` and `def before_call(ctx, case, **kwargs)`.
                 if has_var_keyword(hook):
                     hook(context, case, **kwargs)
                 else:
                     hook(context, case, kwargs)
-            except Exception as exc:
+            except (Exception, SystemExit) as exc:
                 raise HookExecutionError(name, exc) from exc
 
 
@@ -408,22 +427,16 @@ def dispatch_after_network_error(
 def should_keep_failure(failure: Failure, case: Case, response: Response) -> bool:
     """Whether every `filter_failure` hook accepts this failure. One rejection is final."""
     name = "filter_failure"
-    schema = case.operation.schema
-    dispatchers: tuple[HookDispatcher, ...] = (GLOBAL_HOOK_DISPATCHER, schema.hooks)
-    local = schema.get_local_hook_dispatcher()
-    if local is not None:
-        dispatchers = (*dispatchers, local)
+    dispatchers = schema_hook_dispatchers(case.operation.schema)
     if not any(dispatcher.defines(name) for dispatcher in dispatchers):
         return True
     context = HookContext(operation=case.operation)
     for dispatcher in dispatchers:
-        for hook in dispatcher.get_all_by_name(name):
-            if _should_skip_hook(hook, context):
-                continue
+        for hook in dispatcher.applicable(name, context):
             try:
                 if not hook(context, failure, case, response):
                     return False
-            except Exception as exc:
+            except (Exception, SystemExit) as exc:
                 raise HookExecutionError(name, exc) from exc
     return True
 

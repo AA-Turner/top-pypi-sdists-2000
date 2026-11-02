@@ -1,19 +1,20 @@
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from typing import Any, TypeGuard, overload
 
 from schemathesis.core.jsonschema import DRAFT_03_DIALECT, is_unsatisfiable
 from schemathesis.core.jsonschema.bundler import BUNDLE_STORAGE_KEY, REFERENCE_TO_BUNDLE_PREFIX
-from schemathesis.core.jsonschema.numeric import is_numeric_bound
-from schemathesis.core.jsonschema.types import JsonSchema, get_type
-from schemathesis.core.transforms import deepclone
-from schemathesis.specs.openapi.patterns import (
+from schemathesis.core.jsonschema.numeric import INT32_RANGE, INT64_RANGE, is_numeric_bound
+from schemathesis.core.jsonschema.patterns import (
     enforced_pattern,
     is_valid_jsonschema_rs_regex,
     pattern_length_bounds,
     update_quantifier,
 )
+from schemathesis.core.jsonschema.types import JsonSchema, get_type
+from schemathesis.core.transforms import deepclone
+from schemathesis.specs.openapi.discriminator import get_implicit_discriminator_value
 
 
 @overload
@@ -79,6 +80,7 @@ def _to_json_schema(
     schema: JsonSchema,
     *,
     nullable_keyword: str,
+    is_negated: bool = False,
     is_response_schema: bool = False,
     update_quantifiers: bool = True,
     upgrade_legacy_exclusive_bounds: bool = False,
@@ -114,6 +116,7 @@ def _to_json_schema(
 
     if upgrade_legacy_exclusive_bounds:
         _upgrade_legacy_exclusive_bounds(schema)
+        _upgrade_legacy_tuple_items(schema)
 
     if schema.get(nullable_keyword):
         del schema[nullable_keyword]
@@ -140,14 +143,17 @@ def _to_json_schema(
 
     # Handle unsupported regex patterns - try translation first, remove if that fails
     pattern = schema.get("pattern")
-    if pattern is not None:
+    if isinstance(pattern, str):
         # One the validator compiles is kept even where Python cannot read it - the API enforces it,
         # so dropping it would draw values the API turns down.
-        enforced = enforced_pattern(pattern)
+        enforced = pattern if is_negated and is_valid_jsonschema_rs_regex(pattern) else enforced_pattern(pattern)
         if enforced is None:
             del schema["pattern"]
         else:
             schema["pattern"] = enforced
+    elif pattern is not None:
+        # E.g. YAML reads an unquoted `00:00:00.00` as a float; no regex is left to enforce.
+        del schema["pattern"]
     if update_quantifiers:
         update_pattern_in_schema(schema)
     # Sometimes `required` is incorrectly has a boolean value
@@ -167,13 +173,17 @@ def _to_json_schema(
                     schema["required"].remove(name)
                 del subschema["required"]
 
-    if schema_type == "object":
-        if is_response_schema:
+    if is_response_schema:
+        if (
+            schema_type is None
+            or schema_type == "object"
+            or (isinstance(schema_type, list) and "object" in schema_type)
+        ):
             # Write-only properties should not occur in responses
-            rewrite_properties(schema, is_write_only)
-        else:
-            # Read-only properties should not occur in requests
-            rewrite_properties(schema, is_read_only)
+            rewrite_properties(schema, lambda subschema: is_write_only(subschema, bundle))
+    else:
+        # Read-only properties should not occur in requests
+        rewrite_properties(schema, lambda subschema: is_read_only(subschema, bundle))
 
     ensure_required_properties(schema)
 
@@ -202,6 +212,7 @@ def _to_json_schema(
             schema[keyword] = _to_json_schema(
                 value,
                 nullable_keyword=nullable_keyword,
+                is_negated=is_negated != (keyword == "not"),
                 is_response_schema=is_response_schema,
                 update_quantifiers=update_quantifiers,
                 upgrade_legacy_exclusive_bounds=upgrade_legacy_exclusive_bounds,
@@ -216,6 +227,7 @@ def _to_json_schema(
                 value[idx] = _to_json_schema(
                     subschema,
                     nullable_keyword=nullable_keyword,
+                    is_negated=is_negated,
                     is_response_schema=is_response_schema,
                     update_quantifiers=update_quantifiers,
                     upgrade_legacy_exclusive_bounds=upgrade_legacy_exclusive_bounds,
@@ -230,6 +242,7 @@ def _to_json_schema(
                 value[name] = _to_json_schema(
                     subschema,
                     nullable_keyword=nullable_keyword,
+                    is_negated=is_negated,
                     is_response_schema=is_response_schema,
                     update_quantifiers=update_quantifiers,
                     upgrade_legacy_exclusive_bounds=upgrade_legacy_exclusive_bounds,
@@ -244,7 +257,7 @@ def _to_json_schema(
     # must also be removed from the parent's `required`, otherwise the schema is unsatisfiable.
     required = schema.get("required")
     if isinstance(required, list) and required:
-        forbidden = _forbidden_in_allof_branches(schema)
+        forbidden = _forbidden_in_allof_branches(schema, None if is_response_schema else bundle)
         if forbidden:
             new_required = [name for name in required if name not in forbidden]
             if new_required:
@@ -255,18 +268,42 @@ def _to_json_schema(
     return schema
 
 
-def _forbidden_in_allof_branches(schema: dict[str, Any]) -> set[str]:
+def _forbidden_in_allof_branches(schema: dict[str, Any], read_only_bundle: Mapping[str, Any] | None) -> set[str]:
+    """Properties no value satisfies in an `allOf` branch, nested branches included.
+
+    With `read_only_bundle`, branches behind references count too; they may not be converted yet,
+    so a property `readOnly` applies to is forbidden as well.
+    """
     forbidden: set[str] = set()
-    for branch in schema.get("allOf") or []:
-        if not isinstance(branch, dict):
+    all_of = schema.get("allOf")
+    pending: list[object] = list(all_of) if isinstance(all_of, list) else []
+    seen: set[int] = set()
+    while pending:
+        branch = pending.pop()
+        if not isinstance(branch, dict) or id(branch) in seen:
             continue
+        seen.add(id(branch))
         properties = branch.get("properties")
         if isinstance(properties, dict):
             for name, subschema in properties.items():
-                if is_unsatisfiable(subschema):
+                if is_unsatisfiable(subschema) or (
+                    read_only_bundle is not None and is_read_only(subschema, read_only_bundle)
+                ):
                     forbidden.add(name)
-        forbidden.update(_forbidden_in_allof_branches(branch))
+        name = _bundled_name(branch.get("$ref"))
+        if read_only_bundle is not None and name is not None:
+            pending.append(read_only_bundle.get(name))
+        nested = branch.get("allOf")
+        if isinstance(nested, list):
+            pending.extend(nested)
     return forbidden
+
+
+def _bundled_name(reference: object) -> str | None:
+    """Name of the bundled schema `reference` points to, e.g. `schema1` for `#/x-bundled/schema1`."""
+    if isinstance(reference, str) and reference.startswith(f"{REFERENCE_TO_BUNDLE_PREFIX}/"):
+        return reference[len(REFERENCE_TO_BUNDLE_PREFIX) + 1 :]
+    return None
 
 
 def _pin_discriminator_property(
@@ -287,7 +324,12 @@ def _pin_discriminator_property(
     if not property_name:
         return
     explicit_mapping: dict[str, str] = discriminator.get("mapping") or {}
-    ref_to_value = {ref: value for value, ref in explicit_mapping.items()}
+    # Several discriminator values may map to the same schema; an empty value carries no tag
+    ref_to_values: dict[str, list[str]] = {}
+    for value, target in explicit_mapping.items():
+        values = ref_to_values.setdefault(target, [])
+        if value:
+            values.append(value)
 
     for keyword in ("anyOf", "oneOf"):
         items = schema.get(keyword)
@@ -301,24 +343,30 @@ def _pin_discriminator_property(
                 continue
             # Resolve bundled ref (e.g. "#/x-bundled/schema1") back to original URI for schema name extraction
             resolved_ref = ref
-            if name_to_uri and ref.startswith(f"{REFERENCE_TO_BUNDLE_PREFIX}/"):
-                bundled_name = ref[len(REFERENCE_TO_BUNDLE_PREFIX) + 1 :]
+            bundled_name = _bundled_name(ref)
+            if name_to_uri and bundled_name is not None:
                 original_uri = name_to_uri.get(bundled_name, "")
                 if "#" in original_uri:
                     resolved_ref = "#" + original_uri.split("#", 1)[1]
-            allowed = _branch_tag_values(ref, property_name, bundle)
+                elif original_uri:
+                    # A whole-file reference is named after its file: `cat.json` -> `cat`.
+                    resolved_ref = get_implicit_discriminator_value(original_uri)
+            disc_values = ref_to_values.get(resolved_ref)
+            if disc_values is not None:
+                if disc_values:
+                    items[idx] = {"allOf": [item, {"properties": {property_name: {"enum": disc_values}}}]}
+                continue
             # Without an explicit mapping, prefer the branch's own const/enum so the literal
             # tag (`"function"`) wins over the schema name (`FunctionTool`).
-            disc_value = ref_to_value.get(resolved_ref)
-            if disc_value is None and allowed is not None and len(allowed) == 1:
-                disc_value = next(iter(allowed))
+            disc_value = _branch_literal_tag(ref, property_name, bundle)
             if disc_value is None:
                 # Fall back to schema name -- unless the target is itself polymorphic,
                 # in which case the real discriminator values live on its inner branches
                 # and pinning here would force a value none of them accept.
                 if _branch_is_polymorphic(ref, bundle):
                     continue
-                disc_value = resolved_ref.rstrip("/").rsplit("/", 1)[-1]
+                disc_value = get_implicit_discriminator_value(resolved_ref)
+                allowed = branch_tag_values(ref, property_name, bundle)
                 # The branch spells out which values it takes and this is not one of them;
                 # pinning it would leave the branch impossible to satisfy.
                 if allowed is not None and disc_value not in allowed:
@@ -330,13 +378,21 @@ def _pin_discriminator_property(
             items[idx] = {"allOf": [item, {"properties": {property_name: {"enum": [disc_value]}}}]}
 
 
-def _branch_tag_values(
+def _branch_literal_tag(ref: str, property_name: str, bundle: dict[str, JsonSchema] | None) -> str | None:
+    """The single value the branch itself pins for the discriminator property, if any."""
+    values = branch_tag_values(ref, property_name, bundle)
+    if values is not None and len(values) == 1:
+        return next(iter(values))
+    return None
+
+
+def branch_tag_values(
     ref: str, property_name: str, bundle: dict[str, Any] | None, seen: set[str] | None = None
 ) -> set[str] | None:
     """Literal values the branch itself allows for the discriminator property, or `None` when unconstrained."""
-    if bundle is None or not ref.startswith(f"{REFERENCE_TO_BUNDLE_PREFIX}/"):
+    name = _bundled_name(ref)
+    if bundle is None or name is None:
         return None
-    name = ref[len(REFERENCE_TO_BUNDLE_PREFIX) + 1 :]
     seen = seen if seen is not None else set()
     if name in seen:
         return None
@@ -358,7 +414,7 @@ def _tag_values_in_schema(
             continue
         ref = branch.get("$ref")
         if isinstance(ref, str):
-            branch_values = _branch_tag_values(ref, property_name, bundle, seen)
+            branch_values = branch_tag_values(ref, property_name, bundle, seen)
         else:
             branch_values = _tag_values_in_schema(branch, property_name, bundle, seen)
         if branch_values is not None:
@@ -393,9 +449,10 @@ def _tag_literals(schema: JsonSchema | None) -> set[str] | None:
 
 
 def _branch_is_polymorphic(ref: str, bundle: dict[str, Any] | None) -> bool:
-    if bundle is None or not ref.startswith(f"{REFERENCE_TO_BUNDLE_PREFIX}/"):
+    name = _bundled_name(ref)
+    if bundle is None or name is None:
         return False
-    bundled = bundle.get(ref[len(REFERENCE_TO_BUNDLE_PREFIX) + 1 :])
+    bundled = bundle.get(name)
     if not isinstance(bundled, dict):
         return False
     return "oneOf" in bundled or "anyOf" in bundled
@@ -474,10 +531,7 @@ def _rewrite_if_then_else(schema: dict[str, Any]) -> None:
         schema["anyOf"] = new_anyof
 
 
-INTEGER_FORMAT_BOUNDS = {
-    "int32": (-(2**31), 2**31 - 1),
-    "int64": (-(2**63), 2**63 - 1),
-}
+INTEGER_FORMAT_BOUNDS = {"int32": INT32_RANGE, "int64": INT64_RANGE}
 
 # Bounds the schema declares outside the width its integer `format` implies. Values are drawn inside the
 # format range, but a request has to step past the bound the schema itself declares to violate it.
@@ -523,12 +577,24 @@ def _upgrade_legacy_exclusive_bounds(schema: dict[str, Any]) -> None:
             continue
 
         bound = schema.get(bound_key)
-        if isinstance(bound, bool) or not isinstance(bound, int | float):
+        if isinstance(bound, bool) or not isinstance(bound, (int, float)):
             # `exclusive* = true` without a numeric bound can't be represented in modern drafts.
             schema.pop(exclusive_key, None)
             continue
         schema[exclusive_key] = bound
         schema.pop(bound_key, None)
+
+
+def _upgrade_legacy_tuple_items(schema: dict[str, Any]) -> None:
+    # Draft 2020-12 spells a tuple as `prefixItems` and the schema for the rest as `items`.
+    items = schema.get("items")
+    if not isinstance(items, list) or "prefixItems" in schema:
+        return
+    schema["prefixItems"] = items
+    if "additionalItems" in schema:
+        schema["items"] = schema.pop("additionalItems")
+    else:
+        del schema["items"]
 
 
 def ensure_required_properties(schema: dict[str, Any]) -> None:
@@ -614,7 +680,7 @@ def rewrite_properties(schema: dict[str, Any], predicate: Callable[[dict[str, An
     if isinstance(properties, dict):
         for name, subschema in list(properties.items()):
             if predicate(subschema):
-                if name in required:
+                if isinstance(required, list) and name in required:
                     required.remove(name)
                 properties[name] = {"not": {}}
     if not schema.get("required"):
@@ -644,13 +710,39 @@ def permit_forbidden_properties(schema: object) -> bool:
     return changed
 
 
-def is_write_only(schema: object) -> TypeGuard[dict[str, Any]]:
-    if not isinstance(schema, dict):
-        return False
-    return schema.get("writeOnly", False) or schema.get("x-writeOnly", False)
+def is_write_only(schema: object, bundle: Mapping[str, Any] | None = None) -> TypeGuard[dict[str, Any]]:
+    return _has_annotation(schema, bundle, ("writeOnly", "x-writeOnly"))
 
 
-def is_read_only(schema: object) -> TypeGuard[dict[str, Any]]:
-    if not isinstance(schema, dict):
-        return False
-    return schema.get("readOnly", False)
+def is_read_only(schema: object, bundle: Mapping[str, Any] | None) -> bool:
+    """Whether a truthy `readOnly` applies to `schema`.
+
+    Any applicable declaration counts: on the schema itself, behind a bundled `$ref`, in an `allOf` branch,
+    or on the non-null side of a nullable union.
+    """
+    return _has_annotation(schema, bundle, ("readOnly",))
+
+
+def _has_annotation(schema: object, bundle: Mapping[str, Any] | None, keywords: tuple[str, ...]) -> bool:
+    pending: list[object] = [schema]
+    seen: set[int] = set()
+    while pending:
+        node = pending.pop()
+        if not isinstance(node, dict) or id(node) in seen:
+            continue
+        seen.add(id(node))
+        if any(node.get(keyword) for keyword in keywords):
+            return True
+        name = _bundled_name(node.get("$ref"))
+        if bundle is not None and name is not None:
+            pending.append(bundle.get(name))
+        all_of = node.get("allOf")
+        if isinstance(all_of, list):
+            pending.extend(all_of)
+        for keyword in ("anyOf", "oneOf"):
+            variants = node.get(keyword)
+            if isinstance(variants, list):
+                non_null = [variant for variant in variants if variant != {"type": "null"}]
+                if len(non_null) == 1:
+                    pending.append(non_null[0])
+    return False

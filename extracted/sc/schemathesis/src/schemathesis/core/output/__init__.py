@@ -8,12 +8,23 @@ if TYPE_CHECKING:
     from schemathesis.core.transport import Response
 
 TRUNCATED = "// Output truncated..."
+EMPTY_PAYLOAD = "<EMPTY>"
+BINARY_PAYLOAD = "<BINARY>"
+
+
+def pluralize(count: int, word: str) -> str:
+    return f"{count} {word}" if count == 1 else f"{count} {word}s"
 
 
 def escape_surrogates(text: str) -> str:
     # Lone surrogates (e.g. echoed back by a server) are valid `str` but cannot be UTF-8 encoded
     # for terminal or report output; escape them instead of letting the write crash.
     return text.encode("utf-8", "backslashreplace").decode("utf-8")
+
+
+def escape_nonprintable(text: str) -> str:
+    # Escapes control characters like `repr` does, but keeps backslashes single.
+    return "".join(char if char.isprintable() else repr(char)[1:-1] for char in text)
 
 
 def truncate_json(data: Any, *, config: OutputConfig, max_lines: int | None = None) -> str:
@@ -66,6 +77,8 @@ def decode_response_text(response: Response) -> str | None:
     Returns `None` when the body is binary (undecodable under its own or the default encoding);
     a response declaring an unknown or broken charset is decoded lossily instead of raising.
     """
+    if response.render_content is not None:
+        return response.render_content(response.content)
     try:
         return response.text
     except UnicodeDecodeError:
@@ -85,3 +98,13 @@ def prepare_response_payload(payload: str, *, config: OutputConfig) -> str:
     if len(payload) > config.truncation.max_payload_size:
         payload = payload[: config.truncation.max_payload_size] + f" {TRUNCATED}"
     return payload
+
+
+def format_response_payload(response: Response, *, config: OutputConfig) -> str:
+    """Response body as failure output shows it: `<EMPTY>`, `<BINARY>`, or the decoded and truncated text."""
+    if not response.content:
+        return EMPTY_PAYLOAD
+    text = decode_response_text(response)
+    if text is None:
+        return BINARY_PAYLOAD
+    return prepare_response_payload(text, config=config)

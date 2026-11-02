@@ -11,11 +11,10 @@ from hypothesis.core import HypothesisHandle
 
 from schemathesis.auths import AuthStorage
 from schemathesis.core.errors import InvalidSchema
-from schemathesis.core.result import Ok, Result
-from schemathesis.filters import FilterSet, FilterValue, MatcherFunc, RegexValue, is_deprecated
-from schemathesis.generation import overrides
+from schemathesis.core.failures import FailureGroup, as_reported_failure
+from schemathesis.core.result import Err, Ok, Result
+from schemathesis.filters import FilterSet, FilterValue, MatcherFunc, RegexValue
 from schemathesis.generation.feedback import FeedbackSources
-from schemathesis.generation.hypothesis.builder import HypothesisTestConfig, HypothesisTestMode, create_test
 from schemathesis.generation.hypothesis.given import (
     GIVEN_REFRESH_ATTR,
     GIVEN_TARGET_ATTR,
@@ -29,6 +28,7 @@ from schemathesis.generation.hypothesis.given import (
 )
 from schemathesis.pytest._keys import track_schema
 from schemathesis.pytest._subtests import make_subtests
+from schemathesis.pytest._test_builder import build_operation_test, schema_error_suffix
 from schemathesis.pytest.control_flow import fail_on_no_matches
 from schemathesis.pytest.warnings import emit_constants_warnings, emit_openapi_auth_warnings
 from schemathesis.python._constants.orchestrator import make_constants_value_source
@@ -46,8 +46,6 @@ def get_all_tests(
     schema: BaseSchema,
     test_func: Callable,
     settings: hypothesis.settings | None,
-    seed: int | None,
-    as_strategy_kwargs: Callable[[APIOperation], dict[str, Any]] | None,
     given_kwargs: dict[str, GivenInput] | None,
 ) -> Generator[Result[tuple[APIOperation, Callable], InvalidSchema], None, None]:
     """Generate all operations and Hypothesis tests for them."""
@@ -55,38 +53,17 @@ def get_all_tests(
     for result in schema.get_all_operations():
         if isinstance(result, Ok):
             operation = result.ok()
-            if callable(as_strategy_kwargs):
-                _as_strategy_kwargs = as_strategy_kwargs(operation)
-            else:
-                _as_strategy_kwargs = {}
-
-            # Get modes from config for this operation
-            modes = []
-            phases = schema.config.phases_for(operation=operation)
-            if phases.examples.enabled:
-                modes.append(HypothesisTestMode.EXAMPLES)
-            if phases.fuzzing.enabled:
-                modes.append(HypothesisTestMode.FUZZING)
-            if phases.coverage.enabled:
-                modes.append(HypothesisTestMode.COVERAGE)
-
-            # Use fuzzing phase settings if fuzzing is enabled, since only fuzzing uses max_examples
-            phase = "fuzzing" if HypothesisTestMode.FUZZING in modes else None
-            test = create_test(
+            test = build_operation_test(
+                config=schema.config,
                 operation=operation,
                 test_func=test_func,
-                config=HypothesisTestConfig(
-                    settings=schema.config.get_hypothesis_settings(operation=operation, phase=phase),
-                    explicit_settings=settings,
-                    modes=modes,
-                    seed=seed,
-                    project=schema.config,
-                    as_strategy_kwargs=_as_strategy_kwargs,
-                    given_kwargs=given_kwargs or {},
-                    feedback=feedback,
-                ),
+                explicit_settings=settings,
+                given_kwargs=given_kwargs or {},
+                feedback=feedback,
             )
             yield Ok((operation, test))
+            for schema_error in operation.schema_errors:
+                yield Err(schema_error)
         else:
             yield result
 
@@ -123,8 +100,7 @@ class LazySchema:
         operation_id_regex: RegexValue | None = None,
     ) -> LazySchema:
         """Include only operations that match the given filters."""
-        filter_set = self.filter_set.clone()
-        filter_set.include(
+        filter_set = self.filter_set.with_include(
             func,
             name=name,
             name_regex=name_regex,
@@ -156,13 +132,7 @@ class LazySchema:
         deprecated: bool = False,
     ) -> LazySchema:
         """Exclude operations that match the given filters."""
-        filter_set = self.filter_set.clone()
-        if deprecated:
-            if func is None:
-                func = is_deprecated
-            else:
-                filter_set.exclude(is_deprecated)
-        filter_set.exclude(
+        filter_set = self.filter_set.with_exclude(
             func,
             name=name,
             name_regex=name_regex,
@@ -174,6 +144,7 @@ class LazySchema:
             tag_regex=tag_regex,
             operation_id=operation_id,
             operation_id_regex=operation_id_regex,
+            deprecated=deprecated,
         )
         return self.__class__(fixture_name=self.fixture_name, filter_set=filter_set, auth=self.auth)
 
@@ -235,51 +206,34 @@ class LazySchema:
                 else:
                     fixtures = get_fixtures(test_func, request, given_kwargs)
                 # Changing the node id is required for better reporting - the method and path will appear there
-                node_id = request.node._nodeid
+                node_id = request.node.nodeid
                 settings = getattr(wrapped_test, "_hypothesis_internal_use_settings", None)
-
-                def as_strategy_kwargs(_operation: APIOperation) -> dict[str, Any]:
-                    as_strategy_kwargs: dict[str, Any] = {}
-
-                    auth = schema.config.auth_for(operation=_operation)
-                    if auth is not None:
-                        from requests.auth import _basic_auth_str
-
-                        as_strategy_kwargs["headers"] = {"Authorization": _basic_auth_str(*auth)}
-
-                    headers = schema.config.headers_for(operation=_operation)
-                    if headers:
-                        as_strategy_kwargs["headers"] = headers
-
-                    override = overrides.for_operation(config=schema.config, operation=_operation)
-                    for location, entry in override.items():
-                        if entry:
-                            as_strategy_kwargs[location.container_name] = entry
-
-                    return as_strategy_kwargs
 
                 tests = list(
                     get_all_tests(
                         schema=schema,
                         test_func=test_func,
                         settings=settings,
-                        as_strategy_kwargs=as_strategy_kwargs,
                         given_kwargs=given_kwargs,
-                        seed=schema.config.seed,
                     )
                 )
                 if not tests:
                     fail_on_no_matches(node_id)
                 request.session.testscollected += len(tests)
                 subtests = make_subtests(request)
+                from schemathesis.pytest.plugin import report_subtest
+
                 for result in tests:
                     if isinstance(result, Ok):
                         operation, sub_test = result.ok()
-                        request.node._nodeid = f"{node_id}[{operation.method.upper()} {operation.path}]"
-                        run_subtest(operation, fixtures, sub_test, subtests)
+                        _set_node_id(request.node, f"{node_id}[{operation.label}]")
+                        with report_subtest(request.node, schema, operation.label, operation.tags):
+                            run_subtest(operation, fixtures, sub_test, subtests)
                     else:
-                        _schema_error(subtests, result.err(), node_id, request.node)
-                request.node._nodeid = node_id
+                        error = result.err()
+                        with report_subtest(request.node, schema, error.label, None):
+                            _schema_error(subtests, error, node_id, request.node)
+                _set_node_id(request.node, node_id)
 
             sig = signature(test_func)
             if "self" in sig.parameters:
@@ -324,6 +278,8 @@ def run_subtest(
     with subtests.test(label=operation.label):
         try:
             sub_test(**fixtures)
+        except FailureGroup as exc:
+            raise as_reported_failure(exc) from None
         except SkipTest as exc:
             raise pytest.skip.Exception(str(exc)).with_traceback(exc.__traceback__) from None
 
@@ -331,27 +287,23 @@ def run_subtest(
 SEPARATOR = "\n===================="
 
 
+def _set_node_id(node: pytest.Function, node_id: str) -> None:
+    # pytest has no public API for renaming a node. Subtests are reported and counted under this id, so a failing
+    # operation does not also fail the parent test.
+    if hasattr(node, "_id"):
+        # pytest >= 9.2 keeps a structured id
+        node._id = node._id.parse(node_id)
+    else:
+        node._nodeid = node_id  # type: ignore[attr-defined]
+
+
 def _schema_error(subtests: pytest.Subtests, error: InvalidSchema, node_id: str, node: pytest.Function) -> None:
     """Run a failing test, that will show the underlying problem."""
     sub_test = error.as_failing_test_function()
-    kwargs: dict[str, Any] = {}
-    if error.method:
-        kwargs["method"] = error.method.upper()
-    kwargs["path"] = error.path
-    node._nodeid = _get_partial_node_name(node_id, **kwargs)
+    _set_node_id(node, f"{node_id}{schema_error_suffix(error)}")
     __tracebackhide__ = True
-    with subtests.test(**kwargs):
+    with subtests.test(label=error.label):
         sub_test()
-
-
-def _get_partial_node_name(node_id: str, **kwargs: Any) -> str:
-    """Make a test node name for failing tests caused by schema errors."""
-    name = node_id
-    if "method" in kwargs:
-        name += f"[{kwargs['method']} {kwargs['path']}]"
-    else:
-        name += f"[{kwargs['path']}]"
-    return name
 
 
 def get_schema(*, request: FixtureRequest, name: str, filter_set: FilterSet, test_function: Callable) -> BaseSchema:

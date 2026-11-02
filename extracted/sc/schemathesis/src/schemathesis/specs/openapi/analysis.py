@@ -9,9 +9,11 @@ from schemathesis.core import NOT_SET, NotSet
 from schemathesis.core.result import Ok
 from schemathesis.core.schema_analysis import SchemaWarning
 from schemathesis.resources import ExtraDataSource, ResourceRepository
+from schemathesis.specs.openapi.auth_flow.models import AuthFlowSpec
 from schemathesis.specs.openapi.auth_jwt import seed_pool_from_basic_auth, seed_pool_from_headers
 from schemathesis.specs.openapi.extra_data_source import (
     OpenApiExtraDataSource,
+    build_created_keys_by_label,
     build_inputs_by_label,
     build_parameter_requirements,
 )
@@ -21,6 +23,7 @@ from schemathesis.specs.openapi.stateful import dependencies
 from schemathesis.specs.openapi.stateful.dependencies.layers import compute_dependency_layers
 from schemathesis.specs.openapi.stateful.inference import LinkInferencer
 from schemathesis.specs.openapi.warnings import (
+    detect_dictionary_mismatches,
     detect_missing_deserializers,
     detect_unresolvable_references,
     detect_unsupported_regex,
@@ -62,6 +65,7 @@ class OpenAPIAnalysis:
         "_inferencer",
         "_warnings_cache",
         "_schema_warnings_cache",
+        "_auth_flow",
     )
 
     def __init__(self, schema: OpenApiSchema) -> None:
@@ -74,6 +78,7 @@ class OpenAPIAnalysis:
         self._inferencer: LinkInferencer | None = None
         self._warnings_cache: Mapping[str, Sequence[SchemaWarning]] | None = None
         self._schema_warnings_cache: Sequence[SchemaWarning] | None = None
+        self._auth_flow: AuthFlowSpec | None | NotSet = NOT_SET
 
     @property
     def dependency_graph(self) -> dependencies.DependencyGraph:
@@ -118,8 +123,9 @@ class OpenAPIAnalysis:
             descriptors = self.resource_descriptors
             requirements = build_parameter_requirements(self.dependency_graph)
             inputs_by_label = build_inputs_by_label(self.dependency_graph)
+            created_keys_by_label = build_created_keys_by_label(self.dependency_graph)
             semantic_eligible = _collect_semantic_eligible_operations(self.schema)
-            if not descriptors and not inputs_by_label and not semantic_eligible:
+            if not descriptors and not inputs_by_label and not created_keys_by_label and not semantic_eligible:
                 self._extra_data_source = None
             else:
                 repository = ResourceRepository(descriptors)
@@ -134,6 +140,7 @@ class OpenAPIAnalysis:
                     repository=repository,
                     requirements=requirements,
                     inputs_by_label=inputs_by_label,
+                    created_keys_by_label=created_keys_by_label,
                     semantic_index=SemanticValueIndex() if semantic_eligible else None,
                     semantic_eligible_operations=semantic_eligible,
                 )
@@ -158,7 +165,17 @@ class OpenAPIAnalysis:
                         operation=operation.label,
                         status_code=status_code,
                         payload=example_value,
+                        from_example=True,
                     )
+
+    @property
+    def auth_flow(self) -> AuthFlowSpec | None:
+        """Detected sign-up and login flow, or `None` when no flow matches."""
+        if isinstance(self._auth_flow, NotSet):
+            from schemathesis.specs.openapi.auth_flow.detection import detect_auth_flow
+
+            self._auth_flow = detect_auth_flow(self.schema)
+        return self._auth_flow
 
     @property
     def inferencer(self) -> LinkInferencer:
@@ -231,4 +248,4 @@ class OpenAPIAnalysis:
 
     def _collect_schema_warnings(self) -> Sequence[SchemaWarning]:
         """Collect schema-level warnings."""
-        return detect_unused_openapi_auth(self.schema)
+        return [*detect_unused_openapi_auth(self.schema), *detect_dictionary_mismatches(self.schema)]

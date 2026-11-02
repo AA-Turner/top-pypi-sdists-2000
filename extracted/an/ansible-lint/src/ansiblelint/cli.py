@@ -26,6 +26,7 @@ from ansiblelint.file_utils import (
     normpath,
 )
 from ansiblelint.loaders import IGNORE_FILE
+from ansiblelint.output import console_stderr
 from ansiblelint.schemas.main import validate_file_schema
 from ansiblelint.yaml_utils import clean_json
 
@@ -61,6 +62,30 @@ def expand_to_normalized_paths(
         config[paths_var] = normalized_paths
 
 
+def _fatal_config_error(msg: str) -> None:
+    """Log a fatal configuration error and terminate the process."""
+    if any(
+        isinstance(h, logging.FileHandler)
+        and h.baseFilename != os.path.abspath(os.devnull)
+        for h in logging.root.handlers
+    ):
+        _logger.error(msg)
+    console_stderr.print(f"[error]{msg}[/]")
+    sys.exit(RC.INVALID_CONFIG)
+
+
+def _resolve_config_project_dir(config: dict[str, Any], config_path: str) -> None:
+    """Resolve a relative project_dir in config against the config file location."""
+    if (
+        "project_dir" in config
+        and config["project_dir"]
+        and config["project_dir"][0] not in ("/", "~")
+    ):
+        config["project_dir"] = (
+            (Path(config_path).parent / config["project_dir"]).resolve().as_posix()
+        )
+
+
 def load_config(
     config_file: str | None = None, project_path: str | None = None
 ) -> tuple[dict[Any, Any], str | None]:
@@ -74,8 +99,7 @@ def load_config(
     if config_file:
         config_path = os.path.abspath(config_file)
         if not os.path.exists(config_path):
-            _logger.error("Config file not found '%s'", config_path)
-            sys.exit(RC.INVALID_CONFIG)
+            _fatal_config_error(f"Config file not found '{config_path}'")
     config_path = config_path or get_config_path(None, project_path=project_path)
     if not config_path or not os.path.exists(config_path):
         # a missing default config file should not trigger an error
@@ -90,8 +114,7 @@ def load_config(
     )
 
     for error in validate_file_schema(config_lintable):
-        _logger.error("Invalid configuration file %s. %s", config_path, error)
-        sys.exit(RC.INVALID_CONFIG)
+        _fatal_config_error(f"Invalid configuration file {config_path}. {error}")
 
     config = clean_json(config_lintable.data)
     if not isinstance(config, dict):
@@ -101,14 +124,7 @@ def load_config(
     config_dir = os.path.dirname(config_path)
     expand_to_normalized_paths(config, config_dir)
 
-    if (
-        "project_dir" in config
-        and config["project_dir"]
-        and config["project_dir"][0] not in ("/", "~")
-    ):
-        config["project_dir"] = (
-            (Path(config_path).parent / config["project_dir"]).resolve().as_posix()
-        )
+    _resolve_config_project_dir(config, config_path)
 
     return config, config_path
 
@@ -176,11 +192,11 @@ class WriteArgAction(argparse.Action):
         nargs: int | str | None = None,
         const: Any = None,
         default: Any = None,
-        type: Callable[[str], Any] | None = None,  # noqa: A002
+        type: Callable[[str], Any] | None = None,  # ruff:ignore[builtin-argument-shadowing]
         choices: list[Any] | None = None,
         *,
         required: bool = False,
-        help: str | None = None,  # noqa: A002
+        help: str | None = None,  # ruff:ignore[builtin-argument-shadowing]
         metavar: str | None = None,
     ) -> None:
         """Create the argparse action with WriteArg-specific defaults."""
@@ -532,7 +548,7 @@ def merge_config(file_config: dict[Any, Any], cli_config: Options) -> Options:
                 setattr(cli_config, entry, default)
         if cli_config.write_list is None:
             cli_config.write_list = []
-        elif cli_config.write_list == [WriteArgAction._default]:  # noqa: SLF001 # pragma: no cover
+        elif cli_config.write_list == [WriteArgAction._default]:  # ruff:ignore[private-member-access] # pragma: no cover
             cli_config.write_list = ["all"]
         return cli_config
 

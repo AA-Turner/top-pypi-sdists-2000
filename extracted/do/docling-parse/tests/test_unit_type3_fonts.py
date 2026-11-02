@@ -1,0 +1,291 @@
+#!/usr/bin/env python
+"""Type3 fonts, whose glyphs are content streams (PDF 32000-1, 9.6.5).
+
+A Type3 glyph is drawn by running its charproc, so a renderer that only knows
+how to draw glyphs from a face draws nothing at all: pages set in a Type3 font
+came out blank. Charprocs come in two kinds -- an inline image mask, or ordinary
+path painting -- and both had to be executed.
+
+A charproc that paints in any other way -- an image XObject from the font's own
+/Resources, the way Chrome and Skia export colour emoji, or a colour inline
+image -- is run through the content-stream interpreter like a form XObject.
+
+Orientation is the part that is easy to get subtly wrong: glyph space is
+y-up like user space, and taking the image-mask corner order from the wrong
+place renders every glyph upside down, which still looks like text. So these
+fixtures use deliberately lopsided glyphs and check which way up they land.
+"""
+
+from __future__ import annotations
+
+import pytest
+from docling_core.types.doc.page import TextCellUnit
+
+from tests.pdf_builder import (
+    build_pdf,
+    content_stream,
+    parse_page,
+    render_page,
+    stream_object,
+)
+from tests.rendering_regression import (
+    average_color,
+    coverage_ratio,
+    ink_bounds,
+    quadrant_coverage,
+    region_image,
+)
+
+FONT_SIZE = 100
+GLYPH_BOX = (50.0, 50.0, 150.0, 150.0)
+
+
+def _type3_pdf(
+    charproc: bytes,
+    *,
+    resources: str = "<< >>",
+    font_bbox: str = "[0 0 1000 1000]",
+    font_matrix: str = "[0.001 0 0 0.001 0 0]",
+    width: int = 1000,
+    extra_objects: tuple[bytes, ...] = (),
+) -> bytes:
+    """One page drawing a single Type3 glyph 100pt tall at (50, 50).
+
+    `extra_objects` become objects 8, 9, ..., for the font's /Resources.
+    """
+    text = f"BT\n/T3 {FONT_SIZE} Tf\n50 50 Td\n(a) Tj\nET\n"
+    return build_pdf(
+        [
+            "<< /Type /Catalog /Pages 2 0 R >>",
+            "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+            "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 200 200] "
+            "/Resources << /Font << /T3 5 0 R >> >> /Contents 4 0 R >>",
+            content_stream(text),
+            f"<< /Type /Font /Subtype /Type3 /FontBBox {font_bbox} "
+            f"/FontMatrix {font_matrix} /CharProcs 6 0 R "
+            "/Encoding << /Type /Encoding /Differences [97 /square] >> "
+            f"/FirstChar 97 /LastChar 97 /Widths [{width}] "
+            f"/Resources {resources} >>",
+            "<< /square 7 0 R >>",
+            charproc,
+            *extra_objects,
+        ]
+    )
+
+
+def test_character_bbox_uses_actual_charproc_bounds():
+    """A loose Type3 /FontBBox must not make the character cell enormous.
+
+    This mirrors producer-generated Type3 fonts that use an identity
+    /FontMatrix, a one-unit advance and a generic [-10, 10] font box while
+    drawing each glyph in an approximately one-unit CharProc coordinate range.
+    """
+    charproc = stream_object(
+        "",
+        b"1 0 -10 -10 10 10 d1\n0 -0.2 0.6 1 re f\n",
+    )
+    page = parse_page(
+        _type3_pdf(
+            charproc,
+            font_bbox="[-10 -10 10 10]",
+            font_matrix="[1 0 0 1 0 0]",
+            width=1,
+        )
+    )
+
+    cells = list(page.iterate_cells(TextCellUnit.CHAR))
+    assert len(cells) == 1
+    box = cells[0].rect.to_bounding_box()
+
+    assert box.width == pytest.approx(0.6 * FONT_SIZE, abs=0.1)
+    assert box.height == pytest.approx(FONT_SIZE, abs=0.1)
+
+
+def test_blank_charproc_has_advance_but_no_ink_height():
+    """A metrics-only Type3 glyph must not inherit a loose font bbox."""
+    charproc = stream_object("", b"1 0 -10 -10 10 10 d1\n")
+    page = parse_page(
+        _type3_pdf(
+            charproc,
+            font_bbox="[-10 -10 10 10]",
+            font_matrix="[1 0 0 1 0 0]",
+            width=1,
+        )
+    )
+
+    cells = list(page.iterate_cells(TextCellUnit.CHAR))
+    assert len(cells) == 1
+    assert cells[0].text == " "
+    box = cells[0].rect.to_bounding_box()
+
+    assert box.width == pytest.approx(FONT_SIZE, abs=0.1)
+    assert box.height == pytest.approx(0.0, abs=0.1)
+
+
+def test_vector_charproc_is_painted():
+    """A charproc that fills a path puts ink on the page."""
+    charproc = stream_object("", b"1000 0 0 0 1000 1000 d1\n0 0 1000 1000 re f\n")
+    image = region_image(render_page(_type3_pdf(charproc)), GLYPH_BOX)
+
+    assert coverage_ratio(image) > 0.8, (
+        f"a Type3 glyph filling its whole box covered only "
+        f"{coverage_ratio(image):.3f} of it"
+    )
+
+
+def test_vector_charproc_is_not_upside_down():
+    """A glyph inked only in its top half lands in the top half of the page.
+
+    Glyph space is y-up. Getting the corner order wrong flips the glyph, which
+    is invisible on a symmetrical shape and wrong on every real one.
+    """
+    charproc = stream_object("", b"1000 0 0 0 1000 1000 d1\n0 500 1000 500 re f\n")
+    image = region_image(render_page(_type3_pdf(charproc)), GLYPH_BOX)
+
+    bounds = ink_bounds(image)
+    assert bounds is not None, "the glyph painted nothing"
+    _, top, _, bottom = bounds
+    assert bottom <= image.height * 0.6, (
+        f"the ink sits at rows {top}..{bottom} of {image.height}; a glyph inked "
+        "in its upper half rendered in the lower half, so it is upside down"
+    )
+
+
+def test_charproc_graphics_state_is_balanced():
+    """`q`/`Q` inside a charproc do not leak into the rest of the glyph.
+
+    The first square is drawn under a scaling transform; the second is drawn
+    after it is popped and must land where it was asked to, not where the
+    leaked transform would put it.
+    """
+    charproc = stream_object(
+        "",
+        b"1000 0 0 0 1000 1000 d1\n"
+        b"q\n0.5 0 0 0.5 0 0 cm\n0 0 1000 1000 re f\nQ\n"
+        b"500 500 500 500 re f\n",
+    )
+    image = region_image(render_page(_type3_pdf(charproc)), GLYPH_BOX)
+
+    quadrants = quadrant_coverage(image)
+    # scaled square covers the lower-left quarter, the second one the upper right
+    assert quadrants["bottom_left"] > 0.9, (
+        "the transformed part of the charproc did not paint"
+    )
+    assert quadrants["top_right"] > 0.9, (
+        "the part after Q did not paint where it was asked to; the charproc's "
+        "graphics state leaked"
+    )
+    assert quadrants["top_left"] < 0.1 and quadrants["bottom_right"] < 0.1, (
+        "the charproc painted outside both squares"
+    )
+
+
+def test_image_mask_charproc_is_painted():
+    """A charproc whose glyph is an inline image mask paints too.
+
+    The mask's set bits are the ink; an all-ones mask fills the glyph box.
+    """
+    charproc = stream_object(
+        "",
+        b"1000 0 0 0 1000 1000 d1\n"
+        b"q\n1000 0 0 1000 0 0 cm\n"
+        b"BI /IM true /W 8 /H 8 /BPC 1 /D [1 0] ID\n"
+        + bytes([0xFF] * 8)
+        + b"\nEI\nQ\n",
+    )
+    image = region_image(render_page(_type3_pdf(charproc)), GLYPH_BOX)
+
+    assert coverage_ratio(image) > 0.8, (
+        f"an image-mask charproc covered only {coverage_ratio(image):.3f} of "
+        "the glyph box"
+    )
+
+
+RED = bytes([0xFF, 0x00, 0x00])
+BLUE = bytes([0x00, 0x00, 0xFF])
+
+
+def _rgb_image(width: int, height: int, samples: bytes) -> bytes:
+    return stream_object(
+        f"/Type /XObject /Subtype /Image /Width {width} /Height {height} "
+        "/ColorSpace /DeviceRGB /BitsPerComponent 8",
+        samples,
+    )
+
+
+def _image_xobject_pdf(image: bytes) -> bytes:
+    """A colour glyph drawn by an image XObject of the font's own /Resources.
+
+    This is how Chrome and Skia export colour emoji
+    (docling-project/docling#4922).
+    """
+    charproc = stream_object("", b"1000 0 d0\nq 1000 0 0 1000 0 0 cm /Im Do Q\n")
+    return _type3_pdf(
+        charproc,
+        resources="<< /XObject << /Im 8 0 R >> >>",
+        extra_objects=(image,),
+    )
+
+
+def _is_red(color: tuple[float, float, float]) -> bool:
+    red, green, blue = color
+    return red > 200 and green < 60 and blue < 60
+
+
+def _is_blue(color: tuple[float, float, float]) -> bool:
+    red, green, blue = color
+    return red < 60 and green < 60 and blue > 200
+
+
+def test_image_xobject_charproc_is_painted():
+    """A charproc that paints an image XObject puts that image on the page."""
+    pdf = _image_xobject_pdf(_rgb_image(2, 2, RED * 4))
+    image = region_image(render_page(pdf), GLYPH_BOX)
+
+    assert coverage_ratio(image) > 0.8, (
+        f"an image-XObject charproc covered only {coverage_ratio(image):.3f} of "
+        "the glyph box"
+    )
+    assert _is_red(average_color(image)), average_color(image)
+
+
+def test_image_xobject_charproc_is_not_upside_down():
+    """The first image row is the top of the glyph."""
+    pdf = _image_xobject_pdf(_rgb_image(1, 2, RED + BLUE))
+    result = render_page(pdf)
+    left, top, right, bottom = GLYPH_BOX
+    middle = (top + bottom) / 2
+
+    upper = region_image(result, (left, top, right, middle - 5))
+    lower = region_image(result, (left, middle + 5, right, bottom))
+
+    assert _is_red(average_color(upper)), average_color(upper)
+    assert _is_blue(average_color(lower)), average_color(lower)
+
+
+def test_colour_inline_image_charproc_is_painted():
+    """An inline image that is not a 1-bit mask paints too."""
+    charproc = stream_object(
+        "",
+        b"1000 0 d0\nq\n1000 0 0 1000 0 0 cm\n"
+        b"BI /W 2 /H 2 /CS /RGB /BPC 8 ID\n" + RED * 4 + b"\nEI\nQ\n",
+    )
+    image = region_image(render_page(_type3_pdf(charproc)), GLYPH_BOX)
+
+    assert coverage_ratio(image) > 0.8, (
+        f"a colour inline-image charproc covered only {coverage_ratio(image):.3f} "
+        "of the glyph box"
+    )
+    assert _is_red(average_color(image)), average_color(image)
+
+
+def test_image_charproc_is_a_glyph_not_a_page_image():
+    """The image of a glyph is its ink: one character and no page bitmap."""
+    pdf = _image_xobject_pdf(_rgb_image(2, 2, RED * 4))
+
+    page = parse_page(pdf)
+    assert len(list(page.iterate_cells(TextCellUnit.CHAR))) == 1
+    assert len(page.bitmap_resources) == 0
+
+    artifacts = render_page(pdf)._export_bitmap_artifacts()
+    assert [artifact.get("source") for artifact in artifacts] == ["type3_glyph"]

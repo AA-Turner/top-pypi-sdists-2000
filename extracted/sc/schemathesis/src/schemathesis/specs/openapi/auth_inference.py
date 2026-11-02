@@ -13,8 +13,9 @@ from schemathesis.core.error_feedback import (
     RequiresAuthPayload,
 )
 from schemathesis.core.parameters import ParameterLocation
-from schemathesis.specs.openapi._auth_retry import build_retry_transport_kwargs, clone_case
-from schemathesis.specs.openapi.adapter.security import get_effective_security_scheme_names
+from schemathesis.core.transport import AUTH_REJECTION_STATUSES
+from schemathesis.specs.openapi._auth_retry import build_retry_transport_kwargs
+from schemathesis.specs.openapi.adapter.security import declares_security
 from schemathesis.specs.openapi.schemas import OpenApiSchema
 
 if TYPE_CHECKING:
@@ -27,7 +28,7 @@ if TYPE_CHECKING:
 
 def _intersect_configured_schemes(schema: OpenApiSchema) -> list[str]:
     """Return scheme names declared in the spec that also have configured credentials."""
-    configured = schema.config.auth.all_openapi_schemes
+    configured = schema.auth_schemes
     if not configured:
         return []
     declared = schema.security.security_definitions
@@ -43,16 +44,11 @@ def _already_inferred(store: ErrorFeedbackStore, operation_label: str) -> bool:
     return any(observation.kind is ObservationKind.REQUIRES_AUTHENTICATION for observation in observations)
 
 
-def _has_declared_security(operation: APIOperation) -> bool:
-    """Return True iff the operation declares any security (own, schema-level fallback, or inferred overlay)."""
-    return bool(get_effective_security_scheme_names(operation, operation.schema.raw_schema))
-
-
 def _is_auth_success(operation: APIOperation, retry_status: int) -> bool:
     """A retry confirms inference iff it slips past the auth gate without crashing the server."""
     if 200 <= retry_status < 300:
         return True
-    if retry_status in {401, 403} or retry_status >= 500:
+    if retry_status in AUTH_REJECTION_STATUSES or retry_status >= 500:
         return False
     # 4xx outside the auth band confirms only when the spec actually documents that status —
     # otherwise an undocumented 404/405 (route mismatch) would falsely look like inference success.
@@ -72,10 +68,10 @@ def _send_with_scheme(
     or any other unexpected exception. The caller treats `None` as "skip this scheme".
     """
     schema = case.operation.schema
-    config = schema.config.auth.all_openapi_schemes[scheme_name]
+    config = schema.auth_schemes[scheme_name]
 
-    retry_case = clone_case(case)
-    recorder.record_case(parent_id=case.id, case=retry_case, transition=None, is_transition_applied=False)
+    retry_case = case.derive()
+    recorder.record_case(parent_id=case.id, case=retry_case, is_probe=True)
 
     context = AuthContext(operation=case.operation, app=case.operation.app)
 
@@ -87,6 +83,7 @@ def _send_with_scheme(
         provider = schema.security.auth_provider_for(scheme_name, config)
         data = provider.get(retry_case, context)
         provider.set(retry_case, data, context)
+        retry_case.settle_metadata()
         response = schema.transport.send(retry_case, **kwargs)
     except Exception:  # noqa: BLE001 - probe must not propagate; one bad scheme can't kill the loop.
         return None
@@ -113,12 +110,12 @@ def record_auth_inference(
     Each operation is inferred at most once. Probe failures (provider errors, network errors,
     5xx, undocumented 4xx) skip the current scheme.
     """
-    if response.status_code not in (401, 403):
+    if response.status_code not in AUTH_REJECTION_STATUSES:
         return
     operation = case.operation
     if not isinstance(operation.schema, OpenApiSchema):
         return
-    if _has_declared_security(operation):
+    if declares_security(operation):
         return
     if _already_inferred(store, operation.label):
         return

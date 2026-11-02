@@ -4,10 +4,11 @@ from collections.abc import Iterator, Mapping
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
-from schemathesis.core.errors import InfiniteRecursiveReference
+from schemathesis.core.errors import InvalidSchema, RefResolutionError
 from schemathesis.core.jsonschema.bundler import BundleError
 from schemathesis.core.jsonschema.resolver import Resolver
-from schemathesis.core.jsonschema.types import get_type
+from schemathesis.core.jsonschema.types import JsonSchema, get_type
+from schemathesis.core.transforms import decode_pointer, encode_pointer
 from schemathesis.specs.openapi.adapter.parameters import resource_name_from_ref
 from schemathesis.specs.openapi.adapter.references import maybe_resolve_with_resolver
 from schemathesis.specs.openapi.stateful.dependencies import naming
@@ -15,6 +16,7 @@ from schemathesis.specs.openapi.stateful.dependencies.models import (
     CanonicalizationCache,
     Cardinality,
     DefinitionSource,
+    NestedFKCache,
     OperationMap,
     ResourceDefinition,
     ResourceMap,
@@ -33,6 +35,7 @@ from schemathesis.specs.openapi.stateful.dependencies.schemas import (
 if TYPE_CHECKING:
     from schemathesis.schemas import APIOperation
     from schemathesis.specs.openapi.adapter.responses import OpenApiResponse
+    from schemathesis.specs.openapi.schemas import OpenApiSchema
 
 
 @dataclass(slots=True)
@@ -48,15 +51,14 @@ class ExtractedResource:
     is_primitive_identifier: bool = False
     # True when the response is a map keyed by identifier (`{<id>: <object>, ...}`)
     extract_object_keys: bool = False
+    # Fields this response declares for the resource; `None` when it declares none
+    response_fields: frozenset[str] | None = None
+    # Envelope field identifying the wrapped resource (`/bookingid` next to `/booking`)
+    identifier_pointer: str | None = None
 
 
 def extract_resources_from_responses(
-    *,
-    operation: APIOperation,
-    resources: ResourceMap,
-    updated_resources: set[str],
-    resolver: Resolver,
-    canonicalization_cache: CanonicalizationCache,
+    *, operation: APIOperation, state: InferenceState
 ) -> Iterator[tuple[OpenApiResponse, ExtractedResource]]:
     """Extract resource definitions from operation's successful responses.
 
@@ -65,46 +67,66 @@ def extract_resources_from_responses(
     Updates the global resource registry as resources are discovered.
     """
     for response in operation.responses.iter_successful_responses():
-        for extracted in iter_resources_from_response(
-            method=operation.method,
-            path=operation.path,
-            response=response,
-            resources=resources,
-            updated_resources=updated_resources,
-            resolver=resolver,
-            canonicalization_cache=canonicalization_cache,
-        ):
-            yield response, extracted
+        try:
+            extracted = list(
+                iter_resources_from_response(
+                    method=operation.method,
+                    path=operation.path,
+                    response=response,
+                    state=state,
+                )
+            )
+        except (RefResolutionError, InvalidSchema):
+            # An unusable `$ref` hides only this response's resources
+            continue
+        for item in extracted:
+            yield response, item
 
 
 ResponseResourceCache: TypeAlias = dict[str, list[tuple["OpenApiResponse", ExtractedResource]]]
 
 
+@dataclass(slots=True)
+class InferenceState:
+    """What the per-operation scan shares across every operation of one schema."""
+
+    resolver: Resolver
+    # Backs the body-FK gate so `<word>_name` fields without a real target don't spawn ghosts.
+    candidate_resource_names: frozenset[str]
+    resources: ResourceMap
+    # Resources upgraded to a better definition, so existing input slots pick up their fields.
+    updated_resources: set[str]
+    # Same schemas are often canonicalized multiple times.
+    canonicalization_cache: CanonicalizationCache
+    # Per-operation response resources, materialized once and replayed by input + output extraction.
+    response_resource_cache: ResponseResourceCache
+    nested_fk_cache: NestedFKCache
+
+    @classmethod
+    def for_schema(cls, schema: OpenApiSchema) -> InferenceState:
+        return cls(
+            resolver=schema.root_resolver,
+            candidate_resource_names=naming.collect_candidate_resource_names(schema.raw_schema),
+            resources={},
+            updated_resources=set(),
+            canonicalization_cache={},
+            response_resource_cache={},
+            nested_fk_cache={},
+        )
+
+
 def cached_resources_from_responses(
-    *,
-    operation: APIOperation,
-    resources: ResourceMap,
-    updated_resources: set[str],
-    resolver: Resolver,
-    canonicalization_cache: CanonicalizationCache,
-    cache: ResponseResourceCache,
+    *, operation: APIOperation, state: InferenceState
 ) -> list[tuple[OpenApiResponse, ExtractedResource]]:
     """Materialize an operation's response resources once; replay on repeat scans.
 
     Both input resolution and output extraction scan the same responses within one
     operation's analysis pass; the first call registers resources, the rest reuse the list.
     """
+    cache = state.response_resource_cache
     cached = cache.get(operation.label)
     if cached is None:
-        cached = list(
-            extract_resources_from_responses(
-                operation=operation,
-                resources=resources,
-                updated_resources=updated_resources,
-                resolver=resolver,
-                canonicalization_cache=canonicalization_cache,
-            )
-        )
+        cached = list(extract_resources_from_responses(operation=operation, state=state))
         cache[operation.label] = cached
     return cached
 
@@ -114,11 +136,11 @@ def iter_resources_from_response(
     method: str,
     path: str,
     response: OpenApiResponse,
-    resources: ResourceMap,
-    updated_resources: set[str],
-    resolver: Resolver,
-    canonicalization_cache: CanonicalizationCache,
+    state: InferenceState,
 ) -> Iterator[ExtractedResource]:
+    resources = state.resources
+    updated_resources = state.updated_resources
+    canonicalization_cache = state.canonicalization_cache
     schema = response.get_raw_schema()
 
     if isinstance(schema, bool):
@@ -150,6 +172,8 @@ def iter_resources_from_response(
                 yield primitive_array
                 return None
 
+    current_resolver = response.resolver if response.resolver is not None else state.resolver
+
     # Handle map-by-id GET responses: `{type: object, additionalProperties: <object>}` with no
     # explicit properties. Keys are the identifiers (Kubernetes pod-statuses, TBA team-statuses).
     if method == "get" and schema_type == "object" and not schema.get("properties"):
@@ -157,24 +181,41 @@ def iter_resources_from_response(
         if isinstance(additional, dict) and (additional.get("type") == "object" or "$ref" in additional):
             map_resource = _resource_from_map_by_id(path=path, resources=resources)
             if map_resource is not None:
+                # The values are what the response declares, not the resource the keys identify.
+                map_resource.response_fields = _declared_fields(additional, current_resolver)
                 yield map_resource
                 return None
 
-    current_resolver = response.resolver if response.resolver is not None else resolver
     parent_ref = schema.get("$ref")
-    _, resolved = maybe_resolve_with_resolver(schema, current_resolver)
+    _, resolved = maybe_resolve_with_resolver(schema, current_resolver, allow_boolean=True)
 
-    # Sometimes data is wrapped in a single wrapper field
-    # Common patterns: {data: {...}}, {result: {...}}, {response: {...}}
+    # Sometimes data is wrapped in a wrapper field, optionally next to request metadata
+    # Common patterns: {data: {...}}, {result: {...}, status: ..., time: ...}
     pointer = None
     properties = resolved.get("properties", {})
-    if properties and len(properties) == 1:
-        wrapper_field = list(properties)[0]
-        # Check if it's a known wrapper field name
-        common_wrappers = {"data", "result", "response", "payload", "content"}
-        if wrapper_field.lower() in common_wrappers:
-            pointer = f"/{wrapper_field}"
-            resolved = properties[wrapper_field]
+    wrapper_field = _envelope_wrapper_field(properties)
+    # Next to metadata, a referenced list is a pagination wrapper (`{data: List, meta: ...}`) handled further down,
+    # and an object without properties (free-form or a map) carries no fields worth unwrapping into.
+    if wrapper_field is not None and (
+        len(properties) == 1
+        or not (
+            _is_referenced_array(properties[wrapper_field], current_resolver)
+            or _is_object_without_properties(properties[wrapper_field], current_resolver)
+        )
+    ):
+        pointer = f"/{wrapper_field}"
+        resolved = properties[wrapper_field]
+        # A created id wrapped next to status fields: `{httpStatus: ..., response: "<id>"}`
+        if method == "post" and resolved.get("type") in ("string", "integer"):
+            primitive_resource = _resource_from_primitive_response(path=path, resources=resources, pointer=pointer)
+            if primitive_resource is not None:
+                yield primitive_resource
+            return None
+        if len(properties) > 1 and "$ref" in resolved:
+            # The wrapped schema names the resource and may hold a nested page (`{response: Page, status}`),
+            # which the steps below only see once resolved.
+            parent_ref = resolved["$ref"]
+            _, resolved = maybe_resolve_with_resolver(resolved, current_resolver)
 
     resolved = try_unwrap_composition(resolved, current_resolver)
 
@@ -188,7 +229,7 @@ def iter_resources_from_response(
                     current_resolver,
                     nullable_keyword=response.adapter.nullable_keyword,
                 )
-            except (InfiniteRecursiveReference, BundleError):
+            except BundleError:
                 canonicalized = resolved
             if parent_ref is not None:
                 canonicalization_cache[parent_ref] = canonicalized
@@ -218,13 +259,25 @@ def iter_resources_from_response(
     )
 
     if result is not None:
-        resource, cardinality = result
+        resource, cardinality, response_fields = result
+        if canonicalized is not resolved and unwrapped.pointer == ROOT_POINTER and cardinality == Cardinality.ONE:
+            # Flattening keeps one `allOf` reference only; the fields of every inherited schema belong to the response
+            response_fields = _declared_fields(resolved, current_resolver)
+        identifier_pointer = None
+        if pointer is None and unwrapped.pointer != ROOT_POINTER and cardinality == Cardinality.ONE:
+            identifier_pointer = _envelope_identifier_pointer(canonicalized, resource.name)
         if pointer:
             if unwrapped.pointer != ROOT_POINTER:
                 pointer += unwrapped.pointer
         else:
             pointer = unwrapped.pointer
-        yield ExtractedResource(resource=resource, cardinality=cardinality, pointer=pointer)
+        yield ExtractedResource(
+            resource=resource,
+            cardinality=cardinality,
+            pointer=pointer,
+            response_fields=response_fields,
+            identifier_pointer=identifier_pointer,
+        )
         parent_cardinality = cardinality
         # Look for sub-resources. When the unwrapped schema is an array (MANY producer),
         # descend into `items` so we examine the per-element object's properties.
@@ -253,10 +306,13 @@ def iter_resources_from_response(
                             parent_ref=reference,
                         )
                         if sub_result is not None:
-                            subresource, sub_cardinality = sub_result
+                            subresource, sub_cardinality, sub_fields = sub_result
                             subresource_pointer = extend_pointer(pointer, field, parent_cardinality=parent_cardinality)
                             yield ExtractedResource(
-                                resource=subresource, cardinality=sub_cardinality, pointer=subresource_pointer
+                                resource=subresource,
+                                cardinality=sub_cardinality,
+                                pointer=subresource_pointer,
+                                response_fields=sub_fields,
                             )
                             # When the sub-schema is itself a pagination/list wrapper (e.g. Spring
                             # `CustomResponse{response: {content: [...]}}`), descend one more level
@@ -276,12 +332,68 @@ def iter_resources_from_response(
                                         parent_ref=sub_unwrapped.ref or reference,
                                     )
                                     if inner_result is not None:
-                                        inner_resource, inner_cardinality = inner_result
+                                        inner_resource, inner_cardinality, inner_fields = inner_result
                                         yield ExtractedResource(
                                             resource=inner_resource,
                                             cardinality=inner_cardinality,
                                             pointer=subresource_pointer + sub_unwrapped.pointer,
+                                            response_fields=inner_fields,
                                         )
+
+
+ENVELOPE_WRAPPER_FIELDS = frozenset({"data", "result", "response", "payload", "content"})
+# Siblings a wrapper may carry without them describing the wrapped resource. Matched by name
+# only: an `id` next to `result` identifies the response itself, so it must block unwrapping.
+ENVELOPE_METADATA_FIELDS = frozenset(
+    {
+        "status",
+        "httpstatus",
+        "time",
+        "usage",
+        "message",
+        "messages",
+        "success",
+        "issuccess",
+        "error",
+        "errors",
+        "warnings",
+        "meta",
+        "metadata",
+    }
+)
+
+
+def _envelope_wrapper_field(properties: Mapping[str, Any]) -> str | None:
+    wrappers = [name for name in properties if name.lower() in ENVELOPE_WRAPPER_FIELDS]
+    if len(wrappers) != 1:
+        return None
+    if all(name == wrappers[0] or name.lower() in ENVELOPE_METADATA_FIELDS for name in properties):
+        return wrappers[0]
+    return None
+
+
+def _envelope_identifier_pointer(envelope: Mapping[str, Any], resource_name: str) -> str | None:
+    # `{bookingid: 1, booking: {...}}`: the identifier of the wrapped booking sits next to it
+    properties = envelope["properties"]
+    identifier = naming.normalize_for_matching(resource_name) + "id"
+    for name in properties:
+        if naming.normalize_for_matching(name) == identifier:
+            return f"/{encode_pointer(name)}"
+    return None
+
+
+def _is_referenced_array(schema: Mapping[str, Any], resolver: Resolver) -> bool:
+    if "$ref" not in schema:
+        return False
+    _, resolved = maybe_resolve_with_resolver(schema, resolver)
+    return resolved.get("type") == "array" or "items" in resolved
+
+
+def _is_object_without_properties(schema: Mapping[str, Any], resolver: Resolver) -> bool:
+    _, resolved = maybe_resolve_with_resolver(schema, resolver)
+    return resolved.get("type") == "object" and not any(
+        keyword in resolved for keyword in ("properties", "allOf", "anyOf", "oneOf")
+    )
 
 
 def _recover_ref_from_allof(*, branches: list[dict], pointer: str, resolver: Resolver) -> str | None:
@@ -323,7 +435,9 @@ def _resource_from_boolean_schema(*, path: str, resources: ResourceMap) -> Extra
     return ExtractedResource(resource=resource, cardinality=Cardinality.ONE, pointer=ROOT_POINTER)
 
 
-def _resource_from_primitive_response(*, path: str, resources: ResourceMap) -> ExtractedResource | None:
+def _resource_from_primitive_response(
+    *, path: str, resources: ResourceMap, pointer: str = ROOT_POINTER
+) -> ExtractedResource | None:
     """Handle POST/PUT returning a bare primitive identifier (e.g., slug string or integer ID)."""
     name = from_path(path)
     if name is None:
@@ -339,7 +453,7 @@ def _resource_from_primitive_response(*, path: str, resources: ResourceMap) -> E
     return ExtractedResource(
         resource=resource,
         cardinality=Cardinality.ONE,
-        pointer=ROOT_POINTER,
+        pointer=pointer,
         is_primitive_identifier=True,
     )
 
@@ -402,8 +516,8 @@ def _extract_resource_and_cardinality(
     updated_resources: set[str],
     resolver: Resolver,
     parent_ref: str | None = None,
-) -> tuple[ResourceDefinition, Cardinality] | None:
-    """Extract resource from schema and determine cardinality."""
+) -> tuple[ResourceDefinition, Cardinality, frozenset[str] | None] | None:
+    """Extract resource from schema and determine cardinality, with the fields the schema declares."""
     # Check if it's an array
     if schema.get("type") == "array" or "items" in schema:
         items = schema.get("items")
@@ -427,7 +541,7 @@ def _extract_resource_and_cardinality(
         if resource is None:
             return None
 
-        return resource, Cardinality.MANY
+        return resource, Cardinality.MANY, _declared_fields(resolved_items, resolver)
 
     # Single object
     resource = _extract_resource_from_schema(
@@ -442,7 +556,7 @@ def _extract_resource_and_cardinality(
     if resource is None:
         return None
 
-    return resource, Cardinality.ONE
+    return resource, Cardinality.ONE, _declared_fields(schema, resolver)
 
 
 def _extract_resource_from_schema(
@@ -471,30 +585,36 @@ def _extract_resource_from_schema(
     resource = resources.get(resource_name)
 
     if resource is None or resource.source < DefinitionSource.SCHEMA_WITH_PROPERTIES:
-        _, resolved = maybe_resolve_with_resolver(schema, resolver)
+        schema_resolver, resolved = maybe_resolve_with_resolver(schema, resolver)
 
         if "type" in resolved and resolved["type"] != "object" and "properties" not in resolved:
             # Skip strings, etc
             return None
 
-        properties = resolved.get("properties")
-        if isinstance(properties, dict) and properties:
+        properties = _collect_properties(resolved, schema_resolver)
+        if properties:
             fields = sorted(properties)
             types = {}
-            for field, subschema in properties.items():
+            for field, (field_resolver, subschema) in properties.items():
+                resolved_subschema: Mapping[str, Any] | bool = subschema
                 if isinstance(subschema, dict):
-                    _, resolved_subschema = maybe_resolve_with_resolver(subschema, resolver)
-                else:
-                    resolved_subschema = subschema
+                    _, resolved_subschema = maybe_resolve_with_resolver(subschema, field_resolver)
                 types[field] = set(get_type(cast(dict, resolved_subschema)))
+            own = resolved.get("properties")
+            inherited_fields = frozenset(properties) - frozenset(own if isinstance(own, dict) else ())
             source = DefinitionSource.SCHEMA_WITH_PROPERTIES
             # Pre-compute FK fields for efficient link generation
             fk_fields = extract_fk_fields(fields)
-            # Extract nested FK fields from the schema
-            nested_fk_fields = extract_nested_fk_fields(resolved, resolver)
+            # Extract nested FK fields from the schema, including the ones under inherited properties
+            nested_fk_fields = [
+                nested
+                for field, (field_resolver, subschema) in properties.items()
+                for nested in extract_nested_fk_fields({"properties": {field: subschema}}, field_resolver)
+            ]
         else:
             fields = []
             types = {}
+            inherited_fields = frozenset()
             source = DefinitionSource.SCHEMA_WITHOUT_PROPERTIES
             fk_fields = []
             nested_fk_fields = []
@@ -505,6 +625,7 @@ def _extract_resource_from_schema(
                 resource.types = types
                 resource.fk_fields = fk_fields
                 resource.nested_fk_fields = nested_fk_fields
+                resource.inherited_fields = inherited_fields
                 updated_resources.add(resource_name)
         else:
             resource = ResourceDefinition(
@@ -514,6 +635,7 @@ def _extract_resource_from_schema(
                 source=source,
                 fk_fields=fk_fields,
                 nested_fk_fields=nested_fk_fields,
+                inherited_fields=inherited_fields,
             )
             resources[resource_name] = resource
 
@@ -531,3 +653,203 @@ def remove_unused_resources(operations: OperationMap, resources: ResourceMap) ->
     unused = set(resources.keys()) - used_resources
     for resource_name in unused:
         del resources[resource_name]
+
+
+Properties: TypeAlias = dict[str, tuple[Resolver, JsonSchema]]
+# Properties behind a reference, with every reference consulted while collecting them.
+PropertiesCache: TypeAlias = dict[tuple[str, str], tuple[Properties, frozenset[str]]]
+
+
+def _collect_properties(schema: Mapping[str, Any], resolver: Resolver) -> Properties:
+    return _collect_inherited_properties(schema, resolver, frozenset(), {})[0]
+
+
+def _collect_inherited_properties(
+    schema: Mapping[str, Any], resolver: Resolver, seen: frozenset[str], cache: PropertiesCache
+) -> tuple[Properties, frozenset[str]]:
+    # Properties inherited through `allOf` belong to the resource as much as its own ones.
+    properties: Properties = {}
+    own = schema.get("properties")
+    if isinstance(own, dict):
+        properties.update((name, (resolver, subschema)) for name, subschema in own.items())
+    branches = schema.get("allOf")
+    if not isinstance(branches, list):
+        return properties, frozenset()
+    consulted: set[str] = set()
+    for branch in branches:
+        if not isinstance(branch, dict):
+            continue
+        reference = branch.get("$ref")
+        if reference is None:
+            branch_properties, branch_consulted = _collect_inherited_properties(branch, resolver, seen, cache)
+        else:
+            if not isinstance(reference, str):
+                continue
+            consulted.add(reference)
+            if reference in seen:
+                continue
+            key = (resolver.base_uri, reference)
+            cached = cache.get(key)
+            # Reusable only when no reference it consulted is on the current path, as the cycle guard would differ
+            if cached is not None and seen.isdisjoint(cached[1]):
+                branch_properties, branch_consulted = cached
+            else:
+                try:
+                    branch_resolver, resolved = maybe_resolve_with_resolver(branch, resolver)
+                except (RefResolutionError, InvalidSchema):
+                    continue
+                branch_properties, branch_consulted = _collect_inherited_properties(
+                    resolved, branch_resolver, seen | {reference}, cache
+                )
+                if seen.isdisjoint(branch_consulted):
+                    cache[key] = (branch_properties, branch_consulted)
+        consulted.update(branch_consulted)
+        for name, entry in branch_properties.items():
+            properties.setdefault(name, entry)
+    return properties, frozenset(consulted)
+
+
+def write_only_fields(response: OpenApiResponse, resolver: Resolver) -> set[str]:
+    """Top-level fields the response declares `writeOnly`, which therefore never appear in it."""
+    schema = response.get_raw_schema()
+    if not isinstance(schema, dict):
+        return set()
+    current_resolver = response.resolver if response.resolver is not None else resolver
+    try:
+        schema_resolver, resolved = maybe_resolve_with_resolver(schema, current_resolver)
+        fields = set()
+        for name, (field_resolver, subschema) in _collect_properties(resolved, schema_resolver).items():
+            if not isinstance(subschema, dict):
+                continue
+            _, field = maybe_resolve_with_resolver(subschema, field_resolver)
+            branches = field.get("allOf")
+            if any(
+                isinstance(node, dict) and node.get("writeOnly") is True
+                for node in (subschema, field, *(branches if isinstance(branches, list) else ()))
+            ):
+                fields.add(name)
+    except (RefResolutionError, InvalidSchema):
+        return set()
+    return fields
+
+
+def declared_field_values(response: OpenApiResponse, pointer: str, field: str, resolver: Resolver) -> list[Any] | None:
+    """Values the response allows for `field` of the object at `pointer`; `None` when it does not list them."""
+    schema = response.get_raw_schema()
+    # Outputs come from the response body, so the schema is an object.
+    assert isinstance(schema, dict)
+    current_resolver = response.resolver if response.resolver is not None else resolver
+    current: Any = schema
+    # References up to the field were resolved when the output was extracted; the field's own are resolved below.
+    for name in [*(decode_pointer(part) for part in pointer.split("/") if part), field]:
+        current_resolver, current = maybe_resolve_with_resolver(current, current_resolver)
+        entry = _collect_properties(current, current_resolver).get(name)
+        # A field declared without a schema (`true`) may hold anything.
+        if entry is None or not isinstance(entry[1], dict):
+            return None
+        current_resolver, current = entry
+    return allowed_values(current, current_resolver)
+
+
+def allowed_values(schema: Mapping[str, Any], resolver: Resolver | None) -> list[Any] | None:
+    """Values `enum` or `const` limit `schema` to that its `type` allows; `None` when it lists none.
+
+    Without a resolver, references are skipped.
+    """
+    values: list[Any] | None = None
+    types: set[str] | None = None
+    nullable = False
+    pending: list[tuple[Resolver | None, Mapping[str, Any]]] = [(resolver, schema)]
+    # `allOf` chains may be recursive.
+    seen: set[int] = set()
+    while pending:
+        current_resolver, node = pending.pop()
+        if "$ref" in node:
+            if current_resolver is None:
+                continue
+            try:
+                current_resolver, node = maybe_resolve_with_resolver(node, current_resolver)
+            except (RefResolutionError, InvalidSchema):
+                continue
+        if id(node) in seen:
+            continue
+        seen.add(id(node))
+        listed = [node["const"]] if "const" in node else node.get("enum")
+        if isinstance(listed, list):
+            values = listed if values is None else [value for value in values if contains_value(listed, value)]
+        declared = node.get("type")
+        if isinstance(declared, (str, list)):
+            node_types = {declared} if isinstance(declared, str) else set(declared)
+            types = node_types if types is None else _intersect_types(types, node_types)
+        if node.get("nullable") is True or node.get("x-nullable") is True:
+            nullable = True
+        branches = node.get("allOf")
+        if isinstance(branches, list):
+            pending.extend((current_resolver, branch) for branch in branches if isinstance(branch, dict))
+    if values is None:
+        return None
+    # `nullable` adds `null` to the type; `enum` still decides whether `null` is allowed.
+    if nullable and types is not None:
+        types = types | {"null"}
+    # A listed value the declared `type` rules out never appears in a valid instance.
+    if types is not None:
+        values = [
+            value
+            for value in values
+            if _json_type(value) in types or (_json_type(value) == "integer" and "number" in types)
+        ]
+    return values
+
+
+def _intersect_types(left: set[str], right: set[str]) -> set[str]:
+    common = left & right
+    # `integer` is a subset of `number`.
+    if ("integer" in left and "number" in right) or ("number" in left and "integer" in right):
+        common.add("integer")
+    return common
+
+
+_JSON_TYPES = {
+    type(None): "null",
+    bool: "boolean",
+    int: "integer",
+    float: "number",
+    str: "string",
+    list: "array",
+    dict: "object",
+}
+
+
+def _json_type(value: Any) -> str:
+    # JSON Schema counts whole floats (`1.0`) as integers.
+    if isinstance(value, float) and value.is_integer():
+        return "integer"
+    # YAML may also load dates and similar values, which no JSON type matches.
+    return _JSON_TYPES.get(type(value), "object")
+
+
+def contains_value(values: list[Any], value: Any) -> bool:
+    # JSON Schema equality: `1` equals `1.0`, but a boolean is never a number.
+    return any(candidate == value and isinstance(candidate, bool) == isinstance(value, bool) for candidate in values)
+
+
+def _declared_fields(schema: Mapping[str, Any], resolver: Resolver) -> frozenset[str] | None:
+    """Fields declared by an object schema, its `allOf` parents, and any of its `oneOf` / `anyOf` alternatives."""
+    schema_resolver, resolved = maybe_resolve_with_resolver(schema, resolver)
+    if "object" not in get_type(cast(dict, resolved)) and "properties" not in resolved:
+        # Binary or scalar bodies carry no fields at all
+        return frozenset()
+    fields = set(_collect_properties(resolved, schema_resolver))
+    for keyword in ("oneOf", "anyOf"):
+        alternatives = resolved.get(keyword)
+        if not isinstance(alternatives, list):
+            continue
+        for alternative in alternatives:
+            if not isinstance(alternative, dict):
+                continue
+            try:
+                alternative_resolver, alternative = maybe_resolve_with_resolver(alternative, schema_resolver)
+            except (RefResolutionError, InvalidSchema):
+                continue
+            fields.update(_collect_properties(alternative, alternative_resolver))
+    return frozenset(fields) or None

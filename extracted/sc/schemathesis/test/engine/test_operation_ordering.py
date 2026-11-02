@@ -2,13 +2,18 @@ import threading
 from queue import Queue
 
 import pytest
+from flask import jsonify
 
+import schemathesis
+from schemathesis.engine import events
 from schemathesis.engine.context import EngineContext
 from schemathesis.engine.run import Phase, PhaseName
 from schemathesis.engine.run.unit import _create_scheduler
 from schemathesis.engine.run.unit._layered_scheduler import LayeredScheduler
 from schemathesis.specs.openapi._ordering import compute_operation_layers
 from schemathesis.specs.openapi.stateful.dependencies.layers import compute_dependency_layers
+from test.apps.fragments.schemas import null_name_responses
+from test.utils import EventStream
 
 
 def _operations(schema):
@@ -616,6 +621,42 @@ def test_cycle_detection_inferred_dependencies(ctx, operations, expected_layers)
         assert set(layers[i]) == expected_layer
 
 
+def test_dependent_of_two_cycles_waits_for_both(ctx):
+    items_response = {
+        "200": {
+            "description": "OK",
+            "content": {
+                "application/json": {"schema": {"type": "object", "properties": {"itemId": {"type": "string"}}}}
+            },
+        }
+    }
+    users_response = {
+        "200": {
+            "description": "OK",
+            "content": {
+                "application/json": {"schema": {"type": "object", "properties": {"userId": {"type": "string"}}}}
+            },
+        }
+    }
+    item_query = {"name": "itemId", "in": "query", "schema": {"type": "string"}}
+    user_query = {"name": "userId", "in": "query", "schema": {"type": "string"}}
+    id_path = {"name": "id", "in": "path", "required": True, "schema": {"type": "string"}}
+    loaded = ctx.openapi.load_schema(
+        {
+            "/items": {"get": {"parameters": [item_query], "responses": items_response}},
+            "/items/{id}": {"get": {"parameters": [id_path, item_query], "responses": items_response}},
+            "/users": {"get": {"parameters": [user_query], "responses": users_response}},
+            "/users/{id}": {"get": {"parameters": [id_path, user_query], "responses": users_response}},
+            "/report": {"get": {"parameters": [item_query, user_query], "responses": {"204": {"description": "OK"}}}},
+        }
+    )
+
+    assert compute_dependency_layers(loaded.analysis.dependency_graph) == [
+        ["GET /items", "GET /items/{id}", "GET /users", "GET /users/{id}"],
+        ["GET /report"],
+    ]
+
+
 def test_create_scheduler_respects_layer_order_for_single_layer(ctx):
     # Methods listed GET-first to demonstrate that schema-iteration order does
     # not happen to match the desired RESTful order. The scheduler should
@@ -628,21 +669,7 @@ def test_create_scheduler_respects_layer_order_for_single_layer(ctx):
                     "parameters": [
                         {"name": "productName", "in": "path", "required": True, "schema": {"type": "string"}}
                     ],
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "required": ["name"],
-                                        "properties": {"name": {"type": "string"}},
-                                    }
-                                }
-                            },
-                        },
-                        "404": {"description": "Not found"},
-                    },
+                    "responses": null_name_responses(),
                 },
                 "post": {
                     "operationId": "createProduct",
@@ -658,7 +685,7 @@ def test_create_scheduler_respects_layer_order_for_single_layer(ctx):
     engine = EngineContext(schema=loaded, stop_event=threading.Event())
     phase = Phase(name=PhaseName.FUZZING, is_enabled=True)
 
-    scheduler = _create_scheduler(engine, phase)
+    scheduler, _ = _create_scheduler(engine, phase)
 
     dispatched: list[str] = []
     while True:
@@ -711,7 +738,7 @@ def test_operation_with_unresolvable_ref_is_still_dispatched(ctx):
     )
 
     engine = EngineContext(schema=loaded, stop_event=threading.Event())
-    scheduler = _create_scheduler(engine, Phase(name=PhaseName.FUZZING, is_enabled=True))
+    scheduler, _ = _create_scheduler(engine, Phase(name=PhaseName.FUZZING, is_enabled=True))
 
     dispatched = []
     while True:
@@ -721,6 +748,62 @@ def test_operation_with_unresolvable_ref_is_still_dispatched(ctx):
         dispatched.append(result.ok().label)
 
     assert sorted(dispatched) == sorted(operation.label for operation in _operations(loaded))
+
+
+# A definition-level schema error must not abort a dependency-ordered run; it is reported after all layers finish.
+def test_layered_run_reports_operations_with_schema_errors(ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/users": {
+                "post": {
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {"userId": {"type": "string"}},
+                                        "required": ["userId"],
+                                    }
+                                }
+                            },
+                        }
+                    }
+                }
+            },
+            "/users/{userId}": {
+                "get": {
+                    "parameters": [_path_param(name="userId", param_type="string")],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+            "/broken": {
+                "get": {
+                    "parameters": [{"$ref": "#/components/parameters/Missing"}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+
+    @app.route("/users", methods=["POST"])
+    def create_user():
+        return jsonify({"userId": "1"}), 201
+
+    @app.route("/users/<user_id>")
+    def get_user(user_id):
+        return jsonify({})
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    stream = EventStream(schema, phases=[PhaseName.FUZZING], max_examples=1).execute()
+    assert [(event.label, event.info.format()) for event in stream.find_all(events.NonFatalError)] == [
+        (
+            "GET /broken",
+            "Schema Error\n\nUnresolvable reference in the schema\n\nError details:\n"
+            "    Reference: #/components/parameters/Missing\n    Component does not exist in the schema.",
+        )
+    ]
 
 
 def test_create_scheduler_filters_to_requested_operations(ctx):
@@ -733,21 +816,7 @@ def test_create_scheduler_filters_to_requested_operations(ctx):
                     "parameters": [
                         {"name": "productName", "in": "path", "required": True, "schema": {"type": "string"}}
                     ],
-                    "responses": {
-                        "200": {
-                            "description": "OK",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "required": ["name"],
-                                        "properties": {"name": {"type": "string"}},
-                                    }
-                                }
-                            },
-                        },
-                        "404": {"description": "Not found"},
-                    },
+                    "responses": null_name_responses(),
                 },
                 "post": {
                     "operationId": "createProduct",
@@ -762,7 +831,7 @@ def test_create_scheduler_filters_to_requested_operations(ctx):
     engine = EngineContext(schema=loaded, stop_event=threading.Event())
     phase = Phase(name=PhaseName.COVERAGE, is_enabled=True)
 
-    scheduler = _create_scheduler(engine, phase, only=frozenset({"GET /products/{productName}"}))
+    scheduler, _ = _create_scheduler(engine, phase, only=frozenset({"GET /products/{productName}"}))
 
     dispatched: list[str] = []
     while True:

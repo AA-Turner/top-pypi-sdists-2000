@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Container, Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from functools import lru_cache
 from typing import TYPE_CHECKING, Any
@@ -8,70 +8,53 @@ from typing import TYPE_CHECKING, Any
 from hypothesis import strategies as st
 from hypothesis.stateful import RULE_MARKER, Bundle, Rule
 
-from schemathesis.checks import CheckFunction
 from schemathesis.core import NOT_SET
 from schemathesis.core.errors import InvalidStateMachine, InvalidTransition
 from schemathesis.core.parameters import CONTAINER_TO_LOCATION, ParameterLocation
 from schemathesis.core.result import Ok
 from schemathesis.core.transforms import UNRESOLVABLE
-from schemathesis.core.transport import Response, expand_status_code
+from schemathesis.core.transport import expand_status_code
 from schemathesis.engine.link_calibration import DEFAULT_USE_PROBABILITY, LinkCalibrationState
-from schemathesis.engine.recorder import ScenarioRecorder
 from schemathesis.generation import GenerationMode
 from schemathesis.generation.case import Case
+from schemathesis.generation.feedback import NO_FEEDBACK, FeedbackSources
+from schemathesis.generation.hypothesis import add_database_key
 from schemathesis.generation.meta import TestPhase
-from schemathesis.generation.stateful import STATEFUL_TESTS_LABEL
 from schemathesis.generation.stateful.control import TransitionController
 from schemathesis.generation.stateful.state_machine import (
     BASE_EXPLORATION_RATE,
     APIStateMachine,
+    RecordingStateMachine,
     StepInput,
     StepOutput,
-    _normalize_name,
+    Transition,
+    normalize_name,
+    unique_rule_name,
 )
+from schemathesis.generation.value import prune_overwritten_body_constants
 from schemathesis.schemas import APIOperation
-from schemathesis.specs.openapi.adapter.parameters import _prune_overwritten_body_constants
 from schemathesis.specs.openapi.expressions import MultiMatch
 from schemathesis.specs.openapi.stateful.links import OpenApiLink
 
 if TYPE_CHECKING:
-    from schemathesis.core.error_feedback import ErrorFeedbackStore
+    from random import Random
+
+    from schemathesis.core.jsonschema.types import JsonValue
     from schemathesis.generation.stateful.state_machine import StepOutput
-    from schemathesis.python._constants.pool import ConstantsPool
-    from schemathesis.resources import ExtraDataSource
     from schemathesis.specs.openapi.schemas import OpenApiSchema
     from schemathesis.specs.openapi.stateful.dependencies.models import DependencyGraph, OperationNode
 
 FilterFunction = Callable[["StepOutput"], bool]
 
 
-class OpenAPIStateMachine(APIStateMachine):
+class OpenAPIStateMachine(RecordingStateMachine):
     _response_matchers: dict[str, Callable[[StepOutput], str | None]]
     _transitions: ApiTransitions
+    _root_labels: frozenset[str]
 
     def __init__(self) -> None:
-        self.recorder = ScenarioRecorder(label=STATEFUL_TESTS_LABEL, config=self.schema.config.output)
-        self.control = TransitionController(self._transitions)
+        self.control = TransitionController(self._transitions, self._root_labels)
         super().__init__()
-
-    def after_call(self, response: Response, case: Case) -> None:
-        # Always record responses so stateful checks can look up prior responses
-        self.recorder.record_response(case_id=case.id, response=response)
-
-    def validate_response(
-        self,
-        response: Response,
-        case: Case,
-        additional_checks: list[CheckFunction] | None = None,
-        **kwargs: Any,
-    ) -> None:
-        __tracebackhide__ = True
-        case.validate_response(
-            response,
-            additional_checks=additional_checks,
-            transport_kwargs=kwargs or None,
-            recorder=self.recorder,
-        )
 
     def _get_target_for_result(self, result: StepOutput) -> str | None:
         matcher = self._response_matchers.get(result.case.operation.label)
@@ -79,8 +62,28 @@ class OpenAPIStateMachine(APIStateMachine):
             return None
         return matcher(result)
 
+    def _feeds_later_steps(self, output: StepOutput) -> bool:
+        """Whether a link that can follow this response extracts at least one value from it."""
+        bundle_name = self._get_target_for_result(output)
+        if bundle_name is None:
+            return False
+        source = output.case.operation.label
+        return any(
+            _extracts_value(link.extract(output))
+            for link in self._transitions.operations[source].outgoing
+            if f"{source} -> {link.status_code}" == bundle_name
+        )
 
-# The proportion of negative tests generated for "root" transitions
+
+def _extracts_value(transition: Transition) -> bool:
+    values = [extracted.value for container in transition.parameters.values() for extracted in container.values()]
+    if transition.request_body is not None:
+        values.append(transition.request_body.value)
+    # A link without parameters or body needs no data to be followed
+    return not values or any(isinstance(value, Ok) and value.ok() not in (None, UNRESOLVABLE) for value in values)
+
+
+# The proportion of negative tests generated for each step
 NEGATIVE_TEST_CASES_THRESHOLD = 10
 
 
@@ -153,30 +156,47 @@ def collect_transitions(operations: list[APIOperation]) -> ApiTransitions:
     return transitions
 
 
-@st.composite  # type: ignore[untyped-decorator]
+@st.composite
 def _mixed_mode_case(draw: st.DrawFn, strategies: dict[GenerationMode, st.SearchStrategy]) -> Case:
     if draw(st.integers(min_value=0, max_value=99)) < NEGATIVE_TEST_CASES_THRESHOLD:
         return draw(strategies[GenerationMode.NEGATIVE])
     return draw(strategies[GenerationMode.POSITIVE])
 
 
-def _unique_rule_name(name: str, taken: Container[str]) -> str:
-    """Operations differing only in punctuation (`/users` vs `/users/`) normalize alike; keep them separate rules."""
-    if name not in taken:
-        return name
-    suffix = 2
-    while f"{name}_{suffix}" in taken:
-        suffix += 1
-    return f"{name}_{suffix}"
+def _step_case_strategy(
+    target: APIOperation,
+    modes: list[GenerationMode],
+    *,
+    feedback: FeedbackSources,
+    path_parameters: dict[str, object] | None = None,
+    query: dict[str, object] | None = None,
+    headers: dict[str, object] | None = None,
+    cookies: dict[str, object] | None = None,
+    body: object = NOT_SET,
+) -> st.SearchStrategy[Case]:
+    strategies = {
+        mode: target.as_strategy(
+            generation_mode=mode,
+            phase=TestPhase.STATEFUL,
+            feedback=feedback,
+            path_parameters=path_parameters,
+            query=query,
+            headers=headers,
+            cookies=cookies,
+            body=body,
+        )
+        for mode in modes
+    }
+    if len(modes) == 1:
+        return strategies[modes[0]]
+    return _mixed_mode_case(strategies)
 
 
 def create_state_machine(
     schema: OpenApiSchema,
     *,
-    error_feedback: ErrorFeedbackStore | None = None,
+    feedback: FeedbackSources = NO_FEEDBACK,
     link_calibration: LinkCalibrationState | None = None,
-    extra_data_source: ExtraDataSource | None = None,
-    constants_value_source: ConstantsPool | None = None,
 ) -> type[APIStateMachine]:
     operations = [
         result.ok()
@@ -205,6 +225,7 @@ def create_state_machine(
             _response_matchers[operation.label] = make_response_matcher(bundle_matchers)
 
     rules: dict[str, Callable[..., StepOutput | None]] = {}
+    root_rules: set[str] = set()
     catch_all = Bundle("catch_all")
 
     # We want stateful testing to be effective and focus on meaningful transitions.
@@ -227,6 +248,7 @@ def create_state_machine(
     #   3. Focus on transitions that are designed to work together via links
 
     roots = classify_root_transitions(operations, transitions, schema.analysis.dependency_graph)
+    root_labels: set[str] = set()
 
     for target in operations:
         if target.label in transitions.operations:
@@ -237,55 +259,39 @@ def create_state_machine(
             if incoming:
                 for link in incoming:
                     bundle_name = f"{link.source.label} -> {link.status_code}"
-                    name = _unique_rule_name(_normalize_name(link.full_name), rules)
+                    name = unique_rule_name(normalize_name(link.full_name), rules)
                     rules[name] = transition(
                         name=name,
                         target=catch_all,
-                        precondition=is_transition_allowed(bundle_name, link.source.label, target.label),
+                        source_bundle=bundles[bundle_name],
+                        precondition=is_transition_allowed(link.source.label, target.label),
                         input=bundles[bundle_name].flatmap(
                             into_step_input(
                                 target=target,
                                 link=link,
                                 modes=config.modes,
-                                error_feedback=error_feedback,
+                                feedback=feedback,
                                 link_calibration=link_calibration,
-                                extra_data_source=extra_data_source,
-                                constants_value_source=constants_value_source,
                             )
                         ),
                     )
             if target.label in roots.reliable or (not roots.reliable and target.label in roots.fallback):
-                name = _unique_rule_name(_normalize_name(f"RANDOM -> {target.label}"), rules)
-                if len(config.modes) == 1:
-                    case_strategy = target.as_strategy(
-                        generation_mode=config.modes[0],
-                        phase=TestPhase.STATEFUL,
-                        error_feedback=error_feedback,
-                        extra_data_source=extra_data_source,
-                        constants_value_source=constants_value_source,
-                    )
-                else:
-                    case_strategy = _mixed_mode_case(
-                        {
-                            method: target.as_strategy(
-                                generation_mode=method,
-                                phase=TestPhase.STATEFUL,
-                                error_feedback=error_feedback,
-                                extra_data_source=extra_data_source,
-                                constants_value_source=constants_value_source,
-                            )
-                            for method in config.modes
-                        }
-                    )
-
+                name = unique_rule_name(normalize_name(f"RANDOM -> {target.label}"), rules)
+                case_strategy = _step_case_strategy(
+                    target,
+                    config.modes,
+                    feedback=feedback,
+                )
                 rules[name] = transition(
                     name=name,
                     target=catch_all,
                     precondition=is_root_allowed(target.label),
                     input=case_strategy.map(StepInput.initial),
                 )
+                root_rules.add(name)
+                root_labels.add(target.label)
 
-    return type(
+    machine = type(
         "APIWorkflow",
         (OpenAPIStateMachine,),
         {
@@ -293,9 +299,13 @@ def create_state_machine(
             "bundles": bundles,
             "_response_matchers": _response_matchers,
             "_transitions": transitions,
+            "root_rules": frozenset(root_rules),
+            "_root_labels": frozenset(root_labels),
             **rules,
         },
     )
+    add_database_key(machine, "\n".join(rules))
+    return machine
 
 
 def classify_root_transitions(
@@ -340,15 +350,13 @@ def into_step_input(
     target: APIOperation,
     link: OpenApiLink,
     modes: list[GenerationMode],
-    error_feedback: ErrorFeedbackStore | None = None,
+    feedback: FeedbackSources = NO_FEEDBACK,
     link_calibration: LinkCalibrationState | None = None,
-    extra_data_source: ExtraDataSource | None = None,
-    constants_value_source: ConstantsPool | None = None,
 ) -> Callable[[StepOutput], st.SearchStrategy[StepInput]]:
     """A single transition between API operations."""
 
     def builder(_output: StepOutput) -> st.SearchStrategy[StepInput]:
-        @st.composite  # type: ignore[untyped-decorator]
+        @st.composite
         def inner(draw: st.DrawFn, output: StepOutput) -> StepInput:
             random = draw(st.randoms(use_true_random=True))
 
@@ -409,7 +417,7 @@ def into_step_input(
                 and isinstance(transition.request_body.value, Ok)
                 and transition.request_body.value.ok() is not UNRESOLVABLE
             ):
-                request_body = transition.request_body.value.ok()
+                request_body = _choose_wildcard_matches(transition.request_body.value.ok(), random)
             else:
                 request_body = NOT_SET
 
@@ -421,20 +429,18 @@ def into_step_input(
                 else:
                     applied_parameters.append((ParameterLocation.BODY, None))
 
-            cases = st.one_of(
-                [
-                    target.as_strategy(
-                        generation_mode=mode,
-                        phase=TestPhase.STATEFUL,
-                        error_feedback=error_feedback,
-                        extra_data_source=extra_data_source,
-                        constants_value_source=constants_value_source,
-                        **overrides,
-                    )
-                    for mode in modes
-                ]
+            case = draw(
+                _step_case_strategy(
+                    target,
+                    modes,
+                    feedback=feedback,
+                    path_parameters=overrides.get("path_parameters"),
+                    query=overrides.get("query"),
+                    headers=overrides.get("headers"),
+                    cookies=overrides.get("cookies"),
+                    body=overrides.get("body", NOT_SET),
+                )
             )
-            case = draw(cases)
             if request_body is not NOT_SET and link.merge_body:
                 if isinstance(request_body, dict):
                     selected_fields = {}
@@ -449,17 +455,15 @@ def into_step_input(
 
                     if selected_fields:
                         if isinstance(case.body, dict):
-                            case.body = {**case.body, **selected_fields}
+                            case.body = _merge_link_body(case.body, selected_fields)
                         else:
                             # Can't merge into non-dict, replace entirely
                             case.body = selected_fields
                 elif biased_coin(use_p):
-                    case.body = request_body
+                    case.body = _merge_link_body(case.body, request_body)
                     applied_parameters.append((ParameterLocation.BODY, None))
                 if case._meta is not None:
-                    case._meta.constants_draws = _prune_overwritten_body_constants(
-                        case._meta.constants_draws, case.body
-                    )
+                    case._meta.constants_draws = prune_overwritten_body_constants(case._meta.constants_draws, case.body)
             return StepInput(case=case, transition=transition, applied_parameters=applied_parameters)
 
         return inner(output=_output)
@@ -467,9 +471,34 @@ def into_step_input(
     return builder
 
 
-def is_transition_allowed(bundle_name: str, source: str, target: str) -> Callable[[OpenAPIStateMachine], bool]:
+def _merge_link_body(generated: object, linked: JsonValue) -> JsonValue:
+    """Apply link values onto the generated body, keeping generated fields of nested objects and array items."""
+    if isinstance(generated, dict) and isinstance(linked, dict):
+        merged = dict(generated)
+        for key, value in linked.items():
+            merged[key] = _merge_link_body(generated[key], value) if key in generated else value
+        return merged
+    if isinstance(generated, list) and isinstance(linked, list):
+        # Link items apply to generated items at the same index; unmatched items on either side are kept.
+        merged_items = [_merge_link_body(item, value) for item, value in zip(generated, linked, strict=False)]
+        return merged_items + generated[len(linked) :] + linked[len(generated) :]
+    return linked
+
+
+def _choose_wildcard_matches(value: Any, random: Random) -> Any:
+    # Each wildcard expression in a body yields several candidates; one is picked per field.
+    if isinstance(value, MultiMatch):
+        return random.choice(value.values)
+    if isinstance(value, dict):
+        return {key: _choose_wildcard_matches(item, random) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_choose_wildcard_matches(item, random) for item in value]
+    return value
+
+
+def is_transition_allowed(source: str, target: str) -> Callable[[OpenAPIStateMachine], bool]:
     def inner(machine: OpenAPIStateMachine) -> bool:
-        return bool(machine.bundles.get(bundle_name)) and machine.control.allow_transition(source, target)
+        return machine.control.allow_transition(source, target)
 
     return inner
 
@@ -485,6 +514,7 @@ def transition(
     *,
     name: str,
     target: Bundle,
+    source_bundle: Bundle | None = None,
     input: st.SearchStrategy[StepInput],
     precondition: Callable[[OpenAPIStateMachine], bool],
 ) -> Callable[..., StepOutput | None]:
@@ -497,25 +527,27 @@ def transition(
                 is_transition_applied=input.is_applied,
             )
         else:
-            self.recorder.record_case(parent_id=None, case=input.case, transition=None, is_transition_applied=False)
+            self.recorder.record_case(case=input.case)
         self.control.record_step(input, self.recorder)
-        return APIStateMachine._step(self, input=input)
+        output = APIStateMachine._step(self, input=input)
+        if input.transition is None and output is not None and self._feeds_later_steps(output):
+            self.control.record_productive_root(input.case.operation.label)
+        return output
 
     step_function.__name__ = name
     step_function.__qualname__ = name
     # Hypothesis' `@rule` / `@precondition` each build their proxy by exec'ing generated source,
     # and every one leaves a module behind for the lifetime of the process. Link-heavy schemas
     # define rules by the thousands, so attach the rule directly instead.
-    setattr(
-        step_function,
-        RULE_MARKER,
-        Rule(
-            targets=(target.name,),
-            function=step_function,
-            arguments={"input": input},
-            preconditions=(precondition,),
-        ),
+    rule = Rule(
+        targets=(target.name,),
+        function=step_function,
+        arguments={"input": input},
+        preconditions=(precondition,),
     )
+    if source_bundle is not None:
+        rule.bundles = (source_bundle,)
+    setattr(step_function, RULE_MARKER, rule)
     return step_function
 
 

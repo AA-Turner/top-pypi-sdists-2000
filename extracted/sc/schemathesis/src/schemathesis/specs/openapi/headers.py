@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from datetime import timezone
+from datetime import UTC
 from email.utils import format_datetime
 from typing import TYPE_CHECKING
 
-from schemathesis.specs.openapi.formats import header_values
+from schemathesis.specs.openapi.formats import HEADER_FORMAT, header_values
 
 if TYPE_CHECKING:
     from hypothesis import strategies as st
@@ -18,6 +18,8 @@ KNOWN_HEADER_FORMATS: dict[str, str] = {
     "if-unmodified-since": "_http_date_header",
     "range": "_range_header",
 }
+# Formats given to plain string headers so generated values are valid on the wire; the schema itself allows any string.
+PLAIN_HEADER_FORMATS = {HEADER_FORMAT, *KNOWN_HEADER_FORMATS.values()}
 
 # Visible ASCII for ETag content: 0x21-0x7E excluding DQUOTE (0x22)
 _ETAG_CHARS = "".join(chr(i) for i in range(0x21, 0x7F) if chr(i) != '"')
@@ -39,7 +41,7 @@ def if_match_values() -> st.SearchStrategy[str]:
 def http_date_values() -> st.SearchStrategy[str]:
     from hypothesis import strategies as st
 
-    return st.datetimes(timezones=st.just(timezone.utc)).map(lambda dt: format_datetime(dt, usegmt=True))
+    return st.datetimes(timezones=st.just(UTC)).map(lambda dt: format_datetime(dt, usegmt=True))
 
 
 def _range_spec() -> st.SearchStrategy[str]:
@@ -89,21 +91,21 @@ def get_header_format_strategies(mode: GenerationMode) -> dict[str, st.SearchStr
             "_range_header": range_values(),
         }
 
-    @st.composite  # type: ignore[untyped-decorator]
+    @st.composite
     def mixed_if_match(draw: st.DrawFn) -> str:
         rng = draw(st.randoms())
         if rng.random() < STRUCTURED_HEADER_PROBABILITY:
             return draw(if_match_values())
         return draw(header_values())
 
-    @st.composite  # type: ignore[untyped-decorator]
+    @st.composite
     def mixed_http_date(draw: st.DrawFn) -> str:
         rng = draw(st.randoms())
         if rng.random() < STRUCTURED_HEADER_PROBABILITY:
             return draw(http_date_values())
         return draw(header_values())
 
-    @st.composite  # type: ignore[untyped-decorator]
+    @st.composite
     def mixed_range(draw: st.DrawFn) -> str:
         rng = draw(st.randoms())
         r = rng.random()

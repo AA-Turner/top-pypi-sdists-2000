@@ -11,30 +11,30 @@ import re
 from collections.abc import Callable, Iterator, Sequence
 from dataclasses import dataclass
 from functools import cached_property
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TypeGuard
+from urllib.parse import urlsplit
 
 from schemathesis import errors
 from schemathesis.config import ConfigError
 from schemathesis.core.errors import (
     AuthenticationError,
     HookExecutionError,
-    InfiniteRecursiveReference,
     InvalidTransition,
     SerializationNotPossible,
     UnresolvableReference,
+    UnsupportedType,
     format_exception,
     get_request_error_extras,
     get_request_error_message,
     split_traceback,
 )
 from schemathesis.core.output import escape_surrogates
-from schemathesis.specs.graphql.scalars import UnknownScalar
 
 if TYPE_CHECKING:
     import hypothesis.errors
     import requests
-    from requests.exceptions import ChunkedEncodingError
 
+    from schemathesis.engine._rate_limit_retry import TransportError
     from schemathesis.generation.case import Case
 
 __all__ = ["EngineErrorInfo", "DeadlineExceeded", "UnexpectedError"]
@@ -89,8 +89,14 @@ class EngineErrorInfo:
         if isinstance(self._error, UnhealthyAPIError):
             return "Unhealthy API"
 
+        if isinstance(self._error, UnresponsiveOperationError):
+            return "Unresponsive Operation"
+
         if isinstance(self._error, requests.RequestException):
             return "Network Error"
+
+        if isinstance(self._error, UnsupportedType):
+            return self._error.title
 
         if self._kind in (
             RuntimeErrorKind.HYPOTHESIS_HEALTH_CHECK_DATA_TOO_LARGE,
@@ -103,6 +109,7 @@ class EngineErrorInfo:
         if self._kind in (
             RuntimeErrorKind.SCHEMA_INVALID_REGULAR_EXPRESSION,
             RuntimeErrorKind.SCHEMA_UNSUPPORTED_REGULAR_EXPRESSION,
+            RuntimeErrorKind.SCHEMA_INVALID_UNRESOLVABLE_REFERENCE,
             RuntimeErrorKind.SCHEMA_GENERIC,
             RuntimeErrorKind.HYPOTHESIS_UNSATISFIABLE,
         ):
@@ -111,7 +118,6 @@ class EngineErrorInfo:
         return {
             RuntimeErrorKind.SCHEMA_NO_LINKS_FOUND: "Missing Open API links",
             RuntimeErrorKind.SCHEMA_INVALID_STATE_MACHINE: "Invalid OpenAPI Links Definition",
-            RuntimeErrorKind.HYPOTHESIS_UNSUPPORTED_GRAPHQL_SCALAR: "Unknown GraphQL Scalar",
             RuntimeErrorKind.SERIALIZATION_UNBOUNDED_PREFIX: "XML serialization error",
             RuntimeErrorKind.SERIALIZATION_NOT_POSSIBLE: "Serialization not possible",
             RuntimeErrorKind.AUTHENTICATION_ERROR: "Authentication Error",
@@ -129,8 +135,8 @@ class EngineErrorInfo:
         if isinstance(self._error, requests.RequestException):
             return get_request_error_message(self._error)
 
-        if isinstance(self._error, UnknownScalar):
-            return f"Scalar type '{self._error.name}' is not recognized"
+        if isinstance(self._error, UnsupportedType):
+            return self._error.summary
 
         if self._kind in (
             RuntimeErrorKind.SCHEMA_INVALID_REGULAR_EXPRESSION,
@@ -165,11 +171,10 @@ class EngineErrorInfo:
             RuntimeErrorKind.SCHEMA_UNSUPPORTED_REGULAR_EXPRESSION,
             RuntimeErrorKind.SCHEMA_INVALID_STATE_MACHINE,
             RuntimeErrorKind.SCHEMA_INVALID_UNRESOLVABLE_REFERENCE,
-            RuntimeErrorKind.SCHEMA_INVALID_INFINITE_RECURSION,
             RuntimeErrorKind.SCHEMA_GENERIC,
             RuntimeErrorKind.SCHEMA_NO_LINKS_FOUND,
             RuntimeErrorKind.SERIALIZATION_NOT_POSSIBLE,
-            RuntimeErrorKind.HYPOTHESIS_UNSUPPORTED_GRAPHQL_SCALAR,
+            RuntimeErrorKind.HYPOTHESIS_UNSUPPORTED_TYPE,
             RuntimeErrorKind.HYPOTHESIS_UNSATISFIABLE,
             RuntimeErrorKind.HYPOTHESIS_UNSATISFIABLE_FILTER_HOOK,
             RuntimeErrorKind.HYPOTHESIS_HEALTH_CHECK_LARGE_BASE_EXAMPLE,
@@ -190,7 +195,39 @@ class EngineErrorInfo:
             return format_exception(self._error.original_error, with_traceback=True)
         return format_exception(self._error, with_traceback=True)
 
-    def format(self, *, bold: Callable[[str], str] = str, indent: str = "    ") -> str:
+    @property
+    def details(self) -> list[str]:
+        """Lines shown under the message: error extras, or the traceback when it helps."""
+        if self.extras:
+            return self.extras
+        if self.has_useful_traceback:
+            return split_traceback(self.traceback)
+        return []
+
+    @property
+    def code_sample(self) -> str | None:
+        return self._code_sample
+
+    def suggestion(self, *, bold: Callable[[str], str] = str, base_url_is_set: bool = False) -> str | None:
+        if isinstance(self._error, (UnsupportedType, errors.NoLinksFound)):
+            return self._error.suggestion
+        import requests
+
+        if isinstance(self._error, requests.ConnectionError) and is_connection_refused(self._error):
+            # Nothing listened at the address; resets and proxy errors come from a server that did answer.
+            address = _refused_address(self._error)
+            target = "its base URL" if address is None else bold(f"`{address}`")
+            if base_url_is_set:
+                return f"Check that the API is running and reachable at {target}."
+            return f"Check that the API is running and reachable at {target}; set the address with {bold('`--url`')}."
+        if isinstance(self._error, ServerUnavailable):
+            if self._error.culprit_listed:
+                return None
+            if not self._error.recordable:
+                return CRASH_MAY_BE_OLDER
+        return get_runtime_error_suggestion(self._kind, bold=bold)
+
+    def format(self, *, bold: Callable[[str], str] = str, indent: str = "    ", base_url_is_set: bool = False) -> str:
         """Format error message with optional styling and traceback."""
         message = []
 
@@ -202,23 +239,15 @@ class EngineErrorInfo:
         body = self.message or str(self._error)
         message.append(body)
 
-        # Extras
-        if self.extras:
-            extras = self.extras
-        elif self.has_useful_traceback:
-            extras = split_traceback(self.traceback)
-        else:
-            extras = []
-
-        if extras:
+        details = self.details
+        if details:
             message.append("")  # Empty line before extras
-            message.extend(f"{indent}{extra}" for extra in extras)
+            message.extend(f"{indent}{extra}" for extra in details)
 
         if self._code_sample is not None:
             message.append(f"\nReproduce with:\n\n    {self._code_sample}")
 
-        # Suggestion
-        suggestion = get_runtime_error_suggestion(self._kind, bold=bold)
+        suggestion = self.suggestion(bold=bold, base_url_is_set=base_url_is_set)
         if suggestion is not None:
             message.append(f"\nTip: {suggestion}")
 
@@ -232,6 +261,9 @@ def extract_health_check_error(error: hypothesis.errors.FailedHealthCheck) -> hy
         if title in str(error):
             return key
     return None
+
+
+CRASH_MAY_BE_OLDER = "If the server crashed, the request that caused it may be older than these."
 
 
 def get_runtime_error_suggestion(error_type: RuntimeErrorKind, bold: Callable[[str], str] = str) -> str | None:
@@ -251,17 +283,13 @@ def get_runtime_error_suggestion(error_type: RuntimeErrorKind, bold: Callable[[s
 
     return {
         RuntimeErrorKind.CONNECTION_SSL: f"Bypass SSL verification with {bold('`--tls-verify=false`')}.",
-        RuntimeErrorKind.SERVER_UNAVAILABLE: "If the server crashed, the request that caused it may be older than these.\n"
-        f"Record every request sent with {bold('`--report=har`')}.",
+        RuntimeErrorKind.SERVER_UNAVAILABLE: f"{CRASH_MAY_BE_OLDER}\nRecord every request sent with {bold('`--report=har`')}.",
         RuntimeErrorKind.HYPOTHESIS_UNSATISFIABLE: "Review all parameters and request body schemas for conflicting constraints.",
         RuntimeErrorKind.HYPOTHESIS_UNSATISFIABLE_FILTER_HOOK: "Review your `filter_case` hook to ensure it accepts at least some generated cases.",
-        RuntimeErrorKind.SCHEMA_NO_LINKS_FOUND: "Review your endpoint filters to include linked operations",
         RuntimeErrorKind.SCHEMA_INVALID_REGULAR_EXPRESSION: "Ensure your regex follows ECMA 262 (JavaScript) syntax.\n"
         "For guidance, visit: https://json-schema.org/understanding-json-schema/reference/regular_expressions",
         RuntimeErrorKind.SCHEMA_UNSUPPORTED_REGULAR_EXPRESSION: "The pattern is valid - values matching it are what "
         "cannot be built.\nNarrow it, or supply examples for this operation.",
-        RuntimeErrorKind.HYPOTHESIS_UNSUPPORTED_GRAPHQL_SCALAR: "Define a custom strategy for it.\n"
-        "For guidance, visit: https://schemathesis.readthedocs.io/en/stable/guides/graphql-custom-scalars/",
         RuntimeErrorKind.HYPOTHESIS_HEALTH_CHECK_DATA_TOO_LARGE: _format_health_check_suggestion("data_too_large"),
         RuntimeErrorKind.HYPOTHESIS_HEALTH_CHECK_FILTER_TOO_MUCH: _format_health_check_suggestion("filter_too_much"),
         RuntimeErrorKind.HYPOTHESIS_HEALTH_CHECK_TOO_SLOW: _format_health_check_suggestion("too_slow"),
@@ -272,7 +300,7 @@ def get_runtime_error_suggestion(error_type: RuntimeErrorKind, bold: Callable[[s
 
 
 @enum.unique
-class RuntimeErrorKind(str, enum.Enum):
+class RuntimeErrorKind(enum.StrEnum):
     """Classification of runtime errors."""
 
     # Connection related issues
@@ -290,7 +318,7 @@ class RuntimeErrorKind(str, enum.Enum):
     # Hypothesis issues
     HYPOTHESIS_UNSATISFIABLE = "hypothesis_unsatisfiable"
     HYPOTHESIS_UNSATISFIABLE_FILTER_HOOK = "hypothesis_unsatisfiable_filter_hook"
-    HYPOTHESIS_UNSUPPORTED_GRAPHQL_SCALAR = "hypothesis_unsupported_graphql_scalar"
+    HYPOTHESIS_UNSUPPORTED_TYPE = "hypothesis_unsupported_type"
     HYPOTHESIS_HEALTH_CHECK_DATA_TOO_LARGE = "hypothesis_health_check_data_too_large"
     HYPOTHESIS_HEALTH_CHECK_FILTER_TOO_MUCH = "hypothesis_health_check_filter_too_much"
     HYPOTHESIS_HEALTH_CHECK_TOO_SLOW = "hypothesis_health_check_too_slow"
@@ -299,7 +327,6 @@ class RuntimeErrorKind(str, enum.Enum):
     SCHEMA_INVALID_REGULAR_EXPRESSION = "schema_invalid_regular_expression"
     SCHEMA_UNSUPPORTED_REGULAR_EXPRESSION = "schema_unsupported_regular_expression"
     SCHEMA_INVALID_STATE_MACHINE = "schema_invalid_state_machine"
-    SCHEMA_INVALID_INFINITE_RECURSION = "schema_invalid_infinite_recursion"
     SCHEMA_INVALID_UNRESOLVABLE_REFERENCE = "schema_invalid_unresolvable_reference"
     SCHEMA_NO_LINKS_FOUND = "schema_no_links_found"
     SCHEMA_GENERIC = "schema_generic"
@@ -321,8 +348,8 @@ def _classify(*, error: Exception) -> RuntimeErrorKind:
     if isinstance(error, ServerUnavailable):
         return RuntimeErrorKind.SERVER_UNAVAILABLE
 
-    if isinstance(error, UnknownScalar):
-        return RuntimeErrorKind.HYPOTHESIS_UNSUPPORTED_GRAPHQL_SCALAR
+    if isinstance(error, UnsupportedType):
+        return RuntimeErrorKind.HYPOTHESIS_UNSUPPORTED_TYPE
 
     # Configuration errors
     if isinstance(error, ConfigError):
@@ -376,8 +403,6 @@ def _classify(*, error: Exception) -> RuntimeErrorKind:
         return RuntimeErrorKind.SCHEMA_INVALID_STATE_MACHINE
     if isinstance(error, errors.NoLinksFound):
         return RuntimeErrorKind.SCHEMA_NO_LINKS_FOUND
-    if isinstance(error, InfiniteRecursiveReference):
-        return RuntimeErrorKind.SCHEMA_INVALID_INFINITE_RECURSION
     if isinstance(error, UnresolvableReference):
         return RuntimeErrorKind.SCHEMA_INVALID_UNRESOLVABLE_REFERENCE
     if isinstance(error, errors.SerializationError):
@@ -411,16 +436,16 @@ MEMORY_ADDRESS_RE = re.compile("0x[0-9a-fA-F]+")
 URL_IN_ERROR_MESSAGE_RE = re.compile(r"Max retries exceeded with url: .*? \(Caused by")
 
 
-def canonicalize_error_message(error: Exception, with_traceback: bool = True) -> str:
+def canonicalize_error_message(error: Exception) -> str:
     """Canonicalize error messages by removing dynamic components."""
-    message = format_exception(error, with_traceback=with_traceback)
+    message = format_exception(error, with_traceback=True)
     # Replace memory addresses
     message = MEMORY_ADDRESS_RE.sub("0xbaaaaaaaaaad", message)
     # Remove URL information
     return URL_IN_ERROR_MESSAGE_RE.sub("", message)
 
 
-def clear_hypothesis_notes(exc: Exception) -> None:
+def clear_hypothesis_notes(exc: BaseException) -> None:
     notes = getattr(exc, "__notes__", [])
     if not notes:
         return
@@ -431,7 +456,19 @@ def clear_hypothesis_notes(exc: Exception) -> None:
         note for note in notes if not ("while generating" in note or note.strip().startswith("You can reproduce this "))
     ]
     if filtered_notes != notes:
-        exc.__notes__ = filtered_notes  # type: ignore[attr-defined]
+        exc.__notes__ = filtered_notes
+
+
+def is_inconsistent_replay(exc: BaseException) -> TypeGuard[AssertionError]:
+    # Hypothesis asserts rather than raising `Flaky` when a replay draws past a value an earlier run rejected.
+    if not isinstance(exc, AssertionError):
+        return False
+    traceback = exc.__traceback__
+    while traceback is not None and traceback.tb_next is not None:
+        traceback = traceback.tb_next
+    return (
+        traceback is not None and traceback.tb_frame.f_globals["__name__"] == "hypothesis.internal.conjecture.datatree"
+    )
 
 
 def is_unrecoverable_network_error(exc: Exception) -> bool:
@@ -441,6 +478,8 @@ def is_unrecoverable_network_error(exc: Exception) -> bool:
     from urllib3.exceptions import ProtocolError
 
     def has_connection_reset(inner: BaseException) -> bool:
+        if isinstance(inner, (ConnectionAbortedError, ConnectionResetError)):
+            return True
         exc_str = str(inner)
         if any(
             pattern in exc_str
@@ -454,12 +493,14 @@ def is_unrecoverable_network_error(exc: Exception) -> bool:
         ):
             return True
 
-        if inner.__context__ is not None:
-            return has_connection_reset(inner.__context__)
+        # An explicitly chained error is the real cause; otherwise the error raised while handling another one.
+        parent = inner.__cause__ or inner.__context__
+        if parent is not None:
+            return has_connection_reset(parent)
 
         return False
 
-    if isinstance(exc, requests.Timeout | requests.exceptions.ChunkedEncodingError):
+    if isinstance(exc, (requests.Timeout, requests.exceptions.ChunkedEncodingError)):
         return True
     if isinstance(exc.__context__, ProtocolError):
         if len(exc.__context__.args) == 2 and isinstance(exc.__context__.args[1], RemoteDisconnected):
@@ -474,6 +515,10 @@ class UnhealthyAPIError(Exception):
     """The API is unhealthy enough that the stateful phase cannot continue."""
 
 
+class UnresponsiveOperationError(Exception):
+    """Most requests to one operation time out while the rest of the API answers."""
+
+
 def build_code_sample(
     case: Case, request: requests.PreparedRequest | requests.Request | None, transport_kwargs: dict[str, Any]
 ) -> str:
@@ -482,11 +527,29 @@ def build_code_sample(
         headers = dict(request.headers)
     else:
         headers = {**dict(case.headers or {}), **transport_kwargs.get("headers", {})}
-    return case.as_curl_command(headers=headers, verify=transport_kwargs.get("verify", True))
+    return case.as_reproduction_command(headers=headers, verify=transport_kwargs.get("verify", True))
 
 
 class ServerUnavailable(Exception):
-    """The server stopped accepting connections in the middle of the run."""
+    """The server stopped responding in the middle of the run."""
+
+    # Whether a HAR report can record the requests sent to this server.
+    recordable: bool
+    # Whether the message lists a request the crash dropped, so the cause is very likely among them.
+    culprit_listed: bool
+
+    def __init__(self, message: str, *, recordable: bool, culprit_listed: bool) -> None:
+        super().__init__(message)
+        self.recordable = recordable
+        self.culprit_listed = culprit_listed
+
+
+def _refused_address(exc: requests.ConnectionError) -> str | None:
+    request = exc.request
+    if request is None or not request.url:
+        return None
+    parts = urlsplit(str(request.url))
+    return f"{parts.scheme}://{parts.netloc}"
 
 
 def is_connection_refused(exc: requests.ConnectionError) -> bool:
@@ -509,15 +572,24 @@ def is_connection_refused(exc: requests.ConnectionError) -> bool:
     return False
 
 
+def never_reached_server(exc: BaseException | None) -> bool:
+    """Whether the request failed before any server saw it: the connection timed out or was refused."""
+    import requests
+
+    return isinstance(exc, requests.ConnectTimeout) or (
+        isinstance(exc, requests.ConnectionError) and is_connection_refused(exc)
+    )
+
+
 @dataclass(slots=True)
 class UnrecoverableNetworkError:
-    error: requests.ConnectionError | ChunkedEncodingError | requests.Timeout
+    error: TransportError
     code_sample: str
     reason: str | None
 
     def __init__(
         self,
-        error: requests.ConnectionError | ChunkedEncodingError | requests.Timeout,
+        error: TransportError,
         code_sample: str,
         reason: str | None = None,
     ) -> None:
@@ -545,9 +617,15 @@ class TestingState:
         error = self._unrecoverable_network_errors.get(id(exc))
         return error.code_sample if error is not None else None
 
+    def take_unrecoverable_network_error(self) -> UnrecoverableNetworkError | None:
+        """Return the stored unrecoverable network error and forget it, so it is reported once."""
+        error = self.unrecoverable_network_error
+        self._unrecoverable_network_errors.clear()
+        return error
+
     @property
     def unrecoverable_network_error(self) -> UnrecoverableNetworkError | None:
-        """Return any stored unrecoverable network error (for backward compatibility)."""
+        """Return any stored unrecoverable network error."""
         if self._unrecoverable_network_errors:
             return next(iter(self._unrecoverable_network_errors.values()))
         return None

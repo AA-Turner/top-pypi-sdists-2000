@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
@@ -53,24 +54,35 @@ def build(
     # Negative generation reaches this from a `flatmap`, so the same mutated schema comes back on
     # every draw; rebuilding its strategy each time is what the cache is for.
     key = (schema_key, draft, id(formats), alphabet, whole_floats) if schema_key is not None else None
+    result: SearchStrategy[JsonValue] | InvalidSchema | None = None
     if key is not None:
         cached = canonical_strategy_cache.get(key)
         if cached is not MISSING:
-            return cached[1]
-    strategy = _build(
-        schema,
-        draft=draft,
-        formats=formats,
-        format_lengths=format_lengths or {},
-        alphabet=alphabet,
-        schema_key=schema_key,
-        whole_floats=whole_floats,
-    )
-    if key is not None:
-        # Keeping `formats` alive next to the strategy stops its `id` from being recycled
-        # into a stale hit once the caller drops it.
-        canonical_strategy_cache[key] = (formats, strategy)
-    return strategy
+            result = cached[1]
+    if result is None:
+        try:
+            result = _build(
+                schema,
+                draft=draft,
+                formats=formats,
+                format_lengths=format_lengths or {},
+                alphabet=alphabet,
+                schema_key=schema_key,
+                whole_floats=whole_floats,
+            )
+        except InvalidSchema as exc:
+            # A rejected schema is rejected again on every call, and finding out can cost as much as a successful
+            # build, e.g. compiling a pattern with a huge repetition count.
+            result = copy.copy(exc)
+        if key is not None:
+            # Keeping `formats` alive next to the strategy stops its `id` from being recycled
+            # into a stale hit once the caller drops it.
+            canonical_strategy_cache[key] = (formats, result)
+    if isinstance(result, InvalidSchema):
+        # One raise site for fresh and cached rejections, so Hypothesis sees the same failure when it replays a case.
+        # Callers attach the failing operation to the error, so each raise needs its own instance.
+        raise copy.copy(result)
+    return result
 
 
 def _build(
@@ -85,20 +97,26 @@ def _build(
 ) -> SearchStrategy[JsonValue]:
     # The canonical form answers to the schema and draft alone, so a differing alphabet or format map reuses it.
     canonical_key = (schema_key, draft) if schema_key is not None else None
-    cached_form = canonical_form_cache.get(canonical_key) if canonical_key is not None else MISSING
     canonical_schema: jsonschema_rs.CanonicalSchema
-    if cached_form is not MISSING:
+    if canonical_key is not None and (cached_form := canonical_form_cache.get(canonical_key)) is not MISSING:
         canonical_schema = cached_form
     else:
         with _reported():
-            canonical_schema = jsonschema_rs.canonicalize(
-                schema,
-                draft=draft,
-                pattern_options=FANCY_REGEX_OPTIONS,
-                # Draft 2020-12 treats `format` as an annotation and drops it, which would leave a
-                # `format`-carrying schema generating arbitrary strings on this path.
-                validate_formats=True,
-            )
+            try:
+                canonical_schema = jsonschema_rs.canonicalize(
+                    schema,
+                    draft=draft,
+                    pattern_options=FANCY_REGEX_OPTIONS,
+                    # Draft 2020-12 treats `format` as an annotation and drops it, which would leave a
+                    # `format`-carrying schema generating arbitrary strings on this path.
+                    validate_formats=True,
+                )
+            except ValueError as exc:
+                # A value no JSON document can hold (e.g. `datetime.date` in a dict built in Python) arrives
+                # as a bare `ValueError`; the library's own error types are subclasses and stay as reported.
+                if type(exc) is not ValueError:
+                    raise
+                raise InvalidSchema(f"Failed to generate test cases for this API operation: {exc}") from None
         if canonical_key is not None:
             canonical_form_cache[canonical_key] = canonical_schema
     if canonical_schema.kind is canonical.CanonicalKind.RAW:

@@ -1,4 +1,5 @@
 import json
+import platform
 from datetime import date
 
 import pytest
@@ -14,6 +15,18 @@ SERVER_ERROR = {
     "failure": "ServerError",
     "signature": "500",
 }
+
+
+INTERRUPT_ON_SECOND_RESPONSE = """
+calls = 0
+
+@schemathesis.hook
+def after_call(context, case, response):
+    global calls
+    calls += 1
+    if calls > 1:
+        raise KeyboardInterrupt
+"""
 
 
 def write_baseline(tmp_path, *entries):
@@ -90,6 +103,30 @@ def test_new_failure_fails_alongside_a_known_one(ctx, cli, tmp_path):
     )
 
     assert result.exit_code == ExitCode.TESTS_FAILED, result.stdout
+
+
+def test_known_failure_does_not_fail_a_flaky_stateful_suite(ctx, cli, tmp_path):
+    write_baseline(
+        tmp_path,
+        {
+            "operation": "POST /blocks",
+            "check": "positive_data_acceptance",
+            "failure": "RejectedPositiveData",
+            "signature": "422",
+        },
+    )
+
+    result = cli.run(
+        ctx.openapi.apps.flaky_branch_blocks().schema_url,
+        "--phases=stateful",
+        "--checks=positive_data_acceptance",
+        "--max-examples=25",
+        "--seed=6",
+        config=WITH_BASELINE,
+    )
+
+    assert result.exit_code == ExitCode.OK, result.stdout
+    assert "Known failures: 1\n" in result.stdout
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
@@ -204,6 +241,114 @@ def test_missing_baseline_is_created_from_the_run(ctx, cli, tmp_path):
     assert recorded_operations(tmp_path) == ["GET /api/failure"]
 
 
+@pytest.mark.parametrize(
+    ("flags", "config"),
+    [
+        (("--baseline=missing-dir/baseline.json",), None),
+        ((), {"baseline": "missing-dir/baseline.json"}),
+    ],
+    ids=["flag", "config"],
+)
+def test_missing_baseline_directory_is_created(ctx, cli, tmp_path, flags, config):
+    run(cli, ctx.openapi.apps.failure(), *flags, "--phases=fuzzing", config=config)
+
+    assert [
+        entry["operation"] for entry in json.loads((tmp_path / "missing-dir" / "baseline.json").read_text())["entries"]
+    ] == ["GET /api/failure"]
+
+
+@pytest.mark.parametrize(
+    "content",
+    [
+        b"{",
+        b"\xff",
+        b"[]",
+        b'{"format_version": 99, "entries": []}',
+        b'{"format_version": 1, "entries": {}}',
+        b'{"format_version": 1, "entries": ["GET /api/failure"]}',
+        b'{"format_version": 1, "entries": [{"operation": "GET /api/failure"}]}',
+        json.dumps({"format_version": 1, "entries": [{**SERVER_ERROR, "expires": "soon"}]}).encode(),
+    ],
+    ids=[
+        "invalid-json",
+        "invalid-utf8",
+        "not-an-object",
+        "unsupported-version",
+        "entries-not-a-list",
+        "entry-not-an-object",
+        "entry-missing-fields",
+        "invalid-expires",
+    ],
+)
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_unusable_baseline_is_a_usage_error(ctx, cli, tmp_path, snapshot_cli, content):
+    (tmp_path / BASELINE).write_bytes(content)
+
+    assert run(cli, ctx.openapi.apps.failure(), config=WITH_BASELINE) == snapshot_cli
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_baseline_pointing_at_a_directory_is_a_usage_error(ctx, cli, tmp_path, snapshot_cli):
+    (tmp_path / BASELINE).mkdir()
+
+    assert run(cli, ctx.openapi.apps.failure(), config=WITH_BASELINE) == snapshot_cli
+
+
+@pytest.mark.skipif(platform.system() == "Windows", reason="chmod doesn't work the same way on Windows")
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_unreadable_baseline_is_a_usage_error(ctx, cli, tmp_path, snapshot_cli):
+    write_baseline(tmp_path, SERVER_ERROR)
+    (tmp_path / BASELINE).chmod(0)
+
+    assert run(cli, ctx.openapi.apps.failure(), config=WITH_BASELINE) == snapshot_cli
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_baseline_under_a_file_is_reported(ctx, cli, tmp_path, snapshot_cli):
+    (tmp_path / "file").touch()
+
+    assert run(cli, ctx.openapi.apps.failure(), "--phases=fuzzing", "--baseline=file/baseline.json") == snapshot_cli
+
+
+# Every test passes, yet the run exits non-zero because the baseline could not be written.
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_unsaved_baseline_is_named_in_the_final_line(ctx, cli, tmp_path, snapshot_cli):
+    (tmp_path / "file").touch()
+
+    assert run(cli, ctx.openapi.apps.success(), "--phases=fuzzing", "--baseline=file/baseline.json") == snapshot_cli
+
+
+@pytest.mark.skipif(platform.system() == "Windows", reason="chmod doesn't work the same way on Windows")
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_baseline_in_read_only_directory_is_reported(ctx, cli, tmp_path, snapshot_cli):
+    (tmp_path / "read-only").mkdir(mode=0o555)
+
+    assert (
+        run(cli, ctx.openapi.apps.failure(), "--phases=fuzzing", "--baseline=read-only/baseline.json") == snapshot_cli
+    )
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_unusable_baseline_is_a_usage_error_in_fuzz(ctx, cli, tmp_path, snapshot_cli):
+    (tmp_path / BASELINE).write_text("{", encoding="utf-8")
+
+    assert cli.main("fuzz", ctx.openapi.apps.failure().schema_url, "--max-time=1", config=WITH_BASELINE) == snapshot_cli
+
+
+def test_known_failure_is_summarized_in_fuzz(ctx, cli, tmp_path):
+    write_baseline(tmp_path, SERVER_ERROR)
+
+    result = cli.main(
+        "fuzz",
+        ctx.openapi.apps.failure().schema_url,
+        "--checks=not_a_server_error",
+        "--max-time=1",
+        config=WITH_BASELINE,
+    )
+
+    assert "Baseline:\n  Known failures: 1\n" in result.stdout, result.stdout
+
+
 def test_existing_baseline_is_left_alone_without_a_flag(ctx, cli, tmp_path):
     # Absorbing a regression into a committed baseline has to be something you ask for.
     write_baseline(tmp_path, {**SERVER_ERROR, "operation": "GET /api/elsewhere"})
@@ -211,6 +356,40 @@ def test_existing_baseline_is_left_alone_without_a_flag(ctx, cli, tmp_path):
 
     run(cli, ctx.openapi.apps.failure(), f"--baseline={BASELINE}", "--phases=fuzzing")
 
+    assert (tmp_path / BASELINE).read_text() == before
+
+
+def test_interrupted_update_run_does_not_create_the_baseline(ctx, cli, tmp_path):
+    module = ctx.write_pymodule(INTERRUPT_ON_SECOND_RESPONSE)
+
+    result = cli.run(
+        ctx.openapi.apps.success_and_failure().schema_url,
+        "--checks=not_a_server_error",
+        "--phases=fuzzing",
+        "--baseline-update",
+        config={"baseline": str(tmp_path / BASELINE)},
+        hooks=module,
+    )
+
+    assert result.exit_code == 130, result.stdout
+    assert not (tmp_path / BASELINE).exists()
+
+
+def test_interrupted_prune_run_leaves_the_baseline_unchanged(ctx, cli, tmp_path):
+    write_baseline(tmp_path, {**SERVER_ERROR, "signature": "503"})
+    before = (tmp_path / BASELINE).read_text()
+    module = ctx.write_pymodule(INTERRUPT_ON_SECOND_RESPONSE)
+
+    result = cli.run(
+        ctx.openapi.apps.success_and_failure().schema_url,
+        "--checks=not_a_server_error",
+        "--phases=fuzzing",
+        "--baseline-prune",
+        config={"baseline": str(tmp_path / BASELINE)},
+        hooks=module,
+    )
+
+    assert result.exit_code == 130, result.stdout
     assert (tmp_path / BASELINE).read_text() == before
 
 

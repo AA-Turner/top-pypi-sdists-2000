@@ -1,0 +1,130 @@
+[build-system]
+requires = ["flit_core >=3.8,<5"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "django-ninja"
+authors = [
+    {name = "Vitaliy Kucheryaviy", email = "ppr.vitaly@gmail.com"},
+]
+readme = "README.md"
+requires-python = ">=3.7"
+dynamic = ["version", "description"]
+classifiers = [
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3 :: Only",
+    "Framework :: Django",
+    "Framework :: Django :: 3.1",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.1",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
+    "Framework :: Django :: 6.0",
+    "Framework :: Django :: 6.1",
+    "Framework :: AsyncIO",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Internet :: WWW/HTTP",
+]
+
+dependencies = [
+    "Django >=3.1",
+    "pydantic >=2.0,<3.0.0",
+]
+
+[project.urls]
+Homepage = "https://django-ninja.dev"
+Documentation = "https://django-ninja.dev"
+Repository = "https://github.com/vitalik/django-ninja"
+
+
+[dependency-groups]
+test = [
+    "pytest",
+    "pytest-cov",
+    "pytest-django",
+    "pytest-asyncio",
+    "psycopg2-binary",
+    "mypy==1.7.1",
+    "ruff==0.5.7",
+    "django-stubs",
+]
+doc = ["mkdocs", "mkdocs-material", "markdown-include", "mkdocstrings[python]"]
+dev = [
+    { include-group = "test" },
+    { include-group = "doc" },
+    "pre-commit",
+]
+
+[tool.uv.dependency-groups]
+# The library itself supports Python >=3.7, but the dev tooling does not
+# have to — resolve dev/test/doc dependencies for modern Pythons only.
+test = { requires-python = ">=3.9" }
+doc = { requires-python = ">=3.9" }
+dev = { requires-python = ">=3.9" }
+
+[tool.flit.module]
+name = "ninja"
+
+
+[tool.ruff]
+target-version = "py37"
+
+[tool.ruff.format]
+preview = true
+
+[tool.ruff.lint]
+preview = true
+select = [
+    "B",    # flake8-bugbear
+    "C",    # flake8-comprehensions
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "FURB", # refurb
+    "I",    # isort
+    "PTH",  # flake8-use-pathlib
+    "UP",   # pyupgrade
+    "W",    # pycodestyle warnings
+]
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults
+    "C901", # too complex
+]
+
+[tool.ruff.lint.per-file-ignores]
+"ninja/compatibility/datastructures.py" = ["C416"]
+"ninja/utils.py" = ["B004"]
+"tests/*" = ["C408"]
+
+
+[tool.coverage.run]
+omit = ["ninja/compatibility/*"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 100
+skip_covered = true
+show_missing = true

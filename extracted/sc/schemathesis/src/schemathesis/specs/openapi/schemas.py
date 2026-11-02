@@ -1,47 +1,59 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Generator, Iterator, Mapping
+from collections.abc import Callable, Generator, Iterable, Iterator, Mapping
 from dataclasses import dataclass, field
-from difflib import get_close_matches
 from functools import cached_property
 from typing import TYPE_CHECKING, Any, NoReturn, cast
 from urllib.parse import urljoin, urlsplit
 
+import jsonschema_rs
 from packaging import version
 from requests.structures import CaseInsensitiveDict
 from typing_extensions import override
 
 from schemathesis.config import (
-    CoveragePhaseConfig,
-    ExamplesPhaseConfig,
-    FuzzingPhaseConfig,
-    OperationOrdering,
+    ApiKeyAuthConfig,
+    DynamicTokenAuthConfig,
+    HttpBasicAuthConfig,
+    HttpBearerAuthConfig,
 )
-from schemathesis.core import NOT_SET, Body, Specification
+from schemathesis.core import NOT_SET, Body, NotSet, Specification, media_types
 from schemathesis.core.errors import (
+    IncorrectUsage,
     InvalidSchema,
     InvalidStateMachine,
     OperationNotFound,
+    not_found_message,
 )
 from schemathesis.core.jsonschema import Bundler
 from schemathesis.core.jsonschema.bundler import BundleCache
 from schemathesis.core.jsonschema.resolver import Resolver, make_root_resolver, resolve_reference
-from schemathesis.core.result import Err, Ok, Result
-from schemathesis.core.spec import CoverageCapabilities
+from schemathesis.core.parameters import ParameterLocation
+from schemathesis.core.result import Ok, Result
 from schemathesis.core.statistic import ApiStatistic, StatefulInference
+from schemathesis.core.transforms import jsonify_python_specific_types
 from schemathesis.core.transport import (
     HTTP_METHODS_SCHEMA,
-    HttpMethod,
     HttpMethodSchema,
     Response,
     restful_method_priority,
 )
 from schemathesis.engine.link_calibration import LinkCalibrationState
 from schemathesis.generation.case import Case
-from schemathesis.generation.meta import CaseMetadata, ComponentInfo
+from schemathesis.generation.feedback import NO_FEEDBACK, FeedbackSources
+from schemathesis.generation.meta import (
+    CONTENT_TYPE_PROBES,
+    CaseMetadata,
+    ComponentInfo,
+    CoverageScenario,
+    TestPhase,
+    coverage_scenario,
+)
 from schemathesis.resources import ExtraDataSource, ResourcePool
 from schemathesis.specs.openapi import adapter
+from schemathesis.specs.openapi.adapter.parameters import RequestBodySchemaCache
 from schemathesis.specs.openapi.adapter.protocol import SpecificationAdapter
+from schemathesis.specs.openapi.adapter.responses import ResponseSchemaCache
 from schemathesis.specs.openapi.adapter.security import OpenApiSecurity
 from schemathesis.specs.openapi.analysis import OpenAPIAnalysis
 
@@ -52,37 +64,42 @@ from ...hooks import (
     dispatch_before_process_path,
 )
 from ...schemas import APIOperation, APIOperationMap, BaseSchema
+from . import checks
 from ._hypothesis import openapi_cases
 from ._operation_lookup import OperationLookup
 from .examples import get_strategies_from_examples
-from .operations import SCHEMA_PARSING_ERRORS, OperationLoader
+from .operations import SCHEMA_PARSING_ERRORS, OperationLoader, RawSchemaVersion
+from .serialization import _build_urlencoded_serializer
 from .stateful import collect_transitions, create_state_machine
-from .utils import parse_spec_version
-from .validation import ResponseValidator
+from .utils import PathTemplate, compile_path_template, parse_spec_version, read_from_wire
+from .validation import validate_documented_response
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
-    from typing import TypeAlias
+    from typing import Self, TypeAlias
 
+    from hypothesis import HealthCheck
     from hypothesis.strategies import SearchStrategy
 
     from schemathesis.auths import AuthContext, AuthProvider, AuthStorage
+    from schemathesis.checks import CheckContext
     from schemathesis.config import GenerationConfig
-    from schemathesis.core.adapter import ParsedParameters
     from schemathesis.core.cache import CacheWriter
     from schemathesis.core.error_feedback import ErrorFeedbackStore
+    from schemathesis.core.error_feedback.store import Observation
+    from schemathesis.core.jsonschema.types import JsonValue
     from schemathesis.core.schema_analysis import SchemaWarning
-    from schemathesis.core.spec import ApiSchema, Scheduler
+    from schemathesis.core.spec import ApiSchema
     from schemathesis.engine.observations import Observations
     from schemathesis.engine.recorder import ScenarioRecorder
-    from schemathesis.engine.run import Phase
+    from schemathesis.filters import FilterSet
     from schemathesis.generation.coverage import GenerationSession
+    from schemathesis.generation.hypothesis.reporting import SlowParameter, UnsatisfiableParameter
     from schemathesis.generation.stateful import APIStateMachine
-    from schemathesis.python._constants.pool import ConstantsPool
+    from schemathesis.generation.stateful.state_machine import StepInput
     from schemathesis.specs.openapi.adapter import OpenApiResponses
     from schemathesis.specs.openapi.adapter.parameters import OpenApiParameter
     from schemathesis.specs.openapi.adapter.security import OpenApiSecurityParameters, SecurityRequirements
-    from schemathesis.specs.openapi.types import OperationObject
+    from schemathesis.specs.openapi.auth_flow.bootstrap import OpenApiAuthFlow
 
     OpenApiOperation: TypeAlias = APIOperation[
         OpenApiParameter, OpenApiResponses, OpenApiSecurityParameters, "OpenApiSchema"
@@ -93,32 +110,65 @@ _V3_1 = version.parse("3.1")
 _V3_2 = version.parse("3.2")
 
 
+def _validation_value(meta: CaseMetadata, location: ParameterLocation, value: object, current_hash: int) -> object:
+    raw = meta.raw_containers.get(location)
+    # When the container still equals its generated form, validate the typed
+    # snapshot, as coverage stringifies query/path values for the wire and the
+    # validation schema is expressed in the typed form.
+    if current_hash == meta._initial_hashes.get(location) and raw is not None:
+        return raw
+    if isinstance(value, Mapping) and isinstance(raw, Mapping):
+        # A key still equal to its generated wire form validates against the typed snapshot;
+        # a key a hook overwrote (or one auth/overrides added) validates against its live value.
+        original = meta._initial_containers.get(location, {})
+        return {
+            key: raw[key] if key in raw and key in original and original[key] == current else current
+            for key, current in value.items()
+        }
+    return value
+
+
 @dataclass(eq=False, repr=False)
 class OpenApiSchema(BaseSchema):
     adapter: SpecificationAdapter = None  # type: ignore[assignment]
     _spec_version: str = field(init=False)
 
     @override
+    def clone(self, *, test_function: Callable | NotSet = NOT_SET, filter_set: FilterSet | NotSet = NOT_SET) -> Self:
+        cloned = super().clone(test_function=test_function, filter_set=filter_set)
+        # Clones share the raw schema, so a change made through one makes every clone's operations stale.
+        cloned.raw_schema_version = self.raw_schema_version
+        cloned._operations = OperationLoader(cloned)
+        return cloned
+
+    @override
     def __post_init__(self) -> None:
         self._initialize_adapter()
         super().__post_init__()
         self.analysis = OpenAPIAnalysis(self)
-        self._bundler = Bundler()
+        self._bundler = Bundler(ref_siblings=self.adapter.ref_siblings)
         self._bundle_cache: BundleCache = {}
+        self.response_schema_cache = ResponseSchemaCache()
+        self.request_body_schema_cache = RequestBodySchemaCache()
+        self.raw_schema_version = RawSchemaVersion()
         self._operation_lookup = OperationLookup(self, HTTP_METHODS_SCHEMA)
         self._operations = OperationLoader(self)
-        self._response_validator = ResponseValidator(self)
-        # Path-level dedup of undeclared-method coverage probes for callers that pass no run-scoped set.
+        # Path-level dedup of undeclared-method coverage probes for callers that pass no run-scoped session.
         self.coverage_unexpected_methods_seen: set[tuple[str, str]] = set()
         # Per-operation security overlays populated by runtime auth inference. Empty when the server
         # never enforces auth on a declared-public operation; otherwise generations consult this
         # instead of mutating the parsed spec.
         self._inferred_security: dict[str, SecurityRequirements] = {}
+        # Credentials from automatic sign-up, keyed by security scheme.
+        self.bootstrapped_auth: dict[str, HttpBearerAuthConfig | ApiKeyAuthConfig] = {}
+        # Credentials of the signed-up account, keyed by the login operation label.
+        self.bootstrapped_credentials: dict[str, dict[str, JsonValue]] = {}
 
     def _initialize_adapter(self) -> None:
         swagger_version = self.raw_schema.get("swagger")
         if swagger_version is not None:
-            self._spec_version = swagger_version or "2.0"
+            # Swagger has a single version, so an unquoted YAML `2.0` is unambiguous.
+            self._spec_version = str(swagger_version or "2.0")
             self.adapter = adapter.v2
             return
 
@@ -141,17 +191,62 @@ class OpenApiSchema(BaseSchema):
     def specification(self) -> Specification:
         return Specification.openapi(version=self._spec_version)
 
+    @property
+    @override
+    def title(self) -> str | None:
+        info = self.raw_schema.get("info")
+        title = info.get("title") if isinstance(info, dict) else None
+        return title if isinstance(title, str) else None
+
     @cached_property
     def security(self) -> OpenApiSecurity:
         return OpenApiSecurity(raw_schema=self.raw_schema, adapter=self.adapter, resolver=self.root_resolver)
+
+    @override
+    def find_unsatisfiable_parameter(self, operation: APIOperation) -> UnsatisfiableParameter | None:
+        from schemathesis.specs.openapi.diagnostics import find_unsatisfiable_parameter
+
+        return find_unsatisfiable_parameter(operation)
+
+    @override
+    def find_slow_parameter(self, operation: APIOperation, reason: HealthCheck) -> SlowParameter | None:
+        from schemathesis.specs.openapi.diagnostics import find_slow_parameter
+
+        return find_slow_parameter(operation, reason)
+
+    @override
+    def auth_flow(self) -> OpenApiAuthFlow | None:
+        spec = self.analysis.auth_flow
+        if spec is None:
+            return None
+        from schemathesis.specs.openapi.auth_flow.bootstrap import OpenApiAuthFlow
+
+        return OpenApiAuthFlow(schema=self, spec=spec)
 
     @override
     def is_security_param_negated(self, case: Case) -> bool:
         return self.security.is_security_param_negated(case)
 
     @override
-    def _security_auth_providers(self) -> Iterator[AuthProvider]:
+    def alternative_credentials(self, operation: APIOperation) -> list[tuple[ParameterLocation, str]]:
+        from schemathesis.specs.openapi.adapter.security import ORIGINAL_SECURITY_TYPE_KEY
+
+        return [
+            (parameter.location, parameter.name)
+            for parameter in operation.iter_parameters()
+            if not parameter.is_required and ORIGINAL_SECURITY_TYPE_KEY in parameter.definition
+        ]
+
+    @override
+    def security_auth_providers(self) -> Iterator[AuthProvider]:
         return iter(self.security._auth_provider_cache.values())
+
+    @property
+    def auth_schemes(
+        self,
+    ) -> dict[str, ApiKeyAuthConfig | HttpBasicAuthConfig | HttpBearerAuthConfig | DynamicTokenAuthConfig]:
+        """Credentials per security scheme: configured ones, plus a token from automatic sign-up."""
+        return {**self.config.auth.all_openapi_schemes, **self.bootstrapped_auth}
 
     @override
     def apply_auth(self, case: Case, context: AuthContext) -> bool:
@@ -159,7 +254,7 @@ class OpenApiSchema(BaseSchema):
 
         Returns True if authentication was applied, False otherwise.
         """
-        all_schemes = self.config.auth.all_openapi_schemes
+        all_schemes = self.auth_schemes
         if not all_schemes:
             return False
         return self.security.apply_auth(case, context, all_schemes)
@@ -173,17 +268,6 @@ class OpenApiSchema(BaseSchema):
 
         """
         return self.analysis.extra_data_source
-
-    @override
-    def get_coverage_capabilities(self) -> CoverageCapabilities:
-        from schemathesis.specs.openapi.formats import STRING_FORMATS, get_default_format_strategies
-        from schemathesis.specs.openapi.patterns import update_quantifier
-
-        return CoverageCapabilities(
-            format_strategies={**get_default_format_strategies(), **STRING_FORMATS},
-            update_pattern=update_quantifier,
-            validator_cls=self.adapter.jsonschema_validator_cls,
-        )
 
     @override
     def record_runtime_observations(
@@ -216,7 +300,6 @@ class OpenApiSchema(BaseSchema):
         generation_config: GenerationConfig,
         extra_data_source: ResourcePool | None = None,
         error_feedback: ErrorFeedbackStore | None = None,
-        unexpected_methods_seen: set[tuple[str, str]] | None = None,
         session: GenerationSession | None = None,
     ) -> Iterator[Case]:
         from schemathesis.specs.openapi.coverage._operation import iter_coverage_cases
@@ -229,8 +312,8 @@ class OpenApiSchema(BaseSchema):
             unexpected_methods=phases_config.coverage.unexpected_methods,
             generation_config=generation_config,
             extra_data_source=extra_data_source,
-            unexpected_methods_seen=unexpected_methods_seen
-            if unexpected_methods_seen is not None
+            unexpected_methods_seen=session.unexpected_methods_seen
+            if session is not None
             else self.coverage_unexpected_methods_seen,
             error_feedback=error_feedback,
             session=session,
@@ -245,29 +328,34 @@ class OpenApiSchema(BaseSchema):
         for location in list(meta._dirty):
             value = case.get_container(location)
             current_hash = case._hash_container(value)
-            raw = meta.raw_containers.get(location)
-            # When the container still equals its generated form, validate the typed
-            # snapshot — coverage stringifies query/path values for the wire and the
-            # validation schema is expressed in the typed form.
-            if current_hash == meta._initial_hashes.get(location) and raw is not None:
-                validation_value = raw
-            elif isinstance(value, Mapping) and isinstance(raw, Mapping):
-                # A key still equal to its generated wire form validates against the typed snapshot;
-                # a key a hook overwrote (or one auth/overrides added) validates against its live value.
-                original = meta._initial_containers.get(location, {})
-                validation_value = {
-                    key: raw[key] if key in raw and key in original and original[key] == current else current
-                    for key, current in value.items()
-                }
+            if location == ParameterLocation.HEADER and isinstance(value, Mapping):
+                # Header names are case-insensitive, and undeclared headers like auth never make the input invalid.
+                declared = {parameter.name.lower(): parameter.name for parameter in case.operation.headers}
+                value = {declared[name.lower()]: item for name, item in value.items() if name.lower() in declared}
+            validation_value = _validation_value(meta, location, value, current_hash)
+            is_valid: bool | None
+            if location == ParameterLocation.HEADER and coverage_scenario(case) in CONTENT_TYPE_PROBES:
+                # A Content-Type probe is negative through its media type, which no header parameter declares,
+                # so the headers cannot judge it and the generation-time mode stands.
+                is_valid = None
             else:
-                validation_value = value
-            is_valid = case._validate_component(location, validation_value, validator_cls)
-            if location in meta.components:
+                try:
+                    is_valid = case._validate_component(location, validation_value, validator_cls)
+                    if not is_valid and location != ParameterLocation.BODY and isinstance(validation_value, Mapping):
+                        # Parameters travel as text, so `"5"` written for an integer parameter reaches the server as `5`.
+                        is_valid = case._validate_component(
+                            location, read_from_wire(case.operation, location, validation_value), validator_cls
+                        )
+                except jsonschema_rs.ValidationError:
+                    # A schema its own draft rejects cannot judge the value, so the generation-time mode stands.
+                    is_valid = None
+            if location in meta.components and is_valid is not None:
                 new_mode = GenerationMode.POSITIVE if is_valid else GenerationMode.NEGATIVE
                 meta.components[location] = ComponentInfo(mode=new_mode)
             meta.update_validated_hash(location, current_hash)
             meta.clear_dirty(location)
-        if meta.components:
+        # The undeclared method is the violation itself, so no container edit makes the request valid.
+        if meta.components and coverage_scenario(case) != CoverageScenario.UNSPECIFIED_HTTP_METHOD:
             if all(info.mode.is_positive for info in meta.components.values()):
                 meta.generation.mode = GenerationMode.POSITIVE
             else:
@@ -283,76 +371,65 @@ class OpenApiSchema(BaseSchema):
         return {label for label, entry in transitions.operations.items() if entry.incoming}
 
     @override
+    def resource_producers(self) -> dict[str, set[str]]:
+        # From the inferred graph, so it reports what was found in the schema, not what the API can do.
+        operations = self.analysis.dependency_graph.operations
+        by_resource: dict[str, set[str]] = {}
+        for label, node in operations.items():
+            for output in node.outputs:
+                by_resource.setdefault(output.resource.name, set()).add(label)
+        producers: dict[str, set[str]] = {}
+        for label, node in operations.items():
+            if not node.inputs:
+                continue
+            found: set[str] = set()
+            for input_slot in node.inputs:
+                found |= by_resource.get(input_slot.resource.name, set())
+            producers[label] = found - {label}
+        return producers
+
+    @override
     def as_state_machine(self) -> type[APIStateMachine]:
         from schemathesis.python._constants.orchestrator import make_constants_value_source
 
-        return self._build_state_machine(
-            error_feedback=None,
+        return self.build_state_machine(
+            feedback=FeedbackSources(constants_value_source=make_constants_value_source(self)),
             link_calibration=None,
-            extra_data_source=None,
-            constants_value_source=make_constants_value_source(self),
         )
 
     @override
-    def _build_state_machine(
+    def build_state_machine(
         self,
         *,
-        error_feedback: ErrorFeedbackStore | None,
+        feedback: FeedbackSources,
         link_calibration: LinkCalibrationState | None,
-        extra_data_source: ExtraDataSource | None,
-        constants_value_source: ConstantsPool | None = None,
     ) -> type[APIStateMachine]:
         # Apply dependency inference if configured and not already done
         if self.analysis.should_inject_links():
+            _ = self._validation_error
             self.analysis.inject_links()
-        return create_state_machine(
-            self,
-            error_feedback=error_feedback,
-            link_calibration=link_calibration,
-            extra_data_source=extra_data_source,
-            constants_value_source=constants_value_source,
-        )
+        return create_state_machine(self, feedback=feedback, link_calibration=link_calibration)
 
     @override
-    def get_unit_scheduler(
-        self,
-        operations: list[Result[APIOperation, InvalidSchema]],
-        phase: Phase,
-    ) -> Scheduler:
-        from schemathesis.engine.run.unit._layered_scheduler import LayeredScheduler
-        from schemathesis.engine.run.unit._pool import DefaultScheduler, split_results
+    def get_operation_layers(self, operations: list[APIOperation]) -> list[list[APIOperation]]:
         from schemathesis.specs.openapi._ordering import compute_operation_layers
 
-        phase_config = self.config.phases.get_by_name(name=phase.name.value)
-        assert isinstance(phase_config, FuzzingPhaseConfig | CoveragePhaseConfig | ExamplesPhaseConfig)
-        if phase_config.operation_ordering == OperationOrdering.NONE:
-            return DefaultScheduler(operations=operations)
-
-        successes, errors = split_results(operations)
-        if not successes:
-            return DefaultScheduler(operations=operations)
-
-        layers = compute_operation_layers(self, successes)
-
-        if not layers:
-            return DefaultScheduler(operations=operations)
-
+        layers = compute_operation_layers(self, operations)
         if len(layers) == 1:
             # Stable-sort by RESTful priority so producers dispatch before consumers
             # without reordering same-priority operations against each other.
-            ordered_successes = sorted(successes, key=lambda op: restful_method_priority(op.method))
-            ordered: list[Result[APIOperation, InvalidSchema]] = [Ok(op) for op in ordered_successes]
-            ordered.extend(Err(err) for err in errors)
-            return DefaultScheduler(operations=ordered)
-
-        return LayeredScheduler(layers, errors=errors)
+            return [sorted(operations, key=lambda op: restful_method_priority(op.method))]
+        return layers
 
     @override
     def apply_stateful_inference(self, observations: Observations | None) -> StatefulInference:
+        _ = self._validation_error
         injected = 0
-        if observations is not None and observations.location_headers:
+        if observations is not None:
             for operation, entries in observations.location_headers.items():
-                injected += self.analysis.inferencer.inject_links(operation.responses, entries)
+                injected += self.analysis.inferencer.inject_links(operation, entries)
+            for operation, body_entries in observations.body_urls.items():
+                injected += self.analysis.inferencer.inject_links(operation, body_entries)
         if self.analysis.should_inject_links():
             injected += self.analysis.inject_links()
         # Injected links land in the schema, where operations may share a response definition, so one
@@ -360,6 +437,7 @@ class OpenApiSchema(BaseSchema):
         # later reader see them, rather than the counts from before the injection.
         if injected:
             self.__dict__.pop("statistic", None)
+            self._operations.clear_cache()
         transitions = self.statistic.transitions
         return StatefulInference(inferred=injected, total=transitions.total, selected=transitions.selected)
 
@@ -387,6 +465,20 @@ class OpenApiSchema(BaseSchema):
                 )
                 weights[op.label] = 2 + out_degree
         return weights
+
+    @override
+    def record_link_outcome(
+        self,
+        *,
+        calibration: LinkCalibrationState,
+        response: Response,
+        observations: tuple[Observation, ...],
+        step_input: StepInput,
+        recorder: ScenarioRecorder,
+    ) -> None:
+        from schemathesis.specs.openapi.stateful.link_calibration import record_link_outcome
+
+        record_link_outcome(calibration, response, observations, step_input, recorder)
 
     @override
     def iter_link_candidates(
@@ -425,14 +517,6 @@ class OpenApiSchema(BaseSchema):
             HEADER_FORMAT, header_values(exclude_characters=DEFAULT_HEADER_EXCLUDE_CHARACTERS + "\x00")
         )
 
-    @override
-    def get_custom_format_strategies(
-        self, generation_config: GenerationConfig, mode: GenerationMode
-    ) -> dict[str, SearchStrategy]:
-        from schemathesis.specs.openapi._hypothesis import _build_custom_formats
-
-        return _build_custom_formats(generation_config, mode)
-
     def __repr__(self) -> str:
         info = self.raw_schema["info"]
         return f"<{self.__class__.__name__} for {info['title']} {info['version']}>"
@@ -445,12 +529,17 @@ class OpenApiSchema(BaseSchema):
         return iter(paths)
 
     @cached_property
+    def path_templates(self) -> list[PathTemplate]:
+        """Paths with parameters, compiled to match the concrete paths they route."""
+        return [compile_path_template(path) for path in self if "{" in path]
+
+    @cached_property
     def default_media_types(self) -> list[str]:
         return self.adapter.get_default_media_types(self.raw_schema)
 
     @override
-    def _get_base_path(self) -> str:
-        return self.adapter.get_base_path(self.raw_schema)
+    def declared_base_path(self) -> str:
+        return self.adapter.get_base_path(self.raw_schema, self.config.servers.variables or None)
 
     @cached_property
     def _schema_document_path(self) -> str | None:
@@ -492,31 +581,23 @@ class OpenApiSchema(BaseSchema):
             path_resolver = self.root_resolver
             scope = path_resolver.base_uri
         dispatch_before_process_path(self, HookContext(), path, path_item)
-        map = APIOperationMap(self, {})
-        map._data = MethodMap(map, path_resolver, scope, path, CaseInsensitiveDict(path_item))
-        return map
+        return APIOperationMap(self, MethodMap(self, path_resolver, scope, path, CaseInsensitiveDict(path_item)))
 
     @override
     def find_operation_by_label(self, label: str) -> APIOperation | None:
         try:
             method, path = label.split(" ", maxsplit=1)
             return self[path][method]
-        except (OperationNotFound, ValueError):
+        # Both a missing path and a missing method on a known path raise `LookupError`.
+        except (LookupError, ValueError):
             return None
 
     @override
     def on_missing_operation(self, item: str, exc: KeyError) -> NoReturn:
-        matches = get_close_matches(item, list(self))
-        self._on_missing_operation(item, exc, matches)
+        self._on_missing_operation(item, exc, self)
 
-    def _on_missing_operation(self, item: str, exc: KeyError | None, matches: list[str]) -> NoReturn:
-        message = f"`{item}` not found"
-        if matches:
-            message += f". Did you mean `{matches[0]}`?"
-        raise OperationNotFound(message=message, item=item) from exc
-
-    def _should_skip(self, path: str, method: str, definition: OperationObject) -> bool:
-        return self._operations._should_skip(path, method, definition)
+    def _on_missing_operation(self, item: str, exc: KeyError | None, candidates: Iterable[str]) -> NoReturn:
+        raise OperationNotFound(message=not_found_message(item, "", candidates), item=item) from exc
 
     @override
     def _measure_statistic(self) -> ApiStatistic:
@@ -542,55 +623,22 @@ class OpenApiSchema(BaseSchema):
         __tracebackhide__ = True
         yield from self._operations.iter_all()
 
-    def _raise_invalid_schema(
-        self,
-        error: Exception,
-        path: str | None = None,
-        method: str | None = None,
-    ) -> NoReturn:
-        __tracebackhide__ = True
-        self._operations._raise_invalid_schema(error, path, method)
-
     @override
     def validate(self) -> None:
+        error = self._validation_error
+        if error is not None:
+            raise error
+
+    @cached_property
+    def _validation_error(self) -> jsonschema_rs.ValidationError | None:
+        # Inferred links are written into the schema; this must run before them, as they are not the user's to fix.
         try:
-            self._validate()
+            self.adapter.validate_schema(self.raw_schema)
+        except jsonschema_rs.ValidationError as exc:
+            return exc
         except TypeError:
             pass
-
-    def _validate(self) -> None:
-        self.adapter.validate_schema(self.raw_schema)
-
-    def _iter_parameters(
-        self,
-        definition: OperationObject,
-        shared_parameters: Sequence[dict[str, Any]],
-        resolver: Resolver | None = None,
-    ) -> ParsedParameters:
-        return self._operations._iter_parameters(definition, shared_parameters, resolver=resolver)
-
-    def _parse_responses(
-        self, definition: OperationObject, scope: str, resolver: Resolver | None = None
-    ) -> OpenApiResponses:
-        return self._operations._parse_responses(definition, scope, resolver=resolver)
-
-    def _parse_security(self, definition: OperationObject) -> OpenApiSecurityParameters:
-        return self._operations._parse_security(definition)
-
-    def make_operation(
-        self,
-        path: str,
-        method: HttpMethodSchema,
-        parameters: ParsedParameters,
-        definition: OperationObject,
-        scope: str,
-        resolver: Resolver | None = None,
-        path_item: Mapping[str, Any] | None = None,
-    ) -> APIOperation:
-        __tracebackhide__ = True
-        return self._operations.make_operation(
-            path, method, parameters, definition, scope, resolver=resolver, path_item=path_item
-        )
+        return None
 
     @cached_property
     def root_resolver(self) -> Resolver:
@@ -600,14 +648,28 @@ class OpenApiSchema(BaseSchema):
         """Content types available for this API operation."""
         return self.adapter.get_response_content_types(operation, response)
 
-    @override
     def get_request_payload_content_types(self, operation: APIOperation) -> list[str]:
         return self.adapter.get_request_payload_content_types(operation)
 
+    def _get_default_media_type(self, operation: APIOperation) -> str:
+        # If the user wants to send payload, then there should be a media type, otherwise the payload is ignored
+        media_types = self.get_request_payload_content_types(operation)
+        if len(media_types) == 1:
+            # The only available option
+            return media_types[0]
+        media_types_repr = ", ".join(media_types)
+        raise IncorrectUsage(
+            "Can not detect appropriate media type. "
+            "You can either specify one of the defined media types "
+            f"or pass any other media type available for serialization. Defined media types: {media_types_repr}"
+        )
+
     @override
-    def get_strategies_from_examples(self, operation: APIOperation, **kwargs: Any) -> list[SearchStrategy[Case]]:
+    def get_strategies_from_examples(
+        self, operation: APIOperation, feedback: FeedbackSources = NO_FEEDBACK, **kwargs: Any
+    ) -> list[SearchStrategy[Case]]:
         """Get examples from the API operation."""
-        return get_strategies_from_examples(operation, **kwargs)
+        return get_strategies_from_examples(operation, feedback=feedback, **kwargs)
 
     def find_operation_by_id(self, operation_id: str) -> APIOperation:
         """Find an `APIOperation` instance by its `operationId`."""
@@ -627,13 +689,14 @@ class OpenApiSchema(BaseSchema):
         Returns None if no operation matches.
         """
         from werkzeug.exceptions import MethodNotAllowed, NotFound
+        from werkzeug.routing import RequestRedirect
 
         from schemathesis.specs.openapi.stateful.inference import OperationById
 
         # Match path and method using werkzeug router
         try:
             operation_ref, _ = self.analysis.inferencer._adapter.match(path, method=method.upper())
-        except (NotFound, MethodNotAllowed):
+        except (NotFound, MethodNotAllowed, RequestRedirect):
             return None
 
         if isinstance(operation_ref, OperationById):
@@ -647,20 +710,29 @@ class OpenApiSchema(BaseSchema):
         hooks: HookDispatcher | None = None,
         auth_storage: AuthStorage | None = None,
         generation_mode: GenerationMode = GenerationMode.POSITIVE,
-        extra_data_source: ExtraDataSource | None = None,
-        error_feedback: ErrorFeedbackStore | None = None,
-        constants_value_source: ConstantsPool | None = None,
-        **kwargs: Any,
+        feedback: FeedbackSources = NO_FEEDBACK,
+        *,
+        path_parameters: dict[str, Any] | None = None,
+        headers: dict[str, Any] | None = None,
+        cookies: dict[str, Any] | None = None,
+        query: dict[str, Any] | None = None,
+        body: Any = NOT_SET,
+        media_type: str | None = None,
+        phase: TestPhase = TestPhase.FUZZING,
     ) -> SearchStrategy[Case]:
         return openapi_cases(
             operation=operation,
             hooks=hooks,
             auth_storage=auth_storage,
             generation_mode=generation_mode,
-            extra_data_source=extra_data_source,
-            error_feedback=error_feedback,
-            constants_value_source=constants_value_source,
-            **kwargs,
+            feedback=feedback,
+            path_parameters=path_parameters,
+            headers=headers,
+            cookies=cookies,
+            query=query,
+            body=body,
+            media_type=media_type,
+            phase=phase,
         )
 
     @override
@@ -668,15 +740,12 @@ class OpenApiSchema(BaseSchema):
         definitions = [item.definition for item in operation.iter_parameters() if item.location == location]
         config = self.config.generation_for(operation=operation)
         if config.with_security_parameters:
-            security_parameters = [param for param in operation.security.iter_parameters() if param["in"] == location]
-            if security_parameters:
-                definitions.extend(security_parameters)
+            definitions.extend(
+                param.definition for param in operation.security.iter_parameters() if param.location == location
+            )
         if definitions:
-            return self._get_parameter_serializer(definitions)
+            return self.adapter.get_parameter_serializer(definitions)
         return None
-
-    def _get_parameter_serializer(self, definitions: list[dict[str, Any]]) -> Callable | None:
-        return self.adapter.get_parameter_serializer(definitions)
 
     @override
     def get_tags(self, operation: APIOperation) -> list[str] | None:
@@ -687,42 +756,36 @@ class OpenApiSchema(BaseSchema):
         return operation.definition.raw.get("operationId")
 
     @override
-    def prepare_multipart(
-        self, form_data: dict[str, Any], operation: APIOperation, selected_content_types: dict[str, str] | None = None
-    ) -> tuple[list | None, dict[str, Any] | None]:
-        return self.adapter.prepare_multipart(operation, form_data, selected_content_types)
+    def is_deprecated(self, operation: APIOperation) -> bool:
+        return operation.definition.raw.get("deprecated") is True
 
     @override
-    def make_case(
+    def prepare_multipart(
         self,
-        *,
+        form_data: dict[str, Any],
         operation: APIOperation,
-        method: HttpMethod | None = None,
-        path: str | None = None,
-        path_parameters: dict[str, Any] | None = None,
-        headers: dict[str, Any] | CaseInsensitiveDict | None = None,
-        cookies: dict[str, Any] | None = None,
-        query: dict[str, Any] | None = None,
-        body: Body = NOT_SET,
-        media_type: str | None = None,
-        multipart_content_types: dict[str, str] | None = None,
-        meta: CaseMetadata | None = None,
-    ) -> Case:
+        media_type: str,
+        selected_content_types: dict[str, str] | None = None,
+    ) -> tuple[list | None, dict[str, Any] | None]:
+        return self.adapter.prepare_multipart(operation, form_data, media_type, selected_content_types)
+
+    @override
+    def prepare_request_body(self, case: Case) -> Body:
+        body = case.body
+        if not isinstance(body, dict) or case.media_type is None or not media_types.is_form_urlencoded(case.media_type):
+            return body
+        alternative = case.operation.get_body_for_media_type(case.media_type)
+        if alternative is None:
+            return body
+        # Each property is serialized like a query parameter, following the media type's `encoding`
+        serialize = _build_urlencoded_serializer(alternative.definition)
+        return jsonify_python_specific_types(serialize(dict(body)))
+
+    @override
+    def _case_media_type(self, operation: APIOperation, body: Body, media_type: str | None) -> str | None:
         if body is not NOT_SET and media_type is None:
-            media_type = operation._get_default_media_type()
-        return Case(
-            operation=operation,
-            method=method or cast("HttpMethod", operation.method.upper()),
-            path=path or operation.path,
-            path_parameters=path_parameters or {},
-            headers=CaseInsensitiveDict() if headers is None else CaseInsensitiveDict(headers),
-            cookies=cookies or {},
-            query=query or {},
-            body=body,
-            media_type=media_type,
-            multipart_content_types=multipart_content_types,
-            meta=meta,
-        )
+            return self._get_default_media_type(operation)
+        return media_type
 
     @override
     def validate_response(
@@ -733,7 +796,19 @@ class OpenApiSchema(BaseSchema):
         case: Case | None = None,
     ) -> bool | None:
         __tracebackhide__ = True
-        return self._response_validator.validate(operation, response, case=case)
+        return validate_documented_response(self, operation, response, case)
+
+    @override
+    def evaluate_auth(self, ctx: CheckContext, response: Response, case: Case) -> bool | None:
+        return checks._openapi_ignored_auth(ctx, response, case)
+
+    @override
+    def evaluate_negative_data(self, ctx: CheckContext, response: Response, case: Case) -> bool | None:
+        return checks._openapi_negative_data_rejection(ctx, response, case)
+
+    @override
+    def evaluate_positive_data(self, ctx: CheckContext, response: Response, case: Case) -> bool | None:
+        return checks._openapi_positive_data_acceptance(ctx, response, case)
 
 
 @dataclass
@@ -743,7 +818,7 @@ class MethodMap(Mapping):
     Provides a more specific error message if API operation is not found.
     """
 
-    _parent: APIOperationMap
+    _schema: OpenApiSchema
     _resolver: Resolver
     # Reference resolution scope
     _scope: str
@@ -752,7 +827,7 @@ class MethodMap(Mapping):
     # Storage for definitions
     _path_item: CaseInsensitiveDict
 
-    __slots__ = ("_parent", "_resolver", "_scope", "_path", "_path_item")
+    __slots__ = ("_schema", "_resolver", "_scope", "_path", "_path_item")
 
     def __len__(self) -> int:
         return len(self._path_item)
@@ -763,15 +838,19 @@ class MethodMap(Mapping):
     def _init_operation(self, method: str) -> APIOperation:
         method = method.lower()
         operation = self._path_item[method]
-        schema = cast(OpenApiSchema, self._parent._schema)
+        schema = self._schema
         path = self._path
+        loader = schema._operations
+        cached = loader.cached(self._scope, path, method)
+        if cached is not None:
+            return cached
         try:
-            parameters = schema._iter_parameters(
+            parameters = loader._iter_parameters(
                 operation, self._path_item.get("parameters", []), resolver=self._resolver
             )
         except SCHEMA_PARSING_ERRORS as exc:
-            schema._raise_invalid_schema(exc, path, method)
-        return schema.make_operation(
+            loader._raise_invalid_schema(exc, path, method)
+        return loader.make_operation(
             path,
             cast("HttpMethodSchema", method),
             parameters,

@@ -2,26 +2,185 @@ import gc
 import json
 import platform
 from pathlib import Path
+from typing import Any
 
 import pytest
 from flask import Flask, jsonify
-from hypothesis import HealthCheck, given, settings
+from hypothesis import given, settings
 from hypothesis.errors import Unsatisfiable
-from jsonschema_rs import Draft4Validator
+from jsonschema_rs import Draft4Validator, Draft202012Validator
 from werkzeug.exceptions import InternalServerError
 
 import schemathesis
 from schemathesis.core.errors import InvalidSchema
-from schemathesis.core.jsonschema.resolver import load_file_uri, resolve_reference
+from schemathesis.core.jsonschema import Bundler
+from schemathesis.core.jsonschema.resolver import load_file_uri, make_root_resolver, resolve_reference
 from schemathesis.core.result import Ok
 from schemathesis.core.transforms import get_template_fields
-from schemathesis.generation.modes import GenerationMode
+from schemathesis.generation.hypothesis.examples import generate_many
+from schemathesis.specs.openapi.definitions import OPENAPI_30, OPENAPI_31, SWAGGER_20
 from schemathesis.specs.openapi.stateful import dependencies
-from test.utils import as_param, get_schema_path, integer
+from test.utils import integer, run_given
 
 USER_REFERENCE = {"$ref": "#/components/schemas/User"}
 ELIDABLE_SCHEMA = {"description": "Test", "type": "object", "properties": {"foo": {"type": "integer"}}}
 ALL_OF_ROOT = {"allOf": [USER_REFERENCE, {"description": "Test"}], "type": "object", "additionalProperties": False}
+
+
+@pytest.mark.hypothesis_nested
+def test_request_body_schema_reference_to_plain_name_anchor(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /pets",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": {"$ref": "#petName"}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+        components={"schemas": {"Name": {"$anchor": "petName", "type": "string"}}},
+    )
+
+    assert [body.media_type for body in operation.body] == ["application/json"]
+
+    @run_given(case=operation.as_strategy(), max_examples=3)
+    def test(case):
+        assert isinstance(case.body, str)
+
+
+@pytest.mark.parametrize(
+    ("identifier", "reference"),
+    [
+        ("tree", "tree"),
+        ("https://example.com/schemas/tree", "tree"),
+        ("schemas/tree", "tree"),
+        ("./tree", "tree"),
+    ],
+    ids=["relative-id", "reference-relative-to-id", "reference-relative-to-relative-id", "dot-segment-id"],
+)
+def test_request_body_relative_reference_to_declared_id(ctx, identifier, reference):
+    tree = {
+        "$id": identifier,
+        "type": "object",
+        "properties": {"id": {"type": "integer"}, "children": {"type": "array", "items": {"$ref": reference}}},
+        "required": ["id"],
+    }
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {"required": True, "content": {"application/json": {"schema": tree}}},
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+    )
+    validator = Draft202012Validator(tree)
+
+    bodies = [case.body for case in generate_many(operation.as_strategy(), 10)]
+
+    assert [body for body in bodies if not validator.is_valid(body)] == []
+
+
+@pytest.mark.hypothesis_nested
+def test_request_body_reference_into_fragment_of_declared_id(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {"application/json": {"schema": {"$ref": "https://example.invalid/text.json#/$defs/Code"}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+        components={
+            "schemas": {
+                "Text": {
+                    "$id": "https://example.invalid/text.json",
+                    "$defs": {"Code": {"type": "string", "enum": ["alpha"]}},
+                }
+            }
+        },
+    )
+
+    @run_given(case=operation.as_strategy(), max_examples=3)
+    def test(case):
+        assert case.body == "alpha"
+
+
+def _object_with_own_code(uri, code):
+    return {
+        "$id": uri,
+        "type": "object",
+        "properties": {"code": {"$ref": "#/$defs/Code"}},
+        "required": ["code"],
+        "additionalProperties": False,
+        "$defs": {"Code": {"enum": [code]}},
+    }
+
+
+@pytest.mark.hypothesis_nested
+@pytest.mark.parametrize(
+    ("version", "schema", "schemas", "expected"),
+    [
+        ("3.1.0", _object_with_own_code("https://example.invalid/item", "alpha"), {}, {"code": "alpha"}),
+        (
+            "3.0.2",
+            {
+                "id": "https://example.invalid/item",
+                "type": "object",
+                "properties": {"code": {"$ref": "#/definitions/Code"}},
+                "required": ["code"],
+                "additionalProperties": False,
+                "definitions": {"Code": {"enum": ["alpha"]}},
+            },
+            {},
+            {"code": "alpha"},
+        ),
+        (
+            "3.1.0",
+            {
+                **_object_with_own_code("https://example.invalid/outer", "alpha"),
+                "properties": {
+                    "code": {"$ref": "#/$defs/Code"},
+                    "inner": _object_with_own_code("https://example.invalid/inner", "beta"),
+                },
+                "required": ["code", "inner"],
+            },
+            {},
+            {"code": "alpha", "inner": {"code": "beta"}},
+        ),
+        (
+            "3.1.0",
+            {
+                "type": "object",
+                "properties": {"a": {"$ref": "https://example.invalid/a"}, "b": {"$ref": "https://example.invalid/b"}},
+                "required": ["a", "b"],
+                "additionalProperties": False,
+            },
+            {
+                "A": _object_with_own_code("https://example.invalid/a", "alpha"),
+                "B": _object_with_own_code("https://example.invalid/b", "beta"),
+            },
+            {"a": {"code": "alpha"}, "b": {"code": "beta"}},
+        ),
+    ],
+    ids=["defs", "draft-4-definitions", "nested-resource", "named-resources"],
+)
+def test_request_body_reference_into_own_definitions_of_declared_id(ctx, version, schema, schemas, expected):
+    operation = ctx.openapi.load_operation(
+        "POST /items",
+        {
+            "requestBody": {"required": True, "content": {"application/json": {"schema": schema}}},
+            "responses": {"200": {"description": "OK"}},
+        },
+        version=version,
+        components={"schemas": schemas},
+    )
+
+    @run_given(case=operation.as_strategy(), max_examples=3)
+    def test(case):
+        assert case.body == expected
 
 
 def build_schema_with_recursion(schema, definition):
@@ -99,16 +258,13 @@ def test_drop_recursive_references_from_the_last_resolution_level(ctx, definitio
 
     validator = Draft4Validator({**USER_REFERENCE, "components": raw_schema["components"]})
 
-    @given(case=schema["/users"]["POST"].as_strategy())
-    @settings(max_examples=25, suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much], deadline=None)
+    @run_given(case=schema["/users"]["POST"].as_strategy(), max_examples=25)
     def test(case):
         # Generated payload should be valid for the original schema (with references)
         try:
             validator.validate(case.body)
         except RecursionError:
             pass
-
-    test()
 
 
 @pytest.mark.parametrize(
@@ -158,37 +314,27 @@ def test_recursion_asserting_nothing(ctx):
     raw_schema = ctx.openapi.build_schema({})
     build_schema_with_recursion(raw_schema, USER_REFERENCE)
     schema = schemathesis.openapi.from_dict(raw_schema)
-    drawn = []
-
-    @given(case=schema["/users"]["POST"].as_strategy())
-    @settings(max_examples=1, deadline=None)
-    def test(case):
-        drawn.append(case.body)
-
-    test()
+    drawn = [case.body for case in generate_many(schema["/users"]["POST"].as_strategy(), 1)]
     assert drawn
 
 
 def test_nested_recursive_references(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /folders",
         {
-            "/folders": {
-                "post": {
-                    "description": "Test",
-                    "summary": "Test",
-                    "requestBody": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/editFolder",
-                                }
-                            }
-                        },
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "Test"}},
-                }
-            }
+            "description": "Test",
+            "summary": "Test",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/editFolder",
+                        }
+                    }
+                },
+                "required": True,
+            },
+            "responses": {"200": {"description": "Test"}},
         },
         components={
             "schemas": {
@@ -225,300 +371,81 @@ def test_nested_recursive_references(ctx):
         },
     )
 
-    @given(case=schema["/folders"]["POST"].as_strategy())
-    @settings(max_examples=1)
+    @run_given(case=operation.as_strategy(), max_examples=1)
     def test(case):
         pass
 
-    test()
 
-
-def test_simple_dereference(testdir):
-    # When a given parameter contains a JSON reference
-    testdir.make_test(
-        """
-@schema.include(method="POST").parametrize()
-@settings(max_examples=1)
-def test_(request, case):
-    request.config.HYPOTHESIS_CASES += 1
-    assert case.path == "/users"
-    assert case.method == "POST"
-    assert_int(case.body)
-""",
-        paths={
-            "/users": {
-                "post": {
-                    "parameters": [
-                        {
-                            "schema": {"$ref": "#/definitions/SimpleIntRef"},
-                            "in": "body",
-                            "name": "object",
-                            "required": True,
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+def _body_operation(ctx, schema, definitions=None):
+    return ctx.openapi.load_operation(
+        "POST /users",
+        {
+            "parameters": [{"schema": schema, "in": "body", "name": "object", "required": True}],
+            "responses": {"200": {"description": "OK"}},
         },
-        definitions={"SimpleIntRef": {"type": "integer"}},
-        generation_modes=[GenerationMode.POSITIVE],
+        version="2.0",
+        definitions=definitions or {},
     )
-    # Then it should be correctly resolved and used in the generated case
-    result = testdir.runpytest("-v", "-s")
-    result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 2$"])
 
 
-def test_recursive_dereference(testdir):
-    # When a given parameter contains a JSON reference, that reference an object with another reference
-    testdir.make_test(
-        """
-@schema.include(method="POST").parametrize()
-@settings(max_examples=1)
-def test_(request, case):
-    request.config.HYPOTHESIS_CASES += 1
-    assert case.path == "/users"
-    assert case.method == "POST"
-    assert_int(case.body["id"])
-""",
-        paths={
-            "/users": {
-                "post": {
-                    "parameters": [
-                        {
-                            "schema": {"$ref": "#/definitions/ObjectRef"},
-                            "in": "body",
-                            "name": "object",
-                            "required": True,
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        definitions={
-            "ObjectRef": {
-                "required": ["id"],
-                "type": "object",
-                "additionalProperties": False,
-                "properties": {"id": {"$ref": "#/definitions/SimpleIntRef"}},
+@pytest.mark.parametrize(
+    ("schema", "definitions", "is_expected"),
+    [
+        (
+            {"$ref": "#/definitions/SimpleIntRef"},
+            {"SimpleIntRef": {"type": "integer"}},
+            lambda body: isinstance(body, int),
+        ),
+        (
+            {"$ref": "#/definitions/ObjectRef"},
+            {
+                "ObjectRef": {
+                    "required": ["id"],
+                    "type": "object",
+                    "additionalProperties": False,
+                    "properties": {"id": {"$ref": "#/definitions/SimpleIntRef"}},
+                },
+                "SimpleIntRef": {"type": "integer"},
             },
-            "SimpleIntRef": {"type": "integer"},
-        },
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then it should be correctly resolved and used in the generated case
-    result = testdir.runpytest("-v", "-s")
-    result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 2$"])
+            lambda body: isinstance(body["id"], int),
+        ),
+        (
+            {"type": "object", "required": ["id"], "properties": {"id": {"$ref": "#/definitions/SimpleIntRef"}}},
+            {"SimpleIntRef": {"type": "integer"}},
+            lambda body: isinstance(body["id"], int),
+        ),
+        (
+            {
+                "type": "object",
+                "required": ["id"],
+                "properties": {"id": {"allOf": [{"$ref": "#/definitions/A"}, {"$ref": "#/definitions/B"}]}},
+            },
+            {
+                "A": {"type": "object", "required": ["a"], "properties": {"a": {"type": "integer"}}},
+                "B": {"type": "object", "required": ["b"], "properties": {"b": {"type": "string"}}},
+            },
+            lambda body: isinstance(body["id"]["a"], int) and isinstance(body["id"]["b"], str),
+        ),
+        (
+            {"$ref": "#/definitions/NullableIntRef"},
+            {"NullableIntRef": {"type": "integer", "x-nullable": True}},
+            lambda body: isinstance(body, int) or body is None,
+        ),
+    ],
+    ids=["simple", "recursive", "inner", "inner-all-of", "nullable"],
+)
+def test_body_reference_is_resolved(ctx, schema, definitions, is_expected):
+    operation = _body_operation(ctx, schema, definitions)
+
+    @run_given(case=operation.as_strategy(), max_examples=10)
+    def test(case):
+        assert is_expected(case.body), case.body
 
 
-def test_inner_dereference(testdir):
-    # When a given parameter contains a JSON reference inside a property of an object
-    testdir.make_test(
-        """
-@schema.include(method="POST").parametrize()
-@settings(max_examples=1)
-def test_(request, case):
-    request.config.HYPOTHESIS_CASES += 1
-    assert case.path == "/users"
-    assert case.method == "POST"
-    assert_int(case.body["id"])
-""",
-        paths={
-            "/users": {
-                "post": {
-                    "parameters": [
-                        {
-                            "schema": {
-                                "type": "object",
-                                "required": ["id"],
-                                "properties": {"id": {"$ref": "#/definitions/SimpleIntRef"}},
-                            },
-                            "in": "body",
-                            "name": "object",
-                            "required": True,
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        definitions={"SimpleIntRef": {"type": "integer"}},
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then it should be correctly resolved and used in the generated case
-    result = testdir.runpytest("-v", "-s")
-    result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 2$"])
-
-
-def test_inner_dereference_with_lists(testdir):
-    # When a given parameter contains a JSON reference inside a list in `allOf`
-    testdir.make_test(
-        """
-@schema.include(method="POST").parametrize()
-@settings(max_examples=1)
-def test_(request, case):
-    request.config.HYPOTHESIS_CASES += 1
-    assert case.path == "/users"
-    assert case.method == "POST"
-    assert_int(case.body["id"]["a"])
-    assert_str(case.body["id"]["b"])
-""",
-        paths={
-            "/users": {
-                "post": {
-                    "parameters": [
-                        {
-                            "schema": {
-                                "type": "object",
-                                "required": ["id"],
-                                "properties": {
-                                    "id": {"allOf": [{"$ref": "#/definitions/A"}, {"$ref": "#/definitions/B"}]}
-                                },
-                            },
-                            "in": "body",
-                            "name": "object",
-                            "required": True,
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        definitions={
-            "A": {"type": "object", "required": ["a"], "properties": {"a": {"type": "integer"}}},
-            "B": {"type": "object", "required": ["b"], "properties": {"b": {"type": "string"}}},
-        },
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then it should be correctly resolved and used in the generated case
-    result = testdir.runpytest("-v", "-s")
-    result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 2$"])
-
-
-@pytest.mark.parametrize("extra", [{}, {"enum": ["foo", None]}], ids=["no-enum", "enum-with-null"])
-@pytest.mark.parametrize("version", ["2.0", "3.0.2"])
-def test_nullable_parameters(ctx, testdir, version, extra):
-    schema = ctx.openapi.build_schema(
-        {"/users": {"get": {"responses": {"200": {"description": "OK"}}}}}, version=version
-    )
-    if version == "2.0":
-        schema["paths"]["/users"]["get"]["parameters"] = [
-            {"in": "query", "name": "id", "type": "string", "x-nullable": True, "required": True, **extra}
-        ]
-    else:
-        schema["paths"]["/users"]["get"]["parameters"] = [
-            {"in": "query", "name": "id", "schema": {"type": "string", "nullable": True, **extra}, "required": True}
-        ]
-    testdir.make_test(
-        """
-@schema.parametrize()
-@settings(max_examples=1)
-def test_(request, case):
-    assume(case.query["id"] == "null")
-    request.config.HYPOTHESIS_CASES += 1
-    assert case.path == "/users"
-    assert case.method == "GET"
-""",
-        schema=schema,
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then it should be correctly resolved and used in the generated case
-    result = testdir.runpytest("-v", "-s")
-    result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 2$"])
-
-
-def test_nullable_properties(testdir):
-    testdir.make_test(
-        """
-@schema.include(method="POST").parametrize()
-@settings(max_examples=1)
-def test_(request, case):
-    assume(case.body["id"] is None)
-    assert case.path == "/users"
-    assert case.method == "POST"
-    request.config.HYPOTHESIS_CASES += 1
-""",
-        paths={
-            "/users": {
-                "post": {
-                    "parameters": [
-                        {
-                            "in": "body",
-                            "name": "attributes",
-                            "schema": {
-                                "type": "object",
-                                "properties": {"id": {"type": "integer", "format": "int64", "x-nullable": True}},
-                                "required": ["id"],
-                            },
-                            "required": True,
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then it should be correctly resolved and used in the generated case
-    result = testdir.runpytest("-vv", "-s")
-    result.assert_outcomes(passed=1)
-    # At least one `None` value should be generated
-    result.stdout.re_match_lines([r"Hypothesis calls: 2$"])
-
-
-def test_nullable_ref(testdir):
-    testdir.make_test(
-        """
-@schema.include(method="POST").parametrize()
-@settings(max_examples=1)
-def test_(request, case):
-    request.config.HYPOTHESIS_CASES += 1
-    assert case.path == "/users"
-    assert case.method == "POST"
-    if not hasattr(case.meta.phase.data, "description"):
-        assert isinstance(case.body, int) or case.body is None
-""",
-        paths={
-            "/users": {
-                "post": {
-                    "parameters": [
-                        {
-                            "in": "body",
-                            "name": "attributes",
-                            "schema": {"$ref": "#/definitions/NullableIntRef"},
-                            "required": True,
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        definitions={"NullableIntRef": {"type": "integer", "x-nullable": True}},
-        generation_modes=[GenerationMode.POSITIVE],
-    )
-    # Then it should be correctly resolved and used in the generated case
-    result = testdir.runpytest("-v", "-s")
-    result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 3$"])
-
-
-def test_path_ref(testdir):
-    # When path is specified via `$ref`
-    testdir.make_test(
-        """
-@schema.parametrize()
-@settings(max_examples=1)
-def test_(request, case):
-    request.config.HYPOTHESIS_CASES += 1
-    assert case.path == "/users"
-    assert isinstance(case.body, str)
-""",
-        paths={"/users": {"$ref": "#/x-paths/UsersPath"}},
+def test_path_item_reference_is_resolved(ctx):
+    schema = ctx.openapi.load_schema(
+        {"/users": {"$ref": "#/x-paths/UsersPath"}},
+        version="2.0",
         **{
             # custom extension `x-paths` to be compliant with the spec, otherwise there is no handy place
             # to put the referenced object
@@ -530,50 +457,72 @@ def test_(request, case):
                 }
             }
         },
-        generation_modes=[GenerationMode.POSITIVE],
     )
-    # Then it should be correctly resolved and used in the generated case
-    result = testdir.runpytest("-v", "-s")
-    result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 2$"])
+
+    @run_given(case=schema["/users"]["POST"].as_strategy(), max_examples=10)
+    def test(case):
+        assert isinstance(case.body, str)
 
 
-def test_nullable_enum(testdir):
-    # An `enum` that omits null keeps null out of requests even though the parameter is nullable.
-    testdir.make_test(
-        """
-@schema.parametrize()
-@settings(max_examples=1)
-def test_(request, case):
-    request.config.HYPOTHESIS_CASES += 1
-    assert case.path == "/users"
-    assert case.method == "GET"
-    if not hasattr(case.meta.phase.data, "description"):
+def test_nullable_enum_without_null_keeps_null_out(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /users",
+        {
+            "parameters": [integer(name="id", required=True, enum=[1, 2], **{"x-nullable": True})],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="2.0",
+    )
+
+    @run_given(case=operation.as_strategy(), max_examples=10)
+    def test(case):
         assert case.query["id"] in (1, 2)
-""",
-        **as_param(integer(name="id", required=True, enum=[1, 2], **{"x-nullable": True})),
-        generation_modes=[GenerationMode.POSITIVE],
+
+
+@pytest.mark.parametrize("extra", [{}, {"enum": ["foo", None]}], ids=["no-enum", "enum-with-null"])
+@pytest.mark.parametrize("version", ["2.0", "3.0.2"])
+def test_nullable_parameters(ctx, version, extra):
+    if version == "2.0":
+        parameter = {"in": "query", "name": "id", "type": "string", "x-nullable": True, "required": True, **extra}
+    else:
+        parameter = {
+            "in": "query",
+            "name": "id",
+            "schema": {"type": "string", "nullable": True, **extra},
+            "required": True,
+        }
+    operation = ctx.openapi.load_operation(
+        "GET /users", {"parameters": [parameter], "responses": {"200": {"description": "OK"}}}, version=version
     )
-    # Then it should be correctly resolved and used in the generated case
-    result = testdir.runpytest("-v", "-s")
-    result.assert_outcomes(passed=1)
-    result.stdout.re_match_lines([r"Hypothesis calls: 3$"])
+    assert any(case.query["id"] == "null" for case in generate_many(operation.as_strategy(), 10))
+
+
+def test_nullable_properties(ctx):
+    operation = _body_operation(
+        ctx,
+        {
+            "type": "object",
+            "properties": {"id": {"type": "integer", "format": "int64", "x-nullable": True}},
+            "required": ["id"],
+        },
+    )
+    assert any(case.body["id"] is None for case in generate_many(operation.as_strategy(), 10))
 
 
 def test_complex_dereference(complex_schema):
     schema = schemathesis.openapi.from_path(complex_schema)
     body_definition = {
         "schema": {
-            "$ref": "#/x-bundled/schema1",
+            "$ref": "#/x-bundled/schema000001",
             "x-bundled": {
-                "schema1": {
+                "schema000001": {
                     "additionalProperties": False,
                     "description": "Test",
-                    "properties": {"profile": {"$ref": "#/x-bundled/schema2"}, "username": {"type": "string"}},
+                    "properties": {"profile": {"$ref": "#/x-bundled/schema000002"}, "username": {"type": "string"}},
                     "required": ["username", "profile"],
                     "type": "object",
                 },
-                "schema2": {
+                "schema000002": {
                     "additionalProperties": False,
                     "description": "Test",
                     "properties": {"id": {"type": "integer"}},
@@ -1005,8 +954,9 @@ def test_iter_when_ref_resolves_to_none_in_body(ctx):
         pass
 
 
-def test_resolve_large_schema(ctx):
-    path = get_schema_path("openapi3.json")
+def test_resolve_large_schema(ctx, tmp_path):
+    path = tmp_path / "openapi3.json"
+    path.write_text(json.dumps(OPENAPI_30))
     schema = ctx.openapi.load_schema(
         {
             "/": {
@@ -1018,7 +968,7 @@ def test_resolve_large_schema(ctx):
                             "content": {
                                 "application/openapi+json": {
                                     "schema": {
-                                        "$ref": Path(path).as_uri(),
+                                        "$ref": path.as_uri(),
                                     }
                                 }
                             },
@@ -1101,6 +1051,51 @@ def test_remote_ref_fails(ctx, kind, cli, app_runner, snapshot_cli):
     )
 
 
+def test_remote_ref_missing_fragment_reports_document_url(ctx, cli, app_runner, snapshot_cli):
+    app = Flask(__name__)
+    path = "/external/parameters.json"
+    base_url = ""
+
+    @app.route("/openapi.json")
+    def openapi():
+        return jsonify(
+            ctx.openapi.build_schema(
+                {
+                    "/test": {
+                        "get": {
+                            "parameters": [
+                                {
+                                    "name": "key",
+                                    "in": "query",
+                                    "required": True,
+                                    "schema": {"$ref": f"{base_url}{path}#/Missing"},
+                                }
+                            ],
+                            "responses": {"200": {"description": "OK"}},
+                        }
+                    }
+                }
+            )
+        )
+
+    @app.route(path)
+    def external():
+        return jsonify({"Other": {"schema": {"type": "string"}}})
+
+    schema_url = app_runner.openapi_url(app)
+    base_url = schema_url.removesuffix("/openapi.json")
+
+    assert (
+        cli.run(
+            schema_url,
+            "--phases=fuzzing",
+            "--checks=not_a_server_error",
+            config={"warnings": False},
+        )
+        == snapshot_cli
+    )
+
+
 @pytest.mark.hypothesis_nested
 def test_bundling_cache_with_shared_references(ctx):
     schema = ctx.openapi.load_schema(
@@ -1127,12 +1122,9 @@ def test_bundling_cache_with_shared_references(ctx):
 
     operation = next(schema.get_all_operations()).ok()
 
-    @given(case=operation.as_strategy())
-    @settings(max_examples=3)
+    @run_given(case=operation.as_strategy(), max_examples=3)
     def test(case):
         pass
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -1364,17 +1356,14 @@ def test_nested_external_refs_in_array_items_for_stateful(ctx):
 
 @pytest.mark.hypothesis_nested
 def test_prefix_items_with_ref(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "PATCH /v1/customers/",
         {
-            "/v1/customers/": {
-                "patch": {
-                    "requestBody": {
-                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/CustomerUpdate"}}},
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "content": {"application/json": {"schema": {"$ref": "#/components/schemas/CustomerUpdate"}}},
+                "required": True,
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.1.0",
         components={
@@ -1400,16 +1389,13 @@ def test_prefix_items_with_ref(ctx):
         },
     )
 
-    @given(case=schema["/v1/customers/"]["PATCH"].as_strategy())
-    @settings(max_examples=50)
+    @run_given(case=operation.as_strategy(), max_examples=50)
     def test(case):
         key = case.body.get("key")
         if key is not None:
             assert isinstance(key, list)
             assert len(key) == 2
             assert isinstance(key[0], str)
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -1461,28 +1447,22 @@ def test_prefix_items_with_ref(ctx):
 def test_embedded_schema_dialect_declaration(ctx, version, body_schema):
     # Generation schemas are rewritten into Draft 4/7 shapes, so a `$schema` left over from an
     # embedded JSON Schema resource makes them meta-validate against a dialect they no longer match.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /items",
         {
-            "/items": {
-                "post": {
-                    "requestBody": {
-                        "content": {"application/json": {"schema": body_schema}},
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "content": {"application/json": {"schema": body_schema}},
+                "required": True,
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         version=version,
         components={"schemas": {"Scalar": {"type": "string"}}},
     )
 
-    @given(case=schema["/items"]["POST"].as_strategy())
-    @settings(max_examples=5, deadline=None, suppress_health_check=list(HealthCheck))
+    @run_given(case=operation.as_strategy(), max_examples=5)
     def test(case):
         assert isinstance(case.body, dict)
-
-    test()
 
 
 def test_external_path_items_reparsed_after_document_eviction(ctx):
@@ -1517,10 +1497,69 @@ def test_external_path_items_reparsed_after_document_eviction(ctx):
             assert isinstance(result, Ok)
             operation = result.ok()
             names = {parameter.name for parameter in operation.path_parameters}
-            if names != get_template_fields(operation.path):
+            if names != set(get_template_fields(operation.path)):
                 corrupted.append((operation.label, sorted(names)))
         # Eviction is size-driven, so drop the cached documents outright to reach the same state
         # without a spec large enough to overflow it.
         load_file_uri.cache_clear()
         gc.collect()
     assert corrupted == []
+
+
+@pytest.mark.hypothesis_nested
+@pytest.mark.parametrize(
+    ("version", "accepts_body_without_extra"),
+    [("3.1.0", False), ("3.0.3", True)],
+    ids=["siblings-apply", "siblings-ignored"],
+)
+def test_top_level_body_ref_siblings(ctx, version, accepts_body_without_extra):
+    schema = ctx.openapi.load_schema(
+        {
+            "/items": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Base",
+                                    "properties": {"extra": {"type": "integer"}},
+                                    "required": ["extra"],
+                                }
+                            }
+                        },
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+        version=version,
+        components={
+            "schemas": {"Base": {"type": "object", "properties": {"a": {"type": "string"}}, "required": ["a"]}}
+        },
+    )
+    body = schema["/items"]["POST"].body[0]
+    bodies = [case.body for case in generate_many(schema["/items"]["POST"].as_strategy(), 10)]
+
+    assert body.is_valid({"a": "x"}) is accepts_body_without_extra
+    assert [value for value in bodies if not body.is_valid(value)] == []
+
+
+def _strip_remote_refs(value: Any) -> Any:
+    if isinstance(value, dict):
+        ref = value.get("$ref")
+        if isinstance(ref, str) and ref.startswith(("http://", "https://")):
+            return {}
+        return {key: _strip_remote_refs(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_strip_remote_refs(item) for item in value]
+    return value
+
+
+@pytest.mark.parametrize("schema", [SWAGGER_20, OPENAPI_30, OPENAPI_31])
+def test_bundles_open_api_schemas(schema):
+    # Smoke test: official meta-schemas bundle without errors. Remote refs are stripped
+    # so the test stays offline.
+    schema = _strip_remote_refs(schema)
+    resolver = make_root_resolver(schema)
+    Bundler().bundle(schema, resolver)

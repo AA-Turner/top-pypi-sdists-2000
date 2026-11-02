@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass, field
 from typing import Literal
 
 from flask import Flask, abort, jsonify, request
 
 from test.apps.builders import build_schema, make_flask_app_from_schema
+from test.apps.fragments import handlers, schemas
 from test.apps.runtime import Modifier, OpenAPIApp
 
 
@@ -21,7 +21,6 @@ class StatefulConfig:
     custom_headers: dict | None = None
     auth_token: str | None = None
     enforce_auth: bool = True
-    slowdown: float | int | None = None
     duplicate_operation_links: bool = False
     return_plain_text: Literal[False] | str | bytes = False
     omit_required_field: bool = False
@@ -62,6 +61,14 @@ def stateful_users(*modifiers: Modifier[UserStore]) -> OpenAPIApp:
     _register_handlers(app, store)
     for modifier in sorted(modifiers, key=lambda m: m.priority):
         modifier.apply(app, store)
+    return OpenAPIApp(spec=spec, server=app, kind="flask")
+
+
+# Served from the root, not `/api`: tests pin a seed and a baseline label that depend on the paths.
+def flaky_branch_blocks() -> OpenAPIApp:
+    spec = build_schema(schemas.flaky_branch_blocks())
+    app = make_flask_app_from_schema(spec)
+    handlers.register_flaky_branch_blocks(app)
     return OpenAPIApp(spec=spec, server=app, kind="flask")
 
 
@@ -250,8 +257,6 @@ def _register_handlers(app: Flask, store: UserStore) -> None:
             return jsonify({"errors": [{"field": "X-Tenant-Id", "defaultMessage": "must not be blank"}]}), 400
         if config.wrong_link_parser_attributed:
             return jsonify({"userId": ["This field must be a UUID."]}), 422
-        if config.slowdown:
-            time.sleep(config.slowdown)
         user = store.users.get(user_id)
         if user:
             if config.return_plain_text is not False:
@@ -281,8 +286,6 @@ def _register_handlers(app: Flask, store: UserStore) -> None:
 
     @app.route("/users", methods=["POST"])
     def create_user():
-        if config.slowdown:
-            time.sleep(config.slowdown)
         data = request.get_json()
         if not isinstance(data, dict):
             return jsonify({"error": "Invalid input"}), 400
@@ -297,9 +300,10 @@ def _register_handlers(app: Flask, store: UserStore) -> None:
             return response, 201
 
         if config.failure_behind_failure:
-            if len(name) % 10 < 7:
+            # Both branches are common, so the first suite reaches the server error regardless of the seed
+            if len(name) % 2 == 0:
                 return jsonify({"invalid": "user structure"}), 201
-            return jsonify({"error": "Error - rare"}), 500
+            return jsonify({"error": "Error - odd name length"}), 500
 
         if config.reuse_deleted_ids and store.freed_ids:
             new_id = store.freed_ids.pop(0)
@@ -324,8 +328,6 @@ def _register_handlers(app: Flask, store: UserStore) -> None:
 
     @app.route("/users/<int:user_id>", methods=["PATCH"])
     def update_user(user_id):
-        if config.slowdown:
-            time.sleep(config.slowdown)
         user = store.users.get(user_id)
         if config.independent_500:
             return jsonify({"error": "Something went wrong - PATCH"}), 500
@@ -339,8 +341,6 @@ def _register_handlers(app: Flask, store: UserStore) -> None:
 
     @app.route("/users/<int:user_id>", methods=["DELETE"])
     def delete_user(user_id):
-        if config.slowdown:
-            time.sleep(config.slowdown)
         user = store.users.get(user_id)
         if config.independent_500:
             return jsonify({"error": "Something went wrong - DELETE"}), 500
@@ -358,8 +358,6 @@ def _register_handlers(app: Flask, store: UserStore) -> None:
 
     @app.route("/orders/<order_id>", methods=["DELETE"])
     def delete_order(order_id):
-        if config.slowdown:
-            time.sleep(config.slowdown)
         if order_id in store.deleted_orders:
             return jsonify({"error": "Order not found"}), 404
         store.deleted_orders.add(order_id)

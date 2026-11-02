@@ -5,14 +5,15 @@ import re
 from collections.abc import Mapping
 from functools import lru_cache
 from typing import TYPE_CHECKING, Any, cast
-from urllib.parse import urlencode, urlsplit, urlunsplit
+from urllib.parse import quote, quote_plus, urlsplit, urlunsplit
 
 from schemathesis.config import SanitizationConfig
-from schemathesis.core import SCHEMATHESIS_TEST_CASE_HEADER, Body
+from schemathesis.core import SCHEMATHESIS_TEST_CASE_HEADER, Body, media_types
 from schemathesis.core.errors import InvalidSchema
 from schemathesis.core.mutations import OperatorKind
 from schemathesis.core.output.sanitization import sanitize_url, sanitize_value
 from schemathesis.core.parameters import ParameterLocation
+from schemathesis.core.transforms import deepclone, to_wire_text
 from schemathesis.core.transport import USER_AGENT
 from schemathesis.generation.meta import CoveragePhaseData, CoverageScenario, FuzzingPhaseData, StatefulPhaseData
 
@@ -21,6 +22,15 @@ if TYPE_CHECKING:
     from requests.structures import CaseInsensitiveDict
 
     from schemathesis.generation.case import Case
+
+
+#: Transport keyword arguments that replace the generated request body.
+BODY_KWARGS = ("json", "data", "content", "files")
+
+
+def replaces_body(kwargs: Mapping[str, Any]) -> bool:
+    """Whether the caller passes its own request body, so the generated one is not sent."""
+    return any(key in kwargs for key in BODY_KWARGS)
 
 
 @lru_cache
@@ -40,6 +50,49 @@ def prepare_headers(case: Case, headers: dict[str, str] | None = None) -> CaseIn
     if headers:
         default_headers.update(headers)
     return default_headers
+
+
+# RFC 6265 cookie-octets, minus `%` so an encoded value decodes back unambiguously.
+_COOKIE_SAFE_CHARACTERS = "".join(chr(code) for code in range(0x21, 0x7F) if chr(code) not in '",;\\%')
+
+
+def prepare_cookies(cookies: dict[str, Any]) -> dict[str, Any]:
+    """Percent-encode cookie values that cannot go on the wire as Latin-1 header bytes."""
+    if not any(isinstance(value, str) and not _is_latin1(value) for value in cookies.values()):
+        return cookies
+    return {
+        name: quote(value, safe=_COOKIE_SAFE_CHARACTERS) if isinstance(value, str) and not _is_latin1(value) else value
+        for name, value in cookies.items()
+    }
+
+
+def _is_latin1(value: str) -> bool:
+    try:
+        value.encode("latin-1")
+    except UnicodeEncodeError:
+        return False
+    return True
+
+
+def serialize_cookies(case: Case) -> dict[str, Any] | None:
+    """Cookies of `case`, with object and array values in the wire form the schema declares for them."""
+    cookies = case.cookies
+    if not cookies:
+        return cookies
+    containers = {name: value for name, value in cookies.items() if isinstance(value, (dict, list))}
+    if not containers:
+        return cookies
+    serializer = case.operation.get_parameter_serializer(ParameterLocation.COOKIE)
+    if serializer is not None:
+        cookies = {
+            **{name: value for name, value in cookies.items() if name not in containers},
+            **serializer(containers),
+        }
+    # Containers the schema has no style for, such as undeclared cookies, go as percent-encoded JSON text
+    return {
+        name: quote(to_wire_text(value), safe=_COOKIE_SAFE_CHARACTERS) if isinstance(value, (dict, list)) else value
+        for name, value in cookies.items()
+    }
 
 
 def get_exclude_headers(case: Case) -> list[str]:
@@ -96,9 +149,17 @@ def prepare_url(case: Case, base_url: str | None) -> str:
     return case.operation.schema.build_request_url(case, base_url)
 
 
+def base_url_from_request_url(case: Case, url: str) -> str:
+    """Base URL that `case` was sent to as `url`, i.e. `url` without the operation path and query."""
+    parts = urlsplit(url)
+    path_segments = prepare_path(case.path, case.path_parameters).lstrip("/").split("/")
+    base_path = "/".join(parts.path.split("/")[: -len(path_segments)])
+    return urlunsplit((parts.scheme, parts.netloc, base_path, "", ""))
+
+
 def prepare_body(case: Case) -> Body:
     """Prepare body via the schema's spec-aware override."""
-    return case.operation.schema.prepare_request_body(case.body)
+    return case.operation.schema.prepare_request_body(case)
 
 
 @lru_cache(maxsize=128)
@@ -155,13 +216,17 @@ def prepare_path(path: str, parameters: dict[str, Any] | None) -> str:
     return result
 
 
-def prepare_request(case: Case, headers: Mapping[str, Any] | None, *, config: SanitizationConfig) -> PreparedRequest:
+def prepare_request(
+    case: Case, headers: Mapping[str, Any] | None, *, config: SanitizationConfig, base_url: str | None = None
+) -> PreparedRequest:
     import requests
 
     from schemathesis.transport.requests import REQUESTS_TRANSPORT
 
     # The host the case was (or would be) sent to, so a rendered command reproduces the request that ran.
-    base_url = normalize_base_url(case.operation.base_url, host=_client_host(case.operation.app))
+    base_url = normalize_base_url(
+        base_url or case._base_url or case.operation.base_url, host=_client_host(case.operation.app)
+    )
     kwargs = REQUESTS_TRANSPORT.serialize_case(case, base_url=base_url, headers=headers)
     if config.enabled:
         kwargs["url"] = sanitize_url(kwargs["url"], config=config)
@@ -176,6 +241,10 @@ def prepare_request(case: Case, headers: Mapping[str, Any] | None, *, config: Sa
                 sanitize_value(kwargs["params"], config=config)
             elif isinstance(kwargs["params"], str):
                 kwargs["params"] = _sanitize_query_string(kwargs["params"], config=config)
+        # A JSON body can be rooted at a dict or a list; both may carry sensitive values.
+        if isinstance(kwargs.get("json"), (dict, list)):
+            kwargs["json"] = deepclone(kwargs["json"])
+            sanitize_value(kwargs["json"], config=config)
 
     request = requests.Request(**kwargs).prepare()
     _normalize_multipart_boundary(request)
@@ -194,14 +263,15 @@ def _normalize_multipart_boundary(request: PreparedRequest) -> None:
     """
     content_type = request.headers.get("Content-Type")
     body = request.body
-    if not isinstance(content_type, str) or not content_type.lower().startswith("multipart/"):
+    if not isinstance(content_type, str) or not media_types.is_multipart(content_type):
         return
     if not isinstance(body, bytes):
         return
     delimiter, separator, _ = body.partition(b"\r\n")
     if not separator or not delimiter.startswith(b"--"):
         return
-    existing = delimiter[2:]
+    # A body with no parts starts with the closing delimiter, whose trailing `--` is not part of the boundary.
+    existing = delimiter[2:].removesuffix(b"--")
     if not existing:
         return
     # 32 hex characters - a valid boundary token, the same shape and length the multipart encoders produce.
@@ -226,7 +296,7 @@ def _sanitize_query_string(query: str, *, config: SanitizationConfig) -> str:
             key, _, value = chunk.partition("=")
             lower_key = key.lower()
             if lower_key in config.keys_to_sanitize or any(marker in lower_key for marker in config.sensitive_markers):
-                parts.append(urlencode([(key, config.replacement)]))
+                parts.append(f"{key}={quote_plus(config.replacement)}")
             else:
                 parts.append(chunk)
     return "&".join(parts)

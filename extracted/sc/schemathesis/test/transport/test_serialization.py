@@ -4,7 +4,10 @@ import json
 import platform
 import re
 import string
+from email.parser import BytesParser
+from email.policy import HTTP
 from io import StringIO
+from urllib.parse import parse_qsl, unquote
 from xml.etree import ElementTree
 
 import pytest
@@ -22,9 +25,9 @@ from schemathesis.core.parameters import RAW_QUERY_STRING_KEY
 from schemathesis.core.transforms import deepclone
 from schemathesis.transport.asgi import ASGI_TRANSPORT
 from schemathesis.transport.requests import REQUESTS_TRANSPORT, RequestsTransport
-from schemathesis.transport.serialization import Binary
+from schemathesis.transport.serialization import Binary, contains_binary
 from schemathesis.transport.wsgi import WSGI_TRANSPORT, WSGITransport
-from test.utils import assert_requests_call
+from test.utils import assert_requests_call, run_given
 
 
 def to_csv(data):
@@ -58,15 +61,12 @@ def test_text_csv(ctx):
     # And the user registers a custom serializer for it
     schema = schemathesis.openapi.from_url(api.schema_url)
 
-    @given(case=schema["/api/csv"]["POST"].as_strategy())
-    @settings(max_examples=5, deadline=None)
+    @run_given(case=schema["/api/csv"]["POST"].as_strategy(), max_examples=5)
     def test(case):
         # Then this serializer should be used
         response = case.call_and_validate()
         # And data should be successfully sent to the API as CSV
         assert response.json() == case.body
-
-    test()
 
 
 @pytest.fixture
@@ -112,41 +112,32 @@ def test_serialize_yaml(open_api_3_schema_with_yaml_payload, transport):
     if transport is WSGITransport:
         schema.app = 42
 
-    @given(case=schema["/yaml"]["POST"].as_strategy())
-    @settings(max_examples=1)
+    @run_given(case=schema["/yaml"]["POST"].as_strategy(), max_examples=1)
     def test(case):
         # Then Schemathesis should generate valid YAML, not JSON with `application/json` media type
         kwargs = case.as_transport_kwargs()
         assert kwargs["headers"]["Content-Type"] == "text/yaml"
         assert kwargs["data"] == "- 42\n"
 
-    test()
-
 
 def test_serialize_any(ctx):
     # See GH-1526
     # When API expects `*/*`
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /any",
         {
-            "/any": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {"*/*": {"schema": {"type": "array"}}},
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                },
+            "requestBody": {
+                "required": True,
+                "content": {"*/*": {"schema": {"type": "array"}}},
             },
-        }
+            "responses": {"200": {"description": "OK"}},
+        },
     )
 
-    @given(case=schema["/any"]["POST"].as_strategy())
-    @settings(max_examples=1)
+    @run_given(case=operation.as_strategy(), max_examples=1)
     def test(case):
         # Then Schemathesis should generate valid data of any supported type
         assert case.as_transport_kwargs()["headers"]["Content-Type"] in REQUESTS_TRANSPORT._serializers
-
-    test()
 
 
 @pytest.mark.parametrize(
@@ -160,89 +151,203 @@ def test_serialize_any(ctx):
     ],
 )
 def test_media_range_sent_as_concrete_content_type(ctx, declared, expected):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /data",
         {
-            "/data": {
-                "post": {
-                    "requestBody": {"required": True, "content": {declared: {"schema": {"type": "object"}}}},
-                    "responses": {"200": {"description": "OK"}},
-                },
-            },
-        }
+            "requestBody": {"required": True, "content": {declared: {"schema": {"type": "object"}}}},
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    case = schema["/data"]["POST"].Case(body={"key": "value"}, media_type=declared)
+    case = operation.Case(body={"key": "value"}, media_type=declared)
     for transport in (REQUESTS_TRANSPORT, WSGI_TRANSPORT):
         assert transport.serialize_case(case)["headers"]["Content-Type"] == expected
 
 
-@pytest.mark.parametrize("media_type", ["text/html", "text/csv", "text/markdown", "text/powershell"])
-def test_unknown_text_subtype_sent_as_plain_text(ctx, media_type):
-    schema = ctx.openapi.load_schema(
+def test_explicit_content_type_overrides_payload_media_type(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /data",
         {
-            "/data": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {media_type: {"schema": {"type": "string", "enum": ["hello"]}}},
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                },
-            },
-        }
+            "requestBody": {"required": True, "content": {"application/json": {"schema": {"type": "object"}}}},
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(
+        body={"key": "value"}, headers={"Content-Type": "multipart/form-data"}, media_type="application/json"
     )
 
-    @given(case=schema["/data"]["POST"].as_strategy())
-    @settings(max_examples=1)
+    assert {
+        transport.serialize_case(case)["headers"]["Content-Type"] for transport in (REQUESTS_TRANSPORT, WSGI_TRANSPORT)
+    } == {"multipart/form-data"}
+
+
+def test_exact_media_type_wins_over_earlier_media_range(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /data",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "*/*": {"schema": {"type": "object"}},
+                    "application/xml": {"schema": {"type": "object", "xml": {"name": "item"}}},
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(body={"x": 1}, media_type="application/xml")
+    assert {transport.serialize_case(case)["data"] for transport in (REQUESTS_TRANSPORT, WSGI_TRANSPORT)} == {
+        b"<item><x>1</x></item>"
+    }
+
+
+def test_custom_serializer_returning_none_omits_body(ctx):
+    @schemathesis.serializer("application/x-empty")
+    def serialize_empty(ctx, value):
+        return None
+
+    try:
+        operation = ctx.openapi.load_operation(
+            "POST /data",
+            {
+                "requestBody": {
+                    "required": True,
+                    "content": {"application/x-empty": {"schema": {"type": "object"}}},
+                },
+                "responses": {"200": {"description": "OK"}},
+            },
+        )
+        case = operation.Case(body={"key": "value"}, media_type="application/x-empty")
+        for transport in (REQUESTS_TRANSPORT, WSGI_TRANSPORT):
+            serialized = transport.serialize_case(case)
+            assert serialized["headers"]["Content-Type"] == "application/x-empty"
+            assert "data" not in serialized
+    finally:
+        for transport in (ASGI_TRANSPORT, REQUESTS_TRANSPORT, WSGI_TRANSPORT):
+            transport.unregister_serializer("application/x-empty")
+
+
+def test_unregister_serializer_is_idempotent():
+    @schemathesis.serializer("application/x-empty")
+    def serialize_empty(ctx, value):
+        return None
+
+    REQUESTS_TRANSPORT.unregister_serializer("application/x-empty")
+    REQUESTS_TRANSPORT.unregister_serializer("application/x-empty")
+    assert REQUESTS_TRANSPORT.get_first_matching_media_type("application/x-empty") is None
+
+
+def test_custom_serializer_for_multipart_part_receives_the_case(ctx, case_factory):
+    received = []
+
+    @schemathesis.serializer("application/x-empty")
+    def serialize_empty(ctx, value):
+        received.append((ctx.case.media_type, value))
+
+    try:
+        operation = ctx.openapi.load_operation(
+            "POST /upload",
+            {
+                "requestBody": {
+                    "required": True,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {"type": "object", "properties": {"meta": {"type": "object"}}},
+                            "encoding": {"meta": {"contentType": "application/x-empty"}},
+                        }
+                    },
+                },
+                "responses": {"200": {"description": "OK"}},
+            },
+        )
+        case = case_factory(
+            operation=operation, method="POST", body={"meta": {"a": 1}}, media_type="multipart/form-data"
+        )
+        REQUESTS_TRANSPORT.serialize_case(case)
+        assert received == [("multipart/form-data", {"a": 1})]
+    finally:
+        for transport in (ASGI_TRANSPORT, REQUESTS_TRANSPORT, WSGI_TRANSPORT):
+            transport.unregister_serializer("application/x-empty")
+
+
+@pytest.mark.parametrize(
+    ("media_range", "expected"),
+    [
+        ("application/*+json", ["application/json"]),
+        ("application/*+yaml", ["application/yaml", "application/x-yaml"]),
+    ],
+    ids=["json", "yaml"],
+)
+def test_media_range_matches_only_its_own_main_type(media_range, expected):
+    assert [media_type for media_type, _ in REQUESTS_TRANSPORT.get_matching_media_types(media_range)] == expected
+
+
+@pytest.mark.parametrize("media_type", ["text/html", "text/csv", "text/markdown", "text/powershell"])
+def test_unknown_text_subtype_sent_as_plain_text(ctx, media_type):
+    operation = ctx.openapi.load_operation(
+        "POST /data",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {media_type: {"schema": {"type": "string", "enum": ["hello"]}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+
+    @run_given(case=operation.as_strategy(), max_examples=1)
     def test(case):
         kwargs = case.as_transport_kwargs()
         assert (kwargs["headers"]["Content-Type"], kwargs["data"]) == (media_type, b"hello")
 
-    test()
+
+def test_unknown_text_subtype_needs_a_plain_text_serializer(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /data",
+        {
+            "requestBody": {"required": True, "content": {"text/html": {"schema": {"type": "string"}}}},
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(body="hello", media_type="text/html")
+    with pytest.raises(SerializationNotPossible, match=r"Cannot serialize to 'text/html' \(unsupported media type\)"):
+        RequestsTransport().serialize_case(case)
+    assert REQUESTS_TRANSPORT.serialize_case(case)["data"] == b"hello"
 
 
 def test_multipart_content_type_left_to_requests(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
         {
-            "/upload": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "multipart/form-data": {
-                                "schema": {"type": "object", "properties": {"key": {"type": "string"}}}
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {"schema": {"type": "object", "properties": {"key": {"type": "string"}}}}
                 },
             },
-        }
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    case = schema["/upload"]["POST"].Case(body={"key": "value"}, media_type="multipart/form-data")
+    case = operation.Case(body={"key": "value"}, media_type="multipart/form-data")
     assert "Content-Type" not in REQUESTS_TRANSPORT.serialize_case(case)["headers"]
 
 
 def test_serialization_not_possible_manual(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/json": {
-                                "schema": {"type": "integer"},
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {"type": "integer"},
+                    }
                 },
             },
-        }
+            "responses": {"200": {"description": "OK"}},
+        },
     )
 
-    @given(case=schema["/test"]["POST"].as_strategy())
-    @settings(max_examples=1)
+    @run_given(case=operation.as_strategy(), max_examples=1)
     def test(case):
         case.media_type = "application/whatever"
         with pytest.raises(
@@ -251,32 +356,27 @@ def test_serialization_not_possible_manual(ctx):
         ):
             case.as_transport_kwargs()
 
-    test()
-
 
 @pytest.mark.parametrize(
-    "media_type", ["text/yaml", "application/x-www-form-urlencoded", "text/plain", "multipart/form-data"]
+    "media_type",
+    ["application/json", "text/yaml", "application/x-www-form-urlencoded", "text/plain", "multipart/form-data"],
 )
 def test_binary_data(ctx, media_type):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            media_type: {
-                                "schema": {},
-                                "examples": {"answer": {"externalValue": "http://127.0.0.1:1/answer.json"}},
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
+            "requestBody": {
+                "required": True,
+                "content": {
+                    media_type: {
+                        "schema": {},
+                        "examples": {"answer": {"externalValue": "http://127.0.0.1:1/answer.json"}},
+                    }
                 },
             },
-        }
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schema["/test"]["POST"]
     # When an explicit bytes value is passed as body (it happens with `externalValue`)
     body = b"\x92\x42"
     case = operation.Case(body=body, media_type=media_type)
@@ -312,8 +412,26 @@ def test_binary_data(ctx, media_type):
             Binary(b"\x00\x01"),
             {"json": None, "data": b"\x00\x01", "Content-Type": "application/octet-stream"},
         ),
+        (
+            "application/yaml",
+            {"type": "string", "format": "binary"},
+            Binary(b"\x00\x01"),
+            {"json": None, "data": b"\x00\x01", "Content-Type": "application/yaml"},
+        ),
+        (
+            "application/yaml",
+            {"type": "object", "properties": {"f": {"type": "string", "format": "binary"}}, "required": ["f"]},
+            {"f": Binary(b"\x00\x01")},
+            {"json": None, "data": "f: !!binary |\n  AAE=\n", "Content-Type": "application/yaml"},
+        ),
+        (
+            "application/xml",
+            {"type": "string", "format": "binary"},
+            Binary(b"\x00\x01"),
+            {"json": None, "data": b"\x00\x01", "Content-Type": "application/xml"},
+        ),
     ],
-    ids=["json-top-level", "json-nested", "octet-stream"],
+    ids=["json-top-level", "json-nested", "octet-stream", "yaml-top-level", "yaml-nested", "xml-top-level"],
 )
 def test_generated_binary_body(ctx, media_type, schema, body, expected):
     schema = ctx.openapi.load_schema(
@@ -339,18 +457,15 @@ def test_generated_binary_body(ctx, media_type, schema, body, expected):
 
 @pytest.mark.parametrize(("value", "expected"), [(True, b"true"), (False, b"false"), (None, b"null")])
 def test_text_plain_boolean_and_null_use_json_spelling(ctx, value, expected):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {"required": True, "content": {"text/plain": {"schema": {}}}},
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "requestBody": {"required": True, "content": {"text/plain": {"schema": {}}}},
+            "responses": {"200": {"description": "OK"}},
+        },
     )
 
-    case = schema["/test"]["POST"].Case(body=value, media_type="text/plain")
+    case = operation.Case(body=value, media_type="text/plain")
 
     assert (REQUESTS_TRANSPORT.serialize_case(case)["data"], WSGI_TRANSPORT.serialize_case(case)["data"]) == (
         expected,
@@ -358,7 +473,40 @@ def test_text_plain_boolean_and_null_use_json_spelling(ctx, value, expected):
     )
 
 
-def multipart_echo_schema(ctx):
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        (True, b"true"),
+        (False, b"false"),
+        (None, b"null"),
+        ({"a": None}, b'{"a": null}'),
+        # Not JSON-encodable, so sent as before
+        ([b"x"], b"[b'x']"),
+        ("a\ud800", b"a"),
+    ],
+    ids=["true", "false", "null", "object", "bytes-in-list", "unencodable-character-dropped"],
+)
+def test_octet_stream_non_bytes_use_json_spelling(ctx, value, expected):
+    operation = ctx.openapi.load_operation(
+        "POST /test",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {"application/octet-stream": {"schema": {"type": "string", "format": "binary"}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+
+    case = operation.Case(body=value, media_type="application/octet-stream")
+
+    assert [transport.serialize_case(case)["data"] for transport in (REQUESTS_TRANSPORT, WSGI_TRANSPORT)] == [
+        expected,
+        expected,
+    ]
+
+
+def multipart_echo_app(ctx):
     app, _ = ctx.openapi.make_flask_app(
         {
             "/upload": {
@@ -384,11 +532,19 @@ def multipart_echo_schema(ctx):
                 "mimetype": request.mimetype,
                 "has_boundary": "boundary=" in (request.headers.get("Content-Type") or ""),
                 "form": dict(request.form),
+                "fields": {
+                    name: request.form.getlist(name) + [part.read().decode() for part in request.files.getlist(name)]
+                    for name in {*request.form, *request.files}
+                },
                 "raw": request.get_data().decode("latin-1"),
             }
         )
 
-    return schemathesis.openapi.from_wsgi("/openapi.json", app)
+    return app
+
+
+def multipart_echo_schema(ctx):
+    return schemathesis.openapi.from_wsgi("/openapi.json", multipart_echo_app(ctx))
 
 
 def test_wsgi_multipart_form_fields_reach_the_app(ctx):
@@ -402,38 +558,372 @@ def test_wsgi_multipart_form_fields_reach_the_app(ctx):
     )
 
 
+@pytest.mark.parametrize("transport", ["wsgi", "http"])
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        (True, ["true"]),
+        (False, ["false"]),
+        (None, ["null"]),
+        (1.5, ["1.5"]),
+        ({"b": 1}, ['{"b": 1}']),
+        (["x", {"b": None}], ["x", '{"b": null}']),
+    ],
+    ids=["true", "false", "null", "float", "object", "list-with-object"],
+)
+def test_multipart_plain_fields_use_json_spellings(ctx, app_runner, transport, value, expected):
+    app = multipart_echo_app(ctx)
+    if transport == "wsgi":
+        schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
+    else:
+        schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    case = schema["/upload"]["POST"].Case(body={"key": value}, media_type="multipart/form-data")
+    assert case.call().json()["fields"] == {"key": expected}
+
+
+def test_explicit_multipart_content_type_header_carries_the_boundary(ctx, app_runner):
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(multipart_echo_app(ctx)))
+    case = schema["/upload"]["POST"].Case(body={"key": "value"}, media_type="multipart/form-data")
+    received = case.call(headers={"Content-Type": "multipart/form-data"}).json()
+    assert (received["mimetype"], received["has_boundary"], received["form"]) == (
+        "multipart/form-data",
+        True,
+        {"key": "value"},
+    )
+
+
 def test_wsgi_raw_multipart_body_reaches_the_app(ctx):
     operation = multipart_echo_schema(ctx)["/upload"]["POST"]
     case = operation.Case(body=b"\x92\x42", media_type="multipart/form-data")
-    assert case.call().json() == {"mimetype": "", "has_boundary": False, "form": {}, "raw": "\x92B"}
+    assert case.call().json() == {"mimetype": "", "has_boundary": False, "form": {}, "fields": {}, "raw": "\x92B"}
 
 
-def test_multipart_nested_object_serializes_as_json(ctx, case_factory):
-    schema = ctx.openapi.load_schema(
+URLENCODED_NESTED_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "o": {"$ref": "#/components/schemas/Nested"},
+        "arr": {"type": "array", "items": {"type": "integer"}},
+        "s": {"type": "string"},
+    },
+}
+URLENCODED_COMPONENTS = {
+    "schemas": {
+        "Form": URLENCODED_NESTED_SCHEMA,
+        "Nested": {"type": "object", "properties": {"a": {"type": "integer"}, "b": {"type": "boolean"}}},
+    }
+}
+
+
+@pytest.mark.parametrize(
+    ("encoding", "expected"),
+    [
+        (None, [("a", "1"), ("b", "true"), ("arr", "1"), ("arr", "2"), ("s", "x")]),
+        (
+            {"o": {"style": "deepObject"}, "arr": {"style": "form", "explode": False}},
+            [("o[a]", "1"), ("o[b]", "true"), ("arr", "1,2"), ("s", "x")],
+        ),
+    ],
+    ids=["no-encoding", "deep-object-and-unexploded-array"],
+)
+@pytest.mark.parametrize(
+    "body_schema", [URLENCODED_NESTED_SCHEMA, {"$ref": "#/components/schemas/Form"}], ids=["inline", "referenced"]
+)
+@pytest.mark.parametrize("transport", ["requests", "wsgi"])
+def test_urlencoded_body_follows_encoding(ctx, app_runner, body_schema, encoding, expected, transport):
+    media_type_object = {"schema": body_schema}
+    if encoding is not None:
+        media_type_object["encoding"] = encoding
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/form": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {"application/x-www-form-urlencoded": media_type_object},
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                },
+            },
+        },
+        components=URLENCODED_COMPONENTS,
+    )
+
+    @app.route("/form", methods=["POST"])
+    def form():
+        return request.get_data()
+
+    if transport == "wsgi":
+        schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
+    else:
+        schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    case = schema["/form"]["POST"].Case(
+        body={"o": {"a": 1, "b": True}, "arr": [1, 2], "s": "x"},
+        media_type="application/x-www-form-urlencoded",
+    )
+    assert sorted(parse_qsl(case.call().text)) == sorted(expected)
+
+
+@pytest.mark.parametrize("body", [[1, 2], 5], ids=["array", "scalar"])
+@pytest.mark.parametrize("transport", ["requests", "wsgi"])
+def test_urlencoded_non_object_body_is_sent_as_json(ctx, app_runner, body, transport):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/form": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {"application/x-www-form-urlencoded": {"schema": {}}},
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                },
+            },
+        },
+    )
+
+    @app.route("/form", methods=["POST"])
+    def form():
+        return request.get_data()
+
+    if transport == "wsgi":
+        schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
+    else:
+        schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    case = schema["/form"]["POST"].Case(body=body, media_type="application/x-www-form-urlencoded")
+    assert case.call().content == json.dumps(body).encode()
+
+
+@pytest.mark.parametrize("body", [[1, 2], 5, True], ids=["array", "integer", "boolean"])
+@pytest.mark.parametrize("transport", ["requests", "wsgi"])
+def test_multipart_non_object_body_is_sent_as_text(ctx, app_runner, body, transport):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/form": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {"multipart/form-data": {"schema": {}}},
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                },
+            },
+        },
+    )
+
+    @app.route("/form", methods=["POST"])
+    def form():
+        return jsonify({"content_type": request.content_type, "body": request.get_data().decode()})
+
+    if transport == "wsgi":
+        schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
+    else:
+        schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    case = schema["/form"]["POST"].Case(body=body, media_type="multipart/form-data")
+    received = case.call().json()
+    boundary = received["content_type"].removeprefix("multipart/form-data; boundary=")
+    assert received == {
+        "content_type": f"multipart/form-data; boundary={boundary}",
+        "body": f"--{boundary}\r\n{body}--{boundary}--\r\n",
+    }
+
+
+FILE_LIST_SCHEMA = {"type": "array", "items": {"type": "string", "format": "binary"}}
+
+
+def _received_part(part):
+    name = part.get_param("name", header="content-disposition")
+    if part.is_multipart():
+        return [name, part.get_content_type(), [_received_part(nested) for nested in part.iter_parts()]]
+    return [name, part.get_content_type(), part.get_payload(decode=True).decode()]
+
+
+@pytest.mark.parametrize("transport", ["wsgi", "http"])
+@pytest.mark.parametrize(
+    ("content_type", "schema", "value", "expected"),
+    [
+        (
+            "multipart/form-data",
+            {"type": "object"},
+            {"x": "1", "y": True},
+            [["f", "multipart/form-data", [["x", "text/plain", "1"], ["y", "text/plain", "true"]]]],
+        ),
+        (
+            "multipart/form-data",
+            {"type": "object"},
+            {"x": ["1", "2"]},
+            [["f", "multipart/form-data", [["x", "text/plain", "1"], ["x", "text/plain", "2"]]]],
+        ),
+        ("application/json", {"type": "string"}, "raw", [["f", "application/json", "raw"]]),
+        (
+            "application/x-www-form-urlencoded",
+            {"type": "object"},
+            {"x": "1", "y": [True, None]},
+            [["f", "application/x-www-form-urlencoded", "x=1&y=true&y=null"]],
+        ),
+        (
+            "text/plain",
+            {"type": "array", "items": {"type": "string"}},
+            ["a", 1],
+            [["f", "text/plain", "a"], ["f", "text/plain", "1"]],
+        ),
+        ("text/plain", {"type": "object"}, {"x": None}, [["f", "text/plain", '{"x": null}']]),
+        (
+            "application/x-yaml",
+            {"type": "object"},
+            {"x": "1", "y": True},
+            [["f", "application/x-yaml", "x: '1'\ny: true\n"]],
+        ),
+        (
+            "application/xml",
+            {"type": "object", "xml": {"name": "item"}},
+            {"x": "1"},
+            [["f", "application/xml", "<item><x>1</x></item>"]],
+        ),
+        ("application/xml", {"type": "object"}, {"x": "1"}, [["f", "application/xml", "<f><x>1</x></f>"]]),
+        (
+            "application/xml",
+            {"$ref": "#/components/schemas/Item"},
+            {"x": "1"},
+            [["f", "application/xml", "<item><x>1</x></item>"]],
+        ),
+        ("model/stl", FILE_LIST_SCHEMA, 0, [["f", "model/stl", "0"]]),
+        ("model/stl", FILE_LIST_SCHEMA, 0.5, [["f", "model/stl", "0.5"]]),
+        ("model/stl", FILE_LIST_SCHEMA, True, [["f", "model/stl", "true"]]),
+        ("model/stl", FILE_LIST_SCHEMA, None, [["f", "model/stl", "null"]]),
+        ("model/stl", FILE_LIST_SCHEMA, {}, [["f", "model/stl", "{}"]]),
+        ("model/stl", {**FILE_LIST_SCHEMA, "type": ["array", "null"]}, 0, [["f", "model/stl", "0"]]),
+        ("model/stl", {}, 0, [["f", "model/stl", "0"]]),
+        ("application/octet-stream", FILE_LIST_SCHEMA, True, [["f", "application/octet-stream", "true"]]),
+    ],
+    ids=[
+        "nested-multipart",
+        "nested-multipart-list",
+        "already-serialized-string",
+        "urlencoded",
+        "text-list-with-number",
+        "text-object",
+        "yaml",
+        "xml-name",
+        "xml-property-name",
+        "xml-ref",
+        "file-list-integer",
+        "file-list-number",
+        "file-list-boolean",
+        "file-list-null",
+        "file-list-object",
+        "nullable-file-list-integer",
+        "untyped-integer",
+        "octet-stream-file-list-boolean",
+    ],
+)
+def test_multipart_part_encoded_with_its_content_type(
+    ctx, app_runner, transport, content_type, schema, value, expected
+):
+    app, _ = ctx.openapi.make_flask_app(
         {
             "/upload": {
                 "post": {
-                    "consumes": ["multipart/form-data"],
-                    "parameters": [
-                        {
-                            "name": "formData",
-                            "in": "formData",
-                            "required": True,
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "object",
-                                "properties": {"value": {"type": "string"}},
-                            },
-                        }
-                    ],
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "multipart/form-data": {
+                                "schema": {"type": "object", "properties": {"f": schema}},
+                                "encoding": {"f": {"contentType": content_type}},
+                            }
+                        },
+                    },
                     "responses": {"200": {"description": "OK"}},
                 }
             }
         },
+        components={"schemas": {"Item": {"type": "object", "xml": {"name": "item"}}}},
+    )
+
+    @app.route("/upload", methods=["POST"])
+    def upload():
+        header = f"Content-Type: {request.content_type}\r\n\r\n".encode()
+        message = BytesParser(policy=HTTP).parsebytes(header + request.get_data())
+        return jsonify([_received_part(part) for part in message.iter_parts()])
+
+    if transport == "wsgi":
+        loaded = schemathesis.openapi.from_wsgi("/openapi.json", app)
+    else:
+        loaded = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    case = loaded["/upload"]["POST"].Case(body={"f": value}, media_type="multipart/form-data")
+    assert case.call().json() == expected
+
+
+def test_multipart_array_part_items_need_a_serializer(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "requestBody": {
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"f": {"type": "array", "items": {"type": "integer"}}},
+                        },
+                        "encoding": {"f": {"contentType": "model/stl"}},
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(body={"f": [1]}, media_type="multipart/form-data")
+    with pytest.raises(SerializationNotPossible, match="model/stl"):
+        case.as_transport_kwargs(base_url="http://h")
+
+
+@pytest.mark.parametrize(
+    "schema",
+    [True, {"type": "object"}, {"type": "object", "properties": {"other": {"type": "string"}}}],
+    ids=["boolean-schema", "no-properties", "undeclared-part"],
+)
+def test_multipart_xml_part_without_declared_schema_uses_part_name(ctx, schema):
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "requestBody": {
+                "content": {
+                    "multipart/form-data": {
+                        "schema": schema,
+                        "encoding": {"f": {"contentType": "application/xml"}},
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(body={"f": {"x": "1"}}, media_type="multipart/form-data")
+    assert case.as_transport_kwargs(base_url="http://h")["files"] == [
+        ("f", (None, b"<f><x>1</x></f>", "application/xml"))
+    ]
+
+
+def test_multipart_nested_object_serializes_as_json(ctx, case_factory):
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "consumes": ["multipart/form-data"],
+            "parameters": [
+                {
+                    "name": "formData",
+                    "in": "formData",
+                    "required": True,
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "object",
+                        "properties": {"value": {"type": "string"}},
+                    },
+                }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
         version="2.0",
     )
     case = case_factory(
-        operation=schema["/upload"]["POST"],
+        operation=operation,
         method="POST",
         body={"formData": {"slot": {"value": "x"}}},
         media_type="multipart/form-data",
@@ -460,7 +950,7 @@ def _multipart_content_type(serialized: dict, name: str) -> str | None:
     return None
 
 
-def _multipart_upload_echo(ctx, properties: dict, media_type: str):
+def _multipart_upload_app(ctx, properties: dict, media_type: str):
     app, _ = ctx.openapi.make_flask_app(
         {
             "/upload": {
@@ -487,6 +977,11 @@ def _multipart_upload_echo(ctx, properties: dict, media_type: str):
             }
         )
 
+    return app
+
+
+def _multipart_upload_echo(ctx, properties: dict, media_type: str):
+    app = _multipart_upload_app(ctx, properties, media_type)
     return schemathesis.openapi.from_wsgi("/openapi.json", app)["/upload"]["POST"]
 
 
@@ -514,25 +1009,33 @@ def test_wsgi_multipart_mixed_body_arrives_intact(ctx):
     )
 
 
+def test_requests_multipart_mixed_body_arrives_intact(ctx, app_runner):
+    app = _multipart_upload_app(ctx, {"note": {"type": "string"}}, "multipart/mixed")
+    operation = schemathesis.openapi.from_url(app_runner.openapi_url(app))["/upload"]["POST"]
+    received = operation.Case(body={"note": "hello"}, media_type="multipart/mixed").call().json()
+    media_type, _, boundary = received["content_type"].partition("; boundary=")
+    assert (media_type, received["raw"]) == (
+        "multipart/mixed",
+        f'--{boundary}\r\nContent-Disposition: form-data; name="note"\r\n\r\nhello\r\n--{boundary}--\r\n',
+    )
+
+
 def test_multipart_ref_to_object_serializes_as_json(ctx, case_factory):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
         {
-            "/upload": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "multipart/form-data": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {"part": {"$ref": "#/components/schemas/Inner"}},
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"part": {"$ref": "#/components/schemas/Inner"}},
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         components={
             "schemas": {
@@ -544,7 +1047,7 @@ def test_multipart_ref_to_object_serializes_as_json(ctx, case_factory):
         },
     )
     case = case_factory(
-        operation=schema["/upload"]["POST"],
+        operation=operation,
         method="POST",
         body={"part": {"value": "x"}},
         media_type="multipart/form-data",
@@ -556,29 +1059,26 @@ def test_multipart_ref_to_object_serializes_as_json(ctx, case_factory):
 def test_multipart_ref_to_scalar_is_not_json_encoded(ctx, case_factory):
     # A `$ref` to a primitive must NOT be JSON-encoded; the wire bytes should be the raw value,
     # not a JSON-quoted form like b'"raw"'.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
         {
-            "/upload": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "multipart/form-data": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {"part": {"$ref": "#/components/schemas/Token"}},
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"part": {"$ref": "#/components/schemas/Token"}},
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         components={"schemas": {"Token": {"type": "string"}}},
     )
     case = case_factory(
-        operation=schema["/upload"]["POST"],
+        operation=operation,
         method="POST",
         body={"part": "raw"},
         media_type="multipart/form-data",
@@ -587,35 +1087,142 @@ def test_multipart_ref_to_scalar_is_not_json_encoded(ctx, case_factory):
     assert _multipart_payload(serialized, "part") == "raw"
 
 
-def test_multipart_nullable_object_property_serializes_as_json(ctx, case_factory):
-    schema = ctx.openapi.load_schema(
+@pytest.mark.parametrize(
+    "properties, encoding, body, expected",
+    [
+        (
+            {"file": {"type": "string", "format": "binary"}},
+            {},
+            {"file": b"abc", "kind": "a"},
+            [("file", ("file", b"abc")), ("kind", (None, "a"))],
+        ),
+        (
+            {"files": {"type": "array", "items": {"type": "string", "format": "binary"}}},
+            {},
+            {"files": [b"a", b"b"], "kind": "a"},
+            [("files", ("files", b"a")), ("files", ("files", b"b")), ("kind", (None, "a"))],
+        ),
+        (
+            {"meta": {"type": "object", "properties": {"x": {"type": "integer"}}}},
+            {},
+            {"meta": {"x": 1}, "kind": "a"},
+            [("meta", (None, b'{"x": 1}', "application/json")), ("kind", (None, "a"))],
+        ),
+        (
+            {"doc": {"type": "object", "xml": {"name": "item"}}},
+            {"doc": {"contentType": "application/xml"}},
+            {"doc": {"x": "1"}, "kind": "a"},
+            [("doc", (None, b"<item><x>1</x></item>", "application/xml")), ("kind", (None, "a"))],
+        ),
+        (
+            {"tags": {"$ref": "#/components/schemas/Tags"}},
+            {"tags": {"contentType": "application/xml"}},
+            {"tags": [{"n": 1}], "kind": "a"},
+            [("tags", (None, b"<tags><tag><n>1</n></tag></tags>", "application/xml")), ("kind", (None, "a"))],
+        ),
+        (
+            {"tags": {"type": "array", "items": {}}},
+            {},
+            {"tags": [1, "x"], "kind": "a"},
+            [("tags", (None, b'[1, "x"]', "application/json")), ("kind", (None, "a"))],
+        ),
+        (
+            {"tags": {"type": "array", "items": {"$ref": "#/components/schemas/Any"}}},
+            {},
+            {"tags": [1, "x"], "kind": "a"},
+            [("tags", (None, b'[1, "x"]', "application/json")), ("kind", (None, "a"))],
+        ),
+    ],
+    ids=["file", "file-array", "object", "xml", "xml-array-of-refs", "untyped-items", "untyped-items-ref"],
+)
+@pytest.mark.parametrize("declared", ["inline", "ref"])
+def test_multipart_parts_of_body_behind_ref(ctx, declared, properties, encoding, body, expected):
+    # The `kind` reference keeps a referenced body bundled with a `$ref` at its root
+    upload = {"type": "object", "properties": {**properties, "kind": {"$ref": "#/components/schemas/Kind"}}}
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
         {
-            "/upload": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "multipart/form-data": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "part": {
-                                            "type": ["object", "null"],
-                                            "properties": {"value": {"type": "string"}},
-                                        }
-                                    },
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": upload if declared == "inline" else {"$ref": "#/components/schemas/Upload"},
+                        "encoding": encoding,
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        components={
+            "schemas": {
+                "Upload": upload,
+                "Kind": {"type": "string", "enum": ["a"]},
+                "Any": {},
+                "Tags": {"type": "array", "xml": {"wrapped": True}, "items": {"$ref": "#/components/schemas/Tag"}},
+                "Tag": {"type": "object", "xml": {"name": "tag"}, "properties": {"n": {"type": "integer"}}},
             }
+        },
+    )
+    case = operation.Case(body=body, media_type="multipart/form-data")
+    assert case.as_transport_kwargs(base_url="http://127.0.0.1")["files"] == expected
+
+
+@pytest.mark.parametrize("declared", ["inline", "ref"])
+def test_multipart_swagger2_body_parameter_behind_ref(ctx, declared):
+    # The `kind` reference keeps a referenced body bundled with a `$ref` at its root
+    upload = {
+        "type": "object",
+        "properties": {"file": {"type": "string", "format": "binary"}, "kind": {"$ref": "#/definitions/Kind"}},
+    }
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "consumes": ["multipart/form-data"],
+            "parameters": [
+                {
+                    "in": "body",
+                    "name": "body",
+                    "schema": upload if declared == "inline" else {"$ref": "#/definitions/Upload"},
+                }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="2.0",
+        definitions={"Upload": upload, "Kind": {"type": "string"}},
+    )
+    case = operation.Case(body={"file": b"abc", "kind": "a"}, media_type="multipart/form-data")
+    assert case.as_transport_kwargs(base_url="http://127.0.0.1")["files"] == [
+        ("file", ("file", b"abc")),
+        ("kind", (None, "a")),
+    ]
+
+
+def test_multipart_nullable_object_property_serializes_as_json(ctx, case_factory):
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "part": {
+                                    "type": ["object", "null"],
+                                    "properties": {"value": {"type": "string"}},
+                                }
+                            },
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.1.0",
     )
     case = case_factory(
-        operation=schema["/upload"]["POST"],
+        operation=operation,
         method="POST",
         body={"part": {"value": "x"}},
         media_type="multipart/form-data",
@@ -626,28 +1233,25 @@ def test_multipart_nullable_object_property_serializes_as_json(ctx, case_factory
 
 def test_multipart_property_without_type_but_with_properties_serializes_as_json(ctx, case_factory):
     # Property schema with no `type` but with `properties` keyword — still structural.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
         {
-            "/upload": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "multipart/form-data": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {"part": {"properties": {"value": {"type": "string"}}}},
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"part": {"properties": {"value": {"type": "string"}}}},
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
         },
     )
     case = case_factory(
-        operation=schema["/upload"]["POST"],
+        operation=operation,
         method="POST",
         body={"part": {"value": "x"}},
         media_type="multipart/form-data",
@@ -660,24 +1264,19 @@ def test_multipart_boolean_property_schema_is_left_alone(ctx, case_factory):
     # JSON Schema 2020-12 allows `true` as a property schema (accept anything).
     # The default-JSON pass must skip it (no `type`, not a dict-with-structural-keys)
     # rather than crash or stringify with repr.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
         {
-            "/upload": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "multipart/form-data": {"schema": {"type": "object", "properties": {"part": True}}}
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "required": True,
+                "content": {"multipart/form-data": {"schema": {"type": "object", "properties": {"part": True}}}},
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.1.0",
     )
     case = case_factory(
-        operation=schema["/upload"]["POST"],
+        operation=operation,
         method="POST",
         body={"part": "raw"},
         media_type="multipart/form-data",
@@ -687,22 +1286,19 @@ def test_multipart_boolean_property_schema_is_left_alone(ctx, case_factory):
 
 
 def test_multipart_boolean_schema_does_not_crash(ctx, case_factory):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
         {
-            "/upload": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {"multipart/form-data": {"schema": True}},
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "required": True,
+                "content": {"multipart/form-data": {"schema": True}},
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.1.0",
     )
     case = case_factory(
-        operation=schema["/upload"]["POST"],
+        operation=operation,
         method="POST",
         body={"part": "value"},
         media_type="multipart/form-data",
@@ -860,33 +1456,172 @@ def test_multipart_part_content_type(ctx, case_factory, load_kwargs, body, field
     assert _multipart_content_type(serialized, field) == expected
 
 
-def test_unknown_multipart_fields_openapi3(ctx):
-    schema = ctx.openapi.load_schema(
+@pytest.mark.parametrize(
+    ("part", "expected"),
+    [
+        ({"type": "object"}, "application/json"),
+        ({"type": ["array", "null"]}, "application/json"),
+        ({"type": ["string", "null"]}, None),
+        ({"additionalProperties": {"type": "string"}}, "application/json"),
+        ({"items": {}}, "application/json"),
+        ({}, None),
+    ],
+    ids=["object", "type-list-array", "type-list-scalar", "untyped-additional-properties", "untyped-items", "empty"],
+)
+def test_multipart_structured_part_defaults_to_json(ctx, case_factory, part, expected):
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "multipart/form-data": {
-                                "schema": {
-                                    "type": "object",
-                                    "additionalProperties": False,
-                                    "properties": {
-                                        "data": {"type": "string", "format": "binary"},
-                                        "note": {"type": "string"},
-                                    },
-                                    "required": ["data", "note"],
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
+            "requestBody": {
+                "required": True,
+                "content": {"multipart/form-data": {"schema": {"type": "object", "properties": {"part": part}}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version="3.1.0",
+    )
+    case = case_factory(operation=operation, method="POST", body={"part": "x"}, media_type="multipart/form-data")
+    assert _multipart_content_type(REQUESTS_TRANSPORT.serialize_case(case), "part") == expected
+
+
+def test_multipart_part_serialized_with_selected_content_type(ctx, case_factory):
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {"type": "object", "properties": {"meta": {"type": "object"}}},
+                        "encoding": {"meta": {"contentType": "application/xml, application/json"}},
+                    }
                 },
             },
-        }
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schema["/test"]["POST"]
+    case = case_factory(
+        operation=operation,
+        method="POST",
+        body={"meta": {"a": 1}},
+        media_type="multipart/form-data",
+        multipart_content_types={"meta": "application/json"},
+    )
+    assert _multipart_payload(REQUESTS_TRANSPORT.serialize_case(case), "meta") == b'{"a": 1}'
+
+
+@pytest.mark.parametrize("version", ["3.0.2", "3.1.0"])
+def test_multipart_binary_filename_behind_alias_body_ref(ctx, version):
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {"multipart/form-data": {"schema": {"$ref": "#/components/schemas/Upload"}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        version=version,
+        components={
+            "schemas": {
+                "Meta": {"type": "string"},
+                "UploadBase": {
+                    "type": "object",
+                    "properties": {
+                        "file": {"type": "string", "format": "binary"},
+                        "meta": {"$ref": "#/components/schemas/Meta"},
+                    },
+                },
+                "Upload": {"$ref": "#/components/schemas/UploadBase"},
+            }
+        },
+    )
+    case = operation.Case(body={"file": b"abc"}, media_type="multipart/form-data")
+    assert case.as_transport_kwargs(base_url="http://127.0.0.1")["files"] == [("file", ("file", b"abc"))]
+
+
+@pytest.mark.parametrize(
+    ("items", "encoding", "tags", "expected"),
+    [
+        (
+            {"type": "string"},
+            {},
+            ["hello world", "x"],
+            [("tags", (None, "hello world")), ("tags", (None, "x")), ("n", (None, 0))],
+        ),
+        (
+            {"type": "integer"},
+            {},
+            [1, 2],
+            [("tags", (None, 1)), ("tags", (None, 2)), ("n", (None, 0))],
+        ),
+        (
+            {"type": "string"},
+            {"tags": {"contentType": "text/csv"}},
+            ["hello world"],
+            [("tags", (None, "hello world", "text/csv")), ("n", (None, 0))],
+        ),
+        (
+            {"type": "object", "properties": {"v": {"type": "string"}}},
+            {},
+            [{"v": "x"}, {"v": "y"}],
+            [("tags", (None, b'[{"v": "x"}, {"v": "y"}]', "application/json")), ("n", (None, 0))],
+        ),
+    ],
+    ids=["array-of-strings", "array-of-integers", "array-of-strings-with-encoding", "array-of-objects"],
+)
+def test_multipart_array_parts_follow_items_type(ctx, case_factory, items, encoding, tags, expected):
+    # Primitive items default to plain text parts, so a JSON label would make servers reject the raw payload.
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"tags": {"type": "array", "items": items}, "n": {"type": "integer"}},
+                        },
+                        "encoding": encoding,
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = case_factory(
+        operation=operation,
+        method="POST",
+        body={"tags": tags, "n": 0},
+        media_type="multipart/form-data",
+    )
+    assert REQUESTS_TRANSPORT.serialize_case(case)["files"] == expected
+
+
+def test_unknown_multipart_fields_openapi3(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /test",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": False,
+                            "properties": {
+                                "data": {"type": "string", "format": "binary"},
+                                "note": {"type": "string"},
+                            },
+                            "required": ["data", "note"],
+                        }
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
     case = operation.Case(
         body={"data": b"\x92\x42", "note": "foo", "unknown": "seen"}, media_type="multipart/form-data"
     )
@@ -901,7 +1636,7 @@ def test_unknown_multipart_fields_openapi3(ctx):
 @pytest.mark.parametrize(
     "encoding,expected_filename",
     [
-        # No encoding: field name is used as filename for binary parts
+        # No encoding: field name is used as filename for binary parts and list items
         (None, "attachment"),
         # encoding.headers.Content-Disposition.schema.example provides filename
         (
@@ -932,161 +1667,252 @@ def test_unknown_multipart_fields_openapi3(ctx):
             },
             "doc.pdf",
         ),
+        (
+            {"attachment": {"headers": {"Content-Disposition": {"example": "form-data; filename=raw.bin"}}}},
+            "raw.bin",
+        ),
+        (
+            {"attachment": {"headers": {"Content-Disposition": {"example": 'form-data; name="attachment"'}}}},
+            "attachment",
+        ),
     ],
-    ids=["field-name-fallback", "schema-example", "header-example"],
+    ids=["field-name-fallback", "schema-example", "header-example", "unquoted-filename", "no-filename"],
 )
-def test_multipart_binary_field_filename(ctx, encoding, expected_filename):
-    content: dict = {
-        "schema": {
-            "type": "object",
-            "properties": {"attachment": {"type": "string", "format": "binary"}},
-        }
-    }
-    if encoding is not None:
-        content["encoding"] = encoding
-    schema = ctx.openapi.load_schema(
-        {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {"multipart/form-data": content},
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                },
-            },
-        }
-    )
-    case = schema["/test"]["POST"].Case(body={"attachment": b"\x92\x42"}, media_type="multipart/form-data")
-    serialized = REQUESTS_TRANSPORT.serialize_case(case)
-    assert serialized["files"] == [("attachment", (expected_filename, b"\x92B"))]
-
-
 @pytest.mark.parametrize(
-    "encoding,expected_filename",
+    "property_schema, value, sent",
     [
-        # No encoding: field name is used as filename for binary list items
-        (None, "files"),
-        # encoding.headers.Content-Disposition.schema.example provides filename
-        (
-            {
-                "files": {
-                    "headers": {
-                        "Content-Disposition": {
-                            "schema": {
-                                "type": "string",
-                                "example": 'form-data; name="files"; filename="upload.bin"',
-                            }
-                        }
-                    }
-                }
-            },
-            "upload.bin",
-        ),
-        # encoding.headers.Content-Disposition.example (no schema wrapping)
-        (
-            {
-                "files": {
-                    "headers": {
-                        "Content-Disposition": {
-                            "example": 'form-data; name="files"; filename="data.bin"',
-                        }
-                    }
-                }
-            },
-            "data.bin",
-        ),
+        ({"type": "string", "format": "binary"}, b"\x92\x42", [b"\x92B"]),
+        ({"type": "array", "items": {"type": "string", "format": "binary"}}, [b"\x01", b"\x02"], [b"\x01", b"\x02"]),
     ],
-    ids=["field-name-fallback", "schema-example", "header-example"],
+    ids=["single", "list"],
 )
-def test_multipart_binary_list_filename(ctx, encoding, expected_filename):
-    content: dict = {
-        "schema": {
-            "type": "object",
-            "properties": {"files": {"type": "array", "items": {"type": "string", "format": "binary"}}},
-        }
-    }
+def test_multipart_binary_part_filename(ctx, encoding, expected_filename, property_schema, value, sent):
+    content: dict = {"schema": {"type": "object", "properties": {"attachment": property_schema}}}
     if encoding is not None:
         content["encoding"] = encoding
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {"multipart/form-data": content},
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                },
+            "requestBody": {
+                "required": True,
+                "content": {"multipart/form-data": content},
             },
-        }
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    case = schema["/test"]["POST"].Case(body={"files": [b"\x01", b"\x02"]}, media_type="multipart/form-data")
-    serialized = REQUESTS_TRANSPORT.serialize_case(case)
-    assert serialized["files"] == [
-        ("files", (expected_filename, b"\x01")),
-        ("files", (expected_filename, b"\x02")),
+    case = operation.Case(body={"attachment": value}, media_type="multipart/form-data")
+    assert REQUESTS_TRANSPORT.serialize_case(case)["files"] == [
+        ("attachment", (expected_filename, part)) for part in sent
     ]
 
 
-def test_unknown_multipart_fields_openapi2(ctx):
-    schema = ctx.openapi.load_schema(
+@pytest.mark.parametrize(
+    "value, expected_filename",
+    [(b"\x89PNG\r\n\x1a\n\x00", "attachment.png"), (b"%PDF-1.4\n", "attachment.pdf"), (b"\x92B", "attachment")],
+    ids=["png", "pdf", "unknown"],
+)
+def test_multipart_binary_field_filename_extension(ctx, value, expected_filename):
+    # Servers pick the decoder or storage format from the extension.
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "parameters": [
-                        {
-                            "in": "body",
-                            "name": "body",
-                            "required": True,
-                            "schema": {
-                                "type": "object",
-                                "additionalProperties": False,
-                                "properties": {
-                                    "data": {"type": "string", "format": "binary"},
-                                    "note": {"type": "string"},
-                                },
-                                "required": ["data", "note"],
-                            },
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"attachment": {"type": "string", "format": "binary"}},
                         }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+                    }
                 },
             },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(body={"attachment": value}, media_type="multipart/form-data")
+    assert REQUESTS_TRANSPORT.serialize_case(case)["files"] == [("attachment", (expected_filename, value))]
+
+
+@pytest.mark.parametrize(
+    "property_schema, value, expected",
+    [
+        ({"type": "string", "format": "binary"}, b"abc", [("file", ("file", b"abc"))]),
+        ({"$ref": "#/components/schemas/File"}, b"abc", [("file", ("file", b"abc"))]),
+        (
+            {"type": "array", "items": {"$ref": "#/components/schemas/File"}},
+            [b"a", b"b"],
+            [("file", ("file", b"a")), ("file", ("file", b"b"))],
+        ),
+        (
+            {"$ref": "#/components/schemas/Files"},
+            [b"a", b"b"],
+            [("file", ("file", b"a")), ("file", ("file", b"b"))],
+        ),
+    ],
+    ids=["inline", "ref", "ref-items", "ref-array"],
+)
+@pytest.mark.parametrize("body_is_ref", [False, True], ids=["inline-body", "ref-body"])
+def test_multipart_binary_property_filename_behind_ref(ctx, body_is_ref, property_schema, value, expected):
+    upload = {"type": "object", "properties": {"file": property_schema}}
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {"$ref": "#/components/schemas/Upload"} if body_is_ref else upload
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+        components={
+            "schemas": {
+                "Upload": upload,
+                "File": {"type": "string", "format": "binary"},
+                "Files": {"type": "array", "items": {"$ref": "#/components/schemas/File"}},
+            }
+        },
+    )
+    case = operation.Case(body={"file": value}, media_type="multipart/form-data")
+    assert case.as_transport_kwargs(base_url="http://127.0.0.1")["files"] == expected
+
+
+@pytest.mark.parametrize("transport", ["wsgi", "http"])
+@pytest.mark.parametrize(
+    ("version", "operation", "body", "expected"),
+    [
+        (
+            "2.0",
+            {
+                "consumes": ["multipart/form-data"],
+                "parameters": [
+                    {"in": "formData", "name": "description", "type": "string"},
+                    {"in": "formData", "name": "tags", "type": "array", "items": {"type": "string"}},
+                    {"in": "formData", "name": "upload", "type": "file"},
+                ],
+            },
+            {"description": "hello", "tags": ["a", "b"], "upload": b"x", "unknown": "seen"},
+            {
+                "form": {"description": ["hello"], "tags": ["a", "b"], "unknown": ["seen"]},
+                "files": {"upload": ["upload"]},
+            },
+        ),
+        (
+            "2.0",
+            {
+                "consumes": ["multipart/form-data"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {"data": {"type": "string", "format": "binary"}, "note": {"type": "string"}},
+                        },
+                    }
+                ],
+            },
+            {"data": b"x", "note": "foo"},
+            {"form": {"note": ["foo"]}, "files": {"data": ["data"]}},
+        ),
+        (
+            "2.0",
+            {"consumes": ["multipart/form-data"], "parameters": [{"in": "body", "name": "body"}]},
+            {"note": "foo"},
+            {"form": {"note": ["foo"]}, "files": {}},
+        ),
+        (
+            "3.0.2",
+            {
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {"type": "object", "properties": {"note": {"type": "string"}}}
+                        }
+                    }
+                }
+            },
+            {"note": "foo", "unknown": ["a", "b"]},
+            {"form": {"note": ["foo"], "unknown": ["a", "b"]}, "files": {}},
+        ),
+    ],
+    ids=["swagger-form-data", "swagger-body-schema", "swagger-body-without-schema", "openapi3-undeclared-list"],
+)
+def test_multipart_plain_fields_are_not_sent_as_files(ctx, app_runner, transport, version, operation, body, expected):
+    app, _ = ctx.openapi.make_flask_app(
+        {"/upload": {"post": {**operation, "responses": {"200": {"description": "OK"}}}}}, version=version
+    )
+    prefix = "/api" if version == "2.0" else ""
+
+    @app.route(f"{prefix}/upload", methods=["POST"])
+    def upload():
+        return jsonify(
+            {
+                "form": request.form.to_dict(flat=False),
+                "files": {name: [part.filename for part in request.files.getlist(name)] for name in request.files},
+            }
+        )
+
+    if transport == "wsgi":
+        schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
+    else:
+        schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    case = schema["/upload"]["POST"].Case(body=body, media_type="multipart/form-data")
+    assert case.call().json() == expected
+
+
+def test_unknown_multipart_fields_openapi2(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /test",
+        {
+            "parameters": [
+                {
+                    "in": "body",
+                    "name": "body",
+                    "required": True,
+                    "schema": {
+                        "type": "object",
+                        "additionalProperties": False,
+                        "properties": {
+                            "data": {"type": "string", "format": "binary"},
+                            "note": {"type": "string"},
+                        },
+                        "required": ["data", "note"],
+                    },
+                }
+            ],
+            "responses": {"200": {"description": "OK"}},
         },
         version="2.0",
     )
-    operation = schema["/test"]["POST"]
     case = operation.Case(
         body={"data": b"\x92\x42", "note": "foo", "unknown": "seen"}, media_type="multipart/form-data"
     )
     serialized = REQUESTS_TRANSPORT.serialize_case(case)
-    assert serialized["files"] == [
-        ("data", b"\x92B"),
-        ("note", "foo"),
-        ("unknown", "seen"),
-    ]
+    assert (serialized["files"], serialized["data"]) == (
+        [("data", ("data", b"\x92B")), ("unknown", (None, "seen"))],
+        {"note": "foo"},
+    )
 
 
 def test_internal_raw_query_marker_does_not_consume_user_query_parameter(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /test",
         {
-            "/test": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": RAW_QUERY_STRING_KEY,
-                            "in": "query",
-                            "required": True,
-                            "schema": {"type": "string", "enum": ["visible"]},
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+            "parameters": [
+                {
+                    "name": RAW_QUERY_STRING_KEY,
+                    "in": "query",
+                    "required": True,
+                    "schema": {"type": "string", "enum": ["visible"]},
                 }
-            }
-        }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
-    operation = schema["/test"]["GET"]
     case = operation.Case(query={RAW_QUERY_STRING_KEY: "visible"})
 
     serialized_requests = REQUESTS_TRANSPORT.serialize_case(case)
@@ -1094,6 +1920,36 @@ def test_internal_raw_query_marker_does_not_consume_user_query_parameter(ctx):
 
     serialized_wsgi = WSGI_TRANSPORT.serialize_case(case)
     assert serialized_wsgi["query_string"] == {RAW_QUERY_STRING_KEY: "visible"}
+
+
+def test_string_query_reaches_the_server_over_requests_and_wsgi(ctx):
+    api = ctx.openapi.apps.success()
+    for schema in (
+        schemathesis.openapi.from_url(api.schema_url),
+        schemathesis.openapi.from_wsgi("/openapi.json", api.wsgi_app),
+    ):
+        operation = schema["/api/success"]["GET"]
+        operation.Case(query={"a": "1"}).call()
+        operation.Case(query="b=2").call()
+    assert [request.query for request in api.requests if request.path == "/api/success"] == [
+        {"a": "1"},
+        {"b": "2"},
+        {"a": "1"},
+        {"b": "2"},
+    ]
+
+
+def test_empty_object_query_value_sent_as_empty_string_over_requests_and_wsgi(ctx):
+    api = ctx.openapi.apps.success()
+    for schema in (
+        schemathesis.openapi.from_url(api.schema_url),
+        schemathesis.openapi.from_wsgi("/openapi.json", api.wsgi_app),
+    ):
+        schema["/api/success"]["GET"].Case(query={"q": {}, "x": "1"}).call()
+    assert [request.query for request in api.requests if request.path == "/api/success"] == [
+        {"q": "", "x": "1"},
+        {"q": "", "x": "1"},
+    ]
 
 
 @pytest.mark.filterwarnings("error")
@@ -1195,26 +2051,69 @@ def test_get_matching_serializers(media_type, expected):
     assert {media_type for media_type, _ in TRANSPORT.get_matching_media_types(media_type)} == expected
 
 
-def test_serialize_xml_with_boolean_schema(ctx):
-    # Open API 3.1 lets a body be written as `true`, which carries no XML metadata.
-    schema = ctx.openapi.load_schema(
+@pytest.mark.parametrize(
+    ("body", "expected"),
+    [
+        ({"a": 1, "b": None}, b'{"a": 1, "b": null}'),
+        ([1, "x", None], b'[1, "x", null]'),
+        ({"outer": {"inner": None}}, b'{"outer": {"inner": null}}'),
+        (True, b"true"),
+        (None, b"null"),
+        ("x", b"x"),
+    ],
+    ids=["object", "array", "nested-object", "true", "null", "string"],
+)
+@pytest.mark.parametrize("transport", ["http", "wsgi"])
+def test_text_plain_body_spelled_as_json(ctx, app_runner, transport, body, expected):
+    app, _ = ctx.openapi.make_flask_app(
         {
-            "/data": {
+            "/echo": {
                 "post": {
-                    "requestBody": {"required": True, "content": {"application/xml": {"schema": True}}},
+                    "requestBody": {"content": {"text/plain": {"schema": {}}}},
                     "responses": {"200": {"description": "OK"}},
                 }
             }
+        }
+    )
+
+    @app.route("/echo", methods=["POST"])
+    def echo():
+        return request.get_data()
+
+    if transport == "http":
+        schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    else:
+        schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
+    case = schema["/echo"]["POST"].Case(body=body, media_type="text/plain")
+    assert case.call().content == expected
+
+
+def test_serialize_xml_with_boolean_schema(ctx):
+    # Open API 3.1 lets a body be written as `true`, which carries no XML metadata.
+    operation = ctx.openapi.load_operation(
+        "POST /data",
+        {
+            "requestBody": {"required": True, "content": {"application/xml": {"schema": True}}},
+            "responses": {"200": {"description": "OK"}},
         },
         version="3.1.0",
     )
 
-    @given(case=schema["/data"]["POST"].as_strategy())
-    @settings(max_examples=3)
+    @run_given(case=operation.as_strategy(), max_examples=3)
     def test(case):
         assert "data" in REQUESTS_TRANSPORT.serialize_case(case)
 
-    test()
+
+def test_serialize_xml_for_undeclared_media_type(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /data",
+        {
+            "requestBody": {"content": {"application/json": {"schema": {"type": "object"}}}},
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(body={"a": 1}, media_type="application/xml")
+    assert case.as_transport_kwargs(base_url="http://127.0.0.1")["data"] == b"<data><a>1</a></data>"
 
 
 @pytest.mark.parametrize(
@@ -1330,70 +2229,525 @@ def test_serialize_xml(openapi_3_schema_with_xml, path, expected):
             "xml": {"wrapped": True},
         },
         {"type": "integer", "xml": {"prefix": "smp"}},
+        {
+            "type": "object",
+            "properties": {
+                "a": {"enum": [1], "xml": {"prefix": "smp", "namespace": "http://example.com/schema"}},
+                "b": {"enum": [2], "xml": {"prefix": "smp"}},
+            },
+            "additionalProperties": False,
+            "required": ["a", "b"],
+        },
+        {
+            "type": "object",
+            "properties": {
+                "a": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "enum": [1],
+                            "xml": {"attribute": True, "prefix": "smp", "namespace": "http://example.com/schema"},
+                        }
+                    },
+                    "additionalProperties": False,
+                    "required": ["id"],
+                },
+                "b": {"enum": [2], "xml": {"prefix": "smp"}},
+            },
+            "additionalProperties": False,
+            "required": ["a", "b"],
+        },
+        {
+            "type": "object",
+            "properties": {
+                "a": {
+                    "type": "object",
+                    "properties": {
+                        "id": {"enum": [1], "xml": {"attribute": True, "prefix": "q", "namespace": "http://q"}}
+                    },
+                    "additionalProperties": False,
+                    "required": ["id"],
+                    "xml": {"prefix": "smp", "namespace": "http://example.com/schema"},
+                },
+                "b": {"enum": [2], "xml": {"prefix": "smp"}},
+            },
+            "additionalProperties": False,
+            "required": ["a", "b"],
+        },
     ],
 )
 def test_serialize_xml_unbound_prefix(ctx, schema_object):
     # When the schema contains an unbound prefix
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "content": {"application/xml": {"schema": {"$ref": "#/components/schemas/Main"}}},
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "content": {"application/xml": {"schema": {"$ref": "#/components/schemas/Main"}}},
+                "required": True,
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         components={"schemas": {"Main": schema_object}},
     )
 
-    @given(case=schema["/test"]["POST"].as_strategy())
-    @settings(max_examples=1)
+    @run_given(case=operation.as_strategy(), max_examples=1)
     def test(case):
         # Then it should be an error during serialization
         with pytest.raises(SerializationError, match="Unbound prefix: `smp`"):
             case.as_transport_kwargs()
 
-    test()
+
+PREFIXED_ROOT_SCHEMA = {
+    "type": "object",
+    "xml": {"name": "root", "namespace": "http://x", "prefix": "p"},
+    "properties": {"a": {"type": "integer"}},
+    "required": ["a"],
+}
+PREFIXED_ITEM_XML = {"name": "item", "namespace": "http://x", "prefix": "p"}
+PREFIXED_CHILD_XML = {"prefix": "p", "namespace": "http://p"}
+
+
+def _with_child(child):
+    return {"type": "object", "xml": {"name": "root"}, "properties": {"child": child}}
 
 
 @pytest.mark.parametrize(
-    ("body", "expected"),
+    ("schema", "components", "version", "body", "expected"),
     [
-        ("str", b'<p:root xmlns:p="http://x">str</p:root>'),
-        (1, b'<p:root xmlns:p="http://x">1</p:root>'),
-        (1.5, b'<p:root xmlns:p="http://x">1.5</p:root>'),
-        (True, b'<p:root xmlns:p="http://x">true</p:root>'),
-        (None, b'<p:root xmlns:p="http://x">null</p:root>'),
-    ],
-    ids=["string", "integer", "float", "boolean", "null"],
-)
-def test_serialize_xml_scalar_body_under_prefixed_root(ctx, body, expected):
-    schema = ctx.openapi.load_schema(
-        {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "content": {
-                            "application/xml": {
-                                "schema": {
-                                    "type": "object",
-                                    "xml": {"name": "root", "namespace": "http://x", "prefix": "p"},
-                                    "properties": {"a": {"type": "integer"}},
-                                    "required": ["a"],
-                                }
-                            }
-                        },
-                        "required": True,
+        (
+            {"$ref": "#/components/schemas/Item"},
+            {
+                "Item": {"$ref": "#/components/schemas/Base"},
+                "Base": {
+                    "type": "object",
+                    "xml": {"name": "base-tag"},
+                    "properties": {"id": {"type": "integer", "xml": {"attribute": True}}},
+                },
+            },
+            "3.0.2",
+            {"id": 1},
+            b'<base-tag id="1"></base-tag>',
+        ),
+        (
+            {"type": "object", "xml": {"name": "root"}, "properties": {"id": {"$ref": "#/components/schemas/IdAlias"}}},
+            {
+                "IdAlias": {"$ref": "#/components/schemas/Id"},
+                "Id": {"type": "integer", "xml": {"name": "ident", "attribute": True}},
+            },
+            "3.0.2",
+            {"id": 1},
+            b'<root ident="1"></root>',
+        ),
+        (
+            {
+                "type": "array",
+                "xml": {"name": "items", "wrapped": True},
+                "items": {"$ref": "#/components/schemas/Alias"},
+            },
+            {"Alias": {"$ref": "#/components/schemas/Item"}, "Item": {"type": "string", "xml": {"name": "item"}}},
+            "3.0.2",
+            ["x"],
+            b"<items><item>x</item></items>",
+        ),
+        (
+            {"$ref": "#/components/schemas/Item"},
+            {
+                "Item": {"$ref": "#/components/schemas/Base", "xml": {"name": "alias"}},
+                "Base": {
+                    "type": "object",
+                    "xml": {"name": "base-tag", "prefix": "p", "namespace": "http://p"},
+                    "properties": {"a": {"type": "integer"}},
+                },
+            },
+            "3.1.0",
+            {"a": 1},
+            b'<p:alias xmlns:p="http://p"><a>1</a></p:alias>',
+        ),
+        (
+            {
+                "type": "object",
+                "xml": {"name": "root"},
+                "properties": {"id": {"$ref": "#/components/schemas/Id", "xml": {"attribute": True}}},
+            },
+            {"Id": {"type": "integer"}},
+            "3.1.0",
+            {"id": 1},
+            b'<root id="1"></root>',
+        ),
+        (
+            {"$ref": "#/components/schemas/Item"},
+            {"Item": {"$ref": "#/components/schemas/Other"}, "Other": {"$ref": "#/components/schemas/Item"}},
+            "3.0.2",
+            1,
+            b"<Item>1</Item>",
+        ),
+        (PREFIXED_ROOT_SCHEMA, {}, "3.0.2", "str", b'<p:root xmlns:p="http://x">str</p:root>'),
+        (PREFIXED_ROOT_SCHEMA, {}, "3.0.2", 1, b'<p:root xmlns:p="http://x">1</p:root>'),
+        (PREFIXED_ROOT_SCHEMA, {}, "3.0.2", 1.5, b'<p:root xmlns:p="http://x">1.5</p:root>'),
+        (PREFIXED_ROOT_SCHEMA, {}, "3.0.2", True, b'<p:root xmlns:p="http://x">true</p:root>'),
+        (PREFIXED_ROOT_SCHEMA, {}, "3.0.2", None, b'<p:root xmlns:p="http://x">null</p:root>'),
+        (
+            {"type": "array", "items": {"type": "string", "xml": PREFIXED_ITEM_XML}},
+            {},
+            "3.0.2",
+            ["v"],
+            b'<p:item xmlns:p="http://x">v</p:item>',
+        ),
+        (
+            {
+                "type": "array",
+                "items": {"type": "object", "properties": {"a": {"type": "string"}}, "xml": PREFIXED_ITEM_XML},
+            },
+            {},
+            "3.0.2",
+            [{"a": "v"}],
+            b'<p:item xmlns:p="http://x"><a>v</a></p:item>',
+        ),
+        (
+            {
+                "type": "object",
+                "xml": {"name": "root", "namespace": "http://x", "prefix": "p"},
+                "properties": {
+                    "a": {"type": "array", "items": {"type": "string", "xml": {"name": "item", "prefix": "p"}}}
+                },
+            },
+            {},
+            "3.0.2",
+            {"a": ["v"]},
+            b'<p:root xmlns:p="http://x"><p:item>v</p:item></p:root>',
+        ),
+        (
+            _with_child({"type": "object", "properties": {"a": {"type": "string"}}, "xml": PREFIXED_CHILD_XML}),
+            {},
+            "3.0.2",
+            {"child": {"a": "x"}},
+            b'<root><p:child xmlns:p="http://p"><a>x</a></p:child></root>',
+        ),
+        (
+            _with_child({"type": "array", "items": {"type": "string"}, "xml": PREFIXED_CHILD_XML}),
+            {},
+            "3.0.2",
+            {"child": ["x"]},
+            b'<root><p:child xmlns:p="http://p">x</p:child></root>',
+        ),
+        (
+            _with_child({"type": "array", "items": {"type": "string"}, "xml": {**PREFIXED_CHILD_XML, "wrapped": True}}),
+            {},
+            "3.0.2",
+            {"child": ["x"]},
+            b'<root><p:child xmlns:p="http://p"><p:child>x</p:child></p:child></root>',
+        ),
+        (
+            {
+                "type": "object",
+                "xml": {"name": "root"},
+                "properties": {
+                    "a": {
+                        "type": "array",
+                        "xml": {"prefix": "p", "namespace": "http://p"},
+                        "items": {"$ref": "#/components/schemas/Item"},
                     },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
-    )
-    assert schema["/test"]["POST"].Case(body=body).as_transport_kwargs(base_url="http://127.0.0.1")["data"] == expected
+                    "b": {"type": "array", "items": {"$ref": "#/components/schemas/Item"}},
+                },
+            },
+            {"Item": {"type": "string", "xml": {"name": "item"}}},
+            "3.0.2",
+            {"a": ["x"], "b": ["y"]},
+            b'<root><p:item xmlns:p="http://p">x</p:item><item>y</item></root>',
+        ),
+        (
+            {
+                "type": "object",
+                "xml": {"name": "root"},
+                "properties": {
+                    "id": {"type": "string", "xml": {**PREFIXED_CHILD_XML, "attribute": True}},
+                    "child": {"type": "string", "xml": {"prefix": "p"}},
+                },
+            },
+            {},
+            "3.0.2",
+            {"id": "x", "child": "y"},
+            b'<root xmlns:p="http://p" p:id="x"><p:child>y</p:child></root>',
+        ),
+        (
+            {
+                "type": "object",
+                "xml": {"name": "root"},
+                "properties": {
+                    "child": {"type": "string", "xml": {"prefix": "p"}},
+                    "id": {"type": "string", "xml": {**PREFIXED_CHILD_XML, "attribute": True}},
+                },
+            },
+            {},
+            "3.0.2",
+            {"child": "y", "id": "x"},
+            b'<root xmlns:p="http://p" p:id="x"><p:child>y</p:child></root>',
+        ),
+        (
+            {
+                "type": "object",
+                "xml": {"name": "item"},
+                "properties": {"id": {"type": "integer", "xml": {"nodeType": "attribute"}}},
+            },
+            {},
+            "3.2.0",
+            {"id": 1},
+            b'<item id="1"></item>',
+        ),
+        (
+            {
+                "type": "object",
+                "xml": {"name": "item"},
+                "properties": {
+                    "tags": {
+                        "type": "array",
+                        "xml": {"nodeType": "element"},
+                        "items": {"type": "string", "xml": {"name": "tag"}},
+                    }
+                },
+            },
+            {},
+            "3.2.0",
+            {"tags": ["a", "b"]},
+            b"<item><tags><tag>a</tag><tag>b</tag></tags></item>",
+        ),
+        (
+            {
+                "type": "object",
+                "xml": {"name": "item"},
+                "properties": {
+                    "id": {"type": "integer", "xml": {"nodeType": "attribute"}},
+                    "note": {"type": "string", "xml": {"nodeType": "text"}},
+                },
+            },
+            {},
+            "3.2.0",
+            {"id": 1, "note": "a<b"},
+            b'<item id="1">a&lt;b</item>',
+        ),
+        (
+            {
+                "type": "object",
+                "xml": {"name": "item"},
+                "properties": {"note": {"type": "string", "xml": {"nodeType": "cdata"}}},
+            },
+            {},
+            "3.2.0",
+            {"note": "a<b]]>c\x01"},
+            b"<item><![CDATA[a<b]]]]><![CDATA[>c]]></item>",
+        ),
+        (
+            {
+                "type": "object",
+                "xml": {"name": "item"},
+                "properties": {"note": {"type": "string", "xml": {"nodeType": "text"}}},
+            },
+            {},
+            "3.2.0",
+            {"note": {"a": "x"}},
+            b"<item><note><a>x</a></note></item>",
+        ),
+        (
+            {
+                "type": "object",
+                "properties": {
+                    "flag": {"type": "boolean"},
+                    "note": {"type": "null"},
+                    "mark": {"type": "boolean", "xml": {"attribute": True}},
+                },
+                "xml": {"name": "Root"},
+            },
+            {},
+            "3.1.0",
+            {"flag": True, "note": None, "mark": False},
+            b'<Root mark="false"><flag>true</flag><note>null</note></Root>',
+        ),
+        (
+            {"$ref": "#/components/schemas/Main"},
+            {
+                "Main": {
+                    "type": "object",
+                    "properties": {"id": {"$ref": "#/components/schemas/IdField"}},
+                    "xml": {"name": "Root"},
+                },
+                "IdField": {"type": "integer", "xml": {"name": "custom-id", "attribute": True}},
+            },
+            "3.0.2",
+            {"id": 42},
+            b'<Root custom-id="42"></Root>',
+        ),
+        (
+            {"$ref": "#/components/schemas/ItemList"},
+            {
+                "ItemList": {
+                    "type": "array",
+                    "items": {"$ref": "#/components/schemas/Item"},
+                    "xml": {"name": "items", "wrapped": True},
+                },
+                "Item": {"type": "integer", "xml": {"name": "item"}},
+            },
+            "3.0.2",
+            [42, 43],
+            b"<items><item>42</item><item>43</item></items>",
+        ),
+        (
+            {"$ref": "#/components/schemas/Container"},
+            {
+                "Container": {
+                    "type": "object",
+                    "properties": {"user": {"$ref": "#/components/schemas/User"}},
+                    "xml": {"name": "container"},
+                },
+                "User": {
+                    "type": "object",
+                    "properties": {"profile": {"$ref": "#/components/schemas/Profile"}},
+                    "xml": {"name": "user-data"},
+                },
+                "Profile": {"type": "string", "xml": {"name": "user-profile", "attribute": True}},
+            },
+            "3.0.2",
+            {"user": {"profile": "admin"}},
+            b'<container><user-data user-profile="admin"></user-data></container>',
+        ),
+        (
+            {"$ref": "#/definitions/UserProfile"},
+            {"UserProfile": {"type": "object", "properties": {"name": {"type": "string"}, "age": {"type": "integer"}}}},
+            "2.0",
+            {"name": "John", "age": 30},
+            b"<UserProfile><name>John</name><age>30</age></UserProfile>",
+        ),
+        (
+            {
+                "type": "object",
+                "properties": {
+                    "a": {"xml": {"attribute": True}},
+                    "b": {"xml": {"attribute": True}},
+                    "c": {"type": "integer"},
+                },
+                "xml": {"name": "Root"},
+            },
+            {},
+            "3.0.2",
+            {"a": 1, "b": 2, "c": 3},
+            b'<Root a="1" b="2"><c>3</c></Root>',
+        ),
+        (
+            {
+                "type": "array",
+                "items": {"type": "object", "properties": {"id": {"$ref": "#/components/schemas/Id"}}},
+                "xml": {"name": "items", "wrapped": True},
+            },
+            {"Id": {"type": "integer", "xml": {"name": "ident", "attribute": True}}},
+            "3.0.2",
+            [{"id": 1}],
+            b'<items><items ident="1"></items></items>',
+        ),
+        (
+            {
+                "type": "object",
+                "properties": {"text": {"type": "string"}, "q": {"type": "string", "xml": {"attribute": True}}},
+                "xml": {"name": "Root"},
+            },
+            {},
+            "3.0.2",
+            {"text": "a&b<c>\"d'e", "q": "x&\"<'>"},
+            b'<Root q="x&amp;&quot;&lt;&apos;&gt;"><text>a&amp;b&lt;c&gt;&quot;d&apos;e</text></Root>',
+        ),
+        (
+            {"type": "object", "xml": {"name": "Root"}},
+            {},
+            "3.0.2",
+            {"text": "\x00 \t\n\r\x1f\ud7ff\ud800\ue000\ufffd\ufffe\U00010000\U0010ffff"},
+            "<Root><text> \t\n\r\ud7ff\ue000\ufffd\U00010000\U0010ffff</text></Root>".encode(),
+        ),
+        (
+            {"type": "object", "xml": {"name": "Root"}},
+            {},
+            "3.0.2",
+            {"a:b": 1, "_id": 2, "1st": 3, "": 4, "a b": 5, "\ufb01": 6},
+            b"<Root><a_b>1</a_b><_id>2</_id><x_1st>3</x_1st><element>4</element><a_b>5</a_b><fi>6</fi></Root>",
+        ),
+        (
+            _with_child({"type": "array", "items": {"type": "string", "xml": {"name": "1 tag"}}}),
+            {},
+            "3.0.2",
+            {"child": ["a"]},
+            b"<root><x_1_tag>a</x_1_tag></root>",
+        ),
+        ({"type": "string", "xml": {"name": "1 tag"}}, {}, "3.0.2", "a", b"<x_1_tag>a</x_1_tag>"),
+        (
+            {"type": "array", "xml": {"name": "1 tag", "wrapped": True}, "items": {"type": "string"}},
+            {},
+            "3.0.2",
+            ["a"],
+            b"<x_1_tag><x_1_tag>a</x_1_tag></x_1_tag>",
+        ),
+    ],
+    ids=[
+        "reference-alias-chain-root",
+        "reference-alias-chain-property",
+        "reference-alias-chain-array-items",
+        "reference-alias-xml-overrides-target",
+        "reference-sibling-xml-attribute",
+        "reference-cycle",
+        "scalar-under-prefixed-root-string",
+        "scalar-under-prefixed-root-integer",
+        "scalar-under-prefixed-root-float",
+        "scalar-under-prefixed-root-boolean",
+        "scalar-under-prefixed-root-null",
+        "prefixed-array-items-primitive",
+        "prefixed-array-items-object",
+        "prefixed-array-items-primitive-bound-by-ancestor",
+        "prefixed-nested-property-object",
+        "prefixed-nested-property-array",
+        "prefixed-nested-property-wrapped-array",
+        "shared-array-items-keep-own-prefix",
+        "attribute-namespace-binds-prefix-inside-element",
+        "attribute-namespace-binds-prefix-for-earlier-element",
+        "node-type-attribute",
+        "node-type-element-array",
+        "node-type-text",
+        "node-type-cdata",
+        "node-type-text-container-written-as-element",
+        "boolean-and-null-use-json-spelling",
+        "referenced-property-schema",
+        "referenced-array-items",
+        "nested-schema-references",
+        "root-tag-from-reference-openapi2",
+        "attributes-before-elements",
+        "array-items-with-referenced-property",
+        "special-characters-escaped",
+        "invalid-characters-dropped",
+        "invalid-names-sanitized",
+        "invalid-primitive-item-names-sanitized",
+        "invalid-root-primitive-name-sanitized",
+        "invalid-wrapped-root-array-name-sanitized",
+    ],
+)
+def test_serialize_xml_body(ctx, schema, components, version, body, expected):
+    if version == "2.0":
+        operation = ctx.openapi.load_operation(
+            "POST /test",
+            {
+                "consumes": ["application/xml"],
+                "parameters": [{"in": "body", "name": "body", "required": True, "schema": schema}],
+                "responses": {"200": {"description": "OK"}},
+            },
+            definitions=components,
+            version=version,
+        )
+    else:
+        operation = ctx.openapi.load_operation(
+            "POST /test",
+            {
+                "requestBody": {"content": {"application/xml": {"schema": schema}}, "required": True},
+                "responses": {"200": {"description": "OK"}},
+            },
+            components={"schemas": components},
+            version=version,
+        )
+    case = operation.Case(body=body, media_type="application/xml")
+    assert REQUESTS_TRANSPORT.serialize_case(case)["data"] == expected
 
 
 SIMPLE_TEXT_STRATEGY = st.text(min_size=1, alphabet=st.sampled_from(string.ascii_letters))
@@ -1429,22 +2783,19 @@ SCHEMA_OBJECT_STRATEGY = st.deferred(
 @given(data=st.data(), schema_object=SCHEMA_OBJECT_STRATEGY)
 @settings(suppress_health_check=list(HealthCheck), deadline=None, max_examples=25, phases=[Phase.generate])
 def test_serialize_xml_hypothesis(ctx, data, schema_object, media_type):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "content": {media_type: {"schema": {"$ref": "#/components/schemas/Main"}}},
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
+            "requestBody": {
+                "content": {media_type: {"schema": {"$ref": "#/components/schemas/Main"}}},
+                "required": True,
+            },
+            "responses": {"200": {"description": "OK"}},
         },
         components={"schemas": {"Main": schema_object}},
     )
 
-    case = data.draw(schema["/test"]["POST"].as_strategy())
+    case = data.draw(operation.as_strategy())
 
     # Arrays may be serialized into multiple elements without root, therefore wrapping everything and check if
     # it can be parsed.
@@ -1458,283 +2809,72 @@ def test_serialize_xml_hypothesis(ctx, data, schema_object, media_type):
 
 def test_serialize_xml_top_level_string(ctx):
     # A bare string on the wire is not a well-formed XML document, so it cannot be mapped back to the schema.
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "content": {"application/xml": {"schema": {"type": "string", "enum": ["hello"]}}},
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                },
+            "requestBody": {
+                "content": {"application/xml": {"schema": {"type": "string", "enum": ["hello"]}}},
+                "required": True,
             },
-        }
+            "responses": {"200": {"description": "OK"}},
+        },
     )
 
-    @given(case=schema["/test"]["POST"].as_strategy())
-    @settings(max_examples=1)
+    @run_given(case=operation.as_strategy(), max_examples=1)
     def test(case):
         for transport in (REQUESTS_TRANSPORT, WSGI_TRANSPORT):
             assert transport.serialize_case(case)["data"] == b"<data>hello</data>"
 
-    test()
-
 
 def test_xml_with_binary(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "content": {"application/xml": {"schema": {"type": "string", "format": "file"}}},
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                },
+            "requestBody": {
+                "content": {"application/xml": {"schema": {"type": "string", "format": "file"}}},
+                "required": True,
             },
-        }
+            "responses": {"200": {"description": "OK"}},
+        },
     )
 
-    @given(case=schema["/test"]["POST"].as_strategy())
-    @settings(max_examples=1)
+    @run_given(case=operation.as_strategy(), max_examples=1)
     def test(case):
         assert isinstance(case.as_transport_kwargs()["data"], str)
 
-    test()
-
 
 def test_duplicate_xml_attributes(ctx):
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "POST /test",
         {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "content": {
-                            "application/xml": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "prop1": {
-                                            "type": "integer",
-                                            "xml": {"namespace": "foo", "name": "attr", "attribute": True},
-                                        },
-                                        "prop2": {
-                                            "type": "integer",
-                                            "xml": {"namespace": "foo", "name": "attr", "attribute": True},
-                                        },
-                                    },
-                                }
-                            }
-                        },
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        }
+            "requestBody": {
+                "content": {
+                    "application/xml": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "prop1": {
+                                    "type": "integer",
+                                    "xml": {"namespace": "foo", "name": "attr", "attribute": True},
+                                },
+                                "prop2": {
+                                    "type": "integer",
+                                    "xml": {"namespace": "foo", "name": "attr", "attribute": True},
+                                },
+                            },
+                        }
+                    }
+                },
+                "required": True,
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
     )
 
-    case = schema["/test"]["POST"].Case(body={"prop1": 1, "prop2": 2})
+    case = operation.Case(body={"prop1": 1, "prop2": 2})
 
     serialized_data = case.as_transport_kwargs()["data"].decode("utf8")
     ElementTree.fromstring(serialized_data)
-
-
-def test_xml_boolean_and_null_use_json_spelling(ctx):
-    schema = ctx.openapi.load_schema(
-        {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "required": True,
-                        "content": {
-                            "application/xml": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "flag": {"type": "boolean"},
-                                        "note": {"type": "null"},
-                                        "mark": {"type": "boolean", "xml": {"attribute": True}},
-                                    },
-                                    "xml": {"name": "Root"},
-                                }
-                            }
-                        },
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        version="3.1.0",
-    )
-
-    case = schema["/test"]["POST"].Case(body={"flag": True, "note": None, "mark": False}, media_type="application/xml")
-
-    assert (
-        REQUESTS_TRANSPORT.serialize_case(case)["data"]
-        == b'<Root mark="false"><flag>true</flag><note>null</note></Root>'
-    )
-
-
-def test_xml_with_referenced_property_schema(ctx):
-    # When a property references a subschema that contains XML configuration
-    schema = ctx.openapi.load_schema(
-        {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "content": {
-                            "application/xml": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Main",
-                                }
-                            }
-                        },
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        components={
-            "schemas": {
-                "Main": {
-                    "type": "object",
-                    "properties": {
-                        "id": {
-                            "$ref": "#/components/schemas/IdField",
-                        }
-                    },
-                    "xml": {"name": "Root"},
-                },
-                "IdField": {"type": "integer", "xml": {"name": "custom-id", "attribute": True}},
-            }
-        },
-    )
-
-    case = schema["/test"]["POST"].Case(body={"id": 42})
-
-    # Then the XML should use the configuration from the referenced schema
-    data = REQUESTS_TRANSPORT.serialize_case(case)["data"]
-    assert data == b'<Root custom-id="42"></Root>'
-
-
-def test_xml_with_referenced_array_items(ctx):
-    # When array items reference a subschema with XML configuration
-    schema = ctx.openapi.load_schema(
-        {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "content": {
-                            "application/xml": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ItemList",
-                                }
-                            }
-                        },
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        components={
-            "schemas": {
-                "ItemList": {
-                    "type": "array",
-                    "items": {"$ref": "#/components/schemas/Item"},
-                    "xml": {"name": "items", "wrapped": True},
-                },
-                "Item": {"type": "integer", "xml": {"name": "item"}},
-            }
-        },
-    )
-
-    case = schema["/test"]["POST"].Case(body=[42, 43])
-
-    # Then the XML should use the referenced item configuration
-    data = REQUESTS_TRANSPORT.serialize_case(case)["data"]
-    assert data == b"<items><item>42</item><item>43</item></items>"
-
-
-def test_xml_with_nested_schema_references(ctx):
-    # When schemas reference other schemas that also contain references with XML config
-    schema = ctx.openapi.load_schema(
-        {
-            "/test": {
-                "post": {
-                    "requestBody": {
-                        "content": {
-                            "application/xml": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Container",
-                                }
-                            }
-                        },
-                        "required": True,
-                    },
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        components={
-            "schemas": {
-                "Container": {
-                    "type": "object",
-                    "properties": {"user": {"$ref": "#/components/schemas/User"}},
-                    "xml": {"name": "container"},
-                },
-                "User": {
-                    "type": "object",
-                    "properties": {"profile": {"$ref": "#/components/schemas/Profile"}},
-                    "xml": {"name": "user-data"},
-                },
-                "Profile": {"type": "string", "xml": {"name": "user-profile", "attribute": True}},
-            }
-        },
-    )
-
-    case = schema["/test"]["POST"].Case(body={"user": {"profile": "admin"}})
-
-    # Then XML should resolve the entire reference chain correctly
-    data = REQUESTS_TRANSPORT.serialize_case(case)["data"]
-    assert data == b'<container><user-data user-profile="admin"></user-data></container>'
-
-
-def test_xml_root_tag_from_reference_openapi2(ctx):
-    # When OpenAPI 2.0 schema references a definition for the request body
-    schema = ctx.openapi.load_schema(
-        {
-            "/test": {
-                "post": {
-                    "consumes": [
-                        "application/xml",
-                    ],
-                    "parameters": [
-                        {
-                            "in": "body",
-                            "name": "body",
-                            "required": True,
-                            "schema": {"$ref": "#/definitions/UserProfile"},
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
-                }
-            }
-        },
-        definitions={
-            "UserProfile": {"type": "object", "properties": {"name": {"type": "string"}, "age": {"type": "integer"}}}
-        },
-        version="2.0",
-    )
-
-    case = schema["/test"]["POST"].Case(body={"name": "John", "age": 30}, media_type="application/xml")
-
-    # Then the root XML tag should be derived from the reference name "UserProfile"
-    data = REQUESTS_TRANSPORT.serialize_case(case)["data"]
-    assert data == b"<UserProfile><name>John</name><age>30</age></UserProfile>"
 
 
 @pytest.mark.parametrize(
@@ -1749,19 +2889,16 @@ def test_serializer_alias_single(ctx, target, source, body, expected_content):
     schemathesis.serializer.alias(target, source)
 
     try:
-        schema = ctx.openapi.load_schema(
+        operation = ctx.openapi.load_operation(
+            "POST /test",
             {
-                "/test": {
-                    "post": {
-                        "requestBody": {
-                            "content": {target: {"schema": {"type": "object"}}},
-                        },
-                        "responses": {"200": {"description": "OK"}},
-                    }
-                }
-            }
+                "requestBody": {
+                    "content": {target: {"schema": {"type": "object"}}},
+                },
+                "responses": {"200": {"description": "OK"}},
+            },
         )
-        case = schema["/test"]["POST"].Case(body=body, media_type=target)
+        case = operation.Case(body=body, media_type=target)
 
         for transport in (REQUESTS_TRANSPORT, WSGI_TRANSPORT, ASGI_TRANSPORT):
             data = transport.serialize_case(case)["data"]
@@ -1776,23 +2913,20 @@ def test_serializer_alias_multiple_targets(ctx):
     schemathesis.serializer.alias(["application/x-custom-yaml", "text/vnd.yaml.custom"], "application/yaml")
 
     try:
-        schema = ctx.openapi.load_schema(
+        operation = ctx.openapi.load_operation(
+            "POST /test",
             {
-                "/test": {
-                    "post": {
-                        "requestBody": {
-                            "content": {
-                                "application/x-custom-yaml": {"schema": {"type": "object"}},
-                            }
-                        },
-                        "responses": {"200": {"description": "OK"}},
+                "requestBody": {
+                    "content": {
+                        "application/x-custom-yaml": {"schema": {"type": "object"}},
                     }
-                }
-            }
+                },
+                "responses": {"200": {"description": "OK"}},
+            },
         )
 
         for media_type in ["application/x-custom-yaml", "text/vnd.yaml.custom"]:
-            case = schema["/test"]["POST"].Case(body={"id": 42}, media_type=media_type)
+            case = operation.Case(body={"id": 42}, media_type=media_type)
             for transport in (REQUESTS_TRANSPORT, WSGI_TRANSPORT, ASGI_TRANSPORT):
                 data = transport.serialize_case(case)["data"]
                 data_str = data.decode() if isinstance(data, bytes) else data
@@ -1815,13 +2949,26 @@ def test_serializer_alias_multiple_targets(ctx):
     ],
 )
 def test_serializer_alias_validation(target, source, expected_error):
-    with pytest.raises(ValueError, match=re.escape(expected_error)):
+    with pytest.raises(ValueError, match=f"^{re.escape(expected_error)}$"):
         schemathesis.serializer.alias(target, source)
 
 
 def test_serializer_alias_empty_target_in_list():
     with pytest.raises(ValueError, match="Target media type cannot be empty"):
         schemathesis.serializer.alias(["application/custom", ""], "application/json")
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        ({"a": 1, "b": Binary(b"x")}, True),
+        ([1, [b"x"]], True),
+        ({"a": [1, {"b": None}]}, False),
+    ],
+    ids=["binary-after-scalar", "nested-bytes", "no-binary"],
+)
+def test_contains_binary(value, expected):
+    assert contains_binary(value) is expected
 
 
 def test_binary_not_a_dataclass():
@@ -1839,3 +2986,183 @@ def test_binary_not_a_dataclass():
     # asdict should not expose raw bytes
     as_dict = dataclasses.asdict(container)
     json.dumps(as_dict)
+
+
+@pytest.mark.parametrize("transport", [REQUESTS_TRANSPORT, WSGI_TRANSPORT], ids=["requests", "wsgi"])
+def test_multipart_serialization_keeps_case_body(ctx, transport):
+    operation = ctx.openapi.load_operation(
+        "POST /test",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {"type": "object"},
+                        "encoding": {"meta": {"contentType": "application/json"}},
+                    }
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    data = Binary(b"\x92\x42")
+    case = operation.Case(
+        body={"data": data, "price": 0.5, "empty": None, "meta": {"a": 1}, "items": [1.5, "x"]},
+        media_type="multipart/form-data",
+    )
+    transport.serialize_case(case)
+    assert case.body == {"data": data, "price": 0.5, "empty": None, "meta": {"a": 1}, "items": [1.5, "x"]}
+    assert case.body["data"] is data
+
+
+def query_echo_operation(ctx, app_runner, transport, parameters, version="3.0.2"):
+    app, _ = ctx.openapi.make_flask_app(
+        {"/q": {"get": {"parameters": parameters, "responses": {"200": {"description": "OK"}}}}}, version=version
+    )
+
+    @app.route("/q")
+    def echo_query():
+        return jsonify(unquote(request.query_string.decode()))
+
+    if transport == "wsgi":
+        return schemathesis.openapi.from_wsgi("/openapi.json", app)["/q"]["GET"]
+    return schemathesis.openapi.from_url(app_runner.openapi_url(app))["/q"]["GET"]
+
+
+@pytest.mark.parametrize("transport", ["requests", "wsgi"])
+@pytest.mark.parametrize(
+    ("query", "params", "expected"),
+    [
+        ({"a": "1"}, "b=2", "a=1&b=2"),
+        ({"a": "1"}, "", "a=1"),
+        ({}, "?b=2", "b=2"),
+        # The leading "X" checks that only the "?" prefix is stripped.
+        ({"a": ["1", "2"]}, "?Xb=2", "a=1&a=2&Xb=2"),
+    ],
+    ids=["both", "empty-params", "empty-query", "array-query"],
+)
+def test_string_params_merge_into_case_query(ctx, app_runner, transport, query, params, expected):
+    operation = query_echo_operation(ctx, app_runner, transport, [])
+    assert operation.Case(query=query).call(params=params).json() == expected
+
+
+@pytest.mark.parametrize("transport", ["requests", "wsgi"])
+@pytest.mark.parametrize("params", ["x=1&x=2", {"x": ["1", "2"]}, [("x", ["1", "2"])]], ids=["string", "dict", "pairs"])
+@pytest.mark.parametrize(
+    ("parameter", "version", "encoded"),
+    [
+        (
+            {
+                "name": "ids",
+                "in": "query",
+                "required": True,
+                "style": "pipeDelimited",
+                "explode": False,
+                "schema": {"type": "array", "items": {"enum": [1]}, "minItems": 2, "maxItems": 2},
+            },
+            "3.0.2",
+            "ids=1|1",
+        ),
+        (
+            {
+                "name": "filter",
+                "in": "querystring",
+                "required": True,
+                "content": {"application/json": {"schema": {"enum": [{"k": "v"}]}}},
+            },
+            "3.2.0",
+            '{"k":"v"}',
+        ),
+    ],
+    ids=["pipe-delimited", "querystring"],
+)
+def test_extra_params_appended_to_pre_encoded_query(ctx, app_runner, transport, params, parameter, version, encoded):
+    operation = query_echo_operation(ctx, app_runner, transport, [parameter], version=version)
+
+    @run_given(operation.as_strategy(), max_examples=1, phases=[Phase.generate])
+    def test(case):
+        assert case.call(params=params).json() == f"{encoded}&x=1&x=2"
+
+
+def test_multipart_encoded_field_absent_from_body(ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/upload": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "multipart/form-data": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {"name": {"type": "string"}, "meta": {"type": "object"}},
+                                },
+                                "encoding": {"meta": {"contentType": "application/json"}},
+                            }
+                        },
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                },
+            },
+        }
+    )
+
+    @app.route("/upload", methods=["POST"])
+    def upload():
+        return jsonify(dict(request.form))
+
+    operation = schemathesis.openapi.from_url(app_runner.openapi_url(app))["/upload"]["POST"]
+    assert operation.Case(body={"name": "x"}, media_type="multipart/form-data").call().json() == {"name": "x"}
+
+
+def test_wsgi_swagger_multipart_mixed_form_field_reaches_the_app(ctx):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/upload": {
+                "post": {
+                    "consumes": ["multipart/mixed"],
+                    "parameters": [
+                        {"name": "name", "in": "formData", "type": "string", "required": True},
+                        {"name": "tags", "in": "formData", "type": "array", "items": {"type": "string"}},
+                    ],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+        version="2.0",
+    )
+
+    @app.route("/api/upload", methods=["POST"])
+    def upload():
+        return jsonify({"mimetype": request.mimetype, "raw": request.get_data().decode()})
+
+    operation = schemathesis.openapi.from_wsgi("/openapi.json", app)["/upload"]["POST"]
+    received = operation.Case(body={"name": "xy", "tags": ["a", "b"]}, media_type="multipart/mixed").call().json()
+    assert (
+        received["mimetype"],
+        'Content-Disposition: form-data; name="name"\r\n\r\nxy\r\n' in received["raw"],
+        received["raw"].count('Content-Disposition: form-data; name="tags"'),
+    ) == ("multipart/mixed", True, 2)
+
+
+def test_multipart_parts_follow_body_for_case_media_type(ctx):
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {
+                    "multipart/mixed": {
+                        "schema": {"type": "object", "properties": {"file": {"type": "object"}}},
+                        "encoding": {"file": {"contentType": "application/xml"}},
+                    },
+                    "multipart/form-data": {
+                        "schema": {"type": "object", "properties": {"file": {"type": "string", "format": "binary"}}}
+                    },
+                },
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(body={"file": b"data"}, media_type="multipart/form-data")
+    assert case.as_transport_kwargs(base_url="http://127.0.0.1")["files"] == [("file", ("file", b"data"))]

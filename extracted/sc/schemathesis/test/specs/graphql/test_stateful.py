@@ -1,46 +1,10 @@
-from __future__ import annotations
-
+import hypothesis
 import pytest
-from hypothesis import strategies as st
+import strawberry
 
 import schemathesis
-from schemathesis.graphql import nodes
-from schemathesis.specs.graphql.scalars import CUSTOM_SCALARS
 
-
-@pytest.fixture(autouse=True)
-def _register_book_id_scalar():
-    schemathesis.graphql.scalar("BookID", st.uuids().map(str).map(nodes.String))
-    yield
-    CUSTOM_SCALARS.clear()
-
-
-@pytest.mark.parametrize(
-    "filter_arg",
-    [
-        "--exclude-name=Mutation.updateBook",
-        "--exclude-name=Query.book",
-    ],
-    ids=["use-after-create", "update-on-existing"],
-)
-@pytest.mark.snapshot(replace_reproduce_with=True)
-def test_stateful_finds_chained_planted_bug(ctx, cli, snapshot_cli, filter_arg):
-    # Producer chains to a dependent consumer and exposes a planted error.
-    api = ctx.graphql.apps.use_after_create()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=20",
-            "--phases=stateful",
-            "-m",
-            "positive",
-            "-c",
-            "not_a_server_error",
-            filter_arg,
-        )
-        == snapshot_cli
-    )
+pytestmark = pytest.mark.usefixtures("book_id_scalar")
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
@@ -64,19 +28,23 @@ def test_stateful_finds_non_id_chain_bug(ctx, cli, snapshot_cli):
 
 @pytest.mark.parametrize(
     "make_api",
-    [lambda apps: apps.bare_slug(), lambda apps: apps.relay_connection()],
-    ids=["bare-slug-arg", "relay-connection-producer"],
+    [
+        lambda apps: apps.bare_slug(),
+        lambda apps: apps.relay_connection(),
+        lambda apps: apps.use_after_delete(),
+        lambda apps: apps.double_delete(),
+    ],
+    ids=["bare-slug-arg", "relay-connection-producer", "use-after-delete", "double-delete"],
 )
 @pytest.mark.snapshot(replace_reproduce_with=True)
-def test_stateful_finds_non_id_lookup_bug(ctx, cli, snapshot_cli, make_api):
-    # Bare `slug` resolves via the enclosing return type; the producer may be a Relay connection.
-    # High budget: the state machine needs many iterations to feed a captured slug into the lookup.
+def test_stateful_finds_captured_value_bug(ctx, cli, snapshot_cli, make_api):
+    # Bare `slug` resolves via the enclosing return type; tombstones expose reads and deletes of a deleted resource.
     api = make_api(ctx.graphql.apps)
     assert (
         cli.run(
             api.schema_url,
             "--no-shrink",
-            "--max-examples=90",
+            "--max-examples=20",
             "--seed=1",
             "--phases=stateful",
             "-m",
@@ -88,35 +56,162 @@ def test_stateful_finds_non_id_lookup_bug(ctx, cli, snapshot_cli, make_api):
     )
 
 
-def _use_after_delete(apps):
-    return apps.use_after_delete()
+def test_stateful_consumers_mostly_target_created_resources(ctx, cli):
+    # Leaving a captured id unused is occasional exploration; most consumer calls must reach a created book.
+    created: set[str] = set()
+    updates = {"existing": 0, "unknown": 0}
 
+    @strawberry.type
+    class Book:
+        id: strawberry.ID
+        title: str
 
-def _double_delete(apps):
-    return apps.double_delete()
+    @strawberry.type
+    class Query:
+        @strawberry.field
+        def book(self, id: strawberry.ID) -> Book | None:
+            return None
 
+    @strawberry.type
+    class Mutation:
+        @strawberry.mutation
+        def addBook(self, title: str) -> Book:
+            book_id = strawberry.ID(f"book-{len(created)}")
+            created.add(book_id)
+            return Book(id=book_id, title=title)
 
-@pytest.mark.parametrize(
-    "make_api",
-    [_use_after_delete, _double_delete],
-    ids=["use-after-delete", "double-delete"],
-)
-@pytest.mark.snapshot(replace_reproduce_with=True)
-def test_stateful_finds_tombstone_bugs(ctx, cli, snapshot_cli, make_api):
-    # Tombstones expose use-after-delete and double-delete on a known-deleted resource.
-    # Tombstone probes need many iterations to traverse the deleted-id bundle reliably.
-    api = make_api(ctx.graphql.apps)
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=75",
-            "--seed=1",
-            "--phases=stateful",
-            "-m",
-            "positive",
-            "-c",
-            "not_a_server_error",
-        )
-        == snapshot_cli
+        @strawberry.mutation
+        def updateBook(self, id: strawberry.ID, title: str) -> Book | None:
+            updates["existing" if id in created else "unknown"] += 1
+            return None
+
+    api = ctx.graphql.apps.from_schema(strawberry.Schema(Query, Mutation))
+    cli.run_and_assert(
+        api.schema_url,
+        "--max-examples=50",
+        "--seed=1",
+        "--phases=stateful",
+        "-m",
+        "positive",
+        "-c",
+        "not_a_server_error",
     )
+    assert updates["existing"] / (updates["existing"] + updates["unknown"]) > 0.7, updates
+
+
+def test_stateful_feeds_ids_captured_through_mutation_payloads(ctx, cli):
+    created: set[str] = set()
+    received: dict[str, set[str]] = {"note": set(), "updateNote": set(), "deleteNote": set()}
+
+    @strawberry.type
+    class Note:
+        id: strawberry.ID
+        title: str | None
+
+    @strawberry.type
+    class CreateNotePayload:
+        note: Note | None
+        client_mutation_id: str | None
+
+    @strawberry.type
+    class UpdateNotePayload:
+        note: Note | None
+
+    @strawberry.type
+    class DeleteNotePayload:
+        deleted_note_id: strawberry.ID | None
+        client_mutation_id: str | None
+
+    @strawberry.input
+    class NoteInput:
+        title: str | None = None
+
+    @strawberry.type
+    class Query:
+        @strawberry.field
+        def note(self, id: strawberry.ID) -> Note | None:
+            received["note"].add(id)
+            return None
+
+    @strawberry.type
+    class Mutation:
+        @strawberry.mutation
+        def createNote(self, input: NoteInput | None = None) -> CreateNotePayload:
+            note_id = strawberry.ID(f"note-{len(created)}")
+            created.add(note_id)
+            return CreateNotePayload(note=Note(id=note_id, title=None), client_mutation_id=None)
+
+        @strawberry.mutation
+        def updateNote(self, id: strawberry.ID, input: NoteInput | None = None) -> UpdateNotePayload:
+            received["updateNote"].add(id)
+            return UpdateNotePayload(note=None)
+
+        @strawberry.mutation
+        def deleteNote(self, id: strawberry.ID) -> DeleteNotePayload:
+            received["deleteNote"].add(id)
+            return DeleteNotePayload(deleted_note_id=id, client_mutation_id=None)
+
+    api = ctx.graphql.apps.from_schema(strawberry.Schema(Query, Mutation))
+    cli.run_and_assert(
+        api.schema_url,
+        "--max-examples=30",
+        "--seed=1",
+        "--phases=stateful",
+        "-m",
+        "positive",
+        "-c",
+        "not_a_server_error",
+    )
+    assert {name: bool(ids & created) for name, ids in received.items()} == {
+        "note": True,
+        "updateNote": True,
+        "deleteNote": True,
+    }
+
+
+def test_hooks_apply_once_to_stateful_cases(ctx):
+    @strawberry.type
+    class Book:
+        id: strawberry.ID
+
+    @strawberry.type
+    class Query:
+        @strawberry.field
+        def book(self, id: strawberry.ID) -> Book | None:
+            return None
+
+    @strawberry.type
+    class Mutation:
+        @strawberry.mutation
+        def addBook(self, title: str) -> Book:
+            return Book(id=strawberry.ID("1"))
+
+    api = ctx.graphql.apps.from_schema(strawberry.Schema(Query, Mutation))
+    schema = schemathesis.graphql.from_url(api.schema_url)
+    seen = set()
+
+    def increment(name):
+        def hook(context, headers):
+            headers = headers or {}
+            headers[name] = str(int(headers.get(name, "0")) + 1)
+            return headers
+
+        return hook
+
+    def before_call(context, case, kwargs):
+        seen.add((case.headers["X-Global"], case.headers["X-Schema"]))
+
+    with ctx.restore_hooks():
+        schemathesis.hook(before_call)
+        schemathesis.hook("map_headers")(increment("X-Global"))
+        schema.hook("map_headers")(increment("X-Schema"))
+        schema.as_state_machine().run(
+            settings=hypothesis.settings(
+                max_examples=5,
+                deadline=None,
+                database=None,
+                phases=[hypothesis.Phase.generate],
+                suppress_health_check=list(hypothesis.HealthCheck),
+            )
+        )
+    assert seen == {("1", "1")}

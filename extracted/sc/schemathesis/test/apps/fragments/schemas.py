@@ -7,6 +7,22 @@ def success() -> dict[str, Any]:
     return {"/api/success": {"get": {"responses": {"200": {"description": "Success"}}}}}
 
 
+# Declares `name` as required; planted-bug handlers return it as null.
+def null_name_response() -> dict[str, Any]:
+    return {
+        "description": "OK",
+        "content": {
+            "application/json": {
+                "schema": {"type": "object", "required": ["name"], "properties": {"name": {"type": "string"}}}
+            }
+        },
+    }
+
+
+def null_name_responses() -> dict[str, Any]:
+    return {"200": null_name_response(), "404": {"description": "Not found"}}
+
+
 def per_path_servers() -> dict[str, Any]:
     return {
         "/api/admin": {
@@ -43,6 +59,18 @@ def multiple_failures() -> dict[str, Any]:
                 "responses": {"200": {"description": "OK"}},
             }
         }
+    }
+
+
+def identical_query_parameters() -> dict[str, Any]:
+    return {
+        path: {
+            "get": {
+                "parameters": [{"name": "q", "in": "query", "required": True, "schema": {"type": "integer"}}],
+                "responses": {"200": {"description": "OK"}},
+            }
+        }
+        for path in ("/api/twin_a", "/api/twin_b")
     }
 
 
@@ -795,24 +823,6 @@ def header_constraint_bug() -> dict[str, Any]:
     }
 
 
-def query_array_items_bug() -> dict[str, Any]:
-    return {
-        "/api/query_array_items_bug": {
-            "get": {
-                "parameters": [
-                    {
-                        "name": "ids",
-                        "in": "query",
-                        "required": True,
-                        "schema": {"type": "array", "items": {"type": "integer", "minimum": 1, "maximum": 99}},
-                    }
-                ],
-                "responses": {"200": {"description": "OK"}, "400": {"description": "Bad Request"}},
-            }
-        }
-    }
-
-
 def one_of_branch_bug() -> dict[str, Any]:
     return {
         "/api/one_of_branch_bug": {
@@ -874,4 +884,122 @@ def additional_properties_bug() -> dict[str, Any]:
                 "responses": {"200": {"description": "OK"}, "400": {"description": "Bad Request"}},
             }
         }
+    }
+
+
+def languages_with_codes() -> dict[str, Any]:
+    return {
+        "/languages/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {"code": {"type": "string"}},
+                                                "required": ["code"],
+                                            },
+                                        }
+                                    },
+                                    "required": ["results"],
+                                }
+                            }
+                        },
+                    }
+                }
+            }
+        },
+        "/languages/{code}": {
+            "delete": {
+                "parameters": [{"in": "path", "name": "code", "required": True, "schema": {"type": "string"}}],
+                "responses": {"204": {"description": "Deleted"}},
+            }
+        },
+    }
+
+
+def basic_with_query() -> dict[str, Any]:
+    return {
+        "/api/basic_query": {
+            "get": {
+                "security": [{"basicAuth": []}],
+                "parameters": [{"in": "query", "name": "q", "required": True, "schema": {"type": "integer"}}],
+                "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
+            }
+        }
+    }
+
+
+def linked_users() -> dict[str, Any]:
+    return {
+        "/users": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {"type": "object", "properties": {"id": {"type": "integer"}}}
+                            }
+                        },
+                        "links": {
+                            "GetUser": {"operationId": "getUser", "parameters": {"userId": "$response.body#/id"}}
+                        },
+                    }
+                }
+            }
+        },
+        "/users/{userId}": {
+            "get": {
+                "operationId": "getUser",
+                "parameters": [{"name": "userId", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                "responses": {"200": {"description": "OK"}},
+            }
+        },
+    }
+
+
+def flaky_branch_blocks() -> dict[str, Any]:
+    return {
+        "/branches": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "links": {
+                            "BlockBranch": {
+                                "operationId": "createBlock",
+                                "requestBody": {"targetId": "$response.body#/id"},
+                            }
+                        },
+                    },
+                    "409": {"description": "Conflict"},
+                },
+            }
+        },
+        "/blocks": {
+            "post": {
+                "operationId": "createBlock",
+                "requestBody": {
+                    "required": True,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["targetId"],
+                                "properties": {"targetId": {"type": "integer"}},
+                            }
+                        }
+                    },
+                },
+                "responses": {"201": {"description": "Created"}, "422": {"description": "Invalid"}},
+            }
+        },
     }

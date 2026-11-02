@@ -18,6 +18,7 @@ from hypothesis import strategies as st
 from schemathesis.generation import GenerationMode
 from schemathesis.reporting.har import _cookie_to_har
 from schemathesis.reporting.vcr import write_double_quoted
+from test.apps.catalog.openapi.modifiers.stateful import SlowOperations
 from test.utils import load_json_or_fail, load_yaml_or_fail
 
 
@@ -198,6 +199,22 @@ def test_bad_yaml_headers(ctx, cli, cassette_path, hypothesis_max_examples):
     assert cassette["http_interactions"][0]["request"]["headers"][header_name] == [fixed_header]
 
 
+def test_cassette_uri_with_single_quote(ctx, cli, cassette_path):
+    app, _ = ctx.openapi.make_flask_app({"/api/o'brien": {"get": {"responses": {"200": {"description": "OK"}}}}})
+
+    @app.route("/api/o'brien")
+    def obrien():
+        return flask.jsonify({})
+
+    cli.run_openapi_app(
+        app, f"--report-vcr-path={cassette_path}", "--max-examples=1", "--phases=fuzzing", "--mode=positive"
+    )
+    assert [
+        interaction["request"]["uri"].split("/", 3)[3]
+        for interaction in load_cassette(cassette_path)["http_interactions"]
+    ] == ["api/o'brien"]
+
+
 @pytest.mark.skipif(platform.system() == "Windows", reason="Simpler to setup on Linux")
 def test_run_subprocess(ctx, testdir, hypothesis_max_examples, snapshot_cli):
     api = ctx.openapi.apps.success()
@@ -211,7 +228,7 @@ def test_run_subprocess(ctx, testdir, hypothesis_max_examples, snapshot_cli):
     )
     assert result == snapshot_cli
     cassette = load_cassette(cassette_path)
-    assert len(cassette["http_interactions"]) == 9
+    assert len(cassette["http_interactions"]) == 10
     command = f"st run --report-vcr-path={cassette_path} --max-examples={hypothesis_max_examples or 2} {api.schema_url}"
     assert cassette["command"] == command
 
@@ -251,7 +268,7 @@ def test_har_format(ctx, cli, cassette_path, hypothesis_max_examples, args, valu
 LARGE_RESPONSE_BODY = json.dumps({"padding": "x" * 2000}).encode()
 
 
-def test_har_marks_truncated_response_body(ctx, cli, cassette_path):
+def test_cassettes_mark_truncated_response_body(ctx, cli, cassette_path):
     app, _ = ctx.openapi.make_flask_app({"/api/large": {"get": {"responses": {"200": {"description": "OK"}}}}})
 
     @app.route("/api/large")
@@ -262,6 +279,7 @@ def test_har_marks_truncated_response_body(ctx, cli, cassette_path):
     cli.run_openapi_app(
         app,
         f"--report-har-path={har_path}",
+        f"--report-vcr-path={cassette_path}",
         "--max-examples=1",
         "--phases=fuzzing",
         "--mode=positive",
@@ -271,27 +289,84 @@ def test_har_marks_truncated_response_body(ctx, cli, cassette_path):
         (entry["response"]["content"]["size"], entry["response"]["content"]["text"], entry["response"]["bodySize"])
         for entry in load_json_or_fail(har_path)["log"]["entries"]
     ] == [(len(LARGE_RESPONSE_BODY), LARGE_RESPONSE_BODY[:64].decode(), len(LARGE_RESPONSE_BODY))]
-
-
-def test_vcr_marks_truncated_response_body(ctx, cli, cassette_path):
-    app, _ = ctx.openapi.make_flask_app({"/api/large": {"get": {"responses": {"200": {"description": "OK"}}}}})
-
-    @app.route("/api/large")
-    def large():
-        return flask.Response(LARGE_RESPONSE_BODY, content_type="application/json")
-
-    cli.run_openapi_app(
-        app,
-        f"--report-vcr-path={cassette_path}",
-        "--max-examples=1",
-        "--phases=fuzzing",
-        "--mode=positive",
-        config={"output": {"truncation": {"max-recorded-payload-size": 64}}},
-    )
     assert [
         (load_response_body(load_cassette(cassette_path), index), interaction["response"]["truncated_from"])
         for index, interaction in enumerate(load_cassette(cassette_path)["http_interactions"])
     ] == [(LARGE_RESPONSE_BODY[:64].decode(), len(LARGE_RESPONSE_BODY))]
+
+
+def test_har_cookies(ctx, cli, cassette_path):
+    app, _ = ctx.openapi.make_flask_app({"/api/cookies": {"get": {"responses": {"200": {"description": "OK"}}}}})
+
+    @app.route("/api/cookies")
+    def cookies():
+        response = flask.jsonify({})
+        response.set_cookie("session", "abc", path="/")
+        return response
+
+    har_path = cassette_path.with_suffix(".har")
+    cli.run_openapi_app(
+        app,
+        f"--report-har-path={har_path}",
+        "-H",
+        "Cookie: theme=dark",
+        "--max-examples=1",
+        "--phases=fuzzing",
+        "--mode=positive",
+        "--output-sanitize=false",
+    )
+    assert [
+        (entry["request"]["cookies"], entry["response"]["cookies"])
+        for entry in load_json_or_fail(har_path)["log"]["entries"]
+    ] == [([{"name": "theme", "value": "dark"}], [{"name": "session", "value": "abc", "path": "/"}])]
+
+
+def test_har_response_mime_type_and_redirect_url(ctx, cli, cassette_path):
+    app, _ = ctx.openapi.make_flask_app({"/api/items": {"post": {"responses": {"201": {"description": "Created"}}}}})
+
+    @app.route("/api/items", methods=["POST"])
+    def create():
+        return flask.jsonify({}), 201, {"Location": "/api/items/1"}
+
+    har_path = cassette_path.with_suffix(".har")
+    cli.run_openapi_app(
+        app,
+        f"--report-har-path={har_path}",
+        "--max-examples=1",
+        "--phases=fuzzing",
+        "--mode=positive",
+    )
+    assert [
+        (entry["response"]["content"]["mimeType"], entry["response"]["redirectURL"])
+        for entry in load_json_or_fail(har_path)["log"]["entries"]
+    ] == [("application/json", "/api/items/1")]
+
+
+@pytest.mark.parametrize(
+    ("charset", "body", "text"),
+    [("latin-1", '"\xe9"'.encode("latin-1"), '"\xe9"'), ("bogus-xyz", b'"\xc3\xa9"', '"\xe9"')],
+    ids=["latin-1", "unknown-charset"],
+)
+def test_response_body_charset_in_reports(ctx, cli, cassette_path, charset, body, text):
+    app, _ = ctx.openapi.make_flask_app({"/api/text": {"get": {"responses": {"200": {"description": "OK"}}}}})
+
+    @app.route("/api/text")
+    def text_body():
+        return flask.Response(body, content_type=f"application/json; charset={charset}")
+
+    har_path = cassette_path.with_suffix(".har")
+    cli.run_openapi_app(
+        app,
+        f"--report-har-path={har_path}",
+        f"--report-vcr-path={cassette_path}",
+        "--max-examples=1",
+        "--phases=fuzzing",
+        "--mode=positive",
+    )
+    assert [entry["response"]["content"]["text"] for entry in load_json_or_fail(har_path)["log"]["entries"]] == [text]
+    assert [interaction["response"]["body"] for interaction in load_cassette(cassette_path)["http_interactions"]] == [
+        {"encoding": charset, "string": text}
+    ]
 
 
 @pytest.mark.parametrize(
@@ -321,26 +396,6 @@ def test_vcr_marks_truncated_response_body(ctx, cli, cassette_path):
 )
 def test_cookie_to_har(value, expected):
     assert list(_cookie_to_har(value)) == expected
-
-
-@pytest.fixture(params=["tls-verify", "cert", "cert-and-key", "proxies"])
-def request_args(request, tmp_path):
-    if request.param == "tls-verify":
-        return ["--tls-verify=false"], "verify", False, ExitCode.OK
-    cert = tmp_path / "cert.tmp"
-    cert.touch()
-    if request.param == "cert":
-        return [f"--request-cert={cert}"], "cert", str(cert), ExitCode.OK
-    if request.param == "cert-and-key":
-        key = tmp_path / "key.tmp"
-        key.touch()
-        return [f"--request-cert={cert}", f"--request-cert-key={key}"], "cert", (str(cert), str(key)), ExitCode.OK
-    if request.param == "proxies":
-        if platform.system() == "Windows":
-            exit_code = ExitCode.OK
-        else:
-            exit_code = ExitCode.TESTS_FAILED
-        return ["--proxy=http://127.0.0.1"], "proxies", {"all": "http://127.0.0.1"}, exit_code
 
 
 @pytest.mark.parametrize("value", ["true", "false"])
@@ -449,3 +504,30 @@ def test_rejected_report_path_leaves_no_writer_threads(cli, tmp_path):
 
     assert result.exit_code == 2, result.stdout
     assert sorted(thread.name for thread in set(threading.enumerate()) - before) == []
+
+
+def test_store_stateful_timeout(ctx, cli, tmp_path):
+    api = ctx.openapi.apps.stateful_users(SlowOperations({("GET", "/users/<int:user_id>"): 0.5}))
+    vcr_path = tmp_path / "output.yaml"
+    har_path = tmp_path / "output.har"
+    cli.run(
+        api.schema_url,
+        "--phases=stateful",
+        "--max-examples=10",
+        "--request-timeout=0.1",
+        "--seed=1",
+        "-c",
+        "not_a_server_error",
+        f"--report-vcr-path={vcr_path}",
+        f"--report-har-path={har_path}",
+    )
+    timed_out = [
+        interaction["request"]["uri"]
+        for interaction in load_cassette(vcr_path)["http_interactions"]
+        if interaction["response"] is None
+    ]
+    assert timed_out
+    har_entries = [
+        entry for entry in load_json_or_fail(har_path)["log"]["entries"] if entry["response"]["bodySize"] == -1
+    ]
+    assert [entry["request"]["url"] for entry in har_entries] == timed_out

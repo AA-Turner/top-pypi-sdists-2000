@@ -4,12 +4,12 @@ build-backend = "hatchling.build"
 
 [project]
 name = "schemathesis"
-version = "4.28.0"
+version = "4.33.0"
 description = "Adaptive API testing for OpenAPI and GraphQL"
 keywords = ["pytest", "hypothesis", "openapi", "graphql", "testing", "fuzzing", "adaptive"]
 authors = [{ name = "Dmitry Dygalo", email = "dmitry@dygalo.dev" }]
 maintainers = [{ name = "Dmitry Dygalo", email = "dmitry@dygalo.dev" }]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "MIT"
 readme = "README.md"
 include = ["src/schemathesis/py.typed"]
@@ -22,11 +22,11 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
   "Topic :: Software Development :: Testing",
@@ -34,22 +34,22 @@ classifiers = [
 dependencies = [
   "anyio>=4.5,<5",
   "click>=8.0,<9",
-  "harfile>=0.5.0,<1.0",
+  "harfile>=0.6.0,<1.0",
   "hypothesis>=6.130.12,<7",
-  "hypothesis_graphql>=0.13.2,<1",
-  "jsonschema_rs>=0.57.1,<0.58.0",
+  "hypothesis_graphql>=0.13.6,<1",
+  "jsonschema_rs>=0.60.3,<0.61.0",
   "pyrate-limiter>=4.0,<5.0",
   "pytest>=8.4,<10",
   "PyYAML>=5.1,<7.0",
   "requests>=2.22,<3",
   "rich>=13.9.4",
-  "tomli>=2.2.1; python_version < '3.11'",
   "typing-extensions>=4.12.2",
   "werkzeug>=0.16.0,<4",
 ]
 [project.optional-dependencies]
 tests = [
-  "coverage>=6",
+  # coverage 7.13.3+ can drop modules other threads are importing: coveragepy#2247
+  "coverage>=6,<7.13.3",
   "Django>=5.2,<6",
   "fastapi>=0.86.0",
   "Flask>=2.1.1,<4.0",
@@ -57,24 +57,34 @@ tests = [
   "httpx2>=2.12.0,<3.0",
   "pydantic>=1.10.2",
   "pytest-asyncio>=1.0,<2.0",
-  "pytest-httpserver>=1.0,<2.0",
-  "pytest-mock>=3.7.0,<4.0",
+  "pytest-rerunfailures>=15.0,<17.0",
+  "pytest-timeout>=2.3,<3.0",
   "pytest-trio>=0.8,<1.0",
   "pytest-xdist>=3,<4.0",
   "strawberry-graphql[fastapi]>=0.109.0",
   "syrupy>=5.4,<5.5",
   "tomli-w>=1.2.0",
   "allure-python-commons>=2.13.0",
+  "allure-pytest>=2.13.0",
   "trustme>=0.9.0,<2.0",
   "uvicorn>=0.20,<1.0",
+  "webfuzzing-commons==0.13.0",
+  "protobuf>=6.31.0",
 ]
 allure = ["allure-python-commons>=2.13.0"]
-cov = ["coverage-enable-subprocess", "coverage[toml]>=5.3"]
-bench = ["pytest-codspeed==5.0.3"]
-docs = ["mkdocs-material", "mkdocstrings[python]"]
+grpc = [
+  "googleapis-common-protos>=1.70.0",
+  "grpcio>=1.72.1",
+  "grpcio-reflection>=1.72.1",
+  "protobuf>=6.31.0",
+]
+# coverage 7.13.3+ can drop modules other threads are importing: coveragepy#2247
+cov = ["coverage-enable-subprocess", "coverage[toml]>=5.3,<7.13.3"]
+bench = ["pytest-asyncio>=1.0,<2.0", "pytest-codspeed==5.0.3", "pytest-timeout>=2.3,<3.0"]
+docs = ["zensical>=0.0.73,<0.1", "mkdocstrings[python]", "pymdown-extensions<12.2"]
 profiling = ["pyinstrument>=5.1"]
 scripts = ["tracecov>=0.21", "seaborn>=0.13"]
-dev = ["schemathesis[tests,cov,bench,docs,scripts]"]
+dev = ["schemathesis[tests,cov,bench,docs,scripts,grpc]"]
 
 [project.urls]
 Documentation = "https://schemathesis.readthedocs.io/en/stable/"
@@ -101,21 +111,31 @@ exclude = [
 ]
 
 [tool.pytest.ini_options]
-addopts = ["-ra", "--strict-markers", "--strict-config"]
+# The repo tooling tests run on their own, through an explicit `pytest test/tooling`.
+addopts = ["-ra", "--strict-markers", "--strict-config", "--ignore=test/tooling"]
+# Fail a test running over 5 minutes and dump every thread's stack, so a stalled CI job names the culprit.
+timeout = 300
+asyncio_default_fixture_loop_scope = "function"
 xfail_strict = true
+# Duplicate parametrize ids hide repeated or mislabelled cases. pytest 9+ only; the pytest 8 tox env drops `--strict-config`.
+strict_parametrization_ids = true
+# Show the full diff for failed comparisons of large dicts and lists, not only "Use -v to get more diff".
+verbosity_assertions = 1
 truncation_limit_lines = 0
 truncation_limit_chars = 0
 testpaths = "test"
+# Benches and the corpus tests import the repository's `tools` package.
+pythonpath = ["."]
 norecursedirs = ".hypothesis .idea .git src docs .pytest_cache .mypy_cache .tox"
 filterwarnings = [
     "error::pytest.PytestUnraisableExceptionWarning",
     # anyio streams not closed during async test teardown (flaky on Python 3.13+)
     "ignore:Unclosed <MemoryObject.*:ResourceWarning",
     "ignore:.*Unclosed <MemoryObject.*:pytest.PytestUnraisableExceptionWarning",
-    # urllib3/http.client response finalizer raises ValueError on Python 3.14t free-threading GC
+    # urllib3/http.client response finalizer raises ValueError on free-threaded Python GC
     "ignore:Exception ignored while finalizing file <urllib3.response.HTTPResponse.*:pytest.PytestUnraisableExceptionWarning",
     "ignore:Exception ignored while finalizing file <http.client.HTTPResponse.*:pytest.PytestUnraisableExceptionWarning",
-    # asyncio event loop / anyio stream deallocators raise on Python 3.14t free-threading GC
+    # asyncio event loop / anyio stream deallocators raise on free-threaded Python GC
     "ignore:Exception ignored while calling deallocator <function BaseEventLoop.__del__.*:pytest.PytestUnraisableExceptionWarning",
     "ignore:Exception ignored while calling deallocator <function MemoryObject.*.__del__.*:pytest.PytestUnraisableExceptionWarning",
     "ignore:Exception ignored in.*<function MemoryObject.*.__del__.*:pytest.PytestUnraisableExceptionWarning",
@@ -153,7 +173,7 @@ exclude_lines = [
 
 [tool.ruff]
 line-length = 120
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = [
@@ -208,9 +228,7 @@ known-third-party = [
   "click",
   "fastapi",
   "flask",
-  "graphene",
   "graphql",
-  "graphql_server",
   "hypothesis",
   "hypothesis_graphql",
   "packaging",

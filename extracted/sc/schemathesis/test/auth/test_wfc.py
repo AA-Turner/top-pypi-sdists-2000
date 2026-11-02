@@ -2,21 +2,26 @@ from __future__ import annotations
 
 import json
 import os
+from xml.etree import ElementTree
 
 import pytest
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from flask import Flask, jsonify, redirect
+from flask import Flask, jsonify, redirect, request
 
 import schemathesis
 from schemathesis.auths import AuthContext
 from schemathesis.core.cache import Manifest, write
 from schemathesis.core.cache.models import FORMAT_VERSION
+from schemathesis.core.errors import LoaderError
+from schemathesis.specs.openapi.object_authorization import apply_as
 from schemathesis.wfc.converter import wfc_to_auth_provider
-from schemathesis.wfc.errors import WFCLoginError
+from schemathesis.wfc.errors import WFCLoginError, WFCTokenExtractionError, WFCValidationError
+from schemathesis.wfc.escalation import escalating_provider, identity_assignments, restore_identity_assignments
 from schemathesis.wfc.loader import load_from_dict
 from test.apps.catalog.openapi import wfc as wfc_apps
 from test.apps.catalog.openapi.wfc import WFC_PASSWORD, WFC_SESSION, WFC_TOKEN, WFC_USERNAME
+from test.utils import allure_results, refusing_url, silent_url
 
 CREDENTIALS = {
     "username": WFC_USERNAME,
@@ -70,46 +75,32 @@ def _run_wfc(cli, api, path, *args, max_examples=5, **wfc):
     )
 
 
-def test_wfc_path_from_cli_flag(cli, ctx, tmp_path):
-    api = ctx.openapi.apps.wfc_login()
-    auth = _write(tmp_path, {"auth": [{"name": "u", "fixedHeaders": [{"name": "X-Api-Key", "value": "static"}]}]})
-
-    assert cli.run(api.schema_url, "--max-examples=5", f"--auth-wfc={auth}").exit_code == 0
-    assert all(_header(c, "X-Api-Key") == "static" for c in _protected_calls(api))
-
-
-def test_wfc_user_from_cli_flag(cli, ctx, tmp_path):
-    api = ctx.openapi.apps.wfc_login()
-    auth = _write(
+def test_wfc_user_requires_path(cli, tmp_path):
+    schema = _write(
         tmp_path,
-        {
-            "auth": [
-                {"name": "alice", "fixedHeaders": [{"name": "X-Api-Key", "value": "alice-key"}]},
-                {"name": "bob", "fixedHeaders": [{"name": "X-Api-Key", "value": "bob-key"}]},
-            ]
-        },
+        {"openapi": "3.0.0", "info": {"title": "Test", "version": "1.0"}, "paths": {}},
+        name="schema.json",
     )
 
-    result = cli.run(api.schema_url, "--max-examples=5", f"--auth-wfc={auth}", "--auth-wfc-user=bob")
-    assert result.exit_code == 0
-    assert all(_header(c, "X-Api-Key") == "bob-key" for c in _protected_calls(api))
+    result = cli.run(schema, "--url=http://127.0.0.1", "--auth-wfc-user=bob")
 
-
-def test_wfc_user_flag_selects_within_a_configured_file(cli, ctx, tmp_path):
-    # The file comes from the config, the user from the CLI.
-    api = ctx.openapi.apps.wfc_login()
-    auth = _write(
-        tmp_path,
-        {
-            "auth": [
-                {"name": "alice", "fixedHeaders": [{"name": "X-Api-Key", "value": "alice-key"}]},
-                {"name": "bob", "fixedHeaders": [{"name": "X-Api-Key", "value": "bob-key"}]},
-            ]
-        },
+    assert result.exit_code == 2
+    assert result.stderr == (
+        "Usage: schemathesis run [OPTIONS] LOCATION\n"
+        "Try 'schemathesis run --help' for help.\n\n"
+        "Error: --auth-wfc-user requires --auth-wfc or path under [auth.wfc]\n"
     )
 
-    assert _run_wfc(cli, api, auth, "--auth-wfc-user=bob").exit_code == 0
-    assert all(_header(c, "X-Api-Key") == "bob-key" for c in _protected_calls(api))
+
+def test_replay_wfc_user_requires_path(cli):
+    result = cli.main("replay", "--auth-wfc-user=bob")
+
+    assert result.exit_code == 2
+    assert result.stderr == (
+        "Usage: schemathesis replay [OPTIONS] [PATH]\n"
+        "Try 'schemathesis replay --help' for help.\n\n"
+        "Error: --auth-wfc-user requires --auth-wfc or path under [auth.wfc]\n"
+    )
 
 
 def test_wfc_fixed_headers_reach_requests(cli, ctx, tmp_path):
@@ -212,7 +203,16 @@ def test_wfc_external_endpoint_url(cli, ctx, tmp_path):
     assert all(_header(c, "Authorization") == f"Bearer {WFC_TOKEN}" for c in _protected_calls(api))
 
 
-def test_wfc_selects_named_user(cli, ctx, tmp_path):
+@pytest.mark.parametrize(
+    ("cli_args", "wfc_config"),
+    [
+        (["--auth-wfc={path}", "--auth-wfc-user=bob"], None),
+        (["--auth-wfc-user=bob"], {}),
+        ([], {"user": "bob"}),
+    ],
+    ids=["cli-path-and-user", "config-path-cli-user", "config-path-and-user"],
+)
+def test_wfc_selects_named_user(cli, ctx, tmp_path, cli_args, wfc_config):
     api = ctx.openapi.apps.wfc_login()
     auth = _write(
         tmp_path,
@@ -223,8 +223,10 @@ def test_wfc_selects_named_user(cli, ctx, tmp_path):
             ]
         },
     )
+    config = None if wfc_config is None else {"auth": {"wfc": {"path": auth, **wfc_config}}}
 
-    assert _run_wfc(cli, api, auth, user="bob").exit_code == 0
+    result = cli.run(api.schema_url, "--max-examples=5", *(arg.format(path=auth) for arg in cli_args), config=config)
+    assert result.exit_code == 0
     assert all(_header(c, "X-Api-Key") == "bob-key" for c in _protected_calls(api))
 
 
@@ -336,6 +338,19 @@ def test_wfc_wsgi_login_applies_token():
     assert case.headers["Authorization"] == f"Bearer {WFC_TOKEN}"
 
 
+def test_wfc_wsgi_login_missing_header_lists_header_names():
+    app = wfc_apps.wfc_login().server
+    operation = schemathesis.openapi.from_wsgi("/openapi.json", app)["/api/protected"]["GET"]
+    provider = _provider_for(_login(token=_token(extractFrom="header", extractSelector="X-Absent")))
+    context = AuthContext(operation=operation, app=app)
+    with pytest.raises(WFCTokenExtractionError) as exc:
+        provider.get(operation.Case(), context)
+    assert str(exc.value) == (
+        "Header 'X-Absent' not found in response. "
+        "Available headers: 'Content-Type', 'Content-Length', 'X-Auth-Token', 'Set-Cookie'"
+    )
+
+
 def test_wfc_asgi_login_applies_token():
     app = FastAPI()
 
@@ -353,6 +368,29 @@ def test_wfc_asgi_login_applies_token():
     case = operation.Case()
     provider.set(case, provider.get(case, context), context)
     assert case.headers["Authorization"] == f"Bearer {WFC_TOKEN}"
+
+
+def test_wfc_http_login_goes_through_configured_proxy(ctx, app_runner):
+    schema = ctx.openapi.load_schema({"/api/protected": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    schema.config.proxy = f"http://127.0.0.1:{app_runner.run_flask_app(wfc_apps.wfc_login().server)}"
+    operation = schema["/api/protected"]["GET"]
+    provider = _provider_for(_login(token=_token()))
+    context = AuthContext(operation=operation, app=None)
+    case = operation.Case()
+    with refusing_url() as url:
+        schema.config.update(base_url=url)
+        provider.set(case, provider.get(case, context), context)
+    assert case.headers["Authorization"] == f"Bearer {WFC_TOKEN}"
+
+
+def test_wfc_http_login_times_out_without_configured_timeout(ctx):
+    schema = ctx.openapi.load_schema({"/api/protected": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    operation = schema["/api/protected"]["GET"]
+    provider = _provider_for(_login(token=_token()))
+    with silent_url() as url:
+        schema.config.update(base_url=url)
+        with pytest.raises(WFCLoginError, match="Read timed out"):
+            provider.get(operation.Case(), AuthContext(operation=operation, app=None))
 
 
 def _redirect_login_app(ctx) -> Flask:
@@ -412,6 +450,32 @@ def test_wfc_asgi_login_redirect_yields_cookies():
     assert case.cookies == {"JSESSIONID": WFC_SESSION}
 
 
+@pytest.mark.parametrize(
+    ("set_cookie", "expected"),
+    [
+        ("user[id]=1; Path=/", {"user[id]": "1"}),
+        ("a@b=1; Path=/", {"a@b": "1"}),
+        ("sid=1; Path=/; Priority=High", {"sid": "1"}),
+    ],
+    ids=["brackets-in-name", "at-sign-in-name", "unknown-attribute"],
+)
+def test_wfc_wsgi_cookie_login_reads_set_cookie_like_http(ctx, set_cookie, expected):
+    app, _ = ctx.openapi.make_flask_app({"/api/protected": {"get": {"responses": {"200": {"description": "OK"}}}}})
+
+    @app.route("/api/login", methods=["POST"])
+    def login() -> object:
+        response = jsonify({})
+        response.headers.add("Set-Cookie", set_cookie)
+        return response
+
+    operation = schemathesis.openapi.from_wsgi("/openapi.json", app)["/api/protected"]["GET"]
+    provider = _provider_for(_login(expectCookies=True))
+    context = AuthContext(operation=operation, app=app)
+    case = operation.Case()
+    provider.set(case, provider.get(case, context), context)
+    assert case.cookies == expected
+
+
 def test_wfc_login_endpoint_is_resolved_against_the_server_root(ctx, app_runner):
     app, _ = ctx.openapi.make_flask_app(
         {"/protected": {"get": {"responses": {"200": {"description": "OK"}}}}},
@@ -462,6 +526,48 @@ def test_wfc_wsgi_login_redirect_back_to_login_is_rejected(ctx):
     context = AuthContext(operation=operation, app=app)
     with pytest.raises(WFCLoginError, match="redirected back to the login endpoint"):
         provider.get(operation.Case(), context)
+
+
+def test_wfc_external_login_redirect_back_to_login_is_rejected(ctx, app_runner):
+    base_url = app_runner.openapi_url(_bouncing_login_app(ctx), path="")
+    operation = schemathesis.openapi.from_url(f"{base_url}/openapi.json")["/api/protected"]["GET"]
+    provider = _provider_for(
+        {
+            "verb": "POST",
+            "externalEndpointURL": f"{base_url}/api/login",
+            "contentType": "application/json",
+            "payloadUserPwd": CREDENTIALS,
+            "expectCookies": True,
+        }
+    )
+    context = AuthContext(operation=operation, app=None)
+    with pytest.raises(WFCLoginError, match="redirected back to the login endpoint"):
+        provider.get(operation.Case(), context)
+
+
+@pytest.mark.parametrize("location", [None, "http://a]b/x"], ids=["no-location", "malformed-location"])
+def test_wfc_login_redirect_without_location_yields_cookies(ctx, location):
+    app, _ = ctx.openapi.make_flask_app({"/api/protected": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    inner = app.wsgi_app
+
+    # Werkzeug refuses to emit a Location that URL parsing rejects, so the login answer is written raw.
+    def wsgi_app(environ, start_response):
+        if environ["PATH_INFO"] != "/api/login":
+            return inner(environ, start_response)
+        headers = [("Set-Cookie", f"JSESSIONID={WFC_SESSION}; Path=/")]
+        if location is not None:
+            headers.append(("Location", location))
+        start_response("302 Found", headers)
+        return [b""]
+
+    app.wsgi_app = wsgi_app
+
+    operation = schemathesis.openapi.from_wsgi("/openapi.json", app)["/api/protected"]["GET"]
+    provider = _provider_for(_login(expectCookies=True))
+    context = AuthContext(operation=operation, app=app)
+    case = operation.Case()
+    provider.set(case, provider.get(case, context), context)
+    assert case.cookies == {"JSESSIONID": WFC_SESSION}
 
 
 @pytest.mark.parametrize("charset", ["bogus-xyz", "undefined"], ids=["unknown-charset", "undefined-codec"])
@@ -555,20 +661,35 @@ def test_wfc_unreadable_file(cli, ctx, tmp_path):
     assert "failed to read" in result.stdout.lower()
 
 
-def test_wfc_login_connection_error(cli, ctx, tmp_path):
+@pytest.mark.parametrize(
+    "login",
+    [
+        {
+            "verb": "POST",
+            "externalEndpointURL": "http://127.0.0.1:1/api/login",
+            "contentType": "application/json",
+            "payloadUserPwd": CREDENTIALS,
+            "token": _token(),
+        },
+        {
+            "verb": "POST",
+            "externalEndpointURL": "http://[::1/api/login",
+            "contentType": "application/json",
+            "payloadUserPwd": CREDENTIALS,
+            "token": _token(),
+        },
+        _login(token=_token(), headers=[{"name": "X-Tenant", "value": "Zürich€"}]),
+    ],
+    ids=["connection-refused", "malformed-url", "non-latin1-header"],
+)
+def test_wfc_login_connection_error(cli, ctx, tmp_path, login):
     api = ctx.openapi.apps.wfc_login()
-    login = {
-        "verb": "POST",
-        "externalEndpointURL": "http://127.0.0.1:1/api/login",
-        "contentType": "application/json",
-        "payloadUserPwd": CREDENTIALS,
-        "token": _token(),
-    }
     auth = _write(tmp_path, {"auth": [{"name": "u", "loginEndpointAuth": login}]})
 
     result = _run_wfc(cli, api, auth, max_examples=1)
     assert result.exit_code != 0
     assert "login endpoint call failed" in result.stdout.lower()
+    assert "Traceback" not in result.stdout
 
 
 def test_wfc_multiple_users_without_selection(cli, ctx, tmp_path):
@@ -982,6 +1103,16 @@ def test_auth_entry_wins_over_the_template():
     assert entry.login_endpoint_auth.verb == "POST"
 
 
+def test_auth_template_rejects_non_object_entry():
+    doc = {
+        "auth": ["admin"],
+        "authTemplate": {"loginEndpointAuth": {"endpoint": "/shared", "verb": "POST", "expectCookies": True}},
+    }
+
+    with pytest.raises(WFCValidationError, match='"admin" is not of type "object"'):
+        load_from_dict(doc)
+
+
 ROLE_AUTH = {
     "auth": [
         {"name": "viewer", "fixedHeaders": [{"name": "Authorization", "value": "ApiKey viewer"}]},
@@ -999,15 +1130,27 @@ def _identities(api, method, prefix):
     }
 
 
-def test_escalation_walks_the_chain_until_admitted(cli, ctx, tmp_path):
+def test_escalation_settles_each_operation_on_its_identity(cli, ctx, tmp_path):
     api = ctx.openapi.apps.wfc_role_gated()
     auth = _write(tmp_path, ROLE_AUTH)
 
-    cli.run(api.schema_url, "--max-examples=8", f"--auth-wfc={auth}", "--phases=fuzzing")
+    cli.run(api.schema_url, "--max-examples=20", f"--auth-wfc={auth}", "--phases=fuzzing")
 
     assert _identities(api, "GET", "/api/open") == {"viewer"}
     assert "admin" not in _identities(api, "DELETE", "/api/editor-only")
     assert _identities(api, "DELETE", "/api/admin-only") == {"viewer", "", "editor", "admin"}
+    # A 404 says the id was wrong, not that the identity was accepted.
+    assert "admin" in _identities(api, "DELETE", "/api/missing-first")
+    # Payload rejections arrive interleaved with role denials and must not block escalation.
+    assert _identities(api, "POST", "/api/validated") == {"viewer", "", "editor", "admin"}
+    seen = [
+        (r.headers.get("Authorization") or "").removeprefix("ApiKey ")
+        for r in api.requests
+        if r.method == "DELETE" and r.path.startswith("/api/nobody")
+    ]
+    assert seen, "operation was never dispatched"
+    # Every identity is refused; the last one to reach authorization is the one a later request has any chance with.
+    assert seen[-1] == "admin", f"settled on a weaker identity: {seen}"
 
 
 EXPIRING_AUTH = {
@@ -1030,9 +1173,9 @@ def test_escalating_provider_exposes_its_caching_providers(ctx, tmp_path):
     # Reactive reauth is driven off the caching providers reachable from the schema; an escalating
     # provider must not hide the ones it wraps, or a stale token can never be refreshed.
     auth = _write(tmp_path, EXPIRING_AUTH)
-    raw = ctx.openapi.build_schema({"/api/protected": {"get": {"responses": {"200": {"description": "OK"}}}}})
-    schema = schemathesis.openapi.from_dict(
-        raw, config=schemathesis.Config.from_dict({"auth": {"wfc": {"path": auth}}})
+    schema = ctx.openapi.load_schema(
+        {"/api/protected": {"get": {"responses": {"200": {"description": "OK"}}}}},
+        config=schemathesis.Config.from_dict({"auth": {"wfc": {"path": auth}}}),
     )
 
     assert 401 in schema.reauth_retry_statuses
@@ -1063,23 +1206,106 @@ def test_escalation_walks_the_chain_on_401(cli, ctx, tmp_path):
     assert _identities(api, "DELETE", "/api/admin-only") == {"viewer", "", "editor", "admin"}
 
 
-def test_a_missing_resource_does_not_settle_the_identity(cli, ctx, tmp_path):
-    # A 404 says the id was wrong, not that the identity was accepted.
+def test_denials_count_against_the_identity_that_was_sent(cli, ctx, tmp_path):
+    # Coverage cases carry their identity from generation, so many refusals of one user arrive at once.
     api = ctx.openapi.apps.wfc_role_gated()
+    auth = _write(
+        tmp_path,
+        {"auth": [ROLE_AUTH["auth"][0], ROLE_AUTH["auth"][2], ROLE_AUTH["auth"][1]]},
+    )
+
+    cli.run(api.schema_url, "--max-examples=8", f"--auth-wfc={auth}", "--phases=coverage,fuzzing")
+
+    assert "admin" in _identities(api, "DELETE", "/api/admin-only")
+
+
+def test_content_type_probe_refusal_does_not_move_the_identity(cli, ctx, tmp_path):
+    # A server may refuse a malformed request before authorizing it; that says nothing about the identity.
+    app, _ = ctx.openapi.make_flask_app(
+        {"/items": {"get": {"responses": {"200": {"description": "OK"}, "403": {"description": "Forbidden"}}}}}
+    )
+    sent = []
+
+    @app.route("/items")
+    def items():
+        sent.append(request.headers.get("Authorization", ""))
+        content_type = request.headers.get("Content-Type", "")
+        if content_type.startswith("multipart/form-data") and "boundary=" not in content_type:
+            return jsonify({}), 403
+        return jsonify({}), 200
+
     auth = _write(tmp_path, ROLE_AUTH)
+    cli.run_openapi_app(app, "--max-examples=5", f"--auth-wfc={auth}", "--phases=coverage,fuzzing")
 
-    cli.run(api.schema_url, "--max-examples=15", f"--auth-wfc={auth}", "--phases=fuzzing")
-
-    assert "admin" in _identities(api, "DELETE", "/api/missing-first")
+    assert set(sent) == {"ApiKey viewer"}
 
 
-def test_rejected_payloads_do_not_block_escalation(cli, ctx, tmp_path):
-    # `/api/validated` rejects every other payload before checking the role, so denials arrive interleaved.
-    api = ctx.openapi.apps.wfc_role_gated()
-    auth = _write(tmp_path, ROLE_AUTH)
+BASIC_AUTH = {
+    "auth": [
+        {"name": "alice", "fixedHeaders": [{"name": "Authorization", "value": "Basic YWxpY2U6c2VjcmV0"}]},
+        {"name": "bob", "fixedHeaders": [{"name": "Authorization", "value": "Basic Ym9iOnNlY3JldA=="}]},
+    ]
+}
 
-    cli.run(api.schema_url, "--max-examples=15", f"--auth-wfc={auth}", "--phases=fuzzing")
-    assert _identities(api, "POST", "/api/validated") == {"viewer", "", "editor", "admin"}
+
+@pytest.mark.parametrize(
+    ("version", "scheme"),
+    [
+        ("2.0", {"type": "basic"}),
+        ("3.0.2", {"type": "http", "scheme": "basic"}),
+        ("3.0.2", {"type": "http", "scheme": "bearer"}),
+    ],
+    ids=["swagger-basic", "openapi-basic", "openapi-bearer"],
+)
+def test_case_without_credentials_does_not_move_the_identity(ctx, app_runner, tmp_path, version, scheme):
+    # The coverage phase drops the credentials on purpose, so its 401 says nothing about the identity.
+    responses = {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}}
+    security = (
+        {"securityDefinitions": {"auth": scheme}, "basePath": "/"}
+        if version == "2.0"
+        else {"components": {"securitySchemes": {"auth": scheme}}}
+    )
+    app, _ = ctx.openapi.make_flask_app(
+        {"/api/first": {"get": {"responses": responses}}, "/api/orders": {"get": {"responses": responses}}},
+        version=version,
+        security=[{"auth": []}],
+        **security,
+    )
+
+    @app.route("/api/first", endpoint="first")
+    @app.route("/api/orders", endpoint="orders")
+    def protected():
+        return jsonify({}), 200 if request.headers.get("Authorization") else 401
+
+    config = schemathesis.Config.from_dict({"auth": {"wfc": {"path": _write(tmp_path, BASIC_AUTH)}}})
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app), config=config)
+    schema.config.phases.fuzzing.enabled = False
+    schema.config.phases.stateful.enabled = False
+    list(schemathesis.engine.from_schema(schema).execute())
+
+    provider = escalating_provider(schema)
+    assert [provider.names[provider.index_for(label)] for label in ("GET /api/first", "GET /api/orders")] == [
+        "alice",
+        "alice",
+    ]
+
+
+def test_identity_refused_before_accounts_exist_is_retried(cli, ctx, tmp_path):
+    # An API may create its accounts mid-run, so a 401 from before then says nothing about the identity.
+    api = ctx.openapi.apps.wfc_accounts_seeded_later()
+    auth = _write(tmp_path, {"auth": [ROLE_AUTH["auth"][2], ROLE_AUTH["auth"][0], ROLE_AUTH["auth"][1]]})
+
+    cli.run(
+        api.schema_url, "--max-examples=8", f"--auth-wfc={auth}", "--phases=coverage,fuzzing", "--continue-on-failure"
+    )
+
+    seen = [
+        (r.headers.get("Authorization") or "").removeprefix("ApiKey ")
+        for r in api.requests
+        if r.method == "DELETE" and r.path.startswith("/api/admin-only")
+    ]
+    assert seen, "operation was never dispatched"
+    assert seen[-1] == "admin", f"never retried the identity refused before seeding: {seen}"
 
 
 def test_pinned_user_never_escalates(cli, ctx, tmp_path):
@@ -1106,18 +1332,35 @@ def test_assignment_is_restored_from_cache(cli, ctx, tmp_path):
     assert {(r.headers.get("Authorization") or "").removeprefix("ApiKey ") for r in second} == {"admin"}
 
 
-def test_failure_names_the_identity(cli, ctx, tmp_path):
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_failure_names_the_identity(cli, ctx, tmp_path, snapshot_cli):
     # With several identities in play, a report that does not say which one ran is ambiguous.
+    # The name alone is not actionable; the flag that reproduces it is.
     api = ctx.openapi.apps.wfc_role_gated()
     auth = _write(tmp_path, ROLE_AUTH)
+    junit = tmp_path / "junit.xml"
+    allure = tmp_path / "allure-results"
 
-    result = cli.run(
-        api.schema_url, "--max-examples=8", "--phases=fuzzing", f"--auth-wfc={auth}", "-c", "not_a_server_error"
+    assert (
+        cli.run(
+            api.schema_url,
+            "--max-examples=8",
+            "--phases=fuzzing",
+            f"--auth-wfc={auth}",
+            "-c",
+            "not_a_server_error",
+            "--include-path=/api/admin-boom/{itemId}",
+            f"--report-junit-path={junit}",
+            f"--report-allure-path={allure}",
+        )
+        == snapshot_cli
     )
-
-    assert "Server error" in result.stdout
-    # The name alone is not actionable; the flag that reproduces it is.
-    assert "Identity: admin (reproduce with --auth-wfc-user admin)" in result.stdout
+    line = "Identity: admin (reproduce with --auth-wfc-user admin)"
+    assert [failure.text for failure in ElementTree.parse(junit).iter("failure") if line in failure.text] != []
+    messages = [
+        step["statusDetails"]["message"] for result in allure_results(allure) for step in result.get("steps", [])
+    ]
+    assert [message for message in messages if line in message] != []
 
 
 def test_ndjson_records_the_identity(cli, ctx, tmp_path):
@@ -1146,22 +1389,13 @@ def test_ndjson_records_the_identity(cli, ctx, tmp_path):
         for node in json.loads(line).get("ScenarioFinished", {}).get("recorder", {}).get("cases", {}).values()
     }
     assert "admin" in identities
-
-
-def test_exhausted_chain_stops_rather_than_wrapping(cli, ctx, tmp_path):
-    # No identity can reach this operation, and dropping credentials is no better, so it keeps one.
-    api = ctx.openapi.apps.wfc_role_gated()
-    auth = _write(tmp_path, ROLE_AUTH)
-
-    cli.run(api.schema_url, "--max-examples=8", "--phases=fuzzing", f"--auth-wfc={auth}", "-c", "not_a_server_error")
-
     seen = [
         (r.headers.get("Authorization") or "").removeprefix("ApiKey ")
         for r in api.requests
         if r.method == "DELETE" and r.path.startswith("/api/nobody")
     ]
     assert seen, "operation was never dispatched"
-    # Which identity it keeps is the subject of another test; here it only has to stop moving.
+    # No identity can reach this operation and dropping credentials is no better, so it stops moving.
     assert len(set(seen[-3:])) == 1, f"kept cycling through the chain: {seen}"
 
 
@@ -1193,18 +1427,6 @@ def test_unknown_cached_identity_is_ignored(cli, ctx, tmp_path):
     assert _identities(api, "GET", "/api/open") == {"viewer"}
 
 
-def test_escalation_falls_back_to_anonymous(cli, ctx, tmp_path):
-    # A bad `Authorization` header is worse than none: stacks reject it instead of serving the caller.
-    api = ctx.openapi.apps.wfc_credentials_rejected()
-    auth = _write(tmp_path, ROLE_AUTH)
-
-    cli.run(api.schema_url, "--max-examples=8", f"--auth-wfc={auth}", "--phases=fuzzing")
-
-    public = [r for r in api.requests if r.path.startswith("/api/public")]
-    assert public, "operation was never called"
-    assert any(r.headers.get("Authorization") is None for r in public)
-
-
 def test_exhausted_chain_keeps_the_identity_that_got_furthest(cli, ctx, tmp_path):
     # A 403 reached authorization; dropping credentials only earns a 401, so it is not an improvement.
     api = ctx.openapi.apps.wfc_role_gated_401_when_anonymous()
@@ -1221,23 +1443,6 @@ def test_exhausted_chain_keeps_the_identity_that_got_furthest(cli, ctx, tmp_path
     assert seen[-1] != ""
 
 
-def test_exhausted_chain_keeps_the_most_privileged_of_equals(cli, ctx, tmp_path):
-    # Every identity is refused, so none is provably better; the last one to reach authorization is
-    # the one a later request has any chance with.
-    api = ctx.openapi.apps.wfc_role_gated()
-    auth = _write(tmp_path, ROLE_AUTH)
-
-    cli.run(api.schema_url, "--max-examples=20", "--phases=fuzzing", f"--auth-wfc={auth}")
-
-    seen = [
-        (r.headers.get("Authorization") or "").removeprefix("ApiKey ")
-        for r in api.requests
-        if r.method == "DELETE" and r.path.startswith("/api/nobody")
-    ]
-    assert seen, "operation was never dispatched"
-    assert seen[-1] == "admin", f"settled on a weaker identity: {seen}"
-
-
 def test_credentials_that_never_work_reach_anonymous_early(cli, ctx, tmp_path):
     # Walking every identity first spends a short run discovering what the second request could show.
     api = ctx.openapi.apps.wfc_credentials_rejected()
@@ -1248,3 +1453,100 @@ def test_credentials_that_never_work_reach_anonymous_early(cli, ctx, tmp_path):
     public = [r for r in api.requests if r.path.startswith("/api/public")]
     assert public, "operation was never called"
     assert any(r.headers.get("Authorization") is None for r in public)
+
+
+PEER_AUTH = {
+    "auth": [
+        {
+            "name": "alice",
+            "fixedHeaders": [
+                {"name": "Authorization", "value": "ApiKey alice"},
+                {"name": "X-Tenant", "value": "alice"},
+            ],
+        },
+        {"name": "bob", "fixedHeaders": [{"name": "Authorization", "value": "ApiKey bob"}]},
+        {"name": "admin", "fixedHeaders": [{"name": "Authorization", "value": "ApiKey admin"}]},
+    ]
+}
+
+
+def _peer_schema(ctx, tmp_path, *, peers=("alice", "bob"), **wfc):
+    config = {"path": _write(tmp_path, PEER_AUTH), "peers": list(peers), **wfc}
+    return ctx.openapi.load_schema(
+        {"/api/protected": {"get": {"responses": {"200": {"description": "OK"}}}}},
+        config=schemathesis.Config.from_dict({"auth": {"wfc": config}}),
+    )
+
+
+def _authenticated_case(schema):
+    operation = schema["/api/protected"]["GET"]
+    case = operation.Case()
+    schema.auth.set(case, AuthContext(operation=operation, app=None))
+    return case
+
+
+def test_apply_as_sends_only_the_peer_credentials(ctx, tmp_path):
+    schema = _peer_schema(ctx, tmp_path)
+    case = _authenticated_case(schema)
+
+    probe = apply_as(case, escalating_provider(schema).provider_for("bob"), "bob")
+
+    assert (dict(probe.headers), probe._auth_identity) == ({"Authorization": "ApiKey bob"}, "bob")
+    assert dict(case.headers) == {"Authorization": "ApiKey alice", "X-Tenant": "alice"}
+
+
+def test_pinned_user_with_peers_tags_cases(ctx, tmp_path):
+    schema = _peer_schema(ctx, tmp_path, user="bob")
+    escalating_provider(schema).record("GET /api/protected", "bob", 403)
+
+    assert _authenticated_case(schema)._auth_identity == "bob"
+
+
+def test_pinned_user_ignores_persisted_assignments(ctx, tmp_path):
+    schema = _peer_schema(ctx, tmp_path, user="bob")
+    restore_identity_assignments(schema, {"GET /api/protected": "alice"})
+
+    assert (identity_assignments(schema), _authenticated_case(schema)._auth_identity) == ({}, "bob")
+
+
+@pytest.mark.parametrize(
+    "login",
+    [_login(token=_token(sendIn="query", sendName="token", sendTemplate="{token}")), _login(expectCookies=True)],
+    ids=["query-token", "cookie"],
+)
+def test_apply_as_strips_login_credentials(ctx, tmp_path, login):
+    api = ctx.openapi.apps.wfc_login()
+    doc = {
+        "auth": [
+            {"name": "alice", "loginEndpointAuth": login},
+            {"name": "bob", "fixedHeaders": [{"name": "Authorization", "value": "ApiKey bob"}]},
+        ]
+    }
+    config = {"path": _write(tmp_path, doc), "peers": ["alice", "bob"]}
+    schema = schemathesis.openapi.from_url(
+        api.schema_url, config=schemathesis.Config.from_dict({"auth": {"wfc": config}})
+    )
+    case = _authenticated_case(schema)
+
+    probe = apply_as(case, escalating_provider(schema).provider_for("bob"), "bob")
+
+    assert (dict(probe.headers), probe.query, probe.cookies) == ({"Authorization": "ApiKey bob"}, {}, {})
+
+
+def test_probe_is_claimed_once(ctx, tmp_path):
+    provider = escalating_provider(_peer_schema(ctx, tmp_path))
+    key = ("GET /api/orders/{id}", "Order", "bob")
+
+    assert [provider.claim_probe(key), provider.claim_probe(key)] == [True, False]
+
+
+def test_unknown_peer_is_rejected(ctx, tmp_path):
+    with pytest.raises(LoaderError, match="Peer 'carol' not found in WFC auth document"):
+        _peer_schema(ctx, tmp_path, peers=("alice", "carol"))
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+@pytest.mark.parametrize("peers", [["alice"], ["alice", "alice"]], ids=["single", "duplicate"])
+def test_peers_need_two_distinct_users(cli, ctx, tmp_path, snapshot_cli, peers):
+    api = ctx.openapi.apps.wfc_login()
+    assert _run_wfc(cli, api, _write(tmp_path, PEER_AUTH), peers=peers) == snapshot_cli

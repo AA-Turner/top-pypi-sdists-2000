@@ -10,11 +10,12 @@ import time
 import urllib.request
 import warnings
 from dataclasses import dataclass, field
+from functools import cache
 from http.client import HTTPException
 from importlib.metadata import PackageNotFoundError, distribution, version
 from pathlib import Path
 from typing import Any
-from urllib.error import HTTPError, URLError
+from urllib.error import URLError
 
 from packaging.version import Version
 
@@ -120,6 +121,19 @@ ANSIBLE_OWNED_KINDS = {
 
 PROFILES = yaml_from_file(Path(__file__).parent / "data" / "profiles.yml")
 
+ANSIBLE_ENV_VARS = (
+    "ANSIBLE_HOME",
+    "ANSIBLE_LIBRARY",
+    "ANSIBLE_ROLES_PATH",
+    "ANSIBLE_COLLECTIONS_PATH",
+)
+
+
+def has_custom_ansible_env() -> bool:
+    """Return True when any ANSIBLE_* path env var is set by the user."""
+    return any(var in os.environ for var in ANSIBLE_ENV_VARS)
+
+
 LOOP_VAR_PREFIX = "^(__|{role}_)"
 
 
@@ -199,6 +213,44 @@ class Options:  # pylint: disable=too-many-instance-attributes
         """Returns list of ansible versions that are considered supported."""
         return sorted([*self._default_supported, *self.supported_ansible_also])
 
+    @property
+    def mock_root(self) -> Path | None:
+        """Return isolated root for ansible-lint mocks if cache_dir is set."""
+        if self.cache_dir is None:
+            return None
+        return self.cache_dir / "ansible-lint-mocks"
+
+    @property
+    def mock_collections_path(self) -> Path | None:
+        """Return the mock collections path if cache_dir is set."""
+        if self.mock_root is None:
+            return None
+        return self.mock_root / "collections"
+
+    @property
+    def mock_modules_path(self) -> Path | None:
+        """Return the plain mock modules path if cache_dir is set."""
+        if self.mock_root is None:
+            return None
+        return self.mock_root / "modules"
+
+    @property
+    def mock_roles_path(self) -> Path | None:
+        """Return the plain mock roles path if cache_dir is set."""
+        if self.mock_root is None:
+            return None
+        return self.mock_root / "roles"
+
+    def has_collection_mocks(self) -> bool:
+        """Check if any mock roles or modules use collection format (ns.coll.name)."""
+        return any(len(r.split(".")) >= 3 for r in self.mock_roles) or any(
+            len(m.split(".")) >= 3 for m in self.mock_modules
+        )
+
+    def has_plain_role_mocks(self) -> bool:
+        """Check if any mock roles are standalone (non-collection) names."""
+        return any(len(r.split(".")) < 3 for r in self.mock_roles)
+
 
 options = Options()
 
@@ -241,7 +293,7 @@ def guess_install_method() -> str:
 
     # By default we assume pip is not safe to be used
     use_pip = False
-    try:
+    try:  # ruff:ignore[too-many-statements-in-try-clause]
         # Use pip to detect if is safe to use it to upgrade the package.
         # We do imports here to for performance and reasons, and also in order
         # to avoid errors if pip internals change. Also we want to avoid having
@@ -272,16 +324,72 @@ def guess_install_method() -> str:
     return pip if use_pip else ""
 
 
+@cache
 def get_deps_versions() -> dict[str, Version | None]:
-    """Return versions of most important dependencies."""
+    """Return versions of most important dependencies.
+
+    Cached: called per templated string via ansible_template(), and
+    installed versions can't change mid-process.
+    """
     result: dict[str, Version | None] = {}
 
-    for name in ["ansible-core", "ansible-compat", "ruamel-yaml", "ruamel-yaml-clib"]:
+    for name in ["ansible-core", "ansible-compat", "ruamel-yaml"]:
         try:
             result[name] = Version(version(name))
         except PackageNotFoundError:
             result[name] = None
     return result
+
+
+def _version_cache_needs_refresh(cache_file: str) -> bool:
+    if not os.path.exists(cache_file):
+        return True
+    age = time.time() - os.path.getmtime(cache_file)
+    return age >= 24 * 60 * 60
+
+
+def _load_version_cache(cache_file: str) -> dict[str, Any]:
+    with open(cache_file, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _fetch_latest_release(cache_file: str) -> dict[str, Any]:
+    release_url = "https://api.github.com/repos/ansible/ansible-lint/releases/latest"
+    if not release_url.startswith("https://"):  # pragma: no cover (ruff compatibility)
+        msg = "release_url must start with https://"
+        raise ValueError(msg)
+    try:
+        with urllib.request.urlopen(release_url, timeout=10) as url:
+            data = json.load(url)
+            with open(cache_file, "w", encoding="utf-8") as f:
+                json.dump(data, f)
+    except (URLError, HTTPException, TimeoutError) as exc:  # pragma: no cover
+        _logger.debug(
+            "Unable to fetch latest version from %s due to: %s",
+            release_url,
+            exc,
+        )
+        return {}
+    else:
+        return data
+
+
+def _format_version_upgrade_message(
+    current_version: Version,
+    data: dict[str, Any],
+    pip: str,
+) -> str:
+    if not data:
+        return ""
+    html_url = data["html_url"]
+    new_version = Version(data["tag_name"][1:])  # removing v prefix from tag
+
+    if current_version > new_version:
+        return "[dim]You are using a pre-release version of ansible-lint.[/]"
+    if current_version < new_version:
+        msg = f"""[warning]A new release of ansible-lint is available: [warning]{current_version}[/] → [success][link={html_url}]{new_version}[/link][/][/]"""
+        return f"{msg} Upgrade by running: [info]{pip}[/]"
+    return ""
 
 
 def get_version_warning() -> str:
@@ -295,51 +403,20 @@ def get_version_warning() -> str:
     if not pip:
         return ""
 
-    msg = ""
-    data = {}
     current_version = Version(__version__)
 
     if not os.path.exists(CACHE_DIR):  # pragma: no cover
         os.makedirs(CACHE_DIR)
     cache_file = f"{CACHE_DIR}/latest.json"
-    refresh = True
+    refresh = _version_cache_needs_refresh(cache_file)
+    data: dict[str, Any] = {}
     if os.path.exists(cache_file):
-        age = time.time() - os.path.getmtime(cache_file)
-        if age < 24 * 60 * 60:
-            refresh = False
-        with open(cache_file, encoding="utf-8") as f:
-            data = json.load(f)
+        data = _load_version_cache(cache_file)
 
     if not options.offline and (refresh or not data):
-        release_url = (
-            "https://api.github.com/repos/ansible/ansible-lint/releases/latest"
-        )
-        if not release_url.startswith(
-            "https://"
-        ):  # pragma: no cover (ruff compatibility)
-            msg = "release_url must start with https://"
-            raise ValueError(msg)
-        try:
-            with urllib.request.urlopen(release_url) as url:
-                data = json.load(url)
-                with open(cache_file, "w", encoding="utf-8") as f:
-                    json.dump(data, f)
-        except (URLError, HTTPError, HTTPException) as exc:  # pragma: no cover
-            _logger.debug(
-                "Unable to fetch latest version from %s due to: %s",
-                release_url,
-                exc,
-            )
+        fetched = _fetch_latest_release(cache_file)
+        if not fetched:
             return ""
+        data = fetched
 
-    if data:
-        html_url = data["html_url"]
-        new_version = Version(data["tag_name"][1:])  # removing v prefix from tag
-
-        if current_version > new_version:
-            msg = "[dim]You are using a pre-release version of ansible-lint.[/]"
-        elif current_version < new_version:
-            msg = f"""[warning]A new release of ansible-lint is available: [warning]{current_version}[/] → [success][link={html_url}]{new_version}[/link][/][/]"""
-            msg += f" Upgrade by running: [info]{pip}[/]"
-
-    return msg
+    return _format_version_upgrade_message(current_version, data, pip)

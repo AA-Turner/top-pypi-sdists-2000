@@ -2,28 +2,52 @@ from __future__ import annotations
 
 import enum
 import http.client
-from collections.abc import Iterator, Mapping
+import json
+import re
+from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
+from email.parser import BytesParser
+from email.policy import HTTP
 from functools import wraps
 from http.cookies import CookieError, SimpleCookie
 from typing import TYPE_CHECKING, Any, NoReturn, cast
-from urllib.parse import parse_qs, unquote, urlparse
+from urllib.parse import ParseResult, parse_qs, unquote, urlparse
 
 import schemathesis
 from schemathesis.checks import CheckContext, CheckFunction
 from schemathesis.core import NOT_SET, media_types, string_to_boolean
-from schemathesis.core.failures import AcceptedNegativeData, Failure
-from schemathesis.core.jsonschema import BUNDLE_STORAGE_KEY, get_type, make_validator
-from schemathesis.core.jsonschema.types import JsonSchema
-from schemathesis.core.mutations import OperatorKind, render_mutations
-from schemathesis.core.parameters import ParameterLocation, plain_str_values
-from schemathesis.core.transport import HTTP_METHODS_SCHEMA, Response, expand_status_code
+from schemathesis.core.errors import InvalidSchema
+from schemathesis.core.failures import AcceptedNegativeData, AuthScenario, Failure, IgnoredAuth
+from schemathesis.core.jsonschema import BUNDLE_STORAGE_KEY, get_type, make_validator, resolve_bundled_ref
+from schemathesis.core.jsonschema.types import JsonSchema, as_object_schema
+from schemathesis.core.mutations import Mutation, OperatorKind, render_mutations
+from schemathesis.core.parameters import (
+    CONCRETE_LOCATIONS,
+    PARAMETER_LOCATIONS,
+    ParameterLocation,
+    plain_str_values,
+)
+from schemathesis.core.transport import (
+    AUTH_REJECTION_STATUSES,
+    HTTP_METHODS_SCHEMA,
+    SAFE_METHODS,
+    Response,
+    expand_status_code,
+    expand_status_codes,
+    response_content_type,
+)
 from schemathesis.generation.case import Case
-from schemathesis.generation.meta import CoveragePhaseData, CoverageScenario, FuzzingPhaseData
+from schemathesis.generation.meta import (
+    REQUEST_SHAPE_PROBES,
+    CoveragePhaseData,
+    CoverageScenario,
+    FuzzingPhaseData,
+    StatefulPhaseData,
+    coverage_scenario,
+)
 from schemathesis.openapi.checks import (
     AllowHeaderMismatch,
     EnsureResourceAvailability,
-    IgnoredAuth,
     JsonSchemaError,
     MalformedMediaType,
     MissingContentType,
@@ -36,29 +60,41 @@ from schemathesis.openapi.checks import (
     UseAfterFree,
 )
 from schemathesis.specs.openapi._auth_retry import (
-    build_retry_transport_kwargs,
     get_security_parameters,
     remove_auth,
+    send_probe,
     set_auth_for_case,
 )
-from schemathesis.specs.openapi.utils import expand_status_codes
-from schemathesis.transport.prepare import prepare_path
+from schemathesis.specs.openapi.serialization import COLLECTION_FORMAT_DELIMITERS
+from schemathesis.specs.openapi.utils import (
+    coerce_wire_string,
+    numeric_wire_value_is_valid,
+    parameter_types,
+    reads_as_null,
+    sent_text_is_valid,
+)
+from schemathesis.transport.prepare import prepare_path, replaces_body
 from schemathesis.transport.serialization import contains_binary
 
 if TYPE_CHECKING:
+    import jsonschema_rs
+
     from schemathesis.engine.recorder import RecordedScenario
     from schemathesis.schemas import APIOperation
     from schemathesis.specs.openapi.adapter.parameters import OpenApiParameter, OpenApiParameterSet
+    from schemathesis.specs.openapi.adapter.security import SecurityParameter
     from schemathesis.specs.openapi.schemas import OpenApiSchema
 
 
 def is_unexpected_http_status_case(case: Case) -> bool:
-    # Skip checks for requests using HTTP methods not defined in the API spec
-    return bool(
-        case.meta
-        and isinstance(case.meta.phase.data, CoveragePhaseData)
-        and case.meta.phase.data.scenario == CoverageScenario.UNSPECIFIED_HTTP_METHOD
-    )
+    # Skip checks for request-shape probes whose response conformance is irrelevant.
+    return coverage_scenario(case) in REQUEST_SHAPE_PROBES
+
+
+def _is_openapi(case: Case) -> bool:
+    from schemathesis.specs.openapi.schemas import OpenApiSchema
+
+    return isinstance(case.operation.schema, OpenApiSchema)
 
 
 def requires_openapi_schema(func: CheckFunction) -> CheckFunction:
@@ -66,9 +102,7 @@ def requires_openapi_schema(func: CheckFunction) -> CheckFunction:
 
     @wraps(func)
     def wrapper(ctx: CheckContext, response: Response, case: Case) -> bool | None:
-        from schemathesis.specs.openapi.schemas import OpenApiSchema
-
-        if not isinstance(case.operation.schema, OpenApiSchema):
+        if not _is_openapi(case):
             return True
         return func(ctx, response, case)
 
@@ -76,7 +110,7 @@ def requires_openapi_schema(func: CheckFunction) -> CheckFunction:
 
 
 def skips_on_unexpected_http_status(func: CheckFunction) -> CheckFunction:
-    """Skip the check when the scenario targets undefined HTTP methods (coverage mode)."""
+    """Skip the check when a coverage request-shape probe targets the server."""
 
     @wraps(func)
     def wrapper(ctx: CheckContext, response: Response, case: Case) -> bool | None:
@@ -138,15 +172,14 @@ def content_type_conformance(ctx: CheckContext, response: Response, case: Case) 
     documented_content_types = schema.get_content_types(case.operation, response)
     if not documented_content_types:
         return None
-    content_types = response.headers.get("content-type")
-    if not content_types:
+    content_type = response_content_type(response)
+    if content_type is None:
         all_media_types = [f"\n- `{content_type}`" for content_type in documented_content_types]
         raise MissingContentType(
             operation=case.operation.label,
             message=f"The following media types are documented in the schema:{''.join(all_media_types)}",
             media_types=documented_content_types,
         )
-    content_type = content_types[0]
     for option in documented_content_types:
         try:
             expected_main, expected_sub = media_types.parse(option)
@@ -179,7 +212,7 @@ def _reraise_malformed_media_type(case: Case, location: str, actual: str, define
 @requires_openapi_schema
 @skips_on_unexpected_http_status
 def response_headers_conformance(ctx: CheckContext, response: Response, case: Case) -> bool | None:
-    from schemathesis.specs.openapi.validation import _maybe_raise_one_or_more
+    from schemathesis.specs.openapi.validation import maybe_raise_one_or_more
 
     # Find the matching response definition
     response_definition = case.operation.responses.find_by_status_code(response.status_code)
@@ -203,7 +236,10 @@ def response_headers_conformance(ctx: CheckContext, response: Response, case: Ca
         # A header whose schema names a missing component has nothing to validate against.
         if header.unresolvable_reference is not None:
             continue
-        coerced = _coerce_header_value(values[0], header.schema)
+        if header.is_json:
+            coerced = _parse_json_header_value(values[0])
+        else:
+            coerced = _coerce_header_value(values[0], header.schema, explode=header.definition.get("explode", False))
         for exc in header.validator.iter_errors(coerced):
             errors.append(
                 JsonSchemaError.from_exception(
@@ -221,51 +257,55 @@ def response_headers_conformance(ctx: CheckContext, response: Response, case: Ca
         message = f"The following required headers are missing from the response:{''.join(formatted_headers)}"
         errors.append(MissingHeaders(operation=case.operation.label, message=message, missing_headers=missing_headers))
 
-    return _maybe_raise_one_or_more(errors)  # type: ignore[func-returns-value]
+    return maybe_raise_one_or_more(errors)  # type: ignore[func-returns-value]
 
 
-_COLLECTION_FORMAT_DELIMITERS = {
-    "csv": ",",
-    "ssv": " ",
-    "tsv": "\t",
-    "pipes": "|",
-}
-
-
-def _coerce_header_value(value: str, schema: dict[str, Any]) -> Any:
-    schema_type = schema.get("type")
-
-    if schema_type == "string":
+def _parse_json_header_value(value: str) -> object:
+    # A value that is not JSON is validated as text, so the schema reports the mismatch
+    try:
+        return json.loads(value)
+    except ValueError:
         return value
-    if schema_type == "integer":
-        try:
-            return int(value)
-        except ValueError:
+
+
+def _coerce_header_value(value: str, schema: dict[str, Any], *, explode: bool = False) -> Any:
+    types = get_type(schema)
+
+    # OpenAPI 3 headers use `simple` style: `k=v,k=v` when exploded, `k,v,k,v` otherwise.
+    if "object" in types and "type" in schema:
+        if explode:
+            pairs = [item.split("=", 1) for item in value.split(",")]
+        else:
+            items = value.split(",")
+            pairs = [items[i : i + 2] for i in range(0, len(items), 2)]
+        if any(len(pair) != 2 for pair in pairs):
             return value
-    if schema_type == "number":
-        try:
-            return float(value)
-        except ValueError:
-            return value
-    if schema_type == "null" and value.lower() == "null":
-        return None
-    if schema_type == "boolean":
-        return string_to_boolean(value)
-    if schema_type == "array":
+        properties = schema.get("properties") or {}
+        additional = schema.get("additionalProperties")
+        fallback = additional if isinstance(additional, dict) else {}
+        return {key: _coerce_header_value(item, properties.get(key, fallback)) for key, item in pairs}
+
+    # An untyped schema also admits arrays, but its header value is not a delimited list.
+    if "array" in types and "type" in schema:
         # Swagger 2.0: array headers use `collectionFormat` (default `csv`) to define
         # how items are joined into a single header value. Split the wire form into
         # items, then coerce each one against `items` so non-string element types validate.
         collection_format = schema.get("collectionFormat", "csv")
-        delimiter = _COLLECTION_FORMAT_DELIMITERS.get(collection_format)
+        delimiter = COLLECTION_FORMAT_DELIMITERS.get(collection_format)
         if delimiter is None:
             return value
         items_schema = schema.get("items") or {}
         return [_coerce_header_value(item, items_schema) for item in value.split(delimiter)]
-    return value
+    # Header text is already a valid string, so only non-string types need parsing.
+    if "string" in types:
+        return value
+    if "null" in types and value.lower() == "null":
+        return None
+    coerced = coerce_wire_string(value, types)
+    return value if coerced is None else coerced
 
 
 @schemathesis.check
-@requires_openapi_schema
 @skips_on_unexpected_http_status
 def response_schema_conformance(ctx: CheckContext, response: Response, case: Case) -> bool | None:
     return case.operation.validate_response(response, case=case)
@@ -286,34 +326,33 @@ def _declared_parameters_are_valid(case: Case, location: ParameterLocation) -> b
     # Every non-body container defaults to an empty mapping, and the caller never passes `BODY`.
     value = case.get_container(location)
     assert isinstance(value, Mapping)
-    container = getattr(case.operation, location.container_name)
+    container = case.operation.get_parameter_set(location)
     schema = container.schema
     if _has_serialization_sensitive_types(schema, container):
         # Arrays and objects are rewritten on the wire, so post-serialization validity is unknowable.
         return False
-    declared = {name: item for name, item in value.items() if name in container}
+    validator_cls = case.operation.schema.adapter.jsonschema_validator_cls
+    properties = schema.get("properties", {})
     try:
-        return make_validator(schema, case.operation.schema.adapter.jsonschema_validator_cls).is_valid(declared)
+        declared = {
+            name: _boolean_from_wire_spelling(item, properties.get(name, {}), validator_cls)
+            for name, item in value.items()
+            if name in container
+        }
+        return make_validator(schema, validator_cls).is_valid(declared)
     except Exception:
         # Schema the validator cannot read (e.g. a pattern valid in Python but not ECMA 262).
         return False
 
 
-def _has_other_negated_location(case: Case, location: ParameterLocation) -> bool:
-    """Whether a location other than `location` carries a negation the server could act on."""
+def _has_other_negated_location(case: Case, *locations: ParameterLocation) -> bool:
+    """Whether a location outside `locations` carries a negation the server could act on."""
     meta = case.meta
     assert meta is not None
-    for other in (
-        ParameterLocation.PATH,
-        ParameterLocation.QUERY,
-        ParameterLocation.HEADER,
-        ParameterLocation.COOKIE,
-        ParameterLocation.BODY,
-    ):
-        if other == location:
+    for other in PARAMETER_LOCATIONS:
+        if other in locations:
             continue
-        component = meta.components.get(other)
-        if component is None or not component.mode.is_negative:
+        if not meta.is_negative_at(other):
             continue
         if other != ParameterLocation.BODY and _declared_parameters_are_valid(case, other):
             continue
@@ -321,7 +360,7 @@ def _has_other_negated_location(case: Case, location: ParameterLocation) -> bool
     return False
 
 
-def _body_negation_becomes_valid_after_serialization(case: Case) -> bool:
+def _body_negation_becomes_valid_after_serialization(response: Response, case: Case) -> bool:
     """Check if body negation becomes valid after serialization.
 
     For media types like text/plain, any value gets stringified during serialization,
@@ -336,19 +375,99 @@ def _body_negation_becomes_valid_after_serialization(case: Case) -> bool:
     if meta is None:
         return False
 
-    body_meta = meta.components.get(ParameterLocation.BODY)
-    if body_meta is None or not body_meta.mode.is_negative:
+    if not meta.is_negative_at(ParameterLocation.BODY):
         return False
 
     media_type = case.media_type
     if media_type is None:
         return False
 
-    if not _is_stringifying_media_type(media_type):
+    if not _is_stringifying_media_type(media_type) and not _form_body_is_valid_as_sent(response, case, media_type):
         return False
 
-    # Only the body is negative and it's a stringifying media type
+    # Only the body is negative and it becomes valid once serialized
     return not _has_other_negated_location(case, ParameterLocation.BODY)
+
+
+def _form_body_is_valid_as_sent(response: Response, case: Case, media_type: str) -> bool:
+    """Whether a form body satisfies its schema as the server reads the fields actually sent."""
+    body = case.body
+    if not isinstance(body, dict):
+        return False
+    fields = _sent_form_fields(response, media_type)
+    if fields is None:
+        return False
+    alternative = case.operation.get_body_for_media_type(media_type)
+    if alternative is None:
+        return False
+    # Urlencoded names round-trip exactly, while multipart escapes some characters in part names.
+    names_are_exact = media_types.is_form_urlencoded(media_type)
+    try:
+        validator = make_validator(
+            alternative.optimized_schema, _get_openapi_schema(case).adapter.jsonschema_validator_cls
+        )
+        # A field missing from the wire was never received; empty lists and objects send nothing at all.
+        sent: dict[str, object] = {
+            name: value
+            for name, value in body.items()
+            if name not in fields and not names_are_exact and value not in ([], {})
+        }
+        for name, texts in fields.items():
+            if None in texts:
+                # Typed or file parts are not plain text, so they keep the generated value.
+                if name in body:
+                    sent[name] = body[name]
+                continue
+            readings = [reading for text in texts for reading in _form_text_readings(cast(str, text))]
+            # Servers read one of the repeated values and may parse it into the declared type.
+            sent[name] = next(
+                (reading for reading in readings if not _has_errors_at(validator, {**sent, name: reading}, name)),
+                readings[0],
+            )
+        return validator.is_valid(sent)
+    except Exception:
+        # Schemas the validator cannot read - can't tell whether the sent body is valid
+        return False
+
+
+def _form_text_readings(text: str) -> list[object]:
+    """The ways a server may read a form field: as text, or parsed as JSON into a number, boolean, or null."""
+    try:
+        parsed = json.loads(text)
+    except ValueError:
+        return [text]
+    return [text, parsed]
+
+
+def _has_errors_at(validator: jsonschema_rs.Validator, instance: dict[str, object], name: str) -> bool:
+    return any(error.instance_path[:1] == [name] for error in validator.iter_errors(instance))
+
+
+def _sent_form_fields(response: Response, media_type: str) -> Mapping[str, Sequence[str | None]] | None:
+    """Field values in the sent form body; `None` marks a value not sent as plain text."""
+    content = response.request.body
+    if isinstance(content, str):
+        content = content.encode()
+    if not isinstance(content, bytes):
+        return None
+    if media_types.is_form_urlencoded(media_type):
+        return parse_qs(content.decode("ascii", errors="replace"), keep_blank_values=True)
+    if media_types.parse(media_type) != ("multipart", "form-data"):
+        return None
+    content_type = response.request.headers.get("Content-Type", "")
+    message = BytesParser(policy=HTTP).parsebytes(f"Content-Type: {content_type}\r\n\r\n".encode() + content)
+    fields: dict[str, list[str | None]] = {}
+    for part in message.iter_parts():
+        # The encoder names every part.
+        name = cast(str, part.get_param("name", header="content-disposition"))
+        text = None
+        payload = part.get_payload(decode=True)
+        # Parts with a filename or their own content type are files or typed values, not plain text.
+        if isinstance(payload, bytes) and part.get_filename() is None and "content-type" not in part:
+            # Servers decode form text leniently, replacing bytes that are not valid UTF-8.
+            text = payload.decode(errors="replace")
+        fields.setdefault(name, []).append(text)
+    return fields
 
 
 def _body_negation_is_only_forbidden_property(case: Case) -> bool:
@@ -360,8 +479,7 @@ def _body_negation_is_only_forbidden_property(case: Case) -> bool:
     meta = case.meta
     assert meta is not None
 
-    body_meta = meta.components.get(ParameterLocation.BODY)
-    if body_meta is None or not body_meta.mode.is_negative:
+    if not meta.is_negative_at(ParameterLocation.BODY):
         return False
 
     # Another negative component carries its own expectation, so the check still applies.
@@ -372,58 +490,39 @@ def _body_negation_is_only_forbidden_property(case: Case) -> bool:
         return False
 
     validator_cls = _get_openapi_schema(case).adapter.jsonschema_validator_cls
-    for alternative in case.operation.body:
-        if alternative.media_type != case.media_type:
-            continue
-        schema = alternative.optimized_schema
-        permissive = alternative.permissive_schema
-        # No property was forbidden, so validating against the permissive schema would repeat the check below.
-        if permissive is schema:
+    alternative = case.operation.get_body_for_media_type(case.media_type)
+    if alternative is None:
+        return False
+    schema = alternative.optimized_schema
+    permissive = alternative.permissive_schema
+    # No property was forbidden, so validating against the permissive schema would repeat the check below.
+    if permissive is schema:
+        return False
+    try:
+        if make_validator(schema, validator_cls).is_valid(case.body):
             return False
-        try:
-            if make_validator(schema, validator_cls).is_valid(case.body):
-                return False
-            return make_validator(permissive, validator_cls).is_valid(case.body)
-        except Exception:
-            # Schemas or values the validator cannot read — can't tell what was negated
-            return False
-    return False
+        return make_validator(permissive, validator_cls).is_valid(case.body)
+    except Exception:
+        # Schemas or values the validator cannot read — can't tell what was negated
+        return False
 
 
-def _coerce_string_to_numeric(value: str, expected_types: list[str]) -> int | float | None:
-    """Try to coerce `value` to one of the numeric types in `expected_types`.
+def _single_element_array_becomes_valid_after_serialization(response: Response, case: Case) -> bool:
+    """Check if an array value for a scalar query parameter becomes valid after serialization.
 
-    Returns the coerced value, or `None` if the string is not parseable as any expected type.
-    Used to bridge wire-level string transmission (query/header/cookie/path) and
-    the JSON-typed schema constraints those parameters declare.
-    """
-    if "integer" in expected_types:
-        try:
-            return int(value)
-        except (ValueError, TypeError):
-            pass
-    if "number" in expected_types:
-        try:
-            return float(value)
-        except (ValueError, TypeError):
-            pass
-    return None
-
-
-def _single_element_array_becomes_valid_after_serialization(case: Case) -> bool:
-    """Check if an array value for a scalar parameter becomes valid after serialization.
-
-    In query/header/cookie parameters, arrays are serialized as repeated keys:
+    Query arrays are serialized as repeated keys:
     - Single-element [67] -> "?page=67" (identical to scalar 67)
     - Multi-element [True, 1] -> "?page_size=True&page_size=1"
 
     For single-element arrays, the serialized form is indistinguishable from a scalar,
-    so the server will accept any value valid for the original schema.
+    so the server accepts it only when that element is valid for the original schema.
 
     For multi-element arrays, some frameworks pick one value from repeated keys (e.g.
     the last one). If any element in the array is valid for the original scalar schema,
     the server may accept the request, making it an unreliable negative test.
 
+    Query values are also judged by the text actually sent, as nested lists and objects
+    serialize into repeated keys or their string representation.
     """
     from schemathesis.specs.openapi.adapter.parameters import OpenApiParameter
 
@@ -431,87 +530,86 @@ def _single_element_array_becomes_valid_after_serialization(case: Case) -> bool:
     if meta is None:
         return False
 
-    # Check query, header, and cookie parameters
-    for location in (
-        ParameterLocation.QUERY,
-        ParameterLocation.HEADER,
-        ParameterLocation.COOKIE,
-    ):
-        component = meta.components.get(location)
-        if component is None or not component.mode.is_negative:
+    location = ParameterLocation.QUERY
+    if not meta.is_negative_at(location):
+        return False
+    query: object = case.query
+    if not isinstance(query, Mapping):
+        return False
+
+    neutralized: set[tuple[ParameterLocation, str]] = set()
+    sent_query = _sent_query_values(response, case)
+
+    for param_name, param_value in query.items():
+        param = case.operation.query.get(param_name)
+        if param is None:
+            # This is an additional property, not a schema-defined parameter
+            continue
+        assert isinstance(param, OpenApiParameter)
+
+        # An optional parameter that was not sent at all can't make the request invalid.
+        if sent_query is not None and param_name not in sent_query and not param.is_required:
+            neutralized.add((location, param_name))
             continue
 
-        # Get the container (query, headers, cookies)
-        value = case.get_container(location)
-        if not isinstance(value, Mapping):
+        elements = param_value if isinstance(param_value, list) else []
+        sent_texts = sent_query.get(param_name, []) if sent_query is not None else []
+        if not elements and not sent_texts:
             continue
 
-        # Get the parameter definitions
-        container = getattr(case.operation, location.container_name)
+        schema = param.validation_schema
+        expected_types = parameter_types(schema)
 
-        # Check each parameter in the container
-        for param_name, param_value in value.items():
-            if param_name not in container:
-                # This is an additional property, not a schema-defined parameter
-                continue
+        if _declares_type(schema, "array"):
+            continue
 
-            if not isinstance(param_value, list) or not param_value:
-                continue
+        # A single element serializes identically to a scalar; multiple elements become repeated keys and
+        # some frameworks pick one of them. Either way, the request is valid if any element is.
+        try:
+            validator = param.get_validator()
+        except Exception:
+            neutralized.add((location, param_name))
+            continue
+        for element in elements:
+            if validator.is_valid(element):
+                neutralized.add((location, param_name))
+                break
+            # Query values are transmitted as strings, so a string element like "44" produces the same wire
+            # form as int 44. Frameworks that coerce the raw query value to integer/number/boolean will accept it.
+            if isinstance(element, str):
+                coerced = coerce_wire_string(element, expected_types)
+                if coerced is not None and numeric_wire_value_is_valid(coerced, validator.is_valid):
+                    neutralized.add((location, param_name))
+                    break
+        # Nested lists and objects reach the server as repeated keys or their string representation.
+        if any(sent_text_is_valid(text, validator.is_valid, expected_types) for text in sent_texts):
+            neutralized.add((location, param_name))
 
-            # Get the parameter definition
-            param = container.get(param_name)
-            if param is None:
-                continue
-
-            # Get the parameter schema from definition
-            assert isinstance(param, OpenApiParameter)
-            schema = param.definition.get("schema", {})
-
-            # Get the expected type(s) from the schema
-            expected_types = get_type(schema)
-
-            if "array" in expected_types or not expected_types:
-                continue
-
-            # Single-element arrays serialize identically to a scalar
-            if len(param_value) == 1:
-                return True
-
-            # Multi-element arrays serialize as repeated keys. If any element is valid
-            # for the full original schema (including enum, minimum, pattern, etc.),
-            # some frameworks may accept the request by picking that element.
-            try:
-                validator = make_validator(schema, param.adapter.jsonschema_validator_cls)
-            except Exception:
-                return True
-            for element in param_value:
-                if validator.is_valid(element):
-                    return True
-                # Query/header/cookie values are transmitted as strings, so a string element
-                # like "44" produces the same wire form as int 44. Frameworks that coerce the
-                # raw query value to integer/number will accept it.
-                if isinstance(element, str):
-                    coerced = _coerce_string_to_numeric(element, expected_types)
-                    if coerced is not None and validator.is_valid(coerced):
-                        return True
-
-    return False
+    if not neutralized:
+        return False
+    mutations = meta.phase.data.mutations
+    if not mutations:
+        # Without mutation records, any negative component outside the query still makes the request invalid.
+        return all(
+            component_location == location or not component.mode.is_negative
+            for component_location, component in meta.components.items()
+        )
+    # Any other mutated parameter or location still makes the request invalid.
+    return all((mutation.parameter_location, mutation.parameter) in neutralized for mutation in mutations)
 
 
-def _wire_value_matches_parameter(parameter: OpenApiParameter, expected_types: list[str], wire_value: str) -> bool:
+def _wire_value_matches_parameter(parameter: OpenApiParameter, wire_value: str) -> bool:
     """Check whether the text actually sent for `parameter` satisfies its original schema."""
-    if _coerce_string_to_numeric(wire_value, expected_types) is not None:
-        return True
     try:
-        validator = make_validator(parameter.validation_schema, parameter.adapter.jsonschema_validator_cls)
+        validator = parameter.get_validator()
     except Exception:
         # Schema rejected by jsonschema_rs - validity is unknown, so don't report a failure.
         return True
-    return validator.is_valid(wire_value)
+    return sent_text_is_valid(wire_value, validator.is_valid, parameter_types(parameter.validation_schema))
 
 
-def _string_type_mutation_becomes_valid_after_serialization(case: Case, location: ParameterLocation) -> bool:
-    """Check if a type mutation for a numeric path/query parameter becomes valid after serialization.
+def _type_mutations_become_valid_after_serialization(case: Case) -> bool:
+    """Check if every type mutation of a numeric path/query parameter becomes valid after serialization.
 
     Both path and query parameters are transmitted as strings on the wire, so a negative
     type mutation for an integer/number parameter can still be accepted when the serialized
@@ -522,58 +620,55 @@ def _string_type_mutation_becomes_valid_after_serialization(case: Case, location
       like {"5": "x"} produces ?param=5, which is integer-parseable.
     - Path parameters are additionally URL-decoded by servers (e.g. `%2B1` -> `+1`).
     """
-    from schemathesis.specs.openapi.adapter.parameters import OpenApiParameter
-
     meta = case.meta
     if meta is None:
         return False
 
-    target_component = meta.components.get(location)
-    if target_component is None or not target_component.mode.is_negative:
+    phase_data = meta.phase.data
+    if not isinstance(phase_data, (FuzzingPhaseData, StatefulPhaseData)) or not phase_data.mutations:
         return False
+
+    locations = set()
+    for mutation in phase_data.mutations:
+        location = mutation.parameter_location
+        component = meta.components.get(location) if location is not None else None
+        if (
+            mutation.operator != OperatorKind.CHANGE_TYPE
+            or location not in (ParameterLocation.PATH, ParameterLocation.QUERY)
+            or component is None
+            or not component.mode.is_negative
+            or mutation.parameter is None
+            or not _type_mutation_is_valid_on_wire(case, location, mutation.parameter)
+        ):
+            return False
+        locations.add(location)
 
     # If there are other negative components, we should still validate them.
-    if _has_other_negated_location(case, location):
-        return False
+    return not _has_other_negated_location(case, *locations)
 
-    phase_data = meta.phase.data
-    if not isinstance(phase_data, FuzzingPhaseData) or phase_data.parameter_location != location:
-        return False
-    # Multi-site mutations are conservatively skipped — can't pin one keyword expectation.
-    if len(phase_data.mutations) != 1 or phase_data.mutations[0].operator != OperatorKind.CHANGE_TYPE:
-        return False
 
-    container_name = location.container_name
+def _type_mutation_is_valid_on_wire(case: Case, location: ParameterLocation, name: str) -> bool:
+    from schemathesis.specs.openapi.adapter.parameters import OpenApiParameter
+
     case_container = case.get_container(location)
-    if not isinstance(case_container, Mapping) or not case_container:
+    parameter = case.operation.get_parameter_set(location).get(name)
+    if not isinstance(case_container, Mapping) or name not in case_container:
+        return False
+    if not isinstance(parameter, OpenApiParameter):
         return False
 
-    operation_container = getattr(case.operation, container_name)
-    names = [phase_data.parameter] if phase_data.parameter else list(case_container.keys())
-    for param_name in names:
-        if param_name is None or param_name not in case_container or param_name not in operation_container:
-            continue
-
-        value = case_container[param_name]
-        parameter = operation_container.get(param_name)
-        if not isinstance(parameter, OpenApiParameter):
-            continue
-        expected_types = get_type(parameter.definition.get("schema", {}))
-
-        if isinstance(value, (str, int, float)):
-            # `str` subclasses like already-encoded path values are rejected by the validator.
-            wire_value = str(value)
-            # Path parameters are URL-encoded; decode before parsing.
-            if location == ParameterLocation.PATH:
-                wire_value = unquote(wire_value)
-            if _wire_value_matches_parameter(parameter, expected_types, wire_value):
-                return True
-        elif location == ParameterLocation.QUERY and isinstance(value, dict):
-            # urlencode(doseq=True) iterates over dict keys, producing one query value per key.
-            # e.g. {"5": "x"} becomes ?page_size=5, which the server sees as a valid integer.
-            if any(_wire_value_matches_parameter(parameter, expected_types, str(key)) for key in value):
-                return True
-
+    value = case_container[name]
+    if isinstance(value, (str, int, float)):
+        # `str` subclasses like already-encoded path values are rejected by the validator.
+        wire_value = str(value)
+        # Path parameters are URL-encoded; decode before parsing.
+        if location == ParameterLocation.PATH:
+            wire_value = unquote(wire_value)
+        return _wire_value_matches_parameter(parameter, wire_value)
+    if location == ParameterLocation.QUERY and isinstance(value, dict):
+        # urlencode(doseq=True) iterates over dict keys, producing one query value per key.
+        # e.g. {"5": "x"} becomes ?page_size=5, which the server sees as a valid integer.
+        return any(_wire_value_matches_parameter(parameter, str(key)) for key in value)
     return False
 
 
@@ -591,8 +686,7 @@ def _path_array_becomes_valid_after_serialization(case: Case) -> bool:
     if meta is None:
         return False
 
-    component = meta.components.get(ParameterLocation.PATH)
-    if component is None or not component.mode.is_negative:
+    if not meta.is_negative_at(ParameterLocation.PATH):
         return False
 
     # If other locations are also negative, the acceptance can't be attributed to the path round-trip.
@@ -607,22 +701,93 @@ def _path_array_becomes_valid_after_serialization(case: Case) -> bool:
         parameter = operation_container.get(param_name)
         if not isinstance(parameter, OpenApiParameter):
             continue
-        schema = parameter.definition.get("schema", {})
+        schema = as_object_schema(parameter.validation_schema)
         if "array" not in get_type(schema) or parameter.definition.get("style", "simple") != "simple":
             continue
         try:
-            validator = make_validator(schema, parameter.adapter.jsonschema_validator_cls)
+            validator = parameter.get_validator()
         except Exception:
             return True
         # `unquote` keeps `str` subclasses intact, and splitting an empty string keeps the input
         # object; the validator rejects anything but a plain `str`.
-        if validator.is_valid(unquote(str(value)).split(",")):
+        items = unquote(str(value)).split(",")
+        if validator.is_valid(items):
+            return True
+        # Items arrive as text, so `18` is the wire form of `[18]` for an integer array.
+        item_types = get_type(schema.get("items", {}))
+        coerced = [coerce_wire_string(item, item_types) for item in items]
+        numbers = [value for value in coerced if value is not None]
+        if len(numbers) == len(coerced) and numeric_wire_value_is_valid(numbers, validator.is_valid):
             return True
 
     return False
 
 
-def _non_body_negative_values_match_schema(case: Case) -> bool:
+def _declares_type(schema: JsonSchema, name: str) -> bool:
+    declared = schema.get("type") if isinstance(schema, dict) else None
+    return declared == name or isinstance(declared, list) and name in declared
+
+
+def _url_sent_to_operation(response: Response, case: Case) -> ParseResult | None:
+    """The URL the response came from, or `None` if it is not this case's operation, e.g. after a redirect."""
+    request_url = urlparse(response.request.url)
+    try:
+        expected_path = _get_openapi_schema(case).get_full_path(prepare_path(case.path, case.path_parameters))
+    except InvalidSchema:
+        # Path parameters are missing, so the request could not have been sent to this operation.
+        return None
+    if request_url.path != expected_path:
+        return None
+    return request_url
+
+
+def _sent_query_values(response: Response, case: Case) -> dict[str, list[str]] | None:
+    """Parse the query actually sent, or `None` if the request was not sent to this case's operation."""
+    request_url = _url_sent_to_operation(response, case)
+    if request_url is None:
+        return None
+    return parse_qs(request_url.query, keep_blank_values=True)
+
+
+def _query_as_sent(
+    response: Response,
+    case: Case,
+    query: Mapping[str, object],
+    properties: dict[str, JsonSchema],
+    required: list[str],
+) -> dict[str, object] | None:
+    """Replace generated query values with the text actually sent wherever the server reads that text as is."""
+    sent_values = _sent_query_values(response, case)
+    if sent_values is None:
+        return None
+    sent: dict[str, object] = {}
+    # Iterating the generated query skips keys added outside of generation, e.g. query-based auth.
+    for name, value in query.items():
+        # Values like `[]` or `None` are not sent at all.
+        if name not in sent_values:
+            continue
+        texts = sent_values[name]
+        # Other types keep their generated value, as the server parses the text back into it.
+        schema = properties.get(name, {})
+        is_string = _declares_type(schema, "string")
+        # Frameworks read a blank non-string value as an absent one, which an optional parameter allows.
+        if texts == [""] and not is_string and name not in required:
+            continue
+        if texts == [""] or is_string:
+            sent[name] = texts[0] if len(texts) == 1 else texts
+        elif len(texts) == 1 and _declares_type(schema, "boolean"):
+            sent[name] = string_to_boolean(texts[0])
+        else:
+            sent[name] = value
+    return sent
+
+
+def _headers_as_read(headers: Mapping[str, object]) -> dict[str, object]:
+    """Header values as the application reads them: servers drop the spaces and tabs around each value."""
+    return {name: value.strip(" \t") if isinstance(value, str) else value for name, value in headers.items()}
+
+
+def _non_body_negative_values_match_schema(response: Response, case: Case) -> bool:
     """Check if all negative non-body parameter values are still valid against their original schema."""
     from schemathesis.specs.openapi.schemas import OpenApiSchema
 
@@ -631,20 +796,13 @@ def _non_body_negative_values_match_schema(case: Case) -> bool:
         return False
 
     # If body is also negative, this guard does not apply.
-    body_component = meta.components.get(ParameterLocation.BODY)
-    if body_component is not None and body_component.mode.is_negative:
+    if meta.is_negative_at(ParameterLocation.BODY):
         return False
 
     has_negative = False
 
-    for location in (
-        ParameterLocation.PATH,
-        ParameterLocation.QUERY,
-        ParameterLocation.HEADER,
-        ParameterLocation.COOKIE,
-    ):
-        component = meta.components.get(location)
-        if component is None or not component.mode.is_negative:
+    for location in CONCRETE_LOCATIONS:
+        if not meta.is_negative_at(location):
             continue
 
         value = case.get_container(location)
@@ -652,12 +810,20 @@ def _non_body_negative_values_match_schema(case: Case) -> bool:
             continue
 
         has_negative = True
-        container = getattr(case.operation, location.container_name)
+        container = case.operation.get_parameter_set(location)
         if not container:
             continue
+        if location == ParameterLocation.QUERY:
+            sent = _query_as_sent(
+                response, case, value, container.schema.get("properties", {}), container.schema.get("required", [])
+            )
+            if sent is not None:
+                value = sent
         v = dict(value) if location == ParameterLocation.HEADER else value
         if isinstance(v, dict):
             v = plain_str_values(v)
+        if location == ParameterLocation.HEADER:
+            v = _headers_as_read(v)
         try:
             if not container.get_strict_validator().is_valid(v):
                 # At least one parameter is invalid
@@ -670,11 +836,28 @@ def _non_body_negative_values_match_schema(case: Case) -> bool:
     return has_negative
 
 
+def _negative_body_replaced_by_caller(ctx: CheckContext, case: Case) -> bool:
+    """Whether the caller sent its own body, so the only invalid part of the case never reached the server."""
+    transport_kwargs = ctx.internals.transport_kwargs
+    if not transport_kwargs or not replaces_body(transport_kwargs):
+        return False
+    meta = case.meta
+    assert meta is not None
+    return not any(
+        component.mode.is_negative
+        for location, component in meta.components.items()
+        if location != ParameterLocation.BODY
+    )
+
+
 @schemathesis.check
-@requires_openapi_schema
+def negative_data_rejection(ctx: CheckContext, response: Response, case: Case) -> bool | None:
+    return case.operation.schema.evaluate_negative_data(ctx, response, case)
+
+
 @skips_on_unexpected_http_status
 @requires_case_meta
-def negative_data_rejection(ctx: CheckContext, response: Response, case: Case) -> bool | None:
+def _openapi_negative_data_rejection(ctx: CheckContext, response: Response, case: Case) -> bool | None:
     meta = case.meta
     assert meta is not None
 
@@ -685,13 +868,13 @@ def negative_data_rejection(ctx: CheckContext, response: Response, case: Case) -
         meta.generation.mode.is_negative
         and response.status_code not in allowed_statuses
         and not has_only_additional_properties_in_non_body_parameters(case)
-        and not _body_negation_becomes_valid_after_serialization(case)
+        and not _body_negation_becomes_valid_after_serialization(response, case)
         and not _body_negation_is_only_forbidden_property(case)
-        and not _single_element_array_becomes_valid_after_serialization(case)
-        and not _string_type_mutation_becomes_valid_after_serialization(case, ParameterLocation.PATH)
-        and not _string_type_mutation_becomes_valid_after_serialization(case, ParameterLocation.QUERY)
+        and not _single_element_array_becomes_valid_after_serialization(response, case)
+        and not _type_mutations_become_valid_after_serialization(case)
         and not _path_array_becomes_valid_after_serialization(case)
-        and not _non_body_negative_values_match_schema(case)
+        and not _non_body_negative_values_match_schema(response, case)
+        and not _negative_body_replaced_by_caller(ctx, case)
     ):
         extra_info = ""
         phase = meta.phase
@@ -746,10 +929,8 @@ def _collect_declared_properties(
         return set(), False
     reference = schema.get("$ref")
     if isinstance(reference, str):
-        if reference in visited:
-            return set(), False
-        target = bundle.get(reference.rsplit("/", 1)[-1])
-        if target is None:
+        target = resolve_bundled_ref(schema, bundle)
+        if reference in visited or target is schema:
             return set(), False
         return _collect_declared_properties(target, bundle, visited | {reference})
     properties = schema.get("properties")
@@ -777,6 +958,22 @@ def _blamed_body_properties(case: Case, response: Response) -> set[str]:
     return names
 
 
+def _contains_nul(value: object) -> bool:
+    """Whether any string key or value in a JSON-shaped value holds a NUL character."""
+    stack = [value]
+    while stack:
+        item = stack.pop()
+        if isinstance(item, str):
+            if "\x00" in item:
+                return True
+        elif isinstance(item, dict):
+            stack.extend(item.keys())
+            stack.extend(item.values())
+        elif isinstance(item, list):
+            stack.extend(item)
+    return False
+
+
 def _additional_properties_hint(case: Case, response: Response) -> str | None:
     """Return a hint if extra body properties are the likely cause of server rejection."""
     if not isinstance(case.body, dict):
@@ -789,43 +986,45 @@ def _additional_properties_hint(case: Case, response: Response) -> str | None:
 
     validator_cls = case.operation.schema.adapter.jsonschema_validator_cls
 
-    for alternative in case.operation.body:
-        if alternative.media_type != case.media_type:
-            continue
-        raw = alternative.raw_schema
-        if not isinstance(raw, dict):
-            return None
-        declared, forbids_extras = _collect_declared_properties(raw, raw.get(BUNDLE_STORAGE_KEY) or {}, set())
-        if forbids_extras:
-            return None
+    alternative = case.operation.get_body_for_media_type(case.media_type)
+    if alternative is None:
+        return None
+    raw = alternative.raw_schema
+    if not isinstance(raw, dict):
+        return None
+    declared, forbids_extras = _collect_declared_properties(raw, raw.get(BUNDLE_STORAGE_KEY) or {}, set())
+    if forbids_extras:
+        return None
 
-        extra = set(case.body.keys()) - declared
-        if not extra:
-            return None
+    extra = set(case.body.keys()) - declared
+    if not extra:
+        return None
+    # Many servers reject any string with a NUL character, so the extras are not the only plausible cause.
+    if _contains_nul(case.body):
+        return None
 
-        stripped = {k: v for k, v in case.body.items() if k not in extra}
-        # `format: binary` fields hold raw bytes the JSON Schema validator cannot accept.
-        if contains_binary(stripped):
-            return None
-        if not make_validator(alternative.optimized_schema, validator_cls).is_valid(stripped):
-            return None
+    stripped = {k: v for k, v in case.body.items() if k not in extra}
+    # `format: binary` fields hold raw bytes the JSON Schema validator cannot accept.
+    if contains_binary(stripped):
+        return None
+    if not make_validator(alternative.optimized_schema, validator_cls).is_valid(stripped):
+        return None
 
-        # The server named a declared field and none of the extras, so the extras did not cause the rejection.
-        blamed = _blamed_body_properties(case, response)
-        if blamed & declared and not blamed & extra:
-            return None
+    # The server named a declared field and none of the extras, so the extras did not cause the rejection.
+    blamed = _blamed_body_properties(case, response)
+    if blamed & declared and not blamed & extra:
+        return None
 
-        count = len(extra)
-        examples = ", ".join(f"`{k}`" for k in sorted(extra)[:3])
-        if count > 3:
-            examples += f" and {count - 3} more"
-        noun = "property" if count == 1 else "properties"
-        return (
-            f"\nHint: The request body contains {count} additional {noun} not defined in the schema "
-            f"({examples}). The server likely rejects unexpected fields. "
-            "Add `additionalProperties: false` to your schema to prevent this."
-        )
-    return None
+    count = len(extra)
+    examples = ", ".join(f"`{k}`" for k in sorted(extra)[:3])
+    if count > 3:
+        examples += f" and {count - 3} more"
+    noun = "property" if count == 1 else "properties"
+    return (
+        f"\nHint: The request body contains {count} additional {noun} not defined in the schema "
+        f"({examples}). The server appears to reject properties the schema allows. "
+        "Declare `additionalProperties: false` if extras are not accepted, or make the server ignore unknown fields."
+    )
 
 
 # Statuses a credential-granting operation may answer to a well-formed request carrying credentials that do not exist.
@@ -864,10 +1063,13 @@ def _grants_credentials(operation: APIOperation) -> bool:
 
 
 @schemathesis.check
-@requires_openapi_schema
+def positive_data_acceptance(ctx: CheckContext, response: Response, case: Case) -> bool | None:
+    return case.operation.schema.evaluate_positive_data(ctx, response, case)
+
+
 @skips_on_unexpected_http_status
 @requires_case_meta
-def positive_data_acceptance(ctx: CheckContext, response: Response, case: Case) -> bool | None:
+def _openapi_positive_data_acceptance(ctx: CheckContext, response: Response, case: Case) -> bool | None:
     meta = case.meta
     assert meta is not None
 
@@ -906,7 +1108,7 @@ def missing_required_header(ctx: CheckContext, response: Response, case: Case) -
         and data.scenario == CoverageScenario.MISSING_PARAMETER
     ):
         if data.parameter.lower() == "authorization":
-            expected_statuses = {401}
+            expected_statuses = frozenset({401})
         else:
             config = ctx.config.missing_required_header
             expected_statuses = expand_status_codes(config.expected_statuses or [])
@@ -914,32 +1116,23 @@ def missing_required_header(ctx: CheckContext, response: Response, case: Case) -
             # A drawn identifier rarely exists, so the server can reject the request before reading headers.
             if response.status_code == 404 and _targets_generated_resource(ctx, case.operation):
                 return None
-            allowed = ", ".join(map(str, expected_statuses))
+            sorted_statuses = sorted(expected_statuses)
+            allowed = ", ".join(map(str, sorted_statuses))
             raise MissingHeaderNotRejected(
                 operation=f"{case.method} {case.path}",
                 header_name=data.parameter,
                 status_code=response.status_code,
-                expected_statuses=list(expected_statuses),
+                expected_statuses=sorted_statuses,
                 message=f"Got {response.status_code} when missing required '{data.parameter}' header, expected {allowed}",
             )
     return None
-
-
-# Statuses that mean the server rejected the request at the authentication layer.
-AUTH_REJECTION_STATUSES = frozenset({401, 403})
-
-
-def _requires_authentication(operation: APIOperation) -> bool:
-    from schemathesis.specs.openapi.adapter.security import get_effective_security_scheme_names
-
-    return bool(get_effective_security_scheme_names(operation, operation.schema.raw_schema))
 
 
 def _targets_generated_resource(ctx: CheckContext, operation: APIOperation) -> bool:
     """Whether the resource this request targets was drawn rather than supplied by the user."""
     if "{" not in operation.path:
         return False
-    pinned = ctx._override.path_parameters if ctx._override is not None else {}
+    pinned = ctx.internals.override.path_parameters if ctx.internals.override is not None else {}
     return any(
         parameter.name not in pinned
         for parameter in operation.iter_parameters()
@@ -962,9 +1155,14 @@ def unsupported_method(ctx: CheckContext, response: Response, case: Case) -> boo
             # method dispatch. 405 is only guaranteed when the target resource exists.
             if response.status_code == 404 and _targets_generated_resource(ctx, case.operation):
                 return None
+            from schemathesis.specs.openapi.adapter.security import declares_security
+
             # Most frameworks authenticate before method dispatch, so a protected operation rejects an
             # undeclared method with 401/403 without ever reaching routing.
-            if response.status_code in AUTH_REJECTION_STATUSES and _requires_authentication(case.operation):
+            if response.status_code in AUTH_REJECTION_STATUSES and declares_security(case.operation):
+                return None
+            # Rate limiters usually run as middleware ahead of routing and throttle every method alike.
+            if response.status_code == 429:
                 return None
             raise UnsupportedMethodResponse(
                 operation=case.operation.label,
@@ -1011,15 +1209,15 @@ def allow_header_conformance(ctx: CheckContext, response: Response, case: Case) 
         return None
     parts = []
     if missing:
-        parts.append(f"missing documented methods: {', '.join(method.upper() for method in missing)}")
+        parts.append(f"Missing documented methods: {', '.join(method.upper() for method in missing)}")
     if undocumented:
-        parts.append(f"undocumented methods advertised: {', '.join(method.upper() for method in undocumented)}")
+        parts.append(f"Undocumented methods advertised: {', '.join(method.upper() for method in undocumented)}")
     raise AllowHeaderMismatch(
         operation=case.operation.label,
         allow_header=allow_header,
         missing_methods=[method.upper() for method in missing],
         undocumented_methods=[method.upper() for method in undocumented],
-        message=f"`Allow` header does not match the schema — {'; '.join(parts)}\n\nList exactly the methods this resource supports in `Allow`",
+        message=f"`Allow: {allow_header}` does not match the schema. {'. '.join(parts)}\n\nList exactly the methods this resource supports in `Allow`",
     )
 
 
@@ -1039,7 +1237,8 @@ def has_only_additional_properties_in_non_body_parameters(case: Case) -> bool:
     # available, trust the actually-targeted location over the coarse flags.
     phase_data = meta.phase.data
     if isinstance(phase_data, FuzzingPhaseData) and phase_data.mutations:
-        if phase_data.parameter_location in (ParameterLocation.BODY, ParameterLocation.PATH):
+        targeted = {phase_data.parameter_location, *(mutation.parameter_location for mutation in phase_data.mutations)}
+        if ParameterLocation.BODY in targeted or ParameterLocation.PATH in targeted:
             return False
     elif (ParameterLocation.BODY in meta.components and meta.components[ParameterLocation.BODY].mode.is_negative) or (
         ParameterLocation.PATH in meta.components and meta.components[ParameterLocation.PATH].mode.is_negative
@@ -1050,19 +1249,49 @@ def has_only_additional_properties_in_non_body_parameters(case: Case) -> bool:
     for location in (ParameterLocation.QUERY, ParameterLocation.HEADER, ParameterLocation.COOKIE):
         meta_for_location = meta.components.get(location)
         value = case.get_container(location)
+        if isinstance(value, Mapping) and location == ParameterLocation.HEADER:
+            value = _headers_as_read(value)
         if isinstance(value, Mapping) and meta_for_location is not None and meta_for_location.mode.is_negative:
-            container = getattr(case.operation, location.container_name)
+            container = case.operation.get_parameter_set(location)
             schema = container.schema
 
             if _has_serialization_sensitive_types(schema, container):
-                # Can't reliably determine if only additional properties were added
+                # Wire-serialized arrays and objects can't be re-validated, so only mutation metadata can tell.
+                if isinstance(phase_data, (FuzzingPhaseData, StatefulPhaseData)) and any(
+                    _negates_declared_parameter(mutation, location, schema) for mutation in phase_data.mutations
+                ):
+                    return False
+                # Coverage negates one parameter at a time; a scalar one reaches the wire as generated.
+                if (
+                    isinstance(phase_data, CoveragePhaseData)
+                    and phase_data.parameter_location == location
+                    and phase_data.parameter in container
+                    and not _allows_container_type(schema.get("properties", {}).get(phase_data.parameter, {}))
+                ):
+                    return False
                 continue
 
             properties = schema.get("properties", {})
-            value_without_additional_properties = {
-                k: _boolean_from_wire_spelling(v, properties.get(k, {})) for k, v in value.items() if k in container
-            }
             try:
+                value_without_additional_properties = {
+                    k: _boolean_from_wire_spelling(v, properties.get(k, {}), validator_cls)
+                    for k, v in value.items()
+                    if k in container
+                }
+                if isinstance(phase_data, (FuzzingPhaseData, StatefulPhaseData)):
+                    # Generated nulls are sent as the text `null`, but in a mutated parameter it may be a negated string.
+                    mutated = {
+                        mutation.parameter
+                        for mutation in phase_data.mutations
+                        if mutation.parameter_location == location
+                    }
+                    for name, item in value_without_additional_properties.items():
+                        if (
+                            name not in mutated
+                            and isinstance(item, str)
+                            and reads_as_null(item, make_validator(properties.get(name, {}), validator_cls).is_valid)
+                        ):
+                            value_without_additional_properties[name] = None
                 is_valid = make_validator(schema, validator_cls).is_valid(value_without_additional_properties)
             except Exception:
                 # Schema has an invalid pattern (e.g., valid Python regex but invalid ECMA 262)
@@ -1075,10 +1304,27 @@ def has_only_additional_properties_in_non_body_parameters(case: Case) -> bool:
     return True
 
 
-def _boolean_from_wire_spelling(value: object, schema: JsonSchema) -> object:
-    """Booleans reach the check spelled as the wire sends them, so read `true` / `false` back."""
-    if value in ("true", "false") and "boolean" in get_type(schema):
-        return value == "true"
+def _negates_declared_parameter(mutation: Mutation, location: ParameterLocation, schema: dict) -> bool:
+    """Whether `mutation` invalidates a declared parameter in a way that survives wire serialization."""
+    if mutation.parameter_location != location or mutation.parameter is None:
+        return False
+    if not _allows_container_type(schema.get("properties", {}).get(mutation.parameter, {})):
+        return True
+    # Other types arrive as a string that reads as a one-element array, and an empty value is sent as no value.
+    return mutation.operator != OperatorKind.CHANGE_TYPE and "required" not in mutation.keywords
+
+
+def _boolean_from_wire_spelling(
+    value: object, schema: JsonSchema, validator_cls: type[jsonschema_rs.Validator]
+) -> object:
+    """Booleans reach the check spelled as the wire sends them, so read spellings like `true`, `0`, or `yes` back."""
+    # A schema that admits strings may also admit booleans, e.g. through `allowEmptyValue`; a valid string stays one.
+    if (
+        isinstance(value, str)
+        and "boolean" in get_type(schema)
+        and not make_validator(schema, validator_cls).is_valid(value)
+    ):
+        return string_to_boolean(value)
     return value
 
 
@@ -1095,12 +1341,15 @@ def _has_serialization_sensitive_types(schema: dict, container: OpenApiParameter
     A better approach would be to apply serialization later on in the process.
     """
     properties = schema.get("properties", {})
-    for prop_name, prop_schema in properties.items():
-        if prop_name in container:
-            types = get_type(prop_schema)
-            if "array" in types or "object" in types:
-                return True
-    return False
+    return any(
+        _allows_container_type(prop_schema) for prop_name, prop_schema in properties.items() if prop_name in container
+    )
+
+
+def _allows_container_type(schema: JsonSchema) -> bool:
+    """Whether a parameter schema admits arrays or objects."""
+    types = parameter_types(schema)
+    return "array" in types or "object" in types
 
 
 # Methods that cannot re-create a resource — reading, modifying-in-place, or removing.
@@ -1124,7 +1373,7 @@ def _resource_recreated_after_delete(
     (DELETE -> POST) or via a second root POST that reuses a freed resource ID.
     """
     found_delete = False
-    for case in ctx._find_all_cases():
+    for case in ctx.internals.find_all_cases():
         if case.id == delete_case_id:
             found_delete = True
             continue
@@ -1132,7 +1381,7 @@ def _resource_recreated_after_delete(
             continue
         if case.id == current_case_id:
             return False
-        resp = ctx._find_response(case_id=case.id)
+        resp = ctx.internals.find_response(case_id=case.id)
         if (
             case.operation.method.lower() not in _NON_CREATION_METHODS
             and resp is not None
@@ -1155,7 +1404,18 @@ def _created_a_resource(*, parent: Case, parent_response: Response, case: Case) 
     """
     if len(parent.path.rstrip("/").split("/")) < len(case.path.rstrip("/").split("/")):
         return True
-    return parent_response.status_code == 201 or "Location" in parent_response.headers
+    return parent_response.status_code == 201 or "location" in parent_response.headers
+
+
+def _stale_cache_hint(response: Response) -> str:
+    # A shared cache can keep serving the pre-write state, so the failure may belong to the intermediary, not the API.
+    age = response.headers.get("age", [""])[0]
+    if age.isascii() and age.isdigit() and int(age) > 0:
+        return f"\n\nThe response came from a cache (`Age: {age}`) and may be stale"
+    x_cache = response.headers.get("x-cache", [""])[0]
+    if "HIT" in x_cache.upper():
+        return f"\n\nThe response came from a cache (`X-Cache: {x_cache}`) and may be stale"
+    return ""
 
 
 @schemathesis.check
@@ -1176,16 +1436,16 @@ def use_after_free(ctx: CheckContext, response: Response, case: Case) -> bool | 
     if case.operation.method.lower() not in _NON_CREATION_METHODS:
         return None
 
-    for related_case in ctx._find_related(case_id=case.id):
-        parent = ctx._find_parent(case_id=related_case.id)
+    for related_case in ctx.internals.find_related(case_id=case.id):
+        parent = ctx.internals.find_parent(case_id=related_case.id)
         if not parent:
             continue
 
-        parent_response = ctx._find_response(case_id=parent.id)
+        parent_response = ctx.internals.find_response(case_id=parent.id)
 
         # The DELETE itself must have succeeded for a subsequent read to be a use-after-free —
         # a 5xx (server crash) or 404 (nothing to delete) leaves the resource intact.
-        delete_response = ctx._find_response(case_id=related_case.id)
+        delete_response = ctx.internals.find_response(case_id=related_case.id)
         if (
             related_case.operation.method.lower() == "delete"
             and parent_response is not None
@@ -1218,6 +1478,7 @@ def use_after_free(ctx: CheckContext, response: Response, case: Case) -> bool | 
                     message=(
                         "The API did not return a `HTTP 404 Not Found` response "
                         f"(got `HTTP {response.status_code} {reason}`) for a resource that was previously deleted.\n\nThe resource was deleted with `{free}`"
+                        f"{_stale_cache_hint(response)}"
                     ),
                     free=free,
                     usage=usage,
@@ -1238,10 +1499,10 @@ def ensure_resource_availability(ctx: CheckContext, response: Response, case: Ca
     if response.status_code != 404:
         return None
 
-    parent = ctx._find_parent(case_id=case.id)
+    parent = ctx.internals.find_parent(case_id=case.id)
     if parent is None:
         return None
-    parent_response = ctx._find_response(case_id=parent.id)
+    parent_response = ctx.internals.find_response(case_id=parent.id)
     if parent_response is None:
         return None
 
@@ -1269,7 +1530,7 @@ def ensure_resource_availability(ctx: CheckContext, response: Response, case: Ca
 
     # Look for any successful DELETE operations on this resource across all recorded cases,
     # not just the current root's subtree.
-    if ctx._recorder is not None and resource_was_deleted(ctx._recorder, case):
+    if ctx.internals.recorder is not None and resource_was_deleted(ctx.internals.recorder, case, created_by=parent.id):
         # Resource was properly deleted, 404 is expected
         return None
 
@@ -1287,63 +1548,64 @@ def ensure_resource_availability(ctx: CheckContext, response: Response, case: Ca
             f"The API returned `{response.status_code} {reason}` for a resource that was just created.\n\n"
             f"Created with      : `{created_with}`\n"
             f"Not available with: `{not_available_with}`"
+            f"{_stale_cache_hint(response)}"
         ),
         created_with=created_with,
         not_available_with=not_available_with,
     )
 
 
-class AuthScenario(str, enum.Enum):
-    NO_AUTH = "no_auth"
-    INVALID_AUTH = "invalid_auth"
-    GENERATED_AUTH = "generated_auth"
-
-
-class AuthKind(str, enum.Enum):
+class AuthKind(enum.StrEnum):
     EXPLICIT = "explicit"
     GENERATED = "generated"
 
 
-# Statuses that mean the API refused an unauthenticated or badly authenticated request. Frameworks whose
-# first authentication scheme offers no challenge answer 403 instead of 401, and gateways do the same.
-AUTH_ENFORCED_STATUSES = frozenset({401, 403})
-
-
 @schemathesis.check
-@requires_openapi_schema
-@skips_on_unexpected_http_status
 def ignored_auth(ctx: CheckContext, response: Response, case: Case) -> bool | None:
     """Check if an operation declares authentication as a requirement but does not actually enforce it."""
+    return case.operation.schema.evaluate_auth(ctx, response, case)
+
+
+@skips_on_unexpected_http_status
+def _openapi_ignored_auth(ctx: CheckContext, response: Response, case: Case) -> bool | None:
     from schemathesis.specs.openapi.adapter.security import has_effective_optional_auth
 
     operation = case.operation
     if has_effective_optional_auth(operation, operation.schema.raw_schema):
         return True
+    # An invalid path parameter can miss the operation's route entirely, so the response says nothing about its auth.
+    if case.meta is not None and case.meta.is_negative_at(ParameterLocation.PATH):
+        return None
     security_parameters = get_security_parameters(case.operation)
     # Authentication is required for this API operation and response is successful
     if security_parameters and 200 <= response.status_code < 300:
+        # Probes can't remove credentials the schema doesn't declare, so their outcome proves nothing
+        if _has_undeclared_explicit_authorization(ctx, response, security_parameters):
+            return None
         auth = _contains_auth(ctx, case, response, security_parameters)
+        # Without valid credentials, a redirect elsewhere (e.g. to a sign-in page) is how the server refuses.
+        if auth != AuthKind.EXPLICIT and _url_sent_to_operation(response, case) is None:
+            return None
         if auth == AuthKind.EXPLICIT:
+            enforced = ctx.auth_enforced_operations
+            # Enforcement is a property of the operation, so one confirmation per run is enough.
+            if enforced is not None and case.operation.label in enforced:
+                return None
             # Auth is explicitly set, it is expected to be valid
             # Check if invalid auth will give an error
             no_auth_case = remove_auth(case, security_parameters)
-            kwargs = build_retry_transport_kwargs(ctx._transport_kwargs, security_parameters)
-            if case.operation.app is not None:
-                kwargs.setdefault("app", case.operation.app)
-            ctx._record_case(parent_id=case.id, case=no_auth_case)
-            no_auth_response = case.operation.schema.transport.send(no_auth_case, **kwargs)
-            ctx._record_response(case_id=no_auth_case.id, response=no_auth_response)
-            if no_auth_response.status_code not in AUTH_ENFORCED_STATUSES:
+            no_auth_response = send_probe(ctx, case, no_auth_case)
+            if not _enforces_auth(no_auth_response, response):
                 _raise_no_auth_error(no_auth_response, no_auth_case, AuthScenario.NO_AUTH)
             # Try to set invalid auth and check if it succeeds
             for parameter in security_parameters:
                 invalid_auth_case = remove_auth(case, security_parameters)
                 set_auth_for_case(invalid_auth_case, parameter)
-                ctx._record_case(parent_id=case.id, case=invalid_auth_case)
-                invalid_auth_response = case.operation.schema.transport.send(invalid_auth_case, **kwargs)
-                ctx._record_response(case_id=invalid_auth_case.id, response=invalid_auth_response)
-                if invalid_auth_response.status_code not in AUTH_ENFORCED_STATUSES:
+                invalid_auth_response = send_probe(ctx, case, invalid_auth_case)
+                if not _enforces_auth(invalid_auth_response, response):
                     _raise_no_auth_error(invalid_auth_response, invalid_auth_case, AuthScenario.INVALID_AUTH)
+            if enforced is not None:
+                enforced.add(case.operation.label)
         elif auth == AuthKind.GENERATED:
             # If this auth is generated which means it is likely invalid, then
             # this request should have been an error
@@ -1352,6 +1614,40 @@ def ignored_auth(ctx: CheckContext, response: Response, case: Case) -> bool | No
             # Successful response when there is no auth
             _raise_no_auth_error(response, case, AuthScenario.NO_AUTH)
     return None
+
+
+@schemathesis.check
+@requires_openapi_schema
+def object_level_authorization(ctx: CheckContext, response: Response, case: Case) -> bool | None:
+    """Check that one identity cannot read an object another identity created."""
+    from schemathesis.specs.openapi.object_authorization import check_object_level_authorization
+
+    check_object_level_authorization(ctx, response, case)
+    return None
+
+
+def _has_undeclared_explicit_authorization(
+    ctx: CheckContext, response: Response, security_parameters: list[SecurityParameter]
+) -> bool:
+    if any(p.location == ParameterLocation.HEADER and p.name.lower() == "authorization" for p in security_parameters):
+        return False
+    sources = [
+        ctx.internals.headers,
+        ctx.internals.override.headers if ctx.internals.override else None,
+        response._override.headers if response._override else None,
+    ]
+    return any(headers is not None and _has_header(headers, "Authorization") for headers in sources)
+
+
+def _has_header(headers: Mapping[str, Any], name: str) -> bool:
+    return any(key.lower() == name.lower() for key in headers)
+
+
+def _enforces_auth(response: Response, authenticated: Response) -> bool:
+    if response.status_code in AUTH_REJECTION_STATUSES or 300 <= response.status_code < 400:
+        return True
+    # Session-based auth redirects to a sign-in page; a followed redirect ends on a different path.
+    return urlparse(response.request.url).path != urlparse(authenticated.request.url).path
 
 
 def _raise_no_auth_error(response: Response, case: Case, auth: AuthScenario) -> NoReturn:
@@ -1379,19 +1675,21 @@ def _raise_no_auth_error(response: Response, case: Case, auth: AuthScenario) -> 
     raise IgnoredAuth(
         operation=case.operation.label,
         message=message,
+        scenario=auth,
         title=title,
         case_id=case.id,
     )
 
 
 def _contains_auth(
-    ctx: CheckContext, case: Case, response: Response, security_parameters: list[Mapping[str, Any]]
+    ctx: CheckContext, case: Case, response: Response, security_parameters: list[SecurityParameter]
 ) -> AuthKind | None:
     """Whether a request has authentication declared in the schema."""
     from requests.cookies import RequestsCookieJar
 
+    internals = ctx.internals
     # If auth comes from explicit `auth` option or a custom auth, it is always explicit
-    if ctx._auth is not None or case._has_explicit_auth:
+    if internals.auth is not None or case._has_explicit_auth:
         return AuthKind.EXPLICIT
     request = response.request
     parsed = urlparse(request.url)
@@ -1406,32 +1704,32 @@ def _contains_auth(
             # Generated values may render a header the stdlib parser rejects; fall back to the cookie jar.
             header_cookies = SimpleCookie()
 
-    def has_header(p: Mapping[str, Any]) -> bool:
-        return p["in"] == "header" and p["name"] in request.headers
+    def has_header(p: SecurityParameter) -> bool:
+        return p.location == ParameterLocation.HEADER and p.name in request.headers
 
-    def has_query(p: Mapping[str, Any]) -> bool:
-        return p["in"] == "query" and p["name"] in query
+    def has_query(p: SecurityParameter) -> bool:
+        return p.location == ParameterLocation.QUERY and p.name in query
 
-    def has_cookie(p: Mapping[str, Any]) -> bool:
+    def has_cookie(p: SecurityParameter) -> bool:
         cookies = cast(RequestsCookieJar, request._cookies)  # type: ignore[attr-defined]
-        return p["in"] == "cookie" and (p["name"] in cookies or p["name"] in header_cookies)
+        return p.location == ParameterLocation.COOKIE and (p.name in cookies or p.name in header_cookies)
 
     for parameter in security_parameters:
-        name = parameter["name"]
+        name = parameter.name
         if has_header(parameter):
             if (
                 # Explicit CLI headers
-                (ctx._headers is not None and name in ctx._headers)
+                (internals.headers is not None and name in internals.headers)
                 # Other kinds of overrides
-                or (ctx._override and name in ctx._override.headers)
-                or (response._override and name in response._override.headers)
+                or (internals.override and _has_header(internals.override.headers, name))
+                or (response._override and _has_header(response._override.headers, name))
             ):
                 return AuthKind.EXPLICIT
             return AuthKind.GENERATED
         if has_cookie(parameter):
             for headers in [
-                ctx._headers,
-                (ctx._override.headers if ctx._override else None),
+                internals.headers,
+                (internals.override.headers if internals.override else None),
                 (response._override.headers if response._override else None),
             ]:
                 if headers is not None and "Cookie" in headers:
@@ -1439,15 +1737,15 @@ def _contains_auth(
                     if name in jar:
                         return AuthKind.EXPLICIT
 
-            if (ctx._override and name in ctx._override.cookies) or (
+            if (internals.override and name in internals.override.cookies) or (
                 response._override and name in response._override.cookies
             ):
                 return AuthKind.EXPLICIT
             return AuthKind.GENERATED
         if has_query(parameter):
-            transport_params = ctx._transport_kwargs.get("params") if ctx._transport_kwargs else None
+            transport_params = internals.transport_kwargs.get("params") if internals.transport_kwargs else None
             if (
-                (ctx._override and name in ctx._override.query)
+                (internals.override and name in internals.override.query)
                 or (response._override and name in response._override.query)
                 or (isinstance(transport_params, dict) and name in transport_params)
             ):
@@ -1466,8 +1764,12 @@ class ResourcePath:
 
     __slots__ = ("value", "variables")
 
-    def get(self, key: str) -> str:
-        return self.variables[key.lstrip("{").rstrip("}")]
+    def render(self, segment: str) -> str:
+        # Segments may mix variables with literal text, like `{id}:cancel` or `{name}.{ext}`.
+        return _PATH_VARIABLE.sub(lambda match: str(self.variables[match.group(1)]), segment)
+
+
+_PATH_VARIABLE = re.compile(r"\{([^{}]+)\}")
 
 
 def _is_prefix_operation(lhs: ResourcePath, rhs: ResourcePath) -> bool:
@@ -1479,8 +1781,11 @@ def _is_prefix_operation(lhs: ResourcePath, rhs: ResourcePath) -> bool:
         return False
 
     for left, right in zip(lhs_parts, rhs_parts, strict=False):
-        if left.startswith("{") and right.startswith("{"):
-            if str(lhs.get(left)) != str(rhs.get(right)):
+        if "{" in left and "{" in right:
+            resource = lhs.render(left)
+            target = rhs.render(right)
+            # A custom method like `{id}:cancel` acts on the resource named before the colon.
+            if target != resource and not target.startswith(f"{resource}:"):
                 return False
         elif left != right and left.rstrip("s") != right.rstrip("s"):
             # Parts don't match, not a prefix
@@ -1490,19 +1795,17 @@ def _is_prefix_operation(lhs: ResourcePath, rhs: ResourcePath) -> bool:
     return True
 
 
-SAFE_METHODS = frozenset({"GET", "HEAD", "OPTIONS", "TRACE"})
-
-
-def resource_was_deleted(recorder: RecordedScenario, case: Case) -> bool:
+def resource_was_deleted(recorder: RecordedScenario, case: Case, *, created_by: str | None = None) -> bool:
     """Return True if a successful prior request in the scenario removed this case's resource.
 
     A DELETE covers every path below the one it targets. Any other unsafe verb may be a removal
     spelled with the wrong method, so it only counts against the resource's own URI. Used to
-    suppress false positives in checks and in link-calibration observations.
+    suppress false positives in checks and in link-calibration observations. The request that created
+    the resource is not a removal of it.
     """
     case_path = ResourcePath(case.path, case.path_parameters or {})
     for prior_case in recorder.find_all_cases():
-        if prior_case.id == case.id:
+        if prior_case.id in (case.id, created_by):
             continue
         method = prior_case.operation.method.upper()
         if method in SAFE_METHODS:

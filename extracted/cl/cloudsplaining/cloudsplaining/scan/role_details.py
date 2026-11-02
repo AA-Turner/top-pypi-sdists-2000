@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
+import contextlib
 import json
 import logging
 from typing import TYPE_CHECKING, Any
 
+from policy_sentry.util.arns import get_account_from_arn
+
 from cloudsplaining.scan.assume_role_policy_document import AssumeRolePolicyDocument
 from cloudsplaining.scan.inline_policy import InlinePolicy
 from cloudsplaining.shared import utils
+from cloudsplaining.shared.constants import ISSUE_SEVERITY, RISK_DEFINITION
 from cloudsplaining.shared.exceptions import NotFoundException
 from cloudsplaining.shared.exclusions import (
     DEFAULT_EXCLUSIONS,
@@ -39,6 +43,7 @@ class RoleDetailList:
         exclusions: Exclusions = DEFAULT_EXCLUSIONS,
         flag_conditional_statements: bool = False,
         flag_resource_arn_statements: bool = False,
+        flag_trust_policies: bool = False,
         severity: list[str] | None = None,
     ) -> None:
         self.severity = [] if severity is None else severity
@@ -50,6 +55,7 @@ class RoleDetailList:
         # Fix Issue #254 - Allow flagging risky actions even when there are resource constraints
         self.flag_conditional_statements = flag_conditional_statements
         self.flag_resource_arn_statements = flag_resource_arn_statements
+        self.flag_trust_policies = flag_trust_policies
         self.iam_data: dict[str, dict[Any, Any]] = {
             "groups": {},
             "users": {},
@@ -73,6 +79,7 @@ class RoleDetailList:
                         exclusions=exclusions,
                         flag_conditional_statements=self.flag_conditional_statements,
                         flag_resource_arn_statements=self.flag_resource_arn_statements,
+                        flag_trust_policies=flag_trust_policies,
                         severity=self.severity,
                     )
                 )
@@ -99,9 +106,7 @@ class RoleDetailList:
     @property
     def role_names(self) -> list[str]:
         """Get a list of all role names in the account"""
-        results = [role_detail.role_name for role_detail in self.roles]
-        results.sort()
-        return results
+        return sorted(role_detail.role_name for role_detail in self.roles)
 
     @property
     def all_infrastructure_modification_actions_by_inline_policies(self) -> list[str]:
@@ -123,8 +128,7 @@ class RoleDetailList:
     @property
     def json(self) -> dict[str, dict[str, Any]]:
         """Get all JSON results"""
-        result = {role.role_id: role.json for role in self.roles}
-        return result
+        return {role.role_id: role.json for role in self.roles}
 
 
 # pylint: disable=too-many-instance-attributes
@@ -138,6 +142,7 @@ class RoleDetail:
         exclusions: Exclusions = DEFAULT_EXCLUSIONS,
         flag_conditional_statements: bool = False,
         flag_resource_arn_statements: bool = False,
+        flag_trust_policies: bool = False,
         severity: list[str] | None = None,
     ) -> None:
         """
@@ -147,6 +152,7 @@ class RoleDetail:
         :param policy_details: The ManagedPolicyDetails object - i.e., details about all managed policies in the account
         so the role can inherit those attributes
         """
+        self.severity = [] if severity is None else severity
         # Metadata
         self.path = role_detail["Path"]
         self.role_name = role_detail["RoleName"]
@@ -165,6 +171,7 @@ class RoleDetail:
         # Fix Issue #254 - Allow flagging risky actions even when there are resource constraints
         self.flag_conditional_statements = flag_conditional_statements
         self.flag_resource_arn_statements = flag_resource_arn_statements
+        self.flag_trust_policies = flag_trust_policies
 
         self.iam_data: dict[str, dict[Any, Any]] = {
             "groups": {},
@@ -176,7 +183,16 @@ class RoleDetail:
         self.assume_role_policy_document = None
         assume_role_policy = role_detail.get("AssumeRolePolicyDocument")
         if assume_role_policy:
-            self.assume_role_policy_document = AssumeRolePolicyDocument(assume_role_policy)
+            # Extract current account ID from role ARN
+            current_account_id = None
+            if self.arn:
+                with contextlib.suppress(Exception):
+                    # If we can't parse the account ID, continue without it
+                    current_account_id = get_account_from_arn(self.arn)
+
+            self.assume_role_policy_document = AssumeRolePolicyDocument(
+                assume_role_policy, current_account_id, exclusions
+            )
 
         # TODO: Create a class for InstanceProfileList
         self.instance_profile_list = role_detail.get("InstanceProfileList", [])
@@ -275,22 +291,20 @@ class RoleDetail:
     @property
     def attached_customer_managed_policies_pointer_json(self) -> dict[str, str]:
         """Return metadata on attached managed policies so you can look it up in the policies section later."""
-        policies = {
+        return {
             policy.policy_id: policy.policy_name
             for policy in self.attached_managed_policies
             if not is_aws_managed(policy.arn)
         }
-        return policies
 
     @property
     def attached_aws_managed_policies_pointer_json(self) -> dict[str, str]:
         """Return metadata on attached managed policies so you can look it up in the policies section later."""
-        policies = {
+        return {
             policy.policy_id: policy.policy_name
             for policy in self.attached_managed_policies
             if is_aws_managed(policy.arn)
         }
-        return policies
 
     @property
     def all_infrastructure_modification_actions_by_inline_policies(self) -> list[str]:
@@ -303,32 +317,80 @@ class RoleDetail:
     @property
     def inline_policies_json(self) -> dict[str, dict[str, Any]]:
         """Return JSON representation of attached inline policies"""
-        policies = {policy.policy_id: policy.json_large for policy in self.inline_policies}
-        return policies
+        return {policy.policy_id: policy.json_large for policy in self.inline_policies}
 
     @property
     def inline_policies_pointer_json(self) -> dict[str, str]:
         """Return metadata on attached inline policies so you can look it up in the policies section later."""
-        policies = {policy.policy_id: policy.policy_name for policy in self.inline_policies}
-        return policies
+        return {policy.policy_id: policy.policy_name for policy in self.inline_policies}
 
     @property
     def json(self) -> dict[str, Any]:
         """Return the JSON representation of the Role Detail"""
         assume_role_json = self.assume_role_policy_document.json if self.assume_role_policy_document else {}
-        this_role_detail = dict(
-            arn=self.arn,
-            assume_role_policy=dict(PolicyDocument=assume_role_json),
-            create_date=self.create_date,
-            role_last_used=self.role_last_used,
-            id=self.role_id,
-            name=self.role_name,
-            inline_policies=self.inline_policies_pointer_json,
-            instance_profiles=self.instance_profile_list,
-            instances_count=len(self.instance_profile_list),
-            path=self.path,
-            customer_managed_policies=self.attached_customer_managed_policies_pointer_json,
-            aws_managed_policies=self.attached_aws_managed_policies_pointer_json,
-            is_excluded=self.is_excluded,
-        )
+        this_role_detail = {
+            "arn": self.arn,
+            "assume_role_policy": {"PolicyDocument": assume_role_json},
+            "create_date": self.create_date,
+            "role_last_used": self.role_last_used,
+            "id": self.role_id,
+            "name": self.role_name,
+            "inline_policies": self.inline_policies_pointer_json,
+            "instance_profiles": self.instance_profile_list,
+            "instances_count": len(self.instance_profile_list),
+            "path": self.path,
+            "customer_managed_policies": self.attached_customer_managed_policies_pointer_json,
+            "aws_managed_policies": self.attached_aws_managed_policies_pointer_json,
+            "is_excluded": self.is_excluded,
+        }
+
+        if self.flag_trust_policies:
+            severities = {x.lower() for x in self.severity}
+            this_role_detail.update(
+                {
+                    "AssumableByComputeServices": {
+                        "severity": ISSUE_SEVERITY["AssumableByComputeService"],
+                        "description": RISK_DEFINITION["AssumableByComputeService"],
+                        "findings": (
+                            self.assume_role_policy_document.role_assumable_by_compute_services
+                            if self.assume_role_policy_document
+                            and (ISSUE_SEVERITY["AssumableByComputeService"] in severities or not self.severity)
+                            else []
+                        ),
+                    },
+                    "AssumableByCrossAccountPrincipal": {
+                        "severity": ISSUE_SEVERITY["AssumableByCrossAccountPrincipal"],
+                        "description": RISK_DEFINITION["AssumableByCrossAccountPrincipal"],
+                        "findings": (
+                            self.assume_role_policy_document.role_assumable_by_cross_account_principals
+                            if self.assume_role_policy_document
+                            and (ISSUE_SEVERITY["AssumableByCrossAccountPrincipal"] in severities or not self.severity)
+                            else []
+                        ),
+                    },
+                    "AssumableByAnyPrincipal": {
+                        "severity": ISSUE_SEVERITY["AssumableByAnyPrincipal"],
+                        "description": RISK_DEFINITION["AssumableByAnyPrincipal"],
+                        "findings": (
+                            self.assume_role_policy_document.role_assumable_by_any_principal
+                            if self.assume_role_policy_document
+                            and (ISSUE_SEVERITY["AssumableByAnyPrincipal"] in severities or not self.severity)
+                            else []
+                        ),
+                    },
+                    "AssumableByAnyPrincipalWithConditions": {
+                        "severity": ISSUE_SEVERITY["AssumableByAnyPrincipalWithConditions"],
+                        "description": RISK_DEFINITION["AssumableByAnyPrincipalWithConditions"],
+                        "findings": (
+                            self.assume_role_policy_document.role_assumable_by_any_principal_with_conditions
+                            if self.assume_role_policy_document
+                            and (
+                                ISSUE_SEVERITY["AssumableByAnyPrincipalWithConditions"] in severities
+                                or not self.severity
+                            )
+                            else []
+                        ),
+                    },
+                }
+            )
         return this_role_detail

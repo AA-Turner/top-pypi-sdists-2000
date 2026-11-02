@@ -6,7 +6,8 @@ from _pytest.main import ExitCode
 from flask import Flask, Response, jsonify, request
 
 import schemathesis
-from schemathesis.python._constants.registry import default_registry
+from schemathesis.cli.commands.run.warnings import auth_flow_suggestion
+from schemathesis.core.transforms import deepclone
 
 
 def _serve_schema(ctx, cli, app_runner, schema: dict, routes):
@@ -18,38 +19,51 @@ def _serve_schema(ctx, cli, app_runner, schema: dict, routes):
     return app_runner.openapi_url(app)
 
 
-def test_missing_auth_warning_with_fail_on_true(ctx, cli, tmp_path, monkeypatch):
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_warnings_failing_the_run_are_named_in_the_final_line(ctx, cli, snapshot_cli):
     api = ctx.openapi.apps.basic()
-    # Given a config file that fails on all warnings
-    config_file = tmp_path / "schemathesis.toml"
-    config_file.write_text("""
-[warnings]
-fail-on = true
-""")
-    monkeypatch.chdir(tmp_path)
 
-    # When running tests without proper auth (will trigger missing_auth warning)
-    result = cli.run_and_assert(api.schema_url, exit_code=ExitCode.TESTS_FAILED)
-    # And warnings should be displayed
-    assert "WARNINGS" in result.stdout
-    assert "Authentication failed" in result.stdout
+    assert (
+        cli.run(
+            api.schema_url,
+            "--checks=not_a_server_error",
+            "--phases=fuzzing",
+            "--max-examples=1",
+            "--warnings=missing_auth,missing_test_data",
+            config={"warnings": {"fail-on": True}},
+        )
+        == snapshot_cli
+    )
 
 
-def test_missing_auth_warning_with_fail_on_specific(ctx, cli, tmp_path, monkeypatch):
+def test_final_line_does_not_count_warnings_that_do_not_fail_the_run(ctx, cli):
     api = ctx.openapi.apps.basic()
-    # Given a config file that fails only on missing_auth warnings
-    config_file = tmp_path / "schemathesis.toml"
-    config_file.write_text("""
-[warnings]
-fail-on = ["missing_auth"]
-""")
-    monkeypatch.chdir(tmp_path)
+    result = cli.run(
+        api.schema_url,
+        "--checks=not_a_server_error",
+        "--phases=fuzzing",
+        "--max-examples=1",
+        "--include-path=/api/basic",
+        "--include-path=/api/nope",
+        config={"warnings": {"fail-on": ["missing_auth"]}},
+    )
+    assert result.stdout.strip().splitlines()[-1].strip("= ").rsplit(" in ", 1)[0] == "Warnings fail the run"
 
-    # When running tests without proper auth (will trigger missing_auth warning)
-    result = cli.run_and_assert(api.schema_url, exit_code=ExitCode.TESTS_FAILED)
-    # And warnings should be displayed
-    assert "WARNINGS" in result.stdout
-    assert "Authentication failed" in result.stdout
+
+@pytest.mark.parametrize("fail_on", [["timeout_units"], True], ids=["specific", "all"])
+def test_timeout_units_warning_with_fail_on(ctx, cli, fail_on):
+    api = ctx.openapi.apps.success()
+
+    result = cli.run(
+        api.schema_url,
+        "--request-timeout=5000",
+        "--phases=fuzzing",
+        "--max-examples=1",
+        config={"warnings": {"fail-on": fail_on}},
+    )
+
+    final_line = result.stdout.strip().splitlines()[-1].strip("= ").rsplit(" in ", 1)[0]
+    assert (result.exit_code, final_line) == (ExitCode.TESTS_FAILED, "Warnings fail the run")
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
@@ -79,6 +93,32 @@ def test_missing_deserializer_warning_grouped_by_media_type(cli, ctx, snapshot_c
 
     api = ctx.openapi.apps.success()
     assert cli.run(str(schema_path), f"--url={api.base_url}/api", "--max-examples=1") == snapshot_cli
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_missing_deserializer_warning_names_unvalidated_media_type(cli, ctx, snapshot_cli):
+    # JSON responses are validated; only the CSV variant is skipped
+    body = {"type": "object", "properties": {"id": {"type": "integer"}}}
+    schema_path = ctx.openapi.write_schema(
+        {
+            "/users": {
+                "get": {
+                    "responses": {
+                        "200": {
+                            "description": "Success",
+                            "content": {"application/json": {"schema": body}, "text/csv": {"schema": body}},
+                        }
+                    }
+                }
+            }
+        }
+    )
+
+    api = ctx.openapi.apps.success()
+    assert (
+        cli.run(str(schema_path), f"--url={api.base_url}/api", "--warnings=missing_deserializer", "--max-examples=1")
+        == snapshot_cli
+    )
 
 
 def test_missing_deserializer_warning_with_fail_on(cli, ctx, tmp_path, monkeypatch):
@@ -148,47 +188,6 @@ def test_warnings_off_via_cli(cli, ctx):
     assert "Schema validation skipped" not in result.stdout
 
 
-def test_warnings_specific_type_via_cli(cli, ctx):
-    # When --warnings=missing_deserializer is used, only that warning type is shown
-    schema_path = ctx.openapi.write_schema(
-        {
-            "/users": {
-                "get": {
-                    "responses": {
-                        "200": {
-                            "description": "Success",
-                            "content": {
-                                "application/msgpack": {
-                                    "schema": {"type": "object", "properties": {"id": {"type": "integer"}}}
-                                }
-                            },
-                        }
-                    }
-                }
-            }
-        }
-    )
-
-    api = ctx.openapi.apps.success()
-    result = cli.run(
-        str(schema_path), f"--url={api.base_url}/api", "--warnings=missing_deserializer", "--max-examples=1"
-    )
-
-    # Then the specified warning should be displayed
-    assert "WARNINGS" in result.stdout
-    assert "Schema validation skipped" in result.stdout
-
-
-def test_warnings_multiple_types_via_cli(ctx, cli):
-    api = ctx.openapi.apps.basic()
-    # When --warnings with comma-separated values is used
-    result = cli.run(api.schema_url, "--warnings=missing_auth,missing_test_data", "--max-examples=1")
-
-    # Then warnings can still be triggered for specified types
-    # (This just validates the flag is parsed correctly - actual warnings depend on test conditions)
-    assert result.exit_code in (ExitCode.OK, ExitCode.TESTS_FAILED)
-
-
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_final_line_counts_all_warning_kinds_in_run(cli, ctx, app_runner, snapshot_cli):
     # Regression test: the footer "N warnings in Xs" should count warning *kinds*, not just missing_auth operations
@@ -218,24 +217,13 @@ def test_final_line_counts_all_warning_kinds_in_run(cli, ctx, app_runner, snapsh
         return Response(status=404)
 
     schema_url = _serve_schema(ctx, cli, app_runner, schema, [("GET", "/auth", auth), ("GET", "/missing", missing)])
-    assert cli.run(schema_url, "--checks=not_a_server_error", "--max-examples=1") == snapshot_cli
-
-
-def test_warning_on_unauthorized(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.basic()
-    # When endpoint returns only 401
-    # Then the output should contain a warning about it
-    assert (
-        cli.run(
-            api.schema_url,
-            "-c not_a_server_error",
-            "--mode=positive",
-            "--phases=fuzzing",
-            "--mode=positive",
-            "-n 10",
-        )
-        == snapshot_cli
-    )
+    result = cli.run(schema_url, "--checks=not_a_server_error", "--max-examples=1")
+    assert result == snapshot_cli
+    # Each warning's title in the WARNINGS section matches its entry in the summary.
+    warnings, summary = result.stdout.split("WARNINGS", 1)[1].split("SUMMARY", 1)
+    headers = sorted(line.split(" in ", 1)[0] for line in warnings.splitlines() if ": " in line and line[0].isalpha())
+    entries = sorted(line.strip().removeprefix("⚠️ ") for line in summary.splitlines() if "⚠️" in line)
+    assert [line.split(": ", 1)[0] for line in headers] == [line.split(": ", 1)[0] for line in entries]
 
 
 def test_warning_on_no_2xx(ctx, cli, snapshot_cli):
@@ -286,8 +274,29 @@ def test_warning_on_no_2xx_options_only(ctx, cli, snapshot_cli):
                 }
             },
         ),
+        (
+            (),
+            {
+                "config": {
+                    "warnings": False,
+                    "operations": [
+                        {"include-name": "GET /api/failure", "warnings": ["missing_test_data"]},
+                    ],
+                }
+            },
+        ),
+        (
+            (),
+            {
+                "config": {
+                    "operations": [
+                        {"include-name": "GET /api/failure", "warnings": {"fail-on": ["missing_test_data"]}},
+                    ],
+                }
+            },
+        ),
     ],
-    ids=["default", "selected", "disabled-all", "disabled-operation"],
+    ids=["default", "selected", "disabled-all", "disabled-operation", "enabled-operation", "fail-on-operation"],
 )
 def test_warning_on_all_not_found(ctx, cli, snapshot_cli, args, kwargs):
     api = ctx.openapi.apps.success_and_failure()
@@ -389,6 +398,193 @@ def test_missing_test_data_advice_for_unusable_linked_data(ctx, cli, snapshot_cl
     )
 
 
+def test_withdrawn_missing_test_data_warning_does_not_fail_the_run(ctx, cli, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "post": {
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "links": {
+                                "GetItem": {
+                                    "operationId": "getItem",
+                                    "parameters": {"item_id": "$response.body#/id"},
+                                }
+                            },
+                        }
+                    }
+                }
+            },
+            "/items/{item_id}": {
+                "get": {
+                    "operationId": "getItem",
+                    "parameters": [{"in": "path", "name": "item_id", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                }
+            },
+        }
+    )
+    items = set()
+
+    @app.route("/items", methods=["POST"])
+    def create_item():
+        item_id = f"item-{len(items) + 1}"
+        items.add(item_id)
+        return jsonify({"id": item_id}), 201
+
+    @app.route("/items/<item_id>", methods=["GET"])
+    def get_item(item_id):
+        if item_id in items:
+            return jsonify({"id": item_id})
+        return jsonify({"message": "Not found"}), 404
+
+    result = cli.run(
+        app_runner.openapi_url(app),
+        "-c not_a_server_error",
+        "--phases=fuzzing,stateful",
+        "--mode=positive",
+        "--max-examples=10",
+        config={"warnings": {"fail-on": ["missing_test_data"]}},
+    )
+
+    assert (
+        "WARNINGS" in result.stdout,
+        result.exit_code,
+        result.stdout.strip().splitlines()[-1].strip("= ").rsplit(" in ", 1)[0],
+    ) == (False, ExitCode.OK, "No issues found")
+
+
+def _run_missing_test_data(cli, app_runner, app, phases, **config):
+    result = cli.run(
+        app_runner.openapi_url(app),
+        "-c not_a_server_error",
+        f"--phases={phases}",
+        "--mode=positive",
+        "--max-examples=10",
+        config={"warnings": {"fail-on": ["missing_test_data"]}, **config},
+    )
+    return (
+        "Missing test data" in result.stdout,
+        result.exit_code,
+        result.stdout.strip().splitlines()[-1].strip("= ").rsplit(" in ", 1)[0],
+    )
+
+
+def test_missing_test_data_warning_withdrawn_by_later_phase(ctx, cli, app_runner):
+    # The schema example names a resource the server lacks; generated values reach existing ones.
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items/{item_id}": {
+                "get": {
+                    "parameters": [
+                        {
+                            "in": "path",
+                            "name": "item_id",
+                            "required": True,
+                            "schema": {"type": "string"},
+                            "example": "missing",
+                        }
+                    ],
+                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                }
+            },
+        }
+    )
+
+    @app.route("/items/<item_id>", methods=["GET"])
+    def get_item(item_id):
+        if item_id == "missing":
+            return jsonify({"message": "Not found"}), 404
+        return jsonify({"id": item_id})
+
+    assert _run_missing_test_data(cli, app_runner, app, "examples,fuzzing") == (False, ExitCode.OK, "No issues found")
+
+
+def test_missing_test_data_per_operation_fail_on_ignores_other_operations(ctx, cli, app_runner):
+    # Only `GET /orders/{id}` fails on the warning, and a later phase withdraws it; `GET /items/{id}` stays warned.
+    parameters = [{"in": "path", "name": "id", "required": True, "schema": {"type": "string"}, "example": "missing"}]
+    responses = {"200": {"description": "OK"}, "404": {"description": "Not found"}}
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items/{id}": {"get": {"parameters": parameters, "responses": responses}},
+            "/orders/{id}": {"get": {"parameters": parameters, "responses": responses}},
+        }
+    )
+
+    @app.route("/items/<id>", methods=["GET"])
+    def get_item(id):
+        return jsonify({"message": "Not found"}), 404
+
+    @app.route("/orders/<id>", methods=["GET"])
+    def get_order(id):
+        if id == "missing":
+            return jsonify({"message": "Not found"}), 404
+        return jsonify({"id": id})
+
+    assert _run_missing_test_data(
+        cli,
+        app_runner,
+        app,
+        "examples,fuzzing",
+        warnings=True,
+        operations=[{"include-name": "GET /orders/{id}", "warnings": {"fail-on": ["missing_test_data"]}}],
+    ) == (True, ExitCode.OK, "1 warning")
+
+
+def test_missing_test_data_warning_withdrawn_by_documented_redirect(ctx, cli, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "post": {
+                    "responses": {
+                        "201": {
+                            "description": "Created",
+                            "links": {
+                                "GetItem": {"operationId": "getItem", "parameters": {"item_id": "$response.body#/id"}}
+                            },
+                        }
+                    }
+                }
+            },
+            "/items/{item_id}": {
+                "get": {
+                    "operationId": "getItem",
+                    "parameters": [
+                        {
+                            "in": "path",
+                            "name": "item_id",
+                            "required": True,
+                            "schema": {"type": "string"},
+                            "example": "missing",
+                        }
+                    ],
+                    "responses": {"303": {"description": "See Other"}, "404": {"description": "Not found"}},
+                }
+            },
+        }
+    )
+    items = set()
+
+    @app.route("/items", methods=["POST"])
+    def create_item():
+        item_id = f"item-{len(items) + 1}"
+        items.add(item_id)
+        return jsonify({"id": item_id}), 201
+
+    @app.route("/items/<item_id>", methods=["GET"])
+    def get_item(item_id):
+        if item_id in items:
+            return Response(status=303, headers={"Location": f"https://example.com/{item_id}"})
+        return jsonify({"message": "Not found"}), 404
+
+    assert _run_missing_test_data(cli, app_runner, app, "examples,stateful", **{"max-redirects": 0}) == (
+        False,
+        ExitCode.OK,
+        "No issues found",
+    )
+
+
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_missing_test_data_advice_from_dependency_graph(ctx, cli, snapshot_cli):
     # No links are declared, so the advice comes from the inferred dependency graph:
@@ -471,14 +667,7 @@ def test_missing_test_data_advice_grouped_by_cause(ctx, cli, snapshot_cli):
     )
 
 
-@pytest.fixture
-def _clean_registry():
-    default_registry().clear()
-    yield
-    default_registry().clear()
-
-
-@pytest.mark.usefixtures("_clean_registry")
+@pytest.mark.usefixtures("clean_constants_registry")
 def test_constants_extraction_warning_displayed(cli, ctx):
     @schemathesis.python.constants
     def broken_source():
@@ -533,8 +722,17 @@ def test_silent_when_the_schema_declares_no_base_path(ctx, cli, app_runner, snap
     assert cli.run(schema_url, f"--url={base}", "--max-examples=2", "--phases=fuzzing") == snapshot_cli
 
 
-def test_no_missing_auth_warning_when_the_operation_later_succeeds(ctx, cli, app_runner):
-    # Rejected once, served afterwards: the run as a whole got past authentication.
+ORDERS = {
+    "/orders/{orderId}": {
+        "get": {
+            "parameters": [{"name": "orderId", "in": "path", "required": True, "schema": {"type": "string"}}],
+            "responses": {"200": {"description": "OK"}, "404": {"description": "Not Found"}},
+        }
+    }
+}
+
+
+def _rejected_once_then_served(ctx, cli, app_runner, paths, routes):
     schema = ctx.openapi.build_schema(
         {
             "/thing": {
@@ -544,7 +742,8 @@ def test_no_missing_auth_warning_when_the_operation_later_succeeds(ctx, cli, app
                     ],
                     "responses": {"200": {"description": "OK"}},
                 }
-            }
+            },
+            **paths,
         }
     )
     calls = {"n": 0}
@@ -555,20 +754,35 @@ def test_no_missing_auth_warning_when_the_operation_later_succeeds(ctx, cli, app
             return Response(status=401)
         return Response('{"ok": true}', status=200, content_type="application/json")
 
-    schema_url = _serve_schema(ctx, cli, app_runner, schema, [("GET", "/thing", thing)])
-    result = cli.run(schema_url, "-c not_a_server_error", "--max-examples=5", "--phases=examples,fuzzing")
-
-    assert "Missing authentication" not in result.stdout
+    return _serve_schema(ctx, cli, app_runner, schema, [("GET", "/thing", thing), *routes])
 
 
-ORDERS = {
-    "/orders/{orderId}": {
-        "get": {
-            "parameters": [{"name": "orderId", "in": "path", "required": True, "schema": {"type": "string"}}],
-            "responses": {"200": {"description": "OK"}, "404": {"description": "Not Found"}},
-        }
-    }
-}
+def _not_found(order_id):
+    return Response(status=404)
+
+
+@pytest.mark.parametrize(
+    ("paths", "routes", "final_line"),
+    [
+        ({}, [], "No issues found"),
+        (ORDERS, [("GET", "/orders/<order_id>", _not_found)], "1 warning"),
+    ],
+    ids=["no-other-warnings", "other-warning-not-in-fail-on"],
+)
+def test_withdrawn_missing_auth_warning_does_not_fail_the_run(ctx, cli, app_runner, paths, routes, final_line):
+    schema_url = _rejected_once_then_served(ctx, cli, app_runner, paths, routes)
+    result = cli.run(
+        schema_url,
+        "-c not_a_server_error",
+        "--max-examples=5",
+        "--phases=examples,fuzzing",
+        config={"warnings": {"fail-on": ["missing_auth"]}},
+    )
+    assert (
+        result.exit_code,
+        result.stdout.strip().splitlines()[-1].strip("= ").rsplit(" in ", 1)[0],
+        "Authentication failed" in result.stdout,
+    ) == (ExitCode.OK, final_line, False)
 
 
 LOW_VALID_RATE_ARGS = ("--max-examples=10", "--phases=fuzzing", "-m", "positive", "--warnings=low_valid_rate")
@@ -587,29 +801,12 @@ def _orders_app(ctx, *, accept_every, rejection_status=404):
     return app
 
 
-def test_low_valid_rate_reported(ctx, cli):
-    app = _orders_app(ctx, accept_every=10)
-
-    result = cli.run_openapi_app(app, *LOW_VALID_RATE_ARGS)
-
-    assert "Low valid-input rate" in result.stdout
-    assert "GET /orders/{orderId}" in result.stdout
-
-
 def test_low_valid_rate_is_opt_in(ctx, cli):
     app = _orders_app(ctx, accept_every=10)
 
     result = cli.run_openapi_app(app, "--max-examples=10", "--phases=fuzzing", "-m", "positive")
 
     assert "Low valid-input rate" not in result.stdout
-
-
-@pytest.mark.snapshot(replace_reproduce_with=True)
-def test_low_valid_rate_warning(ctx, cli, snapshot_cli):
-    # One request in ten reaches the resource; the rest are well-formed but hit nothing.
-    app = _orders_app(ctx, accept_every=10)
-
-    assert cli.run_openapi_app(app, *LOW_VALID_RATE_ARGS) == snapshot_cli
 
 
 def test_low_valid_rate_distinguishes_rejections_from_missing_resources(ctx, cli):
@@ -619,6 +816,31 @@ def test_low_valid_rate_distinguishes_rejections_from_missing_resources(ctx, cli
 
     assert "(1/10, 9 rejected)" in result.stdout
     assert "refused on their data" in result.stdout
+
+
+def test_low_valid_rate_distinguishes_conflicts_from_rejections(ctx, cli):
+    app = _orders_app(ctx, accept_every=10, rejection_status=409)
+
+    result = cli.run_openapi_app(app, *LOW_VALID_RATE_ARGS, "--checks=not_a_server_error")
+
+    assert "(1/10, 9 conflicts)" in result.stdout
+    assert "collided with existing resources" in result.stdout
+
+
+def test_no_low_valid_rate_warning_for_rate_limited_requests(ctx, cli):
+    app = _orders_app(ctx, accept_every=10, rejection_status=429)
+
+    result = cli.run_openapi_app(app, *LOW_VALID_RATE_ARGS, "--checks=not_a_server_error")
+
+    assert "Low valid-input rate" not in result.stdout
+
+
+def test_no_low_valid_rate_warning_for_redirect_responses(ctx, cli):
+    app = _orders_app(ctx, accept_every=10, rejection_status=300)
+
+    result = cli.run_openapi_app(app, *LOW_VALID_RATE_ARGS, "--checks=not_a_server_error")
+
+    assert "Low valid-input rate" not in result.stdout
 
 
 def test_no_low_valid_rate_warning_when_most_requests_are_accepted(ctx, cli):
@@ -673,14 +895,6 @@ def test_low_valid_rate_for_graphql(ctx, cli, snapshot_cli):
     assert cli.run(api.schema_url, *LOW_VALID_RATE_ARGS, "--continue-on-failure") == snapshot_cli
 
 
-def test_low_valid_rate_tip_for_graphql(ctx, cli):
-    api = ctx.graphql.apps.from_schema(_erratic_books_schema())
-
-    result = cli.run(api.schema_url, *LOW_VALID_RATE_ARGS, "--continue-on-failure")
-
-    assert "supply argument values via a fuzz dictionary" in result.stdout
-
-
 GRAPHQL_SDL = """
 type Book {
   id: String!
@@ -694,23 +908,15 @@ type Query {
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
-def test_missing_test_data_for_graphql(cli, app_runner, tmp_path, snapshot_cli):
+def test_missing_test_data_for_graphql(ctx, cli, snapshot_cli):
     # A 200 with neither `data` nor `errors` fails no check, so nothing else in the run says the query was never served.
-    sdl = tmp_path / "schema.graphql"
-    sdl.write_text(GRAPHQL_SDL)
-
-    app = Flask(__name__)
-
-    @app.route("/graphql", methods=["POST"])
-    def graphql():
-        return jsonify({"data": None})
-
-    port = app_runner.run_flask_app(app)
+    sdl = ctx.graphql.write_sdl(GRAPHQL_SDL)
+    api = ctx.graphql.apps.canned_response({"data": None})
 
     assert (
         cli.run(
             str(sdl),
-            f"--url=http://127.0.0.1:{port}/graphql",
+            f"--url={api.schema_url}",
             "--max-examples=5",
             "--phases=fuzzing",
             "-m",
@@ -727,11 +933,11 @@ type Mutation {{
 """
 
 
+# The canned responses ignore the selection set.
 @pytest.mark.snapshot(replace_reproduce_with=True)
-def test_missing_test_data_for_graphql_survives_stateful(cli, app_runner, tmp_path, snapshot_cli):
+def test_missing_test_data_for_graphql_survives_stateful(ctx, cli, app_runner, snapshot_cli):
     # The mutation is served, so the stateful phase reaches the query - but it still returns no data.
-    sdl = tmp_path / "schema.graphql"
-    sdl.write_text(GRAPHQL_SDL_WITH_MUTATION)
+    sdl = ctx.graphql.write_sdl(GRAPHQL_SDL_WITH_MUTATION)
 
     app = Flask(__name__)
 
@@ -744,6 +950,359 @@ def test_missing_test_data_for_graphql_survives_stateful(cli, app_runner, tmp_pa
     port = app_runner.run_flask_app(app)
 
     assert (
-        cli.run(str(sdl), f"--url=http://127.0.0.1:{port}/graphql", "--max-examples=5", "-m", "positive")
+        cli.run(
+            str(sdl),
+            f"--url=http://127.0.0.1:{port}/graphql",
+            "--max-examples=5",
+            "-m",
+            "positive",
+            "--exclude-checks=response_schema_conformance",
+        )
         == snapshot_cli
     )
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_validation_mismatch_ignores_undeclared_method_probes(ctx, cli, snapshot_cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/bookings/{booking_id}": {
+                "get": {
+                    "parameters": [
+                        {"name": "booking_id", "in": "path", "required": True, "schema": {"type": "string"}}
+                    ],
+                    "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                }
+            },
+            "/bookings": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {"application/json": {"schema": {"type": "object"}}},
+                    },
+                    "responses": {"201": {"description": "Created"}, "422": {"description": "Invalid"}},
+                }
+            },
+        }
+    )
+
+    @app.route("/bookings/<booking_id>", methods=["GET"], provide_automatic_options=False)
+    def get_booking(booking_id):
+        return jsonify({"detail": "Not found"}), 404
+
+    @app.route("/bookings", methods=["POST"], provide_automatic_options=False)
+    def create_booking():
+        return jsonify({"detail": "Invalid"}), 422
+
+    assert cli.run_openapi_app(app, "--phases=coverage", "-c not_a_server_error") == snapshot_cli
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_validation_mismatch_ignores_negative_rejections(ctx, cli, snapshot_cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items/{item_id}": {
+                "get": {
+                    "parameters": [
+                        {"name": "item_id", "in": "path", "required": True, "schema": {"type": "integer"}},
+                        {
+                            "name": "p0",
+                            "in": "query",
+                            "required": False,
+                            "schema": {"type": "integer", "minimum": 1, "maximum": 100},
+                        },
+                    ],
+                    "responses": {
+                        "200": {"description": "OK"},
+                        "404": {"description": "Not found"},
+                        "422": {"description": "Invalid"},
+                    },
+                }
+            }
+        }
+    )
+
+    @app.route("/items/<item_id>", methods=["GET"])
+    def get_item(item_id):
+        try:
+            int(item_id)
+            values = [int(value) for value in request.args.getlist("p0")]
+        except ValueError:
+            return jsonify({"detail": "Invalid"}), 422
+        if len(values) > 1 or any(not 1 <= value <= 100 for value in values):
+            return jsonify({"detail": "Invalid"}), 422
+        return jsonify({"detail": "Not found"}), 404
+
+    assert cli.run_openapi_app(app, "--phases=coverage", "--max-examples=10") == snapshot_cli
+
+
+@pytest.mark.parametrize(("status", "expected"), [(422, True), (409, False)], ids=["rejected", "conflict"])
+def test_validation_mismatch_ignores_conflicts(ctx, cli, status, expected):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items/{item_id}": {
+                "delete": {
+                    "parameters": [
+                        {"name": "item_id", "in": "path", "required": True, "schema": {"type": "integer", "minimum": 1}}
+                    ],
+                    "responses": {"204": {"description": "Deleted"}, "409": {"description": "Referenced"}},
+                }
+            }
+        }
+    )
+
+    @app.route("/items/<item_id>", methods=["DELETE"])
+    def delete_item(item_id):
+        return jsonify({"detail": "Unavailable"}), status
+
+    result = cli.run_openapi_app(app, "--max-examples=10", "-c not_a_server_error")
+
+    assert ("Schema validation mismatch" in result.stdout) is expected
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_missing_test_data_ignores_negative_not_found(ctx, cli, snapshot_cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items/{item_id}": {
+                "get": {
+                    "parameters": [{"name": "item_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}, "422": {"description": "Invalid"}},
+                }
+            }
+        }
+    )
+
+    @app.route("/items/<item_id>", methods=["GET"])
+    def get_item(item_id):
+        try:
+            int(item_id)
+        except ValueError:
+            return jsonify({"detail": "Not found"}), 404
+        return jsonify({"detail": "Invalid"}), 422
+
+    assert cli.run_openapi_app(app, "--phases=coverage", "-c not_a_server_error") == snapshot_cli
+
+
+# The auth-rejected operation keeps its own warning; only the throttled one is reported as rate-limited.
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_rate_limited_operation_warning(ctx, cli, snapshot_cli):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/items": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": ["name"],
+                                    "properties": {"name": {"type": "string", "maxLength": 5}},
+                                }
+                            }
+                        },
+                    },
+                    "responses": {
+                        "200": {"description": "OK"},
+                        "400": {"description": "Invalid"},
+                        "429": {"description": "Too Many Requests"},
+                    },
+                }
+            },
+            "/profile": {"get": {"responses": {"200": {"description": "OK"}, "401": {"description": "No auth"}}}},
+        }
+    )
+
+    @app.route("/items", methods=["POST"])
+    def create_item():
+        return jsonify({"detail": "Too Many Requests"}), 429
+
+    @app.route("/profile", methods=["GET"])
+    def profile():
+        return jsonify({"detail": "Unauthorized"}), 401
+
+    assert cli.run_openapi_app(app, "--max-examples=10", "-c not_a_server_error") == snapshot_cli
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_method_not_allowed_warning_hidden_when_not_displayed(cli, ctx, snapshot_cli):
+    api = ctx.openapi.apps.unimplemented_method()
+
+    assert (
+        cli.run(
+            api.schema_url,
+            "--max-examples=10",
+            "--phases=examples,coverage,fuzzing",
+            "--mode=positive",
+            "--continue-on-failure",
+            "--warnings=missing_auth",
+        )
+        == snapshot_cli
+    )
+
+
+# Only phases whose accepted share falls below the threshold are listed.
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_low_valid_rate_lists_only_phases_below_threshold(ctx, cli, snapshot_cli):
+    app = _orders_app(ctx, accept_every=10)
+
+    assert (
+        cli.run_openapi_app(
+            app, "--max-examples=10", "--phases=coverage,fuzzing", "-m", "positive", "--warnings=low_valid_rate"
+        )
+        == snapshot_cli
+    )
+
+
+SIGN_UP_THEN_LOG_IN = {
+    "/auth/register": {
+        "post": {
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": ["email", "password"],
+                            "properties": {"email": {"type": "string"}, "password": {"type": "string"}},
+                        }
+                    }
+                }
+            },
+            "responses": {"200": {"description": "OK"}},
+        }
+    },
+    "/auth/login": {
+        "post": {
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": ["email", "password"],
+                            "properties": {"email": {"type": "string"}, "password": {"type": "string"}},
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "response": {"type": "object", "properties": {"accessToken": {"type": "string"}}}
+                                },
+                            }
+                        }
+                    },
+                }
+            },
+        }
+    },
+    "/orders": {"get": {"security": [{"bearerAuth": []}], "responses": {"200": {"description": "OK"}}}},
+    "/profile": {"get": {"security": [{"bearerAuth": []}], "responses": {"200": {"description": "OK"}}}},
+}
+
+
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_missing_auth_warning_suggests_login_config(ctx, cli, app_runner, snapshot_cli):
+    schema = ctx.openapi.build_schema(
+        SIGN_UP_THEN_LOG_IN,
+        components={"securitySchemes": {"bearerAuth": {"type": "http", "scheme": "bearer"}}},
+    )
+    schema_url = _serve_schema(
+        ctx,
+        cli,
+        app_runner,
+        schema,
+        [
+            ("POST", "/auth/register", lambda: jsonify({})),
+            ("POST", "/auth/login", lambda: jsonify({})),
+            ("GET", "/orders", lambda: (jsonify({}), 401)),
+            ("GET", "/profile", lambda: (jsonify({}), 401)),
+        ],
+    )
+    assert (
+        cli.run(schema_url, "--max-examples=5", "--phases=examples,fuzzing", "-c not_a_server_error", "--seed=1")
+        == snapshot_cli
+    )
+
+
+def _sign_up_then_log_in(ctx, *, login_media_type="application/json", credential="email"):
+    paths = deepclone(SIGN_UP_THEN_LOG_IN)
+    for path in ("/auth/register", "/auth/login"):
+        content = paths[path]["post"]["requestBody"]["content"]
+        schema = content.pop("application/json")["schema"]
+        schema["properties"] = {credential: {"type": "string"}, "password": {"type": "string"}}
+        schema["required"] = [credential, "password"]
+        content[login_media_type if path == "/auth/login" else "application/json"] = {"schema": schema}
+    return ctx.openapi.load_schema(
+        paths, components={"securitySchemes": {"bearerAuth": {"type": "http", "scheme": "bearer"}}}
+    )
+
+
+def test_auth_flow_suggestion_for_form_login(ctx):
+    assert auth_flow_suggestion(_sign_up_then_log_in(ctx, login_media_type="application/x-www-form-urlencoded")) == (
+        "POST /auth/register and POST /auth/login look like a sign-up and login flow. "
+        "Register an account, then add to schemathesis.toml:\n\n"
+        "    [auth.dynamic.openapi.bearerAuth]\n"
+        '    path = "/auth/login"\n'
+        '    payload = { email = "${LOGIN_EMAIL}", password = "${LOGIN_PASSWORD}" }\n'
+        '    payload_content_type = "application/x-www-form-urlencoded"\n'
+        '    extract_selector = "/response/accessToken"'
+    )
+
+
+@pytest.mark.parametrize(
+    ("credential", "payload"),
+    [
+        ("e-mail", 'e-mail = "${LOGIN_E_MAIL}", password = "${LOGIN_PASSWORD}"'),
+        ("user", 'password = "${LOGIN_PASSWORD}", user = "${LOGIN_USER}"'),
+    ],
+    ids=["hyphenated", "shadows-os-variable"],
+)
+def test_auth_flow_suggestion_placeholders(ctx, credential, payload):
+    assert f"    payload = {{ {payload} }}\n" in auth_flow_suggestion(_sign_up_then_log_in(ctx, credential=credential))
+
+
+@pytest.mark.parametrize(
+    "credentials", [("-H", "Authorization: Bearer expired"), ("--auth", "user:pass")], ids=["header", "basic-auth"]
+)
+def test_missing_auth_warning_keeps_generic_tip_when_credentials_are_supplied(ctx, cli, app_runner, credentials):
+    schema = ctx.openapi.build_schema(
+        SIGN_UP_THEN_LOG_IN,
+        components={"securitySchemes": {"bearerAuth": {"type": "http", "scheme": "bearer"}}},
+    )
+    schema_url = _serve_schema(
+        ctx,
+        cli,
+        app_runner,
+        schema,
+        [
+            ("POST", "/auth/register", lambda: jsonify({})),
+            ("POST", "/auth/login", lambda: jsonify({})),
+            ("GET", "/orders", lambda: (jsonify({}), 401)),
+            ("GET", "/profile", lambda: (jsonify({}), 401)),
+        ],
+    )
+    stdout = cli.run(
+        schema_url,
+        "--max-examples=5",
+        "--phases=examples,fuzzing",
+        "-c not_a_server_error",
+        *credentials,
+    ).stdout
+    assert (
+        "💡 Ensure valid authentication credentials are set via `--auth` or `-H`" in stdout,
+        "sign-up" in stdout,
+    ) == (
+        True,
+        False,
+    )
+
+
+def test_auth_flow_suggestion_skips_graphql(ctx):
+    assert auth_flow_suggestion(ctx.graphql.load_sdl("type Query { ping: Int }")) is None

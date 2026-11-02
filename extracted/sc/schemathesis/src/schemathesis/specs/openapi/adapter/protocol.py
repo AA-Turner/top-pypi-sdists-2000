@@ -8,38 +8,40 @@ from typing import (
     Union,
 )
 
+import jsonschema_rs
+
 from schemathesis.core.jsonschema.resolver import Resolver
 
 if TYPE_CHECKING:
-    import jsonschema_rs
-
     from schemathesis.core.adapter import OperationParameter
     from schemathesis.core.jsonschema.bundler import Bundle, BundleCache, Bundler
     from schemathesis.core.jsonschema.types import JsonSchema
     from schemathesis.core.parameters import SkippedParameter
     from schemathesis.core.transport import Response
     from schemathesis.schemas import APIOperation
+    from schemathesis.specs.openapi.adapter.responses import ResponseSchemaCache
+    from schemathesis.specs.openapi.adapter.security import SecurityParameter
 
 IterResponseExamples = Callable[[Mapping[str, Any], str], Iterator[tuple[str, object]]]
 ExtractRawResponseSchema = Callable[[Mapping[str, Any]], Union["JsonSchema", None]]
-PrepareResponseMediaTypeSchema = Callable[["JsonSchema", "Resolver", str, str], "Bundle"]
 ExtractHeaderSchema = Callable[[Mapping[str, Any], "Resolver", str, str], "Bundle"]
-GetDefaultResponseMediaType = Callable[[Mapping[str, Any]], str | None]
 ResolveResponseMediaType = Callable[[Mapping[str, Any], str | None], str | None]
-ExtractSchemaForMediaType = Callable[[Mapping[str, Any], str | None, "Resolver", str, str], Union["Bundle", None]]
+ExtractSchemaForMediaType = Callable[
+    [Mapping[str, Any], str | None, "Resolver", str, str, "ResponseSchemaCache"], Union["Bundle", None]
+]
 ExtractParameterSchema = Callable[[Mapping[str, Any]], "JsonSchema"]
 ExtractSecurityParameters = Callable[
     [Mapping[str, Any], Mapping[str, Any], "Resolver"],
-    Iterator[Mapping[str, Any]],
+    Iterator["SecurityParameter"],
 ]
 PrepareMultipart = Callable[
-    ["APIOperation", dict[str, Any], dict[str, str] | None],
+    ["APIOperation", dict[str, Any], str, dict[str, str] | None],
     tuple[list[tuple[str, Any]] | None, dict[str, Any] | None],
 ]
 GetResponseContentTypes = Callable[["APIOperation", "Response"], list[str]]
 GetRequestPayloadContentTypes = Callable[["APIOperation"], list[str]]
 GetDefaultMediaTypes = Callable[[Mapping[str, Any]], list[str]]
-GetBasePath = Callable[[Mapping[str, Any]], str]
+GetBasePath = Callable[[Mapping[str, Any], "Mapping[str, str] | None"], str]
 GetBaseUrl = Callable[[Mapping[str, Any]], "str | None"]
 ValidateSchema = Callable[[Mapping[str, Any]], None]
 GetParameterSerializer = Callable[[list[dict[str, Any]]], Callable | None]
@@ -65,8 +67,16 @@ class SchemaVocabulary(Protocol):
 
     # Keyword used to mark nullable fields (e.g., "x-nullable" in OpenAPI 2.0, "nullable" in 3.x)
     nullable_keyword: str
-    # JSON Schema validator class appropriate for this specification version
-    jsonschema_validator_cls: type[jsonschema_rs.Validator]
+
+    # JSON Schema validator class appropriate for this specification version. Read-only, so an adapter may
+    # pin one draft's class.
+    @property
+    def jsonschema_validator_cls(self) -> type[jsonschema_rs.Validator]: ...
+
+
+def is_draft_2020_12(vocabulary: SchemaVocabulary) -> bool:
+    """Whether schemas follow JSON Schema Draft 2020-12, as in Open API 3.1 and later."""
+    return vocabulary.jsonschema_validator_cls is jsonschema_rs.Draft202012Validator
 
 
 class ParameterAdapter(SchemaVocabulary, Protocol):
@@ -98,11 +108,11 @@ class ResponseAdapter(SchemaVocabulary, Protocol):
 
     # Function to extract response schema from specification
     extract_raw_response_schema: ExtractRawResponseSchema
-    prepare_response_media_type_schema: PrepareResponseMediaTypeSchema
     # Functions for handling multiple media types in responses
-    get_default_response_media_type: GetDefaultResponseMediaType
     resolve_response_media_type: ResolveResponseMediaType
     extract_schema_for_media_type: ExtractSchemaForMediaType
+    # Schema of a sequential media type that covers the whole stream, read as an array
+    extract_stream_schema: ExtractSchemaForMediaType
     # Function to extract header schema from specification
     extract_header_schema: ExtractHeaderSchema
     # Function to extract examples from response definition
@@ -119,16 +129,13 @@ class SecurityAdapter(Protocol):
     extract_security_definitions: ExtractSecurityDefinitions
 
 
-class SchemaAdapter(SchemaVocabulary, Protocol):
-    """Whole-schema concerns: base path, media types, multipart bodies, and validation."""
+class SpecificationAdapter(ParameterAdapter, ResponseAdapter, SecurityAdapter, SchemaVocabulary, Protocol):
+    """Full contract for one API specification format; composed of role protocols so callers can depend on a slice."""
 
+    # Whole-schema concerns: base path, media types, multipart bodies, and validation.
     prepare_multipart: PrepareMultipart
     get_request_payload_content_types: GetRequestPayloadContentTypes
     get_default_media_types: GetDefaultMediaTypes
     get_base_path: GetBasePath
     get_base_url: GetBaseUrl
     validate_schema: ValidateSchema
-
-
-class SpecificationAdapter(ParameterAdapter, ResponseAdapter, SecurityAdapter, SchemaAdapter, Protocol):
-    """Full contract for one API specification format; composed of role protocols so callers can depend on a slice."""

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import logging
+import sys
 from typing import TYPE_CHECKING, cast
 
 from ruamel.yaml.comments import CommentedMap, CommentedSeq
@@ -50,6 +51,11 @@ class Transformer:
         """Initialize a Transformer instance."""
         self.write_set = self.effective_write_set(options.write_list)
         self.write_exclude_set = self.effective_write_set(options.write_exclude_list)
+        self.fix_comment_spaces = not any(
+            tag in (options.skip_list or []) or tag in (options.warn_list or [])
+            for tag in ("yaml[comments]", "yaml")
+        )
+        self.warn_list = set(options.warn_list)
 
         self.matches: list[MatchError] = result.matches
         self.files: set[Lintable] = result.files
@@ -88,6 +94,12 @@ class Transformer:
             return {"all"}
         return set(write_list)
 
+    def _should_preserve_long_lines(self) -> bool:
+        """Return true when warned line-length must not be reformatted on dump."""
+        if self.write_set == {"all"} or "yaml" in self.write_set:
+            return False
+        return "yaml[line-length]" in self.warn_list or "yaml" in self.warn_list
+
     def run(self) -> None:
         """For each file, read it, execute transforms on it, then write it."""
         for file, matches in self.matches_per_file.items():
@@ -110,6 +122,7 @@ class Transformer:
                 yaml = FormattedYAML(
                     # Ansible only uses YAML 1.1, but others files should use newer 1.2 (ruamel.yaml defaults to 1.2)
                     version=(1, 1) if file.is_owned_by_ansible() else None,
+                    fix_comment_spaces=self.fix_comment_spaces,
                 )
 
                 ruamel_data = yaml.load(data)
@@ -127,6 +140,10 @@ class Transformer:
                     self._do_transforms(
                         file, ruamel_data or data, file_is_yaml, matches
                     )
+
+                if self._should_preserve_long_lines():
+                    # Avoid folding long scalars when line-length is warn-only (#5030).
+                    yaml.width = sys.maxsize
 
                 _logger.debug("%s %s, version=%s", self.DUMP_MSG, file, yaml.version)
                 # noinspection PyUnboundLocalVariable
@@ -172,13 +189,22 @@ class Transformer:
                 ):
                     match.yaml_path = get_path_to_task(file, match.lineno, data)
 
+            # When yaml[comments] is in warn_list the emitter won't apply
+            # comment-spacing fixes, so don't mark those matches as fixed —
+            # doing so would silently hide the unresolved warning.
+            if match.tag == "yaml[comments]" and not self.fix_comment_spaces:
+                _logger.debug(
+                    "%s %s (comment spacing disabled)", self.FIX_NA_MSG, match_id
+                )
+                continue
+
             _logger.debug("%s %s", self.FIX_APPLY_MSG, match_id)
             try:
                 match.rule.transform(match, file, data)
             except Exception as exc:  # pylint: disable=broad-except
-                _logger.error("%s %s", self.FIX_FAILED_MSG, match_id)  # noqa: TRY400
-                _logger.exception(exc)  # noqa: TRY401
-                _logger.error(self.FIX_ISSUE_MSG)  # noqa: TRY400
+                _logger.error("%s %s", self.FIX_FAILED_MSG, match_id)  # ruff:ignore[error-instead-of-exception]
+                _logger.exception(exc)  # ruff:ignore[verbose-log-message]
+                _logger.error(self.FIX_ISSUE_MSG)  # ruff:ignore[error-instead-of-exception]
                 continue
             if match.fixed:
                 _logger.debug("%s %s", self.FIX_APPLIED_MSG, match_id)

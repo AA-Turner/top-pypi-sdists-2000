@@ -1,34 +1,43 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Callable
+from collections.abc import Callable, Container
 from dataclasses import dataclass
-from functools import lru_cache
+from random import Random
 from typing import TYPE_CHECKING, Any, ClassVar, Final
 
 import hypothesis
+from hypothesis import strategies as st
 from hypothesis.errors import InvalidDefinition
-from hypothesis.stateful import RuleBasedStateMachine
+from hypothesis.stateful import Rule, RuleBasedStateMachine, RuleStrategy
 
+from schemathesis.auths import reauth_and_replay
 from schemathesis.checks import CheckFunction
 from schemathesis.core import DEFAULT_MAX_SCENARIO_STEPS
 from schemathesis.core.errors import STATEFUL_TESTING_GUIDE_URL, NoLinksFound
+from schemathesis.core.failures import FailureGroup, as_reported_failure
 from schemathesis.core.marks import Mark
 from schemathesis.core.parameters import ParameterLocation
-from schemathesis.core.result import Result
+from schemathesis.core.result import Ok, Result
 from schemathesis.core.timing import Instant
 from schemathesis.core.transport import Response
+from schemathesis.engine.recorder import ScenarioRecorder
 from schemathesis.generation.case import Case
+from schemathesis.generation.stateful import STATEFUL_TESTS_LABEL
+from schemathesis.generation.stateful.control import TransitionController
 
 StatefulSchemaMark = Mark["BaseSchema"](attr_name="stateful_schema")
 StatefulCallbackMark = Mark[Callable | None](attr_name="stateful_callback")
 
 if TYPE_CHECKING:
     import hypothesis
+    from hypothesis.stateful import RuleStrategy
+    from hypothesis.strategies._internal.featureflags import FeatureFlags
     from requests.structures import CaseInsensitiveDict
 
     from schemathesis.checks import CheckResult
     from schemathesis.core.parameters import ContainerName
+    from schemathesis.generation.stateful.control import BundleTransitions
     from schemathesis.hooks import HookContext
     from schemathesis.schemas import BaseSchema
 
@@ -151,8 +160,80 @@ class StepOutput:
     __slots__ = ("response", "case")
 
 
-def _normalize_name(name: str) -> str:
+def normalize_name(name: str) -> str:
     return re.sub(r"\W|^(?=\d)", "_", name).replace("__", "_")
+
+
+def unique_rule_name(name: str, taken: Container[str]) -> str:
+    """Operations differing only in punctuation (`/users` vs `/users/`) normalize alike; keep them separate rules."""
+    if name not in taken:
+        return name
+    suffix = 2
+    while f"{name}_{suffix}" in taken:
+        suffix += 1
+    return f"{name}_{suffix}"
+
+
+class _ValidRuleFallbackFlags:
+    """Rule flags that enable every currently valid rule when the drawn flags disable all of them.
+
+    Swarm testing disables a random subset of rules per scenario. API state machines usually have only one or two
+    rules valid at a step, so a subset that disables all of them would reject the whole scenario.
+    """
+
+    __slots__ = ("flags", "rules", "_any_valid_enabled")
+
+    def __init__(self, flags: FeatureFlags, rules: RuleStrategy) -> None:
+        self.flags = flags
+        self.rules = rules
+        self._any_valid_enabled: bool | None = None
+
+    def is_enabled(self, name: str) -> bool:
+        if self.flags.is_enabled(name):
+            return True
+        if self._any_valid_enabled is None:
+            self._any_valid_enabled = any(
+                self.flags.is_enabled(rule.function.__name__) for rule in self.rules.rules if self.rules.is_valid(rule)
+            )
+        return not self._any_valid_enabled
+
+
+def _shuffle_root_rules(strategy: RuleStrategy, machine: type[APIStateMachine], seed: int) -> None:
+    """Shuffle the order in which Hypothesis picks scenario-starting rules, keeping every other rule in place.
+
+    Hypothesis's simplest rule choice is the first valid rule, and every suite opens with its simplest scenarios,
+    so a fixed order makes one root operation start most scenarios across suites.
+    """
+    cached = machine.__dict__.get("_shuffled_rules")
+    if cached is None or cached[0] != seed:
+        ordered = list(strategy.rules)
+        positions = [index for index, rule in enumerate(ordered) if rule.function.__name__ in machine.root_rules]
+        roots = [ordered[index] for index in positions]
+        Random(seed).shuffle(roots)
+        for index, rule in zip(positions, roots, strict=True):
+            ordered[index] = rule
+        cached = (seed, ordered, st.sampled_from(ordered))
+        machine._shuffled_rules = cached
+    _, ordered, sampled = cached
+    strategy.rules = ordered
+    strategy.rules_strategy = sampled
+    # Newer Hypothesis versions also draw rules from this strategy.
+    if hasattr(strategy, "_enabled_rules_strategy"):
+        strategy._enabled_rules_strategy = sampled.filter(strategy._rule_is_enabled)
+
+
+def release_state_machines(*classes: type) -> None:
+    """Drop Hypothesis' per-class caches for state machine classes that will not run again."""
+    # Both are private to Hypothesis; if either moves, the classes simply stay cached as before.
+    per_class = getattr(RuleBasedStateMachine, "_setup_state_per_class", None)
+    if isinstance(per_class, dict):
+        for cls in classes:
+            per_class.pop(cls, None)
+    setup_for = getattr(RuleStrategy, "_setup_for", None)
+    cache_clear = getattr(setup_for, "cache_clear", None)
+    if cache_clear is not None:
+        # An `lru_cache` cannot drop one key; other live classes recompute their rule list once.
+        cache_clear()
 
 
 class APIStateMachine(RuleBasedStateMachine):
@@ -166,29 +247,60 @@ class APIStateMachine(RuleBasedStateMachine):
     # This is a convenience attribute, which happened to clash with `RuleBasedStateMachine` instance level attribute
     # They don't interfere, since it is properly overridden on the Hypothesis side, but it is likely that this
     # attribute will be renamed in the future
-    bundles: ClassVar[dict[str, CaseInsensitiveDict]]
+    bundles: ClassVar[dict[str, CaseInsensitiveDict]]  # type: ignore[misc, assignment]
     schema: BaseSchema
+    # Names of rules that can start a scenario.
+    root_rules: ClassVar[frozenset[str]] = frozenset()
+    # Seeds a shuffle of the root rule order; `None` keeps Hypothesis's order by rule name.
+    rule_order_seed: ClassVar[int | None] = None
+    _shuffled_rules: ClassVar[tuple[int, list[Rule], st.SearchStrategy[Rule]] | None] = None
 
     def __init__(self) -> None:
         try:
             super().__init__()
         except InvalidDefinition as exc:
             if "defines no rules" in str(exc):
+                suggestion = None
+                unusable_bodies = [
+                    result.ok().label
+                    for result in self.schema.get_all_operations()
+                    if isinstance(result, Ok) and result.ok().has_skipped_required_body
+                ]
                 if not self.schema.statistic.transitions.total:
                     message = "Schema contains no link definitions required for stateful testing"
+                elif self.schema.statistic.transitions.selected and unusable_bodies:
+                    message = (
+                        "Linked operations have required request bodies that could not be parsed:\n\n"
+                        + "\n".join(f"  - {label}" for label in unusable_bodies)
+                    )
+                    suggestion = "Fix the request body schemas of these operations to test their links"
                 else:
                     message = "All link definitions required for stateful testing are excluded by filters"
+                    suggestion = "Review your endpoint filters to include linked operations"
                 message += f"\n\nLearn how to define links: {STATEFUL_TESTING_GUIDE_URL}"
-                raise NoLinksFound(message) from None
+                raise NoLinksFound(message, suggestion) from None
             raise
+        rules = self._rules_strategy
+        if self.rule_order_seed is not None and self.root_rules:
+            _shuffle_root_rules(rules, type(self), self.rule_order_seed)
+        # Hypothesis only calls `is_enabled` on the drawn flags, which the fallback provides.
+        rules.enabled_rules_strategy = rules.enabled_rules_strategy.map(
+            lambda flags: _ValidRuleFallbackFlags(flags, rules)  # type: ignore[arg-type, return-value]
+        )
         self.setup()
 
+    # Hypothesis memoizes the base method with `lru_cache`; this one caches on the class instead.
     @classmethod
-    @lru_cache
-    def _to_test_case(cls) -> type:
+    def _to_test_case(cls) -> type:  # type: ignore[override]
+        # Memoized on the class itself: Hypothesis reads `TestCase` whenever it instantiates a machine,
+        # and a process-wide cache would keep every state machine class alive.
+        cached = cls.__dict__.get("_test_case_class")
+        if cached is not None:
+            return cached
         from schemathesis.generation.stateful import run_state_machine_as_test
 
-        class StateMachineTestCase(RuleBasedStateMachine.TestCase):
+        # `TestCase` is a descriptor that Hypothesis resolves to a `unittest.TestCase` subclass.
+        class StateMachineTestCase(RuleBasedStateMachine.TestCase):  # type: ignore[valid-type, misc]
             settings = DEFAULT_STATE_MACHINE_SETTINGS
 
             def runTest(self) -> None:
@@ -214,20 +326,7 @@ class APIStateMachine(RuleBasedStateMachine):
                                 response: Response,
                                 results: list[CheckResult],
                             ) -> None:
-                                for result in results:
-                                    if result.failure is not None:
-                                        code_sample = case.as_curl_command(
-                                            headers=dict(response.request.headers),
-                                            verify=getattr(response, "verify", True),
-                                        )
-                                        _recorder.record_check_failure(
-                                            name=result.name,
-                                            case_id=case.id,
-                                            code_sample=code_sample,
-                                            failure=result.failure,
-                                        )
-                                    else:
-                                        _recorder.record_check_success(name=result.name, case_id=case.id)
+                                _recorder.record_check_results(case, response, results)
 
                             self._on_after_validate = _on_after_validate
                             self.schema.hooks.register_hook_with_name(_on_after_validate, "after_validate")
@@ -239,20 +338,34 @@ class APIStateMachine(RuleBasedStateMachine):
                             _callback(self.recorder, elapsed)
                             super().teardown()
 
-                    run_state_machine_as_test(_Capturing, settings=self.settings)
+                    machine: type[APIStateMachine] = _Capturing
                 else:
-                    run_state_machine_as_test(cls, settings=self.settings)
+                    machine = cls
+                try:
+                    run_state_machine_as_test(machine, settings=self.settings)
+                except FailureGroup as exc:
+                    raise as_reported_failure(exc) from None
+                finally:
+                    if machine is not cls:
+                        release_state_machines(machine)
 
             runTest.is_hypothesis_test = True  # type: ignore[attr-defined]
 
         StateMachineTestCase.__name__ = cls.__name__ + ".TestCase"
         StateMachineTestCase.__qualname__ = cls.__qualname__ + ".TestCase"
         StatefulSchemaMark.set(StateMachineTestCase, cls.schema)
+        cls._test_case_class = StateMachineTestCase
         return StateMachineTestCase
 
     def _new_name(self, target: str) -> str:
-        target = _normalize_name(target)
-        return super()._new_name(target)
+        target = normalize_name(target)
+        # Private Hypothesis method without annotations.
+        return super()._new_name(target)  # type: ignore[no-untyped-call]
+
+    # Bundles hold responses keyed by name, not Hypothesis variable references.
+    def bundle(self, name: str) -> CaseInsensitiveDict | tuple[()]:  # type: ignore[override]
+        # Availability checks should not populate response storage with empty entries.
+        return self.bundles.get(name, ())
 
     def _get_target_for_result(self, result: StepOutput) -> str | None:
         raise NotImplementedError
@@ -262,7 +375,8 @@ class APIStateMachine(RuleBasedStateMachine):
             return
         target = self._get_target_for_result(result)
         if target is not None:
-            super()._add_result_to_targets((target,), result)
+            # Hypothesis <=6.131.15 only; newer versions call `_add_results_to_targets`.
+            super()._add_result_to_targets((target,), result)  # type: ignore[misc]
 
     def _add_results_to_targets(self, targets: tuple[str, ...], results: list[StepOutput | None]) -> None:
         # Hypothesis >6.131.15
@@ -271,7 +385,8 @@ class APIStateMachine(RuleBasedStateMachine):
                 continue
             target = self._get_target_for_result(result)
             if target is not None:
-                super()._add_results_to_targets((target,), [result])
+                # Private Hypothesis method without annotations.
+                super()._add_results_to_targets((target,), [result])  # type: ignore[no-untyped-call]
 
     @classmethod
     def run(cls, *, settings: hypothesis.settings | None = None) -> None:
@@ -304,6 +419,10 @@ class APIStateMachine(RuleBasedStateMachine):
         self.before_call(input.case)
         kwargs = self.get_call_kwargs(input.case)
         response = self.call(input.case, **kwargs)
+        # Replay before validation so checks see the recovered response, not the stale-token one.
+        response = reauth_and_replay(
+            input.case, response, self.schema.reauth_state, lambda: self.call(input.case, **kwargs)
+        )
         self.after_call(response, input.case)
         self.validate_response(response, input.case, **kwargs)
         return StepOutput(response, input.case)
@@ -357,3 +476,82 @@ class APIStateMachine(RuleBasedStateMachine):
         """
         __tracebackhide__ = True
         case.validate_response(response, additional_checks=additional_checks, transport_kwargs=kwargs)
+
+
+class RecordingStateMachine(APIStateMachine):
+    """Records every step of a scenario so stateful checks can look up earlier cases and responses."""
+
+    def __init__(self) -> None:
+        self.recorder = ScenarioRecorder(label=STATEFUL_TESTS_LABEL, config=self.schema.config.output)
+        super().__init__()
+
+    def after_call(self, response: Response, case: Case) -> None:
+        # Always record responses so stateful checks can look up prior responses
+        self.recorder.record_response(case_id=case.id, response=response)
+
+    def validate_response(
+        self,
+        response: Response,
+        case: Case,
+        additional_checks: list[CheckFunction] | None = None,
+        **kwargs: Any,
+    ) -> None:
+        __tracebackhide__ = True
+        case.validate_response(
+            response,
+            additional_checks=additional_checks,
+            transport_kwargs=kwargs or None,
+            recorder=self.recorder,
+        )
+
+
+class BundleStateMachine(RecordingStateMachine):
+    """State machine whose rules pass values from earlier responses to later requests through Hypothesis bundles."""
+
+    _transitions: ClassVar[BundleTransitions]
+    # Labels of operations whose rules start a chain without data from earlier steps.
+    _root_labels: ClassVar[frozenset[str]] = frozenset()
+
+    def __init__(self) -> None:
+        self.control = TransitionController(self._transitions, self._root_labels)
+        super().__init__()
+
+    def _add_result_to_targets(self, targets: tuple[str, ...], result: Any) -> None:  # pragma: no cover
+        # Hypothesis <=6.131.15 only; newer versions call `_add_results_to_targets`.
+        RuleBasedStateMachine._add_result_to_targets(self, targets, result)  # type: ignore[attr-defined]
+
+    def _add_results_to_targets(self, targets: tuple[str, ...], results: list[Any]) -> None:
+        # Private Hypothesis method without annotations.
+        RuleBasedStateMachine._add_results_to_targets(self, targets, results)  # type: ignore[no-untyped-call]
+
+    def _run_case(
+        self,
+        case: Case,
+        *,
+        rule_name: str,
+        parent_id: str | None,
+        applied_parameters: list[tuple[ParameterLocation, str | None]] | None,
+    ) -> StepOutput | None:
+        """Send `case` as one step; `None` when an identical input already passed and the step is skipped."""
+        __tracebackhide__ = True
+        if parent_id is not None:
+            transition: Transition | None = Transition(
+                id=rule_name,
+                parent_id=parent_id,
+                is_inferred=False,
+                parameters={},
+                request_body=None,
+            )
+            applied = applied_parameters or []
+            step_input = StepInput(case=case, transition=transition, applied_parameters=applied)
+        else:
+            transition = None
+            step_input = StepInput.initial(case)
+        self.recorder.record_case(
+            parent_id=parent_id,
+            case=case,
+            transition=transition,
+            is_transition_applied=bool(applied_parameters),
+        )
+        self.control.record_step(step_input, self.recorder)
+        return APIStateMachine._step(self, input=step_input)

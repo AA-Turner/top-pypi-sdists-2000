@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Literal, get_args
 
 from schemathesis.config._error import ConfigError
+from schemathesis.core.transforms import format_body_path
 
 EntryValue = str | int | float
 
@@ -39,12 +40,10 @@ def is_graphql_binding_key(key: str) -> bool:
 
 def parse_body_path(expr: str) -> str:
     """Translate a `body.<path>` binding key to a JSON Pointer with `*` wildcards."""
-    if not expr.startswith(BODY_PREFIX):
-        raise ConfigError(f"Body binding key must start with `body.`: `{expr}`")
     rest = expr[len(BODY_PREFIX) :]
     if not rest:
         raise ConfigError(f"Body binding key has empty path: `{expr}`")
-    return "/" + "/".join(_parse_path_segments(rest.split("."), expr, _is_valid_body_segment))
+    return format_body_path(_parse_path_segments(rest.split("."), expr, _is_valid_body_segment))
 
 
 def parse_graphql_path(expr: str) -> GraphQLBindingPath:

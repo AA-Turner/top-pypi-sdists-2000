@@ -1,14 +1,17 @@
+import gc
+import warnings
 from contextlib import asynccontextmanager
 from typing import Annotated
 
 import pytest
 from fastapi import Cookie, FastAPI, Header, Request
 from fastapi.responses import PlainTextResponse
-from hypothesis import HealthCheck, Phase, given, settings
+from hypothesis import Phase
 from pydantic import BaseModel
 
 import schemathesis
 from schemathesis.python.asgi import ASGIClient
+from test.utils import run_given
 
 
 def test_code_sample(testdir):
@@ -50,34 +53,28 @@ def test_cookies(ctx):
     def cookies(token: str = Cookie(None)):
         return {"token": token}
 
-    schema = ctx.openapi.load_schema(
+    operation = ctx.openapi.load_operation(
+        "GET /cookies",
         {
-            "/cookies": {
-                "get": {
-                    "parameters": [
-                        {
-                            "name": "token",
-                            "in": "cookie",
-                            "required": True,
-                            "schema": {"type": "string", "enum": ["test"]},
-                        }
-                    ],
-                    "responses": {"200": {"description": "OK"}},
+            "parameters": [
+                {
+                    "name": "token",
+                    "in": "cookie",
+                    "required": True,
+                    "schema": {"type": "string", "enum": ["test"]},
                 }
-            }
-        }
+            ],
+            "responses": {"200": {"description": "OK"}},
+        },
     )
 
-    strategy = schema["/cookies"]["GET"].as_strategy()
+    strategy = operation.as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=3, suppress_health_check=[HealthCheck.filter_too_much], deadline=None)
+    @run_given(case=strategy, max_examples=3)
     def test(case):
         response = case.call(app=app)
         assert response.status_code == 200
         assert response.json() == {"token": "test"}
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -98,16 +95,11 @@ def test_null_byte():
 
     strategy = schema["/data"]["POST"].as_strategy()
 
-    @given(case=strategy)
-    @settings(
-        max_examples=50, suppress_health_check=[HealthCheck.filter_too_much], deadline=None, phases=[Phase.generate]
-    )
+    @run_given(case=strategy, max_examples=50, phases=[Phase.generate])
     def test(case):
         response = case.call()
         assert response.status_code == 200
         assert response.json() == {"success": True}
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -125,23 +117,19 @@ def test_null_byte_in_headers():
 
     strategy = schema["/data"]["POST"].as_strategy()
 
-    @given(case=strategy)
-    @settings(
-        max_examples=50, suppress_health_check=[HealthCheck.filter_too_much], deadline=None, phases=[Phase.generate]
-    )
+    @run_given(case=strategy, max_examples=50, phases=[Phase.generate])
     def test(case):
         response = case.call()
         assert response.status_code == 200
         assert response.json() == {"success": True}
 
-    test()
-
 
 def test_base_url(ctx):
     # See GH-1366
     # When base URL has non-empty base path
-    schema = ctx.openapi.load_schema(
-        {"/foo": {"get": {"responses": {"200": {"description": "OK"}}}}},
+    operation = ctx.openapi.load_operation(
+        "GET /foo",
+        {"responses": {"200": {"description": "OK"}}},
         version="3.0.3",
         servers=[{"url": "https://example.org/v1"}],
     )
@@ -153,16 +141,13 @@ def test_base_url(ctx):
     def read_root():
         return {"Hello": "World"}
 
-    strategy = schema["/foo"]["GET"].as_strategy()
+    strategy = operation.as_strategy()
 
-    @given(case=strategy)
-    @settings(max_examples=1, suppress_health_check=[HealthCheck.filter_too_much], deadline=None)
+    @run_given(case=strategy, max_examples=1)
     def test(case):
         response = case.call(app=app)
         # Then the base path should be respected and calls should not lead to 404
         assert response.status_code == 200
-
-    test()
 
 
 def test_schema_and_generated_requests_share_one_host():
@@ -181,12 +166,9 @@ def test_schema_and_generated_requests_share_one_host():
 
     schema = schemathesis.openapi.from_asgi("/openapi.json", app)
 
-    @given(case=schema["/ping"]["GET"].as_strategy())
-    @settings(max_examples=1, deadline=None, phases=[Phase.generate])
+    @run_given(case=schema["/ping"]["GET"].as_strategy(), max_examples=1, phases=[Phase.generate])
     def test(case):
         assert case.call().status_code == 200
-
-    test()
 
     assert seen == ["testserver", "testserver"]
 
@@ -232,14 +214,11 @@ def test_events(setup):
 
     schema = schemathesis.openapi.from_asgi("/openapi.json", app)
 
-    @given(case=schema["/health"]["GET"].as_strategy())
-    @settings(max_examples=3, deadline=None)
+    @run_given(case=schema["/health"]["GET"].as_strategy(), max_examples=3)
     def test(case):
         response = case.call()
         assert response.status_code == 200
         assert response.json() == {"status": "OK"}
-
-    test()
 
     assert data["startup"] == 1
 
@@ -297,7 +276,7 @@ def test_api(case):
     case.call_and_validate()
 """
     )
-    testdir.runpytest_subprocess("-v").assert_outcomes(passed=1)
+    testdir.runpytest("-v").assert_outcomes(passed=1)
     assert events.read_text().split() == ["startup", "shutdown"]
 
 
@@ -310,14 +289,11 @@ def test_head_operation():
 
     schema = schemathesis.openapi.from_asgi("/openapi.json", app)
 
-    @given(case=schema["/ping"]["HEAD"].as_strategy())
-    @settings(max_examples=1, deadline=None)
+    @run_given(case=schema["/ping"]["HEAD"].as_strategy(), max_examples=1)
     def test(case):
         response = case.call()
         assert response.status_code == 200
         assert response.content == b""
-
-    test()
 
 
 def test_application_rejecting_weak_references():
@@ -383,7 +359,7 @@ def test_app(sink):
     inner()
 """
     )
-    testdir.runpytest_subprocess("-v").assert_outcomes(passed=1)
+    testdir.runpytest("-v").assert_outcomes(passed=1)
     assert marker.read_text() == "shutdown finished\n"
 
 
@@ -418,7 +394,7 @@ def test_app():
     inner()
 """
     )
-    result = testdir.runpytest_subprocess("-v")
+    result = testdir.runpytest("-v")
     result.assert_outcomes(passed=1, errors=1)
     assert "shutdown exploded" in result.stdout.str()
 
@@ -437,12 +413,9 @@ def test_lifespan_state():
 
     schema = schemathesis.openapi.from_asgi("/openapi.json", app)
 
-    @given(case=schema["/state/{name}"]["GET"].as_strategy())
-    @settings(max_examples=2, deadline=None, phases=[Phase.generate])
+    @run_given(case=schema["/state/{name}"]["GET"].as_strategy(), max_examples=2, phases=[Phase.generate])
     def test(case):
         assert case.call().json() == {"db": "connected"}
-
-    test()
 
 
 @pytest.mark.hypothesis_nested
@@ -457,12 +430,9 @@ def test_caller_supplied_session_is_used():
     client = ASGIClient(app)
     client.headers["x-custom"] = "from-session"
 
-    @given(case=schema["/echo"]["GET"].as_strategy())
-    @settings(max_examples=1, deadline=None, phases=[Phase.generate])
+    @run_given(case=schema["/echo"]["GET"].as_strategy(), max_examples=1, phases=[Phase.generate])
     def test(case):
         assert case.call(session=client).json() == {"header": "from-session"}
-
-    test()
 
 
 def test_curl_command_names_the_host_the_request_used():
@@ -475,10 +445,43 @@ def test_curl_command_names_the_host_the_request_used():
 
     schema = schemathesis.openapi.from_asgi("/openapi.json", app)
 
-    @given(case=schema["/ping"]["GET"].as_strategy())
-    @settings(max_examples=1, deadline=None, phases=[Phase.generate])
+    @run_given(case=schema["/ping"]["GET"].as_strategy(), max_examples=1, phases=[Phase.generate])
     def test(case):
         response = case.call()
         assert case.as_curl_command() == f"curl -X GET {response.request.url}"
 
-    test()
+
+def test_lifespan_shutdown_leaves_no_unclosed_streams(testdir):
+    testdir.makeini(
+        """
+[pytest]
+filterwarnings = error
+"""
+    )
+    testdir.makepyfile(
+        """
+import gc
+
+import schemathesis
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/ping")
+def ping():
+    return {"ok": "yes"}
+
+schema = schemathesis.openapi.from_asgi("/openapi.json", app)
+
+def test_first():
+    pass
+
+def test_second():
+    gc.collect()
+"""
+    )
+    # The inner session runs in this process; garbage from earlier tests must not surface in its `gc.collect()`.
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        gc.collect()
+    testdir.runpytest("-v").assert_outcomes(passed=2)

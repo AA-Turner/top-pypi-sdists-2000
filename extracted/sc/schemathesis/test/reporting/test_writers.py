@@ -1,14 +1,20 @@
 from __future__ import annotations
 
+import sys
 import tempfile
 from io import StringIO
 from pathlib import Path
 
 import pytest
+import yaml
 
 from schemathesis.config import ProjectConfig, SanitizationConfig
-from schemathesis.reporting import HarWriter, JunitXmlWriter, NdjsonWriter, VcrWriter
-from schemathesis.reporting._command import sanitize_args
+from schemathesis.core.version import SCHEMATHESIS_VERSION
+from schemathesis.reporting._command import get_command_representation, sanitize_args
+from schemathesis.reporting.har import HarWriter
+from schemathesis.reporting.junitxml import JunitXmlWriter
+from schemathesis.reporting.ndjson import NdjsonWriter
+from schemathesis.reporting.vcr import VcrWriter
 
 
 def test_ndjson_writer_context_manager():
@@ -40,6 +46,26 @@ def test_junitxml_writer_context_manager():
     assert "test_label" in content
 
 
+def test_vcr_writer_writes_header_to_stream():
+    stream = StringIO()
+    with VcrWriter(output=stream, config=ProjectConfig.from_dict({})) as writer:
+        writer.open(seed=42, command="st run http://localhost/openapi.json")
+    assert stream.getvalue() == (
+        "command: 'st run http://localhost/openapi.json'\n"
+        f"recorded_with: 'Schemathesis {SCHEMATHESIS_VERSION}'\n"
+        "seed: 42\n"
+        "http_interactions:"
+    )
+
+
+def test_vcr_writer_header_with_single_quote_in_command():
+    command = 'st run http://localhost/openapi.json -H "X-Name: O\'Brien"'
+    stream = StringIO()
+    with VcrWriter(output=stream, config=ProjectConfig.from_dict({})) as writer:
+        writer.open(seed=42, command=command)
+    assert yaml.safe_load(stream.getvalue())["command"] == command
+
+
 @pytest.mark.parametrize(
     "writer_cls, kwargs",
     [
@@ -64,6 +90,8 @@ def test_writer_context_manager_no_error_without_open(writer_cls, kwargs):
         (["--proxy", "http://user:pw@proxy:3128"], ["--proxy", "http://[Filtered]@proxy:3128"]),
         (["-u", "https://api.example.com/?token=s3cret"], ["-u", "https://api.example.com/?token=%5BFiltered%5D"]),
         (["https://user:pw@api.example.com/openapi.json"], ["https://[Filtered]@api.example.com/openapi.json"]),
+        (["--origin", "http://user:pw@api.example.com"], ["--origin", "http://[Filtered]@api.example.com"]),
+        (["--origin=http://user:pw@api.example.com"], ["--origin=http://[Filtered]@api.example.com"]),
         (["--max-examples=5"], ["--max-examples=5"]),
         (["-HX-API-Key: s3cret"], ["-HX-API-Key: [Filtered]"]),
         (["-aadmin:hunter2"], ["-a[Filtered]"]),
@@ -80,6 +108,8 @@ def test_writer_context_manager_no_error_without_open(writer_cls, kwargs):
         "proxy",
         "url-option",
         "url-positional",
+        "unknown-url-option",
+        "unknown-url-option-joined",
         "unrelated",
         "header-attached",
         "auth-attached",
@@ -90,3 +120,40 @@ def test_writer_context_manager_no_error_without_open(writer_cls, kwargs):
 )
 def test_sanitize_args(args, expected):
     assert sanitize_args(args, config=SanitizationConfig()) == expected
+
+
+@pytest.mark.parametrize(
+    "entrypoint, expected",
+    [
+        ("/venv/bin/pytest", "pytest -x"),
+        ("/venv/bin/py.test", "pytest -x"),
+        ("pytest.exe", "pytest -x"),
+        ("st", "st -x"),
+        ("/venv/bin/st", "st -x"),
+        ("st.exe", "st -x"),
+        ("schemathesis", "st -x"),
+        ("/venv/bin/schemathesis", "st -x"),
+        ("schemathesis.exe", "st -x"),
+        ("/venv/lib/python/site-packages/schemathesis/__main__.py", "python -m schemathesis -x"),
+        ("/venv/lib/python/site-packages/pytest/__main__.py", "python -m pytest -x"),
+        ("/venv/bin/python", "<unknown entrypoint>"),
+    ],
+    ids=[
+        "pytest",
+        "py.test",
+        "pytest-exe",
+        "st",
+        "st-path",
+        "st-exe",
+        "schemathesis",
+        "schemathesis-path",
+        "schemathesis-exe",
+        "python-m-schemathesis",
+        "python-m-pytest",
+        "unknown",
+    ],
+)
+def test_command_representation(monkeypatch, entrypoint, expected):
+    monkeypatch.setattr(sys, "argv", [entrypoint, "-x"])
+
+    assert get_command_representation() == expected

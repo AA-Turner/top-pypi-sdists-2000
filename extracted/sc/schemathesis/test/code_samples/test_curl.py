@@ -1,16 +1,20 @@
+import json
 import re
 
 import pytest
+import requests
 from _pytest.main import ExitCode
 from fastapi import FastAPI
-from flask import jsonify
-from hypothesis import HealthCheck, given, settings
+from flask import jsonify, redirect
+from hypothesis import HealthCheck, settings
 from pydantic import BaseModel, ConfigDict, Field
+from werkzeug.exceptions import InternalServerError
 
 import schemathesis
 from schemathesis import Case
+from schemathesis.core.failures import FailureGroup
 from schemathesis.core.parameters import RAW_QUERY_STRING_KEY, ParameterLocation, RawQueryString
-from schemathesis.core.shell import ShellType
+from schemathesis.core.shell import MAX_SHELL_SCAN_BYTES, ShellType
 from schemathesis.generation.meta import (
     CaseMetadata,
     ComponentInfo,
@@ -20,6 +24,8 @@ from schemathesis.generation.meta import (
     TestPhase,
 )
 from schemathesis.generation.modes import GenerationMode
+from test.apps.builders import make_permissive_flask_app
+from test.utils import run_given
 
 
 def _make_get_users_app() -> FastAPI:
@@ -54,19 +60,19 @@ schema.config.generation.update(modes=[GenerationMode.POSITIVE])
 
 
 @pytest.fixture
-def loose_schema(ctx):
-    schema = ctx.openapi.load_schema(
-        {
-            "/test/{key}": {
-                "post": {
-                    "parameters": [{"name": "key", "in": "path"}],
-                    "responses": {"default": {"description": "OK"}},
-                }
+def loose_schema(ctx, app_runner):
+    paths = {
+        "/test/{key}": {
+            "post": {
+                "parameters": [{"name": "key", "in": "path"}],
+                "responses": {"default": {"description": "OK"}},
             }
-        },
-        version="2.0",
-    )
-    schema.config.update(base_url="http://127.0.0.1:1")
+        }
+    }
+    schema = ctx.openapi.load_schema(paths, version="2.0")
+    # A live server answers every generated command, so only a malformed one can make curl fail.
+    app = make_permissive_flask_app(ctx.openapi.build_schema(paths, version="2.0"))
+    schema.config.update(base_url=f"http://127.0.0.1:{app_runner.run_flask_app(app)}/api")
     return schema
 
 
@@ -103,6 +109,21 @@ def test_json_payload(curl):
     curl.assert_valid(command)
 
 
+@pytest.mark.parametrize("loader", ["from_file", "from_path"])
+def test_graphql_schema_loaded_from_file(ctx, curl, loader):
+    sdl = "type Query { hello: String }"
+    if loader == "from_path":
+        schema = schemathesis.graphql.from_path(ctx.graphql.write_sdl(sdl))
+    else:
+        schema = ctx.graphql.load_sdl(sdl)
+    case = schema["Query"]["hello"].Case(body="{ hello }")
+    command = case.as_curl_command()
+    assert (
+        command == "curl -X POST -H 'Content-Type: application/json' -d '{\"query\": \"{ hello }\"}' http://localhost/"
+    )
+    curl.assert_valid(command)
+
+
 def test_explicit_headers(curl):
     # When the generated case contains a header from the list of headers that are ignored by default
     name = "Accept"
@@ -126,6 +147,53 @@ def test_as_curl_command_sanitizes_string_query_params(curl):
     curl.assert_valid(command)
 
 
+def test_as_curl_command_sanitizes_raw_query_with_empty_segments(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /q",
+        {
+            "parameters": [{"name": "token", "in": "query", "schema": {"type": "string"}}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(query={RAW_QUERY_STRING_KEY: RawQueryString("token=se=cret&&flag")})
+    assert case.as_curl_command() == "curl -X GET 'http://localhost/q?token=%5BFiltered%5D&flag'"
+
+
+@pytest.mark.parametrize(
+    ("body", "expected"),
+    [
+        ({"email": "a@b.c", "password": "hunter2"}, '{"email": "a@b.c", "password": "[Filtered]"}'),
+        ([{"password": "hunter2"}], '[{"password": "[Filtered]"}]'),
+    ],
+    ids=["object", "array"],
+)
+def test_as_curl_command_sanitizes_json_body(ctx, body, expected):
+    operation = ctx.openapi.load_operation(
+        "POST /sign-in",
+        {
+            "requestBody": {"content": {"application/json": {"schema": {}}}},
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(body=body, media_type="application/json")
+    assert case.as_curl_command() == (
+        f"curl -X POST -H 'Content-Type: application/json' -d '{expected}' http://localhost/sign-in"
+    )
+    assert case.body == body
+
+
+def test_as_curl_command_keeps_non_sensitive_raw_query_pairs(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /q",
+        {
+            "parameters": [{"name": "token", "in": "query", "schema": {"type": "string"}}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(query={RAW_QUERY_STRING_KEY: RawQueryString("token=secret&page=2")})
+    assert case.as_curl_command() == "curl -X GET 'http://localhost/q?token=%5BFiltered%5D&page=2'"
+
+
 def test_cli_output(ctx, cli, curl):
     api = ctx.openapi.apps.failure()
     result = cli.run_and_assert(api.schema_url, exit_code=ExitCode.TESTS_FAILED)
@@ -147,38 +215,98 @@ def test_cli_output_includes_insecure(ctx, cli, curl):
     curl.assert_valid(command)
 
 
-def test_pytest_subtests_output(ctx, testdir):
+def _call_and_validate(case, base_url):
+    case.call_and_validate(base_url=base_url)
+
+
+def _call_then_validate(case, base_url):
+    response = case.call(base_url=base_url)
+    case.validate_response(response, transport_kwargs={"base_url": base_url})
+
+
+def _send_then_validate(case, base_url):
+    response = requests.get(f"{base_url}{case.formatted_path}")
+    case.validate_response(response)
+
+
+def _send_then_validate_with_base_url(case, base_url):
+    response = requests.get(f"{base_url}{case.formatted_path}")
+    case.validate_response(response, transport_kwargs={"base_url": base_url})
+
+
+@pytest.mark.parametrize(
+    "validate", [_call_and_validate, _call_then_validate, _send_then_validate, _send_then_validate_with_base_url]
+)
+def test_reproduce_with_overridden_base_url(ctx, tmp_path, validate):
     api = ctx.openapi.apps.failure()
-    testdir.make_test(
-        f"""
-@pytest.fixture
-def api_schema():
-    return schemathesis.openapi.from_url('{api.schema_url}')
-
-lazy_schema = schemathesis.pytest.from_fixture("api_schema")
-
-@lazy_schema.parametrize()
-def test_(case):
-    case.call_and_validate()
-""",
+    path = tmp_path / "openapi.json"
+    path.write_text(json.dumps(api.spec))
+    schema = schemathesis.openapi.from_path(path)
+    case = schema["/api/failure"]["GET"].Case()
+    with pytest.raises(FailureGroup) as exc_info:
+        validate(case, api.base_url)
+    assert exc_info.value.message == (
+        "Schemathesis found 1 distinct failure\n\n- ST101 Server error\n\n[500] Internal Server Error:\n\n"
+        f"    `500: Internal Server Error`\n\nReproduce with:\n\n    curl -X GET {api.base_url}/api/failure\n\n"
     )
-    result = testdir.runpytest("-v")
-    result.assert_outcomes(passed=1, failed=1)
-    result.stdout.re_match_lines([".+ Reproduce with:", f".+ curl -X GET {api.base_url}/api/failure"])
+
+
+@pytest.mark.parametrize("validate", [_call_then_validate, _send_then_validate])
+def test_reproduce_after_same_host_redirect(ctx, app_runner, validate):
+    app, raw_schema = ctx.openapi.make_flask_app(
+        {
+            "/items/{item_id}": {
+                "get": {
+                    "parameters": [{"name": "item_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"500": {"description": "Error"}},
+                }
+            }
+        },
+        servers=[{"url": "/v1"}],
+    )
+
+    @app.route("/v1/items/<int:item_id>")
+    def item(item_id):
+        return redirect(f"/v1/items/{item_id}/")
+
+    @app.route("/v1/items/<int:item_id>/")
+    def item_with_slash(item_id):
+        raise InternalServerError
+
+    base_url = app_runner.openapi_url(app, path="/v1")
+    schema = schemathesis.openapi.from_dict(raw_schema)
+    case = schema["/items/{item_id}"]["GET"].Case(path_parameters={"item_id": 42})
+    with pytest.raises(FailureGroup) as exc_info:
+        validate(case, base_url)
+    assert exc_info.value.message == (
+        "Schemathesis found 1 distinct failure\n\n- ST101 Server error\n\n[500] Internal Server Error:\n\n"
+        f"    `500: Internal Server Error`\n\nReproduce with:\n\n    curl -X GET {base_url}/items/42\n\n"
+    )
+
+
+def test_reproduce_when_validated_response_has_no_request_url(ctx, response_factory):
+    operation = ctx.openapi.load_operation("GET /items", {"responses": {"200": {"description": "OK"}}})
+    case = operation.Case()
+    response = response_factory.requests(status_code=500, content=b"Error", content_type="text/plain", method="GET")
+    response.request.url = None
+
+    with pytest.raises(FailureGroup) as exc_info:
+        case.validate_response(response)
+    assert (
+        exc_info.value.message.rstrip().splitlines()[-1]
+        == "    curl -X GET -H 'Content-Type: text/plain' http://localhost/items"
+    )
 
 
 @pytest.mark.hypothesis_nested
 def test_curl_command_validity(curl, loose_schema):
     # When the input schema is too loose
 
-    @given(case=loose_schema["/test/{key}"]["POST"].as_strategy())
-    @settings(max_examples=30, suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much], deadline=None)
+    @run_given(case=loose_schema["/test/{key}"]["POST"].as_strategy(), max_examples=30)
     def test(case):
         command = case.as_curl_command()
         # Then generated command should always be syntactically valid
         curl.assert_valid(command)
-
-    test()
 
 
 @pytest.mark.parametrize(
@@ -191,11 +319,11 @@ def test_curl_command_validity(curl, loose_schema):
             "curl -X GET -H $'X-Test: value\\x1f' http://localhost/users",
             id="bash-header-control-char",
         ),
-        # Fish: hex escaping in quotes for headers
+        # Fish: hex escapes outside the quotes, where fish interprets them
         pytest.param(
             ShellType.FISH,
             {"headers": {"X-Test": "value\x1f"}},
-            "curl -X GET -H 'X-Test: value\\x1f' http://localhost/users",
+            "curl -X GET -H 'X-Test: value'\\x1f http://localhost/users",
             id="fish-header-control-char",
         ),
         # Bash: ANSI-C quoting for body with null byte
@@ -230,13 +358,32 @@ def test_curl_command_validity(curl, loose_schema):
 )
 def test_shell_aware_escaping(curl, monkeypatch, shell_type, case_kwargs, expected_command):
     if shell_type is not None:
-        monkeypatch.setattr("schemathesis.core.shell._DETECTED_SHELL", shell_type)
+        monkeypatch.setenv("SHELL", f"/bin/{shell_type.value}")
 
     case = schema["/users"]["GET"].Case(**case_kwargs)
     command = case.as_curl_command()
 
     assert command == expected_command
     curl.assert_valid(command)
+
+
+@pytest.mark.parametrize(
+    "shell_type",
+    [ShellType.BASH, ShellType.ZSH, ShellType.FISH, ShellType.UNKNOWN],
+    ids=["bash", "zsh", "fish", "unknown"],
+)
+def test_truncated_printable_body_is_quoted(monkeypatch, shell_type):
+    # Unquoted, the truncation marker's `<` would be read as a shell redirect
+    monkeypatch.setenv("SHELL", f"/bin/{shell_type.value}")
+    body = "a" * (MAX_SHELL_SCAN_BYTES + 1)
+    case = schema["/users"]["GET"].Case(body=body, media_type="text/plain")
+    command = case.as_curl_command()
+    quoted_body = f"'{'a' * MAX_SHELL_SCAN_BYTES} <...truncated, {MAX_SHELL_SCAN_BYTES + 1} bytes total>'"
+    expected_command = (
+        f"curl -X GET -H 'Content-Type: text/plain' -d {quoted_body} http://localhost/users"
+        "\n\n⚠️  Request body was truncated for shell display."
+    )
+    assert command == expected_command
 
 
 def test_multipart_with_array_of_bytes_body(curl):
@@ -297,6 +444,38 @@ def test_multipart_with_array_of_bytes_body(curl):
     curl.assert_valid(command)
 
 
+RAW_MULTIPART_PATHS = {
+    "/upload": {
+        "post": {
+            "requestBody": {"content": {"multipart/form-data": {"schema": {"type": "object"}}}},
+            "responses": {"200": {"description": "OK"}},
+        }
+    }
+}
+
+
+@pytest.mark.parametrize(
+    ("body", "expected"),
+    [
+        (
+            b'--abc\r\nContent-Disposition: form-data; name="a"\r\n\r\nb\r\n--abc--\r\n',
+            "curl -X POST -H 'Content-Type: multipart/mixed; boundary=358a4fc91df79a930693beca09e4057c' "
+            '-d $\'--358a4fc91df79a930693beca09e4057c\\r\\nContent-Disposition: form-data; name="a"\\r\\n\\r\\nb\\r\\n'
+            "--358a4fc91df79a930693beca09e4057c--\\r\\n' http://localhost/upload",
+        ),
+        (b"--\r\n", "curl -X POST -H 'Content-Type: multipart/mixed' -d $'--\\r\\n' http://localhost/upload"),
+    ],
+    ids=["header-without-boundary", "no-boundary-in-body"],
+)
+def test_raw_multipart_bytes_body_boundary(ctx, monkeypatch, body, expected):
+    monkeypatch.setenv("SHELL", "/bin/bash")
+    schema = ctx.openapi.load_schema(RAW_MULTIPART_PATHS)
+    case = schema["/upload"]["POST"].Case(
+        body=body, media_type="multipart/form-data", headers={"Content-Type": "multipart/mixed"}
+    )
+    assert case.as_curl_command() == expected
+
+
 MULTIPART_PATHS = {
     "/upload": {
         "post": {
@@ -349,7 +528,8 @@ def multipart_schema(ctx, app_runner):
     [("/upload", {"file": b"00"}), ("/raw", "00")],
     ids=["dict-body", "non-dict-body"],
 )
-def test_multipart_boundary_matches_between_header_and_body(multipart_schema, path, body):
+def test_multipart_boundary_matches_between_header_and_body(multipart_schema, monkeypatch, path, body):
+    monkeypatch.setenv("SHELL", "/bin/bash")
     case = multipart_schema[path]["POST"].Case(body=body, media_type="multipart/form-data")
     response = case.call()
     command = case.as_curl_command(headers=dict(response.request.headers))
@@ -364,3 +544,23 @@ def test_multipart_boundary_matches_between_header_and_body(multipart_schema, pa
 def test_multipart_curl_command_is_stable(multipart_schema, path, body):
     case = multipart_schema[path]["POST"].Case(body=body, media_type="multipart/form-data")
     assert case.as_curl_command() == case.as_curl_command()
+
+
+def test_empty_multipart_curl_body_keeps_closing_delimiter(multipart_schema, monkeypatch):
+    monkeypatch.setenv("SHELL", "/bin/bash")
+    case = multipart_schema["/upload"]["POST"].Case(body={}, media_type="multipart/form-data")
+    command = case.as_curl_command()
+    boundary = HEADER_BOUNDARY.search(command)[1]
+    assert f"-d $'--{boundary}--\\r\\n'" in command, command
+
+
+def test_as_curl_command_keeps_encoded_sensitive_raw_query_key(ctx):
+    operation = ctx.openapi.load_operation(
+        "GET /q",
+        {
+            "parameters": [{"name": "api key", "in": "query", "schema": {"type": "string"}}],
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+    case = operation.Case(query={RAW_QUERY_STRING_KEY: RawQueryString("api%20key=secret&page=2")})
+    assert case.as_curl_command() == "curl -X GET 'http://localhost/q?api%20key=%5BFiltered%5D&page=2'"

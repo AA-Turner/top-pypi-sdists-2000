@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import itertools
-import socket
+import re
 
 import pytest
 import requests
-from flask import jsonify, request
+from flask import Flask, jsonify, request
 
 import schemathesis.openapi
 from schemathesis.auths import (
@@ -18,15 +18,17 @@ from schemathesis.auths import (
     refresh_auth,
     set_on_case,
 )
-from schemathesis.config._auth import AuthConfig, DynamicTokenAuthConfig
-from schemathesis.config._error import ConfigError
+from schemathesis.config import ApiKeyAuthConfig, ConfigError, SchemathesisConfig
+from schemathesis.config._auth import DynamicTokenAuthConfig
 from schemathesis.core.errors import AuthenticationError
+from schemathesis.generation import GenerationMode
 from schemathesis.specs.openapi.adapter.security import build_auth_provider
 from schemathesis.specs.openapi.auths import (
     ApiKeyAuthProvider,
     DynamicTokenAuthProvider,
     HttpBearerAuthProvider,
 )
+from test.utils import refusing_url, silent_url
 
 OAUTH2_SCHEME = {"type": "oauth2", "flows": {"password": {"tokenUrl": "/api/auth", "scopes": {}}}}
 
@@ -38,6 +40,22 @@ def _dynamic_auth(scheme, **overrides):
 def _run_cli(cli, app_runner, app, *flags, config, **kwargs):
     base_url = app_runner.openapi_url(app, path="")
     return cli.run(f"{base_url}/openapi.json", *flags, config={"base-url": base_url, **config}, **kwargs)
+
+
+def _protected_app(ctx, scheme_name, scheme):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/protected": {
+                "get": {
+                    "operationId": "getProtected",
+                    "security": [{scheme_name: []}],
+                    "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
+                }
+            }
+        },
+        components={"securitySchemes": {scheme_name: scheme}},
+    )
+    return app
 
 
 def _register_single_use_token(app):
@@ -113,6 +131,28 @@ def test_get_raises_on_error(auth_operation, path, extract_from, extract_selecto
         provider.get(auth_operation.Case(), ctx)
 
 
+@pytest.mark.parametrize("name", ["user[id]", "a@b"], ids=["brackets-in-name", "at-sign-in-name"])
+def test_get_extracts_cookie_over_wsgi(ctx, name):
+    app, _ = ctx.openapi.make_flask_app({"/data": {"get": {"responses": {"200": {"description": "OK"}}}}})
+
+    @app.route("/api/auth", methods=["POST"])
+    def auth():
+        response = jsonify({})
+        response.headers.add("Set-Cookie", f"{name}=s3ss10nt0k3n; Path=/; Priority=High")
+        return response
+
+    operation = schemathesis.openapi.from_wsgi("/openapi.json", app)["/data"]["GET"]
+    provider = DynamicTokenAuthProvider(
+        path="/api/auth",
+        method="post",
+        payload=None,
+        extract_from="cookie",
+        extract_selector=name,
+        _applier=HttpBearerAuthProvider(bearer=""),
+    )
+    assert provider.get(operation.Case(), AuthContext(operation=operation, app=app)) == "s3ss10nt0k3n"
+
+
 def test_authentication_error_provider_context():
     assert str(AuthenticationError("DynamicTokenAuthProvider", "get", "boom", include_common_causes=False)) == "boom"
     assert (
@@ -156,15 +196,15 @@ def test_get_401_message_is_actionable_without_common_causes(auth_operation):
     )
 
 
-def test_fetch_http_forwards_tls_config(ctx, app_runner, mocker):
-    app, _ = ctx.openapi.make_flask_app({"/data": {"get": {"responses": {"200": {"description": "OK"}}}}})
+def test_fetch_http_forwards_tls_config(ctx, app_runner):
+    app = Flask(__name__)
 
     @app.route("/api/auth", methods=["POST"])
     def auth():
         return jsonify({"access_token": "test-token"})
 
-    spy = mocker.patch("requests.request", wraps=requests.request)
-    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    schema = ctx.openapi.load_schema({"/data": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    schema.config.update(base_url=f"https://127.0.0.1:{app_runner.run_https_flask_app(app)}")
     schema.config.tls_verify = False
     operation = schema["/data"]["GET"]
     provider = DynamicTokenAuthProvider(
@@ -176,18 +216,12 @@ def test_fetch_http_forwards_tls_config(ctx, app_runner, mocker):
         _applier=HttpBearerAuthProvider(bearer=""),
     )
     assert provider.get(operation.Case(), AuthContext(operation=operation, app=None)) == "test-token"
-    assert spy.call_args[1]["verify"] is False
 
 
 def test_get_raises_on_connection_error(ctx, cli, app_runner):
     app, _ = ctx.openapi.make_flask_app({"/data": {"get": {"responses": {"200": {"description": "OK"}}}}})
     schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
     operation = schema["/data"]["GET"]
-
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(("127.0.0.1", 0))
-        closed_port = s.getsockname()[1]
-    schema.config.base_url = f"http://127.0.0.1:{closed_port}"
 
     auth_ctx = AuthContext(operation=operation, app=None)
     provider = DynamicTokenAuthProvider(
@@ -198,8 +232,63 @@ def test_get_raises_on_connection_error(ctx, cli, app_runner):
         extract_selector="/token",
         _applier=HttpBearerAuthProvider(bearer=""),
     )
+    with refusing_url() as url:
+        schema.config.base_url = url
+        with pytest.raises(AuthenticationError, match="Connection to auth endpoint failed"):
+            provider.get(operation.Case(), auth_ctx)
+
+
+def test_get_raises_on_missing_request_cert_file(ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app({"/data": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    operation = schema["/data"]["GET"]
+    schema.config.request_cert = "/nonexistent/cert.pem"
+
+    provider = DynamicTokenAuthProvider(
+        path="/api/auth",
+        method="post",
+        payload=None,
+        extract_from="body",
+        extract_selector="/token",
+        _applier=HttpBearerAuthProvider(bearer=""),
+    )
     with pytest.raises(AuthenticationError, match="Connection to auth endpoint failed"):
-        provider.get(operation.Case(), auth_ctx)
+        provider.get(operation.Case(), AuthContext(operation=operation, app=None))
+
+
+def _token_provider():
+    return DynamicTokenAuthProvider(
+        path="/api/auth",
+        method="post",
+        payload=None,
+        extract_from="body",
+        extract_selector="/access_token",
+        _applier=HttpBearerAuthProvider(bearer=""),
+    )
+
+
+def test_fetch_http_goes_through_configured_proxy(ctx, app_runner):
+    proxy = Flask(__name__)
+
+    @proxy.route("/api/auth", methods=["POST"])
+    def auth():
+        return jsonify({"access_token": "test-token"})
+
+    schema = ctx.openapi.load_schema({"/data": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    schema.config.proxy = f"http://127.0.0.1:{app_runner.run_flask_app(proxy)}"
+    operation = schema["/data"]["GET"]
+    with refusing_url() as url:
+        schema.config.update(base_url=url)
+        assert _token_provider().get(operation.Case(), AuthContext(operation=operation, app=None)) == "test-token"
+
+
+def test_fetch_http_times_out_without_configured_timeout(ctx):
+    schema = ctx.openapi.load_schema({"/data": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    operation = schema["/data"]["GET"]
+    with silent_url() as url:
+        schema.config.update(base_url=url)
+        with pytest.raises(AuthenticationError, match="Read timed out"):
+            _token_provider().get(operation.Case(), AuthContext(operation=operation, app=None))
 
 
 @pytest.mark.parametrize(
@@ -235,22 +324,23 @@ def test_api_key_auth_unknown_location_is_noop(auth_operation):
 
 
 @pytest.mark.parametrize(
-    "kwargs,match",
+    "scheme,message",
     [
-        ({"path": "api/auth", "extract_selector": "/token"}, "must start with '/'"),
+        ({"path": "api/auth", "extract_selector": "/token"}, "Dynamic auth `path` must start with '/': 'api/auth'"),
         (
             {"path": "/api/auth", "extract_from": "body", "extract_selector": "access_token"},
-            "extract_selector.*must start with '/'",
+            "Dynamic auth `extract_selector` must start with '/' when extract_from='body': 'access_token'",
         ),
         (
             {"path": "/api/auth", "extract_selector": "/token", "payload_content_type": ""},
-            "payload_content_type.*non-empty",
+            "Dynamic auth `payload_content_type` must be a non-empty media type string.",
         ),
     ],
 )
-def test_config_rejects_invalid_fields(kwargs, match):
-    with pytest.raises(ConfigError, match=match):
-        DynamicTokenAuthConfig(**kwargs)
+def test_config_rejects_invalid_fields(scheme, message):
+    with pytest.raises(ConfigError) as exc:
+        SchemathesisConfig.from_dict({"auth": {"dynamic": {"openapi": {"BearerAuth": scheme}}}})
+    assert str(exc.value) == message
 
 
 @pytest.fixture
@@ -363,12 +453,12 @@ def test_unsupported_content_type_raises_at_runtime(form_auth_app, app_runner):
 
 
 @pytest.mark.parametrize(
-    "openapi_schemes,dynamic_schemes,match",
+    "openapi_schemes,dynamic_schemes,message",
     [
         (
             {"BearerAuth": {"bearer": "token"}},
             {"BearerAuth": {"path": "/api/auth", "extract_selector": "/token"}},
-            "Scheme 'BearerAuth' appears",
+            "Scheme 'BearerAuth' appears in both auth.openapi and auth.dynamic.openapi. Use one or the other.",
         ),
         (
             {"BearerAuth": {"bearer": "token"}, "ApiKeyAuth": {"api_key": "key"}},
@@ -376,16 +466,15 @@ def test_unsupported_content_type_raises_at_runtime(form_auth_app, app_runner):
                 "BearerAuth": {"path": "/api/auth", "extract_selector": "/token"},
                 "ApiKeyAuth": {"path": "/api/auth", "extract_selector": "/token"},
             },
-            "Schemes .* appear",
+            "Schemes 'ApiKeyAuth', 'BearerAuth' appear in both auth.openapi and auth.dynamic.openapi. "
+            "Use one or the other.",
         ),
     ],
 )
-def test_config_rejects_overlapping_schemes(openapi_schemes, dynamic_schemes, match):
-    with pytest.raises(ConfigError, match=match):
-        AuthConfig(
-            openapi=openapi_schemes,
-            dynamic={"openapi": dynamic_schemes},
-        )
+def test_config_rejects_overlapping_schemes(openapi_schemes, dynamic_schemes, message):
+    with pytest.raises(ConfigError) as exc:
+        SchemathesisConfig.from_dict({"auth": {"openapi": openapi_schemes, "dynamic": {"openapi": dynamic_schemes}}})
+    assert str(exc.value) == message
 
 
 @pytest.mark.parametrize(
@@ -464,32 +553,87 @@ def test_unused_dynamic_auth_warning(ctx, cli, app_runner, snapshot_cli):
     )
 
 
-def test_dynamic_auth_integration(ctx, cli, app_runner, snapshot_cli):
-    app, _ = ctx.openapi.make_flask_app(
-        {
-            "/protected": {
-                "get": {
-                    "operationId": "getProtected",
-                    "security": [{"BearerAuth": []}],
-                    "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
-                }
-            }
-        },
-        components={
-            "securitySchemes": {
-                "BearerAuth": {"type": "http", "scheme": "bearer"},
-            }
-        },
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_dynamic_auth_unsupported_scheme_type_reported(ctx, cli, app_runner, snapshot_cli):
+    app = _protected_app(ctx, "MutualTLS", {"type": "mutualTLS"})
+    assert (
+        _run_cli(
+            cli,
+            app_runner,
+            app,
+            "--phases=fuzzing",
+            "--mode=positive",
+            "-n 1",
+            config={"auth": _dynamic_auth("MutualTLS")},
+        )
+        == snapshot_cli
     )
+
+
+def _token_body(token):
+    return jsonify({"access_token": token})
+
+
+def _session_cookie(token):
+    response = jsonify({})
+    response.set_cookie("SESSION", token, path="/")
+    return response
+
+
+@pytest.mark.parametrize(
+    ("scheme_name", "scheme", "overrides", "issue", "read_credential", "token", "expected"),
+    [
+        (
+            "BearerAuth",
+            {"type": "http", "scheme": "bearer"},
+            {},
+            _token_body,
+            lambda: request.headers.get("Authorization", ""),
+            "dynamic-token",
+            "Bearer dynamic-token",
+        ),
+        (
+            "SessionCookie",
+            {"type": "apiKey", "in": "cookie", "name": "SESSION"},
+            {"extract_from": "cookie", "extract_selector": "SESSION"},
+            _session_cookie,
+            lambda: request.cookies.get("SESSION"),
+            "s3ss10nt0k3n",
+            "s3ss10nt0k3n",
+        ),
+        (
+            "OAuth2",
+            OAUTH2_SCHEME,
+            {},
+            _token_body,
+            lambda: request.headers.get("Authorization", ""),
+            "dynamic-token",
+            "Bearer dynamic-token",
+        ),
+        (
+            "ApiKeyAuth",
+            {"type": "apiKey", "in": "header", "name": "X-API-Key"},
+            {},
+            _token_body,
+            lambda: request.headers.get("X-API-Key", ""),
+            "dynamic-key",
+            "dynamic-key",
+        ),
+    ],
+    ids=["bearer", "cookie", "oauth2", "api-key"],
+)
+def test_dynamic_auth_integration(
+    ctx, cli, app_runner, snapshot_cli, scheme_name, scheme, overrides, issue, read_credential, token, expected
+):
+    app = _protected_app(ctx, scheme_name, scheme)
 
     @app.route("/api/auth", methods=["POST"])
     def auth_endpoint():
-        return jsonify({"access_token": "dynamic-token"})
+        return issue(token)
 
     @app.route("/protected")
     def protected():
-        auth = request.headers.get("Authorization", "")
-        if auth != "Bearer dynamic-token":
+        if read_credential() != expected:
             return jsonify({"error": "unauthorized"}), 401
         return jsonify({"result": "ok"})
 
@@ -502,68 +646,34 @@ def test_dynamic_auth_integration(ctx, cli, app_runner, snapshot_cli):
             "--phases=fuzzing",
             "--mode=positive",
             "-n 3",
-            config={"auth": _dynamic_auth("BearerAuth")},
+            config={"auth": _dynamic_auth(scheme_name, **overrides)},
         )
         == snapshot_cli
     )
 
 
-def test_dynamic_auth_cookie_integration(ctx, cli, app_runner, snapshot_cli):
-    app, _ = ctx.openapi.make_flask_app(
-        {
-            "/protected": {
-                "get": {
-                    "operationId": "getProtected",
-                    "security": [{"SessionCookie": []}],
-                    "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
-                }
-            }
-        },
-        components={
-            "securitySchemes": {
-                "SessionCookie": {"type": "apiKey", "in": "cookie", "name": "SESSION"},
-            }
-        },
+def _run_dynamic_auth_test(testdir, toml, app_source, test_body):
+    testdir.makefile(".toml", schemathesis=toml)
+    testdir.makepyfile(
+        f"""{app_source}@schema.parametrize()
+@settings(max_examples=1, phases=[Phase.generate])
+def test_api(case):
+    {test_body}
+"""
     )
-
-    @app.route("/api/auth", methods=["POST"])
-    def auth_endpoint():
-        response = jsonify({})
-        response.set_cookie("SESSION", "s3ss10nt0k3n", path="/")
-        return response
-
-    @app.route("/protected")
-    def protected():
-        if request.cookies.get("SESSION") != "s3ss10nt0k3n":
-            return jsonify({"error": "unauthorized"}), 401
-        return jsonify({"result": "ok"})
-
-    assert (
-        _run_cli(
-            cli,
-            app_runner,
-            app,
-            "--include-path=/protected",
-            "--phases=fuzzing",
-            "--mode=positive",
-            "-n 3",
-            config={"auth": _dynamic_auth("SessionCookie", extract_from="cookie", extract_selector="SESSION")},
-        )
-        == snapshot_cli
-    )
+    return testdir.runpytest("-s")
 
 
-def test_dynamic_auth_wsgi_e2e(testdir):
-    testdir.makefile(
-        ".toml",
-        schemathesis="""
+@pytest.mark.parametrize(
+    ("toml", "app_source"),
+    [
+        pytest.param(
+            """
 [auth.dynamic.openapi.BearerAuth]
 path = "/api/auth"
 extract_selector = "/access_token"
 """,
-    )
-    testdir.makepyfile(
-        """
+            """
 import schemathesis
 from flask import Flask, jsonify, request
 from hypothesis import Phase, settings
@@ -603,29 +713,17 @@ def protected():
 
 schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
 
-@schema.parametrize()
-@settings(max_examples=1, phases=[Phase.generate])
-def test_api(case):
-    response = case.call()
-    assert response.status_code == 200
-"""
-    )
-    result = testdir.runpytest("-s")
-    result.assert_outcomes(passed=1)
-
-
-def test_dynamic_auth_cookie_wsgi_e2e(testdir):
-    testdir.makefile(
-        ".toml",
-        schemathesis="""
+""",
+            id="wsgi-bearer",
+        ),
+        pytest.param(
+            """
 [auth.dynamic.openapi.SessionCookie]
 path = "/api/auth"
 extract_from = "cookie"
 extract_selector = "SESSION"
 """,
-    )
-    testdir.makepyfile(
-        """
+            """
 import schemathesis
 from flask import Flask, jsonify, request
 from hypothesis import Phase, settings
@@ -667,29 +765,47 @@ def protected():
 
 schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
 
-@schema.parametrize()
-@settings(max_examples=1, phases=[Phase.generate])
-def test_api(case):
-    response = case.call()
-    assert response.status_code == 200
-"""
-    )
-    result = testdir.runpytest("-s")
-    result.assert_outcomes(passed=1)
+""",
+            id="wsgi-cookie",
+        ),
+        pytest.param(
+            """
+[auth.dynamic.openapi.HTTPBearer]
+path = "/api/auth"
+extract_selector = "/access_token"
+""",
+            """
+import schemathesis
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from hypothesis import Phase, settings
 
+app = FastAPI()
+security = HTTPBearer(auto_error=False)
 
-def test_dynamic_auth_cookie_asgi_e2e(testdir):
-    testdir.makefile(
-        ".toml",
-        schemathesis="""
+@app.post("/api/auth", include_in_schema=False)
+async def auth():
+    return {"access_token": "secret-token"}
+
+@app.get("/protected")
+async def protected(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    if credentials is None or credentials.credentials != "secret-token":
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    return {"result": "ok"}
+
+schema = schemathesis.openapi.from_asgi("/openapi.json", app)
+
+""",
+            id="asgi-bearer",
+        ),
+        pytest.param(
+            """
 [auth.dynamic.openapi.SessionCookie]
 path = "/api/auth"
 extract_from = "cookie"
 extract_selector = "SESSION"
 """,
-    )
-    testdir.makepyfile(
-        """
+            """
 import schemathesis
 from fastapi import Depends, FastAPI, HTTPException, Response
 from fastapi.security import APIKeyCookie
@@ -712,70 +828,28 @@ async def protected(session: str = Depends(session_cookie)):
 
 schema = schemathesis.openapi.from_asgi("/openapi.json", app)
 
-@schema.parametrize()
-@settings(max_examples=1, phases=[Phase.generate])
-def test_api(case):
-    response = case.call()
-    assert response.status_code == 200
-"""
-    )
-    result = testdir.runpytest("-s")
-    result.assert_outcomes(passed=1)
-
-
-def test_dynamic_auth_asgi_e2e(testdir):
-    testdir.makefile(
-        ".toml",
-        schemathesis="""
-[auth.dynamic.openapi.HTTPBearer]
-path = "/api/auth"
-extract_selector = "/access_token"
 """,
+            id="asgi-cookie",
+        ),
+    ],
+)
+def test_dynamic_auth_e2e(testdir, toml, app_source):
+    result = _run_dynamic_auth_test(
+        testdir, toml, app_source, "response = case.call()\n    assert response.status_code == 200"
     )
-    testdir.makepyfile(
-        """
-import schemathesis
-from fastapi import FastAPI, Depends, HTTPException
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from hypothesis import Phase, settings
-
-app = FastAPI()
-security = HTTPBearer(auto_error=False)
-
-@app.post("/api/auth", include_in_schema=False)
-async def auth():
-    return {"access_token": "secret-token"}
-
-@app.get("/protected")
-async def protected(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    if credentials is None or credentials.credentials != "secret-token":
-        raise HTTPException(status_code=401, detail="Unauthorized")
-    return {"result": "ok"}
-
-schema = schemathesis.openapi.from_asgi("/openapi.json", app)
-
-@schema.parametrize()
-@settings(max_examples=1, phases=[Phase.generate])
-def test_api(case):
-    response = case.call()
-    assert response.status_code == 200
-"""
-    )
-    result = testdir.runpytest("-s")
     result.assert_outcomes(passed=1)
 
 
-def test_dynamic_auth_wsgi_transport_error(testdir):
-    testdir.makefile(
-        ".toml",
-        schemathesis="""
+@pytest.mark.parametrize(
+    ("toml", "app_source", "message"),
+    [
+        pytest.param(
+            """
 [auth.dynamic.openapi.BearerAuth]
 path = "/api/auth"
 extract_selector = "/access_token"
 """,
-    )
-    testdir.makepyfile(
-        """
+            """
 import schemathesis
 from flask import Flask, jsonify
 from hypothesis import Phase, settings
@@ -813,28 +887,17 @@ def data():
 
 schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
 
-@schema.parametrize()
-@settings(max_examples=1, phases=[Phase.generate])
-def test_api(case):
-    case.call()
-"""
-    )
-    result = testdir.runpytest("-s")
-    result.assert_outcomes(failed=1)
-    result.stdout.fnmatch_lines(["*WSGI auth request failed*"])
-
-
-def test_dynamic_auth_asgi_transport_error(testdir):
-    testdir.makefile(
-        ".toml",
-        schemathesis="""
+""",
+            "*WSGI auth request failed*",
+            id="wsgi",
+        ),
+        pytest.param(
+            """
 [auth.dynamic.openapi.HTTPBearer]
 path = "/api/auth"
 extract_selector = "/access_token"
 """,
-    )
-    testdir.makepyfile(
-        """
+            """
 import schemathesis
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -853,59 +916,43 @@ async def protected(credentials: HTTPAuthorizationCredentials = Depends(security
 
 schema = schemathesis.openapi.from_asgi("/openapi.json", app)
 
-@schema.parametrize()
-@settings(max_examples=1, phases=[Phase.generate])
-def test_api(case):
-    case.call()
-"""
-    )
-    result = testdir.runpytest("-s")
+""",
+            "*ASGI auth request failed*",
+            id="asgi",
+        ),
+    ],
+)
+def test_dynamic_auth_transport_error(testdir, toml, app_source, message):
+    result = _run_dynamic_auth_test(testdir, toml, app_source, "case.call()")
     result.assert_outcomes(failed=1)
-    result.stdout.fnmatch_lines(["*ASGI auth request failed*"])
+    result.stdout.fnmatch_lines([message])
 
 
-def test_dynamic_auth_integration_oauth2(ctx, cli, app_runner, snapshot_cli):
-    app, _ = ctx.openapi.make_flask_app(
-        {
-            "/protected": {
-                "get": {
-                    "operationId": "getProtected",
-                    "security": [{"OAuth2": []}],
-                    "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
-                }
-            }
-        },
-        components={
-            "securitySchemes": {
-                "OAuth2": OAUTH2_SCHEME,
-            }
-        },
+def test_per_test_auth_skipped_for_negated_security_header(ctx, testdir):
+    raw_schema = ctx.openapi.build_schema(
+        {"/protected": {"get": {"security": [{"ApiKeyAuth": []}], "responses": {"200": {"description": "OK"}}}}},
+        components={"securitySchemes": {"ApiKeyAuth": {"type": "apiKey", "name": "X-API-Key", "in": "header"}}},
     )
+    testdir.make_test(
+        """
+class Static:
+    def get(self, case, context):
+        return "secret"
 
-    @app.route("/api/auth", methods=["POST"])
-    def auth_endpoint():
-        return jsonify({"access_token": "dynamic-token"})
+    def set(self, case, data, context):
+        case.headers["X-API-Key"] = data
 
-    @app.route("/protected")
-    def protected():
-        auth = request.headers.get("Authorization", "")
-        if auth != "Bearer dynamic-token":
-            return jsonify({"error": "unauthorized"}), 401
-        return jsonify({"result": "ok"})
-
-    assert (
-        _run_cli(
-            cli,
-            app_runner,
-            app,
-            "--include-path=/protected",
-            "--phases=fuzzing",
-            "--mode=positive",
-            "-n 3",
-            config={"auth": _dynamic_auth("OAuth2")},
-        )
-        == snapshot_cli
+@schema.auth(Static)
+@schema.parametrize()
+@settings(max_examples=5, phases=[Phase.generate])
+def test_api(case):
+    assert case.headers.get("X-API-Key") != "secret"
+""",
+        schema=raw_schema,
+        generation_modes=[GenerationMode.NEGATIVE],
     )
+    result = testdir.runpytest()
+    result.assert_outcomes(passed=1)
 
 
 @pytest.mark.parametrize("cache_by_key", [None, lambda case, ctx: "k"], ids=["unkeyed", "keyed"])
@@ -1002,8 +1049,46 @@ def test_refresh_auth_wsgi_propagates_app(ctx):
     assert case.headers["Authorization"] == "Bearer token-2"
 
 
+def test_refresh_auth_keeps_static_scheme(ctx):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/protected": {
+                "get": {
+                    "security": [{"ApiKeyAuth": [], "BearerAuth": []}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        },
+        components={
+            "securitySchemes": {
+                "ApiKeyAuth": {"type": "apiKey", "name": "X-API-Key", "in": "header"},
+                "BearerAuth": {"type": "http", "scheme": "bearer"},
+            }
+        },
+    )
+    tokens = itertools.count(1)
+
+    @app.route("/api/auth", methods=["POST"])
+    def auth_endpoint():
+        return jsonify({"access_token": f"token-{next(tokens)}"})
+
+    schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
+    schema.config.auth.openapi.schemes["ApiKeyAuth"] = ApiKeyAuthConfig(api_key="static-key")
+    schema.config.auth.dynamic.schemes["BearerAuth"] = DynamicTokenAuthConfig(
+        path="/api/auth", extract_selector="/access_token"
+    )
+    operation = schema["/protected"]["GET"]
+    case = operation.Case()
+    set_on_case(case, AuthContext(operation=operation, app=operation.app), None)
+    assert dict(case.headers) == {"X-API-Key": "static-key", "Authorization": "Bearer token-1"}
+
+    refresh_auth(case)
+
+    assert dict(case.headers) == {"X-API-Key": "static-key", "Authorization": "Bearer token-2"}
+
+
 # Single-use token 401s after first use; the hook re-authenticates and replays so the recorded response is the recovered 2xx.
-def test_reauth_recovers_expired_token(ctx, cli, app_runner, snapshot_cli):
+def test_reauth_recovers_expired_token(ctx, cli, app_runner, tmp_path, snapshot_cli, snapshot_html):
     app, _ = ctx.openapi.make_flask_app(
         {
             "/protected": {
@@ -1022,6 +1107,7 @@ def test_reauth_recovers_expired_token(ctx, cli, app_runner, snapshot_cli):
         },
     )
     state = _register_single_use_token(app)
+    report_dir = tmp_path / "report"
 
     result = _run_cli(
         cli,
@@ -1031,6 +1117,8 @@ def test_reauth_recovers_expired_token(ctx, cli, app_runner, snapshot_cli):
         "--phases=fuzzing",
         "--mode=positive",
         "-n 4",
+        "--seed=42",
+        f"--report-html-path={report_dir}",
         config={
             "checks": {"positive_data_acceptance": {"expected-statuses": ["2xx"]}},
             "auth": _dynamic_auth("OAuth2", retry_on=[401]),
@@ -1038,29 +1126,94 @@ def test_reauth_recovers_expired_token(ctx, cli, app_runner, snapshot_cli):
     )
     assert result == snapshot_cli
     assert state["issued"] >= 2
+    assert (report_dir / "index.html").read_text(encoding="utf-8") == snapshot_html
 
 
-# A negated-security case's 401 is the expected outcome, not an expired token - the hook must not re-authenticate for it.
-def test_negative_auth_case_does_not_reauth(ctx, cli, app_runner, mocker):
+# Single-use tokens: every token fetched after the first recovers one request, unless `--max-time` cuts its replay.
+@pytest.mark.parametrize(
+    "args,max_cut_replays",
+    [(("run", "--phases=stateful", "--max-examples=10"), 0), (("fuzz", "--max-time=1"), 1)],
+    ids=["stateful", "fuzz"],
+)
+def test_reauth_recovers_expired_token_in_multi_step_runs(ctx, cli, app_runner, args, max_cut_replays):
     app, _ = ctx.openapi.make_flask_app(
         {
             "/protected": {
                 "get": {
                     "operationId": "getProtected",
-                    "security": [{"ApiKeyAuth": []}],
-                    "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
+                    "security": [{"OAuth2": []}],
+                    "parameters": [{"name": "key", "in": "query", "required": True, "schema": {"type": "string"}}],
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "links": {
+                                "Again": {
+                                    "operationId": "getProtected",
+                                    "parameters": {"key": "$response.body#/result"},
+                                }
+                            },
+                        },
+                        "401": {"description": "Unauthorized"},
+                    },
                 }
             }
         },
-        components={
-            "securitySchemes": {
-                "ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"},
-            }
-        },
+        components={"securitySchemes": {"OAuth2": OAUTH2_SCHEME}},
     )
+    state = _register_single_use_token(app)
+    command, *flags = args
+    base_url = app_runner.openapi_url(app, path="")
+
+    result = cli.main(
+        command,
+        f"{base_url}/openapi.json",
+        *flags,
+        "--mode=positive",
+        "--seed=42",
+        config={"base-url": base_url, "auth": _dynamic_auth("OAuth2", retry_on=[401])},
+    )
+    reported = re.search(r"Re-authenticated (\d+) time", result.stdout)
+    assert reported is not None, result.stdout
+    assert state["issued"] - 1 - max_cut_replays <= int(reported.group(1)) <= state["issued"] - 1
+
+
+def test_reauth_failure_in_html_report(ctx, cli, app_runner, tmp_path, snapshot_html):
+    app = _protected_app(ctx, "OAuth2", OAUTH2_SCHEME)
+    auth_calls = itertools.count()
 
     @app.route("/api/auth", methods=["POST"])
     def auth_endpoint():
+        if next(auth_calls) == 0:
+            return jsonify({"access_token": "expired"})
+        return jsonify({"error": "invalid credentials"}), 401
+
+    @app.route("/protected")
+    def protected():
+        return jsonify({"error": "unauthorized"}), 401
+
+    report_dir = tmp_path / "report"
+    _run_cli(
+        cli,
+        app_runner,
+        app,
+        "--phases=fuzzing",
+        "--mode=positive",
+        "-n 1",
+        "--seed=42",
+        f"--report-html-path={report_dir}",
+        config={"auth": _dynamic_auth("OAuth2", retry_on=[401])},
+    )
+    assert (report_dir / "index.html").read_text(encoding="utf-8") == snapshot_html
+
+
+# A negated-security case's 401 is the expected outcome, not an expired token - the hook must not re-authenticate for it.
+def test_negative_auth_case_does_not_reauth(ctx, cli, app_runner):
+    app = _protected_app(ctx, "ApiKeyAuth", {"type": "apiKey", "in": "header", "name": "X-API-Key"})
+    token_requests = []
+
+    @app.route("/api/auth", methods=["POST"])
+    def auth_endpoint():
+        token_requests.append(request.path)
         return jsonify({"access_token": "valid-token"})
 
     @app.route("/protected")
@@ -1068,8 +1221,6 @@ def test_negative_auth_case_does_not_reauth(ctx, cli, app_runner, mocker):
         if request.headers.get("X-API-Key", "") != "valid-token":
             return jsonify({"error": "unauthorized"}), 401
         return jsonify({"result": "ok"})
-
-    spy = mocker.spy(schemathesis.auths, "refresh_auth")
 
     _run_cli(
         cli,
@@ -1081,51 +1232,7 @@ def test_negative_auth_case_does_not_reauth(ctx, cli, app_runner, mocker):
         "-n 15",
         config={"auth": _dynamic_auth("ApiKeyAuth", retry_on=[401])},
     )
-    assert spy.call_count == 0
-
-
-def test_dynamic_auth_integration_api_key(ctx, cli, app_runner, snapshot_cli):
-    app, _ = ctx.openapi.make_flask_app(
-        {
-            "/protected": {
-                "get": {
-                    "operationId": "getProtected",
-                    "security": [{"ApiKeyAuth": []}],
-                    "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
-                }
-            }
-        },
-        components={
-            "securitySchemes": {
-                "ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"},
-            }
-        },
-    )
-
-    @app.route("/api/auth", methods=["POST"])
-    def auth_endpoint():
-        return jsonify({"access_token": "dynamic-key"})
-
-    @app.route("/protected")
-    def protected():
-        key = request.headers.get("X-API-Key", "")
-        if key != "dynamic-key":
-            return jsonify({"error": "unauthorized"}), 401
-        return jsonify({"result": "ok"})
-
-    assert (
-        _run_cli(
-            cli,
-            app_runner,
-            app,
-            "--include-path=/protected",
-            "--phases=fuzzing",
-            "--mode=positive",
-            "-n 3",
-            config={"auth": _dynamic_auth("ApiKeyAuth")},
-        )
-        == snapshot_cli
-    )
+    assert token_requests == ["/api/auth"]
 
 
 # A no-auth operation's incidental 401 must not trigger a re-authentication that invalidates the shared token cache.
@@ -1189,7 +1296,7 @@ def test_oauth2_case_without_explicit_auth_does_not_reauth(ctx, cli, app_runner)
     assert hits["auth"] <= 2
 
 
-# Dead credentials make every re-authentication fail; the breaker trips after 3 consecutive failures, bounding auth fetches.
+# Login works until it starts rejecting the credentials: the run warns and stops hitting the login endpoint.
 def test_breaker_bounds_login_attempts(ctx, cli, app_runner):
     app, _ = ctx.openapi.make_flask_app(
         {
@@ -1208,18 +1315,23 @@ def test_breaker_bounds_login_attempts(ctx, cli, app_runner):
             }
         },
     )
-    hits = {"auth": 0}
+    hits = {"auth": 0, "api": 0}
 
     @app.route("/api/auth", methods=["POST"])
     def auth_endpoint():
         hits["auth"] += 1
-        return jsonify({"access_token": "bad"})
+        if hits["auth"] == 1:
+            return jsonify({"access_token": "t"})
+        return jsonify({"error": "invalid credentials"}), 401
 
-    def _unauthorized():
+    def _expires_after_first_call():
+        hits["api"] += 1
+        if hits["api"] == 1 and request.headers.get("Authorization") == "Bearer t":
+            return jsonify({"result": "ok"})
         return jsonify({"error": "unauthorized"}), 401
 
     for i in range(6):
-        app.add_url_rule(f"/r{i}", f"r{i}", _unauthorized)
+        app.add_url_rule(f"/r{i}", f"r{i}", _expires_after_first_call)
 
     result = _run_cli(
         cli,
@@ -1232,6 +1344,49 @@ def test_breaker_bounds_login_attempts(ctx, cli, app_runner):
     )
     assert hits["auth"] <= 4
     assert result.stdout.count("⚠️ Authentication stopped working mid-run - credentials likely invalidated") == 1
+
+
+# An API that answers 401 for unknown ids keeps answering 401 after a successful re-login: credentials are fine.
+def test_401_after_successful_relogin_is_not_invalidated_credentials(ctx, cli, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/tools/{id}": {
+                "get": {
+                    "operationId": "getTool",
+                    "security": [{"OAuth2": []}],
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
+                }
+            }
+        },
+        components={
+            "securitySchemes": {
+                "OAuth2": OAUTH2_SCHEME,
+            }
+        },
+    )
+    hits = {"auth": 0}
+
+    @app.route("/api/auth", methods=["POST"])
+    def auth_endpoint():
+        hits["auth"] += 1
+        return jsonify({"access_token": "t"})
+
+    @app.route("/tools/<id>")
+    def get_tool(id):
+        return jsonify({"detail": "We could not find what you're looking for :/"}), 401
+
+    result = _run_cli(
+        cli,
+        app_runner,
+        app,
+        "--phases=fuzzing",
+        "--mode=positive",
+        "-n 10",
+        config={"auth": _dynamic_auth("OAuth2", retry_on=[401])},
+    )
+    assert "credentials likely invalidated" not in result.stdout
+    assert hits["auth"] == 2
 
 
 # A dead login endpoint is hit a bounded number of times across the whole run, not once per generated case.
@@ -1278,19 +1433,40 @@ def test_dead_login_endpoint_does_not_storm(ctx, cli, app_runner):
 
 
 # A programmatic @schemathesis.auth provider with retry_on re-authenticates like a config-dynamic scheme in a full run.
-def test_custom_provider_reauth_recovers_expired_token(ctx, cli, app_runner):
+# The server checks the API key first, so a generated one would fail every replay after re-login.
+def test_custom_provider_reauth_recovers_with_alternative_security_scheme(ctx, cli, app_runner):
     app, _ = ctx.openapi.make_flask_app(
         {
             "/protected": {
                 "get": {
-                    "operationId": "getProtected",
+                    "security": [{"ApiKey": []}, {"Bearer": []}],
                     "parameters": [{"name": "key", "in": "query", "required": True, "schema": {"type": "string"}}],
                     "responses": {"200": {"description": "OK"}, "401": {"description": "Unauthorized"}},
                 }
             }
         },
+        components={
+            "securitySchemes": {
+                "ApiKey": {"type": "apiKey", "name": "X-Api-Key", "in": "header"},
+                "Bearer": {"type": "http", "scheme": "bearer"},
+            }
+        },
     )
-    state = _register_single_use_token(app)
+    state = {"issued": 0, "valid": None}
+
+    @app.route("/api/auth", methods=["POST"])
+    def auth_endpoint():
+        state["issued"] += 1
+        state["valid"] = f"tok{state['issued']}"
+        return jsonify({"access_token": state["valid"]})
+
+    @app.route("/protected")
+    def protected():
+        token = request.headers.get("Authorization", "").removeprefix("Bearer ")
+        if "X-Api-Key" in request.headers or token != state["valid"]:
+            return jsonify({"error": "unauthorized"}), 401
+        state["valid"] = None
+        return jsonify({"result": "ok"})
 
     base_url = app_runner.openapi_url(app, path="")
     module = ctx.write_pymodule(
@@ -1314,7 +1490,7 @@ class TokenAuth:
         "--include-path=/protected",
         "--phases=fuzzing",
         "--mode=positive",
-        "-n 4",
+        "--max-examples=10",
         config={
             "base-url": base_url,
             "checks": {"positive_data_acceptance": {"expected-statuses": ["2xx"]}},

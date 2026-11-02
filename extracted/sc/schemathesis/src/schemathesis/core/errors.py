@@ -5,11 +5,12 @@ from __future__ import annotations
 import enum
 import re
 import traceback
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
+from difflib import get_close_matches
 from textwrap import indent
 from types import TracebackType
-from typing import TYPE_CHECKING, Any, NoReturn
+from typing import TYPE_CHECKING, Any, NoReturn, TypeGuard
 from urllib.parse import urldefrag
 
 from jsonschema_rs import ValidationError
@@ -17,7 +18,7 @@ from jsonschema_rs import ValidationError
 from schemathesis.core.output import truncate_json
 
 if TYPE_CHECKING:
-    from requests import RequestException
+    from requests import PreparedRequest, ReadTimeout, RequestException
 
     from schemathesis.config import OutputConfig
     from schemathesis.core.jsonschema import BundleError
@@ -37,7 +38,7 @@ class SchemathesisError(Exception):
     """Base exception class for all Schemathesis errors."""
 
 
-class DefinitionKind(str, enum.Enum):
+class DefinitionKind(enum.StrEnum):
     SCHEMA = "Schema Object"
     SECURITY_SCHEME = "Security Scheme Object"
     RESPONSES = "Responses Object"
@@ -103,6 +104,12 @@ class InvalidSchema(SchemathesisError):
         self.path = path
         self.method = method
 
+    @property
+    def label(self) -> str:
+        if self.method and self.path:
+            return f"{self.method.upper()} {self.path}"
+        return self.path or "schema"
+
     @classmethod
     def from_bundle_error(cls, error: BundleError, location: str, name: str | None = None) -> InvalidSchema:
         if location == "body":
@@ -129,6 +136,7 @@ class InvalidSchema(SchemathesisError):
         method: str | None,
         config: OutputConfig,
         location: SchemaLocation | None = None,
+        location_path: list[str | int] | None = None,
     ) -> InvalidSchema:
         # This default message contains the instance which we already printed
         if "is not valid under any of the schemas" in error.message:
@@ -137,7 +145,7 @@ class InvalidSchema(SchemathesisError):
             error_message = error.message
         return cls._from_raw_components(
             instance_path=error.instance_path,
-            location_path=error.instance_path,
+            location_path=error.instance_path if location_path is None else location_path,
             instance=error.instance,
             error_message=error_message,
             path=path,
@@ -239,11 +247,11 @@ class HookExecutionError(SchemathesisError):
     """Raised when a user-defined hook raises an exception during execution."""
 
     hook_name: str
-    original_error: Exception
+    original_error: Exception | SystemExit
 
     __slots__ = ("hook_name", "original_error")
 
-    def __init__(self, hook_name: str, original_error: Exception) -> None:
+    def __init__(self, hook_name: str, original_error: Exception | SystemExit) -> None:
         self.hook_name = hook_name
         self.original_error = original_error
 
@@ -368,7 +376,7 @@ class UnsupportedRegexPattern(InvalidRegexPattern):
         )
 
 
-def is_regex_validation_error(exc: Exception) -> bool:
+def is_regex_validation_error(exc: BaseException) -> TypeGuard[ValidationError]:
     """Check if exception is a jsonschema_rs.ValidationError for invalid regex."""
     return isinstance(exc, ValidationError) and exc.kind.name == "format" and exc.kind.value == "regex"
 
@@ -388,6 +396,16 @@ class InvalidHeadersExample(InvalidSchema):
 
 class IncorrectUsage(SchemathesisError):
     """Indicates incorrect usage of Schemathesis' public API."""
+
+
+class UnsupportedType(SchemathesisError):
+    """A schema type Schemathesis has no data generation strategy for."""
+
+    # Each specification names the type in its own terms: headline, one-line summary, and how to add support.
+    title: str
+    summary: str
+    suggestion: str
+    name: str
 
 
 class AuthenticationError(SchemathesisError):
@@ -425,6 +443,12 @@ class AuthenticationError(SchemathesisError):
 
 class NoLinksFound(IncorrectUsage):
     """Raised when no valid links are available for stateful testing."""
+
+    suggestion: str | None
+
+    def __init__(self, message: str, suggestion: str | None = None) -> None:
+        super().__init__(message)
+        self.suggestion = suggestion
 
 
 class NoProducers(IncorrectUsage):
@@ -550,6 +574,15 @@ class SerializationNotPossible(SerializationError):
         return cls(SERIALIZATION_FOR_TYPE_IS_NOT_POSSIBLE_MESSAGE.format(media_type), media_types=[media_type])
 
 
+def not_found_message(item: str, noun: str, candidates: Iterable[str]) -> str:
+    """Report a missing `item`, suggesting the closest of `candidates` if one is close enough."""
+    message = f"`{item}` {noun} not found" if noun else f"`{item}` not found"
+    matches = get_close_matches(item, list(candidates))
+    if matches:
+        message += f". Did you mean `{matches[0]}`?"
+    return message
+
+
 class OperationNotFound(LookupError, SchemathesisError):
     """Raised when an API operation cannot be found in the schema.
 
@@ -566,7 +599,7 @@ class OperationNotFound(LookupError, SchemathesisError):
 
 
 @enum.unique
-class LoaderErrorKind(str, enum.Enum):
+class LoaderErrorKind(enum.StrEnum):
     # Connection related issues
     CONNECTION_SSL = "connection_ssl"
     CONNECTION_OTHER = "connection_other"
@@ -592,6 +625,10 @@ class LoaderErrorKind(str, enum.Enum):
 
     # GraphQL validation
     GRAPHQL_INVALID_SCHEMA = "graphql_invalid_schema"
+
+    # gRPC validation
+    GRPC_INVALID_DESCRIPTOR_SET = "grpc_invalid_descriptor_set"
+    GRPC_REFLECTION_UNAVAILABLE = "grpc_reflection_unavailable"
 
     # Unclassified
     UNCLASSIFIED = "unclassified"
@@ -653,6 +690,22 @@ def _clean_inner_request_message(message: object) -> str:
     if isinstance(message, str) and message.startswith("HTTPConnectionPool"):
         return re.sub(r"HTTPConnectionPool\(.+?\): ", "", message).rstrip(".")
     return str(message)
+
+
+def read_timeout_error(url: str, timeout: float | int, request: PreparedRequest | None = None) -> ReadTimeout:
+    """A response that did not arrive within the timeout, in the form `requests` reports a late one."""
+    from requests.exceptions import ReadTimeout
+
+    return ReadTimeout(TimeoutError(f"{url}: Read timed out. (read timeout={timeout})"), request=request)
+
+
+def is_read_timeout(exc: RequestException) -> bool:
+    """Whether the response did not arrive within the timeout, before or after its headers."""
+    from requests.exceptions import ReadTimeout
+    from urllib3.exceptions import ReadTimeoutError
+
+    # A timeout while reading the body arrives as a connection error that wraps the read timeout.
+    return isinstance(exc, ReadTimeout) or isinstance(exc.args[0] if exc.args else None, ReadTimeoutError)
 
 
 def get_request_error_message(exc: RequestException) -> str:

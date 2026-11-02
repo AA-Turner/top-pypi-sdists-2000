@@ -2,16 +2,14 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterator
+from collections.abc import Iterator
 from typing import TYPE_CHECKING, Protocol
 
 import hypothesis.errors
 from jsonschema_rs import ValidationError
 
-from schemathesis.core.compat import BaseExceptionGroup
 from schemathesis.core.errors import (
     AuthenticationError,
-    InfiniteRecursiveReference,
     InternalError,
     InvalidHeadersExample,
     InvalidRegexPattern,
@@ -25,15 +23,12 @@ from schemathesis.core.errors import (
 )
 from schemathesis.core.failures import Failure, FailureGroup
 from schemathesis.engine import Status, events
-from schemathesis.engine.errors import DeadlineExceeded, TestingState, UnexpectedError, clear_hypothesis_notes
-from schemathesis.generation.hypothesis.builder import (
-    InfiniteRecursiveReferenceMark,
-    InvalidHeadersExampleMark,
-    InvalidRegexMark,
-    MissingPathParameters,
-    NonSerializableMark,
-    UnresolvableReferenceMark,
-    UnsatisfiableExampleMark,
+from schemathesis.engine.errors import (
+    DeadlineExceeded,
+    TestingState,
+    UnexpectedError,
+    clear_hypothesis_notes,
+    is_inconsistent_replay,
 )
 from schemathesis.generation.hypothesis.reporting import (
     build_health_check_error,
@@ -42,7 +37,6 @@ from schemathesis.generation.hypothesis.reporting import (
 )
 
 if TYPE_CHECKING:
-    from schemathesis.generation.drivers import Controller
     from schemathesis.schemas import APIOperation
 
 
@@ -52,59 +46,6 @@ class NonFatalErrorFactory(Protocol):
     ) -> events.NonFatalError: ...  # pragma: no cover
 
 
-def iter_mark_error_events(
-    *,
-    test_function: Callable,
-    non_fatal_error: NonFatalErrorFactory,
-    current_status: Status | None,
-    serializers_suggestion: str,
-) -> Iterator[events.NonFatalError]:
-    """Yield events for errors stashed on a Hypothesis test function via `*Mark` slots."""
-    status = current_status
-    if UnsatisfiableExampleMark.is_set(test_function):
-        status = Status.ERROR
-        yield non_fatal_error(
-            hypothesis.errors.Unsatisfiable("Failed to generate test cases from examples for this API operation")
-        )
-    non_serializable = NonSerializableMark.get(test_function)
-    if non_serializable is not None and status != Status.ERROR:
-        status = Status.ERROR
-        media_types = ", ".join(non_serializable.media_types)
-        yield non_fatal_error(
-            SerializationNotPossible(
-                "Failed to generate test cases from examples for this API operation because of"
-                f" unsupported payload media types: {media_types}\n{serializers_suggestion}",
-                media_types=non_serializable.media_types,
-            )
-        )
-    invalid_regex = InvalidRegexMark.get(test_function)
-    if invalid_regex is not None and status != Status.ERROR:
-        status = Status.ERROR
-        yield non_fatal_error(InvalidRegexPattern.from_jsonschema_rs_error(invalid_regex))
-    invalid_headers = InvalidHeadersExampleMark.get(test_function)
-    if invalid_headers:
-        yield non_fatal_error(InvalidHeadersExample.from_headers(invalid_headers))
-    missing = MissingPathParameters.get(test_function)
-    if missing:
-        yield non_fatal_error(missing)
-    infinite = InfiniteRecursiveReferenceMark.get(test_function)
-    if infinite:
-        yield non_fatal_error(infinite)
-    unresolvable = UnresolvableReferenceMark.get(test_function)
-    if unresolvable:
-        yield non_fatal_error(unresolvable)
-
-
-def iter_controller_error_events(
-    *,
-    controller: Controller,
-    non_fatal_error: NonFatalErrorFactory,
-) -> Iterator[events.NonFatalError]:
-    """Yield events for errors stashed on a `Controller` during pre-iteration setup."""
-    for exc in controller.deferred_errors:
-        yield non_fatal_error(exc)
-
-
 def prefer_spec_error(exc: Exception, operation: APIOperation) -> Exception:
     """Prefer the specification's own error - it names the offending object and where it sits in the document."""
     if not isinstance(exc, RejectedSchemaDefinition):
@@ -112,14 +53,18 @@ def prefer_spec_error(exc: Exception, operation: APIOperation) -> Exception:
     try:
         operation.schema.validate()
     except ValidationError as error:
-        return InvalidSchema.from_jsonschema_error(
-            error,
-            path=operation.path,
-            method=operation.method,
-            config=operation.schema.config.output,
-            location=SchemaLocation.maybe_from_error_path(error.instance_path, operation.schema.specification.version),
-        )
+        return _invalid_schema(error, operation)
     return exc
+
+
+def _invalid_schema(error: ValidationError, operation: APIOperation) -> InvalidSchema:
+    return InvalidSchema.from_jsonschema_error(
+        error,
+        path=operation.path,
+        method=operation.method,
+        config=operation.schema.config.output,
+        location=SchemaLocation.maybe_from_error_path(error.instance_path, operation.schema.specification.version),
+    )
 
 
 def translate_iteration_exception(
@@ -143,11 +88,7 @@ def translate_iteration_exception(
         return non_fatal_error(exc, code_sample=code_sample)
     if isinstance(
         exc,
-        InvalidSchema
-        | SerializationNotPossible
-        | InfiniteRecursiveReference
-        | UnresolvableReference
-        | InvalidHeadersExample,
+        (InvalidSchema, SerializationNotPossible, UnresolvableReference, InvalidHeadersExample),
     ):
         return non_fatal_error(prefer_spec_error(exc, operation))
     clear_hypothesis_notes(exc)
@@ -171,15 +112,21 @@ def classify_test_exception(
     non_fatal_error: NonFatalErrorFactory,
 ) -> tuple[Status, list[events.NonFatalError]]:
     """Map an exception raised by a Hypothesis-driven test into a scenario status and events to report."""
-    if isinstance(exc, FailureGroup | Failure):
+    if isinstance(exc, (FailureGroup, Failure)):
+        # A request that timed out or dropped before the failure was found is still this operation's finding.
+        stored = state.take_unrecoverable_network_error()
+        if stored is not None:
+            return Status.FAILURE, [non_fatal_error(stored.error, code_sample=stored.code_sample)]
         return Status.FAILURE, []
     if isinstance(exc, UnexpectedError):
         # It could be an error in user-defined extensions, network errors or internal Schemathesis errors
         return Status.ERROR, []
-    if isinstance(exc, hypothesis.errors.Flaky):
+    if isinstance(exc, hypothesis.errors.Flaky) or is_inconsistent_replay(exc):
         return _classify_flaky(exc, state=state, errors=errors, non_fatal_error=non_fatal_error)
     if isinstance(exc, BaseExceptionGroup):
-        return Status.ERROR, list(_iter_group_errors(exc, state=state, non_fatal_error=non_fatal_error))
+        return Status.ERROR, list(
+            _iter_group_errors(exc, operation=operation, state=state, non_fatal_error=non_fatal_error)
+        )
     if isinstance(exc, hypothesis.errors.FailedHealthCheck):
         return Status.ERROR, [non_fatal_error(build_health_check_error(operation, exc, with_tip=False))]
     if isinstance(exc, hypothesis.errors.Unsatisfiable):
@@ -224,7 +171,7 @@ def classify_test_exception(
 
 
 def _classify_flaky(
-    exc: hypothesis.errors.Flaky,
+    exc: hypothesis.errors.Flaky | AssertionError,
     *,
     state: TestingState,
     errors: list[Exception],
@@ -252,19 +199,38 @@ def _classify_flaky(
 def _iter_group_errors(
     exc: BaseExceptionGroup,
     *,
+    operation: APIOperation,
     state: TestingState,
     non_fatal_error: NonFatalErrorFactory,
 ) -> Iterator[events.NonFatalError]:
+    unexplained = []
+    reported = False
+    seen_schema_errors: set[tuple[str, str, str]] = set()
     for sub_exc in exc.exceptions:
         if is_regex_validation_error(sub_exc):
+            reported = True
             yield non_fatal_error(InvalidRegexPattern.from_jsonschema_rs_error(sub_exc))
         elif isinstance(sub_exc, InvalidSchema):
-            yield non_fatal_error(sub_exc)
+            reported = True
+            identity = (sub_exc.message, sub_exc.method or operation.method, sub_exc.path or operation.path)
+            if identity not in seen_schema_errors:
+                seen_schema_errors.add(identity)
+                yield non_fatal_error(sub_exc)
         else:
             code_sample = state.get_code_sample_for(sub_exc)
-            if code_sample is not None:
+            if code_sample is not None and isinstance(sub_exc, Exception):
+                reported = True
                 clear_hypothesis_notes(sub_exc)
                 yield non_fatal_error(sub_exc, code_sample=code_sample)
+            # Check failures and errors raised while testing a case are recorded when they happen
+            elif isinstance(sub_exc, Exception) and not isinstance(sub_exc, (Failure, FailureGroup, UnexpectedError)):
+                unexplained.append(sub_exc)
+    # Other errors often restate a schema error reported above, so they are shown only when nothing else is
+    if not reported:
+        for sub_exc in unexplained:
+            yield translate_iteration_exception(
+                sub_exc, operation=operation, state=state, non_fatal_error=non_fatal_error
+            )
 
 
 def _from_assertion_error(
@@ -281,14 +247,4 @@ def _from_assertion_error(
         except InternalError as internal:
             return non_fatal_error(internal)
     except ValidationError as error:
-        return non_fatal_error(
-            InvalidSchema.from_jsonschema_error(
-                error,
-                path=operation.path,
-                method=operation.method,
-                config=operation.schema.config.output,
-                location=SchemaLocation.maybe_from_error_path(
-                    error.instance_path, operation.schema.specification.version
-                ),
-            )
-        )
+        return non_fatal_error(_invalid_schema(error, operation))

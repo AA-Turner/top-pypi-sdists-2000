@@ -2,7 +2,7 @@ from base64 import b64decode
 
 import jsonschema_rs
 import pytest
-from hypothesis import HealthCheck, given, settings
+from hypothesis import HealthCheck, find, given, settings
 from hypothesis import strategies as st
 
 from schemathesis.config import GenerationConfig
@@ -12,6 +12,7 @@ from schemathesis.specs.openapi._hypothesis import _build_custom_formats, _canon
 from schemathesis.specs.openapi.coverage._schema import is_valid_header_value
 from schemathesis.specs.openapi.formats import FORMAT_LENGTHS, register_string_format
 from schemathesis.transport.serialization import Binary
+from test.utils import run_given
 
 FORMATS = _build_custom_formats(GenerationConfig(), GenerationMode.POSITIVE)
 # Formats named by JSON Schema; the `_`-prefixed rest are internal and carry their own invariants.
@@ -49,22 +50,16 @@ def _asserted():
 def test_registered_format_satisfies_its_own_validator(name, validator):
     # A generator whose values its own validator rejects turns every use of that format into a
     # false positive.
-    @given(_resolve(name))
-    @SETTINGS
+    @run_given(_resolve(name), max_examples=50)
     def test(value):
         assert validator.is_valid(value), value
-
-    test()
 
 
 @pytest.mark.parametrize("name", PUBLIC_FORMATS)
 def test_registered_format_generates_strings(name):
-    @given(_resolve(name))
-    @SETTINGS
+    @run_given(_resolve(name), max_examples=50)
     def test(value):
         assert isinstance(value, str), value
-
-    test()
 
 
 @pytest.mark.parametrize(("name", "bounds"), sorted(FORMAT_LENGTHS.items()))
@@ -73,12 +68,9 @@ def test_declared_format_lengths_hold(name, bounds):
     # silently drops cases.
     low, high = bounds
 
-    @given(_resolve(name))
-    @SETTINGS
+    @run_given(_resolve(name), max_examples=50)
     def test(value):
         assert low <= len(value) <= high, value
-
-    test()
 
 
 @given(st.data())
@@ -93,14 +85,35 @@ def test_binary_format_carries_bytes(data):
     assert isinstance(data.draw(FORMATS["binary"]), Binary)
 
 
+SIGNATURES = (b"\x89PNG\r\n\x1a\n", b"\xff\xd8\xff", b"GIF87a", b"RIFF", b"%PDF-", b"PK\x03\x04")
+FILE_SIGNATURES = pytest.mark.parametrize("signature", SIGNATURES, ids=["png", "jpeg", "gif", "webp", "pdf", "zip"])
+
+
+@FILE_SIGNATURES
+def test_binary_format_draws_real_files(signature):
+    # Upload handlers that parse the file reject random bytes before reaching their own logic.
+    find(FORMATS["binary"], lambda value: value.data.startswith(signature), settings=SETTINGS)
+
+
+@FILE_SIGNATURES
+def test_length_bounded_binary_format_draws_real_files(signature):
+    built = _canonical_strategy(
+        {"type": "string", "format": "binary", "minLength": 1, "maxLength": 1000},
+        GenerationConfig(),
+        jsonschema_rs.Draft202012Validator,
+    )
+    find(built, lambda value: value.data.startswith(signature), settings=SETTINGS)
+
+
+def test_binary_format_still_draws_arbitrary_bytes():
+    find(FORMATS["binary"], lambda value: value.data and not value.data.startswith(SIGNATURES), settings=SETTINGS)
+
+
 @pytest.mark.parametrize("name", ["_header_value", "_basic_auth", "_bearer_auth", "_if_match_header"])
 def test_header_formats_are_transmittable(name):
-    @given(FORMATS[name])
-    @SETTINGS
+    @run_given(FORMATS[name], max_examples=50)
     def test(value):
         assert is_valid_header_value(value), value
-
-    test()
 
 
 @given(FORMATS["_header_name"])
@@ -117,12 +130,9 @@ def test_registering_a_format_invalidates_built_strategies():
     register_string_format("test-digits", st.text(alphabet="0123456789", min_size=1))
     built = _canonical_strategy(schema, GenerationConfig(), jsonschema_rs.Draft202012Validator)
 
-    @given(built)
-    @SETTINGS
+    @run_given(built, max_examples=50)
     def test(value):
         assert value.isdigit(), value
-
-    test()
 
 
 def test_length_window_no_format_value_reaches_admits_nothing():
@@ -149,12 +159,9 @@ def test_narrow_length_window_on_many_format_properties():
     validator = jsonschema_rs.Draft202012Validator({"type": "string", "format": "date-time"}, validate_formats=True)
     drawn = []
 
-    @given(built)
-    @SETTINGS
+    @run_given(built, max_examples=50)
     def test(value):
         drawn.append(value)
-
-    test()
 
     assert drawn
     for value in drawn:
@@ -170,13 +177,10 @@ def test_regex_format_respects_generation_alphabet():
         jsonschema_rs.Draft202012Validator,
     )
 
-    @given(built)
-    @SETTINGS
+    @run_given(built, max_examples=50)
     def test(value):
         assert "\x00" not in value
         value.encode("ascii")
-
-    test()
 
 
 def test_canonical_strategy_cache_respects_header_exclusions():
@@ -196,12 +200,9 @@ def test_canonical_strategy_cache_respects_header_exclusions():
     _canonical_strategy(schema, first_config, jsonschema_rs.Draft4Validator)
     built = _canonical_strategy(schema, second_config, jsonschema_rs.Draft4Validator)
 
-    @given(built)
-    @SETTINGS
+    @run_given(built, max_examples=50)
     def test(value):
         assert value["X-Foo"] == "B"
-
-    test()
 
 
 @pytest.mark.parametrize(
@@ -210,30 +211,52 @@ def test_canonical_strategy_cache_respects_header_exclusions():
     ids=["pattern", "minLength", "maxLength"],
 )
 def test_binary_format_with_string_keywords(keywords):
-    # A binary payload is not a JSON string, so the keywords around it have no say over its bytes.
+    # Keywords written for JSON strings must not turn a binary payload into text.
     built = _canonical_strategy(
         {"type": "string", "format": "binary", **keywords},
         GenerationConfig(),
         jsonschema_rs.Draft202012Validator,
     )
 
-    @given(built)
-    @SETTINGS
+    @run_given(built, max_examples=50)
     def test(value):
         assert isinstance(value, Binary), value
 
-    test()
+
+@pytest.mark.parametrize(
+    ("items", "payload"),
+    [
+        ({"type": "string", "format": "binary"}, lambda item: item.data),
+        (
+            {
+                "type": "object",
+                "properties": {"file": {"type": "string", "format": "binary"}},
+                "required": ["file"],
+                "additionalProperties": False,
+            },
+            lambda item: item["file"].data,
+        ),
+    ],
+    ids=["string", "object"],
+)
+def test_unique_binary_items_differ_by_bytes(items, payload):
+    built = _canonical_strategy(
+        {"type": "array", "items": items, "minItems": 2, "uniqueItems": True},
+        GenerationConfig(),
+        jsonschema_rs.Draft202012Validator,
+    )
+
+    @run_given(built, max_examples=10)
+    def test(value):
+        assert len({payload(item) for item in value}) == len(value) >= 2, value
 
 
 @pytest.mark.parametrize("name", ["email", "idn-email", "hostname", "idn-hostname", "uri", "iri", "uri-template"])
 def test_generated_domain_carries_a_dot(name):
     # A dotless domain is well-formed, yet the stricter checkers real services run reject it.
-    @given(_resolve(name))
-    @SETTINGS
+    @run_given(_resolve(name), max_examples=50)
     def test(value):
         assert "." in value.rsplit("@", 1)[-1], value
-
-    test()
 
 
 @pytest.mark.parametrize("name", ["email", "idn-email", "uri", "iri"])
@@ -245,9 +268,34 @@ def test_length_narrowed_domain_carries_a_dot(name):
         jsonschema_rs.Draft202012Validator,
     )
 
-    @given(built)
-    @SETTINGS
+    @run_given(built, max_examples=50)
     def test(value):
         assert "." in value.rsplit("@", 1)[-1], value
 
-    test()
+
+@pytest.mark.parametrize(
+    ("media_type", "keywords", "low", "high"),
+    [
+        ("application/octet-stream", {"minLength": 5, "maxLength": 5}, 5, 5),
+        ("application/octet-stream", {"minLength": 1}, 1, float("inf")),
+        ("application/octet-stream", {"maxLength": 3}, 0, 3),
+        ("application/json", {"minLength": 2, "maxLength": 4}, 2, 4),
+    ],
+    ids=["exact", "min-only", "max-only", "json"],
+)
+def test_binary_format_respects_length_keywords(ctx, media_type, keywords, low, high):
+    # An empty body for `minLength: 1` reads as a missing body to servers.
+    operation = ctx.openapi.load_operation(
+        "POST /upload",
+        {
+            "requestBody": {
+                "required": True,
+                "content": {media_type: {"schema": {"type": "string", "format": "binary", **keywords}}},
+            },
+            "responses": {"200": {"description": "OK"}},
+        },
+    )
+
+    @run_given(operation.as_strategy(generation_mode=GenerationMode.POSITIVE), max_examples=10)
+    def test(case):
+        assert low <= len(case.body.data) <= high, case.body

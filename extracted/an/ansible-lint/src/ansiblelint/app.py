@@ -14,7 +14,12 @@ from ansible_compat.runtime import Runtime
 
 from ansiblelint import formatters
 from ansiblelint._mockings import _perform_mockings
-from ansiblelint.config import PROFILES, Options, get_version_warning
+from ansiblelint.config import (
+    PROFILES,
+    Options,
+    get_version_warning,
+    has_custom_ansible_env,
+)
 from ansiblelint.config import options as default_options
 from ansiblelint.constants import RC, RULE_DOC_URL
 from ansiblelint.loaders import IGNORE_FILE
@@ -38,6 +43,8 @@ class App:
 
     def __init__(self, options: Options):
         """Construct app run based on already loaded configuration."""
+        if options.profile:
+            options.skip_list.extend(PROFILES[options.profile].get("skip_list", []))
         options.skip_list = _sanitize_list_options(options.skip_list)
         options.warn_list = _sanitize_list_options(options.warn_list)
 
@@ -46,10 +53,9 @@ class App:
         formatter_factory = choose_formatter_factory(options)
         self.formatter = formatter_factory(options.cwd, options.display_relative_path)
 
-        # Without require_module, our _set_collections_basedir may fail
         self.runtime = Runtime(
             project_dir=Path(options.project_dir),
-            isolated=True,
+            isolated=not options.offline and not has_custom_ansible_env(),
             require_module=True,
             verbosity=options.verbosity,
         )
@@ -277,7 +283,7 @@ class App:
             return RC.SUCCESS
         return RC.VIOLATIONS_FOUND
 
-    def report_summary(  # pylint: disable=too-many-locals # noqa: C901
+    def report_summary(  # pylint: disable=too-many-locals # ruff:ignore[complex-structure]
         self,
         summary: SummarizedResults,
         changed_files_count: int,
@@ -392,6 +398,74 @@ def _sanitize_list_options(tag_list: list[str]) -> list[str]:
     return sorted(set(tags))
 
 
+def _add_collections_path_if_needed(
+    options: Options,
+    collections_paths: list[str],
+) -> None:
+    """Append mock collections path as a fallback when collection mocks exist.
+
+    Mocks are appended (not prepended) so installed collections take precedence
+    over empty ansible-lint stubs during plugin resolution and args validation.
+    """
+    if options.has_collection_mocks():
+        mock_path = options.mock_collections_path
+        if mock_path and str(mock_path) not in collections_paths:
+            collections_paths.append(str(mock_path))
+
+
+def _add_module_path_if_needed(
+    options: Options,
+    module_paths: list[str],
+) -> None:
+    """Append plain mock modules path as a fallback when module mocks exist."""
+    if options.mock_modules_path and any(
+        len(module_name.split(".")) < 3 for module_name in options.mock_modules
+    ):
+        mock_path = str(options.mock_modules_path)
+        if mock_path not in module_paths:
+            module_paths.append(mock_path)
+
+
+def _add_roles_path_if_needed(
+    options: Options,
+    roles_paths: list[str],
+) -> None:
+    """Add plain mock roles path to roles_paths if plain-name role mocks exist.
+
+    Mirrors _add_module_path_if_needed / _add_collections_path_if_needed:
+    injecting the mock roles path into the search path must not depend on the
+    runtime's `isolated` setting (which --offline turns off), only on whether
+    _perform_mockings() actually materialized any plain-name role mocks there.
+    """
+    if options.mock_roles_path and options.has_plain_role_mocks():
+        mock_path = str(options.mock_roles_path)
+        if mock_path not in roles_paths:
+            roles_paths.insert(0, mock_path)
+
+
+def _update_path_env(
+    env: dict[str, str],
+    varname: str,
+    paths: list[str],
+) -> None:
+    """Prepend path entries to an environment variable without duplicates."""
+    if not paths:
+        return
+    current = env.get(varname, "")
+    values = [*paths, *(current.split(os.pathsep) if current else [])]
+    env[varname] = os.pathsep.join(dict.fromkeys(values))
+
+
+def _ensure_cache_collections_first(app: App) -> None:
+    """Ensure the runtime cache collections directory is first in collections_paths."""
+    if not app.runtime.cache_dir or app.runtime.config.collections_paths is None:
+        return
+    target_dir = str(app.runtime.cache_dir / "collections")
+    if target_dir in app.runtime.config.collections_paths:
+        app.runtime.config.collections_paths.remove(target_dir)
+    app.runtime.config.collections_paths.insert(0, target_dir)
+
+
 def get_app(*, offline: bool | None = None, cached: bool = False) -> App:
     """Return the application instance, caching the return value."""
     # Avoids ever running the app initialization twice if cached argument
@@ -431,6 +505,23 @@ def get_app(*, offline: bool | None = None, cached: bool = False) -> App:
     # mocking must happen before prepare_environment or galaxy install might
     # fail.
     _perform_mockings(options=app.options)
+
+    # https://github.com/ansible/ansible-lint/issues/4973
+    _add_collections_path_if_needed(app.options, app.runtime.config.collections_paths)
+    default_module_paths = app.runtime.config.default_module_path
+    module_paths = default_module_paths.copy()
+    _add_module_path_if_needed(app.options, module_paths)
+    if module_paths != default_module_paths:
+        _update_path_env(app.runtime.environ, "ANSIBLE_LIBRARY", module_paths)
+
+    default_role_paths = list(app.runtime.config.default_roles_path)
+    role_paths = default_role_paths.copy()
+    _add_roles_path_if_needed(app.options, role_paths)
+    if role_paths != default_role_paths:
+        _update_path_env(app.runtime.environ, "ANSIBLE_ROLES_PATH", role_paths)
+
+    _ensure_cache_collections_first(app)
+
     app.runtime.prepare_environment(
         install_local=(not offline),
         offline=offline,

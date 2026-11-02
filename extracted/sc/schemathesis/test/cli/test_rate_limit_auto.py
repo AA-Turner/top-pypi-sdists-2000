@@ -1,45 +1,34 @@
 from __future__ import annotations
 
+import pytest
 from flask import jsonify, make_response
 
 from schemathesis.core.rate_limit import RATE_LIMIT_AUTO_MAX_RETRIES
 
 
-def test_auto_retries_429_then_succeeds(ctx, cli):
-    calls = {"n": 0}
+def _users_app(ctx, handler):
     app, _ = ctx.openapi.make_flask_app({"/users": {"get": {"responses": {"200": {"description": "OK"}}}}})
+    app.add_url_rule("/users", "users", handler, methods=["GET"])
+    return app
 
-    @app.route("/users")
-    def users():
-        calls["n"] += 1
-        if calls["n"] == 1:
-            resp = make_response("", 429)
-            resp.headers["Retry-After"] = "0"
-            return resp
-        return jsonify([])
 
-    result = cli.run_openapi_app(
-        app, "--rate-limit=auto", "--phases=fuzzing", "--max-examples=1", "--checks=not_a_server_error"
-    )
-    assert result.exit_code == 0, result.stdout
-    # One case: the 429 is retried once and the retry returns 200. Without retry this would be a single call.
-    assert calls["n"] == 2, calls["n"]
+def _rate_limited(retry_after="0"):
+    resp = make_response("", 429)
+    resp.headers["Retry-After"] = retry_after
+    return resp
+
+
+_FUZZING_ARGS = ("--rate-limit=auto", "--phases=fuzzing", "--max-examples=1", "--checks=not_a_server_error")
 
 
 def test_auto_exhausts_retries_on_persistent_429(ctx, cli):
     calls = {"n": 0}
-    app, _ = ctx.openapi.make_flask_app({"/users": {"get": {"responses": {"200": {"description": "OK"}}}}})
 
-    @app.route("/users")
     def users():
         calls["n"] += 1
-        resp = make_response("", 429)
-        resp.headers["Retry-After"] = "0"
-        return resp
+        return _rate_limited()
 
-    result = cli.run_openapi_app(
-        app, "--rate-limit=auto", "--phases=fuzzing", "--max-examples=1", "--checks=not_a_server_error"
-    )
+    result = cli.run_openapi_app(_users_app(ctx, users), *_FUZZING_ARGS)
     assert result.exit_code == 0, result.stdout
     # One case: the initial call plus RATE_LIMIT_AUTO_MAX_RETRIES retries, then it gives up.
     assert calls["n"] == RATE_LIMIT_AUTO_MAX_RETRIES + 1, calls["n"]
@@ -47,16 +36,12 @@ def test_auto_exhausts_retries_on_persistent_429(ctx, cli):
 
 def test_auto_no_retry_without_retry_after(ctx, cli):
     calls = {"n": 0}
-    app, _ = ctx.openapi.make_flask_app({"/users": {"get": {"responses": {"200": {"description": "OK"}}}}})
 
-    @app.route("/users")
     def users():
         calls["n"] += 1
         return make_response("", 429)
 
-    result = cli.run_openapi_app(
-        app, "--rate-limit=auto", "--phases=fuzzing", "--max-examples=1", "--checks=not_a_server_error"
-    )
+    result = cli.run_openapi_app(_users_app(ctx, users), *_FUZZING_ARGS)
     assert result.exit_code == 0, result.stdout
     # A 429 without a `Retry-After` header can't be retried, so it's treated as the final response.
     assert calls["n"] == 1, calls["n"]
@@ -66,21 +51,16 @@ def test_auto_reports_long_wait(ctx, cli, monkeypatch):
     # Drop the report threshold so a zero-second wait still surfaces, avoiding a real sleep.
     monkeypatch.setattr("schemathesis.engine._rate_limit_retry.RATE_LIMIT_AUTO_REPORT_THRESHOLD", 0.0)
     calls = {"n": 0}
-    app, _ = ctx.openapi.make_flask_app({"/users": {"get": {"responses": {"200": {"description": "OK"}}}}})
 
-    @app.route("/users")
     def users():
         calls["n"] += 1
         if calls["n"] == 1:
-            resp = make_response("", 429)
-            resp.headers["Retry-After"] = "0"
-            return resp
+            return _rate_limited()
         return jsonify([])
 
-    result = cli.run_openapi_app(
-        app, "--rate-limit=auto", "--phases=fuzzing", "--max-examples=1", "--checks=not_a_server_error"
-    )
+    result = cli.run_openapi_app(_users_app(ctx, users), *_FUZZING_ARGS)
     assert result.exit_code == 0, result.stdout
+    # One case: the 429 is retried once and the retry returns 200.
     assert calls["n"] == 2, calls["n"]
     assert "Rate limited" in result.stdout
 
@@ -153,12 +133,6 @@ def _stateful_429_app(ctx, get_handler):
     return app
 
 
-def _rate_limited(retry_after="0"):
-    resp = make_response("", 429)
-    resp.headers["Retry-After"] = retry_after
-    return resp
-
-
 _STATEFUL_ARGS = (
     "--rate-limit=auto",
     "--phases=stateful",
@@ -182,8 +156,9 @@ def test_stateful_retried_and_final_both_fail_checks(ctx, cli):
     result = cli.run_openapi_app(_stateful_429_app(ctx, get_user), *_STATEFUL_ARGS)
     # The retried 429 and the final response fail different checks; both failures are reported together.
     assert result.exit_code == 1, result.stdout
-    assert "Undocumented HTTP status code" in result.stdout
+    assert "Undocumented status code" in result.stdout
     assert "Received: 429" in result.stdout
+    assert "Response violates schema" in result.stdout
 
 
 def test_stateful_retried_failure_surfaces_when_final_passes(ctx, cli):
@@ -192,11 +167,42 @@ def test_stateful_retried_failure_surfaces_when_final_passes(ctx, cli):
     def get_user(user_id):
         calls["n"] += 1
         if calls["n"] == 1:
-            return _rate_limited()
-        return jsonify({"id": user_id}), 200
+            response = _rate_limited()
+            response.set_data("Slow down")
+            return response
+        return jsonify({"id": user_id, "note": "final response"}), 200
 
     result = cli.run_openapi_app(_stateful_429_app(ctx, get_user), *_STATEFUL_ARGS)
-    # The first 429 fails the check; the retry returns a valid 200, yet the failure is still reported.
+    # The first 429 fails the check; the retry returns a valid 200, yet the failure is still reported with the 429.
     assert result.exit_code == 1, result.stdout
-    assert "Undocumented HTTP status code" in result.stdout
+    assert "Undocumented status code" in result.stdout
+    assert "Received: 429" in result.stdout
+    assert "[429] Too Many Requests:\n\n    `Slow down`" in result.stdout
+    assert "final response" not in result.stdout
+
+
+@pytest.mark.parametrize(
+    "args",
+    [("run", "--phases=fuzzing", "--max-examples=1"), ("fuzz", "--max-time=10")],
+    ids=["unit", "fuzz"],
+)
+def test_retried_failure_surfaces_when_final_passes(ctx, cli, app_runner, args):
+    calls = {"n": 0}
+
+    def users():
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return _rate_limited()
+        return jsonify([])
+
+    command, *rest = args
+    result = cli.main(
+        command,
+        app_runner.openapi_url(_users_app(ctx, users)),
+        "--rate-limit=auto",
+        "--checks=status_code_conformance",
+        *rest,
+    )
+    assert result.exit_code == 1, result.stdout
+    assert "Undocumented status code" in result.stdout
     assert "Received: 429" in result.stdout

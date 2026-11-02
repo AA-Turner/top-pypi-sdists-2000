@@ -1,26 +1,20 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Protocol
+from typing import TYPE_CHECKING, Any
 
 from requests.structures import CaseInsensitiveDict
 
-from schemathesis.checks import ChecksConfig, collect_after_run_failures
+from schemathesis.checks import CheckContext, ChecksConfig, collect_after_run_failures
 from schemathesis.generation import overrides
 from schemathesis.generation.overrides import Override
 
 if TYPE_CHECKING:
-    from schemathesis.config import ProjectConfig
     from schemathesis.core.failures import Failure
     from schemathesis.engine.context import EngineContext
+    from schemathesis.engine.recorder import ScenarioRecorder
+    from schemathesis.engine.run import PhaseName
     from schemathesis.schemas import APIOperation
-
-
-class CheckContextSource(Protocol):
-    @property
-    def config(self) -> ProjectConfig: ...
-
-    def get_transport_kwargs(self, operation: APIOperation | None = None) -> dict[str, Any]: ...
 
 
 def run_after_run_checks(ctx: EngineContext) -> list[Failure]:
@@ -32,12 +26,40 @@ def run_after_run_checks(ctx: EngineContext) -> list[Failure]:
 
 
 @dataclass(slots=True)
-class CachedCheckContextData:
+class CheckContextData:
+    """Per-operation configuration a check context is built from."""
+
     override: Override
     auth: tuple[str, str] | None
     headers: CaseInsensitiveDict | None
     config: ChecksConfig
-    transport_kwargs: dict[str, object]
+    transport_kwargs: dict[str, Any]
+
+    def to_check_context(
+        self, ctx: EngineContext, *, recorder: ScenarioRecorder, phase: PhaseName | None
+    ) -> CheckContext:
+        return CheckContext(
+            override=self.override,
+            auth=self.auth,
+            headers=self.headers,
+            config=self.config,
+            transport_kwargs=self.transport_kwargs,
+            recorder=recorder,
+            response_checks=ctx.checks.for_responses(),
+            phase=phase,
+            auth_enforced_operations=ctx.auth_enforced_operations,
+        )
+
+
+def collect_check_context_data(*, operation: APIOperation, ctx: EngineContext, phase: str | None) -> CheckContextData:
+    headers = ctx.config.headers_for(operation=operation)
+    return CheckContextData(
+        override=overrides.for_operation(ctx.config, operation=operation),
+        auth=ctx.config.auth_for(operation=operation),
+        headers=CaseInsensitiveDict(headers) if headers else None,
+        config=ctx.config.checks_config_for(operation=operation, phase=phase),
+        transport_kwargs=ctx.get_transport_kwargs(operation=operation),
+    )
 
 
 @dataclass(slots=True)
@@ -47,21 +69,12 @@ class CheckContextCache:
     Per-operation config is constant for the lifetime of a run; caching avoids repeated lookups.
     """
 
-    _cache: dict[str, CachedCheckContextData] = field(default_factory=dict)
+    _cache: dict[str, CheckContextData] = field(default_factory=dict)
 
-    def get_or_create(
-        self, *, operation: APIOperation, ctx: CheckContextSource, phase: str | None
-    ) -> CachedCheckContextData:
+    def get_or_create(self, *, operation: APIOperation, ctx: EngineContext, phase: str | None) -> CheckContextData:
         label = operation.label
         cached = self._cache.get(label)
         if cached is None:
-            headers = ctx.config.headers_for(operation=operation)
-            cached = CachedCheckContextData(
-                override=overrides.for_operation(ctx.config, operation=operation),
-                auth=ctx.config.auth_for(operation=operation),
-                headers=CaseInsensitiveDict(headers) if headers else None,
-                config=ctx.config.checks_config_for(operation=operation, phase=phase),
-                transport_kwargs=ctx.get_transport_kwargs(operation=operation),
-            )
+            cached = collect_check_context_data(operation=operation, ctx=ctx, phase=phase)
             self._cache[label] = cached
         return cached

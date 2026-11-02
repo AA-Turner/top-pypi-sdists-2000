@@ -4,7 +4,6 @@ import json
 from collections.abc import Generator
 from contextlib import contextmanager
 from dataclasses import dataclass
-from enum import Enum
 from typing import TYPE_CHECKING, Any
 
 import jsonschema_rs
@@ -14,23 +13,18 @@ from hypothesis.reporting import with_reporter
 from jsonschema_rs import canonical
 
 from schemathesis.config import OutputConfig
-from schemathesis.core.errors import InvalidSchema
 from schemathesis.core.jsonschema import CANONICALIZE_DRAFT_BY_VALIDATOR, FANCY_REGEX_OPTIONS
-from schemathesis.core.jsonschema.bundler import BUNDLE_STORAGE_KEY, unbundle, unbundle_path
+from schemathesis.core.jsonschema.bundler import BUNDLE_STORAGE_KEY, unbundle_path
 from schemathesis.core.jsonschema.types import JsonSchema
 from schemathesis.core.output import truncate_json
 from schemathesis.core.parameters import ParameterLocation
 from schemathesis.core.transforms import decode_pointer, encode_pointer, resolve_pointer
-from schemathesis.generation.hypothesis.examples import generate_one
 
 if TYPE_CHECKING:
-    from hypothesis.strategies import SearchStrategy
-
     from schemathesis.schemas import APIOperation
-    from schemathesis.specs.openapi.adapter.parameters import OpenApiBody, OpenApiComponent, OpenApiParameter
 
 
-def ignore(_: str) -> None:
+def ignore(_: object) -> None:
     pass
 
 
@@ -52,6 +46,10 @@ Unable to identify the specific parameter. Common causes:
 FILTER_CASE_UNSATISFIABLE_MESSAGE = """Your `filter_case` hook rejected all generated test cases
 
 Schemathesis generated test data, but every case was rejected by your hook."""
+
+FILTER_CASE_EXHAUSTED_MESSAGE = """Your `filter_case` hook stopped accepting generated test cases
+
+Schemathesis could not generate more cases that your hook accepts."""
 
 
 @dataclass(slots=True)
@@ -87,7 +85,7 @@ BRANCH_PROBE_PREFIX = "/allOf/1"
 
 def _display_pointer(pointer: str, name_to_uri: dict[str, str]) -> str:
     segments = [decode_pointer(segment) for segment in pointer[1:].split("/")]
-    return "/" + "/".join(str(segment) for segment in unbundle_path(list(segments), name_to_uri))
+    return "/" + "/".join(encode_pointer(str(segment)) for segment in unbundle_path(list(segments), name_to_uri))
 
 
 def _describe_keyword(schema: JsonSchema, pointer: str, keyword: str) -> str:
@@ -106,6 +104,9 @@ def _find_unsatisfiable(schema: JsonSchema, draft: int) -> dict[str, canonical.U
         return canonical.find_unsatisfiable(
             schema, draft=draft, pattern_options=FANCY_REGEX_OPTIONS, validate_formats=True
         )
+    except canonical.InvalidPattern:
+        # The error names the pattern, so the caller can say what stopped the analysis.
+        raise
     except Exception:
         # Nothing is provably empty when the document cannot be read at all.
         return None
@@ -137,10 +138,11 @@ def _describe_branches(
         if reasons is None or "" not in reasons:
             return None
         at = f"{cause.pointer}/{keyword}/{index}"
-        described.append(_describe_branch(branch, reasons[""], at, name_to_uri))
+        described.append(_describe_branch(probe, reasons[""], at, name_to_uri))
     remaining = len(described) - MAX_REPORTED_BRANCHES
     if remaining > 0:
-        described = described[:MAX_REPORTED_BRANCHES] + [f"{remaining} more branches"]
+        noun = "branch" if remaining == 1 else "branches"
+        described = described[:MAX_REPORTED_BRANCHES] + [f"{remaining} more {noun}"]
     return _join_prose(described)
 
 
@@ -151,25 +153,35 @@ def _join_prose(parts: list[str]) -> str:
 
 
 def _describe_branch(
-    branch: JsonSchema, reason: canonical.UnsatisfiableReason, pointer: str, name_to_uri: dict[str, str]
+    probe: JsonSchema, reason: canonical.UnsatisfiableReason, pointer: str, name_to_uri: dict[str, str]
 ) -> str:
-    """What the branch itself brings to the conflict, named at its own pointer."""
+    """What the branch itself brings to the conflict, named at its own pointer or at the body it references."""
     if isinstance(reason, canonical.UnsatisfiableReason.Empty):
         causes = [reason.cause]
     elif isinstance(reason, canonical.UnsatisfiableReason.Conflict):
         causes = list(reason.causes)
     else:
         causes = []  # pragma: no cover
-    # The probe puts the siblings first and the branch second, so only the second side is the branch.
-    described = " and ".join(
-        _describe_keyword(branch, cause.pointer[len(BRANCH_PROBE_PREFIX) :], keyword)
-        for cause in causes
-        if cause.pointer.startswith(BRANCH_PROBE_PREFIX)
-        for keyword in cause.keywords
-    )
-    if not described:
+    # The probe puts the siblings first and the branch second; a reference's keywords sit under the body it names.
+    keywords_at: dict[str, list[str]] = {}
+    for cause in causes:
+        if cause.pointer.startswith(BRANCH_PROBE_PREFIX):
+            at = pointer
+        elif cause.pointer.startswith(f"/{BUNDLE_STORAGE_KEY}/"):
+            at = cause.pointer
+        else:
+            continue
+        keywords_at.setdefault(at, []).extend(
+            _describe_keyword(probe, cause.pointer, keyword) for keyword in cause.keywords
+        )
+    parts = [
+        f"{' and '.join(keywords)} at {_display_pointer(at, name_to_uri)}"
+        for at, keywords in keywords_at.items()
+        if keywords
+    ]
+    if not parts:
         return f"the branch at {_display_pointer(pointer, name_to_uri)}"
-    return f"{described} at {_display_pointer(pointer, name_to_uri)}"
+    return " and ".join(parts)
 
 
 def _describe_cause(
@@ -193,7 +205,11 @@ def _blame(schema: JsonSchema, reasons: dict[str, canonical.UnsatisfiableReason]
         reason = reasons[pointer]
         if isinstance(reason, canonical.UnsatisfiableReason.Literal):
             return pointer
-        causes = [reason.cause] if isinstance(reason, canonical.UnsatisfiableReason.Empty) else reason.causes
+        if isinstance(reason, canonical.UnsatisfiableReason.Empty):
+            causes = [reason.cause]
+        else:
+            assert isinstance(reason, canonical.UnsatisfiableReason.Conflict)
+            causes = reason.causes
         for cause in causes:
             for candidate in _passed_on_to(schema, cause):
                 if candidate in reasons and candidate not in seen:
@@ -223,7 +239,12 @@ def _passed_on_to(schema: JsonSchema, cause: canonical.Cause) -> Generator[str, 
             if isinstance(required, list):  # pragma: no branch
                 for name in required:
                     yield f"{cause.pointer}/properties/{encode_pointer(str(name))}"
-        elif keyword in ("items", "contains", "prefixItems"):
+        elif keyword == "prefixItems":
+            elements = node.get("prefixItems")
+            if isinstance(elements, list):  # pragma: no branch
+                for index in range(len(elements)):
+                    yield f"{cause.pointer}/prefixItems/{index}"
+        elif keyword in ("items", "contains"):
             yield f"{cause.pointer}/{keyword}"
 
 
@@ -233,12 +254,19 @@ def describe_unsatisfiable(
     """Why no value satisfies this schema, named at the subschema that carries the conflict.
 
     Emptiness that does not reach the root is routine - `additionalProperties: false` is an empty
-    position and says nothing is wrong - so only a root that admits nothing is reported.
+    position and says nothing is wrong - so only a root that admits nothing is reported. A pattern
+    the analysis cannot read is named instead, with the conflict left unlocated.
     """
     draft = CANONICALIZE_DRAFT_BY_VALIDATOR.get(validator_cls)
     if draft is None:
         return None  # pragma: no cover
-    reasons = _find_unsatisfiable(schema, draft)
+    try:
+        reasons = _find_unsatisfiable(schema, draft)
+    except canonical.InvalidPattern as exc:
+        return (
+            f"A pattern could not be analyzed ({exc}), so the conflict is not located. "
+            f"This usually means:\n{UNSATISFIABILITY_CAUSE}"
+        )
     if reasons is None or "" not in reasons:
         return None
     pointer = _blame(schema, reasons, "")
@@ -250,6 +278,7 @@ def describe_unsatisfiable(
         detail = f"Nothing satisfies {_describe_cause(schema, reason.cause, pointer, name_to_uri, draft)}"
         located = reason.cause.pointer != pointer
     else:
+        assert isinstance(reason, canonical.UnsatisfiableReason.Conflict)
         parts = [_describe_cause(schema, cause, pointer, name_to_uri, draft) for cause in reason.causes]
         # The subject is plural when the first part names more than one keyword or branch.
         detail = (" conflict with " if " and " in parts[0] else " conflicts with ").join(parts)
@@ -299,61 +328,6 @@ def is_empty_strategy_error(exc: InvalidArgument) -> bool:
     return "because it has no values" in message or "no elements can be drawn from the element strategy" in message
 
 
-def _parameter_strategy(
-    operation: APIOperation, parameter: OpenApiComponent, location: ParameterLocation
-) -> SearchStrategy:
-    from schemathesis.specs.openapi._hypothesis import make_positive_strategy
-
-    return make_positive_strategy(
-        parameter.optimized_schema,
-        operation.label,
-        location,
-        parameter.media_type,
-        operation.schema.config.generation_for(operation=operation, phase="fuzzing"),
-        operation.schema.adapter.jsonschema_validator_cls,
-        name_to_uri=parameter.name_to_uri,
-    )
-
-
-def _iter_parameters(
-    operation: APIOperation,
-) -> Generator[tuple[ParameterLocation, OpenApiParameter | OpenApiBody], None, None]:
-    for location, container in (
-        (ParameterLocation.QUERY, operation.query),
-        (ParameterLocation.PATH, operation.path_parameters),
-        (ParameterLocation.HEADER, operation.headers),
-        (ParameterLocation.COOKIE, operation.cookies),
-        (ParameterLocation.BODY, operation.body),
-    ):
-        for parameter in container:
-            yield location, parameter
-
-
-def _build_unsatisfiable_parameter(
-    operation: APIOperation, location: ParameterLocation, parameter: OpenApiParameter | OpenApiBody
-) -> UnsatisfiableParameter:
-    return UnsatisfiableParameter(
-        location=location,
-        # A body is identified by its media type, every other parameter by its name.
-        name=parameter.media_type or parameter.name,
-        schema=unbundle(parameter.optimized_schema, parameter.name_to_uri),
-        detail=describe_unsatisfiable(
-            parameter.optimized_schema,
-            parameter.name_to_uri,
-            operation.schema.adapter.jsonschema_validator_cls,
-        ),
-    )
-
-
-def find_unsatisfiable_parameter(operation: APIOperation) -> UnsatisfiableParameter | None:
-    for location, parameter in _iter_parameters(operation):
-        try:
-            generate_one(_parameter_strategy(operation, parameter, location))
-        except (Unsatisfiable, InvalidArgument, InvalidSchema):
-            return _build_unsatisfiable_parameter(operation, location, parameter)
-    return None
-
-
 def build_unsatisfiable_error(
     operation: APIOperation, *, with_tip: bool, filter_tracker: FilterCaseTracker | None = None
 ) -> Unsatisfiable:
@@ -365,7 +339,7 @@ def build_unsatisfiable_error(
             message += "\n\nTip: Review your `filter_case` hook to ensure it accepts at least some generated cases"
         return Unsatisfiable(message)
 
-    unsatisfiable = find_unsatisfiable_parameter(operation)
+    unsatisfiable = operation.schema.find_unsatisfiable_parameter(operation)
 
     if unsatisfiable is not None:
         message = unsatisfiable.get_error_message(operation.schema.config.output)
@@ -380,19 +354,6 @@ def build_unsatisfiable_error(
 
 class UnsatisfiableSchema(Unsatisfiable):
     """A schema that admits no value at all, as opposed to one Hypothesis gave up on."""
-
-
-def build_unsatisfiable_schema_error(operation: APIOperation) -> UnsatisfiableSchema:
-    # Drawing is already under way here, so the parameter is found by reading the schemas rather than
-    # by generating from each of them.
-    for location, parameter in _iter_parameters(operation):
-        unsatisfiable = _build_unsatisfiable_parameter(operation, location, parameter)
-        if unsatisfiable.detail is not None:
-            return UnsatisfiableSchema(unsatisfiable.get_error_message(operation.schema.config.output))
-    return UnsatisfiableSchema(f"""Cannot generate test data for {operation.label}
-
-This usually means:
-{UNSATISFIABILITY_CAUSE}""")
 
 
 HEALTH_CHECK_CAUSES = {
@@ -470,52 +431,22 @@ def _extract_health_check_reason(exc: FailedHealthCheck | InvalidArgument) -> He
     return None
 
 
-def find_slow_parameter(operation: APIOperation, reason: HealthCheck) -> SlowParameter | None:
-    from hypothesis.errors import FailedHealthCheck
-
-    for location, container in (
-        (ParameterLocation.QUERY, operation.query),
-        (ParameterLocation.PATH, operation.path_parameters),
-        (ParameterLocation.HEADER, operation.headers),
-        (ParameterLocation.COOKIE, operation.cookies),
-        (ParameterLocation.BODY, operation.body),
-    ):
-        for parameter in container:
-            try:
-                generate_one(_parameter_strategy(operation, parameter, location), suppress_health_check=[])
-            except (FailedHealthCheck, Unsatisfiable, InvalidArgument, InvalidSchema):
-                if location == ParameterLocation.BODY:
-                    name = parameter.media_type
-                else:
-                    name = parameter.name
-
-                schema = unbundle(parameter.optimized_schema, parameter.name_to_uri)
-                return SlowParameter(location=location, name=name, schema=schema, original=reason)
-    return None
-
-
 def _get_generic_health_check_message(reason: HealthCheck) -> str:
     title = HEALTH_CHECK_TITLES[reason]
     causes = HEALTH_CHECK_CAUSES[reason]
     return f"{title} for this operation\n\nUnable to identify the specific parameter. Common causes:\n{causes}"
 
 
-class HealthCheckTipStyle(Enum):
-    DEFAULT = "default"
-    PYTEST = "pytest"
-
-
 def build_health_check_error(
     operation: APIOperation,
     original: FailedHealthCheck | InvalidArgument,
     with_tip: bool,
-    tip_style: HealthCheckTipStyle = HealthCheckTipStyle.DEFAULT,
 ) -> FailedHealthCheck | InvalidArgument:
     __tracebackhide__ = True
     reason = _extract_health_check_reason(original)
     if reason is None:
         return original
-    slow_param = find_slow_parameter(operation, reason)
+    slow_param = operation.schema.find_slow_parameter(operation, reason)
 
     if slow_param is not None:
         message = slow_param.get_error_message(operation.schema.config.output)
@@ -523,8 +454,9 @@ def build_health_check_error(
         message = _get_generic_health_check_message(reason)
 
     if with_tip:
-        message += f"\n\nTip: {HEALTH_CHECK_ACTIONS[reason]}"
-        if tip_style == HealthCheckTipStyle.PYTEST:
-            message += f". You can disable this health check with @settings(suppress_health_check=[{reason!r}])"
+        message += (
+            f"\n\nTip: {HEALTH_CHECK_ACTIONS[reason]}. "
+            f"You can disable this health check with @settings(suppress_health_check=[{reason!r}])"
+        )
 
     return FailedHealthCheck(message)

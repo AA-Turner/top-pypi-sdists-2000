@@ -3,18 +3,34 @@ from __future__ import annotations
 import base64
 import dataclasses
 import hashlib
+import time
+from functools import cache, partial
 from pathlib import Path
+from random import Random
 from typing import TYPE_CHECKING
 
 import jsonschema_rs
 import pytest
 
-from schemathesis.config import OutputConfig, ReportConfig, ReportFormat, ReportsConfig, SanitizationConfig
+from schemathesis.config import (
+    OutputConfig,
+    ReportConfig,
+    ReportFormat,
+    ReportsConfig,
+    SanitizationConfig,
+    SchemathesisConfig,
+)
 from schemathesis.core.failures import Failure, Severity
 from schemathesis.core.transport import Response
+from schemathesis.engine import Status
+from schemathesis.failure_codes import get_failure_class
+from schemathesis.pytest.reporting import PYTEST_FORMATS, PytestReportOutcome, open_writers
 from schemathesis.reporting._command import get_command_representation
+from schemathesis.reporting.html.build import enabled_checks
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from xdist.workermanage import WorkerController
 
     from schemathesis.core.spec import SchemaMetadata
@@ -22,6 +38,7 @@ if TYPE_CHECKING:
     from schemathesis.generation.meta import CaseMetadata
     from schemathesis.reporting.allure import AllureWriter
     from schemathesis.reporting.har import HarWriter
+    from schemathesis.reporting.html.writer import HtmlWriter
     from schemathesis.reporting.junitxml import JunitXmlWriter
     from schemathesis.reporting.vcr import VcrWriter
 
@@ -29,6 +46,8 @@ if TYPE_CHECKING:
 _XDIST_WRITERS_KEY: pytest.StashKey[dict[str, dict]] = pytest.StashKey()
 # Key used in xdist workeroutput to pass serialized recorders from workers to the controller
 SCHEMATHESIS_RECORDERS_KEY = "schemathesis_recorders"
+# Key used in xdist workerinput to pass the run seed from the controller to workers
+SCHEMATHESIS_SEED_KEY = "schemathesis_seed"
 
 
 class _MimeProxy:
@@ -62,6 +81,9 @@ def serialize_recorder(
     elapsed_sec: float,
     tags: list[str] | None = None,
     allure_calls: list[dict] | None = None,
+    status: Status | None = None,
+    message: str | None = None,
+    has_recorder: bool = True,
 ) -> dict:
     """Serialize a ScenarioRecorder for cross-process transport via workeroutput."""
     interactions: dict[str, dict] = {}
@@ -88,6 +110,11 @@ def serialize_recorder(
                     "http_version": response.http_version,
                     "encoding": response.encoding,
                     "verify": response.verify,
+                    "status_line": response.status_line,
+                    # A body only its schema can decode travels already rendered.
+                    "rendered": (
+                        response.render_content(response.content) if response.render_content is not None else None
+                    ),
                 }
                 if response is not None
                 else None
@@ -140,6 +167,9 @@ def serialize_recorder(
         "cases": cases,
         "tags": tags,
         "allure_calls": serialized_calls,
+        "status": status.name if status is not None else None,
+        "message": message,
+        "has_recorder": has_recorder,
     }
 
 
@@ -191,6 +221,8 @@ def deserialize_recorder(data: dict) -> tuple[ScenarioRecorder, float]:
                 http_version=resp_data["http_version"],
                 encoding=resp_data["encoding"],
                 verify=resp_data["verify"],
+                status_line=resp_data["status_line"],
+                render_content=_rendered(resp_data["rendered"]),
             )
         else:
             response = None
@@ -204,7 +236,7 @@ def deserialize_recorder(data: dict) -> tuple[ScenarioRecorder, float]:
             info = check["failure_info"]
             if info is not None:
                 failure_data = info["failure"]
-                failure = Failure(
+                failure = _rebuilt_failure_class(failure_data["code"])(
                     operation=failure_data["operation"],
                     title=failure_data["title"],
                     message=failure_data["message"],
@@ -229,51 +261,66 @@ def deserialize_recorder(data: dict) -> tuple[ScenarioRecorder, float]:
                 parent_id=None,
                 transition=None,
                 is_transition_applied=False,
+                is_probe=False,
             ),
         )
 
     return recorder, data["elapsed_sec"]
 
 
+@cache
+def _rebuilt_failure_class(code: str) -> type[Failure]:
+    """A class with the original failure's name and code; its other fields stay in the worker."""
+    original = get_failure_class(code) or Failure
+    return type(original.__name__, (Failure,), {"__slots__": (), "code": original.code})
+
+
 def _schema_id(schema: SchemaMetadata) -> str:
     """Stable cross-process identifier for a schema instance.
 
-    Uses the schema's source location when available; falls back to a canonical
-    hash of the raw schema content for in-memory (from_dict) schemas.
+    Uses the schema's source location when available; falls back to the raw schema content for in-memory schemas.
+    The writer configuration separates identical schemas whose results belong to different reports.
     """
     source = schema.location or jsonschema_rs.canonical.json.to_string(schema.raw_schema)
-    return hashlib.sha256(source.encode()).hexdigest()[:16]
+    writer_config = _serialize_writer_config(schema)
+    report_config = jsonschema_rs.canonical.json.to_string(
+        {
+            "directory": writer_config["directory"],
+            "paths": writer_config["paths"],
+            "preserve_bytes": writer_config["preserve_bytes"],
+        }
+    )
+    return hashlib.sha256(f"{source}\0{report_config}".encode()).hexdigest()[:16]
 
 
 def _serialize_writer_config(schema: SchemaMetadata) -> dict:
     """Serialize the minimal writer configuration for cross-process transport."""
     reports = schema.config.reports
     paths: dict[str, str | None] = {}
-    for fmt in (ReportFormat.VCR, ReportFormat.HAR, ReportFormat.JUNIT, ReportFormat.ALLURE):
-        report = getattr(reports, fmt.value)
+    for fmt in PYTEST_FORMATS:
+        report = reports.get(fmt)
         if report.enabled:
             paths[fmt.value] = str(report.path) if report.path is not None else None
 
     sanitization = schema.config.output.sanitization
     return {
         "seed": schema.config.seed,
-        "command": get_command_representation(sanitization if sanitization.enabled else None),
+        "command": get_command_representation(sanitization),
         "preserve_bytes": reports.preserve_bytes,
         "sanitization": dataclasses.asdict(sanitization),
         "directory": str(reports.directory),
         "paths": paths,
-        "api_title": schema.raw_schema.get("info", {}).get("title"),
+        "api_title": schema.title,
+        "location": schema.location,
+        "base_url": schema.get_base_url() or None,
+        "checks": enabled_checks(schema.config.checks_config_for()),
     }
 
 
 def _open_writers_from_config(
-    writer_config: dict, suffix: str | None = None
-) -> list[VcrWriter | HarWriter | JunitXmlWriter | AllureWriter]:
+    writer_config: dict, pytest_config: pytest.Config, *, started_at: float, suffix: str | None = None
+) -> list[VcrWriter | HarWriter | JunitXmlWriter | AllureWriter | HtmlWriter]:
     """Open report writers on the controller using serialized writer configuration."""
-    from schemathesis.reporting.har import HarWriter
-    from schemathesis.reporting.junitxml import JunitXmlWriter
-    from schemathesis.reporting.vcr import VcrWriter
-
     raw = writer_config["sanitization"]
     output = OutputConfig(
         sanitization=SanitizationConfig(
@@ -283,8 +330,6 @@ def _open_writers_from_config(
             replacement=raw["replacement"],
         )
     )
-    seed = writer_config["seed"]
-    command = writer_config["command"]
     paths = writer_config["paths"]
 
     def _rc(fmt: ReportFormat) -> ReportConfig:
@@ -298,49 +343,38 @@ def _open_writers_from_config(
         har=_rc(ReportFormat.HAR),
         junit=_rc(ReportFormat.JUNIT),
         allure=_rc(ReportFormat.ALLURE),
+        html=_rc(ReportFormat.HTML),
     )
-
-    writers: list[VcrWriter | HarWriter | JunitXmlWriter | AllureWriter] = []
-    try:
-        if ReportFormat.VCR.value in paths:
-            vcr_writer = VcrWriter(
-                output=reports.get_stable_path(ReportFormat.VCR, suffix=suffix),
-                config=output,
-                preserve_bytes=writer_config["preserve_bytes"],
-            )
-            vcr_writer.open(seed=seed, command=command)
-            writers.append(vcr_writer)
-        if ReportFormat.HAR.value in paths:
-            har_writer = HarWriter(
-                output=reports.get_stable_path(ReportFormat.HAR, suffix=suffix),
-                config=output,
-                preserve_bytes=writer_config["preserve_bytes"],
-            )
-            har_writer.open(seed=seed)
-            writers.append(har_writer)
-        if ReportFormat.JUNIT.value in paths:
-            writers.append(
-                JunitXmlWriter(output=reports.get_stable_path(ReportFormat.JUNIT, suffix=suffix), config=output)
-            )
-        if ReportFormat.ALLURE.value in paths:
-            from schemathesis.reporting.allure import AllureWriter
-
-            writers.append(
-                AllureWriter(
-                    output_dir=reports.get_stable_path(ReportFormat.ALLURE, suffix=suffix),
-                    config=output,
-                    api_title=writer_config.get("api_title"),
-                )
-            )
-    except Exception:
-        for writer in writers:
-            writer.close()
-        raise
-    return writers
+    return open_writers(
+        pytest_config,
+        reports,
+        partial(reports.get_stable_path, suffix=suffix),
+        output=output,
+        seed=writer_config["seed"],
+        command=writer_config["command"],
+        api_title=writer_config.get("api_title"),
+        location=writer_config["location"],
+        base_url=writer_config["base_url"],
+        checks=writer_config["checks"],
+        started_at=started_at,
+    )
 
 
 class XdistReportingPlugin:
-    """Controller-side pytest plugin for xdist reporting."""
+    """Pytest plugin sharing one seed across xdist workers and building reports on the controller."""
+
+    def __init__(self) -> None:
+        # Registered at configuration time, so this is when the whole run started.
+        self.started_at = time.time()
+        self.seed = Random().getrandbits(128)
+
+    def pytest_configure(self, config: pytest.Config) -> None:
+        workerinput = getattr(config, "workerinput", None)
+        if workerinput is not None:
+            SchemathesisConfig.shared_seed = workerinput.get(SCHEMATHESIS_SEED_KEY)
+
+    def pytest_configure_node(self, node: WorkerController) -> None:
+        node.workerinput[SCHEMATHESIS_SEED_KEY] = self.seed
 
     def pytest_testnodedown(self, node: WorkerController, error: object) -> None:
         # Accumulate per schema_id; writing is deferred to pytest_sessionfinish
@@ -360,6 +394,7 @@ class XdistReportingPlugin:
             from schemathesis.reporting.allure import AllureWriter
         except ImportError:
             AllureWriter = None  # type: ignore[assignment,misc]
+        from schemathesis.reporting.html.writer import HtmlWriter
         from schemathesis.reporting.junitxml import JunitXmlWriter
 
         if hasattr(session.config, "workerinput"):
@@ -371,16 +406,36 @@ class XdistReportingPlugin:
         multi = len(data) > 1
         for schema_id, payload in data.items():
             suffix = schema_id[:8] if multi else None
-            writers = _open_writers_from_config(payload["writer_config"], suffix=suffix)
+            writers = _open_writers_from_config(
+                payload["writer_config"], session.config, started_at=self.started_at, suffix=suffix
+            )
             try:
                 for record in payload["records"]:
                     recorder, elapsed_sec = deserialize_recorder(record)
                     tags: list[str] | None = record.get("tags")
+                    raw_status = record.get("status")
+                    outcome = (
+                        PytestReportOutcome(Status[raw_status], record.get("message"))
+                        if raw_status is not None
+                        else None
+                    )
+                    has_recorder = record.get("has_recorder", True)
                     for writer in writers:
-                        if isinstance(writer, JunitXmlWriter):
-                            writer.write(recorder, elapsed_sec)
+                        if isinstance(writer, (JunitXmlWriter, HtmlWriter)):
+                            writer.write(
+                                recorder,
+                                elapsed_sec,
+                                status=outcome.status if outcome is not None else None,
+                                message=outcome.message if outcome is not None else None,
+                            )
                         elif AllureWriter is not None and isinstance(writer, AllureWriter):
-                            writer.write(recorder, elapsed_sec, tags=tags)
+                            writer.write(
+                                recorder,
+                                elapsed_sec,
+                                tags=tags,
+                                status=outcome.status if outcome is not None else None,
+                                message=outcome.message if outcome is not None else None,
+                            )
                             for call in record.get("allure_calls", []):
                                 t = call["type"]
                                 label = call["label"]
@@ -393,8 +448,14 @@ class XdistReportingPlugin:
                                     writer.accumulate_title(label, call["title"])
                                 elif t == "description":
                                     writer.accumulate_description(label, call["description"])
-                        else:
+                        elif has_recorder:
                             writer.write(recorder)
             finally:
                 for writer in writers:
                     writer.close()
+
+
+def _rendered(text: str | None) -> Callable[[bytes], str | None] | None:
+    if text is None:
+        return None
+    return lambda _: text

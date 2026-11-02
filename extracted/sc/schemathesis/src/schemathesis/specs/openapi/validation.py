@@ -7,12 +7,20 @@ from typing import TYPE_CHECKING, Any
 import jsonschema_rs
 
 from schemathesis.core import deserialization
-from schemathesis.core.errors import InvalidSchema, MalformedMediaType, SchemaLocation
+from schemathesis.core.errors import InvalidSchema, SchemaLocation
 from schemathesis.core.failures import Failure, FailureGroup, MalformedJson
-from schemathesis.core.jsonschema.bundler import REFERENCE_TO_BUNDLE_PREFIX
-from schemathesis.core.transport import Response
-from schemathesis.openapi.checks import JsonSchemaError, MissingContentType
+from schemathesis.core.jsonschema.bundler import BUNDLE_STORAGE_KEY, REFERENCE_TO_BUNDLE_PREFIX, unbundle_path
+from schemathesis.core.jsonschema.types import JsonSchema, JsonSchemaObject
+from schemathesis.core.transport import Response, response_content_type
+from schemathesis.openapi.checks import (
+    ContentDeserializationError,
+    DiscriminatorMismatch,
+    JsonSchemaError,
+    MissingContentType,
+)
 from schemathesis.specs.openapi.content_keywords import ContentSchemaViolation
+from schemathesis.specs.openapi.converter import branch_tag_values
+from schemathesis.specs.openapi.discriminator import get_implicit_discriminator_value
 
 if TYPE_CHECKING:
     from schemathesis.generation.case import Case
@@ -24,51 +32,63 @@ if TYPE_CHECKING:
 _SURROGATE_ESCAPE_RE = re.compile(r"\\u[Dd][89a-fA-F][0-9a-fA-F]{2}")
 
 
-class ResponseValidator:
-    """Validates HTTP responses against an operation's documented schema."""
+def validate_documented_response(
+    schema: OpenApiSchema, operation: APIOperation, response: Response, case: Case | None
+) -> bool | None:
+    """Validate a response against the schema its operation documents for the status code."""
+    __tracebackhide__ = True
+    # HEAD responses never carry a body, whatever content the schema declares.
+    if operation.method.upper() == "HEAD":
+        return None
+    definition = operation.responses.find_by_status_code(response.status_code)
+    if definition is None:
+        return None
 
-    __slots__ = ("schema",)
+    documented_media_types = schema.get_content_types(operation, response)
 
-    def __init__(self, schema: OpenApiSchema) -> None:
-        self.schema = schema
+    failures: list[Failure] = []
 
-    def validate(
-        self,
-        operation: APIOperation,
-        response: Response,
-        *,
-        case: Case | None = None,
-    ) -> bool | None:
-        __tracebackhide__ = True
-        # HEAD responses never carry a body, whatever content the schema declares.
-        if operation.method.upper() == "HEAD":
-            return None
-        schema = self.schema
-        definition = operation.responses.find_by_status_code(response.status_code)
-        if definition is None:
-            return None
+    resolved_content_type = response_content_type(response)
 
-        documented_media_types = schema.get_content_types(operation, response)
+    resolved = definition.get_schema(resolved_content_type)
+    stream = definition.get_stream_schema(resolved.media_type)
+    # A stream cut short holds only its first events, too few to judge constraints like `minItems`
+    stream_schema = None if response.stream_cut_short else stream.schema
+    if resolved.schema is None and stream_schema is None:
+        return None
 
-        failures: list[Failure] = []
-
-        content_types = response.headers.get("content-type")
-        resolved_content_type = content_types[0] if content_types else None
-
-        resolved = definition.get_schema(resolved_content_type)
-        if resolved.schema is None:
-            return None
-
-        sse_validator = None
-        validator = None
-        try:
+    sse_validator = None
+    stream_validator = None
+    validator = None
+    try:
+        if resolved.schema is not None:
             sse_validator = definition.get_sse_validator(resolved.media_type, resolved.schema)
-        except (MalformedMediaType, ValueError) as exc:
-            raise InvalidSchema(
-                f"Invalid response schema for SSE content validation:\n\n  {exc}",
-                path=operation.path,
-                method=operation.method,
-            ) from exc
+        if stream_schema is not None:
+            stream_validator = definition.get_sse_stream_validator(stream_schema)
+    except jsonschema_rs.ValidationError as exc:
+        raise InvalidSchema.from_jsonschema_error(
+            exc,
+            path=operation.path,
+            method=operation.method,
+            config=schema.config.output,
+            location=SchemaLocation.response_schema(schema.specification.version),
+        ) from exc
+    # Schemas built in Python can hold values no JSON document can (e.g. a `datetime.date`).
+    except ValueError as exc:
+        raise InvalidSchema(
+            f"Invalid response schema for SSE content validation:\n\n  {exc}",
+            path=operation.path,
+            method=operation.method,
+        ) from exc
+    if sse_validator is None and stream_validator is None:
+        assert resolved.schema is not None
+        validate_formats = schema.config.checks_config_for(
+            operation=operation
+        ).response_schema_conformance.validate_formats
+        try:
+            validator = definition.get_validator(
+                resolved.media_type, resolved.schema, validate_formats=validate_formats
+            )
         except jsonschema_rs.ValidationError as exc:
             raise InvalidSchema.from_jsonschema_error(
                 exc,
@@ -76,136 +96,140 @@ class ResponseValidator:
                 method=operation.method,
                 config=schema.config.output,
                 location=SchemaLocation.response_schema(schema.specification.version),
+                location_path=unbundle_path(exc.instance_path, resolved.name_to_uri),
             ) from exc
-        if sse_validator is None:
-            validate_formats = schema.config.checks_config_for(
-                operation=operation
-            ).response_schema_conformance.validate_formats
-            try:
-                validator = definition.get_validator(
-                    resolved.media_type, resolved.schema, validate_formats=validate_formats
-                )
-            except jsonschema_rs.ValidationError as exc:
-                raise InvalidSchema.from_jsonschema_error(
-                    exc,
-                    path=operation.path,
-                    method=operation.method,
-                    config=schema.config.output,
-                    location=SchemaLocation.response_schema(schema.specification.version),
-                ) from exc
-            if validator is None:
-                return None
+        if validator is None:
+            return None
 
-        if resolved_content_type is None:
-            formatted_content_types = [f"\n- `{content_type}`" for content_type in documented_media_types]
-            message = f"The following media types are documented in the schema:{''.join(formatted_content_types)}"
-            failures.append(
-                MissingContentType(operation=operation.label, message=message, media_types=documented_media_types)
-            )
-            content_type = resolved.media_type or "application/json"
+    if resolved_content_type is None:
+        formatted_content_types = [f"\n- `{content_type}`" for content_type in documented_media_types]
+        message = f"The following media types are documented in the schema:{''.join(formatted_content_types)}"
+        failures.append(
+            MissingContentType(operation=operation.label, message=message, media_types=documented_media_types)
+        )
+        content_type = resolved.media_type or "application/json"
+    else:
+        content_type = resolved_content_type
+
+    context = deserialization.DeserializationContext(operation=operation, case=case)
+    is_json_sequence = resolved.media_type is not None and definition.describes_json_sequence(resolved.media_type)
+
+    try:
+        if is_json_sequence:
+            data = deserialization.parse_json_sequence(response.content, resolved.media_type)
         else:
-            content_type = resolved_content_type
-
-        context = deserialization.DeserializationContext(operation=operation, case=case)
-
-        try:
             data = deserialization.deserialize_response(response, content_type, context=context)
-        except JSONDecodeError as exc:
-            failures.append(MalformedJson.from_exception(operation=operation.label, exc=exc))
-            _maybe_raise_one_or_more(failures)
-            return None
-        except NotImplementedError:
-            # Expected for media types without a deserializer (images, binary formats).
-            return None
-        except Exception as exc:
-            failures.append(
-                Failure(
-                    operation=operation.label,
-                    title="Content deserialization error",
-                    message=f"Failed to deserialize response content:\n\n  {exc}",
-                )
+    except JSONDecodeError as exc:
+        failures.append(MalformedJson.from_exception(operation=operation.label, exc=exc))
+        maybe_raise_one_or_more(failures)
+        return None
+    except NotImplementedError:
+        # Expected for media types without a deserializer (images, binary formats).
+        return None
+    except Exception as exc:
+        failures.append(
+            ContentDeserializationError(
+                operation=operation.label,
+                message=f"Failed to deserialize response content:\n\n  {exc}",
             )
-            _maybe_raise_one_or_more(failures)
-            return None
+        )
+        maybe_raise_one_or_more(failures)
+        return None
+
+    if sse_validator is not None or stream_validator is not None:
+
+        def deserialize_embedded_payload(content_media_type: str, payload: str) -> Any:
+            embedded_response = Response(
+                status_code=response.status_code,
+                headers={"content-type": [content_media_type]},
+                content=payload.encode("utf-8"),
+                request=response.request,
+                elapsed=response.elapsed,
+                verify=response.verify,
+                message=response.message,
+                http_version=response.http_version,
+                encoding="utf-8",
+            )
+            return deserialization.deserialize_response(embedded_response, content_media_type, context=context)
 
         if sse_validator is not None:
-
-            def deserialize_embedded_payload(content_media_type: str, payload: str) -> Any:
-                embedded_response = Response(
-                    status_code=response.status_code,
-                    headers={"content-type": [content_media_type]},
-                    content=payload.encode("utf-8"),
-                    request=response.request,
-                    elapsed=response.elapsed,
-                    verify=response.verify,
-                    message=response.message,
-                    http_version=response.http_version,
-                    encoding="utf-8",
-                )
-                return deserialization.deserialize_response(embedded_response, content_media_type, context=context)
-
             with sse_validator.with_deserializer(deserialize_embedded_payload):
                 for idx, event_data in enumerate(data):
                     try:
                         sse_validator.validate(event_data)
                     except jsonschema_rs.ValidationError as exc:
-                        cause = exc.__cause__
-                        if isinstance(cause, ContentSchemaViolation):
-                            failure = JsonSchemaError.from_exception(
-                                title="SSE event payload violates content schema",
-                                operation=operation.label,
-                                exc=cause.original,
-                                root_schema=cause.content_schema,
-                                config=operation.schema.config.output,
-                                name_to_uri=resolved.name_to_uri,
-                            )
-                        else:
-                            failure = JsonSchemaError.from_exception(
-                                title="SSE event violates schema",
-                                operation=operation.label,
-                                exc=exc,
-                                root_schema=resolved.schema,
-                                config=operation.schema.config.output,
-                                name_to_uri=resolved.name_to_uri,
-                            )
+                        failure = _sse_failure(operation, exc, resolved, title="SSE event violates schema")
                         failure.message = f"Event #{idx}: {failure.message}"
                         if failure not in failures:
                             failures.append(failure)
-        elif validator is not None:
-            try:
-                response_context = _response_schema_context(definition.status_code, response.status_code)
-                for err in validator.iter_errors(data):
-                    failure = JsonSchemaError.from_exception(
-                        operation=operation.label,
-                        exc=err,
-                        root_schema=resolved.schema,
-                        config=operation.schema.config.output,
-                        name_to_uri=resolved.name_to_uri,
-                        context=response_context,
-                    )
-                    if failure not in failures:
-                        failures.append(failure)
-            except ValueError as exc:
-                # jsonschema_rs raises ValueError for lone Unicode surrogate characters (e.g. \uDCF3);
-                # not valid JSON per RFC 8259 even though Python's json.loads accepts them.
-                doc = response.content.decode("latin-1")
-                position, lineno, colno = _find_surrogate_location(doc)
-                failures.append(
-                    MalformedJson(
-                        operation=operation.label,
-                        validation_message=str(exc),
-                        document=doc,
-                        position=position,
-                        lineno=lineno,
-                        colno=colno,
-                        message=f"Response contains invalid JSON (lone Unicode surrogate characters are not valid per RFC 8259):\n\n  {exc}",
-                    )
+        if stream_validator is not None:
+            with stream_validator.with_deserializer(deserialize_embedded_payload):
+                try:
+                    stream_validator.validate(data)
+                except jsonschema_rs.ValidationError as exc:
+                    failures.append(_sse_failure(operation, exc, stream, title="SSE stream violates schema"))
+    elif validator is not None:
+        try:
+            response_context = _response_schema_context(definition.status_code, response.status_code)
+            for err in validator.iter_errors(data):
+                failure = JsonSchemaError.from_exception(
+                    operation=operation.label,
+                    exc=err,
+                    root_schema=resolved.schema,
+                    config=operation.schema.config.output,
+                    name_to_uri=resolved.name_to_uri,
+                    context=response_context,
                 )
-        discriminator_failure = _check_discriminator(operation, data, resolved)
-        if discriminator_failure is not None:
-            failures.append(discriminator_failure)
-        _maybe_raise_one_or_more(failures)
-        return None
+                if failure not in failures:
+                    # Records are validated as one array, so the leading index of the path names the failing record
+                    if is_json_sequence and failure.instance_path and isinstance(failure.instance_path[0], int):
+                        failure.message = f"Item #{failure.instance_path[0]}: {failure.message}"
+                    failures.append(failure)
+        except ValueError as exc:
+            # jsonschema_rs raises ValueError for lone Unicode surrogate characters (e.g. \uDCF3);
+            # not valid JSON per RFC 8259 even though Python's json.loads accepts them.
+            doc = response.content.decode("latin-1")
+            position, lineno, colno = _find_surrogate_location(doc)
+            failures.append(
+                MalformedJson(
+                    operation=operation.label,
+                    validation_message=str(exc),
+                    document=doc,
+                    position=position,
+                    lineno=lineno,
+                    colno=colno,
+                    message=f"Response contains invalid JSON (lone Unicode surrogate characters are not valid per RFC 8259):\n\n  {exc}",
+                )
+            )
+    discriminator_failure = _check_discriminator(operation, data, resolved)
+    if discriminator_failure is not None:
+        failures.append(discriminator_failure)
+    maybe_raise_one_or_more(failures)
+    return None
+
+
+def _sse_failure(
+    operation: APIOperation, exc: jsonschema_rs.ValidationError, resolved: ResolvedSchema, *, title: str
+) -> JsonSchemaError:
+    cause = exc.__cause__
+    if isinstance(cause, ContentSchemaViolation):
+        return JsonSchemaError.from_exception(
+            title="SSE event payload violates content schema",
+            operation=operation.label,
+            exc=cause.original,
+            root_schema=cause.content_schema,
+            config=operation.schema.config.output,
+            name_to_uri=resolved.name_to_uri,
+        )
+    assert resolved.schema is not None
+    return JsonSchemaError.from_exception(
+        title=title,
+        operation=operation.label,
+        exc=exc,
+        root_schema=resolved.schema,
+        config=operation.schema.config.output,
+        name_to_uri=resolved.name_to_uri,
+    )
 
 
 def _find_surrogate_location(doc: str) -> tuple[int, int, int]:
@@ -225,22 +249,88 @@ def _check_discriminator(
     data: object,
     resolved: ResolvedSchema,
 ) -> Failure | None:
-    """Return a failure if the discriminator property value is not in the known schema mapping."""
-    if not isinstance(data, dict):
+    """Return a failure if any discriminator property value is not in its known schema mapping."""
+    root = resolved.schema
+    # Responses are walked only when some schema behind them declares a discriminator.
+    if not resolved.has_discriminator or not isinstance(root, dict):
         return None
-    schema = resolved.schema
-    if not isinstance(schema, dict):
-        return None
+    bundle = root.get(BUNDLE_STORAGE_KEY)
+    if not isinstance(bundle, dict):
+        bundle = {}
+    # Walk the schema along the response data, so the cost is bounded by the data, not by the schema size.
+    stack: list[tuple[object, object]] = [(root, data)]
+    seen: set[tuple[int, int]] = set()
+    # Values each discriminator accepts depend only on its schema, so objects sharing a schema reuse them.
+    known_values: dict[int, set[str]] = {}
+    while stack:
+        schema, value = stack.pop()
+        if not isinstance(schema, dict) or not isinstance(value, (dict, list)):
+            continue
+        key = (id(schema), id(value))
+        if key in seen:
+            continue
+        seen.add(key)
+        reference = schema.get("$ref")
+        if isinstance(reference, str) and reference.startswith(f"{REFERENCE_TO_BUNDLE_PREFIX}/"):
+            stack.append((bundle.get(reference[len(REFERENCE_TO_BUNDLE_PREFIX) + 1 :]), value))
+        if isinstance(value, dict):
+            failure = _discriminator_failure(operation, schema, value, resolved.name_to_uri, bundle, known_values)
+            if failure is not None:
+                return failure
+            properties = schema.get("properties")
+            if isinstance(properties, dict):
+                stack.extend((subschema, value[name]) for name, subschema in properties.items() if name in value)
+        else:
+            items = schema.get("items")
+            if isinstance(items, dict):
+                stack.extend((items, item) for item in value)
+    return None
+
+
+def _discriminator_failure(
+    operation: APIOperation,
+    schema: JsonSchemaObject,
+    data: dict[str, object],
+    name_to_uri: dict[str, str],
+    bundle: dict[str, JsonSchema],
+    known_values_by_schema: dict[int, set[str]],
+) -> Failure | None:
     discriminator = schema.get("discriminator")
     if not isinstance(discriminator, dict):
         return None
     property_name = discriminator.get("propertyName")
-    if not property_name:
+    # Unknown values fall back to the `defaultMapping` schema, which the body is already validated against
+    if not property_name or "defaultMapping" in discriminator:
         return None
     value = data.get(property_name)
     if not isinstance(value, str):
         return None
 
+    known_values = known_values_by_schema.get(id(schema))
+    if known_values is None:
+        known_values = _known_discriminator_values(schema, discriminator, property_name, name_to_uri, bundle)
+        known_values_by_schema[id(schema)] = known_values
+    if not known_values or value in known_values:
+        return None
+
+    known = ", ".join(f"'{v}'" for v in sorted(known_values))
+    return DiscriminatorMismatch(
+        operation=operation.label,
+        message=(
+            f"Response contains discriminator property '{property_name}' with value {value!r},\n"
+            f"which does not match any of the known schema values: {known}"
+        ),
+    )
+
+
+def _known_discriminator_values(
+    schema: JsonSchemaObject,
+    discriminator: dict[str, object],
+    property_name: str,
+    name_to_uri: dict[str, str],
+    bundle: dict[str, JsonSchema],
+) -> set[str]:
+    """Values that select a branch: mapping keys, branch schema names and every value a branch pins."""
     known_values: set[str] = set()
     explicit_mapping = discriminator.get("mapping")
     if isinstance(explicit_mapping, dict):
@@ -252,26 +342,17 @@ def _check_discriminator(
             ref = item.get("$ref", "")
             if not isinstance(ref, str) or not ref.startswith(f"{REFERENCE_TO_BUNDLE_PREFIX}/"):
                 continue
-            bundled_name = ref[len(REFERENCE_TO_BUNDLE_PREFIX) + 1 :]
-            original_uri = resolved.name_to_uri.get(bundled_name)
-            if original_uri and "#" in original_uri:
-                fragment = original_uri.split("#", 1)[1]
-                schema_name = fragment.rstrip("/").rsplit("/", 1)[-1]
-                if schema_name:
-                    known_values.add(schema_name)
+            known_values.update(_branch_discriminator_values(ref, property_name, name_to_uri, bundle))
+    return known_values
 
-    if not known_values or value in known_values:
-        return None
 
-    known = ", ".join(f"'{v}'" for v in sorted(known_values))
-    return Failure(
-        operation=operation.label,
-        title="Discriminator value not in schema mapping",
-        message=(
-            f"Response contains discriminator property '{property_name}' with value {value!r},\n"
-            f"which does not match any of the known schema values: {known}"
-        ),
-    )
+def _branch_discriminator_values(
+    ref: str, property_name: str, name_to_uri: dict[str, str], bundle: dict[str, JsonSchema]
+) -> set[str]:
+    """Values that select a bundled branch: its schema name and every value it pins for the property."""
+    schema_name = get_implicit_discriminator_value(name_to_uri.get(ref[len(REFERENCE_TO_BUNDLE_PREFIX) + 1 :], ""))
+    tag_values = branch_tag_values(ref, property_name, bundle) or set()
+    return {value for value in (schema_name, *tag_values) if value}
 
 
 def _response_schema_context(matched_key: str, status_code: int) -> str:
@@ -283,7 +364,7 @@ def _response_schema_context(matched_key: str, status_code: int) -> str:
     return f"Validated against the response schema for `{matched_key}` (status code {status_code})."
 
 
-def _maybe_raise_one_or_more(failures: list[Failure]) -> None:
+def maybe_raise_one_or_more(failures: list[Failure]) -> None:
     if not failures:
         return
     if len(failures) == 1:

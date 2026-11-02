@@ -1,15 +1,17 @@
+import os
 import re
+import tomllib
+from collections import Counter
 from pathlib import Path
 
 import pytest
 import yaml
 
-import schemathesis.config._projects
 from schemathesis.checks import CHECKS
-from schemathesis.config import SchemathesisConfig, tomli
+from schemathesis.config import SchemathesisConfig
 from schemathesis.config._validator import CONFIG_SCHEMA
-from schemathesis.core.errors import HookError
 from schemathesis.core.transforms import resolve_pointer
+from schemathesis.errors import HookError
 
 ROOT_DIR = Path(__file__).parent.parent.parent
 DOCS_DIR = ROOT_DIR / "docs"
@@ -27,6 +29,15 @@ def extract_examples(path: str, format: str = "toml") -> list:
     return pattern.findall(markdown)
 
 
+def collect_guide_configs() -> list:
+    configs = []
+    for path in sorted((DOCS_DIR / "guides").glob("*.md")):
+        for idx, config in enumerate(extract_examples(str(path.relative_to(DOCS_DIR)))):
+            configs.append(pytest.param(config, id=f"guide_{path.stem}_{idx}"))
+    return configs
+
+
+GUIDE_CONFIGS = collect_guide_configs()
 ALL_CONFIGS = (
     extract_examples("reference/configuration.md")
     + extract_examples("reference/warnings.md")
@@ -41,13 +52,13 @@ def normalize_test_name(name: str, max_length: int = 30) -> str:
     return name[:max_length].strip("_")
 
 
-@pytest.mark.parametrize("config", ALL_CONFIGS, ids=[normalize_test_name(i) for i in ALL_CONFIGS])
-def test_configs(monkeypatch, config, snapshot_config):
+def set_environment_variables(monkeypatch) -> None:
     monkeypatch.setenv("TEST_STRING_1", "foo")
     monkeypatch.setenv("TEST_STRING_2", "bar")
     monkeypatch.setenv("API_HOST", "http://example.schemathesis.io")
     monkeypatch.setenv("API_TOKEN", "secret")
     monkeypatch.setenv("API_KEY", "secret-key")
+    monkeypatch.setenv("ITEMS_API_KEY", "items-secret-key")
     monkeypatch.setenv("ADMIN_TOKEN", "secret-admin-key")
     monkeypatch.setenv("USERNAME", "user-1")
     monkeypatch.setenv("PASSWORD", "secret-password")
@@ -57,12 +68,43 @@ def test_configs(monkeypatch, config, snapshot_config):
     monkeypatch.setenv("SESSION_ID", "secret-session-id!")
     monkeypatch.setenv("USER_ID", "42")
     monkeypatch.setenv("ENVIRONMENT", "test")
-    monkeypatch.setattr(schemathesis.config._projects, "get_workers_count", lambda: 4)
+
+
+def config_ids(configs: tuple[str, ...]) -> list[str]:
+    # Truncated names collide; number the colliding ones like pytest does, so snapshot names stay put.
+    names = [normalize_test_name(config) for config in configs]
+    counts = Counter(names)
+    seen: Counter[str] = Counter()
+    ids = []
+    for name in names:
+        if counts[name] > 1:
+            ids.append(f"{name}{seen[name]}")
+            seen[name] += 1
+        else:
+            ids.append(name)
+    return ids
+
+
+@pytest.mark.parametrize("config", ALL_CONFIGS, ids=config_ids(ALL_CONFIGS))
+def test_configs(monkeypatch, config, snapshot_config):
+    set_environment_variables(monkeypatch)
+    monkeypatch.setattr(os, "sched_getaffinity", lambda pid: {0, 1, 2, 3}, raising=False)
     try:
         config = SchemathesisConfig.from_str(config)
         assert config == snapshot_config
     except HookError as exc:
         assert str(exc) == snapshot_config
+
+
+@pytest.mark.parametrize("config", GUIDE_CONFIGS)
+def test_guide_configs(monkeypatch, tmp_path, config):
+    dictionary_dir = tmp_path / "fuzz"
+    dictionary_dir.mkdir()
+    (dictionary_dir / "sql_injection.dict").write_text('"SQL injection"\n', encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+    set_environment_variables(monkeypatch)
+
+    SchemathesisConfig.from_str(config)
 
 
 def collect_all_yaml_snippets() -> list[tuple[str, str]]:
@@ -108,8 +150,8 @@ TOML_SNIPPETS = collect_all_toml_snippets()
 @pytest.mark.parametrize(["filename", "snippet"], TOML_SNIPPETS)
 def test_toml_snippets_are_valid(filename: str, snippet: str):
     try:
-        tomli.loads(snippet)
-    except tomli.TOMLDecodeError as exc:
+        tomllib.loads(snippet)
+    except tomllib.TOMLDecodeError as exc:
         pytest.fail(f"Invalid TOML in {filename}:\n{exc}")
 
 

@@ -1,22 +1,32 @@
 from __future__ import annotations
 
+import json
 from typing import TYPE_CHECKING, NamedTuple
 from urllib.parse import urlparse
 
 import click
 
-from schemathesis.cli.commands.replay.executor import CheckOutcome, ReplayOutcome, ReplayStatus, bodies_equal
+from schemathesis.cli.commands.replay.executor import (
+    CheckOutcome,
+    LinkedValue,
+    ReplayOutcome,
+    ReplayStatus,
+    bodies_equal,
+)
 from schemathesis.cli.core import get_terminal_width
 from schemathesis.cli.output import (
     append_replay_command,
     display_section_name,
+    duration_phrase,
     failure_formatter,
-    format_duration,
     format_summary_banner,
     make_console,
 )
-from schemathesis.core.failures import format_failures
-from schemathesis.core.output import truncate_text
+from schemathesis.core import NOT_SET
+from schemathesis.core.failures import case_header, format_failures
+from schemathesis.core.output import pluralize, truncate_text
+from schemathesis.core.transforms import UNRESOLVABLE
+from schemathesis.generation.meta import report_label
 from schemathesis.reporting.crashes import CrashFile, CrashStep
 
 if TYPE_CHECKING:
@@ -24,6 +34,7 @@ if TYPE_CHECKING:
     from rich.text import Text
 
     from schemathesis.config import OutputConfig
+    from schemathesis.schemas import BaseSchema
 
 GLYPH_FIXED = "+"
 GLYPH_FAILING = "x"
@@ -57,6 +68,8 @@ METHOD_STYLES = {
 }
 
 STEP_PATH_MAX = 60
+LINKED_VALUE_MAX = 16
+LINKED_VALUES_MAX = 3
 BADGE_WIDTH = max(len(b.glyph) + 1 + len(b.label) for b in BADGES.values())
 
 
@@ -68,6 +81,7 @@ def render_replay(
     base_url: str | None,
     duration_ms: int,
     output_config: OutputConfig,
+    schema: BaseSchema | None = None,
     removal_count: int = 0,
     incompatible_count: int = 0,
     interrupted: bool = False,
@@ -86,11 +100,10 @@ def render_replay(
     if crashes and not trailing_blank:
         console.print()
 
-    # Group failing checks by the request actually sent, not the declared operation.
     failures: dict[str, list[tuple[CrashFile, ReplayOutcome]]] = {}
     for crash, outcome in zip(crashes, outcomes, strict=True):
         if outcome.failures and outcome.transport_response is not None:
-            failures.setdefault(f"{crash.method} {crash.path_template}", []).append((crash, outcome))
+            failures.setdefault(_operation_label(crash), []).append((crash, outcome))
 
     if failures:
         display_section_name("FAILURES")
@@ -100,10 +113,10 @@ def render_replay(
                 if len(crash.sequence) > 1:
                     # Set the step chain off as its own block instead of butting it against header and failure.
                     console.print()
-                    _print_step_chain(console, sequence=crash.sequence, outcome=outcome)
+                    _print_step_chain(console, sequence=crash.sequence, outcome=outcome, schema=schema)
                     console.print()
-                case_id = f"{index}. Test Case ID: {crash.case_id}" if crash.case_id else None
-                reproduce = append_replay_command(crash.code_sample, crash.case_id)
+                case_id = case_header(index, crash.case_id) if crash.case_id else None
+                reproduce = append_replay_command(outcome.code_sample, crash.case_id)
                 click.echo(
                     format_failures(
                         case_id=case_id,
@@ -126,10 +139,9 @@ def render_replay(
 def _print_run_header(console: Console, *, count: int, source: str, base_url: str | None) -> None:
     from rich.text import Text
 
-    noun = "case" if count == 1 else "cases"
     line = Text()
     line.append("Replaying ", style="dim")
-    line.append(f"{count} {noun}", style="bold")
+    line.append(pluralize(count, "case"), style="bold")
     line.append(" from ", style="dim")
     line.append(source, style="cyan")
     console.print(line)
@@ -146,8 +158,7 @@ def _print_compact_block(console: Console, crash: CrashFile, outcome: ReplayOutc
     """Print the rollup line (plus a breakdown for mixed cases); return True if it ends with a blank line."""
     from rich.text import Text
 
-    terminal_step = crash.sequence[-1]
-    console.print(_header_line(method=terminal_step.method, path=_step_path(terminal_step), outcome=outcome))
+    console.print(_header_line(label=_operation_label(crash), outcome=outcome))
 
     if not outcome.check_outcomes:
         # A case that could not be evaluated carries a single explanation instead of per-check verdicts.
@@ -185,7 +196,16 @@ def _print_check_rows(console: Console, check_outcomes: list[CheckOutcome]) -> N
         console.print(row)
 
 
-def _header_line(*, method: str, path: str, outcome: ReplayOutcome) -> Text:
+def _operation_label(crash: CrashFile) -> str:
+    """The label `st run` reports the case under."""
+    meta = crash.sequence[-1].meta or {}
+    data = (meta.get("phase") or {}).get("data") or {}
+    return report_label(
+        operation_label=crash.operation, method=crash.method, path=crash.path_template, scenario=data.get("scenario")
+    )
+
+
+def _header_line(*, label: str, outcome: ReplayOutcome) -> Text:
     from rich.text import Text
 
     badge = BADGES[outcome.status]
@@ -193,9 +213,13 @@ def _header_line(*, method: str, path: str, outcome: ReplayOutcome) -> Text:
     line.append("  ")
     line.append(f"{badge.glyph} {badge.label}".ljust(BADGE_WIDTH), style=badge.style)
     line.append(" ")
-    line.append(method, style=METHOD_STYLES.get(method, "bold white"))
-    line.append(" ")
-    line.append(path, style="bold bright_white")
+    method, separator, path = label.partition(" ")
+    if separator:
+        line.append(method, style=METHOD_STYLES.get(method, "bold white"))
+        line.append(" ")
+        line.append(path, style="bold bright_white")
+    else:
+        line.append(label, style="bold bright_white")
     return line
 
 
@@ -204,6 +228,7 @@ def _print_step_chain(
     *,
     sequence: list[CrashStep],
     outcome: ReplayOutcome,
+    schema: BaseSchema | None,
 ) -> None:
     from rich.text import Text
 
@@ -213,14 +238,21 @@ def _print_step_chain(
     # so short methods/paths don't leave a wide gap before the status.
     path_limit = min(STEP_PATH_MAX, max(20, get_terminal_width() - 36))
     paths = [truncate_text(_step_path(step), path_limit) for step in sequence]
+    operation_labels: list[str | None] = []
+    for step in sequence:
+        label = schema.operation_label_for_display(step.operation) if schema is not None else None
+        operation_labels.append(truncate_text(label, path_limit) if label is not None else None)
     method_column = max(len(step.method) for step in sequence)
-    path_column = max(len(path) for path in paths)
+    path_column = max(len(label or path) for label, path in zip(operation_labels, paths, strict=True))
+    masked_pointers = _link_source_pointers(sequence)
 
+    rows: list[tuple[Text, str]] = []
     for index, step in enumerate(sequence, start=1):
         actual = step_outcomes[index - 1]
 
         method = step.method
         path = paths[index - 1]
+        operation_label = operation_labels[index - 1]
         delta = _step_delta(
             index=index - 1,
             failing_index=failing_index,
@@ -229,26 +261,103 @@ def _print_step_chain(
             original_body=step.response_body,
             actual_body=actual.body,
             content_type=step.response_headers.get("content-type", ""),
+            masked_pointers=masked_pointers[index - 1],
+            # Values re-extracted by this step or its ancestors may be echoed back in its body.
+            linked=[value for ancestor in _lineage(sequence, index - 1) for value in step_outcomes[ancestor].links],
         )
 
         row = Text()
         row.append("    ")
         row.append(f"{index:>2}", style="dim")
         row.append("  ")
-        row.append(method.ljust(method_column), style=METHOD_STYLES.get(method, "bold white"))
-        row.append("  ")
-        row.append(path.ljust(path_column), style="white")
+        if operation_label is None:
+            row.append(method.ljust(method_column), style=METHOD_STYLES.get(method, "bold white"))
+            row.append("  ")
+            row.append(path.ljust(path_column), style="white")
+        else:
+            row.append(operation_label.ljust(path_column), style="white")
         row.append("  ")
         # Show a single status when the step reproduced identically; only spell out
         # `recorded -> replayed` when the status actually drifted.
-        row.append(str(step.response_status), style=_status_style(step.response_status))
+        row.append(_status_label(schema, step.response_status), style=_status_style(step.response_status))
         if actual.status_code != step.response_status:
             row.append(f" {ARROW} ", style="dim")
-            row.append(str(actual.status_code), style=_status_style(actual.status_code))
+            row.append(_status_label(schema, actual.status_code), style=_status_style(actual.status_code))
         if delta is not None:
             row.append("  ")
             row.append(GLYPH_CHANGED, style=delta)
+        parent = _parent(sequence, index - 1)
+        source = parent + 1 if parent is not None else None
+        rows.append((row, _format_linked_values(actual.links, source=source)))
+
+    # Line up the linked values in their own column, padding only rows that have one.
+    status_column = max(len(row) for row, _ in rows)
+    for row, links in rows:
+        if links:
+            row.pad_right(status_column - len(row))
+            row.append("  ")
+            row.append(links, style="dim")
         console.print(row)
+
+
+def _format_linked_values(links: list[LinkedValue], *, source: int | None) -> str:
+    """Each linked value as sent, with the recorded one when it differs and the step it was extracted from."""
+    shown = links[:LINKED_VALUES_MAX]
+    parts = [_format_linked_value(value, source=source) for value in shown]
+    if len(links) > len(shown):
+        parts.append(f"+{len(links) - len(shown)} more")
+    return ", ".join(parts)
+
+
+def _format_linked_value(value: LinkedValue, *, source: int | None) -> str:
+    if value.fresh is UNRESOLVABLE:
+        if value.recorded is NOT_SET:
+            return f"{value.name} unset (not re-extracted)"
+        return f"{value.name} = {_format_value(value.recorded)} (recorded, not re-extracted)"
+    details = []
+    if value.recorded is not NOT_SET and value.fresh != value.recorded:
+        details.append(f"was {_format_value(value.recorded)}")
+    if source is not None:
+        details.append(f"from step {source}")
+    suffix = f" ({', '.join(details)})" if details else ""
+    return f"{value.name} = {_format_value(value.fresh)}{suffix}"
+
+
+def _format_value(value: object) -> str:
+    if isinstance(value, str):
+        return json.dumps(truncate_text(value, LINKED_VALUE_MAX))
+    return truncate_text(json.dumps(value, default=str), LINKED_VALUE_MAX)
+
+
+def _parent(sequence: list[CrashStep], index: int) -> int | None:
+    # Crash files without a recorded parent link each step to the previous one.
+    parent = sequence[index].parent_index
+    if parent is None:
+        parent = index - 1
+    return parent if 0 <= parent < index else None
+
+
+def _lineage(sequence: list[CrashStep], index: int) -> list[int]:
+    """Indices of the step at `index` and its ancestors."""
+    lineage: list[int] = []
+    current: int | None = index
+    while current is not None:
+        lineage.append(current)
+        current = _parent(sequence, current)
+    return lineage
+
+
+def _link_source_pointers(sequence: list[CrashStep]) -> list[list[str]]:
+    """For each step, the JSON Pointers into its response body that later steps' links extract from."""
+    from schemathesis.specs.openapi.expressions import body_pointers
+
+    pointers: list[list[str]] = [[] for _ in sequence]
+    for index, step in enumerate(sequence):
+        parent = _parent(sequence, index)
+        if step.link is None or parent is None:
+            continue
+        pointers[parent].extend(body_pointers([*step.link.parameters.values(), step.link.request_body]))
+    return pointers
 
 
 def _print_incompatible_notice(console: Console, count: int) -> None:
@@ -264,9 +373,8 @@ def _print_incompatible_notice(console: Console, count: int) -> None:
 def _print_removal_notice(console: Console, count: int) -> None:
     from rich.text import Text
 
-    noun = "crash file" if count == 1 else "crash files"
     line = Text()
-    line.append(f"Removed {count} {noun} (pass --keep to retain).", style="dim")
+    line.append(f"Removed {pluralize(count, 'crash file')} (pass --keep to retain).", style="dim")
     console.print(line)
     console.print()
 
@@ -294,8 +402,7 @@ def _print_summary(
     for status in ReplayStatus:
         if counts[status]:
             parts.append(f"{counts[status]} {status.value}")
-    duration = format_duration(duration_ms)
-    duration_message = f"interrupted after {duration}" if interrupted else f"in {duration}"
+    duration_message = duration_phrase(duration_ms, interrupted=interrupted)
     separator = ", " if interrupted else " "
     message = f"{', '.join(parts)}{separator}{duration_message}" if parts else duration_message
 
@@ -320,6 +427,11 @@ def _status_style(status_code: int) -> str:
     return "white"
 
 
+def _status_label(schema: BaseSchema | None, status_code: int) -> str:
+    name = schema.status_name_for_code(status_code) if schema is not None else None
+    return name or str(status_code)
+
+
 def _step_delta(
     *,
     index: int,
@@ -329,10 +441,12 @@ def _step_delta(
     original_body: str,
     actual_body: str,
     content_type: str,
+    masked_pointers: list[str],
+    linked: list[LinkedValue],
 ) -> str | None:
     """Style for the change glyph on a step row, or `None` when the step reproduced unchanged."""
     changed = original_status != actual_status or not bodies_equal(
-        original_body, actual_body, content_type=content_type
+        original_body, actual_body, content_type=content_type, masked_pointers=masked_pointers, linked=linked
     )
     if not changed:
         return None

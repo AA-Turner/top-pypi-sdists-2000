@@ -10,12 +10,16 @@ from schemathesis.core.failures import Failure
 from schemathesis.core.result import Result
 from schemathesis.core.schema_analysis import SchemaWarning
 from schemathesis.core.warnings import SchemathesisWarning
+from schemathesis.engine import Status
 from schemathesis.engine.errors import EngineErrorInfo
 from schemathesis.engine.recorder import ScenarioRecorder
 from schemathesis.engine.run import Phase, PhaseName
 
 if TYPE_CHECKING:
-    from schemathesis.engine import Status, StopReason
+    from queue import Queue
+
+    from schemathesis.engine import StopReason
+    from schemathesis.engine.run.auth_bootstrap import AuthBootstrapPayload
     from schemathesis.engine.run.probes import ProbePayload
 
 EventGenerator = Generator["EngineEvent", None, None]
@@ -65,14 +69,19 @@ class PhaseStarted(PhaseEvent):
     """Start of an execution phase."""
 
     payload: StatefulPhasePayload | None
+    # Labels of the operations this pass is limited to; `None` means every selected operation.
+    operations: frozenset[str] | None
 
-    __slots__ = ("id", "timestamp", "phase", "payload")
+    __slots__ = ("id", "timestamp", "phase", "payload", "operations")
 
-    def __init__(self, *, phase: Phase, payload: StatefulPhasePayload | None) -> None:
+    def __init__(
+        self, *, phase: Phase, payload: StatefulPhasePayload | None, operations: frozenset[str] | None = None
+    ) -> None:
         self.id = uuid.uuid4()
         self.timestamp = time.time()
         self.phase = phase
         self.payload = payload
+        self.operations = operations
 
 
 @dataclass
@@ -80,11 +89,13 @@ class PhaseFinished(PhaseEvent):
     """End of an execution phase."""
 
     status: Status
-    payload: Result[ProbePayload, Exception] | None
+    payload: Result[ProbePayload, Exception] | AuthBootstrapPayload | None
 
     __slots__ = ("id", "timestamp", "phase", "status", "payload")
 
-    def __init__(self, *, phase: Phase, status: Status, payload: Result[ProbePayload, Exception] | None) -> None:
+    def __init__(
+        self, *, phase: Phase, status: Status, payload: Result[ProbePayload, Exception] | AuthBootstrapPayload | None
+    ) -> None:
         self.id = uuid.uuid4()
         self.timestamp = time.time()
         self.phase = phase
@@ -216,6 +227,50 @@ class ScenarioFinished(ScenarioEvent):
         self.skip_warning = skip_warning
         self.is_final = is_final
 
+    @property
+    def is_test_scenario(self) -> bool:
+        # Sign-up and login calls prepare the run; reports that count tests leave them out.
+        return self.phase is not PhaseName.AUTH_BOOTSTRAP
+
+
+def put_skipped_scenario(
+    events_queue: Queue[EngineEvent],
+    label: str,
+    phase: PhaseName,
+    suite_id: uuid.UUID,
+    *,
+    skip_reason: str | None,
+    skip_warning: SchemathesisWarning | None = None,
+) -> None:
+    """Report an operation that is not tested in this phase as a scenario that started and was skipped."""
+    for event in iter_skipped_scenario(label, phase, suite_id, skip_reason=skip_reason, skip_warning=skip_warning):
+        events_queue.put(event)
+
+
+def iter_skipped_scenario(
+    label: str,
+    phase: PhaseName,
+    suite_id: uuid.UUID,
+    *,
+    skip_reason: str | None,
+    skip_warning: SchemathesisWarning | None = None,
+) -> EventGenerator:
+    """Events of an operation that is not tested in this phase: a scenario that started and was skipped."""
+    started = ScenarioStarted(label=label, phase=phase, suite_id=suite_id)
+    yield started
+    yield ScenarioFinished(
+        id=started.id,
+        suite_id=suite_id,
+        phase=phase,
+        label=label,
+        status=Status.SKIP,
+        recorder=ScenarioRecorder(label=label),
+        elapsed_time=0.0,
+        skip_reason=skip_reason,
+        skip_warning=skip_warning,
+        is_final=True,
+    )
+
 
 @dataclass
 class FuzzScenarioStarted(ScenarioEvent):
@@ -311,6 +366,12 @@ class NonFatalError(EngineEvent):
 
     def __hash__(self) -> int:
         return hash((self.label, type(self.value)))
+
+
+def fail_phase(phase: Phase, error: Exception, *, label: str) -> EventGenerator:
+    """Events of a phase that errored before testing anything."""
+    yield NonFatalError(error=error, phase=phase.name, label=label, related_to_operation=False)
+    yield PhaseFinished(phase=phase, status=Status.ERROR, payload=None)
 
 
 @dataclass

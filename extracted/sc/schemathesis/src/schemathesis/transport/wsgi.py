@@ -1,39 +1,72 @@
 from __future__ import annotations
 
-from collections.abc import Generator
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from io import BytesIO
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
+from urllib.parse import urlsplit, urlunsplit
 
 from typing_extensions import override
 
 from schemathesis.core import Body, NotSet, media_types
-from schemathesis.core.parameters import RAW_QUERY_STRING_KEY, RawQueryString, split_delimited_query
 from schemathesis.core.rate_limit import ratelimit
 from schemathesis.core.timing import Instant
-from schemathesis.core.transforms import merge_at, to_wire_string
-from schemathesis.core.transport import Response
+from schemathesis.core.transforms import to_wire_text
+from schemathesis.core.transport import Response, read_event_stream
 from schemathesis.generation.case import Case
 from schemathesis.generation.overrides import Override
 from schemathesis.python import wsgi
 from schemathesis.transport import BaseTransport, SerializationContext
 from schemathesis.transport.prepare import (
+    BODY_KWARGS,
     get_exclude_headers,
     normalize_base_url,
     prepare_body,
+    prepare_cookies,
     prepare_headers,
     prepare_path,
+    replaces_body,
+    serialize_cookies,
 )
-from schemathesis.transport.requests import REQUESTS_TRANSPORT, _merge_query_components, prepare_multipart_parts
-from schemathesis.transport.serialization import Binary, serialize_binary, serialize_json, serialize_xml, serialize_yaml
+from schemathesis.transport.requests import (
+    REQUESTS_TRANSPORT,
+    encode_non_object_multipart,
+    merge_params_override,
+    prepare_multipart_parts,
+    prepare_query,
+)
+from schemathesis.transport.serialization import Binary, serialize_binary
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    import requests
     import werkzeug
 
 
 def _is_raw_multipart(media_type: str, payload: object) -> bool:
     """Whether a multipart payload is passed through as-is instead of being encoded into form parts."""
-    return media_types.parse(media_type)[0] == "multipart" and isinstance(payload, (str, bytes))
+    return media_types.is_multipart(media_type) and isinstance(payload, (str, bytes))
+
+
+def _auth_headers(
+    case: Case,
+    session_auth: Callable[[requests.PreparedRequest], requests.PreparedRequest] | tuple[str, str] | None,
+    data: dict[str, Any],
+) -> dict[str, str]:
+    """Headers a `requests` auth sets on a request; handshake auths need a network round-trip and set none."""
+    import requests
+
+    # Auth set on the case takes precedence over the session's, as it does for network calls.
+    auth = case._auth or session_auth
+    if auth is None:
+        return {}
+
+    prepared = requests.PreparedRequest()
+    prepared.prepare(method=case.method, url=data.get("base_url", f"http://{wsgi.HOST}") + data["path"])
+    before = dict(prepared.headers)
+    prepared.prepare_auth(auth)
+    return {name: value for name, value in prepared.headers.items() if before.get(name) != value}
 
 
 class WSGITransport(BaseTransport["werkzeug.Client"]):
@@ -41,6 +74,7 @@ class WSGITransport(BaseTransport["werkzeug.Client"]):
     def serialize_case(self, case: Case, **kwargs: Any) -> dict[str, Any]:
         headers = kwargs.get("headers")
         params_override = kwargs.get("params")
+        base_url = kwargs.get("base_url")
 
         final_headers = prepare_headers(case, headers)
 
@@ -51,8 +85,8 @@ class WSGITransport(BaseTransport["werkzeug.Client"]):
             media_type, serializer = self._resolve_serializer(media_type)
 
         extra: dict[str, Any]
-        # Handle serialization
-        if serializer is not None:
+        # Handle serialization. A body the caller passes replaces the generated one, so that one is not serialized.
+        if serializer is not None and not replaces_body(kwargs):
             context = SerializationContext(case=case)
             extra = serializer(context, prepare_body(case))
         else:
@@ -61,35 +95,25 @@ class WSGITransport(BaseTransport["werkzeug.Client"]):
         # Set content type for payload. A raw multipart payload is sent verbatim and carries no
         # boundary, so declaring it as multipart would make it unparsable for the application.
         if media_type and not isinstance(case.body, NotSet) and not _is_raw_multipart(media_type, extra.get("data")):
-            final_headers["Content-Type"] = media_type
-
-        query_string: dict[str, Any] | str | None = case.query
-        if isinstance(query_string, dict):
-            query_string = dict(query_string)
-            raw_query = None
-            marker_value = query_string.get(RAW_QUERY_STRING_KEY)
-            if isinstance(marker_value, RawQueryString):
-                raw_query = str(query_string.pop(RAW_QUERY_STRING_KEY))
-            delimited_raw, query_string = split_delimited_query(query_string)
-            if delimited_raw:
-                raw_query = delimited_raw if raw_query is None else _merge_query_components(raw_query, delimited_raw)
-            if raw_query is not None:
-                query_string = _merge_query_components(raw_query, query_string)
+            final_headers.setdefault("Content-Type", media_type)
 
         data = {
             "method": case.method,
             "path": case.operation.schema.get_full_path(prepare_path(case.path, case.path_parameters)),
             # Convert to regular dict for Werkzeug compatibility
             "headers": dict(final_headers),
-            "query_string": query_string,
+            "query_string": prepare_query(case),
             **extra,
         }
 
+        if base_url is not None:
+            # Werkzeug reads a path in its `base_url` as the mount point, so it only gets the origin.
+            url = urlsplit(case.operation.schema.build_request_url(case, base_url))
+            data["path"] = url.path
+            data["base_url"] = urlunsplit((url.scheme, url.netloc, "", "", ""))
+
         if params_override is not None:
-            if isinstance(data.get("query_string"), str) or isinstance(params_override, str):
-                data["query_string"] = _merge_query_components(data.get("query_string"), params_override)
-            else:
-                merge_at(data, "query_string", params_override)
+            merge_params_override(data, "query_string", params_override)
 
         return data
 
@@ -98,7 +122,7 @@ class WSGITransport(BaseTransport["werkzeug.Client"]):
         self,
         case: Case,
         *,
-        session: werkzeug.Client | None = None,
+        session: werkzeug.Client | requests.Session | None = None,
         **kwargs: Any,
     ) -> Response:
         import requests
@@ -106,17 +130,32 @@ class WSGITransport(BaseTransport["werkzeug.Client"]):
         headers = kwargs.pop("headers", None)
         params = kwargs.pop("params", None)
         cookies = kwargs.pop("cookies", None)
+        timeout = kwargs.pop("timeout", None)
+        auth = None
+        if isinstance(session, requests.Session):
+            # A network session still configures the call, but the application is reached in-process.
+            headers = {**session.headers, **(headers or {})}
+            cookies = {**session.cookies.get_dict(), **(cookies or {})}
+            auth = session.auth
+            session = None
+            # Socket-level settings have no in-process equivalent.
+            for name in ("max_redirects", "verify", "cert", "proxies"):
+                kwargs.pop(name, None)
         application = kwargs.pop("app")
+        base_url = normalize_base_url(kwargs.pop("base_url", None), host=wsgi.HOST)
 
-        data = self.serialize_case(case, headers=headers, params=params)
+        body = {key: kwargs[key] for key in BODY_KWARGS if key in kwargs}
+        data = self.serialize_case(case, headers=headers, params=params, base_url=base_url, **body)
         data.update({key: value for key, value in kwargs.items() if key not in data})
 
         excluded_headers = get_exclude_headers(case)
         for name in excluded_headers:
             data["headers"].pop(name, None)
+        if "Authorization" not in excluded_headers:
+            data["headers"].update(_auth_headers(case, auth, data))
 
         client = session or wsgi.get_client(application)
-        cookies = {**(case.cookies or {}), **(cookies or {})}
+        cookies = prepare_cookies({**(serialize_cookies(case) or {}), **(cookies or {})})
 
         config = case.operation.schema.config
         rate_limit = config.rate_limit_for(operation=case.operation)
@@ -135,30 +174,41 @@ class WSGITransport(BaseTransport["werkzeug.Client"]):
 
         requests_kwargs = REQUESTS_TRANSPORT.serialize_case(
             case,
-            base_url=normalize_base_url(case.operation.base_url, host=wsgi.HOST),
+            base_url=base_url or normalize_base_url(case.operation.base_url, host=wsgi.HOST),
             headers=headers,
             params=params,
             cookies=cookies,
+            **body,
         )
+        # The reported request is the one sent, with the caller's body rather than the generated one.
+        requests_kwargs.update(body)
 
         headers = {}
         for name, value in response.headers:
             headers.setdefault(name.lower(), []).append(value)
 
+        if media_types.is_sse(response.content_type):
+            # An event stream may never end; stop reading once the request timeout passes in total.
+            content, stream_cut_short = read_event_stream(
+                # A WSGI application iterates over bytes.
+                cast("Iterable[bytes]", response.response),
+                timeout or config.request_timeout_for(operation=case.operation),
+                config.max_stream_events_for(operation=case.operation),
+            )
+            response.close()
+        else:
+            content = response.get_data()
+            stream_cut_short = False
+
         return Response(
             status_code=response.status_code,
             headers=headers,
-            content=response.get_data(),
+            content=content,
             request=requests.Request(**requests_kwargs).prepare(),
             elapsed=elapsed,
             verify=False,
-            _override=Override(
-                query=kwargs.get("params") or {},
-                headers=kwargs.get("headers") or {},
-                cookies=kwargs.get("cookies") or {},
-                path_parameters={},
-                body={},
-            ),
+            stream_cut_short=stream_cut_short,
+            _override=Override.from_send_kwargs(kwargs),
         )
 
 
@@ -213,18 +263,8 @@ def cookie_handler(client: werkzeug.Client, cookies: dict[str, Any] | None) -> G
 
 
 WSGI_TRANSPORT = WSGITransport()
-
-
-@WSGI_TRANSPORT.serializer("application/json", "text/json")
-def json_serializer(ctx: SerializationContext, value: Body) -> dict[str, Any]:
-    return serialize_json(value)
-
-
-@WSGI_TRANSPORT.serializer(
-    "text/yaml", "text/x-yaml", "text/vnd.yaml", "text/yml", "application/yaml", "application/x-yaml"
-)
-def yaml_serializer(ctx: SerializationContext, value: Body) -> dict[str, Any]:
-    return serialize_yaml(value)
+# Werkzeug encodes multipart forms itself and takes text as `str`; those serializers are replaced below.
+WSGI_TRANSPORT._copy_serializers_from(REQUESTS_TRANSPORT)
 
 
 def _to_werkzeug_parts(files: list | None, data: dict[str, Any] | None) -> dict[str, list]:
@@ -250,10 +290,22 @@ def _to_werkzeug_parts(files: list | None, data: dict[str, Any] | None) -> dict[
     return parts
 
 
+def _serialize_non_object_multipart(value: Body) -> dict[str, Any]:
+    # A raw payload is sent verbatim; other values are wrapped into a single part
+    if value is None or isinstance(value, (str, bytes)):
+        return {"data": value}
+    raw_data, content_type = encode_non_object_multipart(value)
+    return {"data": raw_data, "content_type": content_type}
+
+
 @WSGI_TRANSPORT.serializer("multipart/form-data", "multipart/mixed")
 def multipart_serializer(ctx: SerializationContext, value: Body) -> dict[str, Any]:
-    if not isinstance(value, dict):
-        return {"data": value}
+    if isinstance(value, dict):
+        return _serialize_multipart_parts(ctx, value)
+    return _serialize_non_object_multipart(value)
+
+
+def _serialize_multipart_parts(ctx: SerializationContext, value: dict[str, Any]) -> dict[str, Any]:
     files, data = prepare_multipart_parts(ctx, value)
     parts = _to_werkzeug_parts(files, data)
     subtype = media_types.parse(ctx.case.media_type or "multipart/form-data")[1]
@@ -266,23 +318,8 @@ def multipart_serializer(ctx: SerializationContext, value: Body) -> dict[str, An
     return {"data": stream.read(), "content_type": f'multipart/{subtype}; boundary="{boundary}"'}
 
 
-@WSGI_TRANSPORT.serializer("application/xml", "text/xml")
-def xml_serializer(ctx: SerializationContext, value: Body) -> dict[str, Any]:
-    return serialize_xml(ctx.case, value)
-
-
-@WSGI_TRANSPORT.serializer("application/x-www-form-urlencoded")
-def urlencoded_serializer(ctx: SerializationContext, value: Body) -> dict[str, Any]:
-    return {"data": value}
-
-
 @WSGI_TRANSPORT.serializer("text/plain")
 def text_serializer(ctx: SerializationContext, value: Body) -> dict[str, Any]:
     if isinstance(value, bytes):
         return {"data": value}
-    return {"data": to_wire_string(value)}
-
-
-@WSGI_TRANSPORT.serializer("application/octet-stream")
-def binary_serializer(ctx: SerializationContext, value: Body) -> dict[str, Any]:
-    return {"data": serialize_binary(value)}
+    return {"data": to_wire_text(value)}

@@ -23,6 +23,12 @@ class PoolDraw:
     resource_field: str
     source_operation: str
     source_status: int
+    # Identity whose request produced the resource; `None` outside multi-identity auth.
+    source_identity: str | None = None
+    # The value was a parent path parameter of the source request, so that request referenced it, not created it.
+    source_input: bool = False
+    # Query of the source request, so a list it came from can be requested again as sent.
+    source_query: dict[str, Any] | None = None
 
 
 @dataclass(slots=True, frozen=True)
@@ -107,6 +113,21 @@ class ResourceRecorder(Protocol):
 
 class ExtraDataSource(ResourcePool, ResourceRecorder, Protocol):
     """Provides extra data from captured API responses for test generation."""
+
+
+def record_interaction(source: ResourceRecorder, case: Case, response: Response) -> None:
+    """Capture the response and the request inputs of one call, where the source records them."""
+    operation = case.operation
+    if source.should_record(operation=operation.label):
+        source.record_response(operation=operation, response=response, case=case)
+    if source.should_record_request(operation=operation.label):
+        source.record_request(operation=operation, case=case, status_code=response.status_code)
+
+
+def record_delete_attempt(source: ResourceRecorder, case: Case, status_code: int) -> None:
+    """Count a DELETE that succeeded or found nothing, so later draws stop reusing the same resource."""
+    if 200 <= status_code < 300 or status_code == 404:
+        source.record_successful_delete(operation=case.operation, case=case)
 
 
 __all__ = [

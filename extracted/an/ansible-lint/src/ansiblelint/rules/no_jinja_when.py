@@ -17,6 +17,17 @@ if TYPE_CHECKING:
     from ansiblelint.utils import Task
 
 RE_JINJA = re.compile(r"{{ (.*?) }}")
+RE_QUOTED_STRING = re.compile(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'')
+_WHEN_KEYS = ("when", "changed_when", "failed_when")
+
+
+def _strip_redundant_jinja(value: str) -> str:
+    for quoted in RE_QUOTED_STRING.findall(value):
+        inner = quoted[1:-1]
+        if "{{" in inner:
+            # {{ }} embedded in a quoted string changes meaning if stripped; skip it
+            return value
+    return RE_JINJA.sub(r"\1", value)
 
 
 class NoFormattingInWhenRule(AnsibleLintRule, TransformMixin):
@@ -78,31 +89,66 @@ class NoFormattingInWhenRule(AnsibleLintRule, TransformMixin):
         lintable: Lintable,
         data: CommentedMap | CommentedSeq | str,
     ) -> None:
-        if match.tag == self.id:
-            task = self.seek(match.yaml_path, data)
-            key_to_check = ("when", "changed_when", "failed_when")
-            for _ in range(len(task)):
-                if isinstance(task, MutableMapping):
-                    for k, v in task.items():
-                        if k == "roles" and isinstance(v, list):
-                            transform_for_roles(v, key_to_check=key_to_check)
-                        elif k in key_to_check:
-                            v = RE_JINJA.sub(r"\1", v)
-                            task[k] = v
-            match.fixed = True
+        if match.tag != self.id:
+            return
+        task = self.seek(match.yaml_path, data)
+        if isinstance(task, MutableMapping):
+            match.fixed = _transform_when_keys(task, _WHEN_KEYS)
 
 
-def transform_for_roles(v: list[Any], key_to_check: tuple[str, ...]) -> None:
-    """Additional transform logic in case of roles."""
-    for idx, new_dict in enumerate(v):
-        for new_key, new_value in new_dict.items():
-            if new_key in key_to_check:
-                if isinstance(new_value, list):
-                    for index, nested_value in enumerate(new_value):
-                        new_value[index] = RE_JINJA.sub(r"\1", nested_value)
-                    v[idx][new_key] = new_value
-                if isinstance(new_value, str):
-                    v[idx][new_key] = RE_JINJA.sub(r"\1", new_value)
+def _transform_when_value(value: Any) -> tuple[Any, bool]:
+    """Return the transformed value and whether it changed.
+
+    Lists are edited in place so that ruamel keeps their comments and blank lines.
+    """
+    if isinstance(value, list):
+        changed = False
+        for index, item in enumerate(value):
+            if isinstance(item, str):
+                new_item = _strip_redundant_jinja(item)
+                if new_item != item:
+                    value[index] = new_item
+                    changed = True
+        return value, changed
+    if isinstance(value, str):
+        new_value = _strip_redundant_jinja(value)
+        return new_value, new_value != value
+    return value, False
+
+
+def _transform_when_keys(
+    task: MutableMapping[str, Any],
+    key_to_check: tuple[str, ...],
+) -> bool:
+    """Return whether any value was actually changed."""
+    changed = False
+    for key, value in task.items():
+        if key == "roles" and isinstance(value, list):
+            changed = transform_for_roles(value, key_to_check=key_to_check) or changed
+        elif key in key_to_check:
+            new_value, value_changed = _transform_when_value(value)
+            if value_changed:
+                task[key] = new_value
+                changed = True
+    return changed
+
+
+def transform_for_roles(v: list[Any], key_to_check: tuple[str, ...]) -> bool:
+    """Additional transform logic in case of roles.
+
+    Returns whether any value was actually changed.
+    """
+    changed = False
+    for role in v:
+        if not isinstance(role, MutableMapping):
+            continue
+        for key, value in role.items():
+            if key in key_to_check:
+                new_value, value_changed = _transform_when_value(value)
+                if value_changed:
+                    role[key] = new_value
+                    changed = True
+    return changed
 
 
 if "pytest" in sys.modules:
@@ -124,3 +170,35 @@ if "pytest" in sys.modules:
         bad_runner = Runner(failure, rules=empty_rule_collection)
         errs = bad_runner.run()
         assert len(errs) == 3
+
+    def test_transform_when_value_preserves_non_strings() -> None:
+        """Autofix must leave non-string when list items untouched."""
+        assert _transform_when_value([True, "{{ foo }}", 1]) == ([True, "foo", 1], True)
+        assert _transform_when_value(True) == (True, False)
+
+    def test_transform_for_roles_skips_shorthand_strings() -> None:
+        """Shorthand role strings must not break transform iteration."""
+        roles: list[Any] = [
+            "geerlingguy.nginx",
+            {"role": "demo", "when": "{{ bar }}"},
+        ]
+        transform_for_roles(roles, key_to_check=_WHEN_KEYS)
+        assert roles[0] == "geerlingguy.nginx"
+        assert roles[1]["when"] == "bar"
+
+    def test_strip_redundant_jinja_skips_quoted_templates() -> None:
+        """Autofix must skip templates embedded in a quoted string."""
+        assert _strip_redundant_jinja("{{ foo }}") == "foo"
+        assert _strip_redundant_jinja("'{{ v }}' == '8'") == "'{{ v }}' == '8'"
+        assert (
+            _strip_redundant_jinja('not "version={{ v }}" in stdout')
+            == 'not "version={{ v }}" in stdout'
+        )
+
+    def test_strip_redundant_jinja_handles_escaped_quotes() -> None:
+        """An escaped quote must not be mistaken for the closing delimiter."""
+        escaped = r"'it\'s {{ v }}' == x"
+        assert _strip_redundant_jinja(escaped) == escaped
+        assert _strip_redundant_jinja('{{ ansible_facts["os_family"] }}') == (
+            'ansible_facts["os_family"]'
+        )

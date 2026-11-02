@@ -1,19 +1,27 @@
 from __future__ import annotations
 
 import pytest
+from flask import jsonify, request
 
 import schemathesis
-from schemathesis.core.error_feedback.pipeline import _reset_pipeline_for_tests
 from schemathesis.engine import events, from_schema
 from schemathesis.engine.run import PhaseName
 from schemathesis.generation import GenerationMode
 from test.apps.catalog.openapi import error_feedback as error_feedback_apps
 
+pytestmark = pytest.mark.usefixtures("reset_feedback_pipeline")
 
-@pytest.fixture(autouse=True)
-def _reset_feedback_pipeline():
-    # MRU singleton leaks across tests otherwise.
-    _reset_pipeline_for_tests()
+
+def _run_feedback(cli, api, max_examples=10, **kwargs):
+    return cli.run(
+        api.schema_url,
+        "--no-shrink",
+        f"--max-examples={max_examples}",
+        "--phases=coverage,fuzzing",
+        "--mode=positive",
+        "--continue-on-failure",
+        **kwargs,
+    )
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
@@ -26,51 +34,17 @@ def _reset_feedback_pipeline():
     ids=["enabled", "disabled"],
 )
 def test_feedback_toggles_planted_bug_visibility(ctx, cli, snapshot_cli, extra_kwargs):
-    api = ctx.openapi.apps.planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-            **extra_kwargs,
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.planted_bug(), **extra_kwargs) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_dotted_path(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.nested_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.nested_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_size_bound(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.size_bound_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.size_bound_planted_bug()) == snapshot_cli
 
 
 # A malformed `Content-Type` on a rejection is the server's fault, not the schema's.
@@ -92,66 +66,22 @@ def test_feedback_ignores_rejection_with_malformed_content_type(ctx, cli, snapsh
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_format(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.format_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.format_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_numeric_bound(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.numeric_bound_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.numeric_bound_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_positive_numeric_gate(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.positive_numeric_gate_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.positive_numeric_gate_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_unrecognized_property(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.unrecognized_property_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.unrecognized_property_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
@@ -161,6 +91,7 @@ def test_feedback_unmasks_planted_bug_via_missing_request_body(ctx, cli, snapsho
         cli.run(
             api.schema_url,
             "--no-shrink",
+            # Feedback must adapt generation before the planted bug surfaces, which takes many cases.
             "--max-examples=80",
             "--phases=coverage,fuzzing",
             "--mode=positive",
@@ -174,115 +105,38 @@ def test_feedback_unmasks_planted_bug_via_missing_request_body(ctx, cli, snapsho
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_pattern(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.pattern_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.pattern_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_type_mismatch(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.jackson_typed_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.jackson_typed_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_type_mismatch_ref_bundled(ctx, cli, snapshot_cli):
     # Adjustment must reach the body schema even when bundled behind $ref / x-bundled.
-    api = ctx.openapi.apps.jackson_typed_planted_bug_ref_bundled()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=30",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.jackson_typed_planted_bug_ref_bundled(), max_examples=30) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_jackson_numeric_overflow(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.jackson_overflow_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.jackson_overflow_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_enum(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.jackson_enum_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.jackson_enum_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_missing_query_parameter(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.missing_query_param_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.missing_query_param_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_recovers_constraints_dropped_from_pydantic_schema(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.pydantic_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.pydantic_planted_bug()) == snapshot_cli
 
 
 def _collect_body_dates(schema, *, phase) -> list[str]:
@@ -307,11 +161,43 @@ def _collect_query_tokens(schema, *, phase) -> list[str]:
     return values
 
 
+def test_drf_detail_envelope_does_not_add_detail_query_parameter(ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/api/audio": {
+                "get": {
+                    "parameters": [{"name": "tags", "in": "query", "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}, "400": {"description": "Bad"}},
+                }
+            }
+        }
+    )
+
+    @app.route("/api/audio")
+    def audio():
+        if request.args.get("tags") == "":
+            return jsonify({"detail": {"tags": ["This field may not be blank."]}}), 400
+        return jsonify([])
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    schema.config.checks.update(included_check_names=["not_a_server_error"])
+    schema.config.phases.update(phases=["coverage", "fuzzing"])
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE, GenerationMode.NEGATIVE], max_examples=30)
+
+    query_keys = set()
+    for event in from_schema(schema).execute():
+        if isinstance(event, events.ScenarioFinished) and event.phase == PhaseName.FUZZING:
+            for case_node in event.recorder.cases.values():
+                query_keys.update(case_node.value.query or {})
+    assert "detail" not in query_keys
+
+
 def test_stale_example_evicted_after_format_inference(ctx):
     api = ctx.openapi.apps.commit_date_with_example()
     schema = schemathesis.openapi.from_url(api.schema_url)
     schema.config.checks.update(included_check_names=["not_a_server_error"])
     schema.config.phases.update(phases=["coverage", "fuzzing"])
+    # A stale example that survives feedback shows up only across many draws.
     schema.config.generation.update(modes=[GenerationMode.POSITIVE], max_examples=100)
 
     fuzzing_commit_dates = _collect_body_dates(schema, phase=PhaseName.FUZZING)
@@ -325,12 +211,44 @@ def test_stale_example_evicted_after_format_inference_on_query_param(ctx):
     schema = schemathesis.openapi.from_url(api.schema_url)
     schema.config.checks.update(included_check_names=["not_a_server_error"])
     schema.config.phases.update(phases=["examples", "coverage", "fuzzing"])
+    # A stale example that survives feedback shows up only across many draws.
     schema.config.generation.update(modes=[GenerationMode.POSITIVE], max_examples=100)
 
     fuzzing_token_values = _collect_query_tokens(schema, phase=PhaseName.FUZZING)
     assert fuzzing_token_values, "No fuzzing query draws collected"
     stale = [v for v in fuzzing_token_values if v == "NOT_A_UUID"]
     assert not stale, f"Stale `token`: {len(stale)}/{len(fuzzing_token_values)} fuzzing draws"
+
+
+def test_example_of_rejected_query_parameter_not_sent(ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/api/items": {
+                "get": {
+                    "parameters": [{"name": "legacy", "in": "query", "schema": {"type": "string"}, "example": "STALE"}],
+                    "responses": {"200": {"description": "OK"}, "400": {"description": "Bad"}},
+                }
+            }
+        }
+    )
+
+    @app.route("/api/items")
+    def items():
+        if "legacy" in request.args:
+            return jsonify({"message": 'parameter name "legacy" is not allowed', "fieldErrors": []}), 400
+        return jsonify([])
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    schema.config.checks.update(included_check_names=["not_a_server_error"])
+    schema.config.phases.update(phases=["examples", "coverage", "fuzzing"])
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE], max_examples=30)
+
+    fuzzing_queries = []
+    for event in from_schema(schema).execute():
+        if isinstance(event, events.ScenarioFinished) and event.phase == PhaseName.FUZZING:
+            fuzzing_queries.extend(case_node.value.query for case_node in event.recorder.cases.values())
+    assert fuzzing_queries, "No fuzzing draws collected"
+    assert [query for query in fuzzing_queries if query and "legacy" in query] == []
 
 
 def test_stale_body_example_evicted_in_coverage_after_examples_observations(ctx):
@@ -391,191 +309,59 @@ def test_stateful_body_generation_consumes_format_inferred_during_fuzzing(ctx):
 @pytest.mark.snapshot(replace_reproduce_with=True)
 @pytest.mark.parametrize("envelope", ["legacy", "modern", "wrapped"])
 def test_feedback_unmasks_planted_bug_via_rails_envelope(ctx, cli, envelope, snapshot_cli):
-    api = ctx.openapi.apps.rails_planted_bug(envelope=envelope)
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=30",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.rails_planted_bug(envelope=envelope), max_examples=30) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_laravel_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.laravel_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=30",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.laravel_planted_bug(), max_examples=30) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_aspnet_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.aspnet_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=30",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.aspnet_planted_bug(), max_examples=30) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_zod_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.zod_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=30",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.zod_planted_bug(), max_examples=30) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_ajv_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.ajv_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.ajv_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_go_validator_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.go_validator_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.go_validator_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_symfony_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.symfony_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.symfony_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_confluent_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.confluent_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.confluent_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_marshmallow_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.marshmallow_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.marshmallow_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_flask_rest_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.flask_rest_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.flask_rest_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_litestar_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.litestar_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.litestar_planted_bug()) == snapshot_cli
 
 
 @pytest.mark.snapshot(replace_reproduce_with=True)
 def test_feedback_unmasks_planted_bug_via_restler_envelope(ctx, cli, snapshot_cli):
-    api = ctx.openapi.apps.restler_planted_bug()
-    assert (
-        cli.run(
-            api.schema_url,
-            "--no-shrink",
-            "--max-examples=10",
-            "--phases=coverage,fuzzing",
-            "--mode=positive",
-            "--continue-on-failure",
-        )
-        == snapshot_cli
-    )
+    assert _run_feedback(cli, ctx.openapi.apps.restler_planted_bug()) == snapshot_cli

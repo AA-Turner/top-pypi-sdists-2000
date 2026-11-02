@@ -1,0 +1,517 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from __future__ import annotations
+
+import os
+from typing import Any, cast
+
+import pytest
+
+from parallel import Parallel, AsyncParallel
+from tests.utils import assert_matches_type
+from parallel.types import (
+    TaskRun,
+    RunInput,
+    TaskRunResult,
+)
+from parallel._utils import parse_date
+
+base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
+
+
+class TestTaskRun:
+    parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+
+    @parametrize
+    def test_method_create(self, client: Parallel) -> None:
+        task_run = client.task_run.create(
+            input="What was the GDP of France in 2023?",
+            processor="base",
+        )
+        assert_matches_type(TaskRun, task_run, path=["response"])
+
+    @parametrize
+    def test_method_create_with_all_params(self, client: Parallel) -> None:
+        task_run = client.task_run.create(
+            input="What was the GDP of France in 2023?",
+            processor="base",
+            advanced_settings={
+                "data_sources": {
+                    "free": ["string"],
+                    "pay_per_use": ["string"],
+                },
+                "location": "us",
+            },
+            enable_events=True,
+            mcp_servers=[
+                {
+                    "name": "name",
+                    "url": "url",
+                    "allowed_tools": ["string"],
+                    "headers": {"foo": "string"},
+                    "type": "url",
+                }
+            ],
+            memory_scope_key="memory_scope_key",
+            metadata={"foo": "string"},
+            previous_interaction_id="previous_interaction_id",
+            source_policy={
+                "after_date": parse_date("2024-01-01"),
+                "exclude_domains": ["reddit.com", "youtube.com/shorts", ".ai"],
+                "include_domains": ["wikipedia.org", "docs.python.org/3", ".edu"],
+            },
+            task_spec={
+                "output_schema": {
+                    "json_schema": {
+                        "additionalProperties": "bar",
+                        "properties": "bar",
+                        "required": "bar",
+                        "type": "bar",
+                    },
+                    "type": "json",
+                },
+                "input_schema": "string",
+            },
+            webhook={
+                "url": "url",
+                "event_types": ["task_run.status"],
+            },
+            betas=["mcp-server-2025-07-17"],
+        )
+        assert_matches_type(TaskRun, task_run, path=["response"])
+
+    @parametrize
+    def test_raw_response_create(self, client: Parallel) -> None:
+        response = client.task_run.with_raw_response.create(
+            input="What was the GDP of France in 2023?",
+            processor="base",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        task_run = response.parse()
+        assert_matches_type(TaskRun, task_run, path=["response"])
+
+    @parametrize
+    def test_streaming_response_create(self, client: Parallel) -> None:
+        with client.task_run.with_streaming_response.create(
+            input="What was the GDP of France in 2023?",
+            processor="base",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            task_run = response.parse()
+            assert_matches_type(TaskRun, task_run, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_method_retrieve(self, client: Parallel) -> None:
+        task_run = client.task_run.retrieve(
+            "run_id",
+        )
+        assert_matches_type(TaskRun, task_run, path=["response"])
+
+    @parametrize
+    def test_raw_response_retrieve(self, client: Parallel) -> None:
+        response = client.task_run.with_raw_response.retrieve(
+            "run_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        task_run = response.parse()
+        assert_matches_type(TaskRun, task_run, path=["response"])
+
+    @parametrize
+    def test_streaming_response_retrieve(self, client: Parallel) -> None:
+        with client.task_run.with_streaming_response.retrieve(
+            "run_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            task_run = response.parse()
+            assert_matches_type(TaskRun, task_run, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_retrieve(self, client: Parallel) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `run_id` but received ''"):
+            client.task_run.with_raw_response.retrieve(
+                "",
+            )
+
+    @parametrize
+    def test_method_events(self, client: Parallel) -> None:
+        task_run_stream = client.task_run.events(
+            "run_id",
+        )
+        task_run_stream.response.close()
+
+    @parametrize
+    def test_raw_response_events(self, client: Parallel) -> None:
+        response = client.task_run.with_raw_response.events(
+            "run_id",
+        )
+
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        stream = response.parse()
+        stream.close()
+
+    @parametrize
+    def test_streaming_response_events(self, client: Parallel) -> None:
+        with client.task_run.with_streaming_response.events(
+            "run_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            stream = response.parse()
+            stream.close()
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_events(self, client: Parallel) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `run_id` but received ''"):
+            client.task_run.with_raw_response.events(
+                "",
+            )
+
+    @parametrize
+    def test_method_result(self, client: Parallel) -> None:
+        task_run = client.task_run.result(
+            run_id="run_id",
+        )
+        assert_matches_type(TaskRunResult, task_run, path=["response"])
+
+    @parametrize
+    def test_method_result_with_all_params(self, client: Parallel) -> None:
+        task_run = client.task_run.result(
+            run_id="run_id",
+            api_timeout=0,
+            betas=["mcp-server-2025-07-17"],
+        )
+        assert_matches_type(TaskRunResult, task_run, path=["response"])
+
+    @parametrize
+    def test_raw_response_result(self, client: Parallel) -> None:
+        response = client.task_run.with_raw_response.result(
+            run_id="run_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        task_run = response.parse()
+        assert_matches_type(TaskRunResult, task_run, path=["response"])
+
+    @parametrize
+    def test_streaming_response_result(self, client: Parallel) -> None:
+        with client.task_run.with_streaming_response.result(
+            run_id="run_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            task_run = response.parse()
+            assert_matches_type(TaskRunResult, task_run, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_result(self, client: Parallel) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `run_id` but received ''"):
+            client.task_run.with_raw_response.result(
+                run_id="",
+            )
+
+    @parametrize
+    def test_method_retrieve_input(self, client: Parallel) -> None:
+        task_run = client.task_run.retrieve_input(
+            "run_id",
+        )
+        assert_matches_type(RunInput, task_run, path=["response"])
+
+    @parametrize
+    def test_raw_response_retrieve_input(self, client: Parallel) -> None:
+        response = client.task_run.with_raw_response.retrieve_input(
+            "run_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        task_run = response.parse()
+        assert_matches_type(RunInput, task_run, path=["response"])
+
+    @parametrize
+    def test_streaming_response_retrieve_input(self, client: Parallel) -> None:
+        with client.task_run.with_streaming_response.retrieve_input(
+            "run_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            task_run = response.parse()
+            assert_matches_type(RunInput, task_run, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_retrieve_input(self, client: Parallel) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `run_id` but received ''"):
+            client.task_run.with_raw_response.retrieve_input(
+                "",
+            )
+
+
+class TestAsyncTaskRun:
+    parametrize = pytest.mark.parametrize(
+        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
+    )
+
+    @parametrize
+    async def test_method_create(self, async_client: AsyncParallel) -> None:
+        task_run = await async_client.task_run.create(
+            input="What was the GDP of France in 2023?",
+            processor="base",
+        )
+        assert_matches_type(TaskRun, task_run, path=["response"])
+
+    @parametrize
+    async def test_method_create_with_all_params(self, async_client: AsyncParallel) -> None:
+        task_run = await async_client.task_run.create(
+            input="What was the GDP of France in 2023?",
+            processor="base",
+            advanced_settings={
+                "data_sources": {
+                    "free": ["string"],
+                    "pay_per_use": ["string"],
+                },
+                "location": "us",
+            },
+            enable_events=True,
+            mcp_servers=[
+                {
+                    "name": "name",
+                    "url": "url",
+                    "allowed_tools": ["string"],
+                    "headers": {"foo": "string"},
+                    "type": "url",
+                }
+            ],
+            memory_scope_key="memory_scope_key",
+            metadata={"foo": "string"},
+            previous_interaction_id="previous_interaction_id",
+            source_policy={
+                "after_date": parse_date("2024-01-01"),
+                "exclude_domains": ["reddit.com", "youtube.com/shorts", ".ai"],
+                "include_domains": ["wikipedia.org", "docs.python.org/3", ".edu"],
+            },
+            task_spec={
+                "output_schema": {
+                    "json_schema": {
+                        "additionalProperties": "bar",
+                        "properties": "bar",
+                        "required": "bar",
+                        "type": "bar",
+                    },
+                    "type": "json",
+                },
+                "input_schema": "string",
+            },
+            webhook={
+                "url": "url",
+                "event_types": ["task_run.status"],
+            },
+            betas=["mcp-server-2025-07-17"],
+        )
+        assert_matches_type(TaskRun, task_run, path=["response"])
+
+    @parametrize
+    async def test_raw_response_create(self, async_client: AsyncParallel) -> None:
+        response = await async_client.task_run.with_raw_response.create(
+            input="What was the GDP of France in 2023?",
+            processor="base",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        task_run = await response.parse()
+        assert_matches_type(TaskRun, task_run, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_create(self, async_client: AsyncParallel) -> None:
+        async with async_client.task_run.with_streaming_response.create(
+            input="What was the GDP of France in 2023?",
+            processor="base",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            task_run = await response.parse()
+            assert_matches_type(TaskRun, task_run, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_method_retrieve(self, async_client: AsyncParallel) -> None:
+        task_run = await async_client.task_run.retrieve(
+            "run_id",
+        )
+        assert_matches_type(TaskRun, task_run, path=["response"])
+
+    @parametrize
+    async def test_raw_response_retrieve(self, async_client: AsyncParallel) -> None:
+        response = await async_client.task_run.with_raw_response.retrieve(
+            "run_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        task_run = await response.parse()
+        assert_matches_type(TaskRun, task_run, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_retrieve(self, async_client: AsyncParallel) -> None:
+        async with async_client.task_run.with_streaming_response.retrieve(
+            "run_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            task_run = await response.parse()
+            assert_matches_type(TaskRun, task_run, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_retrieve(self, async_client: AsyncParallel) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `run_id` but received ''"):
+            await async_client.task_run.with_raw_response.retrieve(
+                "",
+            )
+
+    @parametrize
+    async def test_method_events(self, async_client: AsyncParallel) -> None:
+        task_run_stream = await async_client.task_run.events(
+            "run_id",
+        )
+        await task_run_stream.response.aclose()
+
+    @parametrize
+    async def test_raw_response_events(self, async_client: AsyncParallel) -> None:
+        response = await async_client.task_run.with_raw_response.events(
+            "run_id",
+        )
+
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        stream = await response.parse()
+        await stream.close()
+
+    @parametrize
+    async def test_streaming_response_events(self, async_client: AsyncParallel) -> None:
+        async with async_client.task_run.with_streaming_response.events(
+            "run_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            stream = await response.parse()
+            await stream.close()
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_events(self, async_client: AsyncParallel) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `run_id` but received ''"):
+            await async_client.task_run.with_raw_response.events(
+                "",
+            )
+
+    @parametrize
+    async def test_method_result(self, async_client: AsyncParallel) -> None:
+        task_run = await async_client.task_run.result(
+            run_id="run_id",
+        )
+        assert_matches_type(TaskRunResult, task_run, path=["response"])
+
+    @parametrize
+    async def test_method_result_with_all_params(self, async_client: AsyncParallel) -> None:
+        task_run = await async_client.task_run.result(
+            run_id="run_id",
+            api_timeout=0,
+            betas=["mcp-server-2025-07-17"],
+        )
+        assert_matches_type(TaskRunResult, task_run, path=["response"])
+
+    @parametrize
+    async def test_raw_response_result(self, async_client: AsyncParallel) -> None:
+        response = await async_client.task_run.with_raw_response.result(
+            run_id="run_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        task_run = await response.parse()
+        assert_matches_type(TaskRunResult, task_run, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_result(self, async_client: AsyncParallel) -> None:
+        async with async_client.task_run.with_streaming_response.result(
+            run_id="run_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            task_run = await response.parse()
+            assert_matches_type(TaskRunResult, task_run, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_result(self, async_client: AsyncParallel) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `run_id` but received ''"):
+            await async_client.task_run.with_raw_response.result(
+                run_id="",
+            )
+
+    @parametrize
+    async def test_method_retrieve_input(self, async_client: AsyncParallel) -> None:
+        task_run = await async_client.task_run.retrieve_input(
+            "run_id",
+        )
+        assert_matches_type(RunInput, task_run, path=["response"])
+
+    @parametrize
+    async def test_raw_response_retrieve_input(self, async_client: AsyncParallel) -> None:
+        response = await async_client.task_run.with_raw_response.retrieve_input(
+            "run_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        task_run = await response.parse()
+        assert_matches_type(RunInput, task_run, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_retrieve_input(self, async_client: AsyncParallel) -> None:
+        async with async_client.task_run.with_streaming_response.retrieve_input(
+            "run_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            task_run = await response.parse()
+            assert_matches_type(RunInput, task_run, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_retrieve_input(self, async_client: AsyncParallel) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `run_id` but received ''"):
+            await async_client.task_run.with_raw_response.retrieve_input(
+                "",
+            )

@@ -8,7 +8,7 @@ import sys
 from dataclasses import dataclass, replace
 from fractions import Fraction
 from functools import lru_cache, partial
-from typing import TYPE_CHECKING, NamedTuple, cast
+from typing import TYPE_CHECKING, NamedTuple, TypedDict, TypeGuard, TypeVar, cast
 
 import jsonschema_rs
 from hypothesis import strategies as st
@@ -17,7 +17,7 @@ from hypothesis.strategies._internal.deferred import DeferredStrategy
 from jsonschema_rs import canonical
 
 from schemathesis.config import OutputConfig
-from schemathesis.core import INTERNAL_BUFFER_SIZE, MAX_STRING_LENGTH
+from schemathesis.core import INTERNAL_BUFFER_SIZE, MAX_DRAWN_ARRAY_ITEMS, MAX_STRING_LENGTH
 from schemathesis.core.errors import (
     InvalidSchema,
     UnsupportedRegexPattern,
@@ -26,24 +26,34 @@ from schemathesis.core.errors import (
 from schemathesis.core.jsonschema import (
     CANONICALIZE_DRAFT_BY_VALIDATOR,
     FANCY_REGEX_OPTIONS,
+    VALIDATED_FORMATS_BY_DRAFT,
     build_validator_for,
-    compile_ecma_pattern,
     make_validator,
     make_validator_for,
+    matches_pattern,
+    pattern_matcher,
+)
+from schemathesis.core.jsonschema.patterns import (
+    anchor_end_of_string,
+    compile_ecma_pattern,
+    normalize_regex,
+    pattern_length_bounds,
+    update_quantifier,
 )
 from schemathesis.core.output import truncate_json
-from schemathesis.core.validation import has_leading_whitespace
+from schemathesis.core.transforms import deepclone
+from schemathesis.core.validation import has_surrounding_whitespace
 from schemathesis.generation.jsonschema.context import Alphabet, StrategyContext
-from schemathesis.specs.openapi.patterns import normalize_regex, pattern_length_bounds
-from schemathesis.transport.serialization import contains_binary
+from schemathesis.transport.serialization import Binary, contains_binary
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
     from decimal import Decimal
 
+    from hypothesis.internal.conjecture.data import ConjectureData
     from hypothesis.strategies import SearchStrategy
 
-    from schemathesis.core.jsonschema.types import JsonValue
+    from schemathesis.core.jsonschema.types import JsonSchema, JsonValue
 
     # A bound arrives as `Decimal` when no float spells it back.
     Numeric = int | float | Decimal
@@ -53,8 +63,18 @@ if TYPE_CHECKING:
     Need = tuple[frozenset[object] | None, int]
 
 
+# Any JSON value, kept as the narrower type a caller passes in.
+JsonT = TypeVar("JsonT", bound="JsonValue")
+
 # Upper bound on properties drawn beyond the ones the schema names.
 _EXTRA_KEYS = 5
+
+
+class _SizeBounds(TypedDict, total=False):
+    min_size: int
+    max_size: int
+
+
 _VALIDATOR_BY_CANONICALIZE_DRAFT = {draft: cls for cls, draft in CANONICALIZE_DRAFT_BY_VALIDATOR.items()}
 
 
@@ -68,7 +88,7 @@ def _compiled_pattern(pattern: str) -> re.Pattern[str] | None:
         return None
     # No `re.ASCII`: the translation spells properties out as ranges, and the flag would refuse every
     # non-ASCII one of them. The translation only comes back once it has compiled, so this cannot fail.
-    return re.compile(translated)
+    return re.compile(anchor_end_of_string(translated))
 
 
 def _countable(bound: int | None) -> int | None:
@@ -146,7 +166,7 @@ def _build(schema: jsonschema_rs.CanonicalSchema, ctx: StrategyContext) -> Searc
     if isinstance(view, canonical.ConstView):
         return st.just(cast("JsonValue", view.value))
     if isinstance(view, canonical.EnumView):
-        return st.sampled_from(sorted(view.values, key=_simplest_first))
+        return st.sampled_from(sorted(cast("list[JsonValue]", view.values), key=_simplest_first))
     if isinstance(view, canonical.MultiTypeView):
         return st.one_of([_bare_type(name, ctx) for name in view.types])
     if isinstance(view, canonical.TypedGroupView):
@@ -282,7 +302,7 @@ def _bars_its_input(complement: jsonschema_rs.CanonicalSchema, barred: jsonschem
     return isinstance(view, canonical.NotView) and view.schema == barred
 
 
-def _points_on(schema: JsonValue) -> bool:
+def _points_on(schema: object) -> bool:
     """Whether the schema names a pointer outside the definitions it carries."""
     if isinstance(schema, dict):
         return "$ref" in schema or any(
@@ -291,7 +311,7 @@ def _points_on(schema: JsonValue) -> bool:
     return isinstance(schema, list) and any(_points_on(item) for item in schema)
 
 
-def _names_document(schema: JsonValue) -> bool:
+def _names_document(schema: object) -> bool:
     """Whether the schema names the document itself, rather than a definition it carries."""
     if isinstance(schema, dict):
         return schema.get("$ref") == "#" or any(_names_document(value) for value in schema.values())
@@ -443,7 +463,7 @@ def _array(
         if view.min_items:
             raise
         return st.builds(list)
-    kwargs: dict[str, int] = {}
+    kwargs: _SizeBounds = {}
     if view.min_items is not None:
         kwargs["min_size"] = view.min_items
     max_items = _countable(view.max_items)
@@ -452,14 +472,20 @@ def _array(
     # `st.lists` refuses either bound over an element strategy drawing nothing, so the bounds are
     # answered here instead. Skipped while a pointer target is still being built, where `is_empty`
     # would force a strategy that is not there yet.
-    if kwargs and not ctx.pending and element.is_empty:
+    if kwargs and not ctx.building_cycle and element.is_empty:
         # No position can be filled, so the empty array is the only value the bounds may allow.
         return st.nothing() if kwargs.get("min_size") else st.builds(list)
     if all_distinct:
         return st.lists(element, unique_by=json_identity, **kwargs)
     if view.distinctness is canonical.Distinctness.SOME_REPEATED:
-        return st.lists(element, **kwargs).map(_repeat_one)
-    return st.lists(element, **kwargs)
+        drawn = st.lists(element, **kwargs).map(_repeat_one)
+    else:
+        drawn = st.lists(element, **kwargs)
+    floor = view.min_items or 0
+    if floor > MAX_DRAWN_ARRAY_ITEMS and (max_items is None or max_items >= floor):
+        # Every element spends several choices, so a long floor can outgrow one draw; one element repeated never does.
+        return st.one_of(element.map(lambda item: _tiled(item, floor)), drawn)
+    return drawn
 
 
 def _with_fixed_elements(
@@ -603,19 +629,18 @@ def _from_layout(
     if layout.entries:
         parts.append(st.tuples(*[from_schema(entry, ctx) for entry in layout.entries]))
     parts.extend(
-        _repeated(placement, unique=all_distinct)
+        _repeated(placement, ctx, unique=all_distinct)
         for placement in layout.placements
         if placement.placed or placement.slack
     )
     if free.is_empty:
         # No tail part: `st.lists` refuses a positive ceiling over an element strategy drawing nothing.
         return _joined(parts, unique=all_distinct, checked=layout.counted, schema=schema)
-    kwargs: dict[str, int] = {"min_size": max(0, minimum - fixed)}
+    kwargs: _SizeBounds = {"min_size": max(0, minimum - fixed)}
     if max_items is not None:
         kwargs["max_size"] = max_items - fixed
     # `unique_by` settles the free positions; collisions across parts are left to the joined filter.
-    distinct = {"unique_by": json_identity} if all_distinct else {}
-    parts.append(st.lists(free, **distinct, **kwargs))
+    parts.append(st.lists(free, unique_by=json_identity if all_distinct else None, **kwargs))
     return _joined(parts, unique=all_distinct, checked=layout.counted, schema=schema)
 
 
@@ -756,16 +781,24 @@ def _matching(
     steered: jsonschema_rs.CanonicalSchema | None = schema
     for other in avoid:
         steered = None if steered is None else _narrowed(steered, other, negate=True)
+    declined: UnsupportedRegexPattern | None = None
     if steered is not None:
         try:
             return from_schema(steered, ctx), True
+        except UnsupportedRegexPattern as exc:
+            declined = exc
         except DECLINED:
             pass
     counted = not avoid
     try:
         return from_schema(schema, ctx), counted
+    except UnsupportedRegexPattern as exc:
+        declined = exc
     except DECLINED:
         pass
+    if declined is not None:
+        # The demand names no value a draw can produce, so a filter against it could never pass.
+        raise declined
     # The intersection is not one this builds from, so the demand narrows the elements by filter.
     return _element(items, ctx).filter(_validator(demand)), counted
 
@@ -786,6 +819,8 @@ def _free(
             break
         remaining = subtracted
     else:
+        # At least one demand is bounded, so the loop left a schema behind.
+        assert remaining is not None
         return from_schema(remaining, ctx), _finite_values(remaining)
     if any(_covers(demand, view.items) for demand in bounded):
         # A demand admits everything `items` does; the matches carry the array on their own.
@@ -816,18 +851,20 @@ def _narrowed(
     return schema
 
 
-def _repeated(placement: _Placement, *, unique: bool) -> SearchStrategy[list[JsonValue]]:
+def _repeated(placement: _Placement, ctx: StrategyContext, *, unique: bool) -> SearchStrategy[list[JsonValue]]:
     """One demand's matches, drawn together rather than as a strategy per position."""
     element = placement.demand.element
     # A placement only ever takes positions the demand can fill; `_laid_out` gives up otherwise.
     assert element is not None
     count = placement.placed
-    if element.is_empty:
+    # Skipped while a pointer target is still being built, where `is_empty` would force a strategy that is not there yet.
+    if not ctx.building_cycle and element.is_empty:
         # A contradiction canonicalization could not see: nothing meets the demand, so no array clears
         # the schema this way. Other layouts, and the schema's other branches, may still.
         return st.nothing()
-    kwargs = {"unique_by": json_identity} if unique else {}
-    repeated = st.lists(element, min_size=count, max_size=count + placement.slack, **kwargs)
+    repeated = st.lists(
+        element, min_size=count, max_size=count + placement.slack, unique_by=json_identity if unique else None
+    )
     try:
         repeated.validate()
     except InvalidArgument as exc:
@@ -845,7 +882,7 @@ def _element(items: jsonschema_rs.CanonicalSchema | None, ctx: StrategyContext) 
 # engine — so the filter judges a value exactly the way conformance checks do.
 @lru_cache(maxsize=4096)
 def _validator(schema: jsonschema_rs.CanonicalSchema) -> Callable[[JsonValue], bool]:
-    return build_validator_for(schema.to_json_schema()).is_valid
+    return build_validator_for(cast("JsonSchema", schema.to_json_schema())).is_valid
 
 
 def _supply(
@@ -856,7 +893,7 @@ def _supply(
     if isinstance(view, canonical.ConstView):
         raw = [cast("JsonValue", view.value)]
     elif isinstance(view, canonical.EnumView):
-        raw = list(view.values)
+        raw = cast("list[JsonValue]", list(view.values))
     else:
         return None
     if items is not None:
@@ -873,7 +910,7 @@ def _finite_values(schema: jsonschema_rs.CanonicalSchema) -> frozenset[object] |
     if isinstance(view, canonical.ConstView):
         return frozenset({json_identity(cast("JsonValue", view.value))})
     if isinstance(view, canonical.EnumView):
-        return frozenset(json_identity(value) for value in view.values)
+        return frozenset(json_identity(value) for value in cast("list[JsonValue]", view.values))
     return None
 
 
@@ -921,6 +958,13 @@ def _parts_unique(parts: tuple[Sequence[JsonValue], ...]) -> bool:
     return True
 
 
+def _tiled(item: JsonValue, length: int) -> list[JsonValue]:
+    # A shared container would let an edit at one index show up at every other.
+    if isinstance(item, (dict, list)):
+        return [deepclone(item) for _ in range(length)]
+    return [item] * length
+
+
 def _repeat_one(value: list[JsonValue]) -> list[JsonValue]:
     """One drawn array, with an element repeated where every one of them differs."""
     # A repeat needs two positions to sit in, and the demand carries that floor with it.
@@ -940,7 +984,18 @@ def json_identity(value: JsonValue) -> object:
     # to a float would merge distinct numbers that happen to share one.
     if isinstance(value, (int, float)):
         return ("number", _spelled(value))
-    return ("json", canonical.json.to_string(value))
+    # A binary payload keeps its bytes outside the string, and every one of them compares equal as a `str`.
+    if isinstance(value, Binary):
+        return ("binary", value.data)
+    try:
+        return ("json", canonical.json.to_string(value))
+    except ValueError:
+        # Containers holding binary payloads cannot be spelled as JSON, so they are keyed member by member.
+        if isinstance(value, dict):
+            return ("object", frozenset((key, json_identity(item)) for key, item in value.items()))
+        if isinstance(value, list):
+            return ("array", tuple(json_identity(item) for item in value))
+        raise
 
 
 def _object(view: jsonschema_rs.canonical.ObjectView, ctx: StrategyContext) -> SearchStrategy[JsonValue]:
@@ -953,13 +1008,18 @@ def _object(view: jsonschema_rs.canonical.ObjectView, ctx: StrategyContext) -> S
     value_for = _value_source(view, unnamed, ctx)
     # A key can be required without `properties` saying anything about its value.
     required = {key: entries[key] if key in entries else value_for(key) for key in view.required}
-    optional = {key: entry for key, entry in entries.items() if key not in view.required}
+    # A property no value satisfies can only be absent, so it is never picked.
+    optional = {
+        key: entry
+        for key, entry in entries.items()
+        if key not in view.required and view.properties[key].kind is not canonical.CanonicalKind.FALSE
+    }
     known = set(view.properties) | set(view.required)
     names = None if view.property_names is None else _closed_names(view.property_names)
     if names is not None:
         # A closed name set admits nothing else, so its names are the only optional keys.
         # Sorted: set iteration order is not stable across processes, and draw order decides replays.
-        optional.update({name: value_for(name) for name in sorted(names - set(required) - set(optional))})
+        optional.update({name: value_for(name) for name in sorted(names - set(required) - set(entries))})
         extra = None
     else:
         free_names = _free_names(view, ctx).filter(lambda key: key not in known)
@@ -1036,8 +1096,10 @@ def _violation_entry(
                 key_schema = key_schema.intersect(view.property_names)
             key = from_schema(key_schema, ctx).map(_key)
         else:
-            admitted = _text(ctx) if view.property_names is None else from_schema(view.property_names, ctx).map(_key)
-            key = _rejected_by(admitted, violation.schema)
+            admitted_key = (
+                _text(ctx) if view.property_names is None else from_schema(view.property_names, ctx).map(_key)
+            )
+            key = _rejected_by(admitted_key, violation.schema)
         # A name equal to a declared property would need that property's schema intersected in too;
         # a fresh key sidesteps that at the cost of never reusing a declared name for the injected key.
         key = key.filter(lambda candidate: candidate not in known)
@@ -1072,12 +1134,10 @@ def _violation_entry(
         return st.tuples(key, _rejected_by(admitted, violation.additional))
     if view.additional_properties is not None:
         complement = complement.intersect(view.additional_properties)
-    return st.tuples(key, from_schema(complement, ctx))
+    return st.tuples(key, st.deferred(lambda: from_schema(complement, ctx)))
 
 
-def _rejected_by(
-    admitted: SearchStrategy[JsonValue], schema: jsonschema_rs.CanonicalSchema
-) -> SearchStrategy[JsonValue]:
+def _rejected_by(admitted: SearchStrategy[JsonT], schema: jsonschema_rs.CanonicalSchema) -> SearchStrategy[JsonT]:
     """A demand met by filtering, for a schema whose complement the canonical form cannot spell."""
     # `to_json_schema` carries the draft the node was canonicalized under, so the facets that only
     # assert on some drafts - `contentEncoding` and friends - are judged the same way here.
@@ -1085,7 +1145,7 @@ def _rejected_by(
     return admitted.filter(lambda value: not admits(value))
 
 
-@st.composite  # type: ignore[untyped-decorator]
+@st.composite
 def _with_violations(
     draw: st.DrawFn, base: SearchStrategy[JsonValue], entries: list[SearchStrategy[tuple[str, JsonValue]]]
 ) -> JsonValue:
@@ -1100,21 +1160,35 @@ def _with_violations(
     return result
 
 
+class _Collected(st.SearchStrategy):
+    """Free keys and their values, between `low` and `high` of them."""
+
+    # A self-referential schema reaches these entries from inside them. Emptiness is answered with
+    # the rest of the cycle rather than forced while building, which would enter the cycle again.
+
+    def __init__(self, entries: SearchStrategy[tuple[str, JsonValue]], low: int, high: int) -> None:
+        super().__init__()
+        self.entries = entries
+        self.low = low
+        self.collected = st.lists(entries, unique_by=lambda entry: entry[0], min_size=low, max_size=high).map(dict)
+
+    def calc_is_empty(self, recur: Callable[[SearchStrategy], bool]) -> bool:
+        # No key can be spelled; the floor decides whether that is fatal or only means no extras.
+        return bool(self.low) and recur(self.entries)
+
+    def do_draw(self, data: ConjectureData) -> dict[str, JsonValue]:
+        if self.entries.is_empty:
+            return {}
+        return data.draw(self.collected)
+
+
 def _collect(
     entries: SearchStrategy[tuple[str, JsonValue]], low: int, high: int
 ) -> SearchStrategy[dict[str, JsonValue]]:
-    def resolved() -> SearchStrategy[dict[str, JsonValue]]:
-        if _floor(low) is None:
-            # No object can be that wide.
-            return st.nothing()
-        if entries.is_empty:
-            # No key can be spelled; the floor decides whether that is fatal or only means no extras.
-            return st.nothing() if low else st.just({})
-        return st.lists(entries, unique_by=lambda entry: entry[0], min_size=low, max_size=high).map(dict)
-
-    # `is_empty` forces the entries, and a self-referential schema is still being built here, so the
-    # choice waits for the first draw.
-    return st.deferred(resolved)
+    if _floor(low) is None:
+        # No object can be that wide.
+        return st.nothing()
+    return _Collected(entries, low, high)
 
 
 def _free_names(view: jsonschema_rs.canonical.ObjectView, ctx: StrategyContext) -> SearchStrategy[str]:
@@ -1131,7 +1205,7 @@ def _free_names(view: jsonschema_rs.canonical.ObjectView, ctx: StrategyContext) 
     for pattern in view.pattern_properties:
         compiled = _compiled_pattern(pattern)
         if compiled is not None:
-            drawn = _from_pattern(compiled, ctx)
+            drawn = _from_pattern(compiled, ctx).filter(matches_pattern(pattern))
             sources.append(drawn if not minimum else drawn.filter(lambda name: len(name) >= minimum))
     return st.one_of(sources)
 
@@ -1175,22 +1249,28 @@ def _pattern_values(
     if len(matched) == 1:
         return patterns[matched[0]].values
     # A name several patterns claim answers to all of them at once.
-    return from_schema(_intersection([patterns[index].schema for index in matched]), ctx)
+    schemas = [patterns[index].schema for index in matched]
+    try:
+        return from_schema(_intersection(schemas), ctx)
+    except jsonschema_rs.canonical.UnsupportedResult:
+        # Inexpressible intersection: draw for one pattern, keep what the others accept.
+        others = [_validator(schema) for schema in schemas[1:]]
+        return patterns[matched[0]].values.filter(lambda value: all(is_valid(value) for is_valid in others))
 
 
-@st.composite  # type: ignore[untyped-decorator]
+@st.composite
 def _named_object(
     draw: st.DrawFn,
     required: dict[str, SearchStrategy[JsonValue]],
     optional: dict[str, SearchStrategy[JsonValue]],
     picker: SearchStrategy[set[str]] | None,
-) -> JsonValue:
+) -> dict[str, JsonValue]:
     """Every required key, plus a size-biased pick of the optional ones."""
     chosen = draw(picker) if picker is not None else ()
     return draw(st.fixed_dictionaries({**required, **{key: optional[key] for key in sorted(chosen)}}))
 
 
-@st.composite  # type: ignore[untyped-decorator]
+@st.composite
 def _drawn_object(
     draw: st.DrawFn,
     required: dict[str, SearchStrategy[JsonValue]],
@@ -1199,7 +1279,7 @@ def _drawn_object(
     collect: Callable[[int, int], SearchStrategy[dict[str, JsonValue]]] | None,
     minimum: int,
     maximum: int | None,
-) -> JsonValue:
+) -> dict[str, JsonValue]:
     """Every required key, a pick of the optional ones, and free keys where the floor asks for more."""
     chosen = draw(picker) if picker is not None else ()
     result = draw(st.fixed_dictionaries({**required, **{key: optional[key] for key in sorted(chosen)}}))
@@ -1231,7 +1311,7 @@ def _closed_names(schema: jsonschema_rs.CanonicalSchema) -> set[str] | None:
         return None
     # Canonicalization drops admitted values no property name could equal.
     assert all(isinstance(name, str) for name in names)
-    return names
+    return cast("set[str]", names)
 
 
 def _integer(view: jsonschema_rs.canonical.IntegerView, ctx: StrategyContext) -> SearchStrategy[JsonValue]:
@@ -1321,14 +1401,14 @@ def _number(view: jsonschema_rs.canonical.NumberView) -> SearchStrategy[JsonValu
 
 def _grid_check(
     view: jsonschema_rs.canonical.NumberView, multiple_of: Fraction
-) -> Callable[[int | float | _Unrepresentable], bool]:
+) -> Callable[[int | float | _Unrepresentable], TypeGuard[int | float]]:
     """Accept only what every reading of the emitted number clears."""
     minimum = None if view.minimum is None else _spelled(view.minimum)
     maximum = None if view.maximum is None else _spelled(view.maximum)
     exclusive_minimum = view.exclusive_minimum
     exclusive_maximum = view.exclusive_maximum
 
-    def is_valid(value: int | float | _Unrepresentable) -> bool:
+    def is_valid(value: int | float | _Unrepresentable) -> TypeGuard[int | float]:
         if value is _UNREPRESENTABLE:
             return False
         number = cast("int | float", value)
@@ -1358,21 +1438,21 @@ def _steps(low: int | None, high: int | None) -> SearchStrategy[int]:
     return st.integers(min_value=low, max_value=high)
 
 
-def _lower_step(bound: int | float | None, exclusive: bool, step_size: Fraction) -> int | None:
+def _lower_step(bound: Numeric | None, exclusive: bool, step_size: Fraction) -> int | None:
     if bound is None:
         return None
     quotient = _quotient(bound, step_size)
     return math.floor(quotient) + 1 if exclusive else math.ceil(quotient)
 
 
-def _upper_step(bound: int | float | None, exclusive: bool, step_size: Fraction) -> int | None:
+def _upper_step(bound: Numeric | None, exclusive: bool, step_size: Fraction) -> int | None:
     if bound is None:
         return None
     quotient = _quotient(bound, step_size)
     return math.ceil(quotient) - 1 if exclusive else math.floor(quotient)
 
 
-def _quotient(bound: int | float, step_size: Fraction) -> Fraction:
+def _quotient(bound: Numeric, step_size: Fraction) -> Fraction:
     return _spelled(bound) / step_size
 
 
@@ -1424,7 +1504,7 @@ def _representable_float_bounds(
     return low, high
 
 
-def _combined_multiple_of(values: list[float]) -> Fraction | None:
+def _combined_multiple_of(values: list[Numeric]) -> Fraction | None:
     # Exact rationals: `step * 0.1` in binary floats lands off the grid two times out of five. Several
     # divisors admit exactly the multiples of their least common multiple.
     combined = None
@@ -1504,6 +1584,16 @@ def _admitted_strings(view: jsonschema_rs.canonical.StringView, ctx: StrategyCon
     # A name with no generator behind it is an annotation and leaves the strings unconstrained.
     known = [name for name in view.formats if name in ctx.formats]
     if known:
+        drivers = [pattern for pattern in view.patterns if _compiled_pattern(pattern) is not None]
+        sources = [source for name in known if (source := _format_source(name, view, ctx)) is not None]
+        # A pattern stricter than the format admits few generator values, so it drives when they miss; only a
+        # format the facet check asserts can vouch for what the pattern draws.
+        if drivers and sources and all(name in _CHECKED_FORMATS for name in known):
+            return _format_or_pattern(
+                st.one_of(sources),
+                _string_check(known, view),
+                st.one_of([_pattern_formatted(pattern, known, view, ctx) for pattern in drivers]),
+            )
         # One generator drives, the rest filter; which pair flows depends on the value, so every
         # driver gets a branch and the dead ones reject their draws.
         return st.one_of([_formatted(name, [other for other in known if other != name], view, ctx) for name in known])
@@ -1557,8 +1647,8 @@ def _padded_text(
     strategy = st.tuples(
         st.integers(min_length, ceiling), _text(ctx, characters=characters, max_size=_PADDED_TEXT_HEAD), characters
     ).map(lambda parts: (parts[1] + parts[2] * parts[0])[: parts[0]])
-    # An empty head leaves the padding character opening the value.
-    return _leading_whitespace_check(strategy, ctx.alphabet)
+    # The padding character closes the value, and opens it after an empty head.
+    return _surrounding_whitespace_check(strategy, ctx.alphabet)
 
 
 def _content_string(view: jsonschema_rs.canonical.StringView, ctx: StrategyContext) -> SearchStrategy[JsonValue]:
@@ -1623,15 +1713,14 @@ def _pattern_driven(
     """Values drawn from one pattern and filtered by the remaining ones."""
     compiled = _compiled_pattern(pattern)
     assert compiled is not None
-    strategy = _from_pattern(compiled, ctx)
-    if compiled.pattern != pattern:
-        # Property escapes were spelled out to drive the draw, and that reading is only an
-        # approximation of the validator's - so it decides what the draw is worth.
-        strategy = strategy.filter(_facet_check("pattern", pattern))
-    if "$" in pattern:
-        # Python also matches `$` before a trailing newline, where the validator means end of string;
-        # telling literal `$`s apart costs more than dropping the newline-terminated values.
-        strategy = strategy.filter(lambda value: not value.endswith("\n"))
+    # A length floor left to the filter rejects the short matches drawn, which are most matches inside an array;
+    # spelled into the pattern, it is drawn to.
+    folded = update_quantifier(compiled.pattern, view.min_length, view.max_length)
+    if folded != compiled.pattern:
+        compiled = _compiled_pattern(folded)
+        assert compiled is not None
+    # Python `re` reads the pattern differently from the validator, so the validator decides what the draw is worth.
+    strategy = _from_pattern(compiled, ctx).filter(_facet_check("pattern", pattern))
     for other in others:
         strategy = strategy.filter(_facet_check("pattern", other))
     # Length is normally folded into the pattern upstream; this filter is the soundness net.
@@ -1653,6 +1742,47 @@ def _pattern_joined(
     for pattern in view.patterns:
         strategy = strategy.filter(_facet_check("pattern", pattern))
     return _within_length(strategy, view)
+
+
+_CHECKED_FORMATS = VALIDATED_FORMATS_BY_DRAFT[jsonschema_rs.Draft202012Validator]
+# As many tries as a filtered format value gets before its draw is rejected.
+_FORMAT_ATTEMPTS = 3
+
+
+@st.composite
+def _format_or_pattern(
+    draw: st.DrawFn,
+    formatted: SearchStrategy[JsonValue],
+    admits: Callable[[JsonValue], bool],
+    pattern_driven: SearchStrategy[JsonValue],
+) -> JsonValue:
+    """A format value when one meets every facet within a few tries, a pattern-driven one otherwise."""
+    # A loose pattern admits most format values, a strict one nearly none; falling back rather than
+    # splitting draws between the two keeps the dead side from rejecting its share of them.
+    for _ in range(_FORMAT_ATTEMPTS):
+        value = draw(formatted)
+        if admits(value):
+            return value
+    return draw(pattern_driven)
+
+
+def _string_check(formats: list[str], view: jsonschema_rs.canonical.StringView) -> Callable[[JsonValue], bool]:
+    checks = [_facet_check("format", name) for name in formats]
+    checks.extend(_facet_check("pattern", pattern) for pattern in view.patterns)
+    within = _length_check(view)
+    if within is not None:
+        checks.append(within)
+    return lambda value: all(check(value) for check in checks)
+
+
+def _pattern_formatted(
+    pattern: str, formats: list[str], view: jsonschema_rs.canonical.StringView, ctx: StrategyContext
+) -> SearchStrategy[JsonValue]:
+    """Values drawn from one pattern and filtered by the remaining patterns and every format."""
+    strategy = _pattern_driven(pattern, [other for other in view.patterns if other != pattern], view, ctx)
+    for name in formats:
+        strategy = strategy.filter(_facet_check("format", name))
+    return strategy
 
 
 def _formatted(
@@ -1700,7 +1830,16 @@ def _format_source(
 # exactly; a name without a checker behind it passes everything, like the validator itself.
 @lru_cache(maxsize=512)
 def _facet_check(keyword: str, value: str) -> Callable[[JsonValue], bool]:
-    is_valid = make_validator_for({"type": "string", keyword: value}).is_valid
+    matcher = pattern_matcher(value) if keyword == "pattern" else None
+    is_valid: Callable[[JsonValue], bool]
+    if matcher is not None:
+        # Shares the compiled pattern with every other check of it instead of compiling another validator.
+        def matches(drawn: JsonValue) -> bool:
+            return isinstance(drawn, str) and matcher(drawn)
+
+        is_valid = matches
+    else:
+        is_valid = make_validator_for({"type": "string", keyword: value}).is_valid
 
     def check(drawn: JsonValue) -> bool:
         # A binary payload carries bytes rather than a JSON string, so the facet has no say over it.
@@ -1712,12 +1851,25 @@ def _facet_check(keyword: str, value: str) -> Callable[[JsonValue], bool]:
 def _within_length(
     strategy: SearchStrategy[JsonValue], view: jsonschema_rs.canonical.StringView
 ) -> SearchStrategy[JsonValue]:
-    if view.min_length is None and view.max_length is None:
+    check = _length_check(view)
+    if check is None:
         return strategy
+    return strategy.filter(check)
+
+
+def _length_check(view: jsonschema_rs.canonical.StringView) -> Callable[[JsonValue], bool] | None:
+    if view.min_length is None and view.max_length is None:
+        return None
     low = view.min_length or 0
     high = math.inf if view.max_length is None else view.max_length
-    # A binary payload spells its bytes outside the string, so its length is not the one to measure.
-    return strategy.filter(lambda value: contains_binary(value) or low <= len(value) <= high)
+
+    def check(value: JsonValue) -> bool:
+        # A binary payload spells its bytes outside the string, so its byte count is the length.
+        if isinstance(value, Binary):
+            return low <= len(value.data) <= high
+        return contains_binary(value) or low <= len(cast("str", value)) <= high
+
+    return check
 
 
 def _anything(ctx: StrategyContext) -> SearchStrategy[JsonValue]:
@@ -1728,7 +1880,7 @@ def _anything(ctx: StrategyContext) -> SearchStrategy[JsonValue]:
 def _anything_for(alphabet: Alphabet) -> SearchStrategy[JsonValue]:
     # Arbitrary JSON value; containers bounded to keep draws cheap. Assembling the recursive strategy
     # costs far more than every other lifter combined, and it depends only on the alphabet.
-    text = _leading_whitespace_check(st.text(alphabet=alphabet.as_strategy()), alphabet)
+    text = _surrounding_whitespace_check(st.text(alphabet=alphabet.as_strategy()), alphabet)
     return st.recursive(
         st.none()
         | st.booleans()
@@ -1742,14 +1894,14 @@ def _anything_for(alphabet: Alphabet) -> SearchStrategy[JsonValue]:
 
 def _text(ctx: StrategyContext, *, characters: SearchStrategy[str] | None = None, **kwargs: int) -> SearchStrategy[str]:
     strategy = st.text(alphabet=characters if characters is not None else ctx.alphabet.as_strategy(), **kwargs)
-    return _leading_whitespace_check(strategy, ctx.alphabet)
+    return _surrounding_whitespace_check(strategy, ctx.alphabet)
 
 
-def _leading_whitespace_check(strategy: SearchStrategy[str], alphabet: Alphabet) -> SearchStrategy[str]:
-    """Reject an opening whitespace character, close to the draw that produced it."""
-    if alphabet.allow_leading_whitespace:
+def _surrounding_whitespace_check(strategy: SearchStrategy[str], alphabet: Alphabet) -> SearchStrategy[str]:
+    """Reject an opening or closing whitespace character, close to the draw that produced it."""
+    if alphabet.allow_surrounding_whitespace:
         return strategy
-    return strategy.filter(lambda value: not has_leading_whitespace(value))
+    return strategy.filter(lambda value: not has_surrounding_whitespace(value))
 
 
 # What each JSON type name admits. `True == 1` in Python, but `true` is not a JSON number, and a

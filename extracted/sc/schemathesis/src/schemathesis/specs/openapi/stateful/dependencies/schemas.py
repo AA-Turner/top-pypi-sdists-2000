@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, TypeAlias
 
 from schemathesis.core.jsonschema import ALL_KEYWORDS
 from schemathesis.core.jsonschema.bundler import BUNDLE_STORAGE_KEY, bundle
@@ -32,9 +32,11 @@ SCHEMA_KEYS = frozenset(
     }
 )
 SCHEMA_OBJECT_KEYS = frozenset({"dependencies", "properties", "patternProperties"})
+# Resolved targets shared by several references, by identity, next to their flattened form once known.
+FlattenCache: TypeAlias = dict[int, tuple[JsonSchemaObject, JsonSchemaObject | None]]
 
 
-def resolve_all_refs(schema: JsonSchemaObject) -> dict[str, Any]:
+def resolve_all_refs(schema: JsonSchemaObject, flattened: FlattenCache) -> dict[str, Any]:
     if not schema:
         return schema
     bundled = schema.get(BUNDLE_STORAGE_KEY, {})
@@ -54,16 +56,19 @@ def resolve_all_refs(schema: JsonSchemaObject) -> dict[str, Any]:
         in_flight.add(ref)
         try:
             # No clone needed, as it will be cloned inside `merged`
-            result = resolve_all_refs_inner(bundled[key], resolve=resolve)
+            result = resolve_all_refs_inner(bundled[key], resolve=resolve, flattened=flattened)
         finally:
             in_flight.discard(ref)
         resolved_cache[ref] = result
+        flattened[id(result)] = (result, None)
         return result
 
-    return resolve_all_refs_inner(schema, resolve=resolve)
+    return resolve_all_refs_inner(schema, resolve=resolve, flattened=flattened)
 
 
-def resolve_all_refs_inner(schema: JsonSchema, *, resolve: Callable[[str], dict[str, Any]]) -> dict[str, Any]:
+def resolve_all_refs_inner(
+    schema: JsonSchema, *, resolve: Callable[[str], dict[str, Any]], flattened: FlattenCache
+) -> dict[str, Any]:
     if schema is True:
         return {}
     if schema is False:
@@ -80,17 +85,23 @@ def resolve_all_refs_inner(schema: JsonSchema, *, resolve: Callable[[str], dict[
         schema.pop(BUNDLE_STORAGE_KEY, None)
         schema.pop("example", None)
         # Siblings win over the target they augment, and every property name survives either way.
-        return _flatten_all_of({"allOf": [resolve_all_refs_inner(schema, resolve=resolve), resolved]})
+        return _flatten_all_of(
+            {"allOf": [resolve_all_refs_inner(schema, resolve=resolve, flattened=flattened), resolved]}, flattened
+        )
 
     for key, value in schema.items():
         if key in SCHEMA_KEYS:
             if isinstance(value, list):
-                schema[key] = [resolve_all_refs_inner(v, resolve=resolve) if isinstance(v, dict) else v for v in value]
+                schema[key] = [
+                    resolve_all_refs_inner(v, resolve=resolve, flattened=flattened) if isinstance(v, dict) else v
+                    for v in value
+                ]
             elif isinstance(value, dict):
-                schema[key] = resolve_all_refs_inner(value, resolve=resolve)
+                schema[key] = resolve_all_refs_inner(value, resolve=resolve, flattened=flattened)
         if key in SCHEMA_OBJECT_KEYS:
             schema[key] = {
-                k: resolve_all_refs_inner(v, resolve=resolve) if isinstance(v, dict) else v for k, v in value.items()
+                k: resolve_all_refs_inner(v, resolve=resolve, flattened=flattened) if isinstance(v, dict) else v
+                for k, v in value.items()
             }
     return schema
 
@@ -112,25 +123,29 @@ def canonicalize(
         return {} if bundled is True else {"not": {}}
     # Flatten before resolving so sibling `$ref` branches collapse to the first one;
     # resolving first would inline every branch and over-merge unrelated definitions.
-    flattened = _flatten_all_of(bundled)
-    resolved = resolve_all_refs(flattened)
+    # Each resolved target is shared by all its references; flattening it once keeps this linear in the schema size.
+    flattened: FlattenCache = {}
+    resolved = resolve_all_refs(_flatten_all_of(bundled, {}), flattened)
     resolved.pop(BUNDLE_STORAGE_KEY, None)
     if isinstance(resolved, dict) and ("allOf" in resolved or "anyOf" in resolved or "oneOf" in resolved):
-        return _flatten_all_of(resolved)
+        return _flatten_all_of(resolved, flattened)
     return resolved
 
 
-def _combine_branch_values(existing: Any, incoming: Any) -> Any:
+def _combine_branch_values(existing: Any, incoming: Any, flattened: FlattenCache) -> Any:
     # A later branch specializing what the base only sketched must keep its own sub-fields;
     # earlier branches still win on the plain keywords.
     if isinstance(existing, dict) and isinstance(incoming, dict):
-        return _flatten_all_of({"allOf": [existing, incoming]})
+        return _flatten_all_of({"allOf": [existing, incoming]}, flattened)
     return existing if existing is not None else incoming
 
 
-def _flatten_all_of(schema: JsonSchemaObject) -> JsonSchemaObject:
+def _flatten_all_of(schema: JsonSchemaObject, flattened: FlattenCache) -> JsonSchemaObject:
     # Merge `allOf` structurally: union `properties` and `required` across branches so every property name
     # survives for FK discovery.
+    shared = flattened.get(id(schema))
+    if shared is not None and shared[1] is not None:
+        return shared[1]
     all_of = schema.get("allOf")
     if isinstance(all_of, list):
         properties: dict[str, Any] = {}
@@ -139,16 +154,16 @@ def _flatten_all_of(schema: JsonSchemaObject) -> JsonSchemaObject:
         for branch in ({key: value for key, value in schema.items() if key != "allOf"}, *all_of):
             if not isinstance(branch, dict):
                 continue
-            for key, value in _flatten_all_of(branch).items():
+            for key, value in _flatten_all_of(branch, flattened).items():
                 if key == "properties" and isinstance(value, dict):
                     for name, sub in value.items():
-                        properties[name] = _combine_branch_values(properties.get(name), sub)
+                        properties[name] = _combine_branch_values(properties.get(name), sub, flattened)
                 elif key == "required" and isinstance(value, list):
                     for name in value:
                         if name not in required:
                             required.append(name)
                 elif key == "items":
-                    rest["items"] = _combine_branch_values(rest.get("items"), value)
+                    rest["items"] = _combine_branch_values(rest.get("items"), value, flattened)
                 else:
                     rest.setdefault(key, value)
         result = dict(rest)
@@ -162,11 +177,17 @@ def _flatten_all_of(schema: JsonSchemaObject) -> JsonSchemaObject:
     for key, value in result.items():
         if key in SCHEMA_KEYS:
             if isinstance(value, list):
-                result[key] = [_flatten_all_of(item) if isinstance(item, dict) else item for item in value]
+                result[key] = [_flatten_all_of(item, flattened) if isinstance(item, dict) else item for item in value]
             elif isinstance(value, dict):
-                result[key] = _flatten_all_of(value)
+                result[key] = _flatten_all_of(value, flattened)
         elif key in SCHEMA_OBJECT_KEYS and isinstance(value, dict):
-            result[key] = {name: _flatten_all_of(sub) if isinstance(sub, dict) else sub for name, sub in value.items()}
+            result[key] = {
+                name: _flatten_all_of(sub, flattened) if isinstance(sub, dict) else sub for name, sub in value.items()
+            }
+    if shared is not None:
+        flattened[id(schema)] = (schema, result)
+        # The result is flat already and other parents of the target reach it too.
+        flattened[id(result)] = (result, result)
     return result
 
 
@@ -219,16 +240,18 @@ def try_unwrap_all_of(schema: Mapping[str, Any]) -> Mapping[str, Any]:
     return schema
 
 
-def _filter_composition_alternatives(alternatives: list[dict], resolver: Resolver) -> list[dict]:
+def _filter_composition_alternatives(alternatives: list[JsonSchema], resolver: Resolver) -> list[JsonSchemaObject]:
     """Filter oneOf/anyOf alternatives to keep only interesting schemas."""
-    interesting = []
+    interesting: list[JsonSchemaObject] = []
 
-    for alt_schema in alternatives:
-        _, resolved = maybe_resolve_with_resolver(alt_schema, resolver)
+    for alternative_schema in alternatives:
+        if not isinstance(alternative_schema, dict):
+            continue
+        _, resolved = maybe_resolve_with_resolver(alternative_schema, resolver)
 
         if _is_interesting_schema(resolved):
             # Keep original (with $ref)
-            interesting.append(alt_schema)
+            interesting.append(alternative_schema)
 
     return interesting
 
@@ -295,8 +318,8 @@ def unwrap_schema(schema: Mapping[str, Any], path: str, parent_ref: str | None, 
         array_schema = properties[array_field]
         _, resolved = maybe_resolve_with_resolver(array_schema, resolver)
         pointer = f"/{encode_pointer(array_field)}"
+        ref = array_schema.get("$ref")
 
-        uses_parent_ref = False
         # Try to unwrap one more time
         if resolved.get("type") == "array" or "items" in resolved:
             nested_items = resolved.get("items")
@@ -308,11 +331,15 @@ def unwrap_schema(schema: Mapping[str, Any], path: str, parent_ref: str | None, 
                     nested_properties = resolved_items["properties"][external_tag_]
                     _, resolved = maybe_resolve_with_resolver(nested_properties, resolver)
                     resolved = try_unwrap_composition(resolved, resolver)
+                    if uses_parent_ref:
+                        ref = parent_ref
+                    else:
+                        ref = resolved.get("$ref") or nested_properties.get("$ref") or ref
                     _, resolved = maybe_resolve_with_resolver(resolved, resolver)
-                    pointer += f"/{encode_pointer(external_tag_)}"
+                    # Every list element carries its own tagged resource.
+                    pointer += f"/*/{encode_pointer(external_tag_)}"
 
-        ref = parent_ref if uses_parent_ref else array_schema.get("$ref")
-        return UnwrappedSchema(pointer=pointer, schema=resolved, ref=array_schema.get("$ref"))
+        return UnwrappedSchema(pointer=pointer, schema=resolved, ref=ref)
 
     # External tag
     external_tag = _detect_externally_tagged_pattern(schema, path, parent_ref)

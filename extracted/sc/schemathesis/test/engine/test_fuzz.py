@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import json
+import threading
+import time
 import uuid
+from queue import Queue
 
 import pytest
 import requests
@@ -11,13 +14,19 @@ from werkzeug.exceptions import InternalServerError
 
 import schemathesis
 import schemathesis.auths
-from schemathesis.config import FuzzConfig, OperationConfig, OperationsConfig
+from schemathesis.config import FuzzConfig, OperationConfig, OperationsConfig, SchemathesisConfig
 from schemathesis.core.errors import SerializationNotPossible
+from schemathesis.core.rate_limit import RATE_LIMIT_AUTO_MAX_RETRIES, RATE_LIMIT_AUTO_REPORT_THRESHOLD
 from schemathesis.core.result import Ok
 from schemathesis.core.transport import Response
 from schemathesis.engine import Status, StopReason, events, from_schema
+from schemathesis.engine.control import ExecutionControl
+from schemathesis.engine.run import relay_events
 from schemathesis.generation import GenerationMode
 from schemathesis.specs.openapi.stateful._link_chooser import collect_link_candidates
+from test.apps.fragments import handlers
+from test.apps.fragments.schemas import linked_users
+from test.engine._late_put import attach_late_put
 
 
 def _make_flaky_repro_schema(ctx):
@@ -129,12 +138,62 @@ def test_fuzz_scenario_events_are_paired(ctx):
     _assert_scenario_pairs(collected)
 
 
+# Only waits at or above the reporting threshold are announced, so the test sleeps that long once.
+def test_fuzz_emits_rate_limit_retry(ctx, app_runner):
+    calls = []
+    app, _ = ctx.openapi.make_flask_app({"/users": {"get": {"responses": {"200": {"description": "OK"}}}}})
+
+    @app.route("/users")
+    def users():
+        calls.append(None)
+        if len(calls) == 1:
+            return "", 429, {"Retry-After": str(RATE_LIMIT_AUTO_REPORT_THRESHOLD)}
+        return {"ok": True}
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    schema.config.update(rate_limit="auto")
+    assert [
+        (event.operation, event.delay, event.retries_left)
+        for event in _collect_until_finished(schema)
+        if isinstance(event, events.RateLimitRetry)
+    ] == [("GET /users", RATE_LIMIT_AUTO_REPORT_THRESHOLD, RATE_LIMIT_AUTO_MAX_RETRIES - 1)]
+
+
 def test_fuzz_no_operations_emits_no_scenarios(ctx):
     # When the schema has no operations, the fuzz thread returns immediately
     schema = ctx.openapi.load_schema({})
     collected = _fuzz_events(schema)
     _assert_engine_started_and_finished(collected)
     assert not any(isinstance(e, events.FuzzScenarioStarted) for e in collected)
+
+
+def test_fuzz_skips_operation_with_unresolvable_required_body(ctx):
+    schema = ctx.openapi.load_schema(
+        {
+            "/items": {
+                "post": {
+                    "requestBody": {
+                        "required": True,
+                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Missing"}}},
+                    },
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        }
+    )
+    collected = _fuzz_events(schema)
+    assert [type(event) for event in collected] == [events.EngineStarted, events.EngineFinished]
+
+
+def test_fuzz_wsgi_app_without_error_feedback_and_response_data(ctx):
+    # A WSGI app supplies source constants; the fuzz run draws them alongside disabled feedback sources.
+    api = ctx.openapi.apps.success()
+    config = SchemathesisConfig.from_dict(
+        {"phases": {"fuzzing": {"error-feedback": {"enabled": False}, "extra-data-sources": {"responses": False}}}}
+    )
+    schema = schemathesis.openapi.from_wsgi("/openapi.json", api.wsgi_app, config=config)
+    collected = _collect_until_finished(schema)
+    assert _finished_scenarios(collected) == _finished_scenarios(collected, status=Status.SUCCESS)
 
 
 def test_fuzz_single_unsatisfiable_operation_emits_non_fatal_error(ctx):
@@ -172,23 +231,86 @@ def test_fuzz_preflight_excludes_non_generatable_operation_before_hypothesis(ctx
     assert any(event.status == Status.FAILURE for event in finished)
 
 
-def test_fuzz_preflight_all_operations_excluded(ctx):
-    api = ctx.openapi.apps.success_and_failure()
+def test_fuzz_reports_once_when_generation_fails_after_preflight(ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/search": {
+                "get": {
+                    "parameters": [{"name": "q", "in": "query", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            }
+        }
+    )
+
+    @app.route("/search")
+    def search():
+        return {}
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    schema.config.seed = 1
+
+    # The minimal empty string passes the preflight draw; later non-ASCII values break the hook.
+    @schema.hook
+    def map_query(ctx, query):
+        value = query.get("q")
+        if isinstance(value, str):
+            value.encode("ascii")
+        return query
+
+    errors = _non_fatal_errors(_fuzz_events(schema))
+    assert [(type(event.value), event.label) for event in errors] == [(UnicodeEncodeError, "GET /search")]
+
+
+def _reject(case):
+    assume(False)
+
+
+def _fail_generation(case):
+    raise RuntimeError("generation error")
+
+
+@pytest.mark.parametrize(
+    ("app", "transform", "expected"),
+    [
+        (
+            "success_and_failure",
+            _reject,
+            [
+                events.NonFatalError(error=Unsatisfiable(), phase=None, label=label, related_to_operation=True)
+                for label in ("GET /api/failure", "GET /api/success")
+            ],
+        ),
+        (
+            "path_variable",
+            _fail_generation,
+            [
+                events.NonFatalError(
+                    error=RuntimeError("generation error"),
+                    phase=None,
+                    label="GET /api/path_variable/{key}",
+                    related_to_operation=True,
+                )
+            ],
+        ),
+    ],
+    ids=["unsatisfiable", "generation-error"],
+)
+def test_fuzz_preflight_excludes_all_operations(ctx, app, transform, expected):
+    api = getattr(ctx.openapi.apps, app)()
     schema = schemathesis.openapi.from_url(api.schema_url)
 
     @schema.hook
     def before_generate_case(context, strategy):
-        def reject(case):
-            assume(False)
-
-        return strategy.map(reject)
+        return strategy.map(transform)
 
     collected = _fuzz_events(schema, FuzzConfig())
 
     _assert_engine_started_and_finished(collected)
     assert not any(isinstance(event, events.FuzzScenarioStarted) for event in collected)
     assert not _finished_scenarios(collected)
-    assert _non_fatal_errors(collected)
+    assert _non_fatal_errors(collected) == expected
+    assert collected[-1].stop_reason == StopReason.COMPLETED
 
 
 def test_fuzz_finds_failure_with_continue_on_failure(ctx):
@@ -220,6 +342,15 @@ def test_fuzz_max_failures_stop_reason(ctx):
     schema.config.max_failures = 1
     collected = _fuzz_events(schema, FuzzConfig())
     assert collected[-1].stop_reason == StopReason.FAILURE_LIMIT
+
+
+def test_failure_limit_wins_over_deadline_crossed_while_winding_down():
+    # Workers stopping after a failure can outlive the deadline; the failure is still what stopped the run.
+    control = ExecutionControl(
+        stop_event=threading.Event(), max_failures=None, max_time=5, start_time=time.monotonic() - 10
+    )
+    control.reach_failure_limit()
+    assert control.stop_reason == StopReason.FAILURE_LIMIT
 
 
 def test_fuzz_max_failures_multi_worker(ctx):
@@ -312,6 +443,35 @@ def test_fuzz_generation_parameter_overrides_are_applied(ctx):
     assert query_values == [{"id": -1}] * len(query_values)
 
 
+@pytest.mark.parametrize("workers", [1, 3], ids=["single-worker", "multiple-workers"])
+def test_fuzz_unique_inputs_sends_each_input_once(ctx, app_runner, workers):
+    # Following a link or not is a separate choice in every step, so scenarios vastly outnumber the two inputs.
+    paths = linked_users()
+    paths["/users/{userId}"]["get"]["parameters"][0]["schema"]["enum"] = [1]
+    app, _ = ctx.openapi.make_flask_app(paths)
+    handlers.register_linked_users_create(app)
+
+    @app.route("/users/<int:user_id>")
+    def get_user(user_id):
+        return {}, 500
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    schema.config.update(workers=workers)
+    schema.config.continue_on_failure = True
+    schema.config.checks.update(included_check_names=["not_a_server_error"])
+    schema.config.generation.update(modes=[GenerationMode.POSITIVE], unique_inputs=True)
+    # The time limit only guards against a run that never ends on its own.
+    collected = _fuzz_events(schema, FuzzConfig(max_time=120))
+
+    assert sorted(f"{request.method} {request.path}" for request in app.config["captured_requests"]) == [
+        "GET /users/1",
+        "POST /users",
+    ]
+    assert [event for event in _finished_scenarios(collected) if not event.recorder.cases] == []
+    assert [event.value for event in _non_fatal_errors(collected)] == []
+    assert collected[-1].stop_reason == StopReason.COMPLETED
+
+
 def test_fuzz_multiple_workers_emit_distinct_worker_ids(ctx):
     api = ctx.openapi.apps.path_variable()
     schema = schemathesis.openapi.from_url(api.schema_url)
@@ -363,24 +523,6 @@ def test_fuzz_graphql_schema(ctx):
     assert len(finished_ids) >= 3
 
 
-def test_fuzz_unsatisfied_assumption_preflight_excludes_operation(ctx):
-    api = ctx.openapi.apps.success()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-
-    @schema.hook
-    def before_generate_case(context, strategy):
-        def reject(case):
-            assume(False)
-
-        return strategy.map(reject)
-
-    collected = _fuzz_events(schema, FuzzConfig())
-    errors = _non_fatal_errors(collected)
-    assert errors == [
-        events.NonFatalError(error=Unsatisfiable(), phase=None, label="GET /api/success", related_to_operation=True)
-    ]
-
-
 def test_fuzz_clears_global_auth_when_config_auth_is_defined(ctx):
     api = ctx.openapi.apps.success()
     schema = schemathesis.openapi.from_url(api.schema_url)
@@ -397,29 +539,6 @@ def test_fuzz_clears_global_auth_when_config_auth_is_defined(ctx):
     schema.config.auth.update(basic=("user", "pass"))
     next(iter(from_schema(schema).fuzz(FuzzConfig())))
     assert not schemathesis.auths.GLOBAL_AUTH_STORAGE.is_defined
-
-
-def test_fuzz_generation_exception_excludes_operation(ctx):
-    api = ctx.openapi.apps.path_variable()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-
-    @schema.hook
-    def before_generate_case(context, strategy):
-        def fail_generation(case):
-            raise RuntimeError("generation error")
-
-        return strategy.map(fail_generation)
-
-    collected = _fuzz_events(schema, FuzzConfig())
-    errors = _non_fatal_errors(collected)
-    assert errors == [
-        events.NonFatalError(
-            error=RuntimeError("generation error"),
-            phase=None,
-            label="GET /api/path_variable/{key}",
-            related_to_operation=True,
-        )
-    ]
 
 
 def test_fuzz_preflight_excludes_hook_broken_operation_but_keeps_survivors(ctx):
@@ -484,64 +603,16 @@ def test_fuzz_network_error_emits_non_fatal_error(ctx):
             related_to_operation=True,
         )
     ]
+    assert errors[0].info.code_sample == f"curl -X GET {api.base_url}/api/slow"
+    interactions = [
+        interaction for event in _finished_scenarios(collected) for interaction in event.recorder.interactions.values()
+    ]
+    assert interactions
+    assert all(
+        interaction.request.uri == f"{api.base_url}/api/slow" and interaction.response is None
+        for interaction in interactions
+    )
     _assert_engine_started_and_finished(collected)
-
-
-def test_fuzz_finishes_cleanly_when_preflight_excludes_all_operations(ctx):
-    api = ctx.openapi.apps.success()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-
-    @schema.hook
-    def before_generate_case(context, strategy):
-        def fail_generation(case):
-            raise RuntimeError("generation error")
-
-        return strategy.map(fail_generation)
-
-    collected = _fuzz_events(schema, FuzzConfig())
-    _assert_engine_started_and_finished(collected)
-
-
-def test_fuzz_emits_no_scenario_pairs_when_preflight_excludes_only_operation(ctx):
-    api = ctx.openapi.apps.success()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-    # When preflight excludes the only operation before any scenario starts,
-    # there should be no unmatched fuzz scenario events.
-
-    @schema.hook
-    def before_generate_case(context, strategy):
-        def fail_generation(case):
-            raise RuntimeError("generation error")
-
-        return strategy.map(fail_generation)
-
-    collected = _fuzz_events(schema, FuzzConfig())
-    started_ids = set()
-    finished_ids = set()
-    for event in collected:
-        if isinstance(event, events.FuzzScenarioStarted):
-            started_ids.add(event.id)
-        elif isinstance(event, events.FuzzScenarioFinished):
-            finished_ids.add(event.id)
-    assert started_ids == finished_ids
-
-
-def test_fuzz_completed_stop_reason_when_preflight_excludes_all_operations(ctx):
-    api = ctx.openapi.apps.success()
-    schema = schemathesis.openapi.from_url(api.schema_url)
-    # When preflight excludes all operations due to generation errors, the engine should finish
-    # with COMPLETED (natural end), not INTERRUPTED (which implies external stop).
-
-    @schema.hook
-    def before_generate_case(context, strategy):
-        def fail_generation(case):
-            raise RuntimeError("generation error")
-
-        return strategy.map(fail_generation)
-
-    collected = _fuzz_events(schema, FuzzConfig())
-    finished = next(e for e in collected if isinstance(e, events.EngineFinished))
-    assert finished.stop_reason == StopReason.COMPLETED
 
 
 def test_fuzz_interrupted_by_keyboard_interrupt(ctx):
@@ -558,6 +629,29 @@ def test_fuzz_interrupted_by_keyboard_interrupt(ctx):
     # Drain to EngineFinished
     for _ in stream:
         pass
+
+
+def test_fuzz_exception_thrown_into_stream_stops_workers(ctx):
+    api = ctx.openapi.apps.path_variable()
+    schema = schemathesis.openapi.from_url(api.schema_url)
+    stream = from_schema(schema).fuzz(FuzzConfig())
+    for event in stream:
+        if isinstance(event, events.FuzzScenarioFinished):
+            break
+    error = RuntimeError("Timeout")
+    raised = []
+
+    def throw():
+        try:
+            stream.generator.throw(error)
+        except RuntimeError as exc:
+            raised.append(exc)
+
+    thrower = threading.Thread(target=throw, daemon=True)
+    thrower.start()
+    thrower.join(timeout=30)
+    assert not thrower.is_alive(), "Fuzz workers kept running after the exception"
+    assert raised == [error]
 
 
 @pytest.mark.usefixtures("restore_checks")
@@ -670,3 +764,191 @@ def test_collect_link_candidates(ctx, active, exclude_get, body, expected_overri
         target, overrides = candidates[0]
         assert target.label == get_op.label
         assert overrides == expected_overrides
+
+
+@pytest.mark.parametrize(
+    "links",
+    [
+        pytest.param(
+            {"X": {"operationId": "nope", "parameters": {"productId": "$response.body#/productId"}}},
+            id="unknown-target",
+        ),
+        pytest.param(
+            {"X": {"operationId": "createItem", "requestBody": "$response.body#/missing"}}, id="unresolvable-body"
+        ),
+        pytest.param(
+            {"X": {"operationId": "getProduct", "parameters": {"productId": "$url.x"}}}, id="invalid-expression"
+        ),
+    ],
+)
+def test_iter_link_candidates_edge_links(ctx, case_factory, response_factory, links):
+    schema = ctx.openapi.load_schema(
+        {
+            "/products": {
+                "post": {
+                    "operationId": "createProduct",
+                    "responses": {
+                        "201": {
+                            "description": "C",
+                            "content": {
+                                "application/json": {
+                                    "schema": {"type": "object", "properties": {"productId": {"type": "string"}}}
+                                }
+                            },
+                            "links": links,
+                        }
+                    },
+                }
+            },
+            "/products/{productId}": {
+                "get": {
+                    "operationId": "getProduct",
+                    "parameters": [{"name": "productId", "in": "path", "required": True, "schema": {"type": "string"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+            "/items": {
+                "post": {
+                    "operationId": "createItem",
+                    "requestBody": {"content": {"application/json": {"schema": {"type": "object"}}}},
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+    post_op = schema["/products"]["POST"]
+    operations = [post_op, schema["/products/{productId}"]["GET"], schema["/items"]["POST"]]
+    response = Response.from_requests(
+        response_factory.requests(status_code=201, content=json.dumps({"productId": "abc"}).encode()),
+        verify=True,
+    )
+    candidates = schema.iter_link_candidates(
+        operation=post_op,
+        case=case_factory(operation=post_op),
+        response=response,
+        operations_by_label={operation.label: operation for operation in operations},
+        excluded_labels=set(),
+    )
+    assert candidates == []
+
+
+def test_fuzz_follows_wildcard_link_with_one_listed_identifier(ctx, app_runner):
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/users": {
+                "get": {
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {
+                                "application/json": {
+                                    "schema": {"type": "array", "items": {"$ref": "#/components/schemas/User"}}
+                                }
+                            },
+                        }
+                    }
+                }
+            },
+            "/users/{user_id}": {
+                "delete": {
+                    "parameters": [{"name": "user_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"204": {"description": "Deleted"}, "404": {"description": "Not found"}},
+                }
+            },
+        },
+        components={
+            "schemas": {
+                "User": {"type": "object", "properties": {"id": {"type": "integer"}}, "required": ["id"]},
+            }
+        },
+    )
+    deleted = []
+
+    @app.route("/users", methods=["GET"])
+    def list_users():
+        return [{"id": 1}, {"id": 2}]
+
+    @app.route("/users/<user_id>", methods=["DELETE"])
+    def delete_user(user_id):
+        deleted.append(user_id)
+        return "", 204 if user_id in ("1", "2") else 404
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    schema.config.seed = 1
+    collected = _collect_until_finished(schema, count=20, config=FuzzConfig())
+    assert not _non_fatal_errors(collected)
+    assert [user_id for user_id in deleted if "MultiMatch" in user_id] == []
+    assert {"1", "2"} <= set(deleted)
+
+
+# A consumer that raises mid-run closes the stream; workers must stop instead of fuzzing forever.
+def test_fuzz_closing_stream_mid_run_stops_workers(ctx):
+    api = ctx.openapi.apps.path_variable()
+    schema = schemathesis.openapi.from_url(api.schema_url)
+    stream = from_schema(schema).fuzz(FuzzConfig())
+    for event in stream:
+        if isinstance(event, events.FuzzScenarioFinished):
+            break
+    closer = threading.Thread(target=stream.generator.close, daemon=True)
+    closer.start()
+    closer.join(timeout=10)
+    assert not closer.is_alive()
+    assert not [thread for thread in threading.enumerate() if thread.name.startswith("schemathesis_fuzz")]
+
+
+def test_relay_events_drains_event_put_right_before_worker_exit():
+    exited = threading.Thread(target=lambda: None)
+    exited.start()
+    exited.join()
+    event_queue: Queue = Queue()
+    late_event = events.EngineStarted()
+    attach_late_put(event_queue, late_event)
+
+    assert list(relay_events(event_queue, [exited], timeout=0.01)) == [late_event]
+
+
+def test_fuzz_keeps_running_when_server_state_changes_which_links_apply(ctx, app_runner):
+    # The same generated scenario gets a link to follow on one run and none on the next.
+    app, _ = ctx.openapi.make_flask_app(
+        {
+            "/toggle": {
+                "get": {
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "links": {
+                                "GetItem": {"operationId": "getItem", "parameters": {"item_id": "$response.body#/id"}}
+                            },
+                        },
+                        "404": {"description": "Not found"},
+                    }
+                }
+            },
+            "/items/{item_id}": {
+                "get": {
+                    "operationId": "getItem",
+                    "parameters": [{"name": "item_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "OK"}},
+                }
+            },
+        }
+    )
+    calls = [0]
+
+    @app.route("/toggle")
+    def toggle():
+        calls[0] += 1
+        if calls[0] % 2:
+            return {"id": 1}
+        return {}, 404
+
+    @app.route("/items/<item_id>")
+    def get_item(item_id):
+        return {}
+
+    schema = schemathesis.openapi.from_url(app_runner.openapi_url(app))
+    schema.config.seed = 1
+    schema.config.checks.update(included_check_names=["not_a_server_error"])
+    collected = _fuzz_events(schema, FuzzConfig(max_time=3))
+    assert [event.value for event in _non_fatal_errors(collected)] == []
+    assert collected[-1].stop_reason == StopReason.MAX_TIME

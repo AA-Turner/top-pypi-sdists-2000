@@ -142,6 +142,7 @@ def test_store_ndjson(ctx, cli, ndjson_path, hypothesis_max_examples):
     # Should have PhaseStarted events
     phase_started = [e for e in events if get_event_type(e) == "PhaseStarted"]
     assert len(phase_started) >= 1
+    assert any(get_event_type(e) == "PhaseFinished" for e in events)
 
     # Should have ScenarioFinished events with recorder data
     scenario_finished = [e for e in events if get_event_type(e) == "ScenarioFinished"]
@@ -220,6 +221,7 @@ def test_failure_details(ctx, cli, ndjson_path):
             "title": "Server error",
             "message": "",
             "severity": "critical",
+            "code": "ST101",
         }
     ] * len(failures)
 
@@ -243,81 +245,29 @@ def test_run_subprocess(ctx, testdir, ndjson_path, hypothesis_max_examples):
     assert "EngineFinished" in event_types, f"truncated stream: got only {sorted(event_types)}"
 
 
-@pytest.mark.parametrize("in_config", [True, False])
-def test_report_dir(ctx, cli, tmp_path, in_config):
-    api = ctx.openapi.apps.success()
-    report_dir = tmp_path / "reports"
-    args = ["--max-examples=1"]
-    kwargs = {}
-    if in_config:
-        kwargs["config"] = {"reports": {"ndjson": {"enabled": True}, "directory": str(report_dir)}}
-    else:
-        args = ["--report=ndjson", f"--report-dir={report_dir}", *args]
-    cli.run(api.schema_url, *args, **kwargs)
-    assert report_dir.exists()
-    assert list(report_dir.glob("*.ndjson"))
-
-
-def test_all_event_types(ctx, cli, ndjson_path):
-    api = ctx.openapi.apps.success()
-    cli.run(
-        api.schema_url,
-        f"--report-ndjson-path={ndjson_path}",
-        "--max-examples=1",
-        "--seed=1",
-    )
-    events = load_ndjson(ndjson_path)
-    event_types = {get_event_type(e) for e in events}
-
-    assert "Initialize" in event_types
-    assert "EngineStarted" in event_types
-    assert "PhaseStarted" in event_types
-    assert "ScenarioFinished" in event_types
-    assert "PhaseFinished" in event_types
-    assert "EngineFinished" in event_types
-
-
-def test_phase_data_in_events(ctx, cli, ndjson_path):
-    api = ctx.openapi.apps.success()
-    cli.run(
-        api.schema_url,
-        f"--report-ndjson-path={ndjson_path}",
-        "--max-examples=1",
-        "--seed=1",
-        "--phases=coverage",
-    )
-    events = load_ndjson(ndjson_path)
-    phase_started = [e for e in events if get_event_type(e) == "PhaseStarted"]
-    assert len(phase_started) >= 1
-    for event in phase_started:
-        assert "phase" in get_event_data(event)
-
-
 def test_binary_body_base64(ctx, cli, ndjson_path):
-    api = ctx.openapi.apps.success()
+    api = ctx.openapi.apps.upload_file()
     cli.run_and_assert(
         api.schema_url,
         f"--report-ndjson-path={ndjson_path}",
         "--max-examples=1",
         "--seed=1",
         "--mode=positive",
+        "--phases=fuzzing",
     )
     events = load_ndjson(ndjson_path)
-    scenario_finished = [e for e in events if get_event_type(e) == "ScenarioFinished"]
-    # Binary data should be encoded as {"$base64": "..."} if present
-    for event in scenario_finished:
-        data = get_event_data(event)
-        interactions = data["recorder"].get("interactions", {})
-        for interaction in interactions.values():
-            if interaction.get("response") and interaction["response"].get("body"):
-                body = interaction["response"]["body"]
-                # Body should be a string or a base64 encoded dict
-                assert isinstance(body, (str | dict))
-                if isinstance(body, dict):
-                    assert "$base64" in body
+    bodies = [
+        interaction["request"]["body"]
+        for event in events
+        if get_event_type(event) == "ScenarioFinished"
+        for interaction in get_event_data(event)["recorder"].get("interactions", {}).values()
+        if "body" in interaction["request"]
+    ]
+    assert [list(body) for body in bodies] == [["$base64"]] * len(bodies) != []
+    assert all(b"\x89PNG" in base64.b64decode(body["$base64"]) for body in bodies)
 
 
-def test_enum_serialization(cli, ctx, ndjson_path):
+def test_enum_serialization_without_sanitization(cli, ctx, ndjson_path):
     app, _ = ctx.openapi.make_flask_app({"/users": {"get": {"responses": {"200": {"description": "OK"}}}}})
 
     @app.route("/users")
@@ -330,8 +280,11 @@ def test_enum_serialization(cli, ctx, ndjson_path):
         "--max-examples=10",
         "--seed=1",
         "--phases=coverage",
+        "--output-sanitize=false",
     )
     events = load_ndjson(ndjson_path)
+    assert get_event_type(events[0]) == "Initialize"
+    assert get_event_type(events[-1]) == "EngineFinished"
 
     # PhaseName enum should be serialized as string value
     phase_started = [e for e in events if get_event_type(e) == "PhaseStarted"]
@@ -340,7 +293,15 @@ def test_enum_serialization(cli, ctx, ndjson_path):
         data = get_event_data(event)
         phase = data["phase"]
         assert isinstance(phase["name"], str)
-        assert phase["name"] in ("probing", "schema_analysis", "examples", "coverage", "fuzzing", "stateful")
+        assert phase["name"] in (
+            "probing",
+            "schema_analysis",
+            "auth_bootstrap",
+            "examples",
+            "coverage",
+            "fuzzing",
+            "stateful",
+        )
 
     # Status enum should be serialized as string value
     phase_finished = [e for e in events if get_event_type(e) == "PhaseFinished"]
@@ -403,27 +364,52 @@ def test_form_data_string_body(cli, ctx, ndjson_path):
     assert found_form_request
 
 
-def test_sanitization_disabled(cli, ctx, ndjson_path):
-    app, _ = ctx.openapi.make_flask_app({"/users": {"get": {"responses": {"200": {"description": "OK"}}}}})
+@pytest.mark.parametrize(
+    ("parameters", "args", "config", "expected"),
+    [
+        ([], ["-H", "Authorization: Bearer secret-token"], None, {"headers": {"Authorization": "[Filtered]"}}),
+        (
+            [{"name": "api_key", "in": "query", "required": True, "schema": {"type": "string"}}],
+            [],
+            {"parameters": {"api_key": "secret-token"}},
+            {"query": {"api_key": "[Filtered]"}},
+        ),
+        (
+            [{"name": "session", "in": "cookie", "required": True, "schema": {"type": "string"}}],
+            [],
+            {"parameters": {"session": "secret-token"}},
+            {"cookies": {"session": "[Filtered]"}},
+        ),
+    ],
+    ids=["header", "query", "cookie"],
+)
+def test_recorded_cases_sanitized(cli, ctx, ndjson_path, parameters, args, config, expected):
+    app, _ = ctx.openapi.make_flask_app(
+        {"/foo": {"get": {"parameters": parameters, "responses": {"200": {"description": "OK"}}}}}
+    )
 
-    @app.route("/users")
-    def users():
-        return jsonify([])
+    @app.route("/foo")
+    def foo():
+        return jsonify({})
 
     cli.run_openapi_app(
         app,
         f"--report-ndjson-path={ndjson_path}",
-        "--max-examples=10",
-        "--seed=1",
-        "--output-sanitize=false",
+        "--max-examples=1",
+        "--phases=fuzzing",
+        *args,
+        config=config,
     )
-    events = load_ndjson(ndjson_path)
-
-    assert get_event_type(events[0]) == "Initialize"
-    assert get_event_type(events[-1]) == "EngineFinished"
-
-    phase_started = [e for e in events if get_event_type(e) == "PhaseStarted"]
-    assert len(phase_started) >= 1
+    assert "secret-token" not in ndjson_path.read_text()
+    cases = [
+        node["value"]
+        for event in load_ndjson(ndjson_path)
+        if get_event_type(event) == "ScenarioFinished"
+        for node in get_event_data(event)["recorder"]["cases"].values()
+    ]
+    assert cases
+    for case in cases:
+        assert {key: case[key] for key in expected} == expected
 
 
 @pytest.mark.skipif(platform.system() == "Windows", reason="Simpler to setup on Linux")
@@ -593,6 +579,16 @@ def test_unresolvable_extraction_serialized(cli, ctx, ndjson_path):
     assert found_unresolvable, "Expected to find $unresolvable marker in extraction results"
 
 
+def imported_by_coverage():
+    # Branch coverage parses each source file lazily, importing on whichever thread first runs it
+    frame = sys._getframe()
+    while frame is not None:
+        if frame.f_globals.get("__name__", "").startswith("coverage."):
+            return True
+        frame = frame.f_back
+    return False
+
+
 def test_report_writers_do_not_import(cli, ctx, ndjson_path, tmp_path, monkeypatch):
     # An import on a writer thread races the main thread's own and dies, losing every later event
     api = ctx.openapi.apps.success()
@@ -601,7 +597,8 @@ def test_report_writers_do_not_import(cli, ctx, ndjson_path, tmp_path, monkeypat
     real_import = builtins.__import__
 
     def guarded_import(name, *args, **kwargs):
-        if threading.current_thread().name in ("SchemathesisNdjsonWriter", "SchemathesisHarWriter"):
+        on_writer = threading.current_thread().name in ("SchemathesisNdjsonWriter", "SchemathesisHarWriter")
+        if on_writer and not imported_by_coverage():
             raise RuntimeError(f"deadlock detected by _ModuleLock({name!r})")
         return real_import(name, *args, **kwargs)
 

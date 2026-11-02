@@ -1,21 +1,24 @@
 from __future__ import annotations
 
 import base64
-from dataclasses import dataclass, field
-from enum import Enum
+from dataclasses import dataclass, field, replace
+from enum import StrEnum
 from typing import TYPE_CHECKING, Any
 
 from schemathesis.core.mutations import Mutation
-from schemathesis.core.parameters import ParameterLocation
+from schemathesis.core.parameters import PARAMETER_LOCATIONS, ParameterLocation
 from schemathesis.generation import GenerationMode
 from schemathesis.resources import PoolDraw, SemanticDraw
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable, Iterator
+
+    from schemathesis.generation.case import Case
     from schemathesis.generation.dictionaries import DictionaryDraw
     from schemathesis.python._constants.pool import ConstantDraw
 
 
-class TestPhase(str, Enum):
+class TestPhase(StrEnum):
     __test__ = False
 
     EXAMPLES = "examples"
@@ -24,7 +27,7 @@ class TestPhase(str, Enum):
     STATEFUL = "stateful"
 
 
-class CoverageScenario(str, Enum):
+class CoverageScenario(StrEnum):
     """Coverage test scenario types."""
 
     # Positive scenarios - Valid values
@@ -43,14 +46,15 @@ class CoverageScenario(str, Enum):
     MINIMUM_LENGTH_STRING = "minimum_length_string"
     MAXIMUM_LENGTH_STRING = "maximum_length_string"
     NEAR_BOUNDARY_LENGTH_STRING = "near_boundary_length_string"
+    OVERSIZED_STRING = "oversized_string"
 
     # Positive scenarios - Boundary values for numbers
     MINIMUM_VALUE = "minimum_value"
     MAXIMUM_VALUE = "maximum_value"
     NEAR_BOUNDARY_NUMBER = "near_boundary_number"
+    LARGE_NUMBER = "large_number"
 
     # Positive scenarios - Boundary values for arrays
-    MINIMUM_ITEMS_ARRAY = "minimum_items_array"
     MAXIMUM_ITEMS_ARRAY = "maximum_items_array"
     NEAR_BOUNDARY_ITEMS_ARRAY = "near_boundary_items_array"
     ENUM_VALUE_ITEMS_ARRAY = "enum_value_items_array"
@@ -62,6 +66,9 @@ class CoverageScenario(str, Enum):
 
     # Positive scenarios - Default test case
     DEFAULT_POSITIVE_TEST = "default_positive_test"
+
+    # Positive scenarios - GraphQL field selection
+    FIELD_SELECTION = "field_selection"
 
     # Negative scenarios - Boundary violations for numbers
     VALUE_ABOVE_MAXIMUM = "value_above_maximum"
@@ -90,14 +97,23 @@ class CoverageScenario(str, Enum):
     NOT_MULTIPLE_OF = "not_multiple_of"
     NON_UNIQUE_ITEMS = "non_unique_items"
     UNIQUE_ITEMS_ARRAY = "unique_items_array"
+    MATCHES_NOT_SCHEMA = "matches_not_schema"
 
     # Negative scenarios - Missing parameters
     MISSING_PARAMETER = "missing_parameter"
     DUPLICATE_PARAMETER = "duplicate_parameter"
+    UNKNOWN_ARGUMENT = "unknown_argument"
 
-    # Negative scenarios - Unsupported patterns
+    # Negative scenarios: request-shape probes.
     UNSUPPORTED_PATH_PATTERN = "unsupported_path_pattern"
     UNSPECIFIED_HTTP_METHOD = "unspecified_http_method"
+    MALFORMED_CONTENT_TYPE = "malformed_content_type"
+    UNSUPPORTED_CONTENT_TYPE = "unsupported_content_type"
+
+
+CONTENT_TYPE_PROBES = frozenset({CoverageScenario.MALFORMED_CONTENT_TYPE, CoverageScenario.UNSUPPORTED_CONTENT_TYPE})
+# Requests malformed on purpose: only a server error in response to them is a finding.
+REQUEST_SHAPE_PROBES = frozenset({CoverageScenario.UNSPECIFIED_HTTP_METHOD, *CONTENT_TYPE_PROBES})
 
 
 @dataclass
@@ -140,6 +156,33 @@ class ExamplesPhaseData:
     parameter_location: ParameterLocation | None
     location: str | None
     mutations: tuple[Mutation, ...] = ()
+
+
+PhaseData = ExamplesPhaseData | FuzzingPhaseData | StatefulPhaseData
+
+_PHASE_DATA_TYPES: dict[TestPhase, type[PhaseData]] = {
+    TestPhase.EXAMPLES: ExamplesPhaseData,
+    TestPhase.FUZZING: FuzzingPhaseData,
+    TestPhase.STATEFUL: StatefulPhaseData,
+}
+
+
+def build_phase_data(
+    phase: TestPhase,
+    description: str | None,
+    *,
+    parameter: str | None = None,
+    parameter_location: ParameterLocation | None = None,
+    location: str | None = None,
+    mutations: tuple[Mutation, ...] = (),
+) -> PhaseData:
+    return _PHASE_DATA_TYPES[phase](
+        description=description,
+        parameter=parameter,
+        parameter_location=parameter_location,
+        location=location,
+        mutations=mutations,
+    )
 
 
 @dataclass(slots=True)
@@ -228,6 +271,22 @@ class CaseMetadata:
     # form (use the typed snapshot) or was overwritten by a hook (validate the live value).
     _initial_containers: dict[ParameterLocation, Any] = field(default_factory=dict, init=False)
 
+    def copy(self) -> CaseMetadata:
+        """A copy that revalidating another case's containers cannot change."""
+        copied = replace(
+            self,
+            generation=GenerationInfo(time=self.generation.time, mode=self.generation.mode),
+            components=dict(self.components),
+            raw_containers=dict(self.raw_containers),
+        )
+        copied._initial_hashes = dict(self._initial_hashes)
+        return copied
+
+    def is_negative_at(self, location: ParameterLocation) -> bool:
+        """Whether the component at `location` was generated in negative mode."""
+        component = self.components.get(location)
+        return component is not None and component.mode.is_negative
+
     def mark_dirty(self, location: ParameterLocation) -> None:
         """Mark a component as modified and needing revalidation."""
         self._dirty.add(location)
@@ -278,6 +337,9 @@ class CaseMetadata:
                     "resource_field": draw.resource_field,
                     "source_operation": draw.source_operation,
                     "source_status": draw.source_status,
+                    "source_identity": draw.source_identity,
+                    "source_input": draw.source_input,
+                    "source_query": draw.source_query,
                 }
                 for draw in self.pool_draws
             ],
@@ -344,6 +406,9 @@ class CaseMetadata:
                 resource_field=draw["resource_field"],
                 source_operation=draw["source_operation"],
                 source_status=draw["source_status"],
+                source_identity=draw.get("source_identity"),
+                source_input=draw.get("source_input", False),
+                source_query=draw.get("source_query"),
             )
             for draw in data.get("pool_draws", [])
         )
@@ -446,6 +511,24 @@ class CaseMetadata:
         )
 
 
+def uniform_metadata(
+    *,
+    mode: GenerationMode,
+    phase: PhaseInfo,
+    generation_time: float,
+    constants_draws: tuple[ConstantDraw, ...] = (),
+    dictionary_draws: tuple[DictionaryDraw, ...] = (),
+) -> CaseMetadata:
+    """Metadata of a case generated in one mode for every component."""
+    return CaseMetadata(
+        generation=GenerationInfo(time=generation_time, mode=mode),
+        phase=phase,
+        components={location: ComponentInfo(mode=mode) for location in PARAMETER_LOCATIONS},
+        constants_draws=constants_draws,
+        dictionary_draws=dictionary_draws,
+    )
+
+
 def _load_mutations(raw: dict[str, Any]) -> tuple[Mutation, ...]:
     return tuple(Mutation.from_dict(m) for m in raw.get("mutations", ()))
 
@@ -465,3 +548,41 @@ def _decode_constant_value(value: str | int | float | dict[str, str]) -> str | i
     if isinstance(value, dict):
         return base64.b64decode(value[_BYTES_TAG])
     return value
+
+
+def negated_parameters(meta: CaseMetadata | None) -> Iterator[tuple[str, ParameterLocation]]:
+    """Named parameters a negative case mutated, including each one when it mutates several components."""
+    if meta is None or not meta.generation.mode.is_negative:
+        return
+    data = meta.phase.data
+    if not isinstance(data, (FuzzingPhaseData, CoveragePhaseData, StatefulPhaseData)):
+        return
+    if data.parameter is not None and data.parameter_location is not None:
+        yield data.parameter, data.parameter_location
+    for mutation in data.mutations:
+        if mutation.parameter is not None:
+            yield mutation.parameter, mutation.parameter_location
+
+
+def coverage_scenario(case: Case) -> CoverageScenario | None:
+    # Reading `Case.meta` would revalidate the case, which is only settled once its request is prepared.
+    meta = case._meta
+    if meta is None or not isinstance(meta.phase.data, CoveragePhaseData):
+        return None
+    return meta.phase.data.scenario
+
+
+def report_label(*, operation_label: str, method: str, path: str, scenario: str | None) -> str:
+    """Name a case the way `st run` and `st replay` report it."""
+    # A probe for a method the schema does not declare borrows an operation; name it by the request sent.
+    if scenario == CoverageScenario.UNSPECIFIED_HTTP_METHOD:
+        return f"{method} {path}"
+    return operation_label
+
+
+def content_type_probes_first(cases: Iterable[Case]) -> list[Case]:
+    """Order cases so that Content-Type probes run last under LIFO execution.
+
+    Ordinary requests then keep reporting failures that every request triggers.
+    """
+    return sorted(cases, key=lambda case: coverage_scenario(case) not in CONTENT_TYPE_PROBES)

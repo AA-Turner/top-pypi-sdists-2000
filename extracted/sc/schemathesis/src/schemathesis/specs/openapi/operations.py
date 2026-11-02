@@ -1,19 +1,21 @@
 from __future__ import annotations
 
+import threading
 from collections.abc import Generator, Iterator, Mapping, Sequence
-from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, NoReturn, cast
+from urllib.parse import unquote
 
 import jsonschema_rs
 from packaging import version
 
-from schemathesis.core import INJECTED_PATH_PARAMETER_KEY
+from schemathesis.core import INJECTED_PATH_PARAMETER_KEY, media_types
 from schemathesis.core.adapter import OperationParameter, ParsedParameters
 from schemathesis.core.errors import (
     SCHEMA_ERROR_SUGGESTION,
     HookExecutionError,
-    InfiniteRecursiveReference,
     InvalidSchema,
+    MalformedMediaType,
+    OperationNotFound,
     RefResolutionError,
     SchemaLocation,
 )
@@ -21,13 +23,14 @@ from schemathesis.core.jsonschema.resolver import Resolver, resolve_reference
 from schemathesis.core.parameters import ParameterLocation, SkippedParameter
 from schemathesis.core.result import Err, Ok, Result
 from schemathesis.core.statistic import ApiStatistic
-from schemathesis.core.transforms import get_template_fields
+from schemathesis.core.transforms import decode_pointer, get_template_fields
 from schemathesis.core.transport import HTTP_METHODS_SCHEMA, is_http_method_schema
-from schemathesis.filters import FilterUsage
+from schemathesis.filters import FilterUsage, OperationContext
 from schemathesis.hooks import HookContext, dispatch_before_init_operation, dispatch_before_process_path
 from schemathesis.schemas import APIOperation, OperationDefinition
 from schemathesis.specs.openapi.adapter import OpenApiResponses
-from schemathesis.specs.openapi.adapter.parameters import OpenApiParameter, OpenApiParameterSet
+from schemathesis.specs.openapi.adapter.parameters import OpenApiBody, OpenApiParameter, OpenApiParameterSet
+from schemathesis.specs.openapi.adapter.references import maybe_resolve_with_resolver
 from schemathesis.specs.openapi.adapter.security import OpenApiSecurityParameters, has_optional_auth
 from schemathesis.specs.openapi.adapter.servers import resolve_operation_base_url
 from schemathesis.specs.openapi.utils import parse_spec_version
@@ -38,7 +41,17 @@ if TYPE_CHECKING:
     from schemathesis.specs.openapi.schemas import OpenApiSchema
     from schemathesis.specs.openapi.types import OperationObject
 
-SCHEMA_PARSING_ERRORS = (KeyError, RefResolutionError, InvalidSchema, InfiniteRecursiveReference)
+SCHEMA_PARSING_ERRORS = (KeyError, RefResolutionError, InvalidSchema)
+
+
+def _is_utf8_encodable(value: str) -> bool:
+    # Lone surrogates have no UTF-8 form, so such a path can not be sent over the wire.
+    try:
+        value.encode("utf-8")
+    except UnicodeEncodeError:
+        return False
+    return True
+
 
 _V3_1 = version.parse("3.1")
 
@@ -51,6 +64,38 @@ def _is_specification_extension(path: object) -> bool:
 def is_parsable_operation(definition: object) -> bool:
     """Whether an operation node carries something the adapters can read."""
     return isinstance(definition, dict) and bool(definition)
+
+
+def parse_operation_reference(reference: str) -> tuple[str, str]:
+    """Path and method an `operationRef` like `#/paths/~1users~1%7Bid%7D/get` points to."""
+    _, separator, suffix = reference.partition("#/paths/")
+    if not separator:
+        raise OperationNotFound(f"Operation '{reference}' not found", reference)
+    encoded_path, method = suffix.rsplit("/", maxsplit=1)
+    # A URI fragment is percent-decoded before its JSON Pointer escapes (RFC 6901, section 6).
+    return decode_pointer(unquote(encoded_path)), method
+
+
+def _drop_malformed_media_types(
+    items: list[OperationParameter], path: str, method: str
+) -> tuple[list[OperationParameter], list[InvalidSchema]]:
+    """Leave out request bodies with malformed media types while another body is still usable."""
+    kept: list[OperationParameter] = []
+    errors: list[InvalidSchema] = []
+    has_usable_body = False
+    for item in items:
+        if isinstance(item, OpenApiBody):
+            try:
+                media_types.parse(item.media_type)
+            except MalformedMediaType as exc:
+                errors.append(InvalidSchema.from_malformed_media_type(exc, item.media_type, path=path, method=method))
+                continue
+            has_usable_body = True
+        kept.append(item)
+    if not has_usable_body:
+        # Without a usable body the operation fails to load with the same error.
+        return items, []
+    return kept, errors
 
 
 def _named_after_placeholder(parameters: list[OperationParameter], path: str) -> list[OperationParameter]:
@@ -76,7 +121,7 @@ def _named_after_placeholder(parameters: list[OperationParameter], path: str) ->
         for parameter in parameters
         if parameter.definition.get("in") == "path" and parameter is not target
     }
-    unclaimed = get_template_fields(path) - claimed
+    unclaimed = [name for name in get_template_fields(path) if name not in claimed]
     if len(unclaimed) != 1:
         return parameters
     recovered = OpenApiParameter.from_definition(
@@ -87,20 +132,27 @@ def _named_after_placeholder(parameters: list[OperationParameter], path: str) ->
     return [recovered if parameter is target else parameter for parameter in parameters]
 
 
-@dataclass(slots=True)
-class _FilterContext:
-    """`HasAPIOperation` wrapper; the inner operation is mutated per candidate during filtering."""
+class RawSchemaVersion:
+    """Bumped whenever the raw schema changes; shared by a schema and its clones, which share the raw schema."""
 
-    operation: APIOperation
+    __slots__ = ("value",)
+
+    def __init__(self) -> None:
+        self.value = 0
 
 
 class OperationLoader:
     """OpenAPI operation iteration, construction, and the statistic walk over `paths`."""
 
-    __slots__ = ("schema", "_filter_context")
+    __slots__ = ("schema", "_filter_context", "_built", "_built_at", "_lock")
 
     def __init__(self, schema: OpenApiSchema) -> None:
         self.schema = schema
+        # Every lookup returns the same operation, so its hooks run once and its caches outlive phases.
+        self._built: dict[tuple[str, str, str], APIOperation] = {}
+        self._built_at = schema.raw_schema_version.value
+        # Re-entrant: hooks run during a build may look up other operations.
+        self._lock = threading.RLock()
         # Filter hot path mutates the shared operation's identity fields instead of allocating a fresh one per call.
         # `method` is a placeholder that gets overwritten on every `_should_skip` call.
         filter_operation: APIOperation = APIOperation(
@@ -112,21 +164,22 @@ class OperationLoader:
             responses=None,
             security=None,
         )
-        self._filter_context = _FilterContext(operation=filter_operation)
+        self._filter_context = OperationContext(operation=filter_operation)
 
     def iter_all(self) -> Generator[Result[APIOperation, InvalidSchema], None, None]:
         """Yield every operation as `Ok` or `Err`.
 
-        Two `Err` shapes are possible: unresolved path-level reference (path known, methods unknown)
-        and per-operation parsing failure (path and method known).
+        Three `Err` shapes are possible: missing required `paths` (neither path nor method known),
+        unresolved path-level reference (path known, methods unknown) and per-operation parsing failure
+        (path and method known).
         """
         __tracebackhide__ = True
         schema = self.schema
         paths = schema._get_paths()
         if paths is None:
-            if parse_spec_version(schema.specification.version) >= _V3_1:
-                return
-            self._raise_invalid_schema(KeyError("paths"))
+            if parse_spec_version(schema.specification.version) < _V3_1:
+                yield self._into_err(KeyError("paths"), None, None)
+            return
 
         context = HookContext()
         filters_active = not schema.filter_set.is_empty()
@@ -134,12 +187,15 @@ class OperationLoader:
         serves_schema_document = self._serves_schema_document
         iter_parameters = self._iter_parameters
         make_operation = self.make_operation
+        cached = self.cached
         root_resolver = schema.root_resolver
         for path, path_item in paths.items():
             if _is_specification_extension(path):
                 continue
             method = None
             try:
+                if not _is_utf8_encodable(path):
+                    raise InvalidSchema("Path is not valid UTF-8", path=path)
                 dispatch_before_process_path(schema, context, path, path_item)
                 if isinstance(path_item, dict) and "$ref" in path_item:
                     path_resolver, path_item = resolve_reference(root_resolver, path_item["$ref"])
@@ -158,16 +214,18 @@ class OperationLoader:
                             continue
                         if serves_schema_document(path, method, entry):
                             continue
-                        parameters = iter_parameters(entry, shared_parameters, resolver=path_resolver)
-                        operation = make_operation(
-                            path,
-                            method,
-                            parameters,
-                            entry,
-                            scope,
-                            resolver=path_resolver,
-                            path_item=path_item,
-                        )
+                        operation = cached(scope, path, method)
+                        if operation is None:
+                            parameters = iter_parameters(entry, shared_parameters, resolver=path_resolver)
+                            operation = make_operation(
+                                path,
+                                method,
+                                parameters,
+                                entry,
+                                scope,
+                                resolver=path_resolver,
+                                path_item=path_item,
+                            )
                         yield Ok(operation)
                     except SCHEMA_PARSING_ERRORS as exc:
                         yield self._into_err(exc, path, method)
@@ -264,8 +322,7 @@ class OperationLoader:
                         # A vendor extension key inside `responses` may carry any JSON value.
                         if not isinstance(response, dict):
                             continue
-                        if "$ref" in response:
-                            _, response = resolve_reference(path_resolver, response["$ref"])
+                        _, response = maybe_resolve_with_resolver(response, path_resolver)
                         defined_links = response.get(links_keyword)
                         if defined_links is not None:
                             statistic.transitions.total += len(defined_links)
@@ -275,20 +332,19 @@ class OperationLoader:
                 complete_walk = False
                 continue
 
-        def is_link_selected(link: dict) -> bool:
-            if "$ref" in link:
-                try:
-                    _, link = resolve_reference(root_resolver, link["$ref"])
-                except RefResolutionError:
-                    return False
+        def is_link_selected(link: object) -> bool:
+            if not isinstance(link, dict):
+                return False
+            try:
+                _, link = maybe_resolve_with_resolver(link, root_resolver)
+            except (RefResolutionError, InvalidSchema):
+                return False
 
             if "operationId" in link:
                 return link["operationId"] in selected_operations_by_id
             try:
                 resolve_reference(root_resolver, link["operationRef"])
-                _, _, suffix = link["operationRef"].partition("#/paths/")
-                path, method = suffix.rsplit("/", maxsplit=1)
-                path = path.replace("~1", "/").replace("~0", "~")
+                path, method = parse_operation_reference(link["operationRef"])
                 return (method, path) in selected_operations_by_path
             except Exception:
                 return False
@@ -345,7 +401,12 @@ class OperationLoader:
         """Whether this operation served the schema document, and so stays out unless a filter selects it."""
         schema = self.schema
         document_path = schema._schema_document_path
-        if document_path is None or method != "get" or schema.get_full_path(path).rstrip("/") != document_path:
+        if (
+            document_path is None
+            or method != "get"
+            or not _is_utf8_encodable(path)
+            or schema.get_full_path(path).rstrip("/") != document_path
+        ):
             return False
         context = self._filter_context
         operation = context.operation
@@ -387,6 +448,7 @@ class OperationLoader:
             resolver=schema.root_resolver if resolver is None else resolver,
             scope=scope,
             adapter=schema.adapter,
+            cache=schema.response_schema_cache,
         )
 
     def _parse_security(self, definition: OperationObject) -> OpenApiSecurityParameters:
@@ -411,6 +473,34 @@ class OperationLoader:
         path_item: Mapping[str, Any] | None = None,
     ) -> APIOperation:
         __tracebackhide__ = True
+        with self._lock:
+            cached = self.cached(scope, path, method)
+            if cached is None:
+                cached = self._built[(scope, path, method)] = self._build_operation(
+                    path, method, parameters, definition, scope, resolver=resolver, path_item=path_item
+                )
+            return cached
+
+    def cached(self, scope: str, path: str, method: str) -> APIOperation | None:
+        """The operation built earlier, so callers can skip parsing its parameters."""
+        with self._lock:
+            version = self.schema.raw_schema_version.value
+            if self._built_at != version:
+                self._built.clear()
+                self._built_at = version
+            return self._built.get((scope, path, method))
+
+    def _build_operation(
+        self,
+        path: str,
+        method: HttpMethodSchema,
+        parameters: ParsedParameters,
+        definition: OperationObject,
+        scope: str,
+        resolver: Resolver | None = None,
+        path_item: Mapping[str, Any] | None = None,
+    ) -> APIOperation:
+        __tracebackhide__ = True
         schema = self.schema
         if schema.config.base_url is not None:
             base_url = schema.get_base_url()
@@ -425,6 +515,7 @@ class OperationLoader:
             )
         responses = self._parse_responses(definition, scope, resolver=resolver)
         security = self._parse_security(definition)
+        items, schema_errors = _drop_malformed_media_types(parameters.items, path, method)
         operation: APIOperation[OperationParameter, ResponsesContainer, OpenApiSecurityParameters, OpenApiSchema] = (
             APIOperation(
                 path=path,
@@ -440,14 +531,15 @@ class OperationLoader:
                 headers=OpenApiParameterSet(ParameterLocation.HEADER, adapter=schema.adapter),
                 cookies=OpenApiParameterSet(ParameterLocation.COOKIE, adapter=schema.adapter),
                 skipped_parameters=parameters.skipped,
+                schema_errors=schema_errors,
             )
         )
-        for parameter in _named_after_placeholder(parameters.items, path):
+        for parameter in _named_after_placeholder(items, path):
             operation.add_parameter(parameter)
-        missing_parameter_names = get_template_fields(operation.path) - {
-            parameter.name for parameter in operation.path_parameters
-        }
-        for name in missing_parameter_names:
+        declared_parameter_names = {parameter.name for parameter in operation.path_parameters}
+        for name in get_template_fields(operation.path):
+            if name in declared_parameter_names:
+                continue
             operation.add_parameter(
                 schema.adapter.build_path_parameter({"name": name, INJECTED_PATH_PARAMETER_KEY: True})
             )
@@ -456,19 +548,24 @@ class OperationLoader:
         # credential can only ever be rejected, so such requests are sent without one.
         if config.with_security_parameters and not has_optional_auth(schema.raw_schema, definition):
             for param in operation.security.iter_parameters():
-                param_name = param.get("name")
-                param_location = param.get("in")
-                if (
-                    param_name is not None
-                    and param_location is not None
-                    and operation.get_parameter(name=param_name, location=param_location) is not None
-                ):
+                if operation.get_parameter(name=param.name, location=param.location) is not None:
                     continue
                 operation.add_parameter(
-                    OpenApiParameter.from_definition(definition=dict(param), name_to_uri={}, adapter=schema.adapter)
+                    OpenApiParameter.from_definition(
+                        definition=dict(param.definition), name_to_uri={}, adapter=schema.adapter
+                    )
                 )
         dispatch_before_init_operation(schema, HookContext(operation=operation), operation)
+        # After the hooks: a body they converted keeps its own copies, so their changes stay with this operation.
+        for body in operation.body:
+            if isinstance(body, OpenApiBody):
+                body.share_converted_schemas(schema.request_body_schema_cache)
         return operation
+
+    def clear_cache(self) -> None:
+        """Forget operations built by this schema and its clones after the raw schema changed under them."""
+        with self._lock:
+            self.schema.raw_schema_version.value += 1
 
     def _into_err(self, error: Exception, path: str | None, method: str | None) -> Err[InvalidSchema]:
         __tracebackhide__ = True
@@ -485,8 +582,6 @@ class OperationLoader:
     ) -> NoReturn:
         __tracebackhide__ = True
         schema = self.schema
-        if isinstance(error, InfiniteRecursiveReference):
-            raise InvalidSchema(str(error), path=path, method=method) from None
         if isinstance(error, RefResolutionError):
             raise InvalidSchema.from_reference_resolution_error(error, path=path, method=method) from None
         try:
@@ -499,4 +594,8 @@ class OperationLoader:
                 config=schema.config.output,
                 location=SchemaLocation.maybe_from_error_path(exc.instance_path, schema.specification.version),
             ) from None
+        if isinstance(error, InvalidSchema):
+            error.path = error.path or path
+            error.method = error.method or method
+            raise error
         raise InvalidSchema(SCHEMA_ERROR_SUGGESTION, path=path, method=method) from error

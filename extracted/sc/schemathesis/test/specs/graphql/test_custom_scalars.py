@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from _pytest.main import ExitCode
 from hypothesis import HealthCheck, given, settings
@@ -8,6 +10,7 @@ from schemathesis.core.errors import IncorrectUsage
 from schemathesis.generation import GenerationMode
 from schemathesis.graphql import nodes
 from schemathesis.specs.graphql.scalars import CUSTOM_SCALARS, UnknownScalar
+from test.utils import run_given
 
 UNSUPPORTED_SCALAR_SDL = """
 scalar FooBar
@@ -37,16 +40,14 @@ type Query {
 """
     schema = ctx.graphql.load_sdl(raw_schema)
 
-    @given(schema["Query"]["getByDate"].as_strategy())
+    @run_given(schema["Query"]["getByDate"].as_strategy(), max_examples=100)
     def test(case):
         # Then scalars should be properly generated
         assert f'getByDate(value: "{expected}")' in case.body
 
-    test()
 
-
-def test_custom_scalar_in_cli(ctx, testdir, cli, snapshot_cli):
-    schema_file = testdir.make_graphql_schema_file(
+def test_custom_scalar_in_cli(ctx, cli, snapshot_cli):
+    schema_file = ctx.graphql.write_sdl(
         """
 scalar FooBar
 
@@ -54,13 +55,14 @@ type Query {
   getByDate(value: FooBar!): Int!
 }
     """,
+        filename="schema.gql",
     )
     api = ctx.graphql.apps.books()
     assert cli.run(str(schema_file), f"--url={api.schema_url}") == snapshot_cli
 
 
-def test_built_in_scalars_in_cli(ctx, testdir, cli):
-    schema_file = testdir.make_graphql_schema_file(
+def test_built_in_scalars_in_cli(ctx, cli):
+    schema_file = ctx.graphql.write_sdl(
         """
 scalar Date
 scalar Time
@@ -83,6 +85,7 @@ type Query {
   getByBigInt(value: BigInt!): Int!
   getByUUID(value: UUID!): Int!
 }""",
+        filename="schema.gql",
     )
     api = ctx.graphql.apps.books()
     result = cli.run_and_assert(
@@ -140,3 +143,22 @@ def test_unsupported_scalar_is_not_reported_as_impossible_negative(ctx, modes):
 
     with pytest.raises(UnknownScalar, match="Scalar 'FooBar' is not supported"):
         test()
+
+
+@pytest.mark.parametrize(
+    "strategy",
+    [st.nothing(), st.lists(st.just("x"), min_size=10**5).map("".join).map(nodes.String)],
+    ids=["unsatisfiable", "large-base-example"],
+)
+@pytest.mark.snapshot(replace_reproduce_with=True)
+def test_custom_scalar_generation_uses_generic_diagnostics(ctx, cli, snapshot_cli, strategy):
+    schemathesis.graphql.scalar("FooBar", strategy)
+    schema_file = ctx.graphql.write_sdl(UNSUPPORTED_SCALAR_SDL, filename="schema.gql")
+    api = ctx.graphql.apps.books()
+    assert cli.run(str(schema_file), f"--url={api.schema_url}", "--phases=fuzzing", "--mode=positive") == snapshot_cli
+
+
+def test_unknown_scalar_reported_once_per_operation_across_phases(ctx, cli):
+    api = ctx.graphql.apps.use_after_create()
+    result = cli.run(api.schema_url, "--max-examples=5", "--phases=fuzzing,stateful")
+    assert re.findall(r"^_+ (.+?) _+$", result.stdout, re.MULTILINE) == ["Mutation.updateBook", "Query.book"]

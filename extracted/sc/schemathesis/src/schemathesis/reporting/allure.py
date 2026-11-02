@@ -11,7 +11,6 @@ from allure_commons import hookimpl
 from allure_commons.logger import AllureFileLogger
 from allure_commons.model2 import Attachment, Label, Link, StatusDetails, TestResult, TestStepResult
 
-from schemathesis.core.failures import format_failures
 from schemathesis.engine import Status
 from schemathesis.reporting.recorders import grouped_failures_from_recorder
 
@@ -57,7 +56,6 @@ class AllureWriter:
     """Accumulates per-operation TestResult objects and writes Allure JSON files on close()."""
 
     __slots__ = (
-        "_api_title",
         "_attachment_bodies",
         "_config",
         "_elapsed",
@@ -67,6 +65,8 @@ class AllureWriter:
         "_results",
         "_seen_curls",
         "_skip_reasons",
+        "_status_messages",
+        "api_title",
     )
 
     def __init__(
@@ -74,12 +74,13 @@ class AllureWriter:
     ) -> None:
         self._output_dir = Path(output_dir)
         self._config = config
-        self._api_title = api_title
+        self.api_title = api_title
         self._results: dict[str, TestResult] = {}
         self._elapsed: dict[str, float] = {}
         self._failures: dict[str, list[GroupedFailures]] = {}
         self._seen_curls: dict[str, set[str]] = {}
         self._skip_reasons: dict[str, str] = {}
+        self._status_messages: dict[str, str] = {}
         self._attachment_bodies: dict[str, bytes] = {}
         self._output_dir.mkdir(parents=True, exist_ok=True)
         self._logger = AllureFileLogger(str(self._output_dir))
@@ -93,8 +94,8 @@ class AllureWriter:
                 Label(name="framework", value="schemathesis"),
                 Label(name="layer", value="API"),
             ]
-            if self._api_title is not None:
-                labels.append(Label(name="epic", value=self._api_title))
+            if self.api_title is not None:
+                labels.append(Label(name="epic", value=self.api_title))
             result = TestResult(
                 uuid=str(uuid4()),
                 name=label,
@@ -157,19 +158,37 @@ class AllureWriter:
             result.labels = [lbl for lbl in result.labels if lbl.name != "severity"]
             result.labels.append(Label(name="severity", value=worst_severity))
 
-    def write(self, recorder: RecordedScenario, elapsed_sec: float = 0.0, tags: list[str] | None = None) -> None:
+    def write(
+        self,
+        recorder: RecordedScenario,
+        elapsed_sec: float = 0.0,
+        tags: list[str] | None = None,
+        *,
+        status: Status | None = None,
+        message: str | None = None,
+    ) -> None:
         assert self._config is not None
 
         grouped = grouped_failures_from_recorder(recorder)
-        status = Status.FAILURE if grouped else Status.SUCCESS
+        if status is None:
+            status = Status.FAILURE if grouped else Status.SUCCESS
         self.record_scenario(
             label=recorder.label,
             elapsed_sec=elapsed_sec,
             status=status,
             failures=grouped,
-            skip_reason=None,
+            skip_reason=message if status == Status.SKIP else None,
             tags=tags,
         )
+        if message is not None and not grouped and status in (Status.FAILURE, Status.ERROR):
+            self._status_messages.setdefault(recorder.label, message)
+
+    def unskip(self, labels: Iterable[str]) -> None:
+        """Drop skip reasons of the given labels that passed; another scenario tested them."""
+        for label in labels:
+            result = self._results.get(label)
+            if result is not None and result.status == "passed":
+                self._skip_reasons.pop(label, None)
 
     def record_error(self, label: str, message: str) -> None:
         result = self._get_or_create(label)
@@ -203,13 +222,7 @@ class AllureWriter:
                         name=f"Test Case: {group.case_id}" if group.case_id is not None else "Run check",
                         status="failed",
                         statusDetails=StatusDetails(
-                            message=format_failures(
-                                case_id=None,
-                                response=group.response,
-                                failures=group.failures,
-                                curl=group.code_sample,
-                                config=self._config,
-                            ).lstrip()
+                            message=group.format(index=None, curl=group.code_sample, config=self._config).lstrip()
                         ),
                         start=result.start,
                         stop=result.stop,
@@ -217,6 +230,8 @@ class AllureWriter:
                     result.steps.append(step)
             elif label in self._skip_reasons:
                 result.statusDetails = StatusDetails(message=self._skip_reasons[label])
+            elif label in self._status_messages:
+                result.statusDetails = StatusDetails(message=self._status_messages[label])
 
             for attachment in result.attachments:
                 body = self._attachment_bodies.get(attachment.source)
@@ -225,11 +240,11 @@ class AllureWriter:
             self._logger.report_result(result=result)
 
 
-class _AllureCallBuffer:
+class AllureCallBuffer:
     """Captures dynamic allure API calls in xdist workers for cross-process transport.
 
     Implements the same accumulate_* interface as AllureWriter so it can be
-    passed directly to _AllureHookForwarder as a writer substitute.
+    passed directly to AllureHookForwarder as a writer substitute.
     """
 
     __slots__ = ("_calls",)
@@ -257,7 +272,7 @@ class _AllureCallBuffer:
         return self._calls
 
 
-class _AllureHookForwarder:
+class AllureHookForwarder:
     """Per-test-item pluggy hookimpl that routes dynamic allure API calls to AllureWriter instances.
 
     Created fresh per pytest item, registered before the test body runs, unregistered in teardown.
@@ -266,26 +281,26 @@ class _AllureHookForwarder:
 
     __slots__ = ("_label", "_writers")
 
-    def __init__(self, label: str, writers: Sequence[AllureWriter | _AllureCallBuffer]) -> None:
+    def __init__(self, label: str, writers: Sequence[AllureWriter | AllureCallBuffer]) -> None:
         self._label = label
         self._writers = writers
 
-    @hookimpl  # type: ignore[untyped-decorator]
+    @hookimpl
     def attach_data(self, name: str, body: bytes, attachment_type: _HasMimeType | None, extension: str | None) -> None:
         for w in self._writers:
             w.accumulate_attachment(self._label, name, body, attachment_type)
 
-    @hookimpl  # type: ignore[untyped-decorator]
+    @hookimpl
     def add_link(self, url: str, link_type: str, name: str) -> None:
         for w in self._writers:
             w.accumulate_link(self._label, url, link_type, name)
 
-    @hookimpl  # type: ignore[untyped-decorator]
+    @hookimpl
     def add_title(self, test_title: str) -> None:
         for w in self._writers:
             w.accumulate_title(self._label, test_title)
 
-    @hookimpl  # type: ignore[untyped-decorator]
+    @hookimpl
     def add_description(self, test_description: str) -> None:
         for w in self._writers:
             w.accumulate_description(self._label, test_description)

@@ -22,7 +22,7 @@ from schemathesis.engine import events
 from schemathesis.engine.recorder import RecordedScenario, Request, ScenarioRecorder
 
 if TYPE_CHECKING:
-    from typing_extensions import Self
+    from typing import Self
 
     from schemathesis.config import SanitizationConfig
 
@@ -32,12 +32,24 @@ TextOutput = IO[str] | StringIO | Path
 SKIP_FIELDS: dict[str, frozenset[str]] = {
     # `location` and `base_url` can hold credentials or query-string tokens; the generic
     # dataclass serializer doesn't run them through `sanitize_url`, so skip them entirely.
-    # `base_path` is dropped alongside for consistency. `find_operation_by_label` is a callable.
+    # `base_path` is dropped alongside for consistency. `find_operation_by_label` and `status_name_for_code` are callables.
     "LoadingStarted": frozenset({"location"}),
-    "LoadingFinished": frozenset({"schema", "config", "find_operation_by_label", "location", "base_url", "base_path"}),
+    "LoadingFinished": frozenset(
+        {
+            "schema",
+            "title",
+            "config",
+            "find_operation_by_label",
+            "status_name_for_code",
+            "location",
+            "base_url",
+            "base_path",
+        }
+    ),
     "Case": frozenset({"operation"}),
     "NonFatalError": frozenset({"info"}),  # Duplicate of `value`
-    "CheckFailureInfo": frozenset({"code_sample"}),  # Reconstructable from case + interaction
+    # Reconstructable from case + interaction
+    "CheckFailureInfo": frozenset({"code_sample", "steps"}),
 }
 
 # Underscore-prefixed dataclass fields are skipped by default. EXPOSE_PRIVATE_FIELDS
@@ -79,7 +91,7 @@ def serialize(obj: Any, *, sanitization: SanitizationConfig | None = None) -> An
         return None
     if isinstance(obj, Unresolvable):
         return {"$unresolvable": True}
-    if obj is None or isinstance(obj, bool | int | float | str):
+    if obj is None or isinstance(obj, (bool, int, float, str)):
         return obj
     if isinstance(obj, bytes):
         return {"$base64": base64.b64encode(obj).decode("ascii")}
@@ -89,7 +101,7 @@ def serialize(obj: Any, *, sanitization: SanitizationConfig | None = None) -> An
         return {k: serialize(v, sanitization=sanitization) for k, v in obj.items()}
     if isinstance(obj, Mapping):
         return {k: serialize(v, sanitization=sanitization) for k, v in obj.items()}
-    if isinstance(obj, list | tuple):
+    if isinstance(obj, (list, tuple)):
         return [serialize(v, sanitization=sanitization) for v in obj]
     if isinstance(obj, Ok):
         return serialize(obj.ok(), sanitization=sanitization)
@@ -160,6 +172,10 @@ def serialize(obj: Any, *, sanitization: SanitizationConfig | None = None) -> An
             value = serialize(getattr(obj, field.name), sanitization=sanitization)
             if value is not None and value != {} and value != []:
                 dc_data[public_name] = value
+        # A recorded case carries the same credentials as the request sent from it.
+        if sanitization is not None and cls_name == "Case":
+            for name in ("headers", "cookies", "query"):
+                sanitize_value(dc_data.get(name), config=sanitization)
         return dc_data
     return str(obj)
 

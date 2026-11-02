@@ -13,9 +13,12 @@ import warnings
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from schemathesis.core.result import Ok, Result
-from schemathesis.core.transport import USER_AGENT
+from schemathesis.core import SpecificationFeature
+from schemathesis.core.errors import is_read_timeout
+from schemathesis.core.result import Ok
+from schemathesis.core.transport import DEFAULT_RESPONSE_TIMEOUT, USER_AGENT
 from schemathesis.engine import Status, events
+from schemathesis.engine.errors import never_reached_server
 from schemathesis.transport.prepare import get_default_headers
 
 if TYPE_CHECKING:
@@ -37,22 +40,19 @@ class ProbePayload:
 def execute(ctx: EngineContext, phase: Phase) -> EventGenerator:
     """Discover capabilities of the tested app."""
     probes = run(ctx)
-    status = Status.SUCCESS
-    payload: Result[ProbePayload, Exception] | None = None
     for result in probes:
         if isinstance(result.probe, NullByteInHeader) and result.is_failure:
             ctx.schema.adapt_to_null_byte_in_header_failure()
         elif isinstance(result.probe, UnsafePathDecoder) and result.is_failure:
             ctx.schema.adapt_to_path_decoder_rejection()
-        payload = Ok(ProbePayload(probes=probes))
-    cache_report = ctx.cache.run()
-    if cache_report is not None:
-        payload = Ok(ProbePayload(probes=probes, cache=cache_report))
-    yield events.PhaseFinished(phase=phase, status=status, payload=payload)
+    payload = Ok(ProbePayload(probes=probes, cache=ctx.cache.run()))
+    yield events.PhaseFinished(phase=phase, status=Status.SUCCESS, payload=payload)
 
 
 def run(ctx: EngineContext) -> list[ProbeRun]:
     """Run all probes against the given schema."""
+    if not ctx.schema.specification.supports_feature(SpecificationFeature.HTTP_PROBES):
+        return []
     return [send(probe(), ctx) for probe in PROBES]
 
 
@@ -74,7 +74,7 @@ class Probe:
         raise NotImplementedError
 
 
-class ProbeOutcome(str, enum.Enum):
+class ProbeOutcome(enum.StrEnum):
     # Capability is supported
     SUCCESS = "success"
     # Capability is not supported
@@ -192,15 +192,17 @@ def send(probe: Probe, ctx: EngineContext) -> ProbeRun:
             request.headers.setdefault(header, value)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", InsecureRequestWarning)
-            response = session.send(request, timeout=ctx.config.request_timeout or 2)
+            response = session.send(request, timeout=ctx.config.request_timeout or DEFAULT_RESPONSE_TIMEOUT)
     except MissingSchema:
         # In-process ASGI/WSGI testing will have local URLs and requires extra handling
         # which is not currently implemented
         return ProbeRun(probe, ProbeOutcome.SKIP, None, None, None)
     except RequestException as exc:
-        # Consider any network errors as a failed probe
         req = exc.request if isinstance(exc.request, PreparedRequest) else None
-        return ProbeRun(probe, ProbeOutcome.FAILURE, req, None, exc)
+        # A slow or unreachable server says nothing about the capability; other network errors mean it was rejected
+        inconclusive = is_read_timeout(exc) or never_reached_server(exc)
+        outcome = ProbeOutcome.SKIP if inconclusive else ProbeOutcome.FAILURE
+        return ProbeRun(probe, outcome, req, None, exc)
     finally:
         session.close()
     result_type = probe.analyze_response(response)

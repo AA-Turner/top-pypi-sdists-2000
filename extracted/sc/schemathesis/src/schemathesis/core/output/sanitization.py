@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import MutableMapping, Sequence
 from functools import lru_cache
 from typing import TYPE_CHECKING
-from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
+from urllib.parse import quote_plus, unquote_plus, urlsplit, urlunsplit
 
 if TYPE_CHECKING:
     from schemathesis.config import SanitizationConfig
@@ -34,11 +34,11 @@ def sanitize_value(item: object, *, config: SanitizationConfig) -> None:
                 else:
                     item[key] = config.replacement
         for value in item.values():
-            if isinstance(value, dict | list):
+            if isinstance(value, (dict, list)):
                 sanitize_value(value, config=config)
     elif isinstance(item, list):
         for value in item:
-            if isinstance(value, dict | list):
+            if isinstance(value, (dict, list)):
                 sanitize_value(value, config=config)
 
 
@@ -53,6 +53,13 @@ def sanitize_url(url: str, *, config: SanitizationConfig) -> str:
         config.keys_to_sanitize,
         config.sensitive_markers,
     )
+
+
+def sanitized(url: str | None, sanitization_config: SanitizationConfig) -> str | None:
+    # The schema location may be a file path; only URLs can carry credentials.
+    if url is None or not sanitization_config.enabled or not url.startswith(("http://", "https://")):
+        return url
+    return sanitize_url(url, config=sanitization_config)
 
 
 @lru_cache(maxsize=512)
@@ -71,12 +78,16 @@ def _sanitize_url_cached(
     else:
         netloc = parsed.netloc
 
-    # Sanitize query parameters
-    query = parse_qs(parsed.query, keep_blank_values=True)
-    for key in query:
-        if is_sensitive_key(key, keys_to_sanitize=keys_to_sanitize, sensitive_markers=sensitive_markers):
-            query[key] = [replacement]
-    sanitized_query = urlencode(query, doseq=True)
+    # Mask values of sensitive query keys; every other pair stays byte-for-byte as sent
+    pairs = parsed.query.split("&")
+    for index, pair in enumerate(pairs):
+        key, separator, _ = pair.partition("=")
+        # A bare key has no value to mask
+        if separator and is_sensitive_key(
+            unquote_plus(key), keys_to_sanitize=keys_to_sanitize, sensitive_markers=sensitive_markers
+        ):
+            pairs[index] = f"{key}={quote_plus(replacement)}"
+    sanitized_query = "&".join(pairs)
 
     # Reconstruct the URL
     sanitized_url_parts = parsed._replace(netloc=netloc, query=sanitized_query)
