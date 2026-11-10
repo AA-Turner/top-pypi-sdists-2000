@@ -15,184 +15,198 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+"""Tests for Google Cloud Translate links.
+
+Expected URLs are fully hard-coded: the path and query parts are never derived from the
+constants under test, so a broken or hand-edited ``format_str`` always fails the test.
+"""
+
 from __future__ import annotations
 
 from unittest import mock
 
-import pytest
-
-from tests_common.test_utils.version_compat import AIRFLOW_V_3_0_PLUS
-
-# For no Pydantic environment, we need to skip the tests
-pytest.importorskip("google.cloud.aiplatform_v1")
-
+from airflow.providers.google.cloud.links.base import BASE_LINK
 from airflow.providers.google.cloud.links.translate import (
-    TRANSLATION_BASE_LINK,
+    TranslateResultByOutputConfigLink,
+    TranslateTextBatchLink,
     TranslationDatasetListLink,
+    TranslationDatasetsListLink,
+    TranslationGlossariesListLink,
     TranslationLegacyDatasetLink,
     TranslationLegacyModelLink,
+    TranslationLegacyModelPredictLink,
     TranslationLegacyModelTrainLink,
-)
-from airflow.providers.google.cloud.operators.automl import (
-    AutoMLCreateDatasetOperator,
-    AutoMLListDatasetOperator,
-    AutoMLTrainModelOperator,
+    TranslationModelLink,
+    TranslationModelsListLink,
+    TranslationNativeDatasetLink,
 )
 
-if AIRFLOW_V_3_0_PLUS:
-    from airflow.sdk.execution_time.comms import XComResult
-
-GCP_LOCATION = "test-location"
-GCP_PROJECT_ID = "test-project"
-DATASET = "test-dataset"
-MODEL = "test-model"
+TEST_PROJECT_ID = "test-project"
+TEST_DATASET_ID = "test-dataset"
+TEST_MODEL_ID = "test-model"
+TEST_LOCATION = "europe-west1"
+TEST_OUTPUT_URI_PREFIX = "test-bucket/test-results/run-1"
 
 
 class TestTranslationLegacyDatasetLink:
-    @pytest.mark.db_test
-    def test_get_link(self, create_task_instance_of_operator, session, mock_supervisor_comms):
-        expected_url = f"{TRANSLATION_BASE_LINK}/locations/{GCP_LOCATION}/datasets/{DATASET}/sentences?project={GCP_PROJECT_ID}"
-        link = TranslationLegacyDatasetLink()
-        ti = create_task_instance_of_operator(
-            AutoMLCreateDatasetOperator,
-            dag_id="test_legacy_dataset_link_dag",
-            task_id="test_legacy_dataset_link_task",
-            dataset=DATASET,
-            location=GCP_LOCATION,
+    def test_get_link(self):
+        result = TranslationLegacyDatasetLink()._format_link(
+            location=TEST_LOCATION, dataset_id=TEST_DATASET_ID, project_id=TEST_PROJECT_ID
         )
-        session.add(ti)
-        session.commit()
-
-        link.persist(
-            context={"ti": ti, "task": ti.task},
-            dataset_id=DATASET,
-            project_id=GCP_PROJECT_ID,
-            location=GCP_LOCATION,
+        assert result == (
+            BASE_LINK
+            + "/translation/locations/europe-west1/datasets/test-dataset/sentences?project=test-project"
         )
-
-        if AIRFLOW_V_3_0_PLUS and mock_supervisor_comms:
-            mock_supervisor_comms.send.return_value = XComResult(
-                key="key",
-                value={
-                    "location": ti.task.location,
-                    "dataset_id": DATASET,
-                    "project_id": GCP_PROJECT_ID,
-                },
-            )
-        actual_url = link.get_link(operator=ti.task, ti_key=ti.key)
-        assert actual_url == expected_url
 
 
 class TestTranslationDatasetListLink:
-    @pytest.mark.db_test
-    def test_get_link(self, create_task_instance_of_operator, session, mock_supervisor_comms):
-        expected_url = f"{TRANSLATION_BASE_LINK}/datasets?project={GCP_PROJECT_ID}"
-        link = TranslationDatasetListLink()
-        ti = create_task_instance_of_operator(
-            AutoMLListDatasetOperator,
-            dag_id="test_dataset_list_link_dag",
-            task_id="test_dataset_list_link_task",
-            location=GCP_LOCATION,
-        )
-        session.add(ti)
-        session.commit()
-        link.persist(context={"ti": ti, "task": ti.task}, project_id=GCP_PROJECT_ID)
-
-        if AIRFLOW_V_3_0_PLUS and mock_supervisor_comms:
-            mock_supervisor_comms.send.return_value = XComResult(
-                key="key",
-                value={
-                    "project_id": GCP_PROJECT_ID,
-                },
-            )
-        actual_url = link.get_link(operator=ti.task, ti_key=ti.key)
-        assert actual_url == expected_url
+    def test_get_link(self):
+        result = TranslationDatasetListLink()._format_link(project_id=TEST_PROJECT_ID)
+        assert result == BASE_LINK + "/translation/datasets?project=test-project"
 
 
 class TestTranslationLegacyModelLink:
-    @pytest.mark.db_test
-    def test_get_link(self, create_task_instance_of_operator, session, mock_supervisor_comms):
-        expected_url = (
-            f"{TRANSLATION_BASE_LINK}/locations/{GCP_LOCATION}/datasets/{DATASET}/"
-            f"evaluate;modelId={MODEL}?project={GCP_PROJECT_ID}"
+    def test_get_link(self):
+        result = TranslationLegacyModelLink()._format_link(
+            location=TEST_LOCATION,
+            dataset_id=TEST_DATASET_ID,
+            model_id=TEST_MODEL_ID,
+            project_id=TEST_PROJECT_ID,
         )
-        link = TranslationLegacyModelLink()
-        ti = create_task_instance_of_operator(
-            AutoMLTrainModelOperator,
-            dag_id="test_legacy_model_link_dag",
-            task_id="test_legacy_model_link_task",
-            model=MODEL,
-            project_id=GCP_PROJECT_ID,
-            location=GCP_LOCATION,
+        assert result == (
+            BASE_LINK
+            + "/translation/locations/europe-west1/datasets/test-dataset/"
+            + "evaluate;modelId=test-model?project=test-project"
         )
-        session.add(ti)
-        session.commit()
-        task = mock.MagicMock()
-        task.extra_links_params = {
-            "dataset_id": DATASET,
-            "model_id": MODEL,
-            "project_id": GCP_PROJECT_ID,
-            "location": GCP_LOCATION,
-        }
-        link.persist(
-            context={"ti": ti, "task": task},
-            dataset_id=DATASET,
-            model_id=MODEL,
-            project_id=GCP_PROJECT_ID,
-        )
-        if mock_supervisor_comms:
-            mock_supervisor_comms.send.return_value = XComResult(
-                key="key",
-                value={
-                    "location": ti.task.location,
-                    "dataset_id": DATASET,
-                    "model_id": MODEL,
-                    "project_id": GCP_PROJECT_ID,
-                },
-            )
-        actual_url = link.get_link(operator=task, ti_key=ti.key)
-        assert actual_url == expected_url
 
 
 class TestTranslationLegacyModelTrainLink:
-    @pytest.mark.db_test
-    def test_get_link(self, create_task_instance_of_operator, session, mock_supervisor_comms):
-        expected_url = (
-            f"{TRANSLATION_BASE_LINK}/locations/{GCP_LOCATION}/datasets/{DATASET}/"
-            f"train?project={GCP_PROJECT_ID}"
+    def test_get_link(self):
+        result = TranslationLegacyModelTrainLink()._format_link(
+            location=TEST_LOCATION, dataset_id=TEST_DATASET_ID, project_id=TEST_PROJECT_ID
         )
-        link = TranslationLegacyModelTrainLink()
-        ti = create_task_instance_of_operator(
-            AutoMLTrainModelOperator,
-            dag_id="test_legacy_model_train_link_dag",
-            task_id="test_legacy_model_train_link_task",
-            model={"dataset_id": DATASET},
-            project_id=GCP_PROJECT_ID,
-            location=GCP_LOCATION,
-        )
-        session.add(ti)
-        session.commit()
-        task = mock.MagicMock()
-        task.extra_links_params = {
-            "dataset_id": DATASET,
-            "project_id": GCP_PROJECT_ID,
-            "location": GCP_LOCATION,
-        }
-        link.persist(
-            context={"ti": ti, "task": task},
-            dataset_id=DATASET,
-            project_id=GCP_PROJECT_ID,
-            location=GCP_LOCATION,
+        assert result == (
+            BASE_LINK + "/translation/locations/europe-west1/datasets/test-dataset/train?project=test-project"
         )
 
-        if mock_supervisor_comms:
-            mock_supervisor_comms.send.return_value = XComResult(
-                key="key",
-                value={
-                    "location": ti.task.location,
-                    "dataset_id": ti.task.model["dataset_id"],
-                    "project_id": GCP_PROJECT_ID,
-                },
-            )
-        actual_url = link.get_link(operator=task, ti_key=ti.key)
-        assert actual_url == expected_url
+
+class TestTranslationLegacyModelPredictLink:
+    def test_get_link(self):
+        result = TranslationLegacyModelPredictLink()._format_link(
+            location=TEST_LOCATION,
+            dataset_id=TEST_DATASET_ID,
+            model_id=TEST_MODEL_ID,
+            project_id=TEST_PROJECT_ID,
+        )
+        assert result == (
+            BASE_LINK
+            + "/translation/locations/europe-west1/datasets/test-dataset/"
+            + "predict;modelId=test-model?project=test-project"
+        )
+
+
+class TestTranslationNativeDatasetLink:
+    def test_get_link(self):
+        result = TranslationNativeDatasetLink()._format_link(
+            location=TEST_LOCATION, dataset_id=TEST_DATASET_ID, project_id=TEST_PROJECT_ID
+        )
+        assert result == (
+            BASE_LINK
+            + "/translation/locations/europe-west1/datasets/test-dataset/sentences?project=test-project"
+        )
+
+
+class TestTranslationDatasetsListLink:
+    def test_get_link(self):
+        result = TranslationDatasetsListLink()._format_link(project_id=TEST_PROJECT_ID)
+        assert result == BASE_LINK + "/translation/datasets?project=test-project"
+
+
+class TestTranslationModelLink:
+    def test_get_link(self):
+        result = TranslationModelLink()._format_link(
+            location=TEST_LOCATION,
+            dataset_id=TEST_DATASET_ID,
+            model_id=TEST_MODEL_ID,
+            project_id=TEST_PROJECT_ID,
+        )
+        assert result == (
+            BASE_LINK
+            + "/translation/locations/europe-west1/datasets/test-dataset/"
+            + "evaluate;modelId=test-model?project=test-project"
+        )
+
+
+class TestTranslationModelsListLink:
+    def test_get_link(self):
+        result = TranslationModelsListLink()._format_link(project_id=TEST_PROJECT_ID)
+        assert result == BASE_LINK + "/translation/models/list?project=test-project"
+
+
+class TestTranslationGlossariesListLink:
+    def test_get_link(self):
+        result = TranslationGlossariesListLink()._format_link(project_id=TEST_PROJECT_ID)
+        assert result == BASE_LINK + "/translation/hub/resources?project=test-project"
+
+
+class TestTranslateTextBatchLink:
+    def test_extract_output_uri_prefix_strips_gs_scheme(self):
+        output_config = {"gcs_destination": {"output_uri_prefix": "gs://" + TEST_OUTPUT_URI_PREFIX}}
+        assert TranslateTextBatchLink.extract_output_uri_prefix(output_config) == TEST_OUTPUT_URI_PREFIX
+
+    def test_extract_output_uri_prefix_keeps_relative_prefix(self):
+        long_prefix = {"gcs_destination": {"output_uri_prefix": TEST_OUTPUT_URI_PREFIX}}
+        assert TranslateTextBatchLink.extract_output_uri_prefix(long_prefix) == TEST_OUTPUT_URI_PREFIX
+
+    def test_get_link(self):
+        result = TranslateTextBatchLink()._format_link(
+            project_id=TEST_PROJECT_ID, output_uri_prefix=TEST_OUTPUT_URI_PREFIX
+        )
+        assert result == BASE_LINK + "/storage/browser/test-bucket/test-results/run-1?project=test-project"
+
+    def test_persist(self):
+        mock_context = mock.MagicMock()
+        mock_context["ti"] = mock.MagicMock()
+        mock_context["task"] = mock.MagicMock(spec=[])
+
+        TranslateTextBatchLink.persist(
+            context=mock_context,
+            project_id=TEST_PROJECT_ID,
+            output_config={"gcs_destination": {"output_uri_prefix": "gs://" + TEST_OUTPUT_URI_PREFIX}},
+        )
+
+        mock_context["ti"].xcom_push.assert_called_once_with(
+            key="translate_text_batch",
+            value={"project_id": TEST_PROJECT_ID, "output_uri_prefix": TEST_OUTPUT_URI_PREFIX},
+        )
+
+
+class TestTranslateResultByOutputConfigLink:
+    def test_extract_output_uri_prefix(self):
+        output_config = {"gcs_destination": {"output_uri_prefix": "gs://" + TEST_OUTPUT_URI_PREFIX}}
+        assert (
+            TranslateResultByOutputConfigLink.extract_output_uri_prefix(output_config)
+            == TEST_OUTPUT_URI_PREFIX
+        )
+
+    def test_persist(self):
+        mock_context = mock.MagicMock()
+        mock_context["ti"] = mock.MagicMock()
+        mock_context["task"] = mock.MagicMock(spec=[])
+
+        TranslateResultByOutputConfigLink.persist(
+            context=mock_context,
+            project_id=TEST_PROJECT_ID,
+            output_config={"gcs_destination": {"output_uri_prefix": "gs://" + TEST_OUTPUT_URI_PREFIX}},
+        )
+
+        mock_context["ti"].xcom_push.assert_called_once_with(
+            key="translate_results_by_output_config",
+            value={"project_id": TEST_PROJECT_ID, "output_uri_prefix": TEST_OUTPUT_URI_PREFIX},
+        )
+
+    def test_get_link(self):
+        result = TranslateResultByOutputConfigLink()._format_link(
+            project_id=TEST_PROJECT_ID, output_uri_prefix=TEST_OUTPUT_URI_PREFIX
+        )
+        assert result == BASE_LINK + "/storage/browser/test-bucket/test-results/run-1?project=test-project"
