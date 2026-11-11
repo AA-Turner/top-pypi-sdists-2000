@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import typer
 
 app = typer.Typer()
@@ -6,11 +8,11 @@ app = typer.Typer()
 @app.command()
 def main(
     name: str,
-    lastname: str = typer.Option("", help="Last name of person to greet."),
-    formal: bool = typer.Option(False, help="Say hi formally."),
+    lastname: Annotated[str, typer.Option(help="Last name of person to greet.")] = "",
+    formal: Annotated[bool, typer.Option(help="Say hi formally.")] = False,
 ):
     """
-    Say hi to NAME, optionally with a --lastname.
+    Say hi to 'name', optionally with a --lastname.
 
     If --formal is used, say hi very formally.
     """

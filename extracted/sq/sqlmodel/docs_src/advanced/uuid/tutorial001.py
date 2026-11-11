@@ -1,5 +1,4 @@
 import uuid
-from typing import Union
 
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
@@ -8,7 +7,7 @@ class Hero(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str = Field(index=True)
     secret_name: str
-    age: Union[int, None] = Field(default=None, index=True)
+    age: int | None = Field(default=None, index=True)
 
 
 sqlite_file_name = "database.db"

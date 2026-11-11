@@ -1,7 +1,9 @@
+from typing import Annotated
+
 import typer
 
 
-def main(name: str = typer.Argument()):
+def main(name: Annotated[str, typer.Argument()]):
     print(f"Hello {name}")
 
 

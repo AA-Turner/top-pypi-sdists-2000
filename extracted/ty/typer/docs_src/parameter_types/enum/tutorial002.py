@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Annotated
 
 import typer
 
@@ -14,7 +15,9 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    network: NeuralNetwork = typer.Option(NeuralNetwork.simple, case_sensitive=False),
+    network: Annotated[
+        NeuralNetwork, typer.Option(case_sensitive=False)
+    ] = NeuralNetwork.simple,
 ):
     print(f"Training neural network of type: {network.value}")
 

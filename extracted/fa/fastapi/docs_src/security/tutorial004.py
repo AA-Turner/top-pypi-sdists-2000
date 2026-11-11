@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Union
+from typing import Annotated
 
 import jwt
 from fastapi import Depends, FastAPI, HTTPException, status
@@ -32,14 +32,14 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: Union[str, None] = None
+    username: str | None = None
 
 
 class User(BaseModel):
     username: str
-    email: Union[str, None] = None
-    full_name: Union[str, None] = None
-    disabled: Union[bool, None] = None
+    email: str | None = None
+    full_name: str | None = None
+    disabled: bool | None = None
 
 
 class UserInDB(User):
@@ -47,6 +47,8 @@ class UserInDB(User):
 
 
 password_hash = PasswordHash.recommended()
+
+DUMMY_HASH = password_hash.hash("dummypassword")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -70,13 +72,14 @@ def get_user(db, username: str):
 def authenticate_user(fake_db, username: str, password: str):
     user = get_user(fake_db, username)
     if not user:
+        verify_password(password, DUMMY_HASH)
         return False
     if not verify_password(password, user.hashed_password):
         return False
     return user
 
 
-def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -87,7 +90,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     return encoded_jwt
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -107,7 +110,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return user
 
 
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
+async def get_current_active_user(
+    current_user: Annotated[User, Depends(get_current_user)],
+):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
@@ -115,7 +120,7 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
 
 @app.post("/token")
 async def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(),
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
     user = authenticate_user(fake_users_db, form_data.username, form_data.password)
     if not user:
@@ -131,11 +136,15 @@ async def login_for_access_token(
     return Token(access_token=access_token, token_type="bearer")
 
 
-@app.get("/users/me/", response_model=User)
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
+@app.get("/users/me/")
+async def read_users_me(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+) -> User:
     return current_user
 
 
 @app.get("/users/me/items/")
-async def read_own_items(current_user: User = Depends(get_current_active_user)):
+async def read_own_items(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+):
     return [{"item_id": "Foo", "owner": current_user.username}]

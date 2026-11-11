@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import FastAPI, Form
 from pydantic import BaseModel
 
@@ -10,5 +12,5 @@ class FormData(BaseModel):
 
 
 @app.post("/login/")
-async def login(data: FormData = Form()):
+async def login(data: Annotated[FormData, Form()]):
     return data

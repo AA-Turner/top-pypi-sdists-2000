@@ -1,4 +1,4 @@
-from typing import List
+from typing import Annotated
 
 import typer
 from rich.console import Console
@@ -12,7 +12,7 @@ valid_completion_items = [
 err_console = Console(stderr=True)
 
 
-def complete_name(args: List[str], incomplete: str):
+def complete_name(args: list[str], incomplete: str):
     err_console.print(f"{args}")
     for name, help_text in valid_completion_items:
         if name.startswith(incomplete):
@@ -24,9 +24,10 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    name: List[str] = typer.Option(
-        ["World"], help="The name to say hi to.", autocompletion=complete_name
-    ),
+    name: Annotated[
+        list[str],
+        typer.Option(help="The name to say hi to.", autocompletion=complete_name),
+    ] = ["World"],
 ):
     for n in name:
         print(f"Hello {n}")

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Annotated
 
 import typer
 
@@ -7,9 +7,9 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    names: Tuple[str, str, str] = typer.Argument(
-        ("Harry", "Hermione", "Ron"), help="Select 3 characters to play with"
-    ),
+    names: Annotated[
+        tuple[str, str, str], typer.Argument(help="Select 3 characters to play with")
+    ] = ("Harry", "Hermione", "Ron"),
 ):
     for name in names:
         print(f"Hello {name}")

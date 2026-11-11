@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Annotated
 
 import typer
 
@@ -15,10 +15,10 @@ def version_callback(value: bool):
 
 @app.command()
 def main(
-    name: str = typer.Option("World"),
-    version: Optional[bool] = typer.Option(
-        None, "--version", callback=version_callback
-    ),
+    name: Annotated[str, typer.Option()] = "World",
+    version: Annotated[
+        bool | None, typer.Option("--version", callback=version_callback)
+    ] = None,
 ):
     print(f"Hello {name}")
 

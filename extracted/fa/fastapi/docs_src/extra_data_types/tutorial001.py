@@ -1,5 +1,5 @@
 from datetime import datetime, time, timedelta
-from typing import Union
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import Body, FastAPI
@@ -10,10 +10,10 @@ app = FastAPI()
 @app.put("/items/{item_id}")
 async def read_items(
     item_id: UUID,
-    start_datetime: datetime = Body(),
-    end_datetime: datetime = Body(),
-    process_after: timedelta = Body(),
-    repeat_at: Union[time, None] = Body(default=None),
+    start_datetime: Annotated[datetime, Body()],
+    end_datetime: Annotated[datetime, Body()],
+    process_after: Annotated[timedelta, Body()],
+    repeat_at: Annotated[time | None, Body()] = None,
 ):
     start_process = start_datetime + process_after
     duration = end_datetime - start_process

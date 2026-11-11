@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import Annotated
 
 import typer
 
@@ -14,7 +14,7 @@ app = typer.Typer()
 
 
 @app.command()
-def main(groceries: List[Food] = typer.Option([Food.food_1, Food.food_3])):
+def main(groceries: Annotated[list[Food], typer.Option()] = [Food.food_1, Food.food_3]):
     print(f"Buying groceries: {', '.join([f.value for f in groceries])}")
 
 

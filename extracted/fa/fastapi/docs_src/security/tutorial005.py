@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import List, Union
+from typing import Annotated
 
 import jwt
 from fastapi import Depends, FastAPI, HTTPException, Security, status
@@ -43,15 +43,15 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: Union[str, None] = None
-    scopes: List[str] = []
+    username: str | None = None
+    scopes: list[str] = []
 
 
 class User(BaseModel):
     username: str
-    email: Union[str, None] = None
-    full_name: Union[str, None] = None
-    disabled: Union[bool, None] = None
+    email: str | None = None
+    full_name: str | None = None
+    disabled: bool | None = None
 
 
 class UserInDB(User):
@@ -59,6 +59,8 @@ class UserInDB(User):
 
 
 password_hash = PasswordHash.recommended()
+
+DUMMY_HASH = password_hash.hash("dummypassword")
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="token",
@@ -85,13 +87,14 @@ def get_user(db, username: str):
 def authenticate_user(fake_db, username: str, password: str):
     user = get_user(fake_db, username)
     if not user:
+        verify_password(password, DUMMY_HASH)
         return False
     if not verify_password(password, user.hashed_password):
         return False
     return user
 
 
-def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -103,7 +106,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 
 
 async def get_current_user(
-    security_scopes: SecurityScopes, token: str = Depends(oauth2_scheme)
+    security_scopes: SecurityScopes, token: Annotated[str, Depends(oauth2_scheme)]
 ):
     if security_scopes.scopes:
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
@@ -116,7 +119,7 @@ async def get_current_user(
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
+        username = payload.get("sub")
         if username is None:
             raise credentials_exception
         scope: str = payload.get("scope", "")
@@ -138,7 +141,7 @@ async def get_current_user(
 
 
 async def get_current_active_user(
-    current_user: User = Security(get_current_user, scopes=["me"]),
+    current_user: Annotated[User, Security(get_current_user, scopes=["me"])],
 ):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
@@ -147,7 +150,7 @@ async def get_current_active_user(
 
 @app.post("/token")
 async def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(),
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
     user = authenticate_user(fake_users_db, form_data.username, form_data.password)
     if not user:
@@ -160,18 +163,20 @@ async def login_for_access_token(
     return Token(access_token=access_token, token_type="bearer")
 
 
-@app.get("/users/me/", response_model=User)
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
+@app.get("/users/me/")
+async def read_users_me(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+) -> User:
     return current_user
 
 
 @app.get("/users/me/items/")
 async def read_own_items(
-    current_user: User = Security(get_current_active_user, scopes=["items"]),
+    current_user: Annotated[User, Security(get_current_active_user, scopes=["items"])],
 ):
     return [{"item_id": "Foo", "owner": current_user.username}]
 
 
 @app.get("/status/")
-async def read_system_status(current_user: User = Depends(get_current_user)):
+async def read_system_status(current_user: Annotated[User, Depends(get_current_user)]):
     return {"status": "ok"}

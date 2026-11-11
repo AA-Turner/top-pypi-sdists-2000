@@ -1,26 +1,24 @@
-from typing import List, Optional
-
 from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, select, text
 
 
 class Team(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
     headquarters: str
 
-    heroes: List["Hero"] = Relationship(back_populates="team", passive_deletes="all")
+    heroes: list["Hero"] = Relationship(back_populates="team", passive_deletes="all")
 
 
 class Hero(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
     secret_name: str
-    age: Optional[int] = Field(default=None, index=True)
+    age: int | None = Field(default=None, index=True)
 
-    team_id: Optional[int] = Field(
+    team_id: int | None = Field(
         default=None, foreign_key="team.id", ondelete="SET NULL"
     )
-    team: Optional[Team] = Relationship(back_populates="heroes")
+    team: Team | None = Relationship(back_populates="heroes")
 
 
 sqlite_file_name = "database.db"
@@ -31,8 +29,9 @@ engine = create_engine(sqlite_url, echo=True)
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
-    with engine.connect() as connection:
-        connection.execute(text("PRAGMA foreign_keys=ON"))  # for SQLite only
+    if engine.dialect.name == "sqlite":
+        with engine.connect() as connection:
+            connection.execute(text("PRAGMA foreign_keys=ON"))
 
 
 def create_heroes():

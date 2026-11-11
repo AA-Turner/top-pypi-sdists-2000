@@ -1,10 +1,12 @@
+from typing import Annotated
+
 import typer
 
 app = typer.Typer()
 
 
 @app.command()
-def main(verbose: int = typer.Option(0, "--verbose", "-v", count=True)):
+def main(verbose: Annotated[int, typer.Option("--verbose", "-v", count=True)] = 0):
     print(f"Verbose level is {verbose}")
 
 

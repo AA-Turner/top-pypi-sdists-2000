@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import typer
 
 app = typer.Typer(rich_markup_mode="rich")
@@ -5,9 +7,9 @@ app = typer.Typer(rich_markup_mode="rich")
 
 @app.command()
 def create(
-    username: str = typer.Argument(
-        ..., help="The username to be [green]created[/green]"
-    ),
+    username: Annotated[
+        str, typer.Argument(help="The username to be [green]created[/green]")
+    ],
 ):
     """
     [bold green]Create[/bold green] a new [italic]shiny[/italic] user. :sparkles:
@@ -17,12 +19,14 @@ def create(
     print(f"Creating user: {username}")
 
 
-@app.command(help="[bold red]Delete[/bold red] a user with [italic]USERNAME[/italic].")
+@app.command(help="[bold red]Delete[/bold red] a user with [italic]username[/italic].")
 def delete(
-    username: str = typer.Argument(..., help="The username to be [red]deleted[/red]"),
-    force: bool = typer.Option(
-        False, help="Force the [bold red]deletion[/bold red] :boom:"
-    ),
+    username: Annotated[
+        str, typer.Argument(help="The username to be [red]deleted[/red]")
+    ],
+    force: Annotated[
+        bool, typer.Option(help="Force the [bold red]deletion[/bold red] :boom:")
+    ] = False,
 ):
     """
     Some internal utility function to delete.

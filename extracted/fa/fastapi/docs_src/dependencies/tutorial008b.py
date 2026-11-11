@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import Depends, FastAPI, HTTPException
 
 app = FastAPI()
@@ -21,7 +23,7 @@ def get_username():
 
 
 @app.get("/items/{item_id}")
-def get_item(item_id: str, username: str = Depends(get_username)):
+def get_item(item_id: str, username: Annotated[str, Depends(get_username)]):
     if item_id not in data:
         raise HTTPException(status_code=404, detail="Item not found")
     item = data[item_id]

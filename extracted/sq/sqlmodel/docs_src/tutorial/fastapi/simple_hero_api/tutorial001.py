@@ -1,14 +1,12 @@
-from typing import Optional
-
 from fastapi import FastAPI
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 
 class Hero(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
     secret_name: str
-    age: Optional[int] = Field(default=None, index=True)
+    age: int | None = Field(default=None, index=True)
 
 
 sqlite_file_name = "database.db"

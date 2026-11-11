@@ -1,11 +1,14 @@
+from typing import Annotated, Literal
+
 import typer
-from typing_extensions import Literal
 
 app = typer.Typer()
 
 
 @app.command()
-def main(network: Literal["simple", "conv", "lstm"] = typer.Option("simple")):
+def main(
+    network: Annotated[Literal["simple", "conv", "lstm"], typer.Option()] = "simple",
+):
     print(f"Training neural network of type: {network}")
 
 

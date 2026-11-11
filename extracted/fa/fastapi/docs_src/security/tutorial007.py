@@ -1,4 +1,5 @@
 import secrets
+from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -8,7 +9,9 @@ app = FastAPI()
 security = HTTPBasic()
 
 
-def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
+def get_current_username(
+    credentials: Annotated[HTTPBasicCredentials, Depends(security)],
+):
     current_username_bytes = credentials.username.encode("utf8")
     correct_username_bytes = b"stanleyjobson"
     is_correct_username = secrets.compare_digest(
@@ -29,5 +32,5 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
 
 
 @app.get("/users/me")
-def read_current_user(username: str = Depends(get_current_username)):
+def read_current_user(username: Annotated[str, Depends(get_current_username)]):
     return {"username": username}

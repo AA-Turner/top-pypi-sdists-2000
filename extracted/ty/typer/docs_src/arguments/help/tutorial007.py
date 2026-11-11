@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import typer
 
 app = typer.Typer()
@@ -5,16 +7,17 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    name: str = typer.Argument(..., help="Who to greet"),
-    lastname: str = typer.Argument(
-        "", help="The last name", rich_help_panel="Secondary Arguments"
-    ),
-    age: str = typer.Argument(
-        "", help="The user's age", rich_help_panel="Secondary Arguments"
-    ),
+    name: Annotated[str, typer.Argument(help="Who to greet")],
+    lastname: Annotated[
+        str, typer.Argument(help="The last name", rich_help_panel="Secondary Arguments")
+    ] = "",
+    age: Annotated[
+        str,
+        typer.Argument(help="The user's age", rich_help_panel="Secondary Arguments"),
+    ] = "",
 ):
     """
-    Say hi to NAME very gently, like Dirk.
+    Say hi to 'name' very gently, like Dirk.
     """
     print(f"Hello {name}")
 

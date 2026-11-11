@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import typer
 
 app = typer.Typer(help="Awesome CLI user manager.")
@@ -6,7 +8,7 @@ app = typer.Typer(help="Awesome CLI user manager.")
 @app.command()
 def create(username: str):
     """
-    Create a new user with USERNAME.
+    Create a new user with username.
     """
     print(f"Creating user: {username}")
 
@@ -14,14 +16,16 @@ def create(username: str):
 @app.command()
 def delete(
     username: str,
-    force: bool = typer.Option(
-        ...,
-        prompt="Are you sure you want to delete the user?",
-        help="Force deletion without confirmation.",
-    ),
+    force: Annotated[
+        bool,
+        typer.Option(
+            prompt="Are you sure you want to delete the user?",
+            help="Force deletion without confirmation.",
+        ),
+    ],
 ):
     """
-    Delete a user with USERNAME.
+    Delete a user with username.
 
     If --force is not used, will ask for confirmation.
     """
@@ -33,11 +37,13 @@ def delete(
 
 @app.command()
 def delete_all(
-    force: bool = typer.Option(
-        ...,
-        prompt="Are you sure you want to delete ALL users?",
-        help="Force deletion without confirmation.",
-    ),
+    force: Annotated[
+        bool,
+        typer.Option(
+            prompt="Are you sure you want to delete ALL users?",
+            help="Force deletion without confirmation.",
+        ),
+    ],
 ):
     """
     Delete ALL users in the database.

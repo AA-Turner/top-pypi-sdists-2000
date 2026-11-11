@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Annotated
 
 import typer
 
@@ -7,7 +7,7 @@ app = typer.Typer()
 
 
 @app.command()
-def main(config: Optional[Path] = typer.Option(None)):
+def main(config: Annotated[Path | None, typer.Option()] = None):
     if config is None:
         print("No config file")
         raise typer.Abort()

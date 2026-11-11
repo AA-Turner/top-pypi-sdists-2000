@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import typer
 
 valid_names = ["Camila", "Carlos", "Sebastian"]
@@ -16,9 +18,9 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    name: str = typer.Option(
-        "World", help="The name to say hi to.", autocompletion=complete_name
-    ),
+    name: Annotated[
+        str, typer.Option(help="The name to say hi to.", autocompletion=complete_name)
+    ] = "World",
 ):
     print(f"Hello {name}")
 

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Annotated
 
 from fastapi import FastAPI, HTTPException, Query
 from sqlmodel import Field, Session, SQLModel, create_engine, select
@@ -7,11 +7,11 @@ from sqlmodel import Field, Session, SQLModel, create_engine, select
 class HeroBase(SQLModel):
     name: str = Field(index=True)
     secret_name: str
-    age: Optional[int] = Field(default=None, index=True)
+    age: int | None = Field(default=None, index=True)
 
 
 class Hero(HeroBase, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
 
 
 class HeroCreate(HeroBase):
@@ -23,9 +23,9 @@ class HeroPublic(HeroBase):
 
 
 class HeroUpdate(SQLModel):
-    name: Optional[str] = None
-    secret_name: Optional[str] = None
-    age: Optional[int] = None
+    name: str | None = None
+    secret_name: str | None = None
+    age: int | None = None
 
 
 sqlite_file_name = "database.db"
@@ -57,8 +57,8 @@ def create_hero(hero: HeroCreate):
         return db_hero
 
 
-@app.get("/heroes/", response_model=List[HeroPublic])
-def read_heroes(offset: int = 0, limit: int = Query(default=100, le=100)):
+@app.get("/heroes/", response_model=list[HeroPublic])
+def read_heroes(offset: int = 0, limit: Annotated[int, Query(le=100)] = 100):
     with Session(engine) as session:
         heroes = session.exec(select(Hero).offset(offset).limit(limit)).all()
         return heroes

@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 from fastapi import FastAPI
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
@@ -7,11 +5,11 @@ from sqlmodel import Field, Session, SQLModel, create_engine, select
 class HeroBase(SQLModel):
     name: str = Field(index=True)
     secret_name: str
-    age: Optional[int] = Field(default=None, index=True)
+    age: int | None = Field(default=None, index=True)
 
 
 class Hero(HeroBase, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
 
 
 class HeroCreate(HeroBase):
@@ -51,7 +49,7 @@ def create_hero(hero: HeroCreate):
         return db_hero
 
 
-@app.get("/heroes/", response_model=List[HeroPublic])
+@app.get("/heroes/", response_model=list[HeroPublic])
 def read_heroes():
     with Session(engine) as session:
         heroes = session.exec(select(Hero)).all()

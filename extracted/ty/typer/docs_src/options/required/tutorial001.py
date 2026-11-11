@@ -1,10 +1,12 @@
+from typing import Annotated
+
 import typer
 
 app = typer.Typer()
 
 
 @app.command()
-def main(name: str, lastname: str = typer.Option()):
+def main(name: str, lastname: Annotated[str, typer.Option()]):
     print(f"Hello {name} {lastname}")
 
 

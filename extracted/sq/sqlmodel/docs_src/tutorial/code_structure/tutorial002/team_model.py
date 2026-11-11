@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -7,8 +7,8 @@ if TYPE_CHECKING:
 
 
 class Team(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
     headquarters: str
 
-    heroes: List["Hero"] = Relationship(back_populates="team")
+    heroes: list["Hero"] = Relationship(back_populates="team")

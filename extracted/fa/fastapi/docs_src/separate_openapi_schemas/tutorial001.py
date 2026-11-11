@@ -1,12 +1,10 @@
-from typing import List, Union
-
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 
 class Item(BaseModel):
     name: str
-    description: Union[str, None] = None
+    description: str | None = None
 
 
 app = FastAPI()
@@ -18,7 +16,7 @@ def create_item(item: Item):
 
 
 @app.get("/items/")
-def read_items() -> List[Item]:
+def read_items() -> list[Item]:
     return [
         Item(
             name="Portal Gun",

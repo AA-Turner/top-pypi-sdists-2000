@@ -1,10 +1,12 @@
+from typing import Annotated
+
 import typer
 
 app = typer.Typer()
 
 
 @app.command()
-def main(name: str = typer.Argument(default="World")):
+def main(name: Annotated[str, typer.Argument()] = "World"):
     print(f"Hello {name}!")
 
 

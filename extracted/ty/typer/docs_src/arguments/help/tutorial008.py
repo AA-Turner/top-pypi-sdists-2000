@@ -1,12 +1,14 @@
+from typing import Annotated
+
 import typer
 
 app = typer.Typer()
 
 
 @app.command()
-def main(name: str = typer.Argument("World", hidden=True)):
+def main(name: Annotated[str, typer.Argument(hidden=True)] = "World"):
     """
-    Say hi to NAME very gently, like Dirk.
+    Say hi to 'name' very gently, like Dirk.
     """
     print(f"Hello {name}")
 
