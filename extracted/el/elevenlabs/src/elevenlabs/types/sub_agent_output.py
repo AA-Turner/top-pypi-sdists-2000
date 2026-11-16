@@ -7,13 +7,39 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .sub_agent_output_execution_mode import SubAgentOutputExecutionMode
 
 
 class SubAgentOutput(UncheckedBaseModel):
-    agent_id: str
-    branch_id: typing.Optional[str] = None
-    description: str
-    parameters: typing.Optional["ObjectJsonSchemaPropertyOutput"] = None
+    execution_mode: typing.Optional[SubAgentOutputExecutionMode] = pydantic.Field(default=None)
+    """
+    Whether to wait for the reply, or keep going and get it later in the conversation.
+    """
+
+    timeout_secs: typing.Optional[int] = pydantic.Field(default=None)
+    """
+    How long the agent may run before it's stopped.
+    """
+
+    agent_id: str = pydantic.Field()
+    """
+    The agent to run. Must be in the same workspace.
+    """
+
+    branch_id: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The branch to run. Defaults to the agent's live deployment.
+    """
+
+    description: str = pydantic.Field()
+    """
+    What the agent is for. Shown to the LLM when it picks an agent.
+    """
+
+    parameters: typing.Optional["ObjectJsonSchemaPropertyOutput"] = pydantic.Field(default=None)
+    """
+    Values passed to the agent as dynamic variables.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
