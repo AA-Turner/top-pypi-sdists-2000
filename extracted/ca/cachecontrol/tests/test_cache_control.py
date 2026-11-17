@@ -8,7 +8,8 @@ Unit tests that verify our caching methods work correctly.
 
 import os
 import time
-from unittest.mock import ANY, Mock
+from io import BytesIO
+from unittest.mock import ANY, Mock, patch
 
 import pytest
 
@@ -63,6 +64,13 @@ class TestCacheControllerResponse:
 
         assert not cc.cache.set.called
 
+    def test_no_cache_with_malformed_date(self, cc):
+        # An unparseable date must not crash; treat it like a missing date
+        resp = self.resp({"cache-control": "max-age=3600", "date": "garbage"})
+        cc.cache_response(self.req(), resp)
+
+        assert not cc.cache.set.called
+
     def test_no_cache_with_wrong_sized_body(self, cc):
         # When the body is the wrong size, then we don't want to cache it
         # because it is obviously broken.
@@ -106,11 +114,80 @@ class TestCacheControllerResponse:
         cc.cache_response(self.req(), resp)
         assert not cc.cache.get(cache_url)
 
+    def test_cache_control_directives_case_insensitive(self, cc):
+        now = time.strftime(TIME_FMT, time.gmtime())
+        resp = self.resp({"cache-control": "No-Store, max-age=3600", "date": now})
+
+        cc.cache_response(self.req(), resp)
+
+        assert not cc.cache.set.called
+
     def test_cache_response_no_store_with_etag(self, cc):
         resp = self.resp({"cache-control": "no-store", "ETag": "jfd9094r808"})
         cc.cache_response(self.req(), resp)
 
         assert not cc.cache.set.called
+
+    def test_cache_response_expires_in_future(self, cc):
+        now = time.time()
+        resp = self.resp(
+            {
+                "date": time.strftime(TIME_FMT, time.gmtime(now)),
+                "expires": time.strftime(TIME_FMT, time.gmtime(now + 3600)),
+            }
+        )
+        cc.cache_response(self.req(), resp)
+
+        cc.cache.set.assert_called_with(self.url, ANY, expires=3600)
+
+    @pytest.mark.parametrize(
+        "expires",
+        [
+            # RFC 9111 4.2.1: freshness lifetime is Expires - Date, which the
+            # origin is free to make negative to force revalidation.
+            "past",
+            # RFC 9111 5.3: an invalid Expires means "already expired".
+            "0",
+            "garbage",
+        ],
+    )
+    def test_cache_response_expires_in_past_not_cached(self, cc, expires):
+        now = time.time()
+        if expires == "past":
+            expires = time.strftime(TIME_FMT, time.gmtime(now - 3600))
+        resp = self.resp(
+            {"date": time.strftime(TIME_FMT, time.gmtime(now)), "expires": expires}
+        )
+        cc.cache_response(self.req(), resp)
+
+        assert not cc.cache.set.called
+
+    def test_cache_response_expires_in_past_purges_existing_entry(self):
+        now = time.time()
+        cache = DictCache({self.url: b"stale"})
+        cc = CacheController(cache, serializer=Mock())
+
+        resp = self.resp(
+            {
+                "date": time.strftime(TIME_FMT, time.gmtime(now)),
+                "expires": time.strftime(TIME_FMT, time.gmtime(now - 3600)),
+            }
+        )
+        cc.cache_response(self.req(), resp)
+
+        assert cc.cache.get(self.url) is None
+
+    @pytest.mark.parametrize("expires_time", [0, -1, -3600])
+    def test_cache_set_never_passes_non_positive_expires(self, cc, expires_time):
+        """``_cache_set`` is the only chokepoint into ``BaseCache.set``.
+
+        Backends may therefore assume ``expires`` is either None or strictly
+        positive; a non-positive deadline must purge instead of store.
+        """
+        cc._cache_set(self.url, self.req(), self.resp(), b"testing", expires_time)
+
+        assert not cc.cache.set.called
+        cc.cache.delete.assert_called_with(self.url)
 
     def test_no_cache_with_vary_star(self, cc):
         # Vary: * indicates that the response can never be served
@@ -119,6 +196,74 @@ class TestCacheControllerResponse:
         cc.cache_response(self.req(), resp)
 
         assert not cc.cache.set.called
+
+    def test_cache_response_preserves_userinfo_case(self):
+        cache = DictCache({})
+        cc = CacheController(cache)
+        url = "http://Alice:Secret@localhost/"
+        req = DummyRequest(url=url, headers={})
+        resp = DummyResponse(status=200, headers={"ETag": "xyz"})
+        cc.cache_response(req, resp, b"")
+
+        req = DummyRequest(
+            url="http://alice:secret@localhost/", headers={"if-match": "xyz"}
+        )
+        result = cc.conditional_headers(req)
+
+        assert not result
+
+    def test_conditional_headers_closes_response(self, cc):
+        resp = self.resp({"ETag": '"cached"'})
+        cc.serializer.loads.return_value = resp
+
+        assert cc.conditional_headers(self.req()) == {"If-None-Match": '"cached"'}
+        resp.close.assert_called_once_with()
+
+    @pytest.mark.parametrize("vary", [False, True], ids=["bad-metadata", "vary-miss"])
+    def test_cache_load_miss_closes_body(self, tmp_path, monkeypatch, vary):
+        cache = SeparateBodyFileCache(tmp_path)
+        cc = CacheController(cache)
+        data = b"invalid metadata"
+        if vary:
+            data = cc.serializer.dumps(
+                self.req({"Accept-Language": "en"}),
+                DummyResponse(200, {"Vary": "Accept-Language"}),
+                b"",
+            )
+        cache.set(self.url, data)
+        with BytesIO(b"body") as body:
+            monkeypatch.setattr(cache, "get_body", Mock(return_value=body))
+            assert cc._load_from_cache(self.req()) is None
+            assert body.closed
+
+    def test_purge_closes_separate_body_first(self, tmp_path, monkeypatch):
+        cache = SeparateBodyFileCache(tmp_path)
+        cc = CacheController(cache)
+        req = self.req()
+        resp = DummyResponse(200, {"Date": "Thu, 01 Jan 1970 00:00:00 GMT"})
+        cc._cache_set(self.url, req, resp, b"body")
+
+        cached = cc._load_from_cache(req)
+        assert cached is not None
+        delete = cache.delete
+
+        def delete_after_close(key):
+            assert cached.closed
+            delete(key)
+
+        monkeypatch.setattr(cache, "delete", delete_after_close)
+        with patch.object(cc, "_load_from_cache", return_value=cached):
+            assert cc.cached_request(req) is False
+        assert cache.get(self.url) is None
+
+    def test_update_cached_response_closes_on_write_error(self, cc):
+        cached = self.resp()
+        cc.serializer.loads.return_value = cached
+        cc.cache.set.side_effect = OSError("cache write failed")
+
+        with pytest.raises(OSError, match="cache write failed"):
+            cc.update_cached_response(self.req(), DummyResponse(304, {}))
+        cached.close.assert_called_once_with()
 
     def test_update_cached_response_no_local_cache(self):
         """
@@ -239,6 +384,7 @@ class TestCacheControlRequest:
         self.c.cache = DictCache({self.url: cached_resp})
         resp = self.req({})
         assert not resp
+        cached_resp.close.assert_called_once_with()
 
     def test_cache_request_no_cache(self):
         resp = self.req({"cache-control": "no-cache"})
@@ -268,11 +414,25 @@ class TestCacheControlRequest:
         self.c.cache = cache
         r = self.req({})
         assert r == resp
+        resp.close.assert_not_called()
 
     def test_cache_request_unfresh_max_age(self):
         earlier = time.time() - 3700  # epoch - 1h01m40s
         now = time.strftime(TIME_FMT, time.gmtime(earlier))
-        resp = Mock(headers={"cache-control": "max-age=3600", "date": now}, status=200)
+        resp = Mock(
+            headers={"cache-control": "max-age=3600", "date": now, "ETag": '"cached"'},
+            status=200,
+        )
+        self.c.cache = DictCache({self.url: resp})
+        r = self.req({})
+        assert not r
+        resp.close.assert_called_once_with()
+        assert self.c.cache.get(self.url) is resp
+
+    def test_cache_request_unfresh_permanent_redirect(self):
+        earlier = time.time() - 3600
+        date = time.strftime(TIME_FMT, time.gmtime(earlier))
+        resp = Mock(headers={"cache-control": "max-age=1", "date": date}, status=301)
         self.c.cache = DictCache({self.url: resp})
         r = self.req({})
         assert not r
@@ -305,3 +465,23 @@ class TestCacheControlRequest:
         self.c.cache = DictCache({self.url: resp})
 
         assert not self.req({})
+
+    def test_cached_request_with_malformed_date_not_returned(self):
+        # A cached entry with an unparseable date must not crash the lookup
+        resp = Mock(
+            headers={"cache-control": "max-age=3600", "date": "garbage"}, status=200
+        )
+
+        self.c.cache = DictCache({self.url: resp})
+
+        assert not self.req({})
+        resp.close.assert_called_once_with()
+        assert self.c.cache.get(self.url) is resp
+
+    def test_cached_request_closes_response_on_freshness_error(self):
+        resp = Mock(headers={"Date": "Sat, 01 Jan 10000 00:00:00 GMT"})
+        self.c.cache = DictCache({self.url: resp})
+
+        with pytest.raises(ValueError):
+            self.req({})
+        resp.close.assert_called_once_with()

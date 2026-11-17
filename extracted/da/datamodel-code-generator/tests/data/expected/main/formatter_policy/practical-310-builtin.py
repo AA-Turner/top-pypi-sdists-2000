@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
 
 class Person(BaseModel):
@@ -18,5 +18,5 @@ class Person(BaseModel):
     """The person's last name."""
     age: Annotated[int | None, Field(ge=0)] = None
     """Age in years which must be equal to or greater than zero."""
-    friends: list[object] | None = None
+    friends: list[JsonValue] | None = None
     comment: Annotated[None, Field(None)] = None

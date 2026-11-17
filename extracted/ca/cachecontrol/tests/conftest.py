@@ -2,14 +2,13 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from pprint import pformat
-
 import os
 import socket
-
-import pytest
+from pprint import pformat
 
 import cherrypy
+import pytest
+from cheroot.server import HTTPRequest
 
 
 class SimpleApp:
@@ -103,6 +102,14 @@ class SimpleApp:
         for i in range(10):
             yield pformat(i).encode("utf8")
 
+    def stream_with_crlf(self, env, start_response):
+        headers = [("Content-Type", "text/plain"), ("Cache-Control", "max-age=5000")]
+        start_response("200 OK", headers)
+
+        yield b"AA"
+        yield b"\r\n"
+        yield b"BB"
+
     def fixed_length(self, env, start_response):
         body = b"0123456789"
         headers = [
@@ -126,12 +133,42 @@ class SimpleApp:
 
 @pytest.fixture(scope="session")
 def server():
-    return cherrypy.server
+    cherrypy.tree.graft(SimpleApp(), "/")
+
+    ip, port = get_free_port()
+
+    cherrypy.config.update({"server.socket_host": ip, "server.socket_port": port})
+
+    # turn off logging
+    logger = cherrypy.log.access_log
+    if logger:
+        logger.removeHandler(logger.handlers[0])
+
+    cherrypy.server.start()
+
+    yield cherrypy.server
+
+    cherrypy.server.stop()
 
 
 @pytest.fixture()
 def url(server):
     return "http://%s:%s/" % server.bind_addr
+
+
+@pytest.fixture()
+def malformed_chunk_delimiters(monkeypatch):
+    """Make the test server send XX instead of each chunk's trailing CRLF."""
+    write = HTTPRequest.write
+
+    def write_malformed_chunk(request, chunk):
+        if request.chunked_write and chunk:
+            data = f"{len(chunk):x}\r\n".encode() + chunk + b"XX"
+            request.conn.wfile.write(data)
+        else:
+            write(request, chunk)
+
+    monkeypatch.setattr(HTTPRequest, "write", write_malformed_chunk)
 
 
 def get_free_port():
@@ -141,24 +178,3 @@ def get_free_port():
     s.close()
     ip = os.environ.get("WEBTEST_SERVER_BIND", "127.0.0.1")
     return ip, port
-
-
-def pytest_configure(config):
-    cherrypy.tree.graft(SimpleApp(), "/")
-
-    ip, port = get_free_port()
-
-    cherrypy.config.update({"server.socket_host": ip, "server.socket_port": port})
-
-    # turn off logging
-    logger = cherrypy.log.access_log
-    logger.removeHandler(logger.handlers[0])
-
-    cherrypy.server.start()
-
-
-def pytest_unconfigure(config):
-    try:
-        cherrypy.server.stop()
-    except:  # noqa: E722
-        pass
