@@ -4,6 +4,7 @@
 
 #include "../conv2_common.hpp"
 #include "opencv2/core/hal/intrin.hpp"
+#include "../../hal_replacement.hpp"
 
 // === dispatched calls (implemented here)
 
@@ -386,24 +387,94 @@ CV_CPU_OPTIMIZATION_NAMESPACE_BEGIN
         CONV_FINALIZE_OUT2(8, 9, CONV_ADD_NO_RESIDUAL2); \
     }
 
+// This universal path assumed K0 == vlanes(), which under m1 holds only at VLEN=256,
+// so it is disabled on scalable backends as in #29180. The portable re-enable (a
+// v_setvlmax<v_float32>(K0) universal intrinsic) was implemented and measured in #29619
+// and rejected: capping vlanes() to a non-VLMAX value makes GCC emit a vsetvli per op
+// instead of one per region, which slows down every RVV vector op in the library. A
+// vector of exactly K0 lanes therefore needs native vsetvl, i.e. an accelerated backend
+// behind cv_hal_dnn_conv32f -- which RVV now provides. See #29493 / #29619.
+#elif 0  // CV_SIMD_SCALABLE: RVV goes through cv_hal_dnn_conv32f (#29493, #29619)
+
+/////////////////////////// scalable (RVV) implementation /////////////////////////////
+// K0 == vlanes(), so each of the 10 spatial positions needs exactly one vector
+// accumulator (structurally identical to the AVX2 path, which uses one v_float32x8 per
+// position for its K0=8). One K0-wide weight load is reused across all 10 positions, so
+// the per-output-point load bottleneck of the scalar tail is amortized away. C0 (= vlanes())
+// is a runtime value, so the c0 sweep is a loop rather than a fixed unroll.
+
+#undef CONV_INIT_SUMS
+#define CONV_INIT_SUMS() \
+    v_float32 zz = vx_setzero_f32(); \
+    v_float32 s0 = zz, s1 = zz, s2 = zz, s3 = zz, s4 = zz; \
+    v_float32 s5 = zz, s6 = zz, s7 = zz, s8 = zz, s9 = zz
+
+#undef CONV_UPDATE_LOOP_BODY
+#define CONV_UPDATE_LOOP_BODY() \
+    for (int _c0 = 0; _c0 < C0; _c0++) { \
+        v_float32 _w = vx_load(wptr + _c0*K0); \
+        s0 = v_fma(vx_setall_f32(inptr[0][_c0]), _w, s0); \
+        s1 = v_fma(vx_setall_f32(inptr[1][_c0]), _w, s1); \
+        s2 = v_fma(vx_setall_f32(inptr[2][_c0]), _w, s2); \
+        s3 = v_fma(vx_setall_f32(inptr[3][_c0]), _w, s3); \
+        s4 = v_fma(vx_setall_f32(inptr[4][_c0]), _w, s4); \
+        s5 = v_fma(vx_setall_f32(inptr[5][_c0]), _w, s5); \
+        s6 = v_fma(vx_setall_f32(inptr[6][_c0]), _w, s6); \
+        s7 = v_fma(vx_setall_f32(inptr[7][_c0]), _w, s7); \
+        s8 = v_fma(vx_setall_f32(inptr[8][_c0]), _w, s8); \
+        s9 = v_fma(vx_setall_f32(inptr[9][_c0]), _w, s9); \
+    } \
+    inptr[0] += inpstep[0]; inptr[1] += inpstep[1]; \
+    inptr[2] += inpstep[2]; inptr[3] += inpstep[3]; \
+    inptr[4] += inpstep[4]; inptr[5] += inpstep[5]; \
+    inptr[6] += inpstep[6]; inptr[7] += inpstep[7]; \
+    inptr[8] += inpstep[8]; inptr[9] += inpstep[9]
+
+#undef CONV_START_FINALIZE_OUT
+#define CONV_START_FINALIZE_OUT() \
+    v_float32 vscale = vx_load(scalebuf); \
+    v_float32 vbias = vx_load(biasbuf); \
+    v_float32 valpha = vx_load(alphabuf); \
+    v_float32 vmaxval = vx_setall_f32(maxval)
+
+#define CONV_ADD_RESIDUAL2(idx0, idx1) \
+    s##idx0 = v_add(s##idx0, vx_load(tmpbuf + idx0*K0)); \
+    s##idx1 = v_add(s##idx1, vx_load(tmpbuf + idx1*K0))
+
+#undef CONV_FINALIZE_OUT2
+#define CONV_FINALIZE_OUT2(idx0, idx1, add_residual2) \
+    s##idx0 = v_fma(s##idx0, vscale, vbias); \
+    s##idx1 = v_fma(s##idx1, vscale, vbias); \
+    add_residual2(idx0, idx1); \
+    s##idx0 = v_select(v_ge(s##idx0, zz), s##idx0, v_mul(s##idx0, valpha)); \
+    s##idx1 = v_select(v_ge(s##idx1, zz), s##idx1, v_mul(s##idx1, valpha)); \
+    s##idx0 = v_min(s##idx0, vmaxval); \
+    s##idx1 = v_min(s##idx1, vmaxval); \
+    v_store(outbuf + idx0*K0, s##idx0); \
+    v_store(outbuf + idx1*K0, s##idx1)
+
+#undef CONV_FINALIZE_OUT_ALL
+#define CONV_FINALIZE_OUT_ALL() \
+    CONV_START_FINALIZE_OUT(); \
+    if (resptr) { \
+        CONV_FINALIZE_OUT2(0, 1, CONV_ADD_RESIDUAL2); \
+        CONV_FINALIZE_OUT2(2, 3, CONV_ADD_RESIDUAL2); \
+        CONV_FINALIZE_OUT2(4, 5, CONV_ADD_RESIDUAL2); \
+        CONV_FINALIZE_OUT2(6, 7, CONV_ADD_RESIDUAL2); \
+        CONV_FINALIZE_OUT2(8, 9, CONV_ADD_RESIDUAL2); \
+    } else { \
+        CONV_FINALIZE_OUT2(0, 1, CONV_ADD_NO_RESIDUAL2); \
+        CONV_FINALIZE_OUT2(2, 3, CONV_ADD_NO_RESIDUAL2); \
+        CONV_FINALIZE_OUT2(4, 5, CONV_ADD_NO_RESIDUAL2); \
+        CONV_FINALIZE_OUT2(6, 7, CONV_ADD_NO_RESIDUAL2); \
+        CONV_FINALIZE_OUT2(8, 9, CONV_ADD_NO_RESIDUAL2); \
+    }
+
 #else
 
 #undef CONV_ENABLE_SIMD
 
 #endif
-
-// Compute number of spatial chunks for load balancing across threads.
-static int computeSpatChunks(int total_blocks, int planeblocks, int min_per_chunk = 16) {
-    int nSpatChunks = 1;
-    int nthreads = cv::getNumThreads();
-    int target_tasks = nthreads * 8;
-    if (total_blocks < target_tasks && planeblocks > min_per_chunk) {
-        nSpatChunks = (target_tasks + total_blocks - 1) / total_blocks;
-        int max_chunks = planeblocks / min_per_chunk;
-        nSpatChunks = std::min(nSpatChunks, std::max(1, max_chunks));
-    }
-    return nSpatChunks;
-}
 
 static void setupActivation(const ConvState& cs, int K,
                              FastActivation& fastActivation, const float*& activParams,
@@ -432,14 +503,14 @@ static void setupActivation(const ConvState& cs, int K,
 static void fillCoeffBufs(FastActivation fastActivation, const float* activParams, float defaultAlpha,
                            int k_count, int k_base,
                            const float* scaleptr, const float* biasptr,
-                           float* scalebuf, float* biasbuf, float* alphabuf) {
+                           float* scalebuf, float* biasbuf, float* alphabuf, int K0) {
     int kk = 0;
     for (; kk < k_count; kk++) {
         scalebuf[kk] = scaleptr ? scaleptr[k_base + kk] : 1.f;
         biasbuf[kk] = biasptr ? biasptr[k_base + kk] : 0.f;
         alphabuf[kk] = fastActivation == FAST_ACTIV_PRELU ? activParams[k_base + kk] : defaultAlpha;
     }
-    for (; kk < 8; kk++) {
+    for (; kk < K0; kk++) {
         scalebuf[kk] = 0.f;
         biasbuf[kk] = 0.f;
         alphabuf[kk] = 0.f;
@@ -527,6 +598,10 @@ static void scatterScalarOut(bool aligned_k, int k_base, int k_count, int K0shif
 #define CONV_INIT_SCALAR_SUMS() \
     v_float32x4 zz = v_setzero_f32(); \
     v_float32x4 s0 = zz, s1 = zz
+#elif 0  // CV_SIMD_SCALABLE: RVV temporarily disabled for the m1 switch (#29493)
+#define CONV_INIT_SCALAR_SUMS() \
+    v_float32 zz = vx_setzero_f32(); \
+    v_float32 s0 = zz
 #else
 #define CONV_INIT_SCALAR_SUMS() \
     for (int _ks = 0; _ks < K0; _ks++) tmpbuf[_ks] = 0.f
@@ -561,6 +636,19 @@ static void scatterScalarOut(bool aligned_k, int k_base, int k_count, int K0shif
         s0 = v_min(s0, _vmx); s1 = v_min(s1, _vmx); \
         v_store((outbuf), s0); v_store((outbuf) + 4, s1); \
     }
+#elif 0  // CV_SIMD_SCALABLE: RVV temporarily disabled for the m1 switch (#29493)
+#define CONV_FINALIZE_SCALAR_OUT(outbuf) \
+    { \
+        v_float32 _vsc = vx_load(scalebuf); \
+        v_float32 _vbi = vx_load(biasbuf); \
+        v_float32 _val = vx_load(alphabuf); \
+        v_float32 _vmx = vx_setall_f32(maxval); \
+        s0 = v_fma(s0, _vsc, _vbi); \
+        s0 = v_add(s0, vx_load(resbuf)); \
+        s0 = v_select(v_ge(s0, zz), s0, v_mul(s0, _val)); \
+        s0 = v_min(s0, _vmx); \
+        v_store((outbuf), s0); \
+    }
 #else
 #define CONV_FINALIZE_SCALAR_OUT(outbuf) \
     for (int _kk = 0; _kk < K0; _kk++) { \
@@ -569,6 +657,10 @@ static void scatterScalarOut(bool aligned_k, int k_base, int k_count, int K0shif
         (outbuf)[_kk] = _v; \
     }
 #endif
+
+// RVV uses the generic runtime-C0 path below; the C0=8-specialized kernels are
+// unused on scalable backends, so do not compile them there (avoids -Wunused-function).
+#if !CV_SIMD_SCALABLE
 
 // Specialized 1x1 convolution kernel with stride=1.
 static void conv32fC8_1x1(const void* inp__, const void* residual__, void* out__,
@@ -597,8 +689,10 @@ static void conv32fC8_1x1(const void* inp__, const void* residual__, void* out__
         memset(out__, 0, outtotal*sizeof(float));
     }
 
-    int nSpatChunks_ = computeSpatChunks(total_blocks, planeblocks_);
+    const double pix_macs = convBlockMacsPerPixel(cs);
+    int nSpatChunks_ = computeSpatChunks(total_blocks, planeblocks_, pix_macs);
     int total_tasks = total_blocks * nSpatChunks_;
+    const double nstripes = convStripes(total_tasks, pix_macs * total_blocks * planeblocks_);
 
     parallel_for_(Range(0, total_tasks), [&](const Range& range) {
         constexpr int SPAT_BLOCK_SIZE = 10;
@@ -655,7 +749,7 @@ static void conv32fC8_1x1(const void* inp__, const void* residual__, void* out__
             const float* inpbaseptr = (float*)inp__ + (n * C1 + c1_start) * iplanesize;
             const float* wbaseptr = (float*)weights__ + (g*Kblk + kblk)*(1*C1Max*C0*K0);
 
-            fillCoeffBufs(fastActivation, activParams, defaultAlpha, k_count, k_base, scaleptr, biasptr, scalebuf, biasbuf, alphabuf);
+            fillCoeffBufs(fastActivation, activParams, defaultAlpha, k_count, k_base, scaleptr, biasptr, scalebuf, biasbuf, alphabuf, K0);
 
             float* outptr = (float*)out__ + n*(K1*planesize) + p0*K0;
             const float* resptr = residual__ ? (float*)residual__ + n*(K1*planesize) + p0*K0 : nullptr;
@@ -736,7 +830,7 @@ static void conv32fC8_1x1(const void* inp__, const void* residual__, void* out__
                 scatterScalarOut(aligned_k, k_base, k_count, K0shift, K0, planesize, outptr, outbuf);
             }
         }
-    });
+    }, nstripes);
 }
 
 #if CV_SIMD256 && defined(__AVX2__)
@@ -764,8 +858,10 @@ static void conv32fC8_1x1_kpair(const void* inp__, const void* residual__, void*
     int Kpair_ = Kblk_ / 2;
     int total_blocks_pair = N * cs.ngroups * Kpair_;
 
-    int nSpatChunks_ = computeSpatChunks(total_blocks_pair, planeblocks_);
+    const double pix_macs = 2 * convBlockMacsPerPixel(cs);
+    int nSpatChunks_ = computeSpatChunks(total_blocks_pair, planeblocks_, pix_macs);
     int total_tasks = total_blocks_pair * nSpatChunks_;
+    const double nstripes = convStripes(total_tasks, pix_macs * total_blocks_pair * planeblocks_);
 
     parallel_for_(Range(0, total_tasks), [&](const Range& range) {
         constexpr int SPAT_BLOCK_SIZE = 6;
@@ -824,8 +920,8 @@ static void conv32fC8_1x1_kpair(const void* inp__, const void* residual__, void*
             const float* wbaseptrA = (float*)weights__ + (g*Kblk + kblkA)*(1*C1Max*C0*K0);
             const float* wbaseptrB = (float*)weights__ + (g*Kblk + kblkB)*(1*C1Max*C0*K0);
 
-            fillCoeffBufs(fastActivation, activParams, defaultAlpha, K0, k_baseA, scaleptr, biasptr, scalebufA, biasbufA, alphabufA);
-            fillCoeffBufs(fastActivation, activParams, defaultAlpha, K0, k_baseB, scaleptr, biasptr, scalebufB, biasbufB, alphabufB);
+            fillCoeffBufs(fastActivation, activParams, defaultAlpha, K0, k_baseA, scaleptr, biasptr, scalebufA, biasbufA, alphabufA, K0);
+            fillCoeffBufs(fastActivation, activParams, defaultAlpha, K0, k_baseB, scaleptr, biasptr, scalebufB, biasbufB, alphabufB, K0);
 
             float* outbaseA = (float*)out__ + n*(K1*planesize) + k_baseA*planeblocks;
             float* outbaseB = (float*)out__ + n*(K1*planesize) + k_baseB*planeblocks;
@@ -958,7 +1054,7 @@ static void conv32fC8_1x1_kpair(const void* inp__, const void* residual__, void*
                 }
             }
         }
-    });
+    }, nstripes);
 }
 #endif // CV_SIMD256 && __AVX2__
 
@@ -988,8 +1084,10 @@ static void conv32fC8_3x3s1(const void* inp__, const void* residual__, void* out
         memset(out__, 0, outtotal*sizeof(float));
     }
 
-    int nSpatChunks_ = computeSpatChunks(total_blocks, planeblocks_);
+    const double pix_macs = convBlockMacsPerPixel(cs);
+    int nSpatChunks_ = computeSpatChunks(total_blocks, planeblocks_, pix_macs);
     int total_tasks = total_blocks * nSpatChunks_;
+    const double nstripes = convStripes(total_tasks, pix_macs * total_blocks * planeblocks_);
 
     parallel_for_(Range(0, total_tasks), [&](const Range& range) {
         constexpr int SPAT_BLOCK_SIZE = 10;
@@ -1050,7 +1148,7 @@ static void conv32fC8_3x3s1(const void* inp__, const void* residual__, void* out
             const float* inpbaseptr = (float*)inp__ + (n * C1 + c1_start) * iplanesize;
             const float* wbaseptr = (float*)weights__ + (g*Kblk + kblk)*(9*C1Max*C0*K0);
 
-            fillCoeffBufs(fastActivation, activParams, defaultAlpha, k_count, k_base, scaleptr, biasptr, scalebuf, biasbuf, alphabuf);
+            fillCoeffBufs(fastActivation, activParams, defaultAlpha, k_count, k_base, scaleptr, biasptr, scalebuf, biasbuf, alphabuf, K0);
 
             float* outptr = (float*)out__ + n*(K1*planesize) + p0*K0;
             const float* resptr = residual__ ? (float*)residual__ + n*(K1*planesize) + p0*K0 : nullptr;
@@ -1239,15 +1337,14 @@ static void conv32fC8_3x3s1(const void* inp__, const void* residual__, void* out
                 scatterScalarOut(aligned_k, k_base, k_count, K0shift, K0, planesize, outptr, outbuf);
             }
         }
-    });
+    }, nstripes);
 }
 
 #if CV_SIMD256 && defined(__AVX2__)
-// 3x3 stride-1 conv, same 6x16 AVX2 / 2-Kblk shape as conv32fC8_1x1_kpair.
-// Dispatcher requires ksize=9, strides=1, dilations=1, Kblk even, K%K0==0, ngroups==1.
-static void conv32fC8_3x3s1_kpair(const void* inp__, const void* residual__, void* out__,
-                                  const ConvState& cs, const void* weights__,
-                                  const float* scale__, const float* bias__)
+// Fast AVX2 3x3 conv for any stride: computes two blocks of 8 output channels at once.
+static void conv32fC8_3x3_kpair(const void* inp__, const void* residual__, void* out__,
+                                const ConvState& cs, const void* weights__,
+                                const float* scale__, const float* bias__)
 {
     const MatShape& inpshape = cs.inpshape;
     const MatShape& outshape = cs.outshape;
@@ -1266,8 +1363,10 @@ static void conv32fC8_3x3s1_kpair(const void* inp__, const void* residual__, voi
     int Kpair_ = Kblk_ / 2;
     int total_blocks_pair = N * cs.ngroups * Kpair_;
 
-    int nSpatChunks_ = computeSpatChunks(total_blocks_pair, planeblocks_);
+    const double pix_macs = 2 * convBlockMacsPerPixel(cs);
+    int nSpatChunks_ = computeSpatChunks(total_blocks_pair, planeblocks_, pix_macs);
     int total_tasks = total_blocks_pair * nSpatChunks_;
+    const double nstripes = convStripes(total_tasks, pix_macs * total_blocks_pair * planeblocks_);
 
     parallel_for_(Range(0, total_tasks), [&](const Range& range) {
         constexpr int SPAT_BLOCK_SIZE = 6;
@@ -1287,6 +1386,7 @@ static void conv32fC8_3x3s1_kpair(const void* inp__, const void* residual__, voi
         const int Hi = ndims_ >= 5 ? inpshape[ndims_-3] : 1;
         const int Wi = inpshape[ndims_-2];
         const int padY = cs.pads[1], padX = cs.pads[2];
+        const int SY = cs.strides[1], SX = cs.strides[2];
         int planeblocks = planeblocks_;
         int planesize = planeblocks*K0;
         int iplanesize = Hi*Wi*C0;
@@ -1329,8 +1429,8 @@ static void conv32fC8_3x3s1_kpair(const void* inp__, const void* residual__, voi
             const float* wbaseptrA = (float*)weights__ + (g*Kblk + kblkA)*(9*C1Max*C0*K0);
             const float* wbaseptrB = (float*)weights__ + (g*Kblk + kblkB)*(9*C1Max*C0*K0);
 
-            fillCoeffBufs(fastActivation, activParams, defaultAlpha, K0, k_baseA, scaleptr, biasptr, scalebufA, biasbufA, alphabufA);
-            fillCoeffBufs(fastActivation, activParams, defaultAlpha, K0, k_baseB, scaleptr, biasptr, scalebufB, biasbufB, alphabufB);
+            fillCoeffBufs(fastActivation, activParams, defaultAlpha, K0, k_baseA, scaleptr, biasptr, scalebufA, biasbufA, alphabufA, K0);
+            fillCoeffBufs(fastActivation, activParams, defaultAlpha, K0, k_baseB, scaleptr, biasptr, scalebufB, biasbufB, alphabufB, K0);
 
             float* outbaseA = (float*)out__ + n*(K1*planesize) + k_baseA*planeblocks;
             float* outbaseB = (float*)out__ + n*(K1*planesize) + k_baseB*planeblocks;
@@ -1364,8 +1464,8 @@ static void conv32fC8_3x3s1_kpair(const void* inp__, const void* residual__, voi
 
                 int yj = p / W;
                 int xj = p - yj * W;
-                int yi_base = yj - padY;
-                int xi_base = xj - padX;
+                int yi_base = yj*SY - padY;
+                int xi_base = xj*SX - padX;
                 bool same_row = (xj + SPAT_BLOCK_SIZE <= W);
                 bool y_inner = (yj >= innerY0 && yj < innerY1);
                 bool all_inner = same_row && y_inner && (xj >= innerX0) &&
@@ -1403,7 +1503,7 @@ static void conv32fC8_3x3s1_kpair(const void* inp__, const void* residual__, voi
                     const float* inp_yx_base = inpbaseptr + (yi_base * Wi + xi_base) * C0;
                     const float* inp_pos[SPAT_BLOCK_SIZE];
                     for (int j = 0; j < SPAT_BLOCK_SIZE; j++)
-                        inp_pos[j] = inp_yx_base + j * C0;
+                        inp_pos[j] = inp_yx_base + j * SX * C0;
 
                     #define GET_BASE_INNER(j, kpos, c1) (inp_pos[j] + inp_ofs[kpos] + (c1) * iplanesize)
                     KPAIR3_FMA_BODY(GET_BASE_INNER);
@@ -1414,8 +1514,8 @@ static void conv32fC8_3x3s1_kpair(const void* inp__, const void* residual__, voi
 
                     if (same_row) {
                         for (int j = 0; j < SPAT_BLOCK_SIZE; j++) {
-                            yi_arr[j] = yj - padY;
-                            xi_arr[j] = xj + j - padX;
+                            yi_arr[j] = yj*SY - padY;
+                            xi_arr[j] = (xj + j)*SX - padX;
                             inner_arr[j] = y_inner && ((xj + j) >= innerX0 && (xj + j) < innerX1);
                         }
                     } else {
@@ -1423,8 +1523,8 @@ static void conv32fC8_3x3s1_kpair(const void* inp__, const void* residual__, voi
                             int pj = p + j;
                             int yj_ = pj / W;
                             int xj_ = pj - yj_ * W;
-                            yi_arr[j] = yj_ - padY;
-                            xi_arr[j] = xj_ - padX;
+                            yi_arr[j] = yj_*SY - padY;
+                            xi_arr[j] = xj_*SX - padX;
                             inner_arr[j] = (yj_ >= innerY0 && yj_ < innerY1) &&
                                            (xj_ >= innerX0 && xj_ < innerX1);
                         }
@@ -1490,8 +1590,8 @@ static void conv32fC8_3x3s1_kpair(const void* inp__, const void* residual__, voi
             {
                 int yj = p / W;
                 int xj = p - yj * W;
-                int yi_s = yj - padY;
-                int xi_s = xj - padX;
+                int yi_s = yj*SY - padY;
+                int xi_s = xj*SX - padX;
 
                 __m256 sa = _mm256_setzero_ps();
                 __m256 sb = _mm256_setzero_ps();
@@ -1544,7 +1644,7 @@ static void conv32fC8_3x3s1_kpair(const void* inp__, const void* residual__, voi
                 }
             }
         }
-    });
+    }, nstripes);
 }
 #endif // CV_SIMD256 && __AVX2__
 
@@ -1574,8 +1674,10 @@ static void conv32fC8_1x1_strided(const void* inp__, const void* residual__, voi
         memset(out__, 0, outtotal*sizeof(float));
     }
 
-    int nSpatChunks_ = computeSpatChunks(total_blocks, planeblocks_);
+    const double pix_macs = convBlockMacsPerPixel(cs);
+    int nSpatChunks_ = computeSpatChunks(total_blocks, planeblocks_, pix_macs);
     int total_tasks = total_blocks * nSpatChunks_;
+    const double nstripes = convStripes(total_tasks, pix_macs * total_blocks * planeblocks_);
 
     parallel_for_(Range(0, total_tasks), [&](const Range& range) {
         constexpr int SPAT_BLOCK_SIZE = 10;
@@ -1635,7 +1737,7 @@ static void conv32fC8_1x1_strided(const void* inp__, const void* residual__, voi
             const float* inpbaseptr = (float*)inp__ + (n * C1 + c1_start) * iplanesize;
             const float* wbaseptr = (float*)weights__ + (g*Kblk + kblk)*(1*C1Max*C0*K0);
 
-            fillCoeffBufs(fastActivation, activParams, defaultAlpha, k_count, k_base, scaleptr, biasptr, scalebuf, biasbuf, alphabuf);
+            fillCoeffBufs(fastActivation, activParams, defaultAlpha, k_count, k_base, scaleptr, biasptr, scalebuf, biasbuf, alphabuf, K0);
 
             float* outptr = (float*)out__ + n*(K1*planesize) + p0*K0;
             const float* resptr = residual__ ? (float*)residual__ + n*(K1*planesize) + p0*K0 : nullptr;
@@ -1736,7 +1838,7 @@ static void conv32fC8_1x1_strided(const void* inp__, const void* residual__, voi
                 scatterScalarOut(aligned_k, k_base, k_count, K0shift, K0, planesize, outptr, outbuf);
             }
         }
-    });
+    }, nstripes);
 }
 
 // 2D 3x3 convolution with arbitrary stride and dilation = 1.
@@ -1765,8 +1867,10 @@ static void conv32fC8_3x3_strided(const void* inp__, const void* residual__, voi
         memset(out__, 0, outtotal*sizeof(float));
     }
 
-    int nSpatChunks_ = computeSpatChunks(total_blocks, planeblocks_);
+    const double pix_macs = convBlockMacsPerPixel(cs);
+    int nSpatChunks_ = computeSpatChunks(total_blocks, planeblocks_, pix_macs);
     int total_tasks = total_blocks * nSpatChunks_;
+    const double nstripes = convStripes(total_tasks, pix_macs * total_blocks * planeblocks_);
 
     parallel_for_(Range(0, total_tasks), [&](const Range& range) {
         constexpr int SPAT_BLOCK_SIZE = 10;
@@ -1831,7 +1935,7 @@ static void conv32fC8_3x3_strided(const void* inp__, const void* residual__, voi
             const float* inpbaseptr = (float*)inp__ + (n * C1 + c1_start) * iplanesize;
             const float* wbaseptr = (float*)weights__ + (g*Kblk + kblk)*(9*C1Max*C0*K0);
 
-            fillCoeffBufs(fastActivation, activParams, defaultAlpha, k_count, k_base, scaleptr, biasptr, scalebuf, biasbuf, alphabuf);
+            fillCoeffBufs(fastActivation, activParams, defaultAlpha, k_count, k_base, scaleptr, biasptr, scalebuf, biasbuf, alphabuf, K0);
 
             float* outptr = (float*)out__ + n*(K1*planesize) + p0*K0;
             const float* resptr = residual__ ? (float*)residual__ + n*(K1*planesize) + p0*K0 : nullptr;
@@ -2016,15 +2120,29 @@ static void conv32fC8_3x3_strided(const void* inp__, const void* residual__, voi
                 scatterScalarOut(aligned_k, k_base, k_count, K0shift, K0, planesize, outptr, outbuf);
             }
         }
-    });
+    }, nstripes);
 }
 
+#endif  // !CV_SIMD_SCALABLE
+
+// GCC 14.x miscompiles the scalable (RVV) blocked path of conv32fC8 at -O3 via the
+// -funswitch-loops pass: it produces grossly wrong output. Confirmed broken on GCC 14.2
+// and correct on GCC 15.2 (also correct at -O1/-O2). Disable that single pass for this one
+// function on affected RISC-V GCC builds (< 15) as a targeted workaround. No effect on
+// x86/ARM, clang, or GCC 15+ (the pragmas are skipped there).
+#if defined(__GNUC__) && !defined(__clang__) && defined(__riscv) && __GNUC__ < 15
+#pragma GCC push_options
+#pragma GCC optimize("no-unswitch-loops")
+#endif
 static void conv32fC8(const void* inp__, const void* residual__, void* out__,
                       const ConvState& cs, const void* weights__,
                       const float* scale__, const float* bias__)
 {
+#if !CV_SIMD_SCALABLE  // RVV: skip the C0=8-specialized kernels; use the generic runtime-C0 path
     int ksize = cs.wshape[2];
-    if (ksize == 1 && cs.strides[0]*cs.strides[1]*cs.strides[2] == 1) {
+    // ksize is the tap count, so 1x9 and 9x1 kernels also give 9; check the real 3x3 shape.
+    const bool is3x3 = cs.kshape[0] == 1 && cs.kshape[1] == 3 && cs.kshape[2] == 3;
+    if (ksize == 1 && cs.strides[0]*cs.strides[1]*cs.strides[2] == 1 && !cs.hasPadding()) {
     #if CV_SIMD256 && defined(__AVX2__)
         // Pair-Kblk fast path: 6×16 AVX2 microkernel for wide-C 1x1 stride=1.
         // Requires Kblk even and K aligned to K0 (so both Kblks are full).
@@ -2044,25 +2162,22 @@ static void conv32fC8(const void* inp__, const void* residual__, void* out__,
         cs.outshape.dims <= 5) {
         return conv32fC8_1x1_strided(inp__, residual__, out__, cs, weights__, scale__, bias__);
     }
-    if (ksize == 9 && cs.strides[1] == 1 && cs.strides[2] == 1 &&
+    if (is3x3 && cs.strides[0] == 1 &&
         cs.dilations[1] == 1 && cs.dilations[2] == 1 &&
         cs.outshape.dims <= 5) {
     #if CV_SIMD256 && defined(__AVX2__)
+        // Any input channel count: also faster on narrow inputs (measured on YOLO26n).
         int Kblk = cs.wshape[1];
-        int Cg = cs.inpshape.channels() / cs.ngroups;
-        int cblocks = (Cg + 7) / 8;
         int K_ = cs.outshape.channels();
-        if ((Kblk & 1) == 0 && (K_ % 8) == 0 && cblocks >= 8 && cs.ngroups == 1) {
-            return conv32fC8_3x3s1_kpair(inp__, residual__, out__, cs, weights__, scale__, bias__);
+        if ((Kblk & 1) == 0 && (K_ % 8) == 0 && cs.ngroups == 1) {
+            return conv32fC8_3x3_kpair(inp__, residual__, out__, cs, weights__, scale__, bias__);
         }
     #endif
-        return conv32fC8_3x3s1(inp__, residual__, out__, cs, weights__, scale__, bias__);
-    }
-    if (ksize == 9 && cs.strides[0] == 1 &&
-        cs.dilations[1] == 1 && cs.dilations[2] == 1 &&
-        cs.outshape.dims <= 5) {
+        if (cs.strides[1] == 1 && cs.strides[2] == 1)
+            return conv32fC8_3x3s1(inp__, residual__, out__, cs, weights__, scale__, bias__);
         return conv32fC8_3x3_strided(inp__, residual__, out__, cs, weights__, scale__, bias__);
     }
+#endif  // !CV_SIMD_SCALABLE
 
     const MatShape& inpshape = cs.inpshape;
     const MatShape& outshape = cs.outshape;
@@ -2086,13 +2201,80 @@ static void conv32fC8(const void* inp__, const void* residual__, void* out__,
         memset(out__, 0, outtotal*sizeof(float));
     }
 
-    int nSpatChunksGen_ = computeSpatChunks(total_blocks, planeblocks_);
+    const double pix_macs = convBlockMacsPerPixel(cs);
+    int nSpatChunksGen_ = computeSpatChunks(total_blocks, planeblocks_, pix_macs);
     int total_tasks_gen = total_blocks * nSpatChunksGen_;
+    const double nstripes = convStripes(total_tasks_gen, pix_macs * total_blocks * planeblocks_);
 
     parallel_for_(Range(0, total_tasks_gen), [&](const Range& range) {
+        // Offer this task range to an accelerated HAL first, flattening the descriptor into a
+        // stable C argument list (no dnn types cross the boundary). The HAL fuses conv, scale,
+        // bias, residual and the fast-activation (out = min(s>=0 ? s : s*alpha, maxval)). A
+        // generic activation is a function pointer that cannot cross the ABI, so when one is
+        // present we still run the HAL for the heavy convolution and apply the (elementwise)
+        // activation over this range's output spans afterwards -- matching the built-in
+        // fast-epilogue-then-activation order below. On NOT_IMPLEMENTED fall through.
+        {
+            const int K0_ = outshape.back();
+            int sd = cs.nspatialdims;
+            int insize[3]  = { sd > 2 ? inpshape[sd-1] : 1, sd > 1 ? inpshape[sd] : 1, inpshape[sd+1] };
+            int outsize[3] = { sd > 2 ? outshape[sd-1] : 1, sd > 1 ? outshape[sd] : 1, outshape[sd+1] };
+            float maxval = FLT_MAX, default_alpha = 0.f;
+            const float* prelu_slope = nullptr;
+            switch (cs.fastActivation) {
+                case FAST_ACTIV_CLIP:       maxval = cs.activParams[1]; break;
+                case FAST_ACTIV_LEAKY_RELU: default_alpha = cs.activParams[0]; break;
+                case FAST_ACTIV_PRELU:      prelu_slope = cs.activParams.data(); break;
+                case FAST_ACTIV_NONE:       default_alpha = 1.f; break;
+                default: break; // FAST_ACTIV_RELU: maxval = FLT_MAX, default_alpha = 0
+            }
+            int hal_res = cv_hal_dnn_conv32f(
+                    (const float*)inp__, (const float*)residual__, (float*)out__,
+                    (const float*)weights__, scale__, bias__,
+                    inpshape.channels(), outshape.channels(), inpshape.back(),
+                    cs.ngroups, Kblk_, C1Max_,
+                    insize, outsize, cs.strides, cs.pads, cs.inner,
+                    cs.coordtab.data(), cs.ofstab.data(), (int)cs.ofstab.size(),
+                    maxval, default_alpha, prelu_slope,
+                    nSpatChunksGen_, range.start, range.end);
+            if (hal_res == CV_HAL_ERROR_OK) {
+                if (cs.activation) {
+                    // The HAL wrote conv + scale/bias/residual with an identity fast-epilogue
+                    // (a generic activation always comes with FAST_ACTIV_NONE); apply it in
+                    // place over the output span of every task in this range. The HAL only
+                    // accepts K0-aligned blocks, so each span is contiguous.
+                    const int K = outshape.channels();
+                    const int K1 = (K + K0_ - 1)/K0_;
+                    const int Kg = K/cs.ngroups;
+                    const float* activParams = cs.activParams.data();
+                    for (int t = range.start; t < range.end; t++) {
+                        int block_id = t/nSpatChunksGen_, chunk_id = t - block_id*nSpatChunksGen_;
+                        int p0 = chunk_id*planeblocks_/nSpatChunksGen_;
+                        int p1 = (chunk_id + 1)*planeblocks_/nSpatChunksGen_;
+                        int n = block_id/(cs.ngroups*Kblk_);
+                        int rem = block_id - n*(cs.ngroups*Kblk_);
+                        int g = rem/Kblk_, kblk = rem - g*Kblk_;
+                        int k_base = g*Kg + kblk*K0_;
+                        if (k_base >= K || p1 <= p0)
+                            continue;
+                        float* obuf = (float*)out__ + (size_t)n*K1*planeblocks_*K0_ +
+                                      (size_t)k_base*planeblocks_ + (size_t)p0*K0_;
+                        cs.activation(obuf, obuf, (p1 - p0)*K0_, activParams);
+                    }
+                }
+                return;
+            }
+            else if (hal_res != CV_HAL_ERROR_NOT_IMPLEMENTED)
+                CV_Error_(cv::Error::StsInternal,
+                    ("HAL implementation dnn_conv32f ==> cv_hal_dnn_conv32f returned %d (0x%08x)", hal_res, hal_res));
+        }
+
         constexpr int SPAT_BLOCK_SIZE = 10;
+        // The block size is a fixed property of the blocked layout on every platform,
+        // so C0/K0 are compile-time constants here (#29493).
         constexpr int C0shift = 3, K0shift = C0shift;
         constexpr int C0 = 1 << C0shift, K0 = C0;
+        constexpr int C0BUF = K0;
 
         CV_Assert_N(inpshape.back() == C0, outshape.back() == K0);
 
@@ -2122,18 +2304,18 @@ static void conv32fC8(const void* inp__, const void* residual__, void* out__,
         int innerZ0 = cs.inner[0], innerZ1 = cs.inner[MAX_CONV_DIMS];
         int innerY0 = cs.inner[1], innerY1 = cs.inner[MAX_CONV_DIMS+1];
         int innerX0 = cs.inner[2], innerX1 = cs.inner[MAX_CONV_DIMS+2];
-        float zbuf[C0] = {};
+        float zbuf[C0BUF] = {};
     #endif
 
         FastActivation fastActivation;
         const float* activParams;
         ActivationFunc activation;
         float maxval, defaultAlpha;
-        float scalebuf[K0], biasbuf[K0], alphabuf[K0];
+        float scalebuf[C0BUF], biasbuf[C0BUF], alphabuf[C0BUF];
         setupActivation(cs, K, fastActivation, activParams, activation, maxval, defaultAlpha);
 
         // 1x1x1 convolution with (1,1,1) strides:
-        bool is_1x1s1 = (ksize == 1 && Sz*Sy*Sx == 1);
+        bool is_1x1s1 = (ksize == 1 && Sz*Sy*Sx == 1 && !cs.hasPadding());
         if (is_1x1s1) {
             W *= D*H;
             Wi *= Di*Hi;
@@ -2167,11 +2349,11 @@ static void conv32fC8(const void* inp__, const void* residual__, void* out__,
             const float* inpbaseptr = (float*)inp__ + (n * C1 + c1_start) * iplanesize;
             const float* wbaseptr = (float*)weights__ + (g*Kblk + kblk)*(ksize*C1Max*C0*K0);
 
-            fillCoeffBufs(fastActivation, activParams, defaultAlpha, k_count, k_base, scaleptr, biasptr, scalebuf, biasbuf, alphabuf);
+            fillCoeffBufs(fastActivation, activParams, defaultAlpha, k_count, k_base, scaleptr, biasptr, scalebuf, biasbuf, alphabuf, K0);
 
             float* outptr = (float*)out__ + n*(K1*planesize) + p0*K0;
             const float* resptr = residual__ ? (float*)residual__ + n*(K1*planesize) + p0*K0 : nullptr;
-            float tmpbuf[SPAT_BLOCK_SIZE*K0] = {};
+            float tmpbuf[SPAT_BLOCK_SIZE*C0BUF] = {};
             int p = p0;
 
         #ifdef CONV_ENABLE_SIMD
@@ -2343,7 +2525,7 @@ static void conv32fC8(const void* inp__, const void* residual__, void* out__,
             }
         #endif
 
-            float resbuf[K0] = {};
+            float resbuf[C0BUF] = {};
 
             for (; p < p1; p++, outptr += K0, resptr += (resptr ? K0 : 0))
             {
@@ -2403,6 +2585,12 @@ static void conv32fC8(const void* inp__, const void* residual__, void* out__,
                         CONV_UPDATE_BLOCK1(5);
                         CONV_UPDATE_BLOCK1(6);
                         CONV_UPDATE_BLOCK1(7);
+                    #elif 0  // CV_SIMD_SCALABLE: RVV temporarily disabled for the m1 switch (#29493)
+                        for (int c0 = 0; c0 < C0; ++c0) {
+                            v_float32 w = vx_load(wptr + c0*K0);
+                            v_float32 x = vx_setall_f32(inptr[c0]);
+                            s0 = v_fma(x, w, s0);
+                        }
                     #else
                         for (int c0 = 0; c0 < C0; ++c0) {
                             const float xval = inptr[c0];
@@ -2419,8 +2607,11 @@ static void conv32fC8(const void* inp__, const void* residual__, void* out__,
                 scatterScalarOut(aligned_k, k_base, k_count, K0shift, K0, planesize, outptr, outbuf);
             }
         }
-    });
+    }, nstripes);
 }
+#if defined(__GNUC__) && !defined(__clang__) && defined(__riscv) && __GNUC__ < 15
+#pragma GCC pop_options
+#endif
 
 cv::dnn::ConvFunc getConvFunc_(int depth, int C0)
 {

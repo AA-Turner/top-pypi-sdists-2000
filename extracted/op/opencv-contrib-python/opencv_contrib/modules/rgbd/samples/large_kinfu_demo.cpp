@@ -254,6 +254,7 @@ int main(int argc, char** argv)
             case 'p':
                 if (!idle)
                     pause = true;
+                break;
 #endif
             default: break;
         }

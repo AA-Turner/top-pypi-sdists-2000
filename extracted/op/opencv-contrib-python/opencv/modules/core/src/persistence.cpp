@@ -178,12 +178,12 @@ char* floatToString( char* buf, size_t bufSize, float value, bool halfprecision,
     return buf;
 }
 
-static const char symbols[] = "ucwsifdhHbUIn";
+static const char symbols[] = "ucwsifdhHbUIneE";
 
 static char typeSymbol(int depth)
 {
     CV_StaticAssert(CV_64F == 6, "");
-    CV_CheckDepth(depth, depth >= 0 && depth <= CV_32U, "");
+    CV_CheckDepth(depth, depth >= 0 && depth <= CV_8F_E4M3FNUZ, "");
     return symbols[depth];
 }
 
@@ -268,7 +268,7 @@ int decodeFormat( const char* dt, int* fmt_pairs, int max_len )
 int calcElemSize( const char* dt, int initial_size )
 {
     int size = 0;
-    int fmt_pairs[CV_FS_MAX_FMT_PAIRS], i, fmt_pair_count;
+    int fmt_pairs[CV_FS_MAX_FMT_PAIRS*2], i, fmt_pair_count;
     int comp_size;
 
     fmt_pair_count = decodeFormat( dt, fmt_pairs, CV_FS_MAX_FMT_PAIRS );
@@ -310,6 +310,8 @@ int calcStructSize( const char* dt, int initial_size )
         case 'd': { elem_max_size = std::max( elem_max_size, sizeof(double) ); break; }
         case 'h': { elem_max_size = std::max( elem_max_size, sizeof(hfloat)); break; }
         case 'H': { elem_max_size = std::max( elem_max_size, sizeof(bfloat)); break; }
+        case 'e': { elem_max_size = std::max( elem_max_size, sizeof(fp8_t) ); break; }
+        case 'E': { elem_max_size = std::max( elem_max_size, sizeof(fp8a_t)); break; }
         case 'I': { elem_max_size = std::max( elem_max_size, sizeof(int64_t)); break; }
         case 'U': { elem_max_size = std::max( elem_max_size, sizeof(uint64_t)); break; }
         default:
@@ -323,7 +325,7 @@ int calcStructSize( const char* dt, int initial_size )
 int decodeSimpleFormat( const char* dt )
 {
     int elem_type = -1;
-    int fmt_pairs[CV_FS_MAX_FMT_PAIRS], fmt_pair_count;
+    int fmt_pairs[CV_FS_MAX_FMT_PAIRS*2], fmt_pair_count;
 
     fmt_pair_count = decodeFormat( dt, fmt_pairs, CV_FS_MAX_FMT_PAIRS );
     if( fmt_pair_count != 1 || fmt_pairs[0] >= CV_CN_MAX)
@@ -1229,6 +1231,14 @@ void FileStorage::Impl::writeRawData(const std::string &dt, const void *_data, s
                         ptr = fs::floatToString(buf, sizeof(buf), (float) *(bfloat *) data, true, explicitZero);
                         data += sizeof(bfloat);
                         break;
+                    case CV_8F_E4M3FN:
+                        ptr = fs::floatToString(buf, sizeof(buf), (float) *(fp8_t *) data, true, explicitZero);
+                        data += sizeof(fp8_t);
+                        break;
+                    case CV_8F_E4M3FNUZ:
+                        ptr = fs::floatToString(buf, sizeof(buf), (float) *(fp8a_t *) data, true, explicitZero);
+                        data += sizeof(fp8a_t);
+                        break;
                     default:
                         CV_Error(cv::Error::StsUnsupportedFormat, "Unsupported type");
                         return;
@@ -1827,6 +1837,10 @@ ushort FileStorage::Impl::Base64Decoder::getUInt16() {
     return val;
 }
 
+unsigned FileStorage::Impl::Base64Decoder::getUInt32() {
+    return (unsigned)getInt32();
+}
+
 int FileStorage::Impl::Base64Decoder::getInt32() {
     size_t sz = decoded.size();
     if (ofs + 4 > sz && !readMore(4))
@@ -1904,7 +1918,7 @@ char *FileStorage::Impl::parseBase64(char *ptr, int indent, FileNode &collection
                         ival = (short) base64decoder.getUInt16();
                         break;
                     case CV_32U:
-                        ival = base64decoder.getInt32();
+                        ival = base64decoder.getUInt32();
                         break;
                     case CV_32S:
                         ival = base64decoder.getInt32();
@@ -1928,6 +1942,14 @@ char *FileStorage::Impl::parseBase64(char *ptr, int indent, FileNode &collection
                         break;
                     case CV_16F:
                         fval = float(hfloatFromBits(base64decoder.getUInt16()));
+                        node_type = FileNode::REAL;
+                        break;
+                    case CV_8F_E4M3FN:
+                        fval = fp8_t::decodeLUT()[base64decoder.getUInt8()];
+                        node_type = FileNode::REAL;
+                        break;
+                    case CV_8F_E4M3FNUZ:
+                        fval = fp8a_t::decodeLUT()[base64decoder.getUInt8()];
                         node_type = FileNode::REAL;
                         break;
                     default:
@@ -2725,7 +2747,7 @@ FileNodeIterator& FileNodeIterator::readRaw( const String& fmt, void* _data0, si
                     FileNode node = *(*this);
                     if( node.isInt() )
                     {
-                        int64_t ival = static_cast<int64_t>(elem_size == 8 ? (int64_t)node : (int)node);
+                        int64_t ival = (int64_t)node;
                         switch( elem_type )
                         {
                         case CV_8U:
@@ -2779,6 +2801,14 @@ FileNodeIterator& FileNodeIterator::readRaw( const String& fmt, void* _data0, si
                         case CV_16BF:
                             *(bfloat*)data = bfloat((float)ival);
                             data += sizeof(bfloat);
+                            break;
+                        case CV_8F_E4M3FN:
+                            *(fp8_t*)data = fp8_t((float)ival);
+                            data += sizeof(fp8_t);
+                            break;
+                        case CV_8F_E4M3FNUZ:
+                            *(fp8a_t*)data = fp8a_t((float)ival);
+                            data += sizeof(fp8a_t);
                             break;
                         default:
                             CV_Error( Error::StsUnsupportedFormat, "Unsupported type" );
@@ -2837,6 +2867,14 @@ FileNodeIterator& FileNodeIterator::readRaw( const String& fmt, void* _data0, si
                         case CV_16BF:
                             *(bfloat*)data = bfloat((float)fval);
                             data += sizeof(bfloat);
+                            break;
+                        case CV_8F_E4M3FN:
+                            *(fp8_t*)data = fp8_t((float)fval);
+                            data += sizeof(fp8_t);
+                            break;
+                        case CV_8F_E4M3FNUZ:
+                            *(fp8a_t*)data = fp8a_t((float)fval);
+                            data += sizeof(fp8a_t);
                             break;
                         default:
                             CV_Error( Error::StsUnsupportedFormat, "Unsupported type" );

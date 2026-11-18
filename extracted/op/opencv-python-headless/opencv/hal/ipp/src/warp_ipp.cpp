@@ -81,11 +81,19 @@ static bool IPPSet(const double value[4], void *dataPointer, int step, IppiSize 
 int ipp_hal_warpAffine(int src_type, const uchar *src_data, size_t src_step, int src_width, int src_height, uchar *dst_data, size_t dst_step,
                        int dst_width, int dst_height, const double M[6], int interpolation, int borderType, const double borderValue[4])
 {
+    CV_HAL_CHECK_USE_IPP();
+
     //CV_INSTRUMENT_REGION_IPP();
 
     IppiInterpolationType ippInter  = ippiGetInterpolation(interpolation);
     if((int)ippInter < 0 || interpolation > 2)
         return CV_HAL_ERROR_NOT_IMPLEMENTED;
+
+#if !defined(IPP_CALLS_ENFORCED)
+    // ippBorderTransp does not reproduce cv::BORDER_TRANSPARENT for warping
+    if (borderType == cv::BORDER_TRANSPARENT)
+        return CV_HAL_ERROR_NOT_IMPLEMENTED;
+#endif
 
 #if defined(IPP_CALLS_ENFORCED)
                                      /* C1         C2         C3         C4 */
@@ -97,14 +105,17 @@ int ipp_hal_warpAffine(int src_type, const uchar *src_data, size_t src_step, int
                                    {{1, 1, 0}, {0, 0, 0}, {1, 1, 0}, {1, 1, 0}},   //32F
                                    {{1, 1, 0}, {0, 0, 0}, {1, 1, 0}, {1, 1, 0}}};  //64F
 #else // IPP_CALLS_ENFORCED is not defined, results are strictly aligned to OpenCV implementation
+    // Columns per type: { NEAREST, LINEAR, CUBIC }. Zeroed = IPP declines, OpenCV is used:
+    // 16S LINEAR (diverges 94-99%), 64F/C2 (no IPP support), 8S/32S (not in cv::warpAffine),
+    // CUBIC (handled by genericWarp before the HAL).
                                      /* C1         C2         C3         C4 */
-    char impl[CV_DEPTH_MAX][4][3]={{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},   //8U
+    char impl[CV_DEPTH_MAX][4][3]={{{1, 1, 0}, {0, 0, 0}, {1, 1, 0}, {1, 1, 0}},   //8U
                                    {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},   //8S
-                                   {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {1, 0, 0}},   //16U
+                                   {{1, 1, 0}, {0, 0, 0}, {1, 1, 0}, {1, 1, 0}},   //16U
                                    {{1, 0, 0}, {0, 0, 0}, {1, 0, 0}, {1, 0, 0}},   //16S
                                    {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},   //32S
-                                   {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},   //32F
-                                   {{1, 0, 0}, {0, 0, 0}, {1, 0, 0}, {1, 0, 0}}};  //64F
+                                   {{1, 1, 0}, {0, 0, 0}, {1, 1, 0}, {1, 1, 0}},   //32F
+                                   {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}};  //64F
 #endif
 
     if(impl[CV_TYPE(src_type)][CV_MAT_CN(src_type)-1][interpolation] == 0)
@@ -188,6 +199,8 @@ int ipp_hal_warpAffine(int src_type, const uchar *src_data, size_t src_step, int
 int ipp_hal_warpPerspective(int src_type, const uchar *src_data, size_t src_step, int src_width, int src_height, uchar * dst_data, size_t dst_step,
                             int dst_width, int dst_height, const double M[9], int interpolation, int borderType, const double borderValue[4])
 {
+    CV_HAL_CHECK_USE_IPP();
+
     //CV_INSTRUMENT_REGION_IPP();
 
     IppiInterpolationType ippInter = ippiGetInterpolation(interpolation);
@@ -205,6 +218,13 @@ int ipp_hal_warpPerspective(int src_type, const uchar *src_data, size_t src_step
     {
         return CV_HAL_ERROR_NOT_IMPLEMENTED;
     }
+
+#if !defined(IPP_CALLS_ENFORCED)
+    if (borderType == cv::BORDER_TRANSPARENT)
+    {
+        return CV_HAL_ERROR_NOT_IMPLEMENTED;
+    }
+#endif
 
     // Unsupported source type
     if (src_type !=  CV_8UC1 && src_type !=  CV_8UC3 && src_type !=  CV_8UC4 &&
@@ -225,13 +245,17 @@ int ipp_hal_warpPerspective(int src_type, const uchar *src_data, size_t src_step
                                    {{1, 1}, {0, 0}, {1, 1}, {1, 1}},   //32F
                                    {{0, 0}, {0, 0}, {0, 0}, {0, 0}}};  //64F
 #else // IPP_CALLS_ENFORCED is not defined, results are strictly aligned to OpenCV implementation
+    // Columns per type: { NEAREST, LINEAR }. Zeroed = IPP declines, OpenCV is used:
+    // 16S LINEAR (IPP diverges from OpenCV); NEAREST for 8U/16U and 32F C3/C4 (IPP rounds the .5
+    // boundary opposite cvRound); C2/8S/32S/64F unsupported. NEAREST is enabled for 16S (all
+    // channels) and 32F C1.
                                     /* C1      C2      C3      C4 */
-    char impl[CV_DEPTH_MAX][4][2]={{{0, 0}, {0, 0}, {0, 0}, {0, 0}},   //8U
+    char impl[CV_DEPTH_MAX][4][2]={{{0, 1}, {0, 0}, {0, 1}, {0, 1}},   //8U
                                    {{0, 0}, {0, 0}, {0, 0}, {0, 0}},   //8S
-                                   {{0, 0}, {0, 0}, {0, 0}, {0, 1}},   //16U
-                                   {{1, 1}, {0, 0}, {1, 0}, {1, 1}},   //16S
-                                   {{1, 1}, {0, 0}, {1, 0}, {1, 1}},   //32S
-                                   {{0, 0}, {0, 0}, {0, 0}, {1, 0}},   //32F
+                                   {{0, 1}, {0, 0}, {0, 1}, {0, 1}},   //16U
+                                   {{1, 0}, {0, 0}, {1, 0}, {1, 0}},   //16S
+                                   {{0, 0}, {0, 0}, {0, 0}, {0, 0}},   //32S
+                                   {{1, 1}, {0, 0}, {0, 1}, {0, 1}},   //32F
                                    {{0, 0}, {0, 0}, {0, 0}, {0, 0}}};  //64F
 #endif
 
@@ -384,6 +408,8 @@ int ipp_hal_remap32f(int src_type, const uchar *src_data, size_t src_step, int s
                      float *mapx, size_t mapx_step, float *mapy, size_t mapy_step,
                      int interpolation, int border_type, const double border_value[4])
 {
+    CV_HAL_CHECK_USE_IPP();
+
     if (!((interpolation == cv::INTER_LINEAR || interpolation == cv::INTER_CUBIC || interpolation == cv::INTER_NEAREST) &&
         (border_type == cv::BORDER_CONSTANT || border_type == cv::BORDER_TRANSPARENT)))
     {

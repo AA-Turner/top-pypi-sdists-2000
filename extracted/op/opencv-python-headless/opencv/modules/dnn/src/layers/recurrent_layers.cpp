@@ -284,6 +284,10 @@ public:
 
     bool supportBackend(int backendId) CV_OVERRIDE
     {
+#if defined(HAVE_CUDNNJIT) && !defined(HAVE_CUDNN)
+        if (backendId == DNN_BACKEND_CUDA)
+            return false;  // LSTMOp needs the legacy cuDNN RNN API, absent in a JIT-only build
+#endif
         return backendId == DNN_BACKEND_OPENCV
                || (backendId == DNN_BACKEND_CUDA && isDefaultActivations && !reverse && !usePeephole);
     }
@@ -314,8 +318,12 @@ public:
             if (layout == SEQ_BATCH_HID) {
                 _numSamples = inp0[1];
                 outResShape.push_back(inp0[0]);
+                outResShape.push_back(_numSamples);
             } else {
+                // batch-first layout: the output keeps the (batch, seq, ...) order - this must match
+                // what forward() actually writes, the graph engine preallocates outputs by this shape
                 _numSamples = inp0[0];
+                outResShape.push_back(_numSamples);
                 outResShape.push_back(inp0[1]);
             }
         }
@@ -323,9 +331,9 @@ public:
         {
             CV_Assert(inp0.size() >= 2 && total(inp0, 1) == _numInp);
             _numSamples = inp0[0];
+            outResShape.push_back(_numSamples);
         }
 
-        outResShape.push_back(_numSamples);
         outResShape.insert(outResShape.end(), outTailShape_.begin(), outTailShape_.end());
         outResShape.back() *= (1 + static_cast<int>(bidirectional));
 
@@ -421,14 +429,26 @@ public:
             if (input[0].dims == 4){
                 // here !!!
                 CV_Assert(input[0].size[3] == 1);
-                cv::transposeND(input[0], {1, 0, 2, 3}, tmp); //back to seq_len, batch_size, hidden_size format
+                cv::transpose(input[0], {1, 0, 2, 3}, tmp); //back to seq_len, batch_size, hidden_size format
             }else{
-                cv::transposeND(input[0], {1, 0, 2}, tmp); //back to seq_len, batch_size, hidden_size format
+                cv::transpose(input[0], {1, 0, 2}, tmp); //back to seq_len, batch_size, hidden_size format
             }
             input[0] = tmp;
         }
 
-        Mat cOut = produceCellOutput ? output[0].clone() : Mat();
+        // For the batch-first layout the (preallocated) output[0] is (batch, seq, ...), but the
+        // recurrence below assembles rows in seq-major order - run it on a seq-first temp, then
+        // transpose INTO output[0] at the end. output[0] itself must never be reallocated/replaced:
+        // it is the tensor the graph engine preallocated, a new header would silently detach from it.
+        Mat hOutSeqFirst = output[0];
+        if (layout == BATCH_SEQ_HID)
+        {
+            MatShape seqFirstShape = output[0].shape();
+            std::swap(seqFirstShape[0], seqFirstShape[1]);
+            hOutSeqFirst = Mat(seqFirstShape, output[0].type());
+        }
+
+        Mat cOut = produceCellOutput ? hOutSeqFirst.clone() : Mat();
         const bool needYcTransform = !originalBlobs.empty(); // if the producer is onnx
         const int numDirs = 1 + static_cast<int>(bidirectional);
         for (int i = 0; i < numDirs; ++i)
@@ -484,7 +504,7 @@ public:
             int numSamplesTotal = numTimeStamps*numSamples;
             Mat xTs = input[0].reshape(1, numSamplesTotal);
 
-            Mat hOutTs = output[0].reshape(1, numSamplesTotal);
+            Mat hOutTs = hOutSeqFirst.reshape(1, numSamplesTotal);
             hOutTs = hOutTs.colRange(i * hOutTs.cols / numDirs, (i + 1) * hOutTs.cols / numDirs);
             Mat cOutTs;
             if (produceCellOutput)
@@ -727,11 +747,10 @@ public:
                     cInternal.copyTo(cOutTs.rowRange(curRowRange));
             }
         }
-        // transpose to match batch first output
+        // transpose to match batch first output - into the preallocated tensor (exact-shape create()
+        // inside cv::transpose reuses it, so the graph's output blob is written in place)
         if (layout == BATCH_SEQ_HID){
-            cv::Mat tmp;
-            cv::transposeND(output[0], {1, 0, 2}, tmp);
-            output[0] = tmp;
+            cv::transpose(hOutSeqFirst, {1, 0, 2}, output[0]);
         }
         if (needYcTransform && produceCellOutput)
         {
@@ -753,10 +772,10 @@ public:
         cv::Mat newCellState;
         // transpose to match batch first output
         if (layout == BATCH_SEQ_HID){
-            cv::transposeND(cOut, {2, 0, 1, 3}, newCellState);
+            cv::transpose(cOut, {2, 0, 1, 3}, newCellState);
         }
         else{
-            cv::transposeND(cOut, {0, 2, 1, 3}, newCellState);
+            cv::transpose(cOut, {0, 2, 1, 3}, newCellState);
         }
         cOut = newCellState;
 

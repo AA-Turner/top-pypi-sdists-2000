@@ -422,7 +422,7 @@ static const char* g_hwFeatureNames[CV_HARDWARE_MAX_FEATURE] = { NULL };
 
 static const char* getHWFeatureName(int id)
 {
-    return (id < CV_HARDWARE_MAX_FEATURE) ? g_hwFeatureNames[id] : NULL;
+    return (0 <= id && id < CV_HARDWARE_MAX_FEATURE) ? g_hwFeatureNames[id] : NULL;
 }
 static const char* getHWFeatureNameSafe(int id)
 {
@@ -759,14 +759,16 @@ struct HWFeatures
             }
         }
     #elif (defined __ppc64__ || defined __PPC64__) && defined HAVE_ELF_AUX_INFO
-        unsigned long hwcap = 0;
-        elf_aux_info(AT_HWCAP, &hwcap, sizeof(hwcap));
+        unsigned long hwcap = 0, hwcap2 = 0;
+        if (elf_aux_info(AT_HWCAP, &hwcap, sizeof(hwcap)) != 0)
+            hwcap = 0;
         if (hwcap & PPC_FEATURE_HAS_VSX) {
-            elf_aux_info(AT_HWCAP2, &hwcap, sizeof(hwcap));
-            if (hwcap & PPC_FEATURE2_ARCH_3_00) {
+            if (elf_aux_info(AT_HWCAP2, &hwcap2, sizeof(hwcap2)) != 0)
+                hwcap2 = 0;
+            if (hwcap2 & PPC_FEATURE2_ARCH_3_00) {
                 have[CV_CPU_VSX] = have[CV_CPU_VSX3] = true;
             } else {
-                have[CV_CPU_VSX] = (hwcap & PPC_FEATURE2_ARCH_2_07) != 0;
+                have[CV_CPU_VSX] = (hwcap2 & PPC_FEATURE2_ARCH_2_07) != 0;
             }
         }
     #else
@@ -924,7 +926,8 @@ static HWFeatures* currentFeatures = &featuresEnabled;
 
 bool checkHardwareSupport(int feature)
 {
-    CV_DbgAssert( 0 <= feature && feature <= CV_HARDWARE_MAX_FEATURE );
+    if (feature < 0 || feature >= CV_HARDWARE_MAX_FEATURE)
+        return false;
     return currentFeatures->have[feature];
 }
 
@@ -1176,12 +1179,19 @@ String tempfile( const char* suffix )
 #else
     // Use GUID-based naming to avoid race condition with GetTempFileNameA
     // See issue #19648
-    char temp_dir2[MAX_PATH] = { 0 };
+    wchar_t temp_dir2_w[MAX_PATH] = { 0 };
 
     if (temp_dir.empty())
     {
-        ::GetTempPathA(sizeof(temp_dir2), temp_dir2);
-        temp_dir = std::string(temp_dir2);
+        ::GetTempPathW(sizeof(temp_dir2_w)/sizeof(wchar_t), temp_dir2_w);
+        // Convert from UTF-16 to UTF-8 to support Unicode paths
+        int len = WideCharToMultiByte(CP_UTF8, 0, temp_dir2_w, -1, NULL, 0, NULL, NULL);
+        if (len > 0)
+        {
+            std::vector<char> utf8_buf(len);
+            WideCharToMultiByte(CP_UTF8, 0, temp_dir2_w, -1, utf8_buf.data(), len, NULL, NULL);
+            temp_dir = std::string(utf8_buf.data());
+        }
     }
 
     GUID g;
@@ -2481,7 +2491,12 @@ public:
     IPPInitSingleton()
     {
         useIPP         = true;
+
+#if defined(OPENCV_ALGO_HINT_DEFAULT)
+        useIPP_NE      = OPENCV_ALGO_HINT_DEFAULT == cv::ALGO_HINT_APPROX;
+#else
         useIPP_NE      = false;
+#endif
         ippStatus      = 0;
         funcname       = NULL;
         filename       = NULL;

@@ -1568,6 +1568,7 @@ int BinaryDescriptor::EDLineDetector::EdgeDrawing( cv::Mat &image, EdgeChains &e
       while ( pgImg[indexInArray] > 0 && !pEdgeImg[indexInArray] )
       {
         pEdgeImg[indexInArray] = 1;        // Mark this pixel as an edge pixel
+        if( offsetPFirst >= edgePixelArraySize ) break; 
         pFirstPartEdgeX_[offsetPFirst] = x;
         pFirstPartEdgeY_[offsetPFirst++] = y;
         shouldGoDirection = 0;        //unknown
@@ -1719,6 +1720,7 @@ int BinaryDescriptor::EDLineDetector::EdgeDrawing( cv::Mat &image, EdgeChains &e
       while ( pgImg[indexInArray] > 0 && !pEdgeImg[indexInArray] )
       {
         pEdgeImg[indexInArray] = 1;        // Mark this pixel as an edge pixel
+        if( offsetPFirst >= edgePixelArraySize ) break;
         pSecondPartEdgeX_[offsetPSecond] = x;
         pSecondPartEdgeY_[offsetPSecond++] = y;
         shouldGoDirection = 0;        //unknown
@@ -1869,6 +1871,7 @@ int BinaryDescriptor::EDLineDetector::EdgeDrawing( cv::Mat &image, EdgeChains &e
       while ( pgImg[indexInArray] > 0 && !pEdgeImg[indexInArray] )
       {
         pEdgeImg[indexInArray] = 1;        // Mark this pixel as an edge pixel
+        if( offsetPFirst >= edgePixelArraySize ) break;
         pFirstPartEdgeX_[offsetPFirst] = x;
         pFirstPartEdgeY_[offsetPFirst++] = y;
         shouldGoDirection = 0;        //unknown
@@ -2020,6 +2023,7 @@ int BinaryDescriptor::EDLineDetector::EdgeDrawing( cv::Mat &image, EdgeChains &e
       while ( pgImg[indexInArray] > 0 && !pEdgeImg[indexInArray] )
       {
         pEdgeImg[indexInArray] = 1;        // Mark this pixel as an edge pixel
+        if( offsetPFirst >= edgePixelArraySize ) break;
         pSecondPartEdgeX_[offsetPSecond] = x;
         pSecondPartEdgeY_[offsetPSecond++] = y;
         shouldGoDirection = 0;        //unknown

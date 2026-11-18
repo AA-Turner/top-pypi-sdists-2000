@@ -44,7 +44,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <limits>
-#include "math.h"
+#include <math.h>
 
 
 using namespace std;
@@ -309,6 +309,9 @@ void Domain_Filter::compute_NCfilter(Mat &output, Mat &hz, Mat &psketch, float r
     int h = output.rows;
     int w = output.cols;
     int channel = output.channels();
+
+    if (w < 2)
+        return;
 
     compute_boxfilter(output,hz,psketch,radius);
 

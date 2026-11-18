@@ -52,6 +52,7 @@
 #include "opencv2/core/hal/hal.hpp"
 #include "opencv2/core/check.hpp"
 #include "opencv2/core/utils/buffer_area.private.hpp"
+#include "opencv2/core/utils/logger.hpp"
 #include "opencv2/imgproc/hal/hal.hpp"
 #include "hal_replacement.hpp"
 
@@ -64,7 +65,6 @@
 #include <stack>
 #include <numeric>
 
-#define GET_OPTIMIZED(func) (func)
 
 /* helper tables */
 extern const uchar icvSaturate8u_cv[];

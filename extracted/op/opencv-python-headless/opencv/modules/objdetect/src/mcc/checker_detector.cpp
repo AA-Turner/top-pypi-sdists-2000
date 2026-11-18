@@ -277,20 +277,29 @@ bool CCheckerDetectorImpl::
 
         int rows = croppedImage.size[0];
         int cols = croppedImage.size[1];
-        net.setInput(dnn::blobFromImage(croppedImage, 1.0, Size(), Scalar(), true));
-        Mat output = net.forward();
+        Mat rgbInput;
+        cvtColor(croppedImage, rgbInput, COLOR_BGR2RGB);
+        int inputShape[] = {1, rows, cols, 3};
+        net.setInput(Mat(4, inputShape, CV_8U, rgbInput.data));
 
-        Mat detectionMat(output.size[2], output.size[3], CV_32F, output.ptr<float>());
+        std::vector<String> outNames;
+        outNames.push_back("detection_boxes:0");
+        outNames.push_back("detection_scores:0");
+        std::vector<Mat> outputs;
+        net.forward(outputs, outNames);
 
-        for (int i = 0; i < detectionMat.rows; i++)
+        Mat detectionBoxes = outputs[0].reshape(1, (int)(outputs[0].total() / 4));
+        Mat detectionScores = outputs[1].reshape(1, 1);
+
+        for (int i = 0; i < detectionScores.cols; i++)
         {
-            float confidence = detectionMat.at<float>(i, 2);
+            float confidence = detectionScores.at<float>(0, i);
             if (confidence > m_params.confidenceThreshold)
             {
-                float xTopLeft = max(0.0f, detectionMat.at<float>(i, 3) * cols - m_params.borderWidth);
-                float yTopLeft = max(0.0f, detectionMat.at<float>(i, 4) * rows - m_params.borderWidth);
-                float xBottomRight = min((float)cols - 1, detectionMat.at<float>(i, 5) * cols + m_params.borderWidth);
-                float yBottomRight = min((float)rows - 1, detectionMat.at<float>(i, 6) * rows + m_params.borderWidth);
+                float xTopLeft = max(0.0f, detectionBoxes.at<float>(i, 1) * cols - m_params.borderWidth);
+                float yTopLeft = max(0.0f, detectionBoxes.at<float>(i, 0) * rows - m_params.borderWidth);
+                float xBottomRight = min((float)cols - 1, detectionBoxes.at<float>(i, 3) * cols + m_params.borderWidth);
+                float yBottomRight = min((float)rows - 1, detectionBoxes.at<float>(i, 2) * rows + m_params.borderWidth);
 
                 Point2f topLeft = {xTopLeft, yTopLeft};
                 Point2f bottomRight = {xBottomRight, yBottomRight};
@@ -1265,6 +1274,18 @@ void CCheckerDetectorImpl::
 void CCheckerDetectorImpl::
     removeTooCloseDetections()
 {
+    // Provide a deterministic output by sorting the checkers by their cost and
+    // then by their center coordinates.
+    std::sort(m_checkers.begin(), m_checkers.end(),
+                [](const Ptr<CChecker> &a, const Ptr<CChecker> &b) {
+                    if (a->getCost() != b->getCost())
+                        return a->getCost() < b->getCost();
+                    Point2f ca = a->getCenter();
+                    Point2f cb = b->getCenter();
+                    if (ca.x != cb.x) return ca.x < cb.x;
+                    return ca.y < cb.y;
+                });
+
     // Remove these elements which corners are too close to each other.
     // Eliminate overlaps!!!
     // First detect candidates for removal:
@@ -1306,8 +1327,10 @@ void CCheckerDetectorImpl::
         size_t removalIndex;
         if (p1 < p2)
             removalIndex = tooNearCandidates[i].second;
-        else
+        else if (p2 < p1)
             removalIndex = tooNearCandidates[i].first;
+        else
+            removalIndex = std::max(tooNearCandidates[i].first, tooNearCandidates[i].second);
 
         removalMask[removalIndex] = true;
     }
@@ -1322,7 +1345,7 @@ void CCheckerDetectorImpl::
         m_checkers.push_back(copy_m_checkers[i]);
     }
 
-    sort( m_checkers.begin(), m_checkers.end(),
+    std::stable_sort( m_checkers.begin(), m_checkers.end(),
           [&](const Ptr<CChecker> &a, const Ptr<CChecker> &b)
           {
               return a->getCost() < b->getCost();

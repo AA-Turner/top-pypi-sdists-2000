@@ -8,9 +8,6 @@ from threading import Thread
 import queue
 
 from common import *
-from tf_text_graph_common import readTextMessage
-from tf_text_graph_ssd import createSSDGraph
-from tf_text_graph_faster_rcnn import createFasterRCNNGraph
 
 def help():
     print(
@@ -33,10 +30,6 @@ parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument('--zoo', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'models.yml'),
                     help='An optional path to file with preprocessing parameters.')
 parser.add_argument('--input', help='Path to input image or video file. Skip this argument to capture frames from a camera.')
-parser.add_argument('--out_tf_graph', default='graph.pbtxt',
-                    help='For models from TensorFlow Object Detection API, you may '
-                         'pass a .config file which was used for training through --config '
-                         'argument. This way an additional .pbtxt file with TensorFlow graph will be created.')
 parser.add_argument('--thr', type=float, default=0.5, help='Confidence threshold')
 parser.add_argument('--nms', type=float, default=0.4, help='Non-maximum suppression threshold')
 parser.add_argument('--backend', default="default", type=str, choices=backends,
@@ -78,20 +71,6 @@ if args.config is not None:
 if args.labels is not None:
     args.labels = findFile(args.labels)
 
-# If config specified, try to load it as TensorFlow Object Detection API's pipeline.
-config = readTextMessage(args.config)
-if 'model' in config:
-    print('TensorFlow Object Detection API config detected')
-    if 'ssd' in config['model'][0]:
-        print('Preparing text graph representation for SSD model: ' + args.out_tf_graph)
-        createSSDGraph(args.model, args.config, args.out_tf_graph)
-        args.config = args.out_tf_graph
-    elif 'faster_rcnn' in config['model'][0]:
-        print('Preparing text graph representation for Faster-RCNN model: ' + args.out_tf_graph)
-        createFasterRCNNGraph(args.model, args.config, args.out_tf_graph)
-        args.config = args.out_tf_graph
-
-
 # Load names of classes
 labels = None
 if args.labels:
@@ -99,9 +78,7 @@ if args.labels:
         labels = f.read().rstrip('\n').split('\n')
 
 # Load a network
-engine = cv.dnn.ENGINE_AUTO
-if args.backend != "default" or args.target != "cpu":
-    engine = cv.dnn.ENGINE_CLASSIC
+engine = cv.dnn.ENGINE_OPENCV
 net = cv.dnn.readNet(args.model, args.config, "", engine)
 net.setPreferableBackend(get_backend_id(args.backend))
 net.setPreferableTarget(get_target_id(args.target))
@@ -159,43 +136,20 @@ def postprocess(frame, outs):
                     boxes.append([left, top, width, height])
 
     elif args.postprocessing == 'yolov4':
-        # boxes[b,N,1,4]+confs[b,N,classes] (normalized) or boxes[b,N,4]+scores[b,N]+classIdx[b,N] (model-px)
-        if len(outs) == 3 and outs[0].ndim == 3 and outs[0].shape[2] == 4:
-            boxesArr = outs[0][0]
-            scoresArr = outs[1][0]
-            classIdxArr = outs[2][0]
-            for j in range(boxesArr.shape[0]):
-                score = float(scoresArr[j])
-                if score > confThreshold:
-                    x1 = boxesArr[j][0] / args.width
-                    y1 = boxesArr[j][1] / args.height
-                    x2 = boxesArr[j][2] / args.width
-                    y2 = boxesArr[j][3] / args.height
-                    left = int(x1 * frameWidth)
-                    top = int(y1 * frameHeight)
-                    width = int((x2 - x1) * frameWidth)
-                    height = int((y2 - y1) * frameHeight)
-                    classIds.append(int(classIdxArr[j]))
-                    confidences.append(score)
-                    boxes.append([left, top, width, height])
-        elif len(outs) == 2 and outs[0].ndim == 4 and outs[0].shape[-1] == 4:
-            boxesArr = outs[0].reshape(-1, 4)
-            confsArr = outs[1].reshape(boxesArr.shape[0], -1)
-            for j in range(boxesArr.shape[0]):
-                classId = np.argmax(confsArr[j])
-                confidence = float(confsArr[j][classId])
-                if confidence > confThreshold:
-                    box = boxesArr[j]
-                    left = int(box[0] * frameWidth)
-                    top = int(box[1] * frameHeight)
-                    width = int((box[2] - box[0]) * frameWidth)
-                    height = int((box[3] - box[1]) * frameHeight)
-                    classIds.append(classId)
-                    confidences.append(confidence)
-                    boxes.append([left, top, width, height])
-        else:
-            print('Unsupported YOLO ONNX output format')
-            exit()
+        boxesArr = outs[0].reshape(-1, 4)
+        confsArr = outs[1].reshape(boxesArr.shape[0], -1)
+        for j in range(boxesArr.shape[0]):
+            classId = np.argmax(confsArr[j])
+            confidence = float(confsArr[j][classId])
+            if confidence > confThreshold:
+                box = boxesArr[j]
+                left = int(box[0] * frameWidth)
+                top = int(box[1] * frameHeight)
+                width = int((box[2] - box[0]) * frameWidth)
+                height = int((box[3] - box[1]) * frameHeight)
+                classIds.append(classId)
+                confidences.append(confidence)
+                boxes.append([left, top, width, height])
 
     elif args.postprocessing == 'yolov8' or args.postprocessing == 'yolov5':
         # Network produces output blob with a shape NxC where N is a number of
@@ -236,7 +190,7 @@ def postprocess(frame, outs):
 
     # NMS is used inside Region layer only on DNN_BACKEND_OPENCV for another backends we need NMS in sample
     # or NMS is required if number of outputs > 1
-    if len(outNames) > 1 or (args.postprocessing == 'yolov8' or args.postprocessing == 'yolov5') and args.backend != cv.dnn.DNN_BACKEND_OPENCV:
+    if len(outNames) > 1 or args.postprocessing == 'yolov4' or (args.postprocessing == 'yolov8' or args.postprocessing == 'yolov5') and args.backend != cv.dnn.DNN_BACKEND_OPENCV:
         indices = []
         classIds = np.array(classIds)
         boxes = np.array(boxes)

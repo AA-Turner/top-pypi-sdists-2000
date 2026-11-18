@@ -1,4 +1,4 @@
-opencv_version = "5.0.0.93"
+opencv_version = "5.1.0.95"
 contrib = True
 headless = False
 rolling = False

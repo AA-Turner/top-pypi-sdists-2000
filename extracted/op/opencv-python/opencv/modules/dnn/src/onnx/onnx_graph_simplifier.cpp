@@ -10,6 +10,7 @@
 #ifdef HAVE_PROTOBUF
 #include "../graph_simplifier.hpp"
 #include "onnx_graph_simplifier.hpp"
+#include "onnx_dtype_convert.hpp"
 #include <opencv2/core/utils/filesystem.hpp>
 #include "opencv2/core/utils/filesystem.private.hpp"
 
@@ -1059,6 +1060,15 @@ public:
         opencv_onnx::AttributeProto* attr = node->add_attribute();
         attr->set_name("axis");
         attr->set_i(axis);
+
+        // The matched subgraph reduces over the single `axes` entry of its ReduceSum/
+        // ReduceMax node, which is the per-axis normalization of that one axis.  That is
+        // not what a Softmax/LogSoftmax node before opset 13 means -- those coerce the
+        // input to 2D and reduce the whole flattened tail -- so the fused node has to say
+        // which of the two it stands for.
+        attr = node->add_attribute();
+        attr->set_name("coerced_2d");
+        attr->set_i(0);
     }
 
 protected:
@@ -1402,74 +1412,6 @@ public:
     }
 };
 
-class GatherCastSubgraph : public Subgraph
-{
-public:
-    GatherCastSubgraph()
-    {
-        int input = addNodeToMatch("");
-        int index = addNodeToMatch("Constant");
-        gather = addNodeToMatch("Gather", input, index);
-        cast = addNodeToMatch("Cast", gather);
-        setFusedNode("Gather", input, index);
-    }
-
-    virtual bool match(const Ptr<ImportGraphWrapper>& net, int nodeId,
-                       std::vector<int>& matchedNodesIds) CV_OVERRIDE
-    {
-        bool retVal = Subgraph::match(net, nodeId, matchedNodesIds);
-        size_t matchedNodesNum = matchedNodesIds.size();
-        // Now we check if merging can be made for these Gather and Cast nodes
-        if (!retVal || matchedNodesNum < 2)
-            return retVal;
-        else {
-            int nodeToMatch = matchedNodesIds[cast];
-            const Ptr<ImportNodeWrapper> node = net->getNode(nodeToMatch);
-            if (node->getType() == "Cast") {
-                int inpNodeId = matchedNodesIds[gather];
-                const Ptr<ImportNodeWrapper> inpNode = net->getNode(inpNodeId);
-                if (inpNode->getType() == "Gather") {
-                    int numNodes = net->getNumNodes();
-                    std::string inpNodeName = node->getInputName(0);
-                    for (int i = 0; i < numNodes; ++i) {
-                        const Ptr<ImportNodeWrapper> node_to_check = net->getNode(i);
-                        int numInp = node_to_check->getNumInputs();
-                        for (int inp = 0; inp < numInp; ++inp) {
-                            if (i != nodeToMatch && inpNodeName == node_to_check->getInputName(inp)) {
-                                // Another node has the same input node, so it cannot be merged.
-                                return false;
-                            }
-                        }
-                    }
-                    // extract axis from original Gather node
-                    axis = 0;
-                    opencv_onnx::NodeProto* origGatherNode =
-                        inpNode.dynamicCast<ONNXNodeWrapper>()->node;
-                    for (int i = 0; i < origGatherNode->attribute_size(); i++) {
-                        opencv_onnx::AttributeProto attr = origGatherNode->attribute(i);
-                        if (attr.name() == "axis")
-                            axis = attr.i();
-                    }
-                }
-            }
-        }
-        return retVal;
-    }
-
-    virtual void finalize(const Ptr<ImportGraphWrapper>& net,
-                          const Ptr<ImportNodeWrapper>& fusedNode,
-                          std::vector<Ptr<ImportNodeWrapper> >& /*inputs*/) CV_OVERRIDE
-    {
-        opencv_onnx::NodeProto* node = fusedNode.dynamicCast<ONNXNodeWrapper>()->node;
-        opencv_onnx::AttributeProto* new_attr = node->add_attribute();
-        new_attr->set_name("axis");
-        new_attr->set_i(axis);
-    }
-
-private:
-    int cast, gather, axis;
-};
-
 /*  Constant folding shape for Expand.
 
     Before fusion:
@@ -1626,19 +1568,6 @@ public:
         int add = addNodeToMatch("Add", addVal, exp);
         addNodeToMatch("Log", add);
         setFusedNode("Softplus", input);
-    }
-};
-
-class MulCastSubgraph : public Subgraph
-{
-public:
-    MulCastSubgraph()
-    {
-        int input = addNodeToMatch("");
-        int scaleNode = addNodeToMatch("Constant");
-        int mul = addNodeToMatch("Mul", input, scaleNode);
-        addNodeToMatch("Cast", mul);
-        setFusedNode("Mul", input, scaleNode);
     }
 };
 
@@ -1922,8 +1851,6 @@ void simplifySubgraphs(opencv_onnx::GraphProto& net, const std::string& basePath
     subgraphs.push_back(makePtr<GeluSubGraph>());
     subgraphs.push_back(makePtr<GeluApproximationSubGraph>());
     subgraphs.push_back(makePtr<LayerNormSubGraph>());
-    subgraphs.push_back(makePtr<GatherCastSubgraph>());
-    subgraphs.push_back(makePtr<MulCastSubgraph>());
     subgraphs.push_back(makePtr<UpsampleSubgraph>());
     subgraphs.push_back(makePtr<ResizeSubgraph1>());
     subgraphs.push_back(makePtr<ResizeSubgraph2>());
@@ -1966,30 +1893,46 @@ static std::string getExternalDataValue(const opencv_onnx::TensorProto& tensor_p
     return std::string();
 }
 
-static char* getTensorRAWData(const opencv_onnx::TensorProto& tensor_proto,
-                              std::vector<int64_t>& tensor_data, const std::string& base_path = "")
+// Resolves an external tensor's file path, byte offset and declared length. `length` is
+// size_t(-1) when unspecified, i.e. the payload runs to the end of the file; 0 is a real length.
+static bool resolveExternalData(const opencv_onnx::TensorProto& tensor_proto,
+                                const std::string& base_path,
+                                std::string& full_path, size_t& offset, size_t& length)
 {
+    std::string location_path = getExternalDataValue(tensor_proto, "location");
+    if (location_path.empty())
+        return false;
+    full_path = base_path.empty() ? location_path : utils::fs::join(base_path, location_path);
+    offset = 0;
+    std::string offset_str = getExternalDataValue(tensor_proto, "offset");
+    if (!offset_str.empty())
+        offset = (size_t)std::stoull(offset_str);
+    length = (size_t)-1;
+    std::string length_str = getExternalDataValue(tensor_proto, "length");
+    if (!length_str.empty())
+        length = (size_t)std::stoull(length_str);
+    return true;
+}
+
+static char* getTensorRAWData(const opencv_onnx::TensorProto& tensor_proto,
+                              std::vector<int64_t>& tensor_data, size_t& raw_data_size,
+                              const std::string& base_path = "")
+{
+    raw_data_size = 0;
     if (tensor_proto.has_data_location() && tensor_proto.data_location() == opencv_onnx::TensorProto::EXTERNAL) {
     #if OPENCV_HAVE_FILESYSTEM_SUPPORT
         CV_Assert(tensor_proto.has_data_location() && tensor_proto.data_location() == opencv_onnx::TensorProto::EXTERNAL);
-        std::string location_path = getExternalDataValue(tensor_proto, "location");
-        CV_CheckTrue(!location_path.empty(), "External tensor data location is not specified");
-
-        std::string full_path = base_path.empty() ? location_path : utils::fs::join(base_path, location_path);
+        std::string full_path;
+        size_t offset = 0, declared_length = 0;
+        CV_CheckTrue(resolveExternalData(tensor_proto, base_path, full_path,
+                                         offset, declared_length),
+                     "External tensor data location is not specified");
 
         std::ifstream file(full_path, std::ios::binary | std::ios::ate);
         CV_CheckTrue(file.is_open(), "Failed to open external tensor data file");
 
         size_t file_size = (size_t)file.tellg();
-        size_t offset = 0;
-        std::string offset_str = getExternalDataValue(tensor_proto, "offset");
-        if (!offset_str.empty())
-            offset = (size_t)std::stoull(offset_str);
-
-        size_t length = file_size - offset;
-        std::string length_str = getExternalDataValue(tensor_proto, "length");
-        if (!length_str.empty())
-            length = (size_t)std::stoull(length_str);
+        size_t length = declared_length == (size_t)-1 ? file_size - offset : declared_length;
 
         CV_Check(offset, offset <= file_size, "External data offset exceeds file size");
         CV_Check(length, length <= file_size - offset, "External data length exceeds available bytes");
@@ -1997,12 +1940,14 @@ static char* getTensorRAWData(const opencv_onnx::TensorProto& tensor_proto,
         file.seekg(offset, std::ios::beg);
         tensor_data.resize(divUp(length, sizeof(int64_t)));
         file.read((char*)tensor_data.data(), length);
+        raw_data_size = length;
         return (char*)tensor_data.data();
     #else
         CV_Error(Error::StsNotImplemented, "External tensor data is not supported without filesystem support");
     #endif
     }
     else if (!tensor_proto.raw_data().empty()) {
+        raw_data_size = tensor_proto.raw_data().size();
         char* ptr = (char*)tensor_proto.raw_data().c_str();
         if (!isAligned<sizeof(int64_t)>(ptr))
         {
@@ -2019,18 +1964,157 @@ static char* getTensorRAWData(const opencv_onnx::TensorProto& tensor_proto,
     }
 }
 
-Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto, bool uint8ToInt8, const std::string base_path)
+// True when the payload already holds the bytes of its dataType2cv() type, so a Mat header
+// over it carries what the copy below would. The rest are unpacked, shifted, or widened.
+static bool payloadMatchesCvType(int dt, bool uint8ToInt8)
+{
+    if (onnx_dtype::isExotic(dt) ||
+        dt == opencv_onnx::TensorProto_DataType_FLOAT16 ||
+        dt == opencv_onnx::TensorProto_DataType_BFLOAT16 ||
+        dt == opencv_onnx::TensorProto_DataType_COMPLEX64 ||
+        dt == opencv_onnx::TensorProto_DataType_COMPLEX128 ||
+        (dt == opencv_onnx::TensorProto_DataType_UINT8 && uint8ToInt8))
+        return false;
+    return dataType2cv(dt) >= 0;
+}
+
+// Builds a Mat over the mapped file, or returns false to leave the caller on the copy path.
+static bool mapExternalTensor(const opencv_onnx::TensorProto& tensor_proto, bool uint8ToInt8,
+                              const std::string& base_path, ExternalDataCache& cache, Mat& blob)
+{
+    if (!cache.mappingEnabled)
+        return false;
+    if (!payloadMatchesCvType(tensor_proto.data_type(), uint8ToInt8))
+        return false;
+    int type = dataType2cv(tensor_proto.data_type());
+    if (type < 0 || tensor_proto.dims_size() == 0)
+        return false;
+
+    std::string full_path;
+    size_t offset = 0, length = 0;
+    if (!resolveExternalData(tensor_proto, base_path, full_path, offset, length))
+        return false;
+
+    const size_t size_max = std::numeric_limits<size_t>::max();
+    std::vector<int> sizes;
+    size_t total_elems = 1;
+    for (int i = 0; i < tensor_proto.dims_size(); i++)
+    {
+        int64_t d = tensor_proto.dims(i);
+        if (d <= 0)
+            return false;
+        sizes.push_back((int)d);
+        total_elems = total_elems > size_max / (size_t)d ? size_max : total_elems * (size_t)d;
+    }
+
+    // The copy path validates the payload before reading it; a header has no such moment, so a
+    // shape this mapping cannot cover goes back to that path and raises there.
+    size_t esz = CV_ELEM_SIZE(type);
+    if (offset % esz != 0 || total_elems > size_max / esz)
+        return false;
+    size_t payload = total_elems * esz;
+    if (length != (size_t)-1 && length < payload)
+        return false;
+
+    Ptr<MappedSource> src = cache.open(full_path);
+    if (src.empty())
+    {
+        // The copy path yields the same values, so an unavailable mapping is not a failure.
+        CV_LOG_ONCE_WARNING(NULL, "DNN/ONNX: cannot map external data of '" << full_path
+                            << "', reading it into memory instead");
+        return false;
+    }
+    // Only the payload is mapped; the declared length still needs the copy path's bounds check.
+    if (length != (size_t)-1 && (offset > src->fileSize() || length > src->fileSize() - offset))
+        return false;
+
+    Ptr<MappedFile> view = MappedFile::open(src, offset, payload);
+    if (view.empty())
+    {
+        CV_LOG_ONCE_WARNING(NULL, "DNN/ONNX: cannot map external data of '" << full_path
+                            << "', reading it into memory instead");
+        return false;
+    }
+
+    blob = MappedFile::wrap(view, (int)sizes.size(), sizes.data(), type);
+    return true;
+}
+
+Ptr<MappedSource> ExternalDataCache::open(const std::string& path)
+{
+    std::map<std::string, Ptr<MappedSource> >::iterator it = files.find(path);
+    if (it != files.end())
+        return it->second;
+    // A failed open is cached too, so a file is only ever attempted once.
+    return files[path] = MappedSource::open(path);
+}
+
+// ONNX dtype -> OpenCV type. Shared with the ONNX importer (declared in the header).
+int dataType2cv(int dt)
+{
+    return
+        dt == opencv_onnx::TensorProto_DataType_UINT8 ? CV_8U :
+        dt == opencv_onnx::TensorProto_DataType_INT8 ? CV_8S :
+        dt == opencv_onnx::TensorProto_DataType_UINT16 ? CV_16U :
+        dt == opencv_onnx::TensorProto_DataType_INT16 ? CV_16S :
+        dt == opencv_onnx::TensorProto_DataType_UINT32 ? CV_32U :
+        dt == opencv_onnx::TensorProto_DataType_INT32 ? CV_32S :
+        dt == opencv_onnx::TensorProto_DataType_UINT64 ? CV_64U :
+        dt == opencv_onnx::TensorProto_DataType_INT64 ? CV_64S :
+        dt == opencv_onnx::TensorProto_DataType_FLOAT ? CV_32F :
+        dt == opencv_onnx::TensorProto_DataType_DOUBLE ? CV_64F :
+        dt == opencv_onnx::TensorProto_DataType_FLOAT16 ? CV_16F :
+        dt == opencv_onnx::TensorProto_DataType_BFLOAT16 ? CV_16BF :
+        dt == opencv_onnx::TensorProto_DataType_COMPLEX64 ? CV_32FC2 :
+        dt == opencv_onnx::TensorProto_DataType_COMPLEX128 ? CV_64FC2 :
+        dt == opencv_onnx::TensorProto_DataType_BOOL ? CV_Bool :
+        dt == opencv_onnx::TensorProto_DataType_UINT4 ? CV_8U :
+        dt == opencv_onnx::TensorProto_DataType_INT4 ? CV_8S :
+        dt == onnx_dtype::ONNX_FLOAT8E8M0 ? CV_32F :
+        onnx_dtype::isFp8Native(dt) ? onnx_dtype::fp8NativeDepth(dt) :
+        onnx_dtype::isExoticFloat(dt) ? CV_16F : -1;
+}
+
+Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto, bool uint8ToInt8,
+                     const std::string base_path, ExternalDataCache* cache)
 {
     if (tensor_proto.raw_data().empty() && tensor_proto.float_data().empty() &&
         tensor_proto.double_data().empty() && tensor_proto.int64_data().empty() &&
-        tensor_proto.int32_data().empty() &&
+        tensor_proto.int32_data().empty() && tensor_proto.uint64_data().empty() &&
         (!tensor_proto.has_data_location() || tensor_proto.data_location() != opencv_onnx::TensorProto::EXTERNAL)
     )
+    {
+        // Preserve dtype for an empty tensor (0-sized dim); untyped Mat() defaults to CV_8U.
+        // fp16 -> CV_32F to match the payload widening below.
+        int type = dataType2cv(tensor_proto.data_type());
+        if (type == CV_16F)
+            type = CV_32F;
+        bool genuinely_empty = false;
+        for (int d = 0; d < tensor_proto.dims_size(); d++)
+            if (tensor_proto.dims(d) == 0) { genuinely_empty = true; break; }
+        if (type >= 0 && genuinely_empty)
+        {
+            std::vector<int> shape(tensor_proto.dims().begin(), tensor_proto.dims().end());
+            return Mat(shape, type);
+        }
         return Mat();
+    }
+
+    if (cache && tensor_proto.has_data_location() &&
+        tensor_proto.data_location() == opencv_onnx::TensorProto::EXTERNAL &&
+        !tensor_proto.name().empty())
+    {
+        // A mapping is an optimization, never a requirement: anything the platform, the file
+        // or the range cannot supply falls through to the copy path below, with identical values.
+        Mat mapped;
+        if (mapExternalTensor(tensor_proto, uint8ToInt8, base_path, *cache, mapped))
+            return mapped;
+    }
 
     // read binary data, should be just empty in case it is set in <DTYPE>_data field
     std::vector<int64_t> external_tensor_data;
-    char* rawdata = getTensorRAWData(tensor_proto, external_tensor_data, base_path);
+    size_t raw_data_size = 0;
+    char* rawdata = getTensorRAWData(tensor_proto, external_tensor_data, raw_data_size, base_path);
 
     int datatype = tensor_proto.data_type();
     Mat blob;
@@ -2041,47 +2125,76 @@ Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto, bool uint8ToI
     if (sizes.empty())
         sizes.assign(1, 1);
 
+    // The shape decides how many elements are read from the tensor payload below
+    // (rawdata, the external/raw_data buffer, or one of the typed *_data fields).
+    // The payload is sized independently in the model, so a tensor whose shape
+    // claims more elements than the payload holds reads past the buffer. Validate
+    // the payload against the shape before each read.
+    const size_t size_max = std::numeric_limits<size_t>::max();
+    size_t total_elems = 1;
+    for (size_t i = 0; i < sizes.size(); i++)
+    {
+        const size_t dim = static_cast<size_t>(sizes[i]);
+        total_elems = (dim != 0 && total_elems > size_max / dim) ? size_max : total_elems * dim;
+    }
+    const auto checkPayloadSize = [&](size_t available_elems)
+    {
+        CV_CheckGE(available_elems, total_elems,
+                   "DNN/ONNX: tensor payload is smaller than its declared shape");
+    };
+
+    // The sub-byte and FP8 dtypes below are stored either in raw_data or, one byte's
+    // worth per entry, in int32_data. Narrow int32_data to bytes so both spellings
+    // reach the decode loops as the same buffer.
+    std::vector<uchar> narrowed;
+    const uchar* payload = reinterpret_cast<const uchar*>(rawdata);
+    size_t payload_bytes = raw_data_size;
+    if (!tensor_proto.int32_data().empty() && onnx_dtype::isExotic(datatype))
+    {
+        const auto& i32 = tensor_proto.int32_data();
+        narrowed.resize(i32.size());
+        for (int i = 0; i < i32.size(); i++)
+            narrowed[i] = static_cast<uchar>(i32[i] & 0xFF);
+        payload = narrowed.data();
+        payload_bytes = narrowed.size();
+    }
+
     if (datatype == opencv_onnx::TensorProto_DataType_FLOAT) {
         if (!tensor_proto.float_data().empty()) {
+            checkPayloadSize(tensor_proto.float_data().size());
             Mat(sizes, CV_32FC1, (void*)tensor_proto.float_data().data()).copyTo(blob);
         }
         else {
+            checkPayloadSize(raw_data_size / sizeof(float));
             Mat(sizes, CV_32FC1, rawdata).copyTo(blob);
         }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_FLOAT16)
     {
-        // FIXME, for now, we only load FP16 Tensor as FP32 Mat, full support for FP16 is required in the future.
-        CV_LOG_ONCE_INFO(NULL, "DNN: load FP16 model as FP32 model, and it takes twice the FP16 RAM requirement.");
-
-        // ONNX saves float 16 data in two format: int32 and raw_data.
+        // Load FP16 natively as CV_16F; ONNX stores it in int32_data or raw_data.
         // Link: https://github.com/onnx/onnx/issues/4460#issuecomment-1224373746
         if (!tensor_proto.int32_data().empty())
         {
             size_t sz = tensor_proto.int32_data().size();
+            checkPayloadSize(sz);
             std::vector<int16_t> halfvec(sz);
+            blob.create((int)sizes.size(), sizes.data(), CV_16FC1);
             const int32_t* intdata = (const int32_t*)tensor_proto.int32_data().data();
+            uint16_t* dst = (uint16_t*)blob.data;
             for (size_t i = 0; i < sz; i++)
-            {
-                union
-                {
-                    int16_t h;
-                    int32_t i;
-                } u;
-                u.i = intdata[i];
-                halfvec[i] = u.h;
-            }
-            Mat(sizes, CV_16FC1, halfvec.data()).convertTo(blob, CV_32FC1);
+                dst[i] = (uint16_t)(intdata[i] & 0xFFFF);
         }
         else
         {
-            Mat(sizes, CV_16FC1, rawdata).convertTo(blob, CV_32FC1);
+            checkPayloadSize(raw_data_size / sizeof(int16_t));
+            Mat(sizes, CV_16FC1, rawdata).copyTo(blob);
         }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_BFLOAT16)
     {
         if (!tensor_proto.raw_data().empty())
         {
+            checkPayloadSize(raw_data_size / sizeof(int16_t));
             blob.create((int)sizes.size(), sizes.data(), CV_16BFC1);
             size_t bytes = (size_t)blob.total() * blob.elemSize();
             memcpy(blob.data, rawdata, bytes);
@@ -2089,9 +2202,10 @@ Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto, bool uint8ToI
         else if (!tensor_proto.int32_data().empty())
         {
             const auto& v = tensor_proto.int32_data();
+            checkPayloadSize(v.size());
             blob.create((int)sizes.size(), sizes.data(), CV_16BFC1);
             uint16_t* dst = reinterpret_cast<uint16_t*>(blob.data);
-            for (size_t i = 0; i < v.size(); ++i)
+            for (size_t i = 0; i < total_elems; ++i)
             {
                 dst[i] = static_cast<uint16_t>(v[i] & 0xFFFF);
             }
@@ -2104,30 +2218,54 @@ Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto, bool uint8ToI
     else if (datatype == opencv_onnx::TensorProto_DataType_DOUBLE)
     {
         if (!tensor_proto.double_data().empty())
-            Mat(sizes, CV_64FC1, (void*)tensor_proto.double_data().data()).convertTo(blob, CV_32FC1);
+        {
+            checkPayloadSize(tensor_proto.double_data().size());
+            Mat(sizes, CV_64FC1, (void*)tensor_proto.double_data().data()).copyTo(blob);
+        }
         else
+        {
+            checkPayloadSize(raw_data_size / sizeof(double));
             Mat(sizes, CV_64FC1, rawdata).copyTo(blob);
+        }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_INT32)
     {
         if (!tensor_proto.int32_data().empty())
+        {
+            checkPayloadSize(tensor_proto.int32_data().size());
             Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).copyTo(blob);
+        }
         else
+        {
+            checkPayloadSize(raw_data_size / sizeof(int32_t));
             Mat(sizes, CV_32SC1, rawdata).copyTo(blob);
+        }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_INT64)
     {
         if (!tensor_proto.int64_data().empty())
+        {
+            checkPayloadSize(tensor_proto.int64_data().size());
             Mat(sizes, CV_64SC1, (void*)tensor_proto.int64_data().data()).copyTo(blob);
+        }
         else
+        {
+            checkPayloadSize(raw_data_size / sizeof(int64_t));
             Mat(sizes, CV_64SC1, rawdata).copyTo(blob);
+        }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_INT8)
     {
         if (!tensor_proto.int32_data().empty())
+        {
+            checkPayloadSize(tensor_proto.int32_data().size());
             Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_8S);
+        }
         else
+        {
+            checkPayloadSize(raw_data_size);
             Mat(sizes, CV_8S, rawdata).copyTo(blob);
+        }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_UINT8)
     {
@@ -2135,6 +2273,7 @@ Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto, bool uint8ToI
 
         if (!tensor_proto.int32_data().empty())
         {
+            checkPayloadSize(tensor_proto.int32_data().size());
             int32_t* intdata = (int32_t*)tensor_proto.int32_data().data();
             if (uint8ToInt8)
                 Mat(sizes, CV_32SC1, intdata).convertTo(blob, CV_8S, 1, -128); // handle as ONNX quantized weight
@@ -2143,6 +2282,7 @@ Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto, bool uint8ToI
         }
         else
         {
+            checkPayloadSize(raw_data_size);
             if (uint8ToInt8)
                 Mat(sizes, CV_8U, rawdata).convertTo(blob, CV_8S, 1, -128);  // handle as ONNX quantized weight
             else
@@ -2152,55 +2292,129 @@ Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto, bool uint8ToI
     else if (datatype == opencv_onnx::TensorProto_DataType_UINT16)
     {
         if (!tensor_proto.int32_data().empty())
+        {
+            checkPayloadSize(tensor_proto.int32_data().size());
             Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_16UC1);
+        }
         else
+        {
+            checkPayloadSize(raw_data_size / sizeof(int16_t));
             Mat(sizes, CV_16UC1, rawdata).copyTo(blob);
+        }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_UINT32)
     {
-        if (!tensor_proto.int32_data().empty())
-            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_32UC1);
+        // ONNX packs both UINT32 and UINT64 values into uint64_data, per spec.
+        if (!tensor_proto.uint64_data().empty())
+        {
+            checkPayloadSize(tensor_proto.uint64_data().size());
+            Mat(sizes, CV_64UC1, (void*)tensor_proto.uint64_data().data()).convertTo(blob, CV_32UC1);
+        }
         else
+        {
+            checkPayloadSize(raw_data_size / sizeof(int32_t));
             Mat(sizes, CV_32UC1, rawdata).copyTo(blob);
+        }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_UINT64)
     {
-        if (!tensor_proto.int64_data().empty())
-            Mat(sizes, CV_64SC1, (void*)tensor_proto.int64_data().data()).convertTo(blob, CV_64UC1);
+        if (!tensor_proto.uint64_data().empty())
+        {
+            checkPayloadSize(tensor_proto.uint64_data().size());
+            Mat(sizes, CV_64UC1, (void*)tensor_proto.uint64_data().data()).copyTo(blob);
+        }
         else
+        {
+            checkPayloadSize(raw_data_size / sizeof(int64_t));
             Mat(sizes, CV_64UC1, rawdata).copyTo(blob);
+        }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_BOOL)
     {
-        Mat(sizes, CV_Bool, rawdata).copyTo(blob);
+        // Per ONNX protobuf specification (TensorProto.int32_data in onnx/onnx.proto3),
+        // each boolean element is represented as an individual int32 value (0 for false, !=0 for true),
+        // not as a packed bitmask. Convert from 32-bit integers to native CV_Bool preserving truth values.
+        // Specification: https://github.com/onnx/onnx/blob/main/onnx/onnx.proto3
+        if (!tensor_proto.int32_data().empty())
+        {
+            checkPayloadSize(tensor_proto.int32_data().size());
+            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_Bool);
+        }
+        else
+        {
+            checkPayloadSize(raw_data_size);
+            Mat(sizes, CV_Bool, rawdata).copyTo(blob);
+        }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_INT16)
     {
         if (!tensor_proto.int32_data().empty())
+        {
+            checkPayloadSize(tensor_proto.int32_data().size());
             Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_16SC1);
+        }
         else
+        {
+            checkPayloadSize(raw_data_size / sizeof(int16_t));
             Mat(sizes, CV_16SC1, rawdata).copyTo(blob);
+        }
     }
-    else if (datatype == opencv_onnx::TensorProto_DataType_UINT16)
+    else if (datatype == opencv_onnx::TensorProto_DataType_FLOAT8E4M3FN ||
+             datatype == opencv_onnx::TensorProto_DataType_FLOAT8E4M3FNUZ)
     {
-        if (!tensor_proto.int32_data().empty())
-            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_16UC1);
-        else
-            Mat(sizes, CV_16UC1, rawdata).copyTo(blob);
+        // E4M3FN/E4M3FNUZ have a native depth: keep the raw FP8 bytes.
+        checkPayloadSize(payload_bytes);
+        blob.create((int)sizes.size(), sizes.data(),
+                    CV_MAKETYPE(onnx_dtype::fp8NativeDepth(datatype), 1));
+        memcpy(blob.data, payload, (size_t)blob.total() * blob.elemSize());
     }
-    else if (datatype == opencv_onnx::TensorProto_DataType_UINT32)
+    else if (datatype == opencv_onnx::TensorProto_DataType_FLOAT8E5M2 ||
+             datatype == opencv_onnx::TensorProto_DataType_FLOAT8E5M2FNUZ)
     {
-        if (!tensor_proto.int32_data().empty())
-            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_32UC1);
-        else
-            Mat(sizes, CV_32UC1, rawdata).copyTo(blob);
+        // E5M2/E5M2FNUZ have no native depth: decode losslessly into CV_16F.
+        const onnx_dtype::Fp8Fmt fmt = onnx_dtype::fp8FmtFor(datatype);
+        checkPayloadSize(payload_bytes);
+        blob.create((int)sizes.size(), sizes.data(), CV_16FC1);
+        const uchar* src = payload;
+        hfloat* dst = blob.ptr<hfloat>();
+        for (size_t i = 0, total = blob.total(); i < total; i++)
+            dst[i] = hfloat(onnx_dtype::fp8ToF32(src[i], fmt));
     }
-    else if (datatype == opencv_onnx::TensorProto_DataType_UINT64)
+    else if (datatype == onnx_dtype::ONNX_FLOAT8E8M0)
     {
-        if (!tensor_proto.int64_data().empty())
-            Mat(sizes, CV_64SC1, (void*)tensor_proto.int64_data().data()).convertTo(blob, CV_64UC1);
-        else
-            Mat(sizes, CV_64UC1, rawdata).copyTo(blob);
+        checkPayloadSize(payload_bytes);
+        blob.create((int)sizes.size(), sizes.data(), CV_32FC1);
+        const uchar* src = payload;
+        float* dst = blob.ptr<float>();
+        for (size_t i = 0, total = blob.total(); i < total; i++)
+            dst[i] = onnx_dtype::e8m0ToF32(src[i]);
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_FLOAT4E2M1)
+    {
+        checkPayloadSize(payload_bytes * 2);  // two 4-bit elements per byte
+        blob.create((int)sizes.size(), sizes.data(), CV_16FC1);
+        const uchar* src = payload;
+        hfloat* dst = blob.ptr<hfloat>();
+        for (size_t i = 0, total = blob.total(); i < total; i++)
+            dst[i] = hfloat(onnx_dtype::fp4ToF32(onnx_dtype::unpackNibble(src, i)));
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_INT4)
+    {
+        checkPayloadSize(payload_bytes * 2);  // two 4-bit elements per byte
+        blob.create((int)sizes.size(), sizes.data(), CV_8SC1);
+        const uchar* src = payload;
+        schar* dst = blob.ptr<schar>();
+        for (size_t i = 0, total = blob.total(); i < total; i++)
+            dst[i] = onnx_dtype::int4SignExtend(onnx_dtype::unpackNibble(src, i));
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_UINT4)
+    {
+        checkPayloadSize(payload_bytes * 2);  // two 4-bit elements per byte
+        blob.create((int)sizes.size(), sizes.data(), CV_8UC1);
+        const uchar* src = payload;
+        uchar* dst = blob.ptr<uchar>();
+        for (size_t i = 0, total = blob.total(); i < total; i++)
+            dst[i] = onnx_dtype::unpackNibble(src, i);
     }
     else
     {

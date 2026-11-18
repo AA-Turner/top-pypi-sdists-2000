@@ -41,6 +41,7 @@
 //M*/
 
 #include "test_precomp.hpp"
+#include "opencv2/core/utils/filesystem.hpp"
 
 namespace opencv_test { namespace {
 
@@ -755,13 +756,26 @@ typedef struct TextProp
     bool italic;
 } TextProp;
 
-#ifdef HAVE_UNIFONT // there are other tests for text drawing, so the functionality is tested anyway,
-                    // but this test needs concrete unicode font to compare the printed text
-                    // (including CJK characters) with the reference picture from the database
+// External fonts for the "italic" and "uni" built-in slots, shipped in opencv_extra
+// and registered for the whole test run by test_main.cpp (see registerExternalTestFonts).
+static string externalTestFont(const char* slot)
+{
+    const char* fname = strcmp(slot, "italic") == 0 ? "Rubik-Italic.ttf.gz" : "WenQuanYiMicroHei.ttf.gz";
+    string path = TS::ptr()->get_data_path() + "../highgui/drawing/" + fname;
+    if (!utils::fs::exists(path))
+        throw SkipTestException(string("font is missing in opencv_extra: ") + path);
+    return path;
+}
+
+// The reference picture was rendered with Rubik Italic as the "italic" font and
+// WenQuanYi Micro Hei as the "uni" (CJK) font. Neither is compiled into OpenCV by
+// default (WITH_ITALICFONT / WITH_UNIFONT are OFF); the external copies from
+// opencv_extra reproduce the picture 1:1.
 TEST(Drawing, ttf_text)
 {
     string ts_data_path = TS::ptr()->get_data_path();
-    string custom_font_path = ts_data_path + "../highgui/drawing/";
+    externalTestFont("italic");
+    externalTestFont("uni");
 
     FontFace sans("sans");
     FontFace italic("italic");
@@ -779,6 +793,7 @@ TEST(Drawing, ttf_text)
          "historia, ruégote que no te olvides de mi buen Rocinante,\n"
          "compañero eterno mío en todos mis caminos y carreras!\n", false, 300, false},
         {"Ταχίστη αλώπηξ βαφής ψημένη γη, δρασκελίζει υπέρ νωθρού κυνός.", false, 400, false},
+        {"العربية لغة جميلة، والخط العربي فن.", false, 400, false},
         {"春眠不觉晓，\n处处闻啼鸟。\n夜来风雨声，\n花落知多少。\n"
         " あなたはそれが困難見つけた場合 — あなたは正しい方向に向かっている。\n"
         " 넌 모든 꽃들을 다 꺾어버릴 수는 있겠지만, 봄이 오는 걸 막을 수는 없어。 ", false, 400, false}
@@ -841,10 +856,12 @@ TEST(Drawing, ttf_text)
     }
 
 #if 0
-    //imwrite(ts_data_path + "../highgui/drawing/text_test.png", img);
+    //imwrite(ts_data_path + "../highgui/drawing/text_test_new.png", img);
     imshow("test", img);
     waitKey();
 #else
+    // Always dump the rendered image for visual inspection (HarfBuzz engine bring-up).
+    //imwrite("ttf_text_actual.png", img);
     Mat refimg = imread(ts_data_path + "../highgui/drawing/text_test.png", IMREAD_UNCHANGED);
     //imshow("ref", refimg);
     //imshow("actual", img);
@@ -855,7 +872,92 @@ TEST(Drawing, ttf_text)
     EXPECT_LT(cv::norm(refimg, img, NORM_L1), 6500);
 #endif
 }
+
+// Re-registers the external test fonts when a test that unregistered them finishes.
+struct ExternalTestFontsGuard
+{
+    ~ExternalTestFontsGuard()
+    {
+        FontFace::setBuiltinFont("italic", externalTestFont("italic"));
+        FontFace::setBuiltinFont("uni", externalTestFont("uni"));
+    }
+};
+
+TEST(Drawing, builtin_font_slots)
+{
+    string italic_font = externalTestFont("italic"), uni_font = externalTestFont("uni");
+    ExternalTestFontsGuard guard;
+
+    EXPECT_FALSE(FontFace::setBuiltinFont("no-such-slot", ""));
+    EXPECT_FALSE(FontFace::setBuiltinFont("uni", "no-such-file.ttf"));
+
+    // back to the compiled-in state: only the fonts selected at build time
+    ASSERT_TRUE(FontFace::setBuiltinFont("italic", ""));
+    ASSERT_TRUE(FontFace::setBuiltinFont("uni", ""));
+    {
+        // "italic" always resolves to some font: the compiled-in Rubik Italic if any,
+        // otherwise the upright "sans" (so FONT_ITALIC in the legacy API keeps working)
+        FontFace italic("italic");
+#ifdef HAVE_ITALICFONT
+        EXPECT_EQ(italic.getName(), "italic");
+#else
+        EXPECT_EQ(italic.getName(), "sans");
 #endif
+        FontFace uni;
+#ifdef HAVE_UNIFONT
+        EXPECT_TRUE(uni.set("uni"));
+#else
+        EXPECT_FALSE(uni.set("uni"));
+#endif
+    }
+    Mat img(60, 300, CV_8UC3, Scalar::all(255));
+    FontFace sans("sans");
+    Rect r_before = getTextSize(img.size(), "打印文字", Point(10, 40), sans, 30, 400, PUT_TEXT_ALIGN_LEFT);
+
+    // register the external CJK font: it now serves both as "uni" and as a fallback for "sans"
+    ASSERT_TRUE(FontFace::setBuiltinFont("uni", uni_font));
+    FontFace uni("uni");
+    EXPECT_EQ(uni.getName(), "uni");
+    Rect r_after = getTextSize(img.size(), "打印文字", Point(10, 40), sans, 30, 400, PUT_TEXT_ALIGN_LEFT);
+#ifndef HAVE_UNIFONT
+    // without the CJK font the characters were not covered and measured as '?'
+    EXPECT_NE(r_before.width, r_after.width);
+#else
+    EXPECT_EQ(r_before.width, r_after.width);
+#endif
+    putText(img, "打印文字", Point(10, 40), Scalar(0, 0, 0), sans, 30, 400, PUT_TEXT_ALIGN_LEFT);
+    EXPECT_LT(mean(img)[0], 255.0); // something has been drawn
+
+    ASSERT_TRUE(FontFace::setBuiltinFont("italic", italic_font));
+    FontFace italic("italic");
+    EXPECT_EQ(italic.getName(), "italic");
+}
+
+// Experiment (not a regression test): render Arabic + Devanagari with FiraGO,
+// which covers both scripts, and dump a PNG for visual inspection.
+TEST(Drawing, DISABLED_firago_experiment)
+{
+    // FiraGO covers both Arabic and Devanagari. It is optional test data:
+    // findDataFile(..., /*required=*/false) throws SkipTestException when the
+    // font is absent, so the test is reported as skipped rather than failing.
+    string fontpath = findDataFile("../highgui/drawing/FiraGo-Book.ttf", false);
+    FontFace fira(fontpath);
+
+    Mat img(360, 1000, CV_8UC3, Scalar::all(255));
+    Scalar color(40, 40, 40);
+    int x0 = 40, y = 70;
+
+    putText(img, "FiraGO: Arabic + Devanagari", Point(x0, y), color, fira, 30, 500,
+            PUT_TEXT_ALIGN_LEFT, Range());
+    y += 90;
+    putText(img, "العربية لغة جميلة، والخط العربي فن.", Point(x0, y), color, fira, 48, 400,
+            PUT_TEXT_ALIGN_LEFT, Range());
+    y += 100;
+    putText(img, "नमस्ते दुनिया — संस्कृतम् सुन्दरम् अस्ति।", Point(x0, y), color, fira, 48, 400,
+            PUT_TEXT_ALIGN_LEFT, Range());
+
+    imwrite("firago_experiment.png", img);
+}
 
 TEST(Drawing, fillpoly_contours)
 {
@@ -1110,7 +1212,7 @@ PARAM_TEST_CASE(FillPolyFully, unsigned, unsigned, int, int, Point, cv::LineType
     }
 };
 
-TEST_P(FillPolyFully, DISABLED_fillpoly_fully)
+TEST_P(FillPolyFully, fillpoly_fully)
 {
     int imageSizeOffset = 15;
 
@@ -1303,6 +1405,25 @@ TEST(Drawing, line_connectivity_regression_26413)
     // LINE_4 for a 10-pixel diagonal should have approximately 19 pixels
     // (needs both horizontal and vertical steps)
     EXPECT_GT(count4, 15) << "LINE_4 diagonal should have significantly more pixels due to staircase";
+}
+
+//This test ensures that the tipLength geometric ratio is strictly bounded  within the logical range (0.0, 1.0].
+TEST(Imgproc_Drawing, arrowedLine_tipLength_validation)
+{
+    // Create a simple miniature canvas for testing. Added cv:: prefix.
+    cv::Mat img = cv::Mat::zeros(100, 100, CV_8UC3);
+    cv::Point pt1(10, 10), pt2(90, 90);
+
+    // 1. Validate legal parameters: should not throw any exceptions (Normal cases)
+    EXPECT_NO_THROW(cv::arrowedLine(img, pt1, pt2, cv::Scalar(255, 255, 255), 1, 8, 0, 0.1));
+    EXPECT_NO_THROW(cv::arrowedLine(img, pt1, pt2, cv::Scalar(255, 255, 255), 1, 8, 0, 1.0));
+
+    // 2. Validate illegal parameters: expect cv::Exception to be thrown (Boundary violations)
+    // Negative ratio (tipLength <= 0.0)
+    EXPECT_THROW(cv::arrowedLine(img, pt1, pt2, cv::Scalar(255, 255, 255), 1, 8, 0, -0.5), cv::Exception);
+
+    // Overflow ratio (tipLength > 1.0)
+    EXPECT_THROW(cv::arrowedLine(img, pt1, pt2, cv::Scalar(255, 255, 255), 1, 8, 0, 1.5), cv::Exception);
 }
 
 }} // namespace

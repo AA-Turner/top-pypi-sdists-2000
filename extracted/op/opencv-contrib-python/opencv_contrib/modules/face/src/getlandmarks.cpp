@@ -192,9 +192,9 @@ static void _copyVector2Output(std::vector< std::vector< Point2f > > &vec, Outpu
     }
     else if (out.kind() == _OutputArray::STD_VECTOR_VECTOR) {
         for (unsigned int i = 0; i < vec.size(); i++) {
-            out.create(68, 1, CV_32FC2, i);
+            out.create((int)vec[i].size(), 1, CV_32FC2, i);
             Mat m = out.getMat(i);
-            Mat(Mat(vec[i]).t()).copyTo(m);
+            Mat(vec[i]).reshape(2, 1).copyTo(m);
         }
     }
     else {
@@ -275,7 +275,7 @@ bool FacemarkKazemiImpl::fit(InputArray img, InputArray roi, OutputArrayOfArrays
             }
         }
         for(unsigned long j=0;j<shapes[e].size();j++){
-                Mat C = (Mat_<double>(3,1) << shapes[e][j].x, shapes[e][j].y, 1);
+                Mat C = Mat_<double>({3,1}, {shapes[e][j].x, shapes[e][j].y, 1});
                 Mat D = warp_mat*C;
                 shapes[e][j].x=float(D.at<double>(0,0));
                 shapes[e][j].y=float(D.at<double>(1,0));

@@ -45,15 +45,13 @@
 #include "opencv2/core/utility.hpp"
 
 #include "opencv2/core/private.hpp"
-
+#include "opencv2/core/utils/logger.hpp"
 #include "opencv2/calib.hpp"
 #include "opencv2/geometry.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/features.hpp"
 
 #include "opencv2/core/ocl.hpp"
-
-#define GET_OPTIMIZED(func) (func)
 
 
 namespace cv {

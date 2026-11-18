@@ -332,6 +332,12 @@ convertTo(const _Tp* src, void* dst, int dtype,
     case CV_16BF:
         convert_(src, (cv::bfloat*)dst, total, alpha, beta);
         break;
+    case CV_8F_E4M3FN:
+        convert_(src, (cv::fp8_t*)dst, total, alpha, beta);
+        break;
+    case CV_8F_E4M3FNUZ:
+        convert_(src, (cv::fp8a_t*)dst, total, alpha, beta);
+        break;
     case CV_Bool:
         convert_to_bool(src, (bool*)dst, total, alpha, beta);
         break;
@@ -414,6 +420,12 @@ void convert(const Mat& src, cv::OutputArray _dst,
             break;
         case CV_16BF:
             convertTo((const cv::bfloat*)sptr, dptr, dtype, total, alpha, beta);
+            break;
+        case CV_8F_E4M3FN:
+            convertTo((const cv::fp8_t*)sptr, dptr, dtype, total, alpha, beta);
+            break;
+        case CV_8F_E4M3FNUZ:
+            convertTo((const cv::fp8a_t*)sptr, dptr, dtype, total, alpha, beta);
             break;
         default:
             CV_Error(cv::Error::StsNotImplemented, "unknown/unsupported depth");
@@ -1448,7 +1460,7 @@ norm_flt_(const _Tp* src1, const _Tp* src2, size_t total, int cn, int normType, 
 double norm(InputArray _src, int normType, InputArray _mask)
 {
     Mat src = _src.getMat(), mask = _mask.getMat();
-    if( src.depth() == CV_16F )
+    if( src.depth() == CV_16F || src.depth() == CV_8F_E4M3FN || src.depth() == CV_8F_E4M3FNUZ )
     {
         Mat src32f;
         src.convertTo(src32f, CV_32F);
@@ -1648,6 +1660,12 @@ double norm(InputArray _src1, InputArray _src2, int normType, InputArray _mask)
         case CV_16BF:
             result = norm_flt_<cv::bfloat, short>((const cv::bfloat*)sptr1, (const cv::bfloat*)sptr2, total, cn, normType, result, mptr);
             break;
+        case CV_8F_E4M3FN:
+            result = norm_flt_<cv::fp8_t, schar>((const cv::fp8_t*)sptr1, (const cv::fp8_t*)sptr2, total, cn, normType, result, mptr);
+            break;
+        case CV_8F_E4M3FNUZ:
+            result = norm_flt_<cv::fp8a_t, schar>((const cv::fp8a_t*)sptr1, (const cv::fp8a_t*)sptr2, total, cn, normType, result, mptr);
+            break;
         default:
             CV_Error(Error::StsUnsupportedFormat, "");
         };
@@ -1811,7 +1829,11 @@ void logicOp(const Mat& src, const Scalar& s, Mat& dst, char op)
         const uchar* sptr = planes[0].ptr();
         uchar* dptr = planes[1].ptr();
 
-        logicOpS_(sptr, (uchar*)&buf[0], dptr, total, op);
+        if (op == '~' && src.depth() == CV_Bool)   // logical NOT: 0 -> 1, non-zero -> 0
+            for (size_t j = 0; j < total; j++)
+                dptr[j] = (uchar)(sptr[j] == 0);
+        else
+            logicOpS_(sptr, (uchar*)&buf[0], dptr, total, op);
     }
 }
 
@@ -2251,6 +2273,15 @@ int check( const Mat& a, double fmin, double fmax, vector<int>* _idx )
 // success_err_level is maximum allowed difference, idx is the index of the first
 // element for which difference is >success_err_level
 // (or index of element with the maximum difference)
+static inline double decodeFP8(const uchar* p, int depth)
+{
+    switch (depth)
+    {
+    case CV_8F_E4M3FN:   return (double)(float)*reinterpret_cast<const cv::fp8_t*>(p);
+    default:             return (double)(float)*reinterpret_cast<const cv::fp8a_t*>(p);
+    }
+}
+
 int cmpEps( const Mat& arr_, const Mat& refarr_, double* _realmaxdiff,
             double success_err_level, vector<int>* _idx,
             bool element_wise_relative_error )
@@ -2351,6 +2382,38 @@ int cmpEps( const Mat& arr_, const Mat& refarr_, double* _realmaxdiff,
                     continue;
                 double a_val = (float)((cv::bfloat*)sptr1)[j];
                 double b_val = (float)((cv::bfloat*)sptr2)[j];
+                double threshold;
+                if( cvIsNaN(a_val) || cvIsInf(a_val) )
+                {
+                    result = CMP_EPS_INVALID_TEST_DATA;
+                    idx = startidx + j;
+                    break;
+                }
+                if( cvIsNaN(b_val) || cvIsInf(b_val) )
+                {
+                    result = CMP_EPS_INVALID_REF_DATA;
+                    idx = startidx + j;
+                    break;
+                }
+                a_val = fabs(a_val - b_val);
+                threshold = element_wise_relative_error ? fabs(b_val) + 1 : maxval;
+                if( a_val > threshold*success_err_level )
+                {
+                    realmaxdiff = a_val/threshold;
+                    if( idx == 0 )
+                        idx = startidx + j;
+                    break;
+                }
+            }
+            break;
+        case CV_8F_E4M3FN:
+        case CV_8F_E4M3FNUZ:
+            for( j = 0; j < total; j++ )
+            {
+                if( ((uchar*)sptr1)[j] == ((uchar*)sptr2)[j] )
+                    continue;
+                double a_val = decodeFP8((const uchar*)sptr1 + j, depth);
+                double b_val = decodeFP8((const uchar*)sptr2 + j, depth);
                 double threshold;
                 if( cvIsNaN(a_val) || cvIsInf(a_val) )
                 {
@@ -3402,6 +3465,14 @@ static void writeElems(std::ostream& out, const void* data, int nelems, int dept
         std::streamsize pp = out.precision();
         out.precision(4);
         writeElems<cv::bfloat, float>(out, data, nelems, starpos);
+        out.precision(pp);
+    }
+    else if(depth == CV_8F_E4M3FN || depth == CV_8F_E4M3FNUZ)
+    {
+        std::streamsize pp = out.precision();
+        out.precision(4);
+        if(depth == CV_8F_E4M3FN)        writeElems<cv::fp8_t, float>(out, data, nelems, starpos);
+        else                             writeElems<cv::fp8a_t, float>(out, data, nelems, starpos);
         out.precision(pp);
     }
     else if(depth == CV_32F)

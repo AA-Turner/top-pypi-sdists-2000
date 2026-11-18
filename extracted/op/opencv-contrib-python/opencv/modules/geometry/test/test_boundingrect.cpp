@@ -96,4 +96,82 @@ TEST(Imgproc_BoundingRect, bug_24217)
     }
 }
 
+// See https://github.com/opencv/opencv/issues/29578
+// cv::Mat_<bool>::depth() returns CV_Bool in 5.0, which regressed boundingRect
+// (it used to be treated as CV_8U in 4.x). A boolean mask must be handled as a
+// byte-wise mask, matching the CV_8UC1 result.
+TEST(Imgproc_BoundingRect, bool_mask_29578)
+{
+    for (int image_width = 3; image_width < 20; image_width++)
+    {
+        for (int image_height = 1; image_height < 15; image_height++)
+        {
+            cv::Rect rect(0, image_height - 1, 3, 1);
+
+            cv::Mat_<bool> mask(cv::Size(image_width, image_height), false);
+            mask(rect).setTo(true);
+
+            cv::Mat_<uchar> ref(cv::Size(image_width, image_height), (uchar)0);
+            ref(rect).setTo(255);
+
+            EXPECT_EQ(mask.depth(), CV_Bool);
+            cv::Rect result;
+            ASSERT_NO_THROW(result = boundingRect(mask));
+            EXPECT_EQ(result, rect);
+            EXPECT_EQ(result, boundingRect(ref));
+        }
+    }
+}
+
+// See https://github.com/opencv/opencv/issues/29837
+// A CV_32F coordinate outside of the int range used to reach cvFloor(), which is undefined
+// there: points spanning 1e10 collapsed to a 1x1 rect at INT_MIN, and +inf/-inf gave
+// INT_MIN/INT_MAX, an inverted rectangle. They are saturated to the representable bounds now.
+TEST(Imgproc_BoundingRect, out_of_int_range_29837)
+{
+    const int imin = std::numeric_limits<int>::min();
+    const int imax = std::numeric_limits<int>::max();
+    const float inf = std::numeric_limits<float>::infinity();
+
+    // in-range point sets are unaffected
+    std::vector<Point2f> in_range { Point2f(1e4f, 1e4f), Point2f(2e4f, 2e4f) };
+    EXPECT_EQ(boundingRect(in_range), Rect(10000, 10000, 10001, 10001));
+
+    // out of range: saturated, orientation preserved
+    std::vector<Point2f> above { Point2f(1e10f, 1e10f), Point2f(2e10f, 2e10f) };
+    EXPECT_EQ(boundingRect(above), Rect(imax, imax, 1, 1));
+
+    std::vector<Point2f> below { Point2f(-1e10f, -1e10f), Point2f(-2e10f, -2e10f) };
+    EXPECT_EQ(boundingRect(below), Rect(imin, imin, 1, 1));
+
+    // infinities saturate the same way, and the sides are clamped instead of overflowing
+    std::vector<Point2f> plus_inf { Point2f(inf, 0.f), Point2f(1.f, 1.f), Point2f(2.f, 0.f) };
+    EXPECT_EQ(boundingRect(plus_inf), Rect(1, 0, imax, 2));
+
+    std::vector<Point2f> minus_inf { Point2f(-inf, 0.f), Point2f(1.f, 1.f), Point2f(2.f, 0.f) };
+    EXPECT_EQ(boundingRect(minus_inf), Rect(imin, 0, imax, 2));
+
+    // long enough to go through the SIMD path as well
+    std::vector<Point2f> simd(64, Point2f(5.f, 5.f));
+    simd[37] = Point2f(1e10f, -1e10f);
+    EXPECT_EQ(boundingRect(simd), Rect(5, imin, imax - 4, imax));
+
+    // CV_32S needs no conversion, but its sides can overflow int just the same
+    std::vector<Point> ints { Point(imin, imin), Point(imax, imax) };
+    EXPECT_EQ(boundingRect(ints), Rect(imin, imin, imax, imax));
+}
+
+TEST(Geometry_MinEnclosingTriangle, empty_and_collinear)
+{
+    Mat empty;
+    std::vector<Point2f> triangle;
+    double area = cv::minEnclosingTriangle(empty, triangle);
+    EXPECT_EQ(area, 0.0);
+    EXPECT_TRUE(triangle.empty());
+
+    std::vector<Point2f> onePoint = { Point2f(0, 0) };
+    area = cv::minEnclosingTriangle(onePoint, triangle);
+    EXPECT_EQ(area, 0.0);
+}
+
 }} // namespace

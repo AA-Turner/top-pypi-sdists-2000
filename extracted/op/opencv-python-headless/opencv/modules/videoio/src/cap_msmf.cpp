@@ -743,6 +743,26 @@ public:
         }
         return result;
     }
+    std::string getMSMFDeviceName(UINT32 index) const
+    {
+        std::string result;
+        if (index >= count || !devices[index])
+            return result;
+
+        WCHAR* wname = NULL;
+        UINT32 length = 0;
+        if (FAILED(devices[index]->GetAllocatedString(MF_DEVSOURCE_ATTRIBUTE_FRIENDLY_NAME, &wname, &length)))
+            return result;
+
+        const int size = ::WideCharToMultiByte(CP_UTF8, 0, wname, (int)length, NULL, 0, NULL, NULL);
+        if (size > 0)
+        {
+            result.resize((size_t)size);
+            ::WideCharToMultiByte(CP_UTF8, 0, wname, (int)length, &result[0], size, NULL, NULL);
+        }
+        CoTaskMemFree(wname);
+        return result;
+    }
 private:
     IMFActivate** devices;
     UINT32 count;
@@ -1427,10 +1447,11 @@ bool CvCapture_MSMF::setAudioProperties(const cv::VideoCaptureParameters& params
     }
     if (params.has(CAP_PROP_AUDIO_SAMPLES_PER_SECOND))
     {
+        static const int MSMF_MAX_AUDIO_SAMPLES_PER_SECOND = 384000; // highest rate used by real PCM audio hardware
         int value = params.get<int>(CAP_PROP_AUDIO_SAMPLES_PER_SECOND);
-        if (value < 0)
+        if (value < 0 || value > MSMF_MAX_AUDIO_SAMPLES_PER_SECOND)
         {
-            CV_LOG_ERROR(NULL, "VIDEOIO/MSMF: CAP_PROP_AUDIO_SAMPLES_PER_SECOND parameter can't be negative: " << value);
+            CV_LOG_ERROR(NULL, "VIDEOIO/MSMF: CAP_PROP_AUDIO_SAMPLES_PER_SECOND parameter value is invalid/unsupported: " << value);
             return false;
         }
         else
@@ -1727,7 +1748,7 @@ bool CvCapture_MSMF::grabAudioFrame()
             else if (flags & MF_SOURCE_READERF_ENDOFSTREAM)
             {
                 aEOS = true;
-                if (videoStream != -1 && !vEOS)
+                if (videoStream != -1)
                     returnFlag = true;
                 if (videoStream == -1)
                     audioSamplePos += chunkLengthOfBytes/((captureAudioFormat.bit_per_sample/8)*captureAudioFormat.nChannels);
@@ -2469,6 +2490,27 @@ cv::Ptr<cv::IVideoCapture> cv::cvCreateCapture_MSMF(const Ptr<IStreamReader>& st
             return capture;
     }
     return cv::Ptr<cv::IVideoCapture>();
+}
+
+std::vector<cv::VideoDeviceInfo> cv::enumerate_MSMF_devices()
+{
+    std::vector<cv::VideoDeviceInfo> result;
+    DeviceList devices;
+    UINT32 count = 0;
+    try
+    {
+        Media_Foundation::getInstance();
+        count = devices.read();
+    }
+    catch (const cv::Exception& e)
+    {
+        CV_LOG_DEBUG(NULL, "Failed to enumerate MSMF devices: " << e.what());
+        return result;
+    }
+
+    for (UINT32 i = 0; i < count; i++)
+        result.push_back(cv::makeVideoDeviceInfo((int)i, cv::CAP_MSMF, devices.getMSMFDeviceName(i)));
+    return result;
 }
 
 //

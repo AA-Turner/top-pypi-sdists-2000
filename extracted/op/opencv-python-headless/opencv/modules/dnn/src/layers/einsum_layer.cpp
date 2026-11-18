@@ -60,7 +60,7 @@ static Mat Transpose(
     MatShape order(permutation.begin(), permutation.end());
 
     std::vector<int> order_(order.begin(), order.end());
-    cv::transposeND((reshape ? input_reshaped : input), order_, output);
+    cv::transpose((reshape ? input_reshaped : input), order_, output);
     return output;
 }
 
@@ -380,6 +380,27 @@ public:
     mutable bool outputShapeComputed;
     mutable MatShape cachedOutputShape;
 
+    // Equation parsing maps labels to concrete dimensions, so every derived
+    // table must be rebuilt together when any operand shape changes.
+    void resetShapeState()
+    {
+        einsumInpShapes.clear();
+        preProcessedInputs.clear();
+        homogenizedInputDims.clear();
+        einsumOutDims.clear();
+        inputSubscriptIndices.clear();
+        subscriptIndicesToLastInput.clear();
+        subscriptIndicesToDimValue.clear();
+        subscriptIndicesToOutputIndices.clear();
+        letter2count.fill(0);
+        letter2index.fill(-1);
+        numLetterIndices = 0;
+        numOfEllipsisDims = 0;
+        numInputs = 0;
+        cachedOutputShape.clear();
+        outputShapeComputed = false;
+    }
+
     void parseEquation(String equation);
     void processEquation(const std::vector<MatShape>& inputs);
     void processBroadcastedDims();
@@ -404,12 +425,13 @@ public:
     );
 
     void computeOutputShape(const std::vector<MatShape>& inputs) const {
-        if (!outputShapeComputed) {
-            // Copy of the existing computation logic
-            const_cast<LayerEinsumImpl*>(this)->processEquation(inputs);
-            const_cast<LayerEinsumImpl*>(this)->processBroadcastedDims();
-            const_cast<LayerEinsumImpl*>(this)->validateOutputSubscript();
-            const_cast<LayerEinsumImpl*>(this)->calculateOutputShape();
+        if (!outputShapeComputed || inputs != einsumInpShapes) {
+            LayerEinsumImpl* self = const_cast<LayerEinsumImpl*>(this);
+            self->resetShapeState();
+            self->processEquation(inputs);
+            self->processBroadcastedDims();
+            self->validateOutputSubscript();
+            self->calculateOutputShape();
 
             cachedOutputShape = einsumOutDims;
             outputShapeComputed = true;
@@ -471,19 +493,6 @@ public:
     {
         CV_UNUSED(requiredOutputs);
         CV_UNUSED(internals);
-
-        // check if input einsumInputShapes is empty
-        if (einsumInpShapes.empty()) {
-            outputShapeComputed = false;
-        } else {
-            // check weather shapes in inputs are compatible with shapes in einsumInpShapes
-            for (int i = 0; i < inputs.size(); i++) {
-                if (inputs[i] != einsumInpShapes[i]) {
-                    outputShapeComputed = false;
-                    break;
-                }
-            }
-        }
 
         computeOutputShape(inputs);
 
@@ -682,13 +691,14 @@ void LayerEinsumImpl::preProcessInputs(InputArrayOfArrays& inputs_arr)
 
         // variable to hold processed version of the original input
         MatShape input_dims = shape(input);
-        if (input_dims.empty()){
+        const auto& currSubscriptIndices = inputSubscriptIndices[inputIter];
+
+        if (input_dims.empty() || currSubscriptIndices.empty()){
+            CV_CheckEQ(total(input_dims), (size_t)1, "Einsum: input with no subscript labels must be a scalar");
             homogenizedInputDims[inputIter] = MatShape(numLetterIndices, 1);
             ++inputIter;
             continue;
         }
-
-        const auto& currSubscriptIndices = inputSubscriptIndices[inputIter];
 
         // There should be subscript index (subscript label) for each dim of the input
         CV_CheckEQ(input_dims.size(), currSubscriptIndices.size(),
@@ -785,7 +795,7 @@ void LayerEinsumImpl::parseEquation(String equation)
     }
 
     // trailing comma without token
-    if (lhs_eq[lhs_eq.size()-1] == ',')
+    if (!lhs_eq.empty() && lhs_eq[lhs_eq.size()-1] == ',')
         lhs_eq_tokens.push_back(std::string());
 
 }
@@ -1055,6 +1065,8 @@ void LayerEinsumImpl::processEquation(const std::vector<MatShape>& inputs)
                 CV_CheckNE(letterIdx, -1,
                     "The only permissible subscript labels are lowercase letters (a-z) and uppercase letters (A-Z).");
 
+                CV_CheckLT(dim_count, rank,
+                    "The Einsum subscripts string has an excessive number of subscript labels compared to the rank of the input.");
                 int dimValue = shape[dim_count];
 
                 // The subscript label was not found in the global subscript label array
@@ -1082,8 +1094,7 @@ void LayerEinsumImpl::processEquation(const std::vector<MatShape>& inputs)
                 ++letter2count[letterIdx];
                 currTokenIndices.push_back(letter2index[letterIdx]);
 
-                CV_CheckLE(++dim_count, rank,
-                    "The Einsum subscripts string has an excessive number of subscript labels compared to the rank of the input.");
+                ++dim_count;
             }
         }
 

@@ -1,6 +1,8 @@
 // This file is part of OpenCV project.
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html
+//
+// Copyright (C) 2026, Advanced Micro Devices, Inc., all rights reserved.
 
 
 #include "precomp.hpp"
@@ -155,20 +157,27 @@ float normL2Sqr_(const float* a, const float* b, int n)
 {
     int j = 0; float d = 0.f;
 #if (CV_SIMD || CV_SIMD_SCALABLE)
+    const int vl = VTraits<v_float32>::vlanes();
     v_float32 v_d0 = vx_setzero_f32(), v_d1 = vx_setzero_f32();
     v_float32 v_d2 = vx_setzero_f32(), v_d3 = vx_setzero_f32();
-    for (; j <= n - 4 * VTraits<v_float32>::vlanes(); j += 4 * VTraits<v_float32>::vlanes())
+    for (; j <= n - 4 * vl; j += 4 * vl)
     {
         v_float32 t0 = v_sub(vx_load(a + j), vx_load(b + j));
-        v_float32 t1 = v_sub(vx_load(a + j + VTraits<v_float32>::vlanes()), vx_load(b + j + VTraits<v_float32>::vlanes()));
+        v_float32 t1 = v_sub(vx_load(a + j + vl), vx_load(b + j + vl));
         v_d0 = v_muladd(t0, t0, v_d0);
-        v_float32 t2 = v_sub(vx_load(a + j + 2 * VTraits<v_float32>::vlanes()), vx_load(b + j + 2 * VTraits<v_float32>::vlanes()));
+        v_float32 t2 = v_sub(vx_load(a + j + 2 * vl), vx_load(b + j + 2 * vl));
         v_d1 = v_muladd(t1, t1, v_d1);
-        v_float32 t3 = v_sub(vx_load(a + j + 3 * VTraits<v_float32>::vlanes()), vx_load(b + j + 3 * VTraits<v_float32>::vlanes()));
+        v_float32 t3 = v_sub(vx_load(a + j + 3 * vl), vx_load(b + j + 3 * vl));
         v_d2 = v_muladd(t2, t2, v_d2);
         v_d3 = v_muladd(t3, t3, v_d3);
     }
-    d = v_reduce_sum(v_add(v_add(v_add(v_d0, v_d1), v_d2), v_d3));
+    v_d0 = v_add(v_add(v_d0, v_d1), v_add(v_d2, v_d3));
+    for (; j <= n - vl; j += vl)
+    {
+        v_float32 t0 = v_sub(vx_load(a + j), vx_load(b + j));
+        v_d0 = v_muladd(t0, t0, v_d0);
+    }
+    d = v_reduce_sum(v_d0);
 #endif
     for( ; j < n; j++ )
     {
@@ -183,16 +192,20 @@ float normL1_(const float* a, const float* b, int n)
 {
     int j = 0; float d = 0.f;
 #if (CV_SIMD || CV_SIMD_SCALABLE)
+    const int vl = VTraits<v_float32>::vlanes();
     v_float32 v_d0 = vx_setzero_f32(), v_d1 = vx_setzero_f32();
     v_float32 v_d2 = vx_setzero_f32(), v_d3 = vx_setzero_f32();
-    for (; j <= n - 4 * VTraits<v_float32>::vlanes(); j += 4 * VTraits<v_float32>::vlanes())
+    for (; j <= n - 4 * vl; j += 4 * vl)
     {
         v_d0 = v_add(v_d0, v_absdiff(vx_load(a + j), vx_load(b + j)));
-        v_d1 = v_add(v_d1, v_absdiff(vx_load(a + j + VTraits<v_float32>::vlanes()), vx_load(b + j + VTraits<v_float32>::vlanes())));
-        v_d2 = v_add(v_d2, v_absdiff(vx_load(a + j + 2 * VTraits<v_float32>::vlanes()), vx_load(b + j + 2 * VTraits<v_float32>::vlanes())));
-        v_d3 = v_add(v_d3, v_absdiff(vx_load(a + j + 3 * VTraits<v_float32>::vlanes()), vx_load(b + j + 3 * VTraits<v_float32>::vlanes())));
+        v_d1 = v_add(v_d1, v_absdiff(vx_load(a + j + vl), vx_load(b + j + vl)));
+        v_d2 = v_add(v_d2, v_absdiff(vx_load(a + j + 2 * vl), vx_load(b + j + 2 * vl)));
+        v_d3 = v_add(v_d3, v_absdiff(vx_load(a + j + 3 * vl), vx_load(b + j + 3 * vl)));
     }
-    d = v_reduce_sum(v_add(v_add(v_add(v_d0, v_d1), v_d2), v_d3));
+    v_d0 = v_add(v_add(v_d0, v_d1), v_add(v_d2, v_d3));
+    for (; j <= n - vl; j += vl)
+        v_d0 = v_add(v_d0, v_absdiff(vx_load(a + j), vx_load(b + j)));
+    d = v_reduce_sum(v_d0);
 #endif
     for( ; j < n; j++ )
         d += std::abs(a[j] - b[j]);
@@ -203,11 +216,14 @@ int normL1_(const uchar* a, const uchar* b, int n)
 {
     int j = 0, d = 0;
 #if (CV_SIMD || CV_SIMD_SCALABLE)
-    for (; j <= n - 4 * VTraits<v_uint8>::vlanes(); j += 4 * VTraits<v_uint8>::vlanes())
+    const int vl = VTraits<v_uint8>::vlanes();
+    for (; j <= n - 4 * vl; j += 4 * vl)
         d += v_reduce_sad(vx_load(a + j), vx_load(b + j)) +
-             v_reduce_sad(vx_load(a + j + VTraits<v_uint8>::vlanes()), vx_load(b + j + VTraits<v_uint8>::vlanes())) +
-             v_reduce_sad(vx_load(a + j + 2 * VTraits<v_uint8>::vlanes()), vx_load(b + j + 2 * VTraits<v_uint8>::vlanes())) +
-             v_reduce_sad(vx_load(a + j + 3 * VTraits<v_uint8>::vlanes()), vx_load(b + j + 3 * VTraits<v_uint8>::vlanes()));
+             v_reduce_sad(vx_load(a + j + vl), vx_load(b + j + vl)) +
+             v_reduce_sad(vx_load(a + j + 2 * vl), vx_load(b + j + 2 * vl)) +
+             v_reduce_sad(vx_load(a + j + 3 * vl), vx_load(b + j + 3 * vl));
+    for (; j <= n - vl; j += vl)
+        d += v_reduce_sad(vx_load(a + j), vx_load(b + j));
 #endif
     for( ; j < n; j++ )
         d += std::abs(a[j] - b[j]);
@@ -303,6 +319,9 @@ double norm( InputArray _src, int normType, InputArray _mask )
 #endif
 
     Mat src = _src.getMat(), mask = _mask.getMat();
+    CV_Assert( mask.empty() || ((mask.type() == CV_8U || mask.type() == CV_8S || mask.type() == CV_Bool) && src.size == mask.size) );
+    if( src.empty() )
+        return 0.0;
     int depth = src.depth(), cn = src.channels();
     if( src.dims <= 2 )
     {
@@ -396,15 +415,15 @@ double norm( InputArray _src, int normType, InputArray _mask )
     result.d = 0;
     NAryMatIterator it(arrays, ptrs);
     CV_CheckLT((size_t)it.size, (size_t)INT_MAX, "");
-    bool is_fp16 = depth == CV_16F || depth == CV_16BF;
+    bool is_small_float = depth == CV_16F || depth == CV_16BF || depth == CV_8F_E4M3FN || depth == CV_8F_E4M3FNUZ;
 
-    if ((normType == NORM_L1 && (depth <= CV_16S || depth == CV_Bool || is_fp16)) ||
-        ((normType == NORM_L2 || normType == NORM_L2SQR) && (depth <= CV_8S || depth == CV_Bool || is_fp16)))
+    if ((normType == NORM_L1 && (depth <= CV_16S || depth == CV_Bool || is_small_float)) ||
+        ((normType == NORM_L2 || normType == NORM_L2SQR) && (depth <= CV_8S || depth == CV_Bool || is_small_float)))
     {
         // special case to handle "integer" overflow in accumulator
         const size_t esz = src.elemSize();
         const int total = (int)it.size;
-        const int blockSize0 = (is_fp16 ? (1 << 10) :
+        const int blockSize0 = (is_small_float ? (1 << 10) :
             depth == CV_Bool ? (1 << 30) :
             normType == NORM_L1 && depth <= CV_8S ? (1 << 23) : (1 << 15))/cn;
         const int blockSize = std::min(total, blockSize0);
@@ -424,7 +443,7 @@ double norm( InputArray _src, int normType, InputArray _mask )
                 count += bsz;
                 if (count + blockSize >= blockSize0 || (i+1 >= it.nplanes && j+bsz >= total))
                 {
-                    result.d += is_fp16 ? (double)blocksum.f : (double)blocksum.i;
+                    result.d += is_small_float ? (double)blocksum.f : (double)blocksum.i;
                     blocksum.i = 0;
                     count = 0;
                 }
@@ -447,7 +466,7 @@ double norm( InputArray _src, int normType, InputArray _mask )
     {
         if(depth <= CV_32S || depth == CV_32U || depth == CV_Bool)
             return result.u;
-        if (depth == CV_32F || is_fp16)
+        if (depth == CV_32F || is_small_float)
             return result.f;
         if (depth == CV_64U || depth == CV_64S)
             return (double)result.UL;
@@ -536,6 +555,9 @@ double norm( InputArray _src1, InputArray _src2, int normType, InputArray _mask 
 #endif
 
     Mat src1 = _src1.getMat(), src2 = _src2.getMat(), mask = _mask.getMat();
+    CV_Assert( mask.empty() || ((mask.type() == CV_8U || mask.type() == CV_8S || mask.type() == CV_Bool) && src1.size == mask.size) );
+    if( src1.empty() || src2.empty() )
+        return 0.0;
     int depth = src1.depth(), cn = src1.channels();
     if( src1.dims <= 2 )
     {
@@ -628,15 +650,15 @@ double norm( InputArray _src1, InputArray _src2, int normType, InputArray _mask 
     NAryMatIterator it(arrays, ptrs);
     CV_CheckLT((size_t)it.size, (size_t)INT_MAX, "");
 
-    bool is_fp16 = depth == CV_16F || depth == CV_16BF;
+    bool is_small_float = depth == CV_16F || depth == CV_16BF || depth == CV_8F_E4M3FN || depth == CV_8F_E4M3FNUZ;
 
-    if ((normType == NORM_L1 && (depth <= CV_16S || depth == CV_Bool || is_fp16)) ||
-        ((normType == NORM_L2 || normType == NORM_L2SQR) && (depth <= CV_8S || depth == CV_Bool || is_fp16)))
+    if ((normType == NORM_L1 && (depth <= CV_16S || depth == CV_Bool || is_small_float)) ||
+        ((normType == NORM_L2 || normType == NORM_L2SQR) && (depth <= CV_8S || depth == CV_Bool || is_small_float)))
     {
         // special case to handle "integer" overflow in accumulator
         const size_t esz = src1.elemSize();
         const int total = (int)it.size;
-        const int blockSize0 = (is_fp16 ? (1 << 10) :
+        const int blockSize0 = (is_small_float ? (1 << 10) :
             depth == CV_Bool ? (1 << 30) :
             normType == NORM_L1 && depth <= CV_8S ? (1 << 23) : (1 << 15))/cn;
         const int blockSize = std::min(total, blockSize0);
@@ -656,7 +678,7 @@ double norm( InputArray _src1, InputArray _src2, int normType, InputArray _mask 
                 count += bsz;
                 if (count + blockSize >= blockSize0 || (i+1 >= it.nplanes && j+bsz >= total))
                 {
-                    result.d += is_fp16 ? (double)blocksum.f : (double)blocksum.i;
+                    result.d += is_small_float ? (double)blocksum.f : (double)blocksum.i;
                     blocksum.i = 0;
                     count = 0;
                 }
@@ -680,7 +702,7 @@ double norm( InputArray _src1, InputArray _src2, int normType, InputArray _mask 
     {
         if (depth <= CV_32S || depth == CV_32U || depth == CV_Bool)
             return result.u;
-        if (depth == CV_32F || is_fp16)
+        if (depth == CV_32F || is_small_float)
             return result.f;
         if (depth == CV_64U || depth == CV_64S)
             return (double)result.UL;

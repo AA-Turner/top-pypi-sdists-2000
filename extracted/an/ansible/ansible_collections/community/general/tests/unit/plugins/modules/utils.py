@@ -4,52 +4,14 @@
 
 from __future__ import annotations
 
-import contextlib as _contextlib
-import json
-import unittest
-from unittest.mock import patch
+import typing as t
 
-from ansible.module_utils import basic
-from ansible.module_utils.common.text.converters import to_bytes
+if t.TYPE_CHECKING:  # pragma: no cover
+    from ansible_collections.community.general.plugins.module_utils._typing import ArgumentSpecT
 
 
-@_contextlib.contextmanager
-def set_module_args(args):
-    if "_ansible_remote_tmp" not in args:
-        args["_ansible_remote_tmp"] = "/tmp"
-    if "_ansible_keep_remote_files" not in args:
-        args["_ansible_keep_remote_files"] = False
-
-    serialized_args = to_bytes(json.dumps({"ANSIBLE_MODULE_ARGS": args}))
-    with patch.object(basic, "_ANSIBLE_ARGS", serialized_args):
-        yield
-
-
-class AnsibleExitJson(Exception):
-    pass
-
-
-class AnsibleFailJson(Exception):
-    pass
-
-
-def exit_json(*args, **kwargs):
-    if "changed" not in kwargs:
-        kwargs["changed"] = False
-    raise AnsibleExitJson(kwargs)
-
-
-def fail_json(*args, **kwargs):
-    kwargs["failed"] = True
-    raise AnsibleFailJson(kwargs)
-
-
-class ModuleTestCase(unittest.TestCase):
-    def setUp(self):
-        self.mock_module = patch.multiple(basic.AnsibleModule, exit_json=exit_json, fail_json=fail_json)
-        self.mock_module.start()
-        self.mock_sleep = patch("time.sleep")
-        self.mock_sleep.start()
-        set_module_args({})
-        self.addCleanup(self.mock_module.stop)
-        self.addCleanup(self.mock_sleep.stop)
+def get_default_params(argspec: ArgumentSpecT) -> dict[str, t.Any]:
+    result = {}
+    for option, data in argspec.items():
+        result[option] = data.get("default")
+    return result

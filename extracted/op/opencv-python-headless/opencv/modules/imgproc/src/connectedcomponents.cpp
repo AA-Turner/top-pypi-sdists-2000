@@ -1153,10 +1153,10 @@ namespace cv{
             //Array used to store info and labeled pixel by each thread.
             //Different threads affect different memory location of chunksSizeAndLabels
             const int chunksSizeAndLabelsSize = roundUp(h, 2);
-            std::vector<int> chunksSizeAndLabels(chunksSizeAndLabelsSize);
+            AutoBuffer<int> chunksSizeAndLabels(chunksSizeAndLabelsSize);
 
             //Tree of labels
-            std::vector<LabelT> P(Plength, 0);
+            AutoBuffer<LabelT> P(Plength, 0);
             //First label is for background
             //P[0] = 0;
 
@@ -1176,7 +1176,7 @@ namespace cv{
             }
 
             //Array for statistics data
-            std::vector<StatsOp> sopArray(h);
+            AutoBuffer<StatsOp> sopArray(h);
             sop.init(nLabels);
 
             //Second scan
@@ -1218,7 +1218,7 @@ namespace cv{
             // ............
             const size_t Plength = size_t(((h + 1) / 2) * size_t((w + 1) / 2)) + 1;
 
-            std::vector<LabelT> P_(Plength, 0);
+            AutoBuffer<LabelT> P_(Plength, 0);
             LabelT *P = P_.data();
             //P[0] = 0;
             LabelT lunique = 1;
@@ -1782,10 +1782,10 @@ namespace cv{
 
             //Array used to store info and labeled pixel by each thread.
             //Different threads affect different memory location of chunksSizeAndLabels
-            std::vector<int> chunksSizeAndLabels(roundUp(h, 2));
+            AutoBuffer<int> chunksSizeAndLabels(roundUp(h, 2));
 
             //Tree of labels
-            std::vector<LabelT> P_(Plength, 0);
+            AutoBuffer<LabelT> P_(Plength, 0);
             LabelT* P = P_.data();
             //First label is for background
             //P[0] = 0;
@@ -1806,7 +1806,7 @@ namespace cv{
             }
 
             //Array for statistics dataof threads
-            std::vector<StatsOp> sopArray(h);
+            AutoBuffer<StatsOp> sopArray(h);
 
             sop.init(nLabels);
             //Second scan
@@ -1842,7 +1842,7 @@ namespace cv{
             // ............
             const size_t Plength = size_t((size_t(h) * size_t(w) + 1) / 2) + 1;
 
-            std::vector<LabelT> P_(Plength, 0);
+            AutoBuffer<LabelT> P_(Plength, 0);
             LabelT* P = P_.data();
             P[0] = 0;
             LabelT lunique = 1;
@@ -2315,10 +2315,10 @@ namespace cv{
 
             //Array used to store info and labeled pixel by each thread.
             //Different threads affect different memory location of chunksSizeAndLabels
-            std::vector<int> chunksSizeAndLabels(roundUp(h, 2));
+            AutoBuffer<int> chunksSizeAndLabels(roundUp(h, 2));
 
             //Tree of labels
-            std::vector<LabelT> P_(Plength, 0);
+            AutoBuffer<LabelT> P_(Plength, 0);
             LabelT *P = P_.data();
             //First label is for background
             //P[0] = 0;
@@ -2352,7 +2352,7 @@ namespace cv{
             }
 
             //Array for statistics dataof threads
-            std::vector<StatsOp> sopArray(h);
+            AutoBuffer<StatsOp> sopArray(h);
 
             sop.init(nLabels);
             //Second scan
@@ -2387,7 +2387,7 @@ namespace cv{
             //Obviously, 4-way connectivity upper bound is also good for 8-way connectivity labeling
             const size_t Plength = (size_t(h) * size_t(w) + 1) / 2 + 1;
             //array P for equivalences resolution
-            std::vector<LabelT> P_(Plength, 0);
+            AutoBuffer<LabelT> P_(Plength, 0);
             LabelT *P = P_.data();
             //first label is for background pixels
             //P[0] = 0;
@@ -4265,10 +4265,10 @@ namespace cv{
             //Array used to store info and labeled pixel by each thread.
             //Different threads affect different memory location of chunksSizeAndLabels
             const int chunksSizeAndLabelsSize = roundUp(h, 2);
-            std::vector<int> chunksSizeAndLabels(chunksSizeAndLabelsSize);
+            AutoBuffer<int> chunksSizeAndLabels(chunksSizeAndLabelsSize);
 
             //Tree of labels
-            std::vector<LabelT> P(Plength, 0);
+            AutoBuffer<LabelT> P(Plength, 0);
             //First label is for background
             //P[0] = 0;
 
@@ -4288,7 +4288,7 @@ namespace cv{
             }
 
             //Array for statistics data
-            std::vector<StatsOp> sopArray(h);
+            AutoBuffer<StatsOp> sopArray(h);
             sop.init(nLabels);
 
             //Second scan
@@ -4323,7 +4323,7 @@ namespace cv{
             //............
             const size_t Plength = size_t(((h + 1) / 2) * size_t((w + 1) / 2)) + 1;
 
-            std::vector<LabelT> P_(Plength, 0);
+            AutoBuffer<LabelT> P_(Plength, 0);
             LabelT *P = P_.data();
             //P[0] = 0;
             LabelT lunique = 1;
@@ -5659,7 +5659,7 @@ namespace cv{
         const char *currentParallelFramework = cv::currentParallelFramework();
         const int nThreads = cv::getNumThreads();
 
-        CV_Assert(iDepth == CV_8U || iDepth == CV_8S);
+        CV_Assert(iDepth == CV_8U || iDepth == CV_8S || iDepth == CV_Bool);
 
         //Run parallel labeling only if the rows of the image are at least twice the number of available threads
         const bool is_parallel = currentParallelFramework != NULL && nThreads > 1 && L.rows / nThreads >= 2;
@@ -5758,6 +5758,7 @@ int cv::connectedComponents(InputArray img_, OutputArray _labels, int connectivi
 
 int cv::connectedComponents(InputArray img_, OutputArray _labels, int connectivity, int ltype, int ccltype){
     const cv::Mat img = img_.getMat();
+    CV_Assert(!img.empty());
     _labels.create(img.size(), CV_MAT_DEPTH(ltype));
     cv::Mat labels = _labels.getMat();
     connectedcomponents::NoOp sop;
@@ -5783,6 +5784,7 @@ int cv::connectedComponentsWithStats(InputArray img_, OutputArray _labels, Outpu
     OutputArray centroids, int connectivity, int ltype, int ccltype)
 {
     const cv::Mat img = img_.getMat();
+    CV_Assert(!img.empty());
     _labels.create(img.size(), CV_MAT_DEPTH(ltype));
     cv::Mat labels = _labels.getMat();
     connectedcomponents::CCStatsOp sop(statsv, centroids);

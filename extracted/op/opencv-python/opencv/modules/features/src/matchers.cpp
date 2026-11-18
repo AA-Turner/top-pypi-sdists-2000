@@ -580,6 +580,10 @@ bool DescriptorMatcher::empty() const
 void DescriptorMatcher::train()
 {}
 
+void DescriptorMatcher::setImagePairInfo( const std::vector<KeyPoint>&, const std::vector<KeyPoint>&,
+                                          Size, Size )
+{}
+
 void DescriptorMatcher::match( InputArray queryDescriptors, InputArray trainDescriptors,
                               std::vector<DMatch>& matches, InputArray mask ) const
 {
@@ -996,8 +1000,9 @@ void BFMatcher::knnMatchImpl( InputArray _queryDescriptors, std::vector<std::vec
     for( iIdx = 0; iIdx < imgCount; iIdx++ )
     {
         CV_Assert( trainDescCollection[iIdx].rows < IMGIDX_ONE );
+        Mat mask = (crossCheck || masks.empty()) ? Mat() : masks[iIdx];
         batchDistance(queryDescriptors, trainDescCollection[iIdx], dist, dtype, nidx,
-                      normType, knn, masks.empty() ? Mat() : masks[iIdx], update, crossCheck);
+                      normType, knn, mask, update, crossCheck);
         update += IMGIDX_ONE;
     }
 
