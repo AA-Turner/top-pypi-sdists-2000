@@ -1,96 +1,163 @@
-package stream_test
+package stream
 
 import (
-	"net/http"
+	"context"
 	"testing"
+	"testing/synctest"
 
-	"github.com/wandb/wandb/core/internal/stream"
+	"github.com/stretchr/testify/require"
+
+	"github.com/wandb/wandb/core/internal/observabilitytest"
+	"github.com/wandb/wandb/core/internal/runwork"
+	"github.com/wandb/wandb/core/internal/runworktest"
+	"github.com/wandb/wandb/core/internal/settings"
+	"github.com/wandb/wandb/core/internal/transactionlogtest"
+	spb "github.com/wandb/wandb/core/pkg/service_go_proto"
 )
 
-func TestProxyFn(t *testing.T) {
-	tests := []struct {
-		name          string
-		httpProxy     string
-		httpsProxy    string
-		requestURL    string
-		envProxy      map[string]string
-		expectedProxy string
-		expectedError bool
-	}{
-		{
-			name:          "Custom HTTP proxy",
-			httpProxy:     "http://custom-proxy:8080",
-			requestURL:    "http://example.com",
-			expectedProxy: "http://custom-proxy:8080",
-			expectedError: false,
+func exitFlushRecord() *spb.Record {
+	return &spb.Record{RecordType: &spb.Record_Request{Request: &spb.Request{
+		RequestType: &spb.Request_WaitForRunExitFlush{
+			WaitForRunExitFlush: &spb.WaitForRunExitFlushRequest{},
 		},
-		{
-			name:          "Custom HTTPS proxy",
-			httpsProxy:    "http://custom-proxy:8443",
-			requestURL:    "https://example.com",
-			expectedProxy: "http://custom-proxy:8443",
-			expectedError: false,
-		},
-		{
-			name:          "No custom proxy, fallback to environment HTTP proxy",
-			requestURL:    "http://example.com",
-			envProxy:      map[string]string{"HTTP_PROXY": "http://env-proxy:8080"},
-			expectedProxy: "http://env-proxy:8080",
-			expectedError: false,
-		},
-		{
-			name:          "Custom proxy with invalid URL",
-			httpProxy:     "http:// invalid-url ",
-			requestURL:    "http://example.com",
-			expectedProxy: "",
-			expectedError: true,
-		},
-		{
-			name:          "Custom proxy overrides environment proxy",
-			httpProxy:     "http://custom-proxy:8080",
-			requestURL:    "http://example.com",
-			envProxy:      map[string]string{"HTTP_PROXY": "http://env-proxy:8080"},
-			expectedProxy: "http://custom-proxy:8080",
-			expectedError: false,
-		},
-	}
+	}}}
+}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			for env, value := range tt.envProxy {
-				t.Setenv(env, value)
+func TestStream_ExitFlushNotifiesMultipleAndLateRequests(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		logger := observabilitytest.NewTestLogger(t)
+		reader, logWriter := transactionlogtest.ReaderWriter(t)
+		writer := (&WriterFactory{
+			Logger:   logger,
+			Settings: settings.New(),
+		}).New(logWriter)
+		input := make(chan runwork.Work)
+		go writer.Do(input)
+		defer func() {
+			close(input)
+			for range writer.Chan() {
 			}
+		}()
+		started := make(chan struct{})
+		close(started)
+		stream := &Stream{
+			logger:              logger,
+			started:             started,
+			transactionLogReady: writer.exitFlushDone,
+			runWork:             runwork.New(1, logger),
+		}
+		first, firstResponses := runworktest.SimpleRequest(t, "first")
+		second, secondResponses := runworktest.SimpleRequest(t, "second")
 
-			req, err := http.NewRequest("GET", tt.requestURL, http.NoBody)
-			if err != nil {
-				t.Fatalf("http.NewRequest failed: %v", err)
-			}
+		stream.HandleRecord(exitFlushRecord(), first)
+		stream.HandleRecord(exitFlushRecord(), second)
+		synctest.Wait()
+		select {
+		case <-firstResponses:
+			t.Fatal("response arrived before exit")
+		default:
+		}
+		select {
+		case <-secondResponses:
+			t.Fatal("response arrived before exit")
+		default:
+		}
+		input <- runwork.NoRequest(runwork.WorkFromRecord(&spb.Record{
+			RecordType: &spb.Record_Exit{Exit: &spb.RunExitRecord{ExitCode: 42}},
+		}))
+		synctest.Wait() // The writer is blocked forwarding exit.
+		late, lateResponses := runworktest.SimpleRequest(t, "late")
+		stream.HandleRecord(exitFlushRecord(), late)
 
-			proxyFn := stream.ProxyFn(tt.httpProxy, tt.httpsProxy)
-			proxyURL, err := proxyFn(req)
+		for _, responses := range []<-chan *spb.ServerResponse{firstResponses, secondResponses, lateResponses} {
+			response := <-responses
+			require.NotNil(
+				t,
+				response.GetResultCommunicate().GetResponse().GetWaitForRunExitFlushResponse(),
+			)
+		}
+		record, err := reader.Read()
+		require.NoError(t, err)
+		require.EqualValues(t, 42, record.GetExit().GetExitCode())
+		synctest.Wait()
+	})
+}
 
-			if tt.expectedError {
-				if err == nil {
-					t.Errorf("expected an error but got none")
-				}
-				return
-			}
+func TestStream_ExitFlushWithoutWriter(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		started := make(chan struct{})
+		close(started)
+		logger := observabilitytest.NewTestLogger(t)
+		stream := &Stream{logger: logger, started: started, runWork: runwork.New(1, logger)}
+		request, responses := runworktest.SimpleRequest(t, "flush")
 
-			if err != nil {
-				t.Errorf("unexpected error: %v", err)
-				return
-			}
+		stream.HandleRecord(exitFlushRecord(), request)
+		stream.HandleRecord(exitFlushRecord(), nil)
 
-			if proxyURL == nil {
-				if tt.expectedProxy != "" {
-					t.Errorf("expected proxy URL %s but got nil", tt.expectedProxy)
-				}
-				return
-			}
+		response := <-responses
+		require.Equal(t, "No response.", response.GetErrorResponse().GetMessage())
+		synctest.Wait()
+	})
+}
 
-			if proxyURL.String() != tt.expectedProxy {
-				t.Errorf("expected proxy URL %s but got %s", tt.expectedProxy, proxyURL.String())
-			}
-		})
-	}
+func TestStream_ExitFlushCancellationWhileWaitingForWriter(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		logger := observabilitytest.NewTestLogger(t)
+		writer := &Writer{exitFlushDone: make(chan struct{})}
+		started := make(chan struct{})
+		close(started)
+		stream := &Stream{
+			logger:              logger,
+			started:             started,
+			transactionLogReady: writer.exitFlushDone,
+			runWork:             runwork.New(1, logger),
+		}
+		ctx, cancel := context.WithCancel(t.Context())
+		responses := make(chan *spb.ServerResponse, 1)
+		request := runwork.NewRequest("flush", ctx, cancel, responses)
+
+		stream.HandleRecord(exitFlushRecord(), request)
+		synctest.Wait()
+		cancel()
+		synctest.Wait()
+
+		select {
+		case <-responses:
+			t.Fatal("canceled request received a response")
+		default:
+		}
+	})
+}
+
+func TestStream_ExitFlushRespondsWhenWriterStopsWithoutExit(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		logger := observabilitytest.NewTestLogger(t)
+		_, logWriter := transactionlogtest.ReaderWriter(t)
+		writer := (&WriterFactory{Logger: logger, Settings: settings.New()}).New(logWriter)
+		started := make(chan struct{})
+		close(started)
+		stream := &Stream{
+			logger:              logger,
+			started:             started,
+			transactionLogReady: writer.exitFlushDone,
+			runWork:             runwork.New(1, logger),
+		}
+		input := make(chan runwork.Work)
+		stream.wg.Add(1)
+		go func() {
+			defer stream.wg.Done()
+			writer.Do(input)
+		}()
+		request, responses := runworktest.SimpleRequest(t, "flush")
+
+		stream.HandleRecord(exitFlushRecord(), request)
+		synctest.Wait()
+		close(input)
+		response := <-responses
+		require.NotNil(
+			t,
+			response.GetResultCommunicate().GetResponse().GetWaitForRunExitFlushResponse(),
+		)
+		stream.Close()
+	})
 }
