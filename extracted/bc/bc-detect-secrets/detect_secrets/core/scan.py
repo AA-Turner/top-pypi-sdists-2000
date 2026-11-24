@@ -26,6 +26,12 @@ from ..util.code_snippet import CodeSnippet
 from ..util.code_snippet import get_code_snippet
 from ..util.inject import call_function_with_arguments
 from ..util.path import get_relative_path
+from ..util.prevalidation import could_match
+from ..util.prevalidation import is_enabled
+from ..util.prevalidation import required_literals
+from ..util.prevalidation import Requirement
+from .gate import build_gate
+from .gate import Gate
 from .log import log
 from .potential_secret import PotentialSecret
 from detect_secrets.util.filetype import determine_file_type
@@ -36,6 +42,68 @@ if TYPE_CHECKING:
 
 MIN_LINE_LENGTH = int(os.getenv('CHECKOV_MIN_LINE_LENGTH', '5'))
 MAX_LINE_LENGTH = int(os.getenv('CHECKOV_MAX_LINE_LENGTH', '100000'))
+
+# Feature flag: set DETECT_SECRETS_PERF_FILTER_CACHE=0 to disable filter list caching.
+_FILTER_CACHE_ENABLED: bool = os.getenv('DETECT_SECRETS_PERF_FILTER_CACHE', '1') != '0'
+
+# Cache: maps frozenset(parameters) -> list of matching filter functions.
+# Invalidated by cache_bust() in settings.py via the callback registered below.
+_filter_cache: dict[frozenset[str], List[SelfAwareCallable]] = {}
+_PREGATE_ENABLED: bool = os.getenv('DETECT_SECRETS_PERF_PREGATE', '0') != '0'
+_gate: Gate | None = None
+
+# Feature flag: set DETECT_SECRETS_PREVALIDATION=1 to skip, per file, regex plugins whose required
+# literals do not appear anywhere in the file.
+_PREVALIDATION_ENABLED: bool = is_enabled('DETECT_SECRETS_PREVALIDATION')
+
+
+def _requirements_for(plugin: BasePlugin) -> List[Requirement]:
+    # required_literals is cached by pattern source, so this stays cheap and, unlike a cache keyed
+    # by plugin instance, cannot go stale when settings change and plugins are rebuilt.
+    return [required_literals(pattern) for pattern in getattr(plugin, 'denylist', None) or []]
+
+
+def _passes_prevalidation(plugin: BasePlugin, lowered_document: str) -> bool:
+    """False only when the plugin provably cannot match anything in the document."""
+    from ..plugins.base import RegexBasedDetector
+
+    # Case 1: the plugin implements its own check. Used by plugins that hold many independent
+    # regexes and filter them one by one (returning True here and narrowing internally).
+    custom = getattr(plugin, 'prevalidate', None)
+    if callable(custom):
+        return bool(custom(lowered_document))
+
+    # Case 2: not regex-based (e.g. keyword or entropy plugins): there is no pattern to derive
+    # literals from, so it always runs.
+    if not isinstance(plugin, RegexBasedDetector):
+        return True
+
+    # Case 3: a regex plugin with an empty denylist: nothing to reason about, so it always runs.
+    requirements = _requirements_for(plugin)
+    if not requirements:
+        return True
+
+    # Case 4: runs if at least one of its regexes could match: either no literal could be
+    # derived for it (None, always counts as a possible match) or one of its required literals
+    # is in the file. Returns False only when every regex is provably impossible for this document.
+    return any(could_match(requirement, lowered_document) for requirement in requirements)
+
+
+def _get_gate() -> Gate:
+    global _gate
+    if _gate is None:
+        _gate = build_gate(get_plugins())
+    return _gate
+
+
+def _could_contain_secret(line: str) -> bool:
+    """
+    Returns True if the line could possibly contain a secret pattern. This is
+    a cheap pre-filter: if it returns False, no plugin currently loaded for
+    this scan can match this line. Rebuilt from the real, live plugin set --
+    see detect_secrets.core.gate for how correctness is achieved.
+    """
+    return _get_gate().could_contain_secret(line)
 
 
 @lru_cache(maxsize=1)
@@ -285,7 +353,8 @@ def _get_lines_from_file(filename: str) -> Generator[List[str], None, None]:
     :raises: FileNotFoundError
     """
     with open(filename) as f:
-        log.info(f'Checking file: {filename}')
+        # Lazy %-style logging: avoid formatting the string when INFO is disabled.
+        log.info('Checking file: %s', filename)
 
         try:
             lines = get_transformed_file(cast(NamedIO, f))
@@ -343,6 +412,14 @@ def _process_line_based_plugins(
 ) -> Generator[PotentialSecret, None, None]:
     line_content = [line[1] for line in lines]
 
+    plugins = get_plugins()
+    if _PREVALIDATION_ENABLED:
+        lowered_document = '\n'.join(line_content).lower()
+        plugins = [plugin for plugin in plugins if _passes_prevalidation(plugin, lowered_document)]
+        if not plugins:
+            log.debug('Skipping "%s": no plugin passed pre-validation', filename)
+            return
+
     # NOTE: We iterate through lines *then* plugins, because we want to quit early if any of the
     # filters return True.
     index = 0
@@ -351,6 +428,12 @@ def _process_line_based_plugins(
         index += 1
         if len(line) < MIN_LINE_LENGTH or len(line) > MAX_LINE_LENGTH:
             # skip lines which have too few or too many none whitespace chars
+            continue
+
+        # PRE-GATE: skip lines that cannot possibly match any currently loaded
+        # plugin. This avoids building the code_snippet context window and
+        # running all plugins for lines that are provably clean.
+        if _PREGATE_ENABLED and not _could_contain_secret(line):
             continue
 
         if not is_added and not is_removed:
@@ -378,7 +461,7 @@ def _process_line_based_plugins(
         ):
             continue
 
-        for plugin in get_plugins():
+        for plugin in plugins:
             for secret in _scan_line(
                     plugin=plugin,
                     filename=filename,
@@ -449,16 +532,20 @@ def _is_filtered_out(required_filter_parameters: Iterable[str], **kwargs: Any) -
     for filter_fn in get_filters_with_parameter(*required_filter_parameters):
         try:
             if call_function_with_arguments(filter_fn, **kwargs):
+                # NOTE: We use lazy %-style logging (template + args) rather than
+                # eagerly building an f-string, so that the string formatting cost
+                # is only paid when INFO-level logging is actually enabled (the
+                # default level is ERROR). This is a hot path called per-line,
+                # per-secret, per-filter during a scan.
                 if 'secret' in kwargs:
-                    debug_msg = f'Skipping "{kwargs["secret"]}" due to `{filter_fn.path}`.'
+                    log.info('Skipping "%s" due to `%s`.', kwargs['secret'], filter_fn.path)
                 elif list(kwargs.keys()) == ['filename']:
                     # We want to make sure this is only run if we're skipping files (as compared
                     # to other filters that may include `filename` as a parameter).
-                    debug_msg = f'Skipping "{kwargs["filename"]}" due to `{filter_fn.path}`'
+                    log.info('Skipping "%s" due to `%s`', kwargs['filename'], filter_fn.path)
                 else:
-                    debug_msg = f'Skipping secret due to `{filter_fn.path}`.'
+                    log.info('Skipping secret due to `%s`.', filter_fn.path)
 
-                log.info(debug_msg)
                 return True
         except TypeError:
             # Skipping non-compatible filters
@@ -484,11 +571,44 @@ def get_filters_with_parameter(*parameters: str) -> List[SelfAwareCallable]:
 
     >>> get_filters_with_parameter('secret')
     [bar]
-    """
-    minimum_parameters = set(parameters)
 
-    return [
-        filter
-        for filter in get_filters()
-        if minimum_parameters <= filter.injectable_variables
+    Results are cached by parameter set since the filter list does not change
+    after settings load. Cache is invalidated by cache_bust() in settings.py.
+
+    Controlled by DETECT_SECRETS_PERF_FILTER_CACHE env var (default: 1 = enabled).
+    """
+    if not _FILTER_CACHE_ENABLED:
+        minimum_parameters = set(parameters)
+        return [
+            f for f in get_filters()
+            if minimum_parameters <= f.injectable_variables
+        ]
+
+    key = frozenset(parameters)
+    cached = _filter_cache.get(key)
+    if cached is not None:
+        return cached
+
+    minimum_parameters = set(parameters)
+    result = [
+        f for f in get_filters()
+        if minimum_parameters <= f.injectable_variables
     ]
+    _filter_cache[key] = result
+    return result
+
+
+from detect_secrets import settings as _settings  # noqa: E402
+
+
+def _bust_filter_cache() -> None:
+    _filter_cache.clear()
+
+
+def _bust_gate_cache() -> None:
+    global _gate
+    _gate = None
+
+
+_settings.register_cache_bust_callback(_bust_filter_cache)
+_settings.register_cache_bust_callback(_bust_gate_cache)

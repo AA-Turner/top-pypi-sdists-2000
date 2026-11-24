@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: bc-detect-secrets
-Version: 1.5.47
+Version: 1.5.54
 Summary: Tool for detecting secrets in the codebase
 Home-page: https://github.com/bridgecrewio/detect-secrets
 Author: bridgecrew
@@ -8,7 +8,6 @@ Author-email: meet@bridgecrew.io
 License: Apache License 2.0
 Keywords: secret-management,pre-commit,security,entropy-checks
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
@@ -22,7 +21,7 @@ Classifier: Environment :: Console
 Classifier: Operating System :: OS Independent
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Typing :: Typed
-Requires-Python: >=3.8
+Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: pyyaml
@@ -32,6 +31,19 @@ Provides-Extra: word-list
 Requires-Dist: pyahocorasick; extra == "word-list"
 Provides-Extra: gibberish
 Requires-Dist: gibberish-detector; extra == "gibberish"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 [![Build Status](https://github.com/bridgecrewio/detect-secrets/actions/workflows/release.yml/badge.svg)](https://github.com/bridgecrewio/detect-secrets/actions/workflows/release.yml?query=branch%3Amaster++)
 [![PyPI](https://img.shields.io/pypi/v/bc-detect-secrets)](https://pypi.org/project/bc-detect-secrets/)
