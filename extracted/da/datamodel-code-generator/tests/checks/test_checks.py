@@ -118,6 +118,7 @@ def test_check_seams() -> None:
     assert_output(report())
 
 
+@pytest.mark.value_checks
 def test_checks_run_in_a_python_a_test_starts() -> None:
     """A Python that a test starts runs the checks the variables turn on, as the test process does."""
     result = subprocess.run(
@@ -176,6 +177,7 @@ class _RenamingParser(JsonSchemaParser):
         self.model_resolver.references["#/definitions/Pet"].name = "Animal"
 
 
+@pytest.mark.value_checks
 def test_naming_check_reports_a_name_no_naming_call_gives() -> None:
     """A name that no naming call of the resolver gives fails the parse when ``name_models`` starts.
 
@@ -230,6 +232,7 @@ _ENUM_TAGGED_VARIANTS = Path(__file__).parents[1] / "data/openapi/discriminator_
 """Variants in the module ``pets`` whose tag field is typed by an enum of the root module."""
 
 
+@pytest.mark.value_checks
 def test_trigger_check_reports_a_pass_that_writes_where_its_trigger_is_false(monkeypatch: pytest.MonkeyPatch) -> None:
     """A pass that rewrites what its trigger does not name fails the parse when the trigger check runs it anyway.
 

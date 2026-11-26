@@ -52,7 +52,9 @@ and `--json`; `fail` judges them as every other cell. `guide` runs none.
 
 Cells whose bytes differ get a behaviour signature per side (scripts/_behaviour_signature.py, a fresh process per
 tree; each module of a package is also imported first in a process of its own) with a validation probe per name
-and, for payload cases, payload verdicts; scripts/_behaviour_classify.py puts each cell into one class. A cell
+and, for payload cases, payload verdicts; scripts/_behaviour_classify.py puts each cell into one class. The PR tier
+signs no family cell it reports only whose sides both generated other bytes: it reports that cell as
+`differs-unsigned` (`UNSIGNED_CLASS`); the nightly and release tiers sign and class every family cell. A cell
 that uses an option, value or input type BASE does not have is `opt-in` and is not generated.
 
 Without `--identity` the change records judge every cell whose facts (`compare_release.cell_facts`) differ. A PR run
@@ -244,6 +246,7 @@ ORACLE_FILES = (
     "scripts/compile_builtin_templates.py",
     "scripts/declared_changes.py",
     "scripts/fact_tables.py",
+    "scripts/os_selection.py",
     "scripts/record_prs.py",
     "scripts/select_ci_test_shard.py",
 )
@@ -312,6 +315,12 @@ TARGET_OPTIONS = ("--generate-client", "--generate-server")
 FAMILIES_KEY = "families"
 FAMILY_MODES = ("report", "fail")
 """The values of the allowlist file's `families` key: report the family cells only (the default), or judge them."""
+UNSIGNED_CLASS = "differs-unsigned"
+"""The class the PR tier reports a family cell under that it reports only and whose sides both generated other bytes.
+
+The PR tier signs no such cell: a target cell signs every module of its packages in a process of its own (about 5 s a
+cell on a runner), and the class would change nothing. The nightly tier signs and classes every family cell.
+"""
 VERDICTS_OPTION = "--verdicts"
 PICK_OPTION = "--pick"
 HEAD_ONLY_OPTIONS = (VERDICTS_OPTION, PICK_OPTION)
@@ -543,6 +552,7 @@ class Gate:
     candidate_info: Candidate
     family_root: Path = Path()
     families_judged: bool = False
+    tier: str = ""
     family_index: list[FamilyCase] | None = None
     family_problem: str = ""
     base_version: str = ""
@@ -616,7 +626,7 @@ def opt_in_reason(args: list[str], inventory: dict[str, list[str] | None]) -> st
 
 def changed_files(candidate: Candidate, base: str) -> list[str]:
     """Return the files under tests/data that changed between the release and the candidate."""
-    return changed_paths(candidate, base, ("tests/data",))
+    return changed_paths(candidate.repo, base, candidate.revision, ("tests/data",))
 
 
 def added_files(candidate: Candidate, base: str, directory: str) -> list[str]:
@@ -1107,7 +1117,8 @@ def judge_outcomes(
 
     It adds the cell to the evidence, then gives the identity verdict, or the classification and, where the sides'
     facts differ, the verdict of the change records (`judge_cell`). A family cell the run reports only (`in_verdict`)
-    adds nothing to the evidence, and no change record judges it.
+    adds nothing to the evidence, and no change record judges it; the PR tier does not sign it where both sides
+    generated other bytes (`UNSIGNED_CLASS`).
     """
     base, candidate = outcomes
     if in_verdict(gate, cell):
@@ -1116,6 +1127,8 @@ def judge_outcomes(
     if gate.identity:
         return Result(cell, identity_verdict(base, candidate))
     same = base.ok and candidate.ok and base.tree == candidate.tree
+    if gate.tier == "pr" and base.ok and candidate.ok and not same and not in_verdict(gate, cell):
+        return Result(cell, Verdict(UNSIGNED_CLASS))
     sides = [Side(base.ok, base.error), Side(candidate.ok, candidate.error)]
     valid: frozenset[str] = frozenset()
     if base.ok and not same:
@@ -1213,7 +1226,9 @@ class Plan:
     has no such tag. `judged` are those records, an extending record as its target with its own id, covers and cells;
     `head` and `before` the candidate's and the base's records by id. `presets` are the latest tag's (None: the
     base's own, for a release the repository has no tag of). `changed` are the files below tests/data a PR changes;
-    `src` and `oracle` say whether it changes src/ and the gate's own files (a release run always runs); `groups`
+    `src` says whether the candidate's src/ differs from the base's, which decides whether cells are generated (the
+    stored proofs are judged per change, `stored_problems`), and `oracle` whether it changes the gate's own files (a
+    release run always runs); `groups`
     the (input, output model type) pairs of the run each selector covers, which share a shard (`place`); `spaces` the
     label spaces whose cells the run builds (`build_cells`), which judge the selectors of those spaces only. `landed`
     are the records of a PR run that record a change merged before its base (`landed_records`), by id, with the
@@ -1246,15 +1261,16 @@ def _git_names(repo: Path, *args: str) -> list[str]:
     return [name for name in compare_release.git(repo, *args).stdout.split("\0") if name]
 
 
-def changed_paths(candidate: Candidate, base: str, paths: Sequence[str]) -> list[str]:
-    """Return the files below `paths` that differ between a revision and the candidate.
+def changed_paths(repo: Path, base: str, revision: str | None, paths: Sequence[str]) -> list[str]:
+    """Return the files below `paths` that differ between two revisions of a repository (None: its checkout).
 
     A checkout counts its uncommitted and untracked files too, so a local run sees what CI will see after a commit.
     """
-    revision = [candidate.revision] if candidate.revision else []
-    names = _git_names(candidate.repo, "diff", "--name-only", "--no-renames", "-z", base, *revision, "--", *paths)
-    if not candidate.revision:
-        names += _git_names(candidate.repo, "ls-files", "-z", "--others", "--exclude-standard", "--", *paths)
+    names = _git_names(
+        repo, "diff", "--name-only", "--no-renames", "-z", base, *([revision] if revision else []), "--", *paths
+    )
+    if not revision:
+        names += _git_names(repo, "ls-files", "-z", "--others", "--exclude-standard", "--", *paths)
     return sorted(set(names))
 
 
@@ -1369,9 +1385,9 @@ def plan_records(ns: argparse.Namespace, candidate: Candidate) -> Plan:
         before, _ = read_fragments(fragment_texts(repo, base, candidate.root), strict=False)
         tag_commit = compare_release.commit_of(f"refs/tags/{tag}", repo) or None
         plan = Plan(base, release=False, tag=tag, tag_commit=tag_commit, head=head, before=before)
-        plan.changed = changed_paths(candidate, base, ("tests/data",))
-        plan.src = bool(changed_paths(candidate, base, ("src",)))
-        plan.oracle = bool(changed_paths(candidate, base, ORACLE_FILES))
+        plan.changed = changed_paths(repo, base, candidate.revision, ("tests/data",))
+        plan.src = bool(changed_paths(repo, base, candidate.revision, ("src",)))
+        plan.oracle = bool(changed_paths(repo, base, candidate.revision, ORACLE_FILES))
         added = [record for record_id, record in head.items() if record_id not in before]
         problems = [
             problem for record_id, found in head_problems.items() if record_id not in before for problem in found
@@ -1619,8 +1635,9 @@ def judge_cell(
 
     Equal facts, and sides the timeout or the memory cap stopped both, need nothing (None). A head stopped where the
     base finished is a violation no record covers: its output is unfinished. Otherwise the head runs a second time,
-    which must give the same facts; then the records that cover the cell must admit every kind of its difference
-    with the evidence of their categories (`judge`), computed only for the categories that cover it.
+    which must give the same facts; then the records that cover the cell must admit every kind of its difference and
+    explain it together with the evidence of their categories (`judge`), computed only for the categories that cover
+    it.
     """
     base, candidate = outcomes
     old, new = compare_release.cell_facts(base), compare_release.cell_facts(candidate)
@@ -1826,31 +1843,51 @@ def stored_label_problem(
 
 
 def stored_problems(gate: Gate) -> list[str]:
-    """Return the stored labels of a src PR whose proof fails: an `output-text` record's covers, a `harness` record's.
+    """Return the stored labels of a PR's src changes whose proof fails: the covers those changes add to records.
 
-    The labels are those of the PR's `output-text` records, and those a `harness` record adds to its covers; the
-    verdict on each `harness` label that needs the proof goes to `Gate.verdicts` by its base and head contents.
+    The PR is each change from the base as main takes them (`declared_changes.change_steps`), so a push of several
+    pull requests to main is judged as each of them was, also where a later one reverts src/, and a change that
+    leaves src/ alone needs no proof.
     """
     plan, candidate = gate.plan, gate.candidate_info
-    if plan is None or plan.release or not plan.src or plan.base is None:
+    if plan is None or plan.release or plan.base is None:
         return []
+    repo, problems = candidate.repo, []
+    records = {plan.base: plan.before, candidate.revision: plan.head}
+    for old, new in declared_changes.change_steps(repo, plan.base, candidate.revision):
+        for revision in {old, new} - records.keys():
+            records[revision] = read_fragments(fragment_texts(repo, revision, candidate.root), strict=False)[0]
+        if changed_paths(repo, old, new, ("src",)):
+            problems += step_problems(gate, (old, new), records[old], records[new])
+    return problems
+
+
+def step_problems(
+    gate: Gate, revisions: tuple[str, str | None], before: dict[str, Record], head: dict[str, Record]
+) -> list[str]:
+    """Return the stored labels of one src change whose proof fails, by the records `before` and `head` it.
+
+    The labels are those of the `output-text` records the change adds, and those a `harness` record adds to its
+    covers; the verdict on each `harness` label that needs the proof goes to `Gate.verdicts` by its base and head
+    contents. A revision None is the candidate's checkout.
+    """
     labels: list[tuple[str, Category]] = [
         (label, Category.OUTPUT_TEXT)
-        for record in plan.judged
-        if record.category == Category.OUTPUT_TEXT
-        for label in record.covers
+        for record_id, record in head.items()
+        if record_id not in before
+        and (resolved := resolved_record(record, head)[0]) is not None
+        and resolved.category == Category.OUTPUT_TEXT
+        for label in resolved.covers
     ]
-    for record_id, record in plan.head.items():
-        target, _ = resolved_record(record, plan.head)
+    for record_id, record in head.items():
+        target, _ = resolved_record(record, head)
         if target is not None and target.category == Category.HARNESS:
-            known = set(plan.before[record_id].covers) if record_id in plan.before else set()
+            known = set(before[record_id].covers) if record_id in before else set()
             labels += [(label, Category.HARNESS) for label in record.covers if label not in known]
     if not labels:
         return []
-    sides = (
-        declared_changes.Side(candidate.repo, plan.base),
-        declared_changes.Side(candidate.repo, candidate.revision),
-    )
+    repo = gate.candidate_info.repo
+    sides = (declared_changes.Side(repo, revisions[0]), declared_changes.Side(repo, revisions[1]))
     problems = []
     for label, category in dict.fromkeys(labels):
         problem = stored_label_problem(gate, label, category, sides)
@@ -1861,12 +1898,14 @@ def stored_problems(gate: Gate) -> list[str]:
     return problems
 
 
-def write_verdicts(gate: Gate, ns: argparse.Namespace) -> None:
-    """Write the verdicts on the `harness` labels of a src PR to `--verdicts`, read by `declared_changes.py check`.
+def judge_stored_labels(gate: Gate, ns: argparse.Namespace) -> None:
+    """Judge the stored labels of a PR's src changes and write the verdicts on their `harness` labels to `--verdicts`.
 
-    Shard 1 judges the stored labels (`stored_problems`) and writes the file; the other shards leave it alone, so
-    the shards of one run may share it.
+    `declared_changes.py check` reads the file. Shard 1 judges the stored labels (`stored_problems`, their problems
+    join the plan's) and writes the file; the other shards leave it alone, so the shards of one run may share it.
     """
+    if gate.plan is not None and ns.shard_index == 1:
+        gate.plan.problems += stored_problems(gate)
     if ns.verdicts and ns.shard_index == 1:
         ns.verdicts.parent.mkdir(parents=True, exist_ok=True)
         ns.verdicts.write_text(json.dumps({"verdicts": gate.verdicts}, indent=1) + "\n", encoding="utf-8")
@@ -2295,7 +2334,7 @@ def report_families(results: list[Result]) -> None:
             print(f"family (report only) {verdict.cls}: {cell.label} | {cell.backend} | {cell.option_label}")
             print("".join(f"    {note[:240]}\n" for note in verdict.notes[:6]), end="")
     counts = Counter(result.verdict.cls for result in results)
-    classes = ", ".join(f"{name}={counts[name]}" for name in CLASSES if counts[name])
+    classes = ", ".join(f"{name}={counts[name]}" for name in (*CLASSES, UNSIGNED_CLASS) if counts[name])
     print(f"families (report only, the allowlist file's {FAMILIES_KEY} key): {len(results)} cells, {classes}")
 
 
@@ -2436,6 +2475,7 @@ def build_gate(ns: argparse.Namespace) -> Gate:
         candidate_info=candidate,
         family_root=cache_dir / "family-inputs" / _stable(str(candidate.root))[:12],
         families_judged=families_judged(ns.allowlist),
+        tier=ns.tier,
         base_version=ns.base,
         identity=ns.identity,
         evidence=compare_release.Evidence(units),
@@ -2470,7 +2510,8 @@ def shortcut(gate: Gate, plan: Plan, ns: argparse.Namespace) -> int:
     A PR record that names cells fails then, as no cell can differ, except a record of a change already merged
     (`Plan.landed`), whose cells the runs against the release judge: its selectors must name released surface only
     (`plan_surface_problems`), as those runs refuse any other. The base's gate still runs on a change of the gate's
-    own files (`base_gate`).
+    own files (`base_gate`). The stored proofs of its src changes (a push to main that reverts one) are judged before
+    (`judge_stored_labels`), and their problems are the plan's.
     """
     base = (plan.base or "")[:12]
     problems = [
@@ -2506,7 +2547,7 @@ def gate_main(ns: argparse.Namespace) -> int:
     gate = build_gate(ns)
     plan = gate.plan
     if plan is not None and not plan.release and not plan.src:
-        write_verdicts(gate, ns)
+        judge_stored_labels(gate, ns)
         return shortcut(gate, plan, ns)
     inventory = option_inventory(gate.base.side.python, gate.base.env)
     offered = option_inventory(gate.candidate.side.python, gate.candidate.env) if gate.identity else inventory
@@ -2535,9 +2576,7 @@ def gate_main(ns: argparse.Namespace) -> int:
         gate.candidate.close()
         if gate.rerun is not None:
             gate.rerun.close()
-    if plan is not None and ns.shard_index == 1:
-        plan.problems += stored_problems(gate)
-    write_verdicts(gate, ns)
+    judge_stored_labels(gate, ns)
     if gate.identity:
         results = not_compared(results)
         if ns.shard_index == 1 and (surface := option_changes(inventory, offered)):

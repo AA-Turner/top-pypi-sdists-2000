@@ -17,6 +17,7 @@ from contextlib import contextmanager
 from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from fnmatch import fnmatch
 from functools import cache, cached_property
 from importlib.util import find_spec
 from itertools import islice, starmap
@@ -88,6 +89,8 @@ if TYPE_CHECKING:
     import warnings
     from collections.abc import Iterable
 
+    from scripts.os_selection import Selection
+
 pytest_plugins = ("tests.checks.plugin",)
 
 CLI_DOC_COLLECTION_OUTPUT = Path(__file__).parent / "cli_doc" / ".cli_doc_collection.json"
@@ -114,11 +117,24 @@ CHECK_AREA_ENVS = (
     CHECK_TEMPLATE_ASSIGNMENTS_ENV,
 )
 """The variable of every debug check area (`Area` in `tests/checks/areas.py`) set to `1`."""
+VALUE_CHECK_AREA_ENVS = (
+    CHECK_MODEL_GRAPH_ENV,
+    CHECK_SCHEMA_GRAPH_ENV,
+    CHECK_RENDER_PLANS_ENV,
+    CHECK_RENDER_MEMOS_ENV,
+    CHECK_FACT_FINALITY_ENV,
+    CHECK_NAMING_ENV,
+    CHECK_TEMPLATE_ASSIGNMENTS_ENV,
+)
+"""The areas that compare computed values and cost a few percent of a run; `--skip-value-checks` leaves them off."""
 CHECK_FACT_FINALITY_SWEEP_ENV = "DATAMODEL_CODE_GENERATOR_CHECK_FACT_FINALITY_SWEEP"
 CHECK_PASS_TRIGGERS_ENV = "DATAMODEL_CODE_GENERATOR_CHECK_PASS_TRIGGERS"
 SWEEP_PYTHON = (3, 15)
-"""The Python from which the test suite also sets `CHECK_FACT_FINALITY_SWEEP_ENV` and `CHECK_PASS_TRIGGERS_ENV` to `1`:
-one CI lane runs the sweep and the passes whose trigger is false, the others skip those passes as users do."""
+"""The Python from which the test suite also sets `CHECK_FACT_FINALITY_SWEEP_ENV` to `1`: one CI lane runs the sweep,
+the others compare only the models a pass touched; it widens `CHECK_FACT_FINALITY_ENV`, so a run that leaves that
+off runs no sweep either. `CHECK_PASS_TRIGGERS_ENV` stays off unless the environment sets it
+or `--check-pass-triggers` is given: the nightly workflow (`tox run -e pass-triggers`) runs the suite on `SWEEP_PYTHON`
+with it on."""
 CHILD_COVERAGE_ENV = {"COVERAGE_CORE": "ctrace"} if find_spec("coverage.tracer") else {}
 """What a test adds to the environment of a Python it starts under ``coverage run``: ``ctrace``, where installed.
 
@@ -258,6 +274,17 @@ def pytest_addoption(parser: pytest.Parser) -> None:
         help="Collect CLI documentation metadata from tests marked with @pytest.mark.cli_doc",
     )
     parser.addoption(
+        "--check-pass-triggers",
+        action="store_true",
+        default=False,
+        help="Run each pass whose trigger is false anyway and fail on what it changes (PASS_TRIGGERS)",
+    )
+    parser.addoption(
+        "--os-selection",
+        metavar="FILE",
+        help="Keep only the tests FILE selects for Windows and macOS (tests/os_selection.toml); deselect the others",
+    )
+    parser.addoption(
         "--test-shard",
         metavar="INDEX/TOTAL",
         help="Run one of TOTAL shards of the selected tests, split by their measured CI durations",
@@ -268,6 +295,12 @@ def pytest_addoption(parser: pytest.Parser) -> None:
         default=[],
         metavar="NODEID@INDEX/TOTAL",
         help="Of the selected tests under NODEID, run only the INDEX/TOTAL shard that --test-shard would select",
+    )
+    parser.addoption(
+        "--skip-value-checks",
+        action="store_true",
+        default=False,
+        help="Leave the value-comparing debug check areas off (the CI shards that another shard of the run covers)",
     )
     parser.addoption(
         "--expected-observe",
@@ -296,14 +329,24 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 def pytest_configure(config: pytest.Config) -> None:
     """Register the cli_doc marker and turn on every debug check area that is not set, except in CodSpeed benchmarks.
 
-    The finality sweep and the trigger check are turned on only from `SWEEP_PYTHON`.
+    The finality sweep is turned on only from `SWEEP_PYTHON`; the trigger check only by `--check-pass-triggers` or where
+    the environment sets it. `--skip-value-checks` leaves `VALUE_CHECK_AREA_ENVS` unset.
     """
     benchmarks = config.getoption("codspeed", default=False)
-    for name in () if benchmarks else CHECK_AREA_ENVS:
+    skipped = VALUE_CHECK_AREA_ENVS if config.getoption("--skip-value-checks") else ()
+    for name in () if benchmarks else (name for name in CHECK_AREA_ENVS if name not in skipped):
         os.environ.setdefault(name, "1")
     if not benchmarks and sys.version_info >= SWEEP_PYTHON:
         os.environ.setdefault(CHECK_FACT_FINALITY_SWEEP_ENV, "1")
-        os.environ.setdefault(CHECK_PASS_TRIGGERS_ENV, "1")
+    os.environ[CHECK_PASS_TRIGGERS_ENV] = (
+        "1"
+        if config.getoption("check_pass_triggers") and not benchmarks
+        else os.environ.get(CHECK_PASS_TRIGGERS_ENV, "0")
+    )
+    config.addinivalue_line(
+        "markers",
+        "value_checks: run the test with the value-comparing check areas on, even under --skip-value-checks",
+    )
     config.addinivalue_line(
         "markers",
         "cli_doc(options, option_description, cli_args, input_schema=None, golden_output=None, "
@@ -317,7 +360,7 @@ def pytest_configure(config: pytest.Config) -> None:
     config.stash[CLI_DOC_ITEMS] = []
     ledger = config.stash[_LEDGER] = _Ledger(config)
     config.pluginmanager.register(_LedgerPlugin(ledger), "expected-ledger")
-    config.pluginmanager.register(SlowTestOrdering(), "slow-test-ordering")
+    config.pluginmanager.register(SlowTestOrdering(_os_selection(config)), "slow-test-ordering")
 
 
 @pytest.hookimpl(wrapper=True)
@@ -620,12 +663,47 @@ def _is_under(nodeid: str, base: str) -> bool:
     return nodeid == base or nodeid.startswith((f"{base}::", f"{base}["))
 
 
+def _os_selection(config: pytest.Config) -> Selection | None:
+    """Read the ``--os-selection`` file, failing the run on a missing or malformed one."""
+    if (path := config.getoption("--os-selection")) is None:
+        return None
+    from scripts.os_selection import Selection
+
+    try:
+        return Selection.load(Path(path), config.rootpath)
+    except ValueError as error:
+        msg = f"--os-selection: {error}"
+        raise pytest.UsageError(msg) from error
+
+
 class SlowTestOrdering:
-    """Select the requested test parts and shard, then start each xdist worker chunk with measured slow tests."""
+    """Select the ``--os-selection`` tests, the requested test parts and shard, then order each xdist worker chunk.
+
+    Each worker chunk starts with measured slow tests. A test module that holds no test the selection keeps is not
+    collected at all.
+    """
+
+    def __init__(self, selection: Selection | None) -> None:
+        """Keep the selection ``--os-selection`` names, or None without the option."""
+        self.selection = selection
+
+    def pytest_ignore_collect(self, collection_path: Path, config: pytest.Config) -> bool | None:
+        """Leave uncollected a test module that holds no test ``--os-selection`` keeps."""
+        if (
+            (selection := self.selection) is None
+            or not collection_path.is_relative_to(config.rootpath)
+            or collection_path.is_dir()
+            or not any(fnmatch(collection_path.name, pattern) for pattern in config.getini("python_files"))
+            or selection.may_hold(collection_path.relative_to(config.rootpath).as_posix())
+        ):
+            return None
+        return True
 
     @pytest.hookimpl(trylast=True)
     def pytest_collection_modifyitems(self, config: pytest.Config, items: list[pytest.Item]) -> None:
         """Run after marker and keyword deselection so shards and chunk boundaries match what xdist distributes."""
+        if (selection := self.selection) is not None:
+            items[:] = _keep_selected(config, items, {item.nodeid for item in items if selection.selects(item.nodeid)})
         durations = slow_test_durations()
         if parts := config.getoption("--test-part"):
             items[:] = select_test_parts(config, items, durations, parts)
@@ -2852,6 +2930,19 @@ def _isolate_builtin_formatter_config(
         encoding="utf-8",
     )
     monkeypatch.chdir(settings_path)
+
+
+@pytest.fixture(autouse=True)
+def _value_check_areas(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Turn the value-comparing check areas on for tests marked ``value_checks``.
+
+    A test of an area, or one whose stored output records which areas run, must not depend on the shard's
+    `--skip-value-checks`.
+    """
+    if request.node.get_closest_marker("value_checks") is None:
+        return
+    for name in VALUE_CHECK_AREA_ENVS:
+        monkeypatch.setenv(name, "1")
 
 
 @pytest.fixture

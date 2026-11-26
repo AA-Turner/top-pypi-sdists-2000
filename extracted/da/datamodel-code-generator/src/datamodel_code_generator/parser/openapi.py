@@ -57,7 +57,6 @@ from datamodel_code_generator.enums import (
 from datamodel_code_generator.parser import _schema_documents, _schema_refs, _union_tags
 from datamodel_code_generator.parser._api_reference import pointer_fragment as _pointer_fragment
 from datamodel_code_generator.parser._naming import composed_name
-from datamodel_code_generator.parser._origins import with_subtype_ref, with_type_origin
 from datamodel_code_generator.parser._rw_split import update_field_refs_for_variant
 from datamodel_code_generator.parser._schema_dispatch import Default, DispatchTable, Row, SchemaSite
 from datamodel_code_generator.parser._schema_graph import keep_resolved_ref, validate_resolved_ref
@@ -93,6 +92,8 @@ from datamodel_code_generator.reference import (
 )
 from datamodel_code_generator.types import (
     DataType,
+    _with_subtype_ref,
+    _with_type_origin,
     build_union,
 )
 from datamodel_code_generator.types import EmptyDataType as EmptyDataType
@@ -236,10 +237,21 @@ class ParameterObject(BaseModel):
     description: Optional[str] = None
     required: bool = False
     deprecated: bool = False
-    schema_: Optional[JsonSchemaObject] = Field(None, alias="schema")
+    schema_: JsonSchemaObject | bool | None = Field(None, alias="schema")
     example: YamlValue = None
     examples: Optional[Union[str, OrReference[ExampleObject]]] = None
     content: dict[str, MediaObject] = Field(default_factory=dict)
+
+    @classmethod
+    @override
+    def __get_pydantic_core_schema__(cls, source: type[BaseModel], handler: GetCoreSchemaHandler, /) -> CoreSchema:
+        """Validate parameter objects so that each takes the location of the document object it is validated from."""
+        return _located_model_schema(source, handler)
+
+    @property
+    def schema_location(self) -> SchemaLocation | None:
+        """Return the location of the parameter object in its document."""
+        return self.__dict__.get(SCHEMA_LOCATION_KEY)
 
 
 class HeaderObject(BaseModel):
@@ -248,7 +260,7 @@ class HeaderObject(BaseModel):
     description: Optional[str] = None
     required: bool = False
     deprecated: bool = False
-    schema_: Optional[JsonSchemaObject] = Field(None, alias="schema")
+    schema_: JsonSchemaObject | bool | None = Field(None, alias="schema")
     example: YamlValue = None
     examples: Optional[Union[str, OrReference[ExampleObject]]] = None
     content: dict[str, MediaObject] = Field(default_factory=dict)
@@ -880,7 +892,7 @@ class OpenAPIParser(JsonSchemaParser):
     def _get_discriminator_subtype_data_type(self, ref: str) -> DataType:
         """Resolve one subtype without recursively expanding its discriminator, recording the `$ref` it stands for."""
         self.resolve_ref(ref)
-        return with_subtype_ref(super().get_ref_data_type(ref), ref)
+        return _with_subtype_ref(super().get_ref_data_type(ref), ref)
 
     def _get_discriminator_union_type(self, ref: str) -> DataType | None:
         """Create a union type for discriminator subtypes if available.
@@ -964,7 +976,7 @@ class OpenAPIParser(JsonSchemaParser):
                 origin = field_obj.__dict__.get(FIELD_ORIGIN_KEY)
                 field_obj = self.data_model_field_type(**{  # noqa: PLW2901
                     **field_obj.__dict__,
-                    "data_type": with_type_origin(new_field_type, field.schema_location),
+                    "data_type": _with_type_origin(new_field_type, field.schema_location),
                     "extras": {**field_obj.extras, "discriminator": normalized_discriminator},
                 })
                 field_obj.__dict__[FIELD_ORIGIN_KEY] = origin
@@ -1018,12 +1030,18 @@ class OpenAPIParser(JsonSchemaParser):
         location: SchemaLocation | None = None,
     ) -> DataType:
         """Parse a schema object or resolve a reference to get DataType; ``location`` locates a boolean schema."""
-        if isinstance(schema, bool):
-            return self.parse_schema(name, _locate(self._validate_schema_object(schema, path), location), path)
-        if isinstance(schema, JsonSchemaObject):
-            return self.parse_schema(name, schema, path)
+        if isinstance(schema, (bool, JsonSchemaObject)):
+            return self.parse_schema(name, self._schema_value(schema=schema, path=path, location=location), path)
         self.resolve_ref(schema.ref)
         return self.get_ref_data_type(schema.ref)
+
+    def _schema_value(
+        self, *, schema: JsonSchemaObject | bool, path: list[str], location: SchemaLocation | None
+    ) -> JsonSchemaObject:
+        """Return a schema an OpenAPI object holds as a schema object; a boolean schema is located at ``location``."""
+        if isinstance(schema, bool):
+            return _locate(self._validate_schema_object(schema, path), location)
+        return schema
 
     @classmethod
     def _array_schema_from_media_item_schema(cls, item_schema: MediaSchema) -> JsonSchemaObject:
@@ -1372,7 +1390,7 @@ class OpenAPIParser(JsonSchemaParser):
         """
         schema = source.schema
         if isinstance(schema, bool):
-            return self._site_schema(_locate(self._validate_schema_object(schema, path), source.location))
+            return self._site_schema(self._schema_value(schema=schema, path=path, location=source.location))
         if isinstance(schema, ReferenceObject) and self.keep_content_parameter_refs:
             return _locate(JsonSchemaObject.model_validate({"$ref": schema.ref}), source.location)
         return self._site_schema(self.resolve_object(schema, JsonSchemaObject))
@@ -1423,10 +1441,15 @@ class OpenAPIParser(JsonSchemaParser):
                 class_name=class_key("predicted", name),
                 output_names=output_names,
             )
-            if parameter.schema_:
-                field_schema = self._site_schema(parameter.schema_, merge_ref_siblings=True)
-                field_schemas.append((field_schema, [*path, name, parameter_name]))
-                field_type = partial(self.parse_item, field_name, field_schema, [*path, name, parameter_name])
+            if parameter.schema_ is not None:
+                schema_path = [*path, name, parameter_name]
+                schema_location = (declared := parameter.schema_location) and declared.child("schema")
+                field_schema = self._site_schema(
+                    self._schema_value(schema=parameter.schema_, path=schema_path, location=schema_location),
+                    merge_ref_siblings=True,
+                )
+                field_schemas.append((field_schema, schema_path))
+                field_type = partial(self.parse_item, field_name, field_schema, schema_path)
             else:
                 data_types: list[DataType] = []
                 field_schema = None

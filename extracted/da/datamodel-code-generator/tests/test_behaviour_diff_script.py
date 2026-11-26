@@ -8,22 +8,27 @@ change the owner accepted, and the behaviour changes the gate has to stop.
 from __future__ import annotations
 
 import contextlib
+import functools
+import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
-from contextlib import redirect_stderr, redirect_stdout
+import threading
+from contextlib import contextmanager, redirect_stderr, redirect_stdout
 from dataclasses import asdict, dataclass, field, replace
 from io import StringIO
 from pathlib import Path
-from types import ModuleType, SimpleNamespace
-from typing import TYPE_CHECKING, Any
+from types import FunctionType, ModuleType, SimpleNamespace
+from typing import TYPE_CHECKING, Any, TypeVar
 
 import pytest
 import tomllib
 
 from scripts import behaviour_diff, declared_changes
 from scripts._behaviour_classify import (
+    SIGNATURE_FAILED,
     Allowlist,
     CellEvidence,
     Change,
@@ -44,7 +49,8 @@ from tests.conftest import assert_output
 from tests.units import REFS_HEADER
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    import argparse
+    from collections.abc import Callable, Generator
 
 ROOT = Path(__file__).resolve().parents[1]
 SIGNATURE_SCRIPT = ROOT / "scripts" / "_behaviour_signature.py"
@@ -1045,8 +1051,8 @@ SIGNATURE_CASES: dict[str, tuple[str, dict[str, str], list[dict[str, Any]] | Non
     "stub_beside_module": (
         "pydantic_v2.BaseModel",
         {
-            "model.py": "from mcp_types._wire_base import WireModel\n\n\nclass Model(WireModel):\n    name: str\n",
-            "mcp_types/_wire_base.py": "from pydantic import BaseModel\n\n\nclass WireModel(BaseModel):\n    pass\n",
+            "model.py": "from stub_types._wire_base import WireModel\n\n\nclass Model(WireModel):\n    name: str\n",
+            "stub_types/_wire_base.py": "from pydantic import BaseModel\n\n\nclass WireModel(BaseModel):\n    pass\n",
         },
         None,
     ),
@@ -1527,13 +1533,15 @@ def test_example_value(case: str) -> None:
     assert_output(json.dumps(example_value(EXAMPLE_CASES[case])) + "\n")
 
 
-def _git(*args: str, cwd: Path) -> str:
+def _git(*args: str, cwd: Path, dates: dict[str, str] | None = None) -> str:
+    """Run git in `cwd` as a fixed author; `dates` sets the dates of the commits it writes."""
     return subprocess.run(
         ["git", "-c", "user.name=t", "-c", "user.email=t@example.com", *args],
         cwd=cwd,
         capture_output=True,
         text=True,
         check=True,
+        env=os.environ | dates if dates else None,
     ).stdout.strip()
 
 
@@ -2207,6 +2215,41 @@ def test_identity_reports_family_cells_until_the_key_judges_them(case: str, tmp_
     argv += ["--cache-dir", str(tmp_path / "cache"), "--allowlist", str(allowlist), "--identity", "-j", "1"]
     argv += ["--select", "tests/data/jsonschema/plain.json", "--select", "family:*"]
     prefixes = ("family", "families", "violation:", "    ", "summary:", "evidence: complete", "evidence: incomplete")
+    lines = _family_lines([*argv, "--json", str(tmp_path / "cells.jsonl")], tmp_path / "cells.jsonl", prefixes)
+    assert_output("\n".join(lines).replace(str(tmp_path), "TMP").replace(commits[0][:9], "<sha>") + "\n")
+
+
+UNSIGNED_FAMILY_CASES = {
+    "the PR tier signs no family cell it reports only": ("pr", "report"),
+    "the nightly tier signs it": ("nightly", "report"),
+    "the PR tier signs it once the key judges the family cells": ("pr", "fail"),
+}
+"""The tier of each gate run of a candidate that changes a family cell, and the `families` key of its allowlist file."""
+
+
+@needs("posix")
+@needs("sys-monitoring")
+@pytest.mark.parametrize("case", sorted(UNSIGNED_FAMILY_CASES))
+def test_pr_tier_signs_no_family_cell_it_reports_only(case: str, tmp_path: Path) -> None:
+    """The PR tier reports a family cell whose sides both generated other bytes as `differs-unsigned`.
+
+    The candidate adds a comment to the output of the family cell that has a `bytes` field, so its signature is
+    `no-behaviour` where it is signed. The nightly tier signs that cell and prints its class. With `families = "fail"`
+    the cell is in the verdict, and the PR tier signs it and judges it like any other cell.
+    """
+    tier, mode = UNSIGNED_FAMILY_CASES[case]
+    repo = tmp_path / "repo"
+    commits = _fake_generator(repo, ["first"], "0.1.0")
+    (repo / "src" / "datamodel_code_generator" / "__main__.py").write_text(FAKE_RAW, encoding="utf-8")
+    _family_library(repo, FAKE_FAMILY_DOCUMENTS)
+    projects = tmp_path / "projects.json"
+    projects.write_text('{"projects": []}', encoding="utf-8")
+    allowlist = tmp_path / "allowlist.toml"
+    allowlist.write_text(f'base = "0.1.0"\nfamilies = "{mode}"\n', encoding="utf-8")
+    argv = ["gate", commits[0], str(repo), "--types", "pydantic_v2.BaseModel", "--candidate-python", sys.executable]
+    argv += ["--cache-dir", str(tmp_path / "cache"), "--allowlist", str(allowlist), "--tier", tier, "-j", "1"]
+    argv += ["--projects", str(projects), "--select", "tests/data/jsonschema/plain.json", "--select", "family:*"]
+    prefixes = ("family", "families", "violation:", "summary:")
     lines = _family_lines([*argv, "--json", str(tmp_path / "cells.jsonl")], tmp_path / "cells.jsonl", prefixes)
     assert_output("\n".join(lines).replace(str(tmp_path), "TMP").replace(commits[0][:9], "<sha>") + "\n")
 
@@ -2922,7 +2965,8 @@ class CellsCase:
     which must give the gate's verdict: it fails the harness labels the gate refuses. `shards` runs the gate as that
     many shards, one after another, with the same `--verdicts` file. `shape` names, in words, the rule the case pins or
     the passing shape it keeps. `merged` ends the subject of main's next commit with that pull request, `(#n)`, and
-    `released` the release's, as a squash merge writes it.
+    `released` the release's, as a squash merge writes it. `pushed` are commits before the head, and origin/main
+    points at the head: a push of several pull requests to main.
     """
 
     verdict: str
@@ -2938,6 +2982,7 @@ class CellsCase:
     shards: int = 1
     merged: str = ""
     released: str = ""
+    pushed: tuple[dict[str, str | None], ...] = ()
 
 
 COMMENT_PLAIN = _cells_src(("plain", None, "comment"))
@@ -2960,6 +3005,12 @@ def _landed(*cells: dict[str, object], refs: tuple[str, ...] = ("#2",), extends:
 
 
 OUTPUT_TEXT_OTHER = _record("other-note", "output-text", _cells("other.json"))
+OTHER_REFACTOR = _cells_src(("other", None, "comment"), helper="HELPER = 1\n")
+"""A source change over main's change of `other` that changes no output."""
+LISTING_HARNESS = {f"{CELLS_EXPECTED}/main/jsonschema/listing.txt": "Model\nOther\n"} | _record(
+    "listing-test", "harness", covers=("main/jsonschema/listing.txt",)
+)
+"""A changed listing a `harness` record covers: its proof fails in a src change."""
 CHECKED = _cells_input("checked", type="int", validator=True)
 MEMORY = _cells_input("memory", type="int", memory=True)
 FAILS = _cells_input("fails", type="int", fail="boom")
@@ -3441,6 +3492,88 @@ CELLS_CASES: dict[str, CellsCase] = {
         | _record("listing-test", "harness", covers=("main/jsonschema/listing.txt",)),
         records=True,
     ),
+    "pass: a push to main of a src change, then a test-only change a harness record covers": CellsCase(
+        "pass",
+        "harness, modified listing, in a change without src/ pushed to main after a src change",
+        {f"{CELLS_EXPECTED}/main/jsonschema/listing.txt": "Model\nOther\n"}
+        | _record("listing-test", "harness", covers=("main/jsonschema/listing.txt",)),
+        pushed=(CELLS_REFACTOR,),
+        records=True,
+    ),
+    "fail: a push to main of a test-only change, then a src change a harness record covers": CellsCase(
+        "fail",
+        "harness, modified listing, in a src change pushed to main after a change without src/",
+        CELLS_REFACTOR
+        | {f"{CELLS_EXPECTED}/main/jsonschema/listing.txt": "Model\nOther\n"}
+        | _record("listing-test", "harness", covers=("main/jsonschema/listing.txt",)),
+        pushed=({"docs/notes.md": "notes\n"},),
+        records=True,
+    ),
+    "pass: a push to main of a docs change, then a test-only change a harness record covers": CellsCase(
+        "pass",
+        "harness, modified listing, in a change without src/ pushed to main after a docs change",
+        {f"{CELLS_EXPECTED}/main/jsonschema/listing.txt": "Model\nOther\n"}
+        | _record("listing-test", "harness", covers=("main/jsonschema/listing.txt",)),
+        pushed=({"docs/notes.md": "notes\n"},),
+        records=True,
+    ),
+    "fail: a push to main of a src change a harness record covers, then a test-only change": CellsCase(
+        "fail",
+        "harness, modified listing, in a src change pushed to main before a change without src/",
+        {"docs/notes.md": "notes\n"},
+        pushed=(
+            CELLS_REFACTOR
+            | {f"{CELLS_EXPECTED}/main/jsonschema/listing.txt": "Model\nOther\n"}
+            | _record("listing-test", "harness", covers=("main/jsonschema/listing.txt",)),
+        ),
+        records=True,
+    ),
+    "pass: a push to main of a src change a harness record covers, then its revert": CellsCase(
+        "pass",
+        "harness, modified module the proof holds for, in a src change whose revert follows in the push",
+        pushed=(
+            CELLS_REFACTOR
+            | {PLAIN_MODULE: CELLS_MODULE.format("int  # note")}
+            | _record("plain-test", "harness", covers=("main/jsonschema/plain.py",)),
+        ),
+        head=_cells_src(),
+        records=True,
+    ),
+    "pass: a push to main of a src refactor, its revert, then the cells of a change merged before it": CellsCase(
+        "pass",
+        "records-only change, cells of a merged change, after a src change and its revert in the push",
+        _landed(_cells("other.json")),
+        base=COMMENT_OTHER | OTHER_NOTE_UNNAMED,
+        merged="#2",
+        pushed=(OTHER_REFACTOR, COMMENT_OTHER),
+        records=True,
+    ),
+    "fail: a push to main of a src change a harness proof refuses, its revert, then merged cells": CellsCase(
+        "fail",
+        "harness, modified listing, in a src change of a push whose src/ ends unchanged",
+        _landed(_cells("other.json")),
+        base=COMMENT_OTHER | OTHER_NOTE_UNNAMED,
+        merged="#2",
+        pushed=(OTHER_REFACTOR | LISTING_HARNESS, COMMENT_OTHER),
+        records=True,
+    ),
+    "fail: a push to main of a src change, its revert a harness proof refuses, then merged cells": CellsCase(
+        "fail",
+        "harness, modified listing, in the revert of a push whose src/ ends unchanged",
+        _landed(_cells("other.json")),
+        base=COMMENT_OTHER | OTHER_NOTE_UNNAMED,
+        merged="#2",
+        pushed=(OTHER_REFACTOR, COMMENT_OTHER | LISTING_HARNESS),
+        records=True,
+    ),
+    "fail: a push to main of a src change, its revert, then cells of a pull request not merged": CellsCase(
+        "fail",
+        "records-only change, cells of an unmerged pull request, after a src change and its revert in the push",
+        _landed(_cells("other.json"), refs=("#2", "#3")),
+        base=COMMENT_OTHER | OTHER_NOTE_UNNAMED,
+        merged="#2",
+        pushed=(OTHER_REFACTOR, COMMENT_OTHER),
+    ),
     "fail: a fragment that does not parse": CellsCase(
         "fail",
         "fragment does not parse",
@@ -3584,10 +3717,15 @@ def _cells_write(repo: Path, files: dict[str, str | None]) -> None:
             path.write_text(text, encoding="utf-8")
 
 
+CELLS_DATES = {"GIT_AUTHOR_DATE": "2026-01-01T00:00:00+0000", "GIT_COMMITTER_DATE": "2026-01-01T00:00:00+0000"}
+"""The dates of every commit of an oracle case's history: cases whose histories agree get the same commits, so their
+runs of one revision read the same version file and share their results (`SharedRuns`)."""
+
+
 def _cells_commit(repo: Path, files: dict[str, str | None], message: str) -> str:
     _cells_write(repo, files)
     _git("add", "-A", ".", cwd=repo)
-    _git("commit", "-q", "--allow-empty", "-m", message, cwd=repo)
+    _git("commit", "-q", "--allow-empty", "-m", message, cwd=repo, dates=CELLS_DATES)
     return _git("rev-parse", "HEAD", cwd=repo)
 
 
@@ -3605,8 +3743,12 @@ def _cells_project(case: CellsCase, repo: Path) -> dict[str, str]:
     _git("switch", "-q", "main", cwd=repo)
     main = _cells_commit(repo, case.main, "main after the fork")
     _git("switch", "-q", "-c", "pr", "layer", cwd=repo)
+    for number, pushed in enumerate(case.pushed, 1):
+        _cells_commit(repo, pushed, f"pushed {number}")
     _cells_commit(repo, case.head, "head")
-    orphan = _git("commit-tree", "-m", "another history", f"{release}^{{tree}}", cwd=repo)
+    if case.pushed:
+        _git("update-ref", "refs/remotes/origin/main", "HEAD", cwd=repo)
+    orphan = _git("commit-tree", "-m", "another history", f"{release}^{{tree}}", cwd=repo, dates=CELLS_DATES)
     return {"base": base, "main": main, "tag": f"refs/tags/{CELLS_TAG}", "unknown": "4" * 40, "orphan": orphan}
 
 
@@ -3620,11 +3762,180 @@ def _cells_exit(run: Callable[[], int], log: StringIO) -> int:
         return stopped.code if isinstance(stopped.code, int) else 1
 
 
-def cells_verdict(case: CellsCase, tmp_path: Path) -> tuple[str, str]:
+SHARED_SCRIPTS = ("__init__.py", "_behaviour_signature.py", "_stored_module.py", "compare_release.py")
+"""The files of scripts/ the signature, stored-module and generation processes run or import."""
+
+
+def _read(value: object) -> str:
+    """Return an argument of a process by what the process reads: a file it is given by the digest of its bytes."""
+    path = Path(value) if isinstance(value, str | Path) else None
+    read = path is not None and path.is_absolute() and path.is_file()
+    return hashlib.sha256(path.read_bytes()).hexdigest() if read else str(value)
+
+
+def _files(tree: Path) -> dict[str, str]:
+    """Return the files and directories below `tree` by their relative paths, a file with the digest of its bytes.
+
+    Bytecode caches are left out: an interpreter writes them from the sources beside them and reads them in their place.
+    """
+    return {
+        str(path.relative_to(tree)): hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else ""
+        for path in sorted(tree.rglob("*"))
+        if "__pycache__" not in path.relative_to(tree).parts
+    }
+
+
+_Shared = TypeVar("_Shared")
+"""What a shared call returns: a JSON value, read back from the shared file in the same shape."""
+
+
+@dataclass
+class SharedRuns:
+    """The gate's signature, stored-module, generation and option processes of the stand-in's runs, each run once.
+
+    `signature` returns what `scripts/_behaviour_signature.py` prints, `stored_side` what `scripts/_stored_module.py`
+    writes (its draws are derandomised and use no database), `generate` what a worker of `scripts/compare_release.py`
+    generates and `option_inventory` what the generator's parser offers; each reads, in a fresh process, only the
+    interpreter, the files of scripts/ it runs, the files of `tree` (the directory holding the module, package or run
+    it imports, or the source tree it imports the generator from), its other arguments (a file by its bytes) and the
+    environment. Every oracle case signs and generates the release's cells of `plain` and `other` again, so calls of
+    one function that agree on all of these share its result, in `root`: one directory of the test session, which its
+    xdist workers share. A signature runs in `tree` (`-I` on absolute paths), a stored module from the checkout whose
+    scripts are keyed (`-E -m`), a generation in a fresh directory of its own, and the environment differs between
+    tests only in the variables of pytest and its xdist workers (`PYTEST_*`), which only they read. An empty result (a
+    stopped draw), a failed signature (a timeout, a crash), a run the gate's own cache would not keep (a stopped
+    generation: `Outcome.cacheable`), a result that names the directory holding `tree` or the session's directories
+    (a test's own paths) and a result of a function defined inside a test (a replacement that may close over the test's
+    values) are never shared. A shared stored-module result does not write its output file again: only `stored_side`
+    reads it; a shared generation writes no output directory: its callers read the outcome.
+    """
+
+    root: Path
+    locks: dict[str, threading.Lock] = field(default_factory=dict)
+    lock: threading.Lock = field(default_factory=threading.Lock)
+
+    def run(
+        self,
+        function: FunctionType,
+        call: Callable[[], _Shared],
+        tree: Path,
+        *inputs: object,
+    ) -> _Shared:
+        """Return what `call` (a call of `function`) returns, from the first call of `function` with these inputs."""
+        env = sorted(
+            (name, value)
+            for name, value in os.environ.items()
+            if not name.startswith(("DATAMODEL_CODE_GENERATOR", "PYTEST_"))
+        )
+        scripts = [_read(behaviour_diff.SIGNATURE_SCRIPT.with_name(name)) for name in SHARED_SCRIPTS]
+        name = f"{function.__module__}.{function.__qualname__}"
+        key = hashlib.sha256(
+            json.dumps([name, _files(tree), [str(value) for value in inputs], env, scripts]).encode()
+        ).hexdigest()
+        path = self.root / f"{key}.json"
+        with self.lock:
+            lock = self.locks.setdefault(key, threading.Lock())
+        with lock:
+            text = path.read_text(encoding="utf-8") if path.exists() else json.dumps(call())
+            result = json.loads(text)
+            shared = (
+                bool(result)
+                and not result.get(SIGNATURE_FAILED)
+                and result.get("cacheable", True)
+                and "<locals>" not in name
+                and not any(str(directory) in text for directory in (tree.parent, self.root.parent))
+            )
+            if shared and not path.exists():
+                written = path.with_suffix(f".{os.getpid()}.{threading.get_ident()}.tmp")
+                written.write_text(text, encoding="utf-8")
+                written.replace(path)
+        return result
+
+
+@pytest.fixture(scope="session")
+def shared_root(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """Return the directory of the session's `SharedRuns`: beside the xdist workers' own directories, where they run."""
+    base = tmp_path_factory.getbasetemp()
+    root = (base.parent if os.environ.get("PYTEST_XDIST_WORKER") else base) / "shared-runs"
+    root.mkdir(exist_ok=True)
+    return root
+
+
+@contextmanager
+def shared_runs(root: Path) -> Generator[None, None, None]:
+    """Let the gate runs inside take the processes they share (`SharedRuns`) from `root`.
+
+    It wraps the functions installed when it starts, so a test that replaces one keeps its replacement. The second run
+    of the head (`Gate.rerun`), which must show a head that generates other output each time, the runs that trace or
+    record what they run (`Runner.probes`, `Runner.lines`) and those of a side with no source tree of its own always
+    generate. Every option inventory of these runs reads a revision's tree on `PYTHONPATH` (`run_environment`), which
+    keys it.
+    """
+    runs = SharedRuns(root)
+    signature, stored, inventory = behaviour_diff.signature, behaviour_diff.stored_side, behaviour_diff.option_inventory
+    build, generate = behaviour_diff.build_gate, behaviour_diff.compare_release.Runner.generate
+    reruns: list[behaviour_diff.compare_release.Runner] = []
+
+    def shared_signature(
+        gate: behaviour_diff.Gate, target: Path, backend: str, payloads: Path | None, *, targets: bool = False
+    ) -> dict[str, object]:
+        call = functools.partial(signature, gate, target, backend, payloads, targets=targets)
+        given = (gate.signature_python, gate.candidate_python, gate.timeout, target.name, backend, _read(payloads))
+        return runs.run(signature, call, target.parent, *given, targets)
+
+    def shared_stored(
+        gate: behaviour_diff.Gate, target: Path, backend: str, values: Path | None
+    ) -> behaviour_diff.StoredSide:
+        call = functools.partial(stored, gate, target, backend, values)
+        given = (gate.candidate_python, behaviour_diff.PAYLOAD_DRAW_TIMEOUT, target.name, backend, _read(values))
+        return runs.run(stored, call, target.parent, *given)
+
+    def shared_inventory(python: Path, env: dict[str, str] | None = None) -> dict[str, list[str] | None]:
+        given = {**(env or {})}
+        tree = Path(given.pop("PYTHONPATH"))
+        code = behaviour_diff.OPTION_INVENTORY
+        return runs.run(inventory, lambda: inventory(python, env), tree, python, code, sorted(given.items()))
+
+    def shared_build(ns: argparse.Namespace) -> behaviour_diff.Gate:
+        gate = build(ns)
+        reruns.extend([gate.rerun] if gate.rerun is not None else [])
+        return gate
+
+    def shared_generate(
+        runner: behaviour_diff.compare_release.Runner, args: list[str], tmp: Path
+    ) -> behaviour_diff.compare_release.Outcome:
+        package = runner.side.package
+        if any(runner is rerun for rerun in reruns) or runner.probes is not None or runner.lines or package is None:
+            return generate(runner, args, tmp)
+        env = sorted((name, value.replace(str(package), "<package>")) for name, value in runner.env.items())
+        inputs = [
+            _files(path.parent) for path in behaviour_diff.compare_release._path_arguments(args) if path.is_file()
+        ]
+        side = (runner.side.name, runner.side.python, runner.import_check, runner.timeout, runner.memory_mb)
+        given = (*side, env, [*map(_read, args)], inputs)
+        outcome = runs.run(generate, lambda: vars(generate(runner, args, tmp)), package, *given)
+        return behaviour_diff.compare_release.Outcome(**outcome)
+
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setattr(behaviour_diff, "signature", shared_signature)
+        patch.setattr(behaviour_diff, "stored_side", shared_stored)
+        patch.setattr(behaviour_diff, "option_inventory", shared_inventory)
+        patch.setattr(behaviour_diff, "build_gate", shared_build)
+        patch.setattr(behaviour_diff.compare_release.Runner, "generate", shared_generate)
+        yield
+
+
+def cells_verdict(case: CellsCase, tmp_path: Path, shared: Path) -> tuple[str, str]:
     """Run the gate (and, for `records`, the records check) as CI runs it and return the verdict and the log.
 
-    The verdict is `split` where the records check and the gate disagree.
+    The verdict is `split` where the records check and the gate disagree. The gate's processes are shared with the
+    other cases' runs through `shared` (`SharedRuns`).
     """
+    with shared_runs(shared):
+        return _cells_verdict(case, tmp_path)
+
+
+def _cells_verdict(case: CellsCase, tmp_path: Path) -> tuple[str, str]:
     repo = tmp_path / "repo"
     against = _cells_project(case, repo)[case.against]
     projects = tmp_path / "projects.json"
@@ -3651,7 +3962,7 @@ def cells_verdict(case: CellsCase, tmp_path: Path) -> tuple[str, str]:
 
 
 @needs("posix")
-def test_guide_runs_the_gate_of_the_release(tmp_path: Path) -> None:
+def test_guide_runs_the_gate_of_the_release(tmp_path: Path, shared_root: Path) -> None:
     """Without `--cells`, `guide` runs the gate of the release against the previous one and writes its page."""
     repo = tmp_path / "repo"
     _cells_project(CellsCase("pass", "release run", base=COMMENT_OTHER | OUTPUT_TEXT_OTHER), repo)
@@ -3663,7 +3974,7 @@ def test_guide_runs_the_gate_of_the_release(tmp_path: Path) -> None:
     argv = ["guide", release, "0.2.0", "--candidate", str(repo), "-j", "2"]
     argv += ["--candidate-python", sys.executable, "--cache-dir", str(tmp_path / "cache")]
     argv += ["--projects", str(projects), "--allowlist", str(allowlist)]
-    with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+    with shared_runs(shared_root), redirect_stdout(StringIO()), redirect_stderr(StringIO()):
         code = behaviour_diff.main([*argv, "--docs", str(page := tmp_path / "page.json")])
     assert_output(f"exit={code}\n{page.read_text(encoding='utf-8').replace(release, 'RELEASE')}")
 
@@ -3680,9 +3991,9 @@ def test_shipped_allowlist_accepts_nothing() -> None:
 )
 @needs("posix")
 @pytest.mark.parametrize("case", sorted(CELLS_CASES))
-def test_cells_oracle(case: str, tmp_path: Path) -> None:
+def test_cells_oracle(case: str, tmp_path: Path, shared_root: Path) -> None:
     """The gate gives each oracle case the verdict of the cell gate: a case that fails, fails on that verdict."""
-    verdict, log = cells_verdict(CELLS_CASES[case], tmp_path)
+    verdict, log = cells_verdict(CELLS_CASES[case], tmp_path, shared_root)
     assert verdict == CELLS_CASES[case].verdict, log
 
 
@@ -3713,12 +4024,12 @@ REPORT_LINES = (
         "pass: output-text with a covered stored module that has no payloads",
     ],
 )
-def test_cells_report(case: str, tmp_path: Path) -> None:
+def test_cells_report(case: str, tmp_path: Path, shared_root: Path) -> None:
     """The gate reports each violation, the records that covered cells and a block for the cells none covers.
 
     The block is a starting `[[change.cells]]` table per input, with the aspects and a `match` of the change lines.
     """
-    _, log = cells_verdict(CELLS_CASES[case], tmp_path)
+    _, log = cells_verdict(CELLS_CASES[case], tmp_path, shared_root)
     lines = [line for line in log.splitlines() if line.startswith(REPORT_LINES)]
     assert_output("\n".join(sorted(set(lines), key=lines.index)) + "\n")
 
@@ -3727,7 +4038,9 @@ def test_cells_report(case: str, tmp_path: Path) -> None:
     "an oracle case fails on its own verdict, never through a stored output a fix run accepts"
 )
 @needs("posix")
-def test_cells_stored_side_that_draws_nothing_fails(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_cells_stored_side_that_draws_nothing_fails(
+    tmp_path: Path, shared_root: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """A stored module whose head side wrote no draws (the timeout, a crash) fails its proof; it is no empty pass."""
     draw = behaviour_diff.stored_side
 
@@ -3737,7 +4050,7 @@ def test_cells_stored_side_that_draws_nothing_fails(tmp_path: Path, monkeypatch:
         return {} if values is None and target.parent.name == "head" else draw(gate, target, backend, values)
 
     monkeypatch.setattr(behaviour_diff, "stored_side", stopped)
-    verdict, log = cells_verdict(CELLS_CASES["pass: output-text with a covered stored module"], tmp_path)
+    verdict, log = cells_verdict(CELLS_CASES["pass: output-text with a covered stored module"], tmp_path, shared_root)
     assert verdict == "fail", log
     assert "wrote no draws" in log, log
 
@@ -3746,11 +4059,13 @@ def test_cells_stored_side_that_draws_nothing_fails(tmp_path: Path, monkeypatch:
     "an oracle case fails on its own verdict, never through a stored output a fix run accepts"
 )
 @needs("posix")
-def test_cells_selector_over_the_cell_limit_is_refused(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_cells_selector_over_the_cell_limit_is_refused(
+    tmp_path: Path, shared_root: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """A selector that names more cells than the limit stops the gate with a message that names the record."""
     case = CELLS_CASES["pass: options * covers the preset cells"]
     monkeypatch.setattr(behaviour_diff, "SELECTOR_CELL_LIMIT", 10)
-    verdict, log = cells_verdict(case, tmp_path)
+    verdict, log = cells_verdict(case, tmp_path, shared_root)
     assert verdict == "fail", log
     assert "entry preset-note: cells 1 names" in log, log
     assert "narrow its input, backends or options" in log, log
@@ -4082,6 +4397,16 @@ NO_BEHAVIOUR = CellEvidence("no-behaviour", model_files=True, rule_b=True, paylo
 TYPE_LINE = "[type] Model:a: int -> float"
 DECIDED = _judged("decided-change", _lines("tests/data/**", aspects=("type",), match="int -> float"))
 OUTPUT, EXIT, WARNINGS, MESSAGES = CellKind.OUTPUT, CellKind.EXIT, CellKind.WARNINGS, CellKind.MESSAGES
+GAP_NOTICE = _judged("notice", _lines("tests/data/**", match="gap"))
+TRACK_NOTICE = replace(GAP_NOTICE, id="other-notice", cells=(_lines("tests/data/**", match="track"),))
+GAP_WARNING, TRACK_WARNING = "[warning] added UserWarning: mind the gap", "[warning] added UserWarning: off the track"
+TWO_CHANGES = (GAP_WARNING, TRACK_WARNING, "[message] removed first attempt: off the track", "[message] added gap")
+"""The warning and message lines of two changes of one release on one cell, each declared by its own notice."""
+CRASH_FIXED = CellEvidence(
+    "crash-fix", lines=("[exit] 2 -> 0", GAP_WARNING, TRACK_WARNING, "[message] removed handled: Error"), exits=(2, 0)
+)
+REMOVED_FLAG = CellEvidence("violation", lines=("[exit] 0 -> 2",), exits=(0, 2), removed=frozenset({"--old-flag"}))
+OLD_FLAG_API = _judged("api", affects=(("options", ("--old-flag",)),))
 JUDGE_CASES: dict[str, tuple[list[Record], set[CellKind], CellEvidence, behaviour_diff.Cell]] = {
     "no record": ([], {OUTPUT}, NO_BEHAVIOUR, _cell()),
     "no selector covers the cell": (
@@ -4348,14 +4673,127 @@ JUDGE_CASES: dict[str, tuple[list[Record], set[CellKind], CellEvidence, behaviou
     ),
     "a record without a category": ([_judged(None)], {OUTPUT}, NO_BEHAVIOUR, _cell()),
     "a harness record": ([_judged("harness")], {OUTPUT}, NO_BEHAVIOUR, _cell()),
+    "two notices, each line matched by one": (
+        [GAP_NOTICE, TRACK_NOTICE],
+        {WARNINGS, MESSAGES},
+        CellEvidence("same", lines=TWO_CHANGES),
+        _cell(),
+    ),
+    "two notices and a warning line neither matches": (
+        [GAP_NOTICE, TRACK_NOTICE],
+        {WARNINGS, MESSAGES},
+        CellEvidence("same", lines=(*TWO_CHANGES, "[warning] added UserWarning: other")),
+        _cell(),
+    ),
+    "one notice and the lines of another change it does not declare": (
+        [GAP_NOTICE],
+        {WARNINGS, MESSAGES},
+        CellEvidence("same", lines=TWO_CHANGES),
+        _cell(),
+    ),
+    "a crash-fix on a cell that was no crash, two notices matching every line": (
+        [_judged("crash-fix"), GAP_NOTICE, TRACK_NOTICE],
+        {WARNINGS, MESSAGES},
+        CellEvidence("same", lines=TWO_CHANGES),
+        _cell(),
+    ),
+    "a crash-fix on a cell that was no crash, two notices and a message line neither matches": (
+        [_judged("crash-fix"), GAP_NOTICE, TRACK_NOTICE],
+        {WARNINGS, MESSAGES},
+        CellEvidence("same", lines=(*TWO_CHANGES, "[message] added other")),
+        _cell(),
+    ),
+    "a crash-fix on a cell that was no crash beside a notice, a warning line it does not match": (
+        [_judged("crash-fix"), GAP_NOTICE],
+        {WARNINGS, MESSAGES},
+        CellEvidence("same", lines=("[warning] added UserWarning: other", "[message] added gap")),
+        _cell(),
+    ),
+    "a crash-fix and two notices, each warning matched by one": (
+        [_judged("crash-fix"), GAP_NOTICE, TRACK_NOTICE],
+        {OUTPUT, EXIT, WARNINGS, MESSAGES},
+        CRASH_FIXED,
+        _cell(),
+    ),
+    "a crash-fix and a notice that matches the warnings only": (
+        [_judged("crash-fix"), _judged("notice", _lines("tests/data/**", match="UserWarning"))],
+        {OUTPUT, EXIT, WARNINGS, MESSAGES},
+        CRASH_FIXED,
+        _cell(),
+    ),
+    "a crash-fix and two notices when a signature could not be taken": (
+        [_judged("crash-fix"), GAP_NOTICE, TRACK_NOTICE],
+        {OUTPUT, EXIT, WARNINGS, MESSAGES},
+        replace(CRASH_FIXED, signature_failed=True),
+        _cell(),
+    ),
+    "api beside a crash-fix on a cell that now fails": (
+        [OLD_FLAG_API, _judged("crash-fix")],
+        {EXIT, MESSAGES},
+        REMOVED_FLAG,
+        _cell(options=("--old-flag",)),
+    ),
+    "api beside a decision that selects none of the lines": (
+        [OLD_FLAG_API, DECIDED],
+        {EXIT, MESSAGES},
+        REMOVED_FLAG,
+        _cell(options=("--old-flag",)),
+    ),
+    "output-text beside a crash-fix on a cell that was no crash": (
+        [_judged("output-text"), _judged("crash-fix")],
+        {OUTPUT},
+        NO_BEHAVIOUR,
+        _cell(),
+    ),
+    "output-text and a notice beside an experimental record whose companion differs": (
+        [
+            _judged("experimental", affects=(("experimental", ("cli-option.generate-client",)),)),
+            _judged("output-text"),
+            GAP_NOTICE,
+        ],
+        {OUTPUT, WARNINGS},
+        replace(NO_BEHAVIOUR, companion_equal=False, lines=(GAP_WARNING,)),
+        _cell(options=("--generate-client",)),
+    ),
+    "output-text and two notices, one matching no line": (
+        [_judged("output-text"), GAP_NOTICE, TRACK_NOTICE],
+        {OUTPUT, WARNINGS},
+        replace(NO_BEHAVIOUR, lines=(GAP_WARNING,)),
+        _cell(),
+    ),
+    "a decision that selects no line beside a notice, on output that shows in no line": (
+        [DECIDED, GAP_NOTICE],
+        {OUTPUT, WARNINGS},
+        CellEvidence("violation", lines=(GAP_WARNING,)),
+        _cell(),
+    ),
+    "a notice and a signature line while the output is equal": (
+        [GAP_NOTICE],
+        {WARNINGS},
+        CellEvidence("same", lines=(TYPE_LINE, GAP_WARNING)),
+        _cell(),
+    ),
+    "output-text and a decision on a no-behaviour cell": (
+        [_judged("output-text"), DECIDED],
+        {OUTPUT},
+        NO_BEHAVIOUR,
+        _cell(),
+    ),
+    "a decision that selects the exit line beside a notice, on output that shows in no line": (
+        [_judged("default-fix", _lines("tests/data/**", aspects=("exit",))), GAP_NOTICE],
+        {OUTPUT, EXIT, WARNINGS},
+        CellEvidence("violation", lines=("[exit] 0 -> 1", GAP_WARNING), exits=(0, 1)),
+        _cell(),
+    ),
 }
 
 
 @pytest.mark.parametrize("case", sorted(JUDGE_CASES))
 def test_judge(case: str) -> None:
-    """A differing cell passes when the records that cover it admit each kind of its difference with their evidence.
+    """A differing cell passes when the records that cover it admit each kind of its difference and explain it together.
 
-    A decision's, an experimental or a crash-fix record's holding evidence covers the kinds it admits alone.
+    Decisions and notices explain the lines their selectors select, the other categories the kinds they admit, where
+    their evidence holds; a record whose evidence fails is no failure where the others explain all it admits.
     """
     records, found, evidence, cell = JUDGE_CASES[case]
     verdict = judge(cell, frozenset(found), records, evidence)

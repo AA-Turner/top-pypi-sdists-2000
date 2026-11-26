@@ -152,9 +152,9 @@ def flatten_conflicting_base_layouts(parser: PlansHost, module_models: ModuleMod
     Bases are handled before the models inheriting from them, as their own fields then give the layout. The
     layouts are seen as the processing of each module may leave them: a discriminator field may become a msgspec
     tag, which takes no slot, and reuse may make a duplicate an empty subclass of the model it duplicates, whose
-    layout it then has. A model that this processing leaves conflicting keeps failing the final check of the
-    output. A model that a type override replaces has a layout the generator does not know, as a configured base
-    class has.
+    layout it then has. A model that this processing leaves conflicting is flattened once every module is
+    processed (``cross_module.flatten_conflicting_final_layouts``). A model that a type override replaces has a
+    layout the generator does not know, as a configured base class has.
     """
     models = [model for _, models in module_models for model in models]
     if not (joins := [model for model in models if len(model.base_classes) > 1]):
@@ -208,8 +208,6 @@ def flatten_base_layouts(parser: FlattenHost, model: DataModel) -> None:
     parser._graph_builder.adopt_base_options(model)
     fields = model.flatten_base_layouts(adopt)
     with parser._graph_builder.defer_refresh():
-        for base_class in model.base_classes:
-            parser._graph_builder.detach_data_type_ref(base_class)
         parser._graph_builder.set_fields(model, fields)
         parser._graph_builder.reset_base_classes(model)
 

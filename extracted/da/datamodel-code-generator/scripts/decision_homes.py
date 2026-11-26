@@ -74,12 +74,11 @@ class BuilderHome(NamedTuple):
     (``parser/_schema_dispatch.py``) and is the only reader of the table besides the scopes that only ask it for
     ``typed_children``, and the parse methods the table's rows hold run only through the tables. A record with ``marks``
     stands for an output: a call with one of those marks is made only in the builder and its ``parts``. A mark is a call
-    of a class or a subclass (or its ``model_construct``/``model_validate``) or of a function, and where it asks for
-    one, a parameter that the call binds to a constant (heki's argument-list targets). An output built by
-    ``model_copy``, by a flag computed from a variable slot (``{CONTAINER_FLAGS[slot]: True}``) or by a flag dict that
-    is handed on, merged or chosen by a condition before it reaches the call carries no mark and is not seen, nor is a
-    call on a receiver heki cannot type (an unannotated parameter), through ``functools.partial``, or of
-    ``DataType.model_construct``/``model_validate``, whose keywords heki cannot bind.
+    of a class or a subclass or of a function, and where it asks for one, a parameter that the call binds to a constant
+    (heki's argument-list targets); a call of the class also covers its ``model_construct``, ``model_validate`` and
+    ``model_copy``, and a flag dict handed on, merged or chosen by a condition before it reaches the call. A flag
+    computed from a variable slot (``{CONTAINER_FLAGS[slot]: True}``) carries no mark and is not seen, nor is a call on
+    a receiver heki cannot type (an unannotated parameter).
     """
 
     output: str
@@ -174,7 +173,7 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             "unless `legacy-ref-branch-without-site-parts`) and `JsonSchemaParser._parse_ref_branch_model` (the class "
             "of a `$ref` branch: with the allOf members beside its union, `parse_all_of` of both, unless that row; a "
             "`$ref` branch a discriminator expanded is one such class per subtype, read from the `$ref` the expansion "
-            "records on each member, `_expanded_variants` over `parser/_origins.py:with_subtype_ref`), "
+            "records on each member, `_expanded_variants` over `types.py:_with_subtype_ref`), "
             "`JsonSchemaParser._parse_all_of_union_parts` and `_all_of_union_combinations` (the union parts of an "
             "allOf, a part at `union_part-<p>` below the site, and a union model per combination of one branch of each "
             "over `branch_combinations` by model, unless `legacy-union-parts-joined`); `parser/_schema_refs.py`: "
@@ -221,7 +220,7 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             Home("parser/jsonschema.py", "JsonSchemaParser._parse_ref_branch_model"),
             Home("parser/jsonschema.py", "JsonSchemaParser.parse_all_of"),
             Home("parser/jsonschema.py", "_expanded_variants"),
-            Home("parser/_origins.py", "with_subtype_ref"),
+            Home("types.py", "_with_subtype_ref"),
             Home("parser/jsonschema.py", "JsonSchemaParser._parse_all_of_union_parts"),
             Home("parser/jsonschema.py", "JsonSchemaParser._all_of_union_combinations"),
             Home("parser/_schema_refs.py", "intersect_ref_siblings_schema"),
@@ -394,7 +393,9 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
         ),
         adapters=(
             "`types.py:DataType.admits_none`, `items_admit_none` (the None of a container's item union, inside it), "
-            "`names_nullable_model`, `adds_reference_null`; `model/_field_imports.py:field_none_source` (the field's "
+            "`names_nullable_model`, `adds_reference_null`, `_rendered_null_source` (the type's own facts into "
+            "`rendered_nullability`) and `_hint_null` (the same with the members answering by their hints); "
+            "`model/_field_imports.py:field_none_source` (the field's "
             "facts into `field_renders_none`, for `model/base.py:DataModelFieldBase._field_null_source` and "
             "`field_admits_none`); writes: `types.py:DataType._materialize_render_state` (see L7) and the record, "
             "through `DataType._update_type_null`, from the store operations `redirect_reference_users`, "
@@ -413,6 +414,8 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             Home("types.py", "DataType.items_admit_none"),
             Home("types.py", "DataType.names_nullable_model"),
             Home("types.py", "DataType.adds_reference_null"),
+            Home("types.py", "DataType._rendered_null_source"),
+            Home("types.py", "_hint_null"),
             Home("model/_field_imports.py", "field_none_source"),
             Home("model/base.py", "DataModelFieldBase._field_null_source"),
             Home("model/_field_imports.py", "field_admits_none"),
@@ -508,7 +511,7 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
         core="`model/enum.py`: `enum_value_base` (rows `EnumValueBaseRow`)",
         adapters=(
             "`model/enum.py:Enum.value_base` (read by `types.py:DataTypeManager._constraint_keywords` through "
-            "`ModelView.value_base`); `parser/_tag_plan.py:_member_choice_keys` (the keys of the choices that members "
+            "`DataModel.value_base`); `parser/_tag_plan.py:_member_choice_keys` (the keys of the choices that members "
             "make, read by `_written_enum_member_keys` before the tags are written and by `settle_site` after), "
             "`parser/_tag_plan.py:writes_member_values` (the members of a plain Enum that "
             "`--use-enum-values-in-discriminator` writes as tags hold their values beside them, `Literal[Kind.a, "
@@ -1642,14 +1645,16 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             "`types.py:build_union` (with the builder's `self.data_type`) for `parser/jsonschema.py` and "
             "`parser/openapi.py`, `model/msgspec.py:DataModelField._ordered_union_data_type`; "
             "`types.py:DataType.__init__`; `parser/generation.py:GenerationStore.replace_nested_data_type` (L5 "
-            "collapse); `parser/graphql.py:GraphQLParser.parse_union`; `types.py:render_type_expr` (`_render_union`); "
+            "collapse); `parser/graphql.py:GraphQLParser.parse_union`; `types.py:render_type_expr` (`_render_union`, "
+            "with `_merge_union_members`, which hands it the hints of the members); `types.py:_link_parts` "
+            "(`constructed`, for every `DataType` built with members); "
             "`_target_binding.py` (`_ordered_union`, the structural projection); "
             "`model/pydantic_v2/base_model.py:DataModelField._type_hint_with_missing_sentinel`; "
             "`parser/_passes/render_prep.py:_flatten_union_members` (`flattened`); `types.py:union_members` gives the "
             "members of a type that is a union at its top level and `types.py:written_union_members` the members of a "
             "union as written, with such member unions spread (msgspec's plain-union checks, and the nested-union "
             "checks of `parser/_passes/imports.py` and `parser/_passes/_shared.py:_iter_discriminator_data_types`), "
-            "through `types.py:_union_members` and `_written_union_members`, which the decisions call for views; "
+            "through `types.py:_union_members` and `_written_union_members`, which the decisions call; "
             "`parser/_passes/_shared.py:msgspec_union_members` the union a msgspec type writes (its own, or the items "
             "of a list, set or map), which the msgspec decoding warnings and `parser/_str_like_unions.py` read; a "
             "container's item union takes `constructed` from `DataType.__init__`, and the None of its items stays "
@@ -1666,6 +1671,8 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             Home("parser/graphql.py", "GraphQLParser.parse_union"),
             Home("types.py", "render_type_expr"),
             Home("types.py", "_render_union"),
+            Home("types.py", "_merge_union_members"),
+            Home("types.py", "_link_parts"),
             Home("_target_binding.py", "_ordered_union"),
             Home("model/pydantic_v2/base_model.py", "DataModelField._type_hint_with_missing_sentinel"),
             Home("parser/_passes/render_prep.py", "_flatten_union_members"),
@@ -2576,9 +2583,17 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
         core="`types.py`: `_copied_node`, `_copy_data_type`, `DataType.__deepcopy__`",
         adapters=(
             "`types.py:DataTypeManager.copy_data_type` (a leaf prototype takes a node copy, a nested one a deep copy), "
-            "`parser/base.py:Parser._copy_model_type`, `model/msgspec.py:DataModelField._copy_data_type`"
+            "the callers of the overridable `parser/base.py:Parser._copy_model_type` hook "
+            "(`parser/_passes/modules.py:collapse_root_models_in_scope`, `parser/jsonschema.py`: "
+            "`JsonSchemaParser._copy_schema_runtime_validation_for_variant`, "
+            "`JsonSchemaParser._get_inherited_field_type`), `model/msgspec.py:DataModelField._copy_data_type`"
         ),
-        sites=(Home("types.py", "DataTypeManager.copy_data_type"),),
+        sites=(
+            Home("types.py", "DataTypeManager.copy_data_type"),
+            Home("parser/_passes/modules.py", "collapse_root_models_in_scope"),
+            Home("parser/jsonschema.py", "JsonSchemaParser._copy_schema_runtime_validation_for_variant"),
+            Home("parser/jsonschema.py", "JsonSchemaParser._get_inherited_field_type"),
+        ),
     ),
     DecisionHome(
         decision=(
@@ -2742,12 +2757,12 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
         ),
         adapters=(
             "every caller calls the core: the walks of a type tree (`types.py`: `DataType.walk`, `_link_parts`; "
-            "`_parse_memo.py:ParseMemo._references`; `parser/_origins.py:with_type_origin`; `parser/generation.py`: "
+            "`_parse_memo.py:ParseMemo._references`; `types.py:_with_type_origin`; `parser/generation.py`: "
             "`_tree_nodes`, `GenerationIndex.inlined_holders_of`; `parser/_passes/render_prep.py`: "
             "`_contains_model_reference`, `_iter_alias_references`; `parser/_passes/modules.py:_value_positions`; "
             "`parser/_type_overrides.py:apply_override_to_data_type`; "
             "`model/_field_imports.py:write_pre_render_nullability`; `parser/_held_null.py:_types`, over the "
-            "decision's views; `model/pydantic_base.py:DataModelField._has_anyurl_outside_container`), "
+            "decision's models; `model/pydantic_base.py:DataModelField._has_anyurl_outside_container`), "
             "`_parse_memo.py:ParseMemo.bump_node`, `types.py:_copy_data_type`, "
             "`model/msgspec.py:DataModelField._unconstrained_members`, "
             "`model/msgspec.py:DataModelField._written_type`, `model/pydantic_base.py:DataModelField._written_type`, "
@@ -2764,7 +2779,7 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             Home("types.py", "DataType.walk"),
             Home("types.py", "_link_parts"),
             Home("_parse_memo.py", "ParseMemo._references"),
-            Home("parser/_origins.py", "with_type_origin"),
+            Home("types.py", "_with_type_origin"),
             Home("parser/generation.py", "_tree_nodes"),
             Home("parser/generation.py", "GenerationIndex.inlined_holders_of"),
             Home("parser/_passes/render_prep.py", "_contains_model_reference"),
@@ -3000,7 +3015,9 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             "error (`_requirements.py`, a leaf that names its ASCII rows), the `AttributeError` of a module "
             "`__getattr__`, which writes the interpreter's own message and runs while modules import, the `repr()` of "
             "bytes, which is ASCII, and the keys that compare values only "
-            "(`parser/_all_of_values.py:schema_signature`, `parser/avro.py`, `_recommend/_signals.py`)"
+            "(`parser/_all_of_values.py:schema_signature`, `parser/avro.py`, `_recommend/_signals.py`); the tool table "
+            "of a client package and the warnings of the operations it leaves out (`_client/render.py:_Tools`, "
+            "`_client/tools.py`), and its MCP server module (`_client/render.py:_Facades.mcp_server`)"
         ),
         sites=(
             Home("python_literal.py", "represent_python_value"),
@@ -3017,6 +3034,9 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             Home("_requirements.py"),
             Home("parser/avro.py"),
             Home("_recommend/_signals.py"),
+            Home("_client/render.py", "_Tools"),
+            Home("_client/tools.py"),
+            Home("_client/render.py", "_Facades.mcp_server"),
         ),
     ),
     DecisionHome(
@@ -3645,16 +3665,25 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
         homes=(
             Home("parser/_passes/_import_edges.py", "relative_import_targets"),
             Home("parser/_passes/_import_edges.py", "module_import_edges"),
+            Home("parser/_passes/_import_edges.py", "init_loads"),
             Home("parser/_passes/_import_edges.py", "_written_package"),
         ),
-        core="`parser/_passes/_import_edges.py`: `relative_import_targets`, `module_import_edges`, `_written_package`",
+        core=(
+            "`parser/_passes/_import_edges.py`: `relative_import_targets`, `module_import_edges`, `init_loads`, "
+            "`_written_package`"
+        ),
         adapters=(
             "every caller calls the core: the modules the written modules load "
             "(`parser/_passes/imports.py:_loaded_modules`, for the imports of a package's `__init__.py` that a loaded "
             "submodule hides), the refusal of a block written with a part Python cannot import by "
             "(`parser/_passes/imports.py:reject_unimportable_imports`), the refusal of a class named like a module "
             "below its package, unless the package loads the module first "
-            "(`parser/_passes/imports.py:reject_class_named_like_submodule`, which adds the imports of the forwarders) "
+            "(`parser/_passes/imports.py:reject_class_named_like_submodule`, which adds the imports of the forwarders, "
+            "and `_class_named_like_submodule`, which keeps the reading of 0.90.0 to 0.100.0 of an ancestor "
+            "package's imports where the classes do not evaluate their annotations as they are defined, row "
+            "`legacy-running-packages-load`), "
+            "the import of the models of a submodule from the submodule where its package loads it before its class "
+            "(`parser/_passes/imports.py:submodules_hidden_by_packages`) "
             "and the packages whose `__init__.py` a module writes (the aliases of `parser/_passes/imports.py` for the "
             "names a package's submodules hide)"
         ),
@@ -3662,6 +3691,8 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             Home("parser/_passes/imports.py", "_loaded_modules"),
             Home("parser/_passes/imports.py", "reject_unimportable_imports"),
             Home("parser/_passes/imports.py", "reject_class_named_like_submodule"),
+            Home("parser/_passes/imports.py", "_class_named_like_submodule"),
+            Home("parser/_passes/imports.py", "submodules_hidden_by_packages"),
             Home("__init__.py"),
         ),
     ),
@@ -3995,8 +4026,17 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             "`escape_docstring`, `format_docstring`, `comment_safe`, `inline_comment_safe` (`model/base.py` keeps "
             "their names, and the Jinja filters `escape_docstring` and `format_docstring`)"
         ),
-        adapters="the docstring of a client codec (`_client/codec_render.py:_description`)",
-        sites=(Home("_client/codec_render.py", "_description"),),
+        adapters=(
+            "the docstring of a client codec (`_client/codec_render.py:_description`), the tool table of a client "
+            "package (`_client/render.py`: `_Tools`, `_Facades.tools`), and its MCP server module "
+            "(`_client/render.py:_Facades.mcp_server`)"
+        ),
+        sites=(
+            Home("_client/codec_render.py", "_description"),
+            Home("_client/render.py", "_Tools"),
+            Home("_client/render.py", "_Facades.tools"),
+            Home("_client/render.py", "_Facades.mcp_server"),
+        ),
     ),
     DecisionHome(
         decision="the line endings of a text read as Python's universal newlines read a file: CRLF and a lone CR as LF",
@@ -4386,7 +4426,8 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             "`_runtime/server/responses.py:_content`; `_runtime/protocols/pagination.py`: `_integer`, `_restored`, "
             "`_runtime/protocols/resume.py:state_count`, `_runtime/protocols/sources.py:_count`, "
             "`_runtime/protocols/uploads.py:_Upload._offered`, `_runtime/protocols/caches.py`, "
-            "`_runtime/client/timing.py:usable_seconds`"
+            "`_runtime/client/timing.py:usable_seconds`, `_runtime/client/tools.py`: `_body`, `_dumped`, "
+            "`_runtime/client/tool_server.py:_result` (the text of a tool's MCP result)"
         ),
         sites=(
             Home("_runtime/protocols/records.py", "plain_copy"),
@@ -4403,6 +4444,9 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             Home("_runtime/protocols/uploads.py", "_Upload._offered"),
             Home("_runtime/client/timing.py", "usable_seconds"),
             Home("_runtime/protocols/caches.py"),
+            Home("_runtime/client/tools.py", "_body"),
+            Home("_runtime/client/tools.py", "_dumped"),
+            Home("_runtime/client/tool_server.py", "_result"),
         ),
     ),
     DecisionHome(
@@ -6039,11 +6083,13 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
         core="`_message_text.py:wrapped_lines`",
         adapters=(
             "`_recommend/_report.py` (the rule texts, trial effects and footnotes, the changes of a migration, the "
-            "notes), `_registry_render.py:_render_registry_table` (the notes of `--list-experimental`)"
+            "notes), `_registry_render.py:_render_registry_table` (the notes of `--list-experimental`), "
+            "`_config_export.py:_written_text` (the notes of `--write-pyproject-config`)"
         ),
         sites=(
             Home("_registry_render.py", "_render_registry_table"),
             Home("_recommend/_report.py"),
+            Home("_config_export.py", "_written_text"),
         ),
     ),
     DecisionHome(
@@ -6383,7 +6429,9 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             "`no-place`, the fields of bases as rows `collected` or `nearest` of `DataModel._BASE_FIELDS`), "
             "`python_base_classes`, `DataModel.iter_all_fields`, `sort_data_models_for_mro` (its `c3_merge` names the "
             "core's); `parser/_passes/_shared.py:takes_positional_place`; "
-            "`parser/_passes/settle.py:sort_base_classes_for_mro`; `parser/_inherited_schemas.py`: "
+            "`parser/_passes/settle.py:sort_base_classes_for_mro`; "
+            "`parser/_passes/cross_module.py:flatten_conflicting_final_layouts` (the models with fewer ancestors "
+            "first); `parser/_inherited_schemas.py`: "
             "`linearize_inherited_schema_refs` and `sort_inherited_base_classes_for_mro` (raw schemas, `first-head`); "
             "rule `python`: `parser/_inheritance_check.py:check_model_inheritance` (behind "
             "`Parser._check_model_inheritance`), `_target_binding.py:_Models.field_bindings`"
@@ -6395,6 +6443,7 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             Home("model/base.py", "sort_data_models_for_mro"),
             Home("parser/_passes/_shared.py", "takes_positional_place"),
             Home("parser/_passes/settle.py", "sort_base_classes_for_mro"),
+            Home("parser/_passes/cross_module.py", "flatten_conflicting_final_layouts"),
             Home("parser/_inherited_schemas.py", "linearize_inherited_schema_refs"),
             Home("parser/_inherited_schemas.py", "sort_inherited_base_classes_for_mro"),
             Home("parser/_inheritance_check.py", "check_model_inheritance"),
@@ -6536,11 +6585,13 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
         ),
         adapters=(
             "`_client/plan.py:Planner.resolved`, `_fastapi/plan.py:Planner.selected` (each target keeps only its own "
-            "forms and its own rules where they differ)"
+            "forms and its own rules where they differ), `_client/tools.py:plan_tools` (a tool's description, the "
+            "docstring of its method)"
         ),
         sites=(
             Home("_client/plan.py", "Planner.resolved"),
             Home("_fastapi/plan.py", "Planner.selected"),
+            Home("_client/tools.py", "plan_tools"),
         ),
     ),
     DecisionHome(
@@ -6561,7 +6612,7 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
         adapters=(
             "`_client/codec_plan.py:CodecRuntime.modules`, `_client/codec_render.py` (the model bindings' import and "
             "codec arguments), `_client/runtime.py:Capabilities.modules`, `_fastapi/render.py` "
-            "(`ServerRenderer.runtime`, `_declared`)"
+            "(`ServerRenderer.runtime`, `_declared`), `_client/render.py:_Tools.result` (the codec of a tool's result)"
         ),
         sites=(
             Home("_client/codec_plan.py", "CodecRuntime.modules"),
@@ -6569,6 +6620,7 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             Home("_fastapi/render.py", "ServerRenderer.runtime"),
             Home("_fastapi/render.py", "_declared"),
             Home("_client/codec_render.py"),
+            Home("_client/render.py", "_Tools.result"),
         ),
     ),
     DecisionHome(
@@ -6715,7 +6767,9 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             "or an object, unmatched, unevaluated, held as a `JsonSchemaObject` field, definitions); a walker that "
             "visits another set or order than a role gives keeps it as a named view of the table; the keywords that "
             "hold schemas only for references (`DEFINITION_KEYS`) and those whose values are instance data; the "
-            "subschemas one keyword holds, read by its shape, and the walk over every value of a loaded JSON value"
+            "subschemas one keyword holds, read by its shape, and the walk over every value of a loaded JSON value "
+            "(the tool table of a generated client keeps its own copy of the keywords that hold schemas, "
+            "`_runtime/client/tools.py`: `_NAMING` and `_HOLDING`, as the runtime never imports the generator)"
         ),
         homes=(
             Home("_json_schema.py", "SCHEMA_POSITIONS"),
@@ -7024,13 +7078,15 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
         adapters=(
             "`parser/_passes/settle.py:_named_model_path`, `parser/base.py:Parser._model_metadata`, the lone surrogate "
             "refusals (`model/msgspec.py:Struct._validate_renamed_field_names`, "
-            "`parser/_passes/imports.py:reject_lone_surrogates_pydantic_reads`)"
+            "`parser/_passes/imports.py:reject_lone_surrogates_pydantic_reads`), the warnings of the union rows of "
+            "an allOf (`parser/jsonschema.py:JsonSchemaParser._warn_dropped_union`)"
         ),
         sites=(
             Home("parser/_passes/settle.py", "_named_model_path"),
             Home("parser/base.py", "Parser._model_metadata"),
             Home("model/msgspec.py", "Struct._validate_renamed_field_names"),
             Home("parser/_passes/imports.py", "reject_lone_surrogates_pydantic_reads"),
+            Home("parser/jsonschema.py", "JsonSchemaParser._warn_dropped_union"),
         ),
     ),
     DecisionHome(
@@ -7103,7 +7159,8 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             "`parser/graphql.py:GraphQLParser._resolve_typename_collisions`; "
             "`_client/target.py:_HelperDigests.contract`; `input_model.py:_native_generic_field_paths`; "
             "`model/pydantic_v2/base_model.py:has_lookaround_pattern` (the models whose patterns a Pydantic dataclass "
-            "reads, row `legacy-dataclass-follows-every-reference`)"
+            "reads, row `legacy-dataclass-follows-every-reference`); "
+            "`parser/_passes/_import_edges.py:init_loads` (the modules a package's `__init__.py` loads)"
         ),
         sites=(
             Home("_reference_graph.py", "ReferenceGraph.reached"),
@@ -7116,6 +7173,7 @@ DECISION_HOMES: Final[tuple[DecisionHome, ...]] = (
             Home("_client/target.py", "_HelperDigests.contract"),
             Home("input_model.py", "_native_generic_field_paths"),
             Home("model/pydantic_v2/base_model.py", "has_lookaround_pattern"),
+            Home("parser/_passes/_import_edges.py", "init_loads"),
         ),
     ),
     DecisionHome(
@@ -8289,11 +8347,7 @@ BUILDER_HOMES: Final[tuple[BuilderHome, ...]] = (
         output="the reference that names a model",
         prose="Names come from `ModelResolver.add`.",
         builder=Home("reference.py", "ModelResolver.add"),
-        marks=(
-            Mark(callee="datamodel_code_generator.reference.Reference"),
-            Mark(callee="datamodel_code_generator.reference.Reference.model_construct"),
-            Mark(callee="datamodel_code_generator.reference.Reference.model_validate"),
-        ),
+        marks=(Mark(callee="datamodel_code_generator.reference.Reference"),),
         parts=(Home("reference.py", "ModelResolver._register_reference"),),
     ),
 )

@@ -57,3 +57,33 @@ def test_reports_uninstall_failure(clean_project, run_command):
 
     run_command.return_value.returncode = 1
     assert remove_extraneous_packages(clean_project) is True
+
+
+@pytest.mark.parametrize("bare", [False, True])
+def test_failed_uninstall_reports_stderr_and_continues(
+    clean_project, monkeypatch, capsys, bare
+):
+    from pipenv.routines.clean import remove_extraneous_packages
+
+    clean_project.installed_package_names = ["stale-a", "stale-b"]
+    clean_project.lockfile.content = {"default": {}, "develop": {}}
+    attempted = []
+
+    def fake_subprocess_run(command, *args, **kwargs):
+        attempted.append(command[3])
+        if command[3] == "stale-a":
+            return mock.MagicMock(
+                returncode=1, stdout="", stderr="Permission denied: [red]"
+            )
+        return mock.MagicMock(returncode=0, stdout="", stderr="Successful uninstall")
+
+    monkeypatch.setattr("pipenv.utils.processes.subprocess_run", fake_subprocess_run)
+    monkeypatch.setattr("pipenv.routines.clean.project_python", lambda *a, **k: "py")
+    monkeypatch.setattr("pipenv.routines.clean.get_runnable_pip", lambda: "pip")
+
+    assert remove_extraneous_packages(clean_project, bare=bare) is True
+    assert attempted == ["stale-a", "stale-b"]
+    captured = capsys.readouterr()
+    assert captured.err == "Permission denied: [red]\n"
+    if bare:
+        assert captured.out == ""

@@ -73,8 +73,12 @@ def remove_extraneous_packages(project, dry_run=False, bare=False, system=False)
                 apparent_bad_package,
                 "-y",
             ]
-            c = run_command(cmd, is_verbose=project.s.is_verbose())
+            c = run_command(
+                cmd, is_verbose=project.s.is_verbose(), catch_exceptions=False
+            )
             if c.returncode != 0:
+                if c.stderr:
+                    err.print(c.stderr, markup=False)
                 failure = True
     return failure
 

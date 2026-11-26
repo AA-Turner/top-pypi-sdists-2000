@@ -17,7 +17,7 @@ from tests.conftest import assert_output
 
 ROOT = Path(__file__).parents[1]
 FIXTURE_ROOT = Path(__file__).parent / "data" / "architecture_boundaries"
-CHECKER_FILES = ("check_architecture_boundaries.py", "_import_cycles.py", "_source_model.py")
+CHECKER_FILES = ("check_architecture_boundaries.py", "_source_model.py")
 """The guard and the modules it reads imports with, as a copy of the guard in a tree needs them."""
 
 
@@ -39,7 +39,7 @@ def test_source_tree_respects_architecture_boundaries() -> None:
 
 
 def test_architecture_boundary_detector_reports_cross_layer_dependencies() -> None:
-    """Cover static, relative, dynamic, semantic, and private import violations."""
+    """Cover the reads of each layer that bypass its capabilities: attributes, identities and private names."""
     files: list[tuple[Path, check_architecture_boundaries.Layer]] = [
         (FIXTURE_ROOT / "entrypoint" / "forbidden.py", "entrypoint"),
         (FIXTURE_ROOT / "parser" / "forbidden.py", "parser"),
@@ -66,20 +66,6 @@ def test_architecture_boundary_detector_reports_cross_layer_dependencies() -> No
     )
 
 
-@pytest.mark.parametrize(
-    "fixture",
-    [
-        pytest.param(FIXTURE_ROOT / "shared_model_dynamic_import" / "forbidden.py", id="shared_model_dynamic_import"),
-        pytest.param(FIXTURE_ROOT / "shared_model_dynamic_import" / "allowed.py", id="clean"),
-    ],
-)
-def test_architecture_boundary_detector_handles_shared_model_dynamic_imports(fixture: Path) -> None:
-    """Reject concrete dynamic imports while allowing shadowed aliases without a target."""
-    violations = check_architecture_boundaries.check_files([(fixture, "shared-model")], allowlist={})
-
-    assert_output(check_architecture_boundaries.format_report(violations))
-
-
 def test_architecture_boundary_detector_fails_closed_where_the_source_model_cannot_read(tmp_path: Path) -> None:
     """Report an import that leaves the top-level package and a module the source model refuses, as violations."""
     stored = [FIXTURE_ROOT / "unreadable" / "import.py.txt", FIXTURE_ROOT / "unreadable" / "source.py.txt"]
@@ -91,6 +77,21 @@ def test_architecture_boundary_detector_fails_closed_where_the_source_model_cann
     report = check_architecture_boundaries.format_report(check_architecture_boundaries.check_files(files, allowlist={}))
 
     assert_output(report.replace(tmp_path.as_posix(), "tests/data/architecture_boundaries/unreadable"))
+
+
+@pytest.mark.parametrize("layer", ["parser", "shared-model"])
+def test_architecture_boundary_detector_refuses_dynamic_imports_heki_cannot_judge(
+    layer: check_architecture_boundaries.Layer,
+) -> None:
+    """Refuse a dynamic import through a star import, and through another object outside shared model code.
+
+    heki's import boundaries judge ``importlib.import_module`` and ``__import__`` read through an import; the call that
+    reads as importlib stays unreported here, whatever it loads.
+    """
+    fixture = FIXTURE_ROOT / "unjudged_dynamic_import" / "forbidden.py"
+    violations = check_architecture_boundaries.check_files([(fixture, layer)], allowlist={})
+
+    assert_output(check_architecture_boundaries.format_report(violations))
 
 
 def test_architecture_boundary_detector_reports_a_dependency_the_source_model_refuses(
@@ -143,7 +144,6 @@ def test_architecture_boundary_source_classification() -> None:
         source_root / "model" / "__init__.py",
         source_root / "model" / "pydantic_v2" / "base_model.py",
         source_root / "model" / "runtime_validation.py",
-        source_root / "model" / "_views.py",
         source_root / "model" / "_decisions" / "nullability.py",
         source_root / "model" / "_decisions" / "enum_kind.py",
         source_root / "model" / "_decisions" / "tag_value.py",
@@ -168,17 +168,15 @@ def test_architecture_boundary_source_classification() -> None:
 def test_import_cycles_count_the_imports_that_close_them() -> None:
     """Each kind of import back raises the import-cycle keys it can close; the fixture's package says why.
 
-    Imports that run when their module is imported close ``module-level`` cycles, which the guard also rejects;
-    function-local and ``TYPE_CHECKING`` imports close ``lazy`` ones only.
+    Imports that run when their module is imported close ``module-level`` cycles; function-local and
+    ``TYPE_CHECKING`` imports close ``lazy`` ones only.
     """
     lines = []
     for fixture in sorted((FIXTURE_ROOT / "import_cycles").iterdir()):
         lines.append(f"== {fixture.name}")
         for key, found in import_cycles(fixture).items():
             lines += [f"{key}: {', '.join(f'{path}:{line}' for path, line in cycle)}" for cycle in found]
-        lines.append(
-            check_architecture_boundaries.format_report(check_architecture_boundaries.import_cycle_violations(fixture))
-        )
+        lines.append("")
     assert_output("\n".join(lines))
 
 
@@ -208,27 +206,6 @@ def test_architecture_boundary_detector_reports_stale_allowlist_entries() -> Non
         [(clean_fixture, "parser")],
         allowlist={
             stale_key: check_architecture_boundaries.AllowlistEntry("fixture for stale-entry reporting"),
-        },
-    )
-
-    assert_output(
-        check_architecture_boundaries.format_report(violations),
-    )
-
-
-def test_reference_allowlist_is_symbol_specific() -> None:
-    """Do not let a compatibility import allowance hide another backend symbol."""
-    fixture = FIXTURE_ROOT / "reference" / "symbol_specific.py"
-    key = check_architecture_boundaries.BoundaryKey(
-        "tests/data/architecture_boundaries/reference/symbol_specific.py",
-        "load_unrelated_backend_symbol",
-        "reference-backend-import",
-        "datamodel_code_generator.model.field_name.PydanticFieldNameResolver",
-    )
-    violations = check_architecture_boundaries.check_files(
-        [(fixture, "reference")],
-        allowlist={
-            key: check_architecture_boundaries.AllowlistEntry("fixture for symbol-specific compatibility import")
         },
     )
 
@@ -279,13 +256,13 @@ def test_architecture_boundary_cli_reports_actionable_failures(
     clean_output = capsys.readouterr()
 
     legacy_key = check_architecture_boundaries.BoundaryKey(
-        "src/datamodel_code_generator/reference.py",
-        "_default_field_name_resolver_class",
-        "reference-backend-import",
-        "datamodel_code_generator.model.field_name.PydanticFieldNameResolver",
+        "src/datamodel_code_generator/config.py",
+        "ParserConfig",
+        "config-backend-reference",
+        "datamodel_code_generator.model.pydantic_v2.RootModel",
     )
     monkeypatch.delitem(check_architecture_boundaries.DEFAULT_ALLOWLIST, legacy_key)
-    failure_code = check_architecture_boundaries.main([str(ROOT / "src" / "datamodel_code_generator" / "reference.py")])
+    failure_code = check_architecture_boundaries.main([str(ROOT / "src" / "datamodel_code_generator" / "config.py")])
     failure_by_symbol = re.sub(r"^(src/[^:]+):\d+:\d+:", r"\1:", capsys.readouterr().err, flags=re.MULTILINE)
     monkeypatch.undo()
 
@@ -327,7 +304,6 @@ def test_architecture_boundary_cli_checks_the_full_source_tree() -> None:
     "fixture",
     [
         pytest.param(FIXTURE_ROOT / "shared_model" / "forbidden.py", id="forbidden"),
-        pytest.param(FIXTURE_ROOT / "shared_model_dynamic_import" / "forbidden.py", id="shared_model_dynamic_import"),
     ],
 )
 def test_architecture_boundary_cli_reports_shared_model_backend_access(tmp_path: Path, fixture: Path) -> None:

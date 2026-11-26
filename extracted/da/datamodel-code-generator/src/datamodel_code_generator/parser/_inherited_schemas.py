@@ -44,7 +44,7 @@ from datamodel_code_generator._url_redaction import named_location
 from datamodel_code_generator._warning_control import quiet
 from datamodel_code_generator.enums import AllOfMergeMode
 from datamodel_code_generator.model import DataModel, DataModelFieldBase
-from datamodel_code_generator.model.base import _field_source_name, get_inherited_fields
+from datamodel_code_generator.model.base import _field_source_name, _with_field_origin, get_inherited_fields
 from datamodel_code_generator.parser import _rw_split, _schema_refs, _value_keywords
 from datamodel_code_generator.parser._all_of_values import conjoined_declarations, holds_union_member
 from datamodel_code_generator.parser._field_copies import _get_inherited_type_modifiers
@@ -59,7 +59,6 @@ from datamodel_code_generator.parser._intersection import (
     merge_inherited_value,
 )
 from datamodel_code_generator.parser._null_facts import dump_null_sources, resolve_null_facts
-from datamodel_code_generator.parser._origins import with_field_origin
 from datamodel_code_generator.parser._passes._keys import _DEFERRED_INHERITED_FIELD_KEY, _DEFERRED_INHERITED_TYPE_KEY
 from datamodel_code_generator.parser._rw_split import RwSplitHost
 from datamodel_code_generator.parser._schema_documents import current_document
@@ -87,16 +86,11 @@ from datamodel_code_generator.parser._schema_reading import (
 )
 from datamodel_code_generator.parser._value_keywords import get_effective_array_length
 from datamodel_code_generator.python_literal import stable_repr
-from datamodel_code_generator.reference import (
-    Reference,
-    _is_special_path,
-    context_variable,
-    get_inferred_module_name,
-)
+from datamodel_code_generator.reference import Reference, _is_special_path, context_variable, get_inferred_module_name
 from datamodel_code_generator.types import DataType, untyped_value_data_type
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
+    from collections.abc import Callable, Collection, Iterable, Iterator, Mapping, Sequence
 
     from typing_extensions import Unpack
 
@@ -162,14 +156,18 @@ __all__ = [
     "merge_inherited_union_branch",
     "merge_properties_with_parent_constraints",
     "model_declarations",
+    "names_all_of_over_union",
     "normalize_inherited_constraint_compositions",
     "normalize_inherited_nested_schema_value",
+    "optional_held_names",
     "optional_inherited_required_names",
     "override_row",
     "parse_fields_beside_parents",
     "parse_inherited_schema_fields",
     "preserve_inherited_materialized_type_shape",
     "property_conjunctions",
+    "read_chain",
+    "read_within",
     "remove_inherited_distributed_shape",
     "remove_unconstrained_compositions",
     "required_names_at",
@@ -178,6 +176,7 @@ __all__ = [
     "select_inherited_distributed_shape",
     "sort_inherited_base_classes_for_mro",
     "union_model_properties",
+    "union_model_restated_names",
     "walk_inherited_schemas",
     "with_conjoined_properties",
 ]
@@ -1657,15 +1656,24 @@ def _read_through_members(
             read.append(member)
         elif not member.ref:
             read.append(_read_within(member, within))
-        elif (
-            not (target := parser._load_ref_schema_object(member.ref)).allOf
-            or "x-python-import" in target.extras
-            or not (target.anyOf or target.oneOf or holds_union_member(parser, target))
-        ):
+        elif not names_all_of_over_union(parser, target := parser._load_ref_schema_object(member.ref)):
             read.append(member)
         elif (location := target.schema_location) not in (chain := within or frozenset({schema.schema_location})):
             read.append(_read_within(_read_through_target(parser, member.ref, target), chain | {location}))
     return read
+
+
+def names_all_of_over_union(parser: InheritedSchemasHost, target: JsonSchemaObject) -> bool:
+    """Return whether an allOf member naming ``target`` names an allOf that holds a union (``_read_through_members``).
+
+    Such a target is an allOf beside its own ``anyOf`` or ``oneOf``, or one whose members hold one
+    (``holds_union_member``); one an ``x-python-import`` types is the class it imports, so a member naming it is a base.
+    """
+    return bool(
+        target.allOf
+        and "x-python-import" not in target.extras
+        and (target.anyOf or target.oneOf or holds_union_member(parser, target))
+    )
 
 
 def _read_through_target(parser: InheritedSchemasHost, ref: str, target: JsonSchemaObject) -> JsonSchemaObject:
@@ -1679,6 +1687,16 @@ def _read_through_target(parser: InheritedSchemasHost, ref: str, target: JsonSch
     if document_part(_schema_refs.schema_location(parser, resolved_ref)) == document:
         return target
     return parser._schema_object(_schema_refs.ref_target_dump(parser, ref, resolved_ref)[0])
+
+
+def read_chain(schema: JsonSchemaObject) -> frozenset[SchemaLocation]:
+    """Return the locations a schema was read within on the way to it (``_read_through_members``), empty for none."""
+    return frozenset(location for location in schema.__dict__.get(_READ_THROUGH_KEY, ()) if location is not None)
+
+
+def read_within(schema: JsonSchemaObject, chain: frozenset[SchemaLocation]) -> JsonSchemaObject:
+    """Return a copy of ``schema`` marked as read within the locations ``chain``, as ``_read_through_members`` marks."""
+    return _read_within(schema, frozenset(chain) | read_chain(schema))
 
 
 def _read_within(schema: JsonSchemaObject, chain: frozenset[SchemaLocation | None]) -> JsonSchemaObject:
@@ -1976,6 +1994,38 @@ def union_model_properties(
     return properties
 
 
+def optional_held_names(
+    holders: Iterable[tuple[Collection[str], Collection[str]]], required_names: Collection[str]
+) -> frozenset[str]:
+    """Return the names of ``required_names`` that some holder declares without requiring.
+
+    Each holder is a base of a class: the names it declares and the names it requires. The class takes a field from
+    one of its bases, which one depends on the output, so such a name is restated as required in the class
+    (``optional_inherited_required_names``, ``union_model_restated_names``).
+    """
+    return frozenset(
+        name for declared, required in holders for name in declared if name in required_names and name not in required
+    )
+
+
+def union_model_restated_names(
+    declarations: Sequence[ModelDeclarations] | None, part_declarations: ModelDeclarations
+) -> tuple[str, ...]:
+    """Return the names a union model of an allOf restates as required, in the order its bases declare them.
+
+    Those of the names some base requires that some base declares without requiring (``optional_held_names`` over
+    the ``declarations`` of its bases). Where the declarations of a branch are not known (None), every name the
+    other parts require (``part_declarations``), by name.
+    """
+    if declarations is None:
+        return tuple(sorted(part_declarations[1]))
+    restated = optional_held_names(
+        ((properties.keys(), names) for properties, names in declarations),
+        frozenset[str]().union(*(names for _, names in declarations)),
+    )
+    return tuple(dict.fromkeys(name for properties, _ in declarations for name in properties if name in restated))
+
+
 def _without_checks(declaration: JsonSchemaObject) -> dict[str, Any]:
     """Return the dump of a declaration without its check keywords and documentation."""
     return _dump_without_keywords(declaration, _CHECK_KEYWORDS | _DOCUMENTATION_KEYWORDS)
@@ -2057,10 +2107,12 @@ def optional_inherited_required_names(
     """
     bases = [base for base in base_classes if base.path and not _is_special_path(base.path)]
     if not (
-        restated := required_names.intersection(
-            name
-            for base in bases
-            for name in get_inherited_property_map(parser, [base]).keys() - required_names_at(parser, base.path)
+        restated := optional_held_names(
+            (
+                (get_inherited_property_map(parser, [base]).keys(), required_names_at(parser, base.path))
+                for base in bases
+            ),
+            required_names,
         )
     ):
         return ()
@@ -2293,10 +2345,14 @@ def build_missing_required_field(  # noqa: PLR0917
     base_classes: list[Reference],
     scope: ClassScope,
     inherited_fields: dict[str, DataModelFieldBase] | None = None,
+    *,
+    deferred: bool = False,
 ) -> DataModelFieldBase:
     """Build a field for a required name that is not declared in properties.
 
-    A copy of the inherited field keeps that field's origin; a new field records the origin ``required-only``.
+    A copy of the inherited field keeps that field's origin; a new field records the origin ``required-only``. A
+    ``deferred`` field is a placeholder that ``override_required_field`` replaces by a copy of the field its class
+    takes from its bases, once every base is built.
     """
     field_name, alias = parser.model_resolver.get_valid_field_name_and_alias(
         required_field_name,
@@ -2305,7 +2361,9 @@ def build_missing_required_field(  # noqa: PLR0917
         class_name=scope.name,
         output_names=scope.output_names,
     )
-    inherited_field = get_inherited_field(parser, required_field_name, base_classes, inherited_fields)
+    inherited_field = (
+        None if deferred else get_inherited_field(parser, required_field_name, base_classes, inherited_fields)
+    )
     if inherited_field is not None and inherited_field.name and inherited_field.name not in excludes:
         field_name = inherited_field.name
     if inherited_field is not None:
@@ -2323,7 +2381,7 @@ def build_missing_required_field(  # noqa: PLR0917
         parser._apply_inherited_field_default(copied_field, inherited_field, scope=scope)
         return copied_field
 
-    deferred = get_inherited_field_schema(parser, required_field_name, base_classes) is not None
+    deferred = deferred or get_inherited_field_schema(parser, required_field_name, base_classes) is not None
     field = parser._build_field(
         "legacy-alias-option-only",
         parser.data_type()
@@ -2337,7 +2395,7 @@ def build_missing_required_field(  # noqa: PLR0917
         required=True,
         original_name=required_field_name,
     )
-    with_field_origin(field, "required-only", None)
+    _with_field_origin(field, "required-only", None)
     if deferred:
         field.__dict__[_DEFERRED_INHERITED_FIELD_KEY] = scope
     return field

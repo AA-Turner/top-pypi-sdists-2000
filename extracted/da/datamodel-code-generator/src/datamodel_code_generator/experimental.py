@@ -24,6 +24,7 @@ ExperimentalFeatureId = Literal[
     "behavior.batch-generation-jobs",
     "behavior.naming-hint",
     "behavior.remote-reference-lock",
+    "cli-option.client-tools",
     "cli-option.generate-client",
     "cli-option.generate-schema-validators",
     "cli-option.generate-server",
@@ -34,6 +35,7 @@ ExperimentalFeatureId = Literal[
     "cli-option.use-missing-sentinel",
     "cli-option.use-type-alias",
     "cli-option.use-type-alias-type",
+    "cli-option.write-pyproject-config",
     "extra.httpx2",
     "input-format.asyncapi",
     "input-format.avro",
@@ -142,6 +144,40 @@ EXPERIMENTAL_FEATURES: dict[ExperimentalFeatureId, ExperimentalFeature] = {
             "errors do not fall back."
         ),
     ),
+    "cli-option.client-tools": ExperimentalFeature(
+        id="cli-option.client-tools",
+        kind="cli-option",
+        target=(
+            "--client-tools functions and mcp (client-tools in [tool.datamodel-codegen], client_tools in generate())"
+        ),
+        message=(
+            "The tool table of a generated client and its MCP server are experimental; its tools, their names, "
+            "schemas, annotations, search, and error values may change."
+        ),
+        since_version="0.103.0",
+        note=(
+            "`--client-tools functions` adds `tools.py` to a client package of Pydantic v2 models: `Toolset(client)` "
+            "and `AsyncToolset(client)` hold a tool for each operation whose arguments and success results are JSON "
+            "values, named by its client method, such as `pets_get_pet`. `search(query)` ranks the tools by their "
+            "names, tags, routes, descriptions, and signatures, `schema(name)` gives the JSON schemas of a tool's "
+            "arguments and result from the models, and `call(name, arguments)` validates the arguments as JSON "
+            "through the models, calls the client's method, and returns the JSON result, or an error value that "
+            "holds no header or URL, with each credential the client placed on the call's requests replaced in the "
+            "result and in an error's request ID and body. The arguments are the operation's parameters and body, "
+            "never a parameter at a credential's position or the request options; `read_only=True` leaves out the "
+            "tools of unsafe methods. An operation left out of the tools keeps its method, and generation warns why. "
+            "Under `--untrusted-input` a tool's description leaves out the operation's summary and description, and "
+            "`schema(name)` leaves out the `description`, `title`, and `examples` of every JSON schema, while the "
+            "models keep theirs. "
+            "`--client-tools mcp` also adds `mcp_server.py`, which serves the tools of the asyncio client over MCP "
+            "through the low-level server of the `mcp` SDK: `server(client)` returns the server, `serve(make_client)` "
+            "and `python -m <package>.mcp_server` serve it on stdin and stdout. Each tool is listed with the JSON "
+            "schemas `schema(name)` gives, without the output schema where it holds a pattern Python's `re` rejects, "
+            "and with read-only and idempotent annotations from its HTTP method; a "
+            "refused argument or a failed call is a result marked as an error, and an unknown tool a protocol error. "
+            "The server looks up no credentials, and the printed requirements gain `mcp`."
+        ),
+    ),
     "cli-option.generate-client": ExperimentalFeature(
         id="cli-option.generate-client",
         kind="cli-option",
@@ -240,6 +276,8 @@ EXPERIMENTAL_FEATURES: dict[ExperimentalFeatureId, ExperimentalFeature] = {
             "--recommend-options reads the input schema, measures naming-relevant signals of OpenAPI, AsyncAPI, and "
             "JSON Schema documents, and prints the latest dated preset to start from with the options to add, as a "
             "command and a pyproject.toml block. Options set on the command line or in pyproject.toml are kept. "
+            "When no option, key or preset sets the target Python version, it takes the lower bound of the "
+            "project's requires-python (>=, ~= or == forms) and adds it to the command and the block. "
             "For schemas of up to 3000 estimated models, it also generates the candidate configurations in memory "
             "and recommends the one whose class names score best; nothing is written. With --generate-prompt, the "
             "prompt embeds the report, and its JSON output carries the recommend-options payload as recommendation."
@@ -311,6 +349,28 @@ EXPERIMENTAL_FEATURES: dict[ExperimentalFeatureId, ExperimentalFeature] = {
         note=(
             "The option implies --use-type-alias and selects TypeAliasType for Python 3.10 and 3.11. "
             "Python 3.12 and newer continue to use native type statements."
+        ),
+    ),
+    "cli-option.write-pyproject-config": ExperimentalFeature(
+        id="cli-option.write-pyproject-config",
+        kind="cli-option",
+        target=(
+            "--write-pyproject-config, its report, and the written key of the recommend-options and pyproject-config "
+            "JSON payloads"
+        ),
+        message=(
+            "Writing the pyproject.toml table is experimental; the file it chooses, the edits it refuses, and its "
+            "report may change."
+        ),
+        since_version="0.102.0",
+        note=(
+            "It writes the table --recommend-options prints into the pyproject.toml that gives the table, else into "
+            "./pyproject.toml, and the table of --generate-pyproject-config into ./pyproject.toml; a missing file is "
+            "created with the table alone. "
+            "Only the keys to add or change are set; the file keeps its other text, line endings and byte order "
+            "mark. An edit that tomllib does not read back as exactly those keys set, such as one of an inline "
+            "table or dotted keys, is refused: nothing is written and the block is printed as before. HTTP headers "
+            "and query parameters are never written, and URLs are written without credentials, query and fragment."
         ),
     ),
     "input-format.asyncapi": ExperimentalFeature(

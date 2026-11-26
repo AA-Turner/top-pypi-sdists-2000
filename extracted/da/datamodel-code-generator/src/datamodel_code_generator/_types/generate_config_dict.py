@@ -22,6 +22,7 @@ if TYPE_CHECKING:
         ClientAsyncAPIPerspective,
         ClientBodyArguments,
         ClientSignatureStyle,
+        ClientTools,
         ClientType,
         CollapseRootModelsNameStrategy,
         ConstructorFieldOrder,
@@ -97,6 +98,7 @@ class BaseGenerateConfig(TypedDict):
     extra_fields: NotRequired[str | None]
     use_generic_base_class: NotRequired[bool]
     keep_bases_beside_generic_base_class: NotRequired[bool]
+    keep_bases_of_typed_dicts_listed_before_their_parents: NotRequired[bool]
     class_name: NotRequired[str | None]
     allow_leading_underscore_class_name: NotRequired[bool]
     class_name_prefix: NotRequired[str | None]
@@ -111,6 +113,7 @@ class BaseGenerateConfig(TypedDict):
     use_single_line_docstring: NotRequired[bool]
     use_default_kwarg: NotRequired[bool]
     apply_field_options_to_every_field: NotRequired[bool]
+    apply_default_values_to_true_properties: NotRequired[bool]
     deserialize_default_values: NotRequired[Sequence[DefaultValueType]]
     use_missing_sentinel: NotRequired[bool]
     reuse_model: NotRequired[bool]
@@ -156,6 +159,7 @@ class BaseGenerateConfig(TypedDict):
     intersect_allof_keywords: NotRequired[bool]
     intersect_combined_schema_keywords: NotRequired[bool]
     distribute_allof_over_unions: NotRequired[bool]
+    distribute_allof_over_object_branches: NotRequired[bool]
     intersect_merged_allof_members: NotRequired[bool]
     read_allof_parents_as_their_models: NotRequired[bool]
     read_allof_parents_in_mro_order: NotRequired[bool]
@@ -347,6 +351,7 @@ class BaseGenerateConfig(TypedDict):
     client_deep_object_brackets: NotRequired[bool | None]
     client_asyncapi_perspective: NotRequired[ClientAsyncAPIPerspective | None]
     client_protocols: NotRequired[Mapping[str, Any] | None]
+    client_tools: NotRequired[ClientTools | None]
 
 
 class GenerateConfigDict(BaseGenerateConfig, closed=True):

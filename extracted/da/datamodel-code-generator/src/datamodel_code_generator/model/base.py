@@ -61,6 +61,7 @@ from datamodel_code_generator._parse_memo import (
     memoized,
     note_reads,
 )
+from datamodel_code_generator._paths import absolute_form
 from datamodel_code_generator._python_syntax import (
     _normalize_string,
     _single_line_docstring,
@@ -136,7 +137,7 @@ from datamodel_code_generator.python_literal import (
     stable_pformat,
     stable_repr,
 )
-from datamodel_code_generator.reference import Reference, _BaseModel
+from datamodel_code_generator.reference import FIELD_ORIGIN_KEY, FieldOrigin, Reference, _BaseModel
 from datamodel_code_generator.types import (
     ANY,
     NONE,
@@ -168,8 +169,9 @@ if TYPE_CHECKING:
         RenderInputs,
         RenderReady,
     )
-    from datamodel_code_generator.model._views import FieldView, ModelForm
     from datamodel_code_generator.python_literal import PythonRuntimeExpression
+    from datamodel_code_generator.reference import FieldOriginKind, SchemaLocation
+    from datamodel_code_generator.types import ModelForm
 
 TEMPLATE_DIR: Path = Path(__file__).parents[0] / "template"
 
@@ -195,6 +197,7 @@ _MAX_MISSING_CUSTOM_TEMPLATE_SUBDIRS = 128
 _MAX_CUSTOM_TEMPLATE_SIGNATURES = 128
 _MAX_CUSTOM_TEMPLATE_DEPENDENCIES = 128
 _ORIGINAL_TEMPLATE_LOADER_MARKER = "__datamodel_code_generator_original_template_loader__"
+_COMPILED_PATTERN_KEY = "_compiled_python_pattern"
 _NESTED_MODEL_DEFAULT_FACTORY_ORDER_KEY = "_nested_model_default_factory_order"
 _NESTED_MODEL_DEFAULT_FACTORY_RECURSIVE_KEYS_KEY = "_nested_model_default_factory_recursive_keys"
 _PATH_PARTNER_KEY = "_path_partner_model_key"
@@ -1391,6 +1394,17 @@ class DataModelFieldBase(_BaseModel):  # noqa: PLR0904
         self.invalidate_semantic_caches()
 
 
+def _with_field_origin(
+    field: DataModelFieldBase, kind: FieldOriginKind, location: SchemaLocation | None
+) -> DataModelFieldBase:
+    """Record that ``field`` is built as ``kind`` from the schema object at ``location``, replacing a record.
+
+    The parser's builders record it when they build the field (FIELD_ORIGIN, ``reference.py:field_origin_of``).
+    """
+    field.__dict__[FIELD_ORIGIN_KEY] = FieldOrigin(kind, location)
+    return field
+
+
 def _apply_literal_default(field: DataModelFieldBase, decision: LiteralDefault) -> None:
     """Write what ``decide_literal_default`` decides for a field fixed to one value; the field keeps the rest."""
     if decision.writes_default:
@@ -2281,6 +2295,16 @@ class BaseLayoutView(NamedTuple):
     is_opaque: Callable[[DataModel], bool]
 
 
+def _is_instance_field(field: DataModelFieldBase) -> bool:
+    """Return whether a field takes a slot of its struct, unlike the class variable a msgspec tag field becomes."""
+    return not field.is_class_var
+
+
+def _same_model(model: DataModel) -> DataModel:
+    """Return the model itself as the model whose layout it has."""
+    return model
+
+
 def _model_written(field: DataModelFieldBase, *, keeps_none: bool = False) -> ModelWritten:
     """Return the written assignment of a field as the neutral rule reads it: its call, declared factory and default."""
     return ModelWritten(
@@ -2338,7 +2362,12 @@ def _classify_field_assignment(
     return classify_assignment(_assignment_inputs(field, row, written))
 
 
-def _field_source_name(field: FieldView) -> str | None:
+def _model_of_reference(reference: Reference) -> DataModel | None:
+    """Return the model a reference names, as the written output holds it, or None when it names no model."""
+    return source if isinstance(source := reference.source, DataModel) else None
+
+
+def _field_source_name(field: DataModelFieldBase) -> str | None:
     """Return the name the schema gives the field: its original name, else its name."""
     return field.original_name if field.original_name is not None else field.name
 
@@ -2559,6 +2588,10 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
     def _declares_inherited_fields(self) -> bool:  # noqa: PLR6301
         """Return whether the model declares the fields of its bases itself (`_KEEPS_INHERITED_FIELD_TYPES`)."""
         return False
+
+    def keeps_inherited_field_types(self) -> bool:
+        """Return whether a subclass declares an inherited field as its bases do (`_KEEPS_INHERITED_FIELD_TYPES`)."""
+        return self._KEEPS_INHERITED_FIELD_TYPES
 
     @staticmethod
     def _base_layout_key(field: DataModelFieldBase) -> object:
@@ -3253,7 +3286,7 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
         template_adapter = self.CUSTOM_TEMPLATE_ADAPTER if self._custom_template_dir is not None else None
         if self._uses_custom_root_template:
             return _get_template_with_absolute_path(
-                resolved_path.absolute(),
+                absolute_form(resolved_path),
                 Path(self.TEMPLATE_FILE_PATH).parent,
                 template_adapter,
                 self._custom_template_dir,
@@ -3264,7 +3297,7 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
     def imports(self) -> tuple[Import, ...]:
         """Get all imports required by this model and its fields: the fields' kept imports, then the model's own."""
         return chain_as_tuple(
-            (i for f in self.fields for i in field_imports(f)),
+            (i for f in self._class_body_fields() for i in field_imports(f)),
             self._additional_imports,
         )
 
@@ -3536,16 +3569,18 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
         """
         return None
 
-    def _write_additional_properties_type(self, data_type: DataType) -> None:
+    def _write_additional_properties_type(
+        self, data_type: DataType, *, reference_classes: set[str] | None = None
+    ) -> None:
         """Write ``data_type`` as the type of the additional properties, with its imports, as the settings render it.
 
-        The classes it names stay those recorded for the additional properties. ``GenerationStore`` runs it
-        (``replace_additional_properties_type``).
+        The classes it names are ``reference_classes``, or stay those recorded for the additional properties.
+        ``GenerationStore`` runs it (``replace_additional_properties_type``).
         """
         self.store_additional_properties_type(
             self.extra_template_data,
             _make_referencing_type_expression(data_type),
-            set(self.additional_properties_reference_classes),
+            set(self.additional_properties_reference_classes) if reference_classes is None else reference_classes,
             imports=tuple(data_type.all_imports),
         )
         self._name_final_classes()
@@ -3786,14 +3821,15 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
     @property
     def _custom_template_fields(self) -> Sequence[DataModelFieldBase | _RenderedDataModelField]:
         """Return custom-template fields, allocating proxies only when escaping changes a docstring."""
+        fields = self._class_body_fields()
         if not any(
             field.use_field_description or field.use_field_description_example or field.use_inline_field_description
-            for field in self.fields
+            for field in fields
         ):
-            return self.fields
+            return fields
 
         rendered_fields: list[DataModelFieldBase | _RenderedDataModelField] | None = None
-        for index, field in enumerate(self.fields):
+        for index, field in enumerate(fields):
             if (docstring := field.docstring) is None or (
                 escaped_docstring := escape_docstring(docstring)
             ) == docstring:
@@ -3803,9 +3839,9 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
 
             if rendered_fields is None:
                 rendered_fields = []
-                rendered_fields.extend(self.fields[:index])
+                rendered_fields.extend(fields[:index])
             rendered_fields.append(_RenderedDataModelField(field, escaped_docstring or ""))
-        return self.fields if rendered_fields is None else rendered_fields
+        return fields if rendered_fields is None else rendered_fields
 
     def _template_fields(self, *, use_custom_template: bool) -> Sequence[DataModelFieldBase | _RenderedDataModelField]:
         """Return fields in the representation expected by the selected template, their plans rebuilt if changed."""
@@ -3851,8 +3887,12 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
         """Return fields with docstrings prepared for built-in templates."""
         return [
             _RenderedDataModelField(field, self._format_docstring(field.docstring, self.FIELD_DOCSTRING_INDENT))
-            for field in self.fields
+            for field in self._class_body_fields()
         ]
+
+    def _class_body_fields(self) -> list[DataModelFieldBase]:
+        """Return the fields the class body writes: the model's own."""
+        return self.fields
 
 
 def _model_package_class(cls: type) -> bool:
@@ -4165,14 +4205,19 @@ def get_effective_fields(model: DataModel) -> tuple[DataModelFieldBase, ...]:
 
 def get_inherited_fields(models: list[DataModel]) -> dict[str, DataModelFieldBase]:
     """Build one effective field lookup with exact original names taking priority."""
-    original_names: dict[str, DataModelFieldBase] = {}
-    generated_names: dict[str, DataModelFieldBase] = {}
+    return {name: field for name, (_, field) in _inherited_field_owners(models).items()}
+
+
+def _inherited_field_owners(models: list[DataModel]) -> dict[str, tuple[DataModel, DataModelFieldBase]]:
+    """Return the lookup of `get_inherited_fields` with the model that declares each field."""
+    original_names: dict[str, tuple[DataModel, DataModelFieldBase]] = {}
+    generated_names: dict[str, tuple[DataModel, DataModelFieldBase]] = {}
     for model in linearize_data_models(models):
         for field in model.fields:
             if field.original_name is not None:
-                original_names.setdefault(field.original_name, field)
+                original_names.setdefault(field.original_name, (model, field))
             if field.name is not None:
-                generated_names.setdefault(field.name, field)
+                generated_names.setdefault(field.name, (model, field))
     generated_names.update(original_names)
     return generated_names
 

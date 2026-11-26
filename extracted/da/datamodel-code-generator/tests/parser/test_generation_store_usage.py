@@ -300,7 +300,7 @@ def enclosing(field):
 
 
 def test_dict_key_writes_of_model_code(tmp_path: Path) -> None:
-    """Model code writes its own keys through ``self``; a cached property writes its name."""
+    """Model code writes its own keys through ``self``; a cached property is heki's (the cache contract forbids it)."""
     source = tmp_path / "model.py"
     source.write_text(
         """
@@ -326,11 +326,7 @@ class Field:
 """,
     )
 
-    assert _key_writes(source, "model") == snapshot("""\
-10 Field.path path
-7 Field.mark _marked
-19 Field.Inner.nested nested
-""")
+    assert _key_writes(source, "model") == snapshot("7 Field.mark _marked\n")
 
 
 def test_checker_uses_generation_store_api_surface() -> None:
@@ -352,6 +348,7 @@ def test_checker_uses_generation_store_api_surface() -> None:
             "detach_model_data_type_refs",
             "discard_derived_facts",
             "drop_field_discriminator",
+            "drop_field_extra",
             "drop_held_null",
             "drop_union_member_constraints",
             "drop_union_operator",
@@ -361,14 +358,17 @@ def test_checker_uses_generation_store_api_surface() -> None:
             "mark_forward_references",
             "mark_serialized_as_any",
             "mark_target_null",
+            "name_additional_properties_classes",
             "name_enum_member",
             "name_enum_member_literal_class",
             "name_reference",
             "note_changed_models",
             "omit_field_default",
             "override_type_import",
+            "record_alias_resolution_scope",
             "record_dropped_multiple_of",
             "record_nullable_without_default",
+            "record_raw_schema_default",
             "record_site_constraints",
             "record_values_as_written",
             "record_widened_values",
@@ -469,7 +469,7 @@ def test_fact_vocabulary_and_table_shape() -> None:
         "MemberUse": ("CALL", "READ", "WRITE"),
     })
     assert Counter(row.kind for row in checker.ATTRIBUTE_FACTS) == snapshot(
-        Counter({"FACT": 75, "PRESENTATION": 59, "BOOKKEEPING": 33, "CACHE": 11})
+        Counter({"FACT": 75, "PRESENTATION": 60, "BOOKKEEPING": 33, "CACHE": 11})
     )
     assert sorted({row.owner for row in checker.ATTRIBUTE_FACTS}) == snapshot([
         "AnnotatedConstraintDataType",

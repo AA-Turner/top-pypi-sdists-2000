@@ -127,12 +127,13 @@ impl<'db> BoundMethodType<'db> {
         func: Type<'db>,
         program: Program<'db>,
         receiver: Type<'db>,
+        kind: CallableTypeKind,
     ) -> Self {
         Self::new_internal(
             db,
-            func.underlying_function(db),
+            func,
             program,
-            func.is_classmethod(db),
+            kind == CallableTypeKind::ClassMethodLike,
             BoundMethodReceiver::Instance(receiver),
         )
     }
@@ -165,9 +166,10 @@ impl<'db> BoundMethodType<'db> {
     pub(crate) fn new(db: &'db dyn Db, function: FunctionType<'db>, receiver: Type<'db>) -> Self {
         Self::from_callable(
             db,
-            Type::FunctionLiteral(function),
+            Type::FunctionLiteral(function.underlying_function(db)),
             function.program_file(db).program(db),
             receiver,
+            function.callable_type_kind(db),
         )
     }
 
@@ -354,6 +356,9 @@ impl<'c, 'db> TypeRelationChecker<'_, 'c, 'db> {
         // Diagnostics retain the original order so signature mismatches keep their context.
         let receiver_constraints = (!self.is_context_collection_enabled())
             .then(|| self.check_type_pair(db, source.self_instance(db), target.self_instance(db)));
+        if receiver_constraints.is_some_and(ConstraintSet::is_budget_exceeded) {
+            return ConstraintSet::BudgetExceeded;
+        }
         if receiver_constraints.is_some_and(ConstraintSet::is_trivially_never_satisfied) {
             return self.never();
         }
@@ -911,7 +916,7 @@ impl<'c, 'db> TypeRelationChecker<'_, 'c, 'db> {
             ) => self.check_property_instance_pair(db, source_property, target_property),
 
             (KnownBoundMethodType::StrStartswith(_), KnownBoundMethodType::StrStartswith(_)) => {
-                ConstraintSet::from_bool(self.constraints, source == target)
+                self.when(source == target)
             }
 
             (

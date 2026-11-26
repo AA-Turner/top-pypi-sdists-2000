@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 import subprocess
@@ -13,7 +14,7 @@ import pytest
 import yaml
 
 from scripts._source_model import SourceModule, bases
-from scripts.ci_coverage import EXPECTED_NAMES, PULL_REQUEST_NAMES
+from scripts.ci_coverage import EXPECTED_NAMES
 from scripts.select_ci_test_shard import PROFILES
 from tests.conftest import assert_output
 
@@ -27,13 +28,43 @@ MISSING_TARGETS_MESSAGE = (
 )
 
 
+def _job_count(matrix: dict[str, list[str]]) -> int:
+    """Return how many jobs a job without an ``include`` matrix runs: the product of its matrix axes, else one."""
+    return math.prod(len(axis) for axis in matrix.values())
+
+
+def _skip_value_checks_condition(steps: list[dict[str, str]]) -> str:
+    """Return the expression of the sharded run step that passes ``--skip-value-checks`` when it is true."""
+    run_step = next(step for step in steps if step.get("name") == "Run sharded test suite")
+    return re.findall(r'if \[ "\$\{\{ (.+?) \}\}" = "true" \]; then\n\s+value_check_args=', run_step["run"])[0]
+
+
+def _value_check_shards(groups: dict[str, list[dict[str, str]]]) -> dict[str, int]:
+    """Return, per job, tox environment and runner, how many shards keep the value checks on in a pull request."""
+    kept = [
+        (name, entry)
+        for name in ("test-shard", "test-shard-nocov", "test-shard-nocov-main")
+        for entry in groups[name]
+        if entry["coverage"] == "true" and entry["tox_env"] == "py314-parallel"
+    ]
+    return {
+        f"{name}:{entry['tox_env']}:{entry['os']}": sum(
+            other["tox_env"] == entry["tox_env"] and other["os"] == entry["os"] for other in groups[name]
+        )
+        for name, entry in kept
+    }
+
+
 def test_workflow_matrix_and_coverage_contract() -> None:
     """Changing dependency groups must preserve every existing test environment."""
     workflow = yaml.load((ROOT / ".github/workflows/test.yaml").read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
     jobs = workflow["jobs"]
-    groups = {name: job["strategy"]["matrix"]["include"] for name, job in jobs.items() if "strategy" in job}
+    groups = {
+        name: job["strategy"]["matrix"]["include"]
+        for name, job in jobs.items()
+        if "include" in job.get("strategy", {}).get("matrix", {})
+    }
     names = []
-    main_only_names = set()
     producers = []
     for name, entries in groups.items():
         for entry in entries:
@@ -43,8 +74,6 @@ def test_workflow_matrix_and_coverage_contract() -> None:
             env = entry.get("coverage_name", entry["tox_env"])
             shard = f"-shard{entry['shard']}" if "shard" in entry else ""
             names.append(f".coverage.{env}{shard}-{entry.get('os', 'ubuntu-24.04')}")
-            if jobs[name].get("if") == MAIN_ONLY_IF:
-                main_only_names.add(names[-1])
     main_only_jobs = sorted(name for name, job in jobs.items() if job.get("if") == MAIN_ONLY_IF)
     configurations = sorted(
         f"{entry['tox_env']}:{entry.get('os', 'ubuntu-24.04')}:{entry.get('shard', '')}/{entry.get('shard_total', '')}"
@@ -52,7 +81,7 @@ def test_workflow_matrix_and_coverage_contract() -> None:
         for entries in groups.values()
         for entry in entries
     )
-    shard_entries = [entry for name in ("test-shard", "test-shard-main", "test-shard-nocov") for entry in groups[name]]
+    shard_entries = [entry for name in ("test-shard", "test-shard-nocov") for entry in groups[name]]
     shard_groups: dict[tuple[str, str, str, str], list[tuple[int, int]]] = {}
     for name, entries in groups.items():
         for entry in entries:
@@ -62,13 +91,18 @@ def test_workflow_matrix_and_coverage_contract() -> None:
     all_setup_steps = [step for job in jobs.values() for step in job["steps"] if "setup-uv@" in step.get("uses", "")]
     output = {
         "configurations": sorted(configurations),
-        "job_count": len(configurations) + sum("strategy" not in job for job in jobs.values()),
+        "job_count": len(configurations)
+        + sum(
+            _job_count(job.get("strategy", {}).get("matrix", {})) for name, job in jobs.items() if name not in groups
+        ),
         "extra_tests": sorted(
             f"{entry['tox_env']}:shard{entry['shard']}:{entry['extra_tests']}"
             for entries in groups.values()
             for entry in entries
             if entry.get("extra_tests")
         ),
+        "skip_value_checks_in_pull_request": _skip_value_checks_condition(jobs["test-shard"]["steps"]),
+        "value_check_shards_in_pull_request": _value_check_shards(groups),
         "shard_profile_mapping": jobs["test-shard"]["env"]["SHARD_PROFILE"],
         "shards_complete": all(
             sorted(shards) == [(index, len(shards)) for index in range(1, len(shards) + 1)]
@@ -83,7 +117,7 @@ def test_workflow_matrix_and_coverage_contract() -> None:
         "coverage_count": len(names),
         "coverage_unique": len(set(names)),
         "expected_names_match": set(names) == EXPECTED_NAMES,
-        "main_only_names_match": main_only_names == EXPECTED_NAMES - PULL_REQUEST_NAMES,
+        "coverage_producers_run_in_pull_requests": all(jobs[name].get("if") != MAIN_ONLY_IF for name in producers),
         "main_only_jobs": main_only_jobs,
         "gate_main_only_jobs_match": jobs["test-gate"]["steps"][0]["env"]["MAIN_ONLY_JOBS"]
         == f"${{{{ github.event_name == 'pull_request' && '{' '.join(main_only_jobs)}' || '' }}}}",
@@ -98,8 +132,7 @@ def test_workflow_matrix_and_coverage_contract() -> None:
         "cache_paths": sorted({step["with"]["cache-local-path"] for step in all_setup_steps}),
         "cache_dependencies": sorted({step["with"]["cache-dependency-glob"] for step in all_setup_steps}),
         "shared_shard_steps": all(
-            jobs[name]["steps"] is jobs["test-shard"]["steps"]
-            for name in ("test-shard-main", "test-shard-nocov", "test-shard-nocov-main")
+            jobs[name]["steps"] is jobs["test-shard"]["steps"] for name in ("test-shard-nocov", "test-shard-nocov-main")
         ),
         "shared_http_steps": jobs["test-http-backends"]["steps"] is jobs["test-http-backends-nocov"]["steps"],
         "checkout_credentials": sorted({

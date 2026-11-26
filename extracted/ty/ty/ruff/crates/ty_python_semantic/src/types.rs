@@ -96,9 +96,7 @@ use crate::types::function::{
 pub(crate) use crate::types::generics::GenericContext;
 use crate::types::generics::{ApplySpecialization, Specialization, bind_typevar};
 use crate::types::infer::InferenceFlags;
-use crate::types::known_instance::{
-    FieldInstanceKind, InternedConstraintSet, InternedType, SentinelInstance,
-};
+use crate::types::known_instance::{InternedConstraintSet, InternedType, SentinelInstance};
 pub use crate::types::method::{BoundMethodType, KnownBoundMethodType, WrapperDescriptorKind};
 use crate::types::mro::{MroIterator, StaticMroError};
 pub(crate) use crate::types::narrow::{NarrowingConstraint, infer_narrowing_constraints};
@@ -560,6 +558,11 @@ pub(crate) struct ApplyTypeMappingVisitor<'env, 'db> {
     /// Whether materialization also transforms type-variable bounds and defaults.
     materialize_typevar_bounds_and_defaults: bool,
     default: OnceCell<Box<TypeTransformer<'db, ApplyTypeMappingTag>>>,
+    /// Transforms argument hints in contravariant positions, such as callback inputs.
+    /// If sibling inference leaves `T` unsolved, these positions can still use
+    /// the full call's binding for `T`. The default transformer caches by type
+    /// alone, so reusing it could give both positions the same substitution.
+    flipped_argument_transformer: OnceCell<Box<TypeTransformer<'db, ApplyTypeMappingTag>>>,
     top_materialization: OnceCell<Box<TypeTransformer<'db, ApplyTypeMappingTag>>>,
     bottom_materialization: OnceCell<Box<TypeTransformer<'db, ApplyTypeMappingTag>>>,
     top_specialization_materialization: OnceCell<Box<TypeTransformer<'db, ApplyTypeMappingTag>>>,
@@ -579,6 +582,7 @@ impl<'env, 'db> ApplyTypeMappingVisitor<'env, 'db> {
             recursion_context: None,
             materialize_typevar_bounds_and_defaults: true,
             default: OnceCell::default(),
+            flipped_argument_transformer: OnceCell::default(),
             top_materialization: OnceCell::default(),
             bottom_materialization: OnceCell::default(),
             top_specialization_materialization: OnceCell::default(),
@@ -616,6 +620,10 @@ impl<'env, 'db> ApplyTypeMappingVisitor<'env, 'db> {
         func: impl FnOnce() -> Type<'db>,
     ) -> Type<'db> {
         let type_transformer = match type_mapping {
+            TypeMapping::ApplySpecialization(ApplySpecialization::ArgumentHint {
+                flipped: true,
+                ..
+            }) => &self.flipped_argument_transformer,
             TypeMapping::Materialize(MaterializationKind::Top) => &self.top_materialization,
             TypeMapping::Materialize(MaterializationKind::Bottom) => &self.bottom_materialization,
             TypeMapping::ApplySpecializationWithMaterialization {
@@ -3767,10 +3775,11 @@ impl<'db> Type<'db> {
         target: Type<'db>,
         inferable: TypeVarSet<'db>,
     ) -> DiscardDisjointUnionElementsResult<'db> {
-        let constraints = ConstraintSetBuilder::new();
+        let builder = ConstraintSetBuilder::new();
+        let constraints = builder.unlimited();
         let filtered = self.filter_union(db, env, |elem| {
             !elem
-                .when_disjoint_from(db, env, target, &constraints, inferable)
+                .when_disjoint_from(db, env, target, constraints, inferable)
                 .is_always_satisfied(db, env, inferable)
         });
         if filtered.is_never() && !self.is_never() {
@@ -4595,7 +4604,13 @@ impl<'db> Type<'db> {
     ) -> PlaceAndQualifiers<'db> {
         Self::class_member_with_policy_inner(
             db,
-            MemberLookupKey::new(db, env.program(db), self, name, policy),
+            MemberLookupKey::new(
+                db,
+                env.program(db),
+                self.literal_member_representative(name).unwrap_or(self),
+                name,
+                policy,
+            ),
         )
     }
 
@@ -4721,6 +4736,16 @@ impl<'db> Type<'db> {
         }
     }
 
+    /// Share the raw class member across ordinary literals. The descriptor
+    /// still binds to the original value, and `__len__` uses the literal's length.
+    fn literal_member_representative(self, name: &str) -> Option<Self> {
+        match self.as_literal_value()?.kind() {
+            LiteralValueTypeKind::String(_) if name != "__len__" => Some(Self::literal_string()),
+            LiteralValueTypeKind::Int(_) => Some(Self::int_literal(0)),
+            _ => None,
+        }
+    }
+
     /// A protocol's implicit `__hash__ = None` belongs to the protocol class itself.
     /// A structural implementation can provide a hash or disable hashing.
     fn unspecified_protocol_hash(
@@ -4776,6 +4801,9 @@ impl<'db> Type<'db> {
             }
         }
 
+        if let Some(literal) = ty.literal_member_representative(key.name(db)) {
+            return literal.class_member_with_policy(db, env, key.name(db), key.policy(db));
+        }
         Self::class_member_with_policy_inner(db, key)
     }
 
@@ -6852,8 +6880,7 @@ impl<'db> Type<'db> {
 
                 // attrs defines the methods `validator` and `default` on field instances.
                 Type::KnownInstance(KnownInstanceType::Field(field))
-                    if matches!(name_str, "validator" | "default")
-                        && field.kind(db) == FieldInstanceKind::Attrs =>
+                    if matches!(name_str, "validator" | "default") && field.kind(db).is_attrs() =>
                 {
                     Place::bound(dedicated::attrs::generic_identity_function(db, env)).into()
                 }
@@ -12036,9 +12063,15 @@ impl<'db> TypeMapping<'_, 'db> {
                 specialization: *specialization,
                 materialization_kind: materialization_kind.flip(),
             },
+            TypeMapping::ApplySpecialization(hint) => {
+                let mut hint = *hint;
+                if let ApplySpecialization::ArgumentHint { flipped, .. } = &mut hint {
+                    *flipped = !*flipped;
+                }
+                TypeMapping::ApplySpecialization(hint)
+            }
             TypeMapping::Promote(mode, kind) => TypeMapping::Promote(mode.flip(), *kind),
-            TypeMapping::ApplySpecialization(_)
-            | TypeMapping::ApplyRecursiveSubstitution(_)
+            TypeMapping::ApplyRecursiveSubstitution(_)
             | TypeMapping::BindLegacyTypevars(_)
             | TypeMapping::FreshenBoundTypeVars { .. }
             | TypeMapping::BindSelf(..)

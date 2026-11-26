@@ -61,10 +61,10 @@ from datamodel_code_generator.model.base import (
     _effective_field_owners,
     _field_source_name,
     _find_base_classes,
+    _inherited_field_owners,
     _ModelKeys,
     _written_name,
     direct_base_models,
-    get_inherited_fields,
     linearize_data_models,
     python_base_classes,
     sort_data_models_for_mro,
@@ -102,7 +102,6 @@ from datamodel_code_generator.types import (
     DefaultValueRecipe,
     _sole_member,
     _union_members,
-    _UnionNodeT,
     union_members,
 )
 
@@ -119,9 +118,8 @@ if TYPE_CHECKING:
     from datamodel_code_generator.imports import Imports
     from datamodel_code_generator.model._decisions.tag_value import EnumTagMembers, FieldTagSite, TagFieldMatch
     from datamodel_code_generator.model._render_plan import AssignmentFacts
-    from datamodel_code_generator.model._views import DataTypeView, FieldView, ModelView, ReferenceView
     from datamodel_code_generator.model.base import DataModelFieldBase
-    from datamodel_code_generator.parser._field_rows import FieldCopyFacts, FieldIdentity
+    from datamodel_code_generator.parser._field_rows import FieldCopyFacts, FieldIdentity, InheritedCopyOptions
     from datamodel_code_generator.parser._graph_ids import KeyedModels
     from datamodel_code_generator.parser._imports_plan import ModuleImportLedger
     from datamodel_code_generator.parser._model_shapes import BaseDedup, ModelShapes, ReuseGroups, ShapeRow
@@ -131,7 +129,7 @@ if TYPE_CHECKING:
     from datamodel_code_generator.reference import ModelResolver
     from datamodel_code_generator.types import DataTypeManager, DefaultValueDescriptor
 
-ModelT = TypeVar("ModelT", bound="ModelView")
+ModelT = TypeVar("ModelT", bound="DataModel")
 
 
 def with_dedupe_request_response_hint(message: str) -> str:
@@ -208,7 +206,7 @@ def follow_type_aliases(data_type: Any, alias_of: Callable[[Any], Any]) -> Any:
 
 
 def required_fields_a_default_lacks(
-    field: FieldView, model_of: Callable[[ReferenceView], ModelT | None]
+    field: DataModelFieldBase, model_of: Callable[[Reference], ModelT | None]
 ) -> tuple[ModelT, list[str]] | None:
     """Return the model a field's object default cannot be, with the names of its required fields the default lacks.
 
@@ -220,10 +218,10 @@ def required_fields_a_default_lacks(
     if requires_value(field) or not isinstance(default := field.default, dict):
         return None
 
-    def alias_of(reference: ReferenceView) -> ModelView | None:
+    def alias_of(reference: Reference) -> DataModel | None:
         return model if (model := model_of(reference)) is not None and model.form == "alias" else None
 
-    data_type: DataTypeView = follow_type_aliases(field.data_type, alias_of)
+    data_type: DataType = follow_type_aliases(field.data_type, alias_of)
     if data_type._writes_nothing_of_its_own:
         if (member := _sole_member(data_type.data_types)) is None:
             return None
@@ -508,6 +506,10 @@ class InheritedFieldHost(Protocol):
         """The generation store of the parse."""
 
     @property
+    def keep_bases_of_typed_dicts_listed_before_their_parents(self) -> bool:
+        """Whether a TypedDict resolves the unresolved placeholder of a base (``_reads_through_unresolved_bases``)."""
+
+    @property
     def model_resolver(self) -> ModelResolver:
         """The resolver of model and field names."""
 
@@ -515,10 +517,7 @@ class InheritedFieldHost(Protocol):
         self,
         field: DataModelFieldBase,
         inherited_field: DataModelFieldBase,
-        *,
-        force_optional: bool,
-        partial_merge_mode: AllOfMergeMode,
-        reserved_names: set[str],
+        **options: Unpack[InheritedCopyOptions],
     ) -> DataModelFieldBase | None:
         """Copy a deferred inherited field, or return None when it is not deferred."""
 
@@ -761,15 +760,73 @@ def _inherited_placeholder_name(field: DataModelFieldBase) -> str | None:
     return field.original_name
 
 
+def _reads_through_unresolved_bases(host: InheritedFieldHost, model: DataModel) -> bool:
+    """Return whether ``model`` resolves a base's placeholder that its own module has not resolved yet (#7532).
+
+    The base's module is processed after the module of ``model``, so its placeholder has no type yet; its own bases
+    give the field it takes there. Row ``legacy-typed-dicts-copy-unresolved-parent-placeholders``, a TypedDict without
+    ``--keep-bases-of-typed-dicts-listed-before-their-parents``, copies the base's placeholder instead, as 0.102.0
+    does: the copy has no type and narrows the base's key, so the cross-module flatten makes the TypedDict declare the
+    keys of its bases, and a TypedDict that keeps its bases types the key None.
+    """
+    row: Literal["read-through", "legacy-typed-dicts-copy-unresolved-parent-placeholders"] = (
+        "legacy-typed-dicts-copy-unresolved-parent-placeholders"
+        if model.keeps_inherited_field_types() and not host.keep_bases_of_typed_dicts_listed_before_their_parents
+        else "read-through"
+    )
+    return row != "legacy-typed-dicts-copy-unresolved-parent-placeholders"
+
+
+def _resolves_placeholders(host: InheritedFieldHost, model: DataModel) -> bool:
+    """Return whether ``override_required_field`` resolves the placeholders of ``model``: not an enum or root model."""
+    return not (isinstance(model, Enum) or host._is_root_model(model))
+
+
+def _inherited_declaration(
+    host: InheritedFieldHost,
+    model: DataModel,
+    name: str,
+    inherited_fields: Mapping[str, tuple[DataModel, DataModelFieldBase]],
+) -> tuple[DataModelFieldBase, list[tuple[DataModelFieldBase, set[str]]]] | None:
+    """Return the field ``model`` inherits under ``name`` and the placeholders its copy resolves first, else None.
+
+    None where no base declares the field. ``inherited_fields`` holds the fields of the bases of ``model`` with the
+    model that declares each. Where ``model`` reads through unresolved bases, a base's placeholder is resolved through
+    that base's own bases by the step its own module takes, without writing the base: each such placeholder comes with
+    the field names of its model, the innermost first, and ``override_required_field`` copies it onto the field before
+    it. A model the resolution already came through takes the placeholder, so an inheritance cycle ends there.
+    """
+    placeholders: list[tuple[DataModelFieldBase, set[str]]] = []
+    path = {id(model)}
+    subclass, key, fields = model, name, inherited_fields
+    while (inherited := fields.get(key)) is not None:
+        owner, field = inherited
+        if (
+            (owner_name := _inherited_placeholder_name(field)) is None
+            or id(owner) in path
+            or not _resolves_placeholders(host, owner)
+            or not _reads_through_unresolved_bases(host, subclass)
+        ):
+            return field, placeholders[::-1]
+        placeholders.append((field, {owner_field.name for owner_field in owner.fields if owner_field.name}))
+        path.add(id(owner))
+        subclass, key, fields = owner, owner_name, _inherited_field_owners(_find_base_classes(owner))
+    return None
+
+
 def override_required_field(
     host: InheritedFieldHost,
     models: list[DataModel],
 ) -> None:
-    """Replace the placeholder fields that name an inherited property by copies of the inherited fields."""
+    """Replace the placeholder fields that name an inherited property by copies of the inherited fields.
+
+    Only the copy that replaces a model's own placeholder registers the references its types name; the copies of the
+    placeholders of its bases that it resolves first (``_inherited_declaration``) are read by the next copy alone.
+    """
     pending_models = (
         model
         for model in models
-        if not (isinstance(model, Enum) or host._is_root_model(model))
+        if _resolves_placeholders(host, model)
         and any(_inherited_placeholder_name(field) is not None for field in model.fields)
     )
     if (first_model := next(pending_models, None)) is None:
@@ -780,7 +837,8 @@ def override_required_field(
     for model in chain((first_model,), pending_models):
         resolved_fields: list[DataModelFieldBase] = []
         reserved_names = {field.name for field in model.fields if field.name}
-        inherited_fields = get_inherited_fields(_find_base_classes(model))
+        inherited_fields = _inherited_field_owners(_find_base_classes(model))
+        declarations = {name: field for name, (_, field) in inherited_fields.items()}
         pending_fields = model.fields
         pending_fields.reverse()
         builder.set_fields(model, [])
@@ -792,39 +850,46 @@ def override_required_field(
                 continue
 
             _detach_deferred_inherited_field_parents(model_field)
-            original_field = inherited_fields.get(original_name)
-            if not original_field:
+            if (inherited := _inherited_declaration(host, model, original_name, inherited_fields)) is None:
                 continue
-            if (
-                copied_original_field := host._copy_inherited_field(
-                    model_field,
-                    original_field,
-                    force_optional=host.force_optional_for_required_fields,
-                    partial_merge_mode=host.allof_merge_mode,
-                    reserved_names=reserved_names,
-                )
-            ) is None:
-                copied_original_field = host._copy_model_field(
-                    original_field, identity=placeholder_identity(model_field), required=True
-                )
-            default_source = original_field
-            if not (scope := model_field.__dict__.get(_DEFERRED_INHERITED_FIELD_KEY)) and (
-                scope := model_field.__dict__.get(_DEFERRED_INHERITED_CLASS_KEY)
-            ):
-                default_source = inherited_default_source(host.allof_merge_mode, model_field, original_field)
-            if scope:
-                apply_inherited_field_default(
-                    copied_original_field,
-                    default_source,
-                    scope=scope,
-                    model_resolver=host.model_resolver,
-                    apply_default_values_for_required_fields=host.apply_default_values_for_required_fields,
-                )
-            elif host.apply_default_values_for_required_fields and copied_original_field.has_default:
-                copied_original_field.use_default_with_required = True
-            resolved_fields.append(copied_original_field)
+            original_field, placeholders = inherited
+            for placeholder, names in (*placeholders, (model_field, reserved_names)):
+                declarations[original_name] = original_field
+                if (
+                    copied_original_field := host._copy_inherited_field(
+                        placeholder,
+                        original_field,
+                        force_optional=host.force_optional_for_required_fields,
+                        partial_merge_mode=host.allof_merge_mode,
+                        reserved_names=names,
+                        register_references=placeholder is model_field,
+                    )
+                ) is None:
+                    copied_original_field = host._copy_model_field(
+                        original_field,
+                        identity=placeholder_identity(placeholder),
+                        required=True,
+                        register_references=placeholder is model_field,
+                    )
+                default_source = original_field
+                if not (scope := placeholder.__dict__.get(_DEFERRED_INHERITED_FIELD_KEY)) and (
+                    scope := placeholder.__dict__.get(_DEFERRED_INHERITED_CLASS_KEY)
+                ):
+                    default_source = inherited_default_source(host.allof_merge_mode, placeholder, original_field)
+                if scope:
+                    apply_inherited_field_default(
+                        copied_original_field,
+                        default_source,
+                        scope=scope,
+                        model_resolver=host.model_resolver,
+                        apply_default_values_for_required_fields=host.apply_default_values_for_required_fields,
+                    )
+                elif host.apply_default_values_for_required_fields and copied_original_field.has_default:
+                    copied_original_field.use_default_with_required = True
+                original_field = copied_original_field
+            resolved_fields.append(original_field)
         if model.REQUIRES_UNIQUE_FIELD_ALIASES:
-            _restore_inherited_field_names_for_unique_aliases(builder, resolved_fields, inherited_fields)
+            _restore_inherited_field_names_for_unique_aliases(builder, resolved_fields, declarations)
         builder.set_fields(model, resolved_fields)
 
 
@@ -1360,12 +1425,12 @@ def _is_discriminator_wrapper(model: DataModel) -> bool:
     return model.IS_ALIAS or model.IS_ROOT_MODEL
 
 
-def msgspec_union_members(data_type: _UnionNodeT) -> Sequence[_UnionNodeT]:
+def msgspec_union_members(data_type: DataType) -> Sequence[DataType]:
     """Return the members of the union a type writes: its own, or the items of a list, set or map of several types.
 
     Such a container writes its items as a union inside it; the items of a tuple are its positions instead. The msgspec
-    decoding warnings (``imports.py:warn_about_msgspec_decoding``) read it for a ``DataType``, the decision of
-    ``--merge-msgspec-str-like-union-members`` (``parser/_str_like_unions.py``) for a view of one.
+    decoding warnings (``imports.py:warn_about_msgspec_decoding``) and the decision of
+    ``--merge-msgspec-str-like-union-members`` (``parser/_str_like_unions.py``) read it.
     """
     if members := _union_members(data_type):
         return members
@@ -1914,7 +1979,7 @@ def _set_item_facts(data_type: DataType, sets: Collection[int], reading: _PlanRe
     return facts[0]
 
 
-def _tuple_positions_end(data_type: DataTypeView) -> int | None:
+def _tuple_positions_end(data_type: DataType) -> int | None:
     """Return where the positions of a tuple type that a set item reading reads end.
 
     It reads every position of a tuple of any length, and the first of a tuple of a fixed length.
@@ -1922,7 +1987,7 @@ def _tuple_positions_end(data_type: DataTypeView) -> int | None:
     return None if (count := data_type.tuple_item_count) is None else min(count, 1)
 
 
-def _written_hash_slot(data_type: DataTypeView, sets: Collection[int]) -> ContainerSlot | None:
+def _written_hash_slot(data_type: DataType, sets: Collection[int]) -> ContainerSlot | None:
     """Return the container a type is written as, as its values hash (``hash_slot``), or None for no container.
 
     ``sets`` holds the lists that become sets, by id.
